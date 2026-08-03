@@ -1,0 +1,83 @@
+url: https://statmodels7.github.io/covstructs7/
+
+template:
+  bootstrap: 5
+
+reference:
+- title: Families
+  desc: >
+    The parametrisations. Each maps an unconstrained vector to a matrix in its
+    own constrained set, and each owns the side of that matrix.
+  contents:
+  - log_cholesky
+  - diag_struct
+  - scalar_struct
+  - scaled_struct
+
+- title: The map and its inverse
+  contents:
+  - struct_matrix
+  - struct_free
+
+- title: Derivatives
+  desc: >
+    Exact to second order, on the unconstrained scale, which is what joint
+    estimation over the coefficients and the matrix parameters consumes.
+  contents:
+  - struct_dmatrix
+  - struct_d2matrix
+  - struct_pair_names
+  - struct_pair_indices
+
+- title: What a likelihood asks of the matrix
+  desc: >
+    The log-determinant, or the log pseudo-determinant when the family is rank
+    deficient, and the solves -- computed through a factor rather than through
+    an explicit inverse.
+  contents:
+  - struct_logdet
+  - struct_dlogdet
+  - struct_d2logdet
+  - struct_solve
+  - struct_factor
+
+- title: Rank
+  desc: >
+    A rank read off an assembled matrix is not scale invariant, so it is
+    computed once from the components and membership is tested against the null
+    space it implies.
+  contents:
+  - struct_null_basis
+
+- title: Tools
+  contents:
+  - check_covstruct
+  - struct_is_numerical
+  - numerical_dmatrix
+  - numerical_d2matrix
+
+- title: Classes
+  desc: The S7 classes; each page lists the methods that dispatch on it.
+  contents:
+  - covstruct
+  - LogCholeskyStruct
+  - ends_with(".LogCholeskyStruct")
+  - DiagStruct
+  - ends_with(".DiagStruct")
+  - ScaledStruct
+  - ends_with(".ScaledStruct")
+
+- title: Base-class defaults
+  desc: >
+    The methods registered on the abstract class, which every structure
+    inherits unless it registers something more specific.
+  contents:
+  - ends_with(".covstruct")
+
+- title: Internals
+  desc: >
+    The machinery the exported functions are built from. None of it is
+    exported, and none is needed to use the package; it is documented so that
+    the derivations can be followed from the code that implements them.
+  contents:
+  - has_keyword("internal")

@@ -1,0 +1,276 @@
+
+<!-- README.md is generated from README.Rmd. Please edit that file, then
+     regenerate with devtools::build_readme(). Do not use knitr::knit(): it
+     processes the code but leaves this YAML header in the output as literal
+     text, which GitHub and pkgdown both render verbatim. -->
+
+<!-- badges: start -->
+
+[![R-CMD-check](https://github.com/statmodels7/covstructs7/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/statmodels7/covstructs7/actions/workflows/R-CMD-check.yaml)
+[![Codecov test
+coverage](https://codecov.io/gh/statmodels7/covstructs7/graph/badge.svg)](https://app.codecov.io/gh/statmodels7/covstructs7)
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+<!-- badges: end -->
+
+# covstructs7
+
+Every R package that fits a model with a covariance matrix carries its
+own parametrisation of it, written inside the routine that needs it.
+`nlme` has the `pdMat` classes, `lme4` has its `theta` vector, `glmmTMB`
+has its covariance structures — three private rewritings of the same
+mathematics, none exposing a derivative, none reusable from outside.
+
+A covariance structure is a fixed mathematical object. The map from an
+unconstrained vector to a matrix in some constrained set, its inverse,
+its derivatives, and the quantities a likelihood asks of the matrix are
+all determined once and for all, so they can be written once and built
+on.
+
+`{covstructs7}` makes a structure an object that can be **evaluated,
+inverted, differentiated to second order, and asked for its
+log-determinant and its solves** — including when the matrix is **rank
+deficient**, which a covariance may not be but a precision routinely is.
+
+It is the matrix-parameter layer of
+[statmodels7](https://statmodels7.github.io), an S7 toolkit for
+statistical modelling, alongside
+[linkfunctions7](https://statmodels7.github.io/linkfunctions7/),
+[distributions7](https://statmodels7.github.io/distributions7/),
+[optimizers7](https://statmodels7.github.io/optimizers7/) and
+[basis7](https://statmodels7.github.io/basis7/).
+
+## Installation
+
+``` r
+# install.packages("pak")
+pak::pak("statmodels7/covstructs7")
+```
+
+## A structure is an object
+
+``` r
+s <- log_cholesky(3)
+s
+#> Structure: log_cholesky
+#> Matrix:    3 x 3, symmetric
+#> Rank:      3 of 3
+#> Role:      either
+#> 
+#> Free values: 6
+#>   log_L1, log_L2, log_L3, L2.1, L3.1, L3.2
+#> 
+#> From the base class: none
+
+eta <- c(0.1, -0.2, 0.3, 0.5, -0.4, 0.2)
+round(struct_matrix(s, eta), 4)
+#>         v1      v2      v3
+#> v1  1.2214  0.5526 -0.4421
+#> v2  0.5526  0.9203 -0.0363
+#> v3 -0.4421 -0.0363  2.0221
+```
+
+The map is a bijection onto the positive definite cone, so it inverts
+exactly:
+
+``` r
+max(abs(struct_free(s, struct_matrix(s, eta)) - eta))
+#> [1] 6.938894e-17
+```
+
+## Not a link, and why
+
+A link in `{linkfunctions7}` is a **scalar** bijection with a diagonal
+Jacobian, and everything built on it depends on that diagonality. A map
+from $\mathbb{R}^d$ to a matrix has a full Jacobian, so it is a
+different contract and a different class. The two **compose**: the
+diagonal block of a structured matrix is a scalar map, and those are
+`{linkfunctions7}` links reused as they are.
+
+``` r
+struct_matrix(diag_struct(3, link = linkfunctions7::sqrt_link()), c(1, 2, 3))
+#>    v1 v2 v3
+#> v1  1  0  0
+#> v2  0  4  0
+#> v3  0  0  9
+```
+
+## Rank-deficient precisions are the point
+
+A spline penalty is singular by construction: its null space is the
+functions it leaves alone. Reading it as a prior makes that prior
+improper, which is exactly what makes it a legitimate **penalty** and
+not a legitimate density.
+
+``` r
+p <- crossprod(diff(diag(6), differences = 2))
+s <- scaled_struct(p)
+s
+#> Structure: scaled
+#> Matrix:    6 x 6, symmetric
+#> Rank:      4 of 6 (null space of dimension 2)
+#> Role:      precision
+#> 
+#> Free values: 1
+#>   scale
+#> 
+#> From the base class: none
+```
+
+The null space is the constants and the straight lines — the functions a
+second-difference penalty leaves alone — and the structure carries an
+orthonormal basis for it:
+
+``` r
+lin <- cbind(1, 1:6)
+c(penalty_annihilates_them = max(abs(p %*% lin)),
+  null_basis_spans_the_same = max(abs(qr.resid(qr(lin), s@null_basis))))
+#>  penalty_annihilates_them null_basis_spans_the_same 
+#>              0.000000e+00              9.482992e-16
+```
+
+The log-determinant becomes the log **pseudo**-determinant, and its
+derivative is the rank — a constant, whatever the scale:
+
+``` r
+c(at_small_scale = unname(struct_dlogdet(s, -6)),
+  at_large_scale = unname(struct_dlogdet(s, 6)),
+  rank = s@rank)
+#> at_small_scale at_large_scale           rank 
+#>              4              4              4
+```
+
+That derivative is what makes the scale estimable at all. Writing a
+penalty as a negative log prior, $\frac{\lambda}{2}\beta^\top P\beta -
+\frac{r}{2}\log\lambda$, the stationary point is
+$\lambda = r/(\beta^\top P
+\beta)$; dropping the constant leaves a derivative of one sign and sends
+$\lambda$ to zero.
+
+``` r
+set.seed(1)
+beta <- rnorm(6)
+q <- drop(t(beta) %*% p %*% beta)
+
+c(closed_form = s@rank / q,
+  numerical = optimize(function(l) l / 2 * q - s@rank / 2 * log(l),
+                       c(1e-8, 1e8), tol = 1e-12)$minimum)
+#> closed_form   numerical 
+#>   0.1382685   0.1382685
+```
+
+## Rank comes from the components, never from an assembled matrix
+
+The mathematical rank of $\lambda_1 P_1 + \lambda_2 P_2$ does not depend
+on the positive scalars. A count of eigenvalues above a relative
+tolerance does, and a fitted model with smoothing parameters far apart
+is ordinary:
+
+``` r
+p1 <- kronecker(crossprod(diff(diag(8), differences = 2)), diag(4))
+p2 <- kronecker(diag(8), crossprod(diff(diag(4), differences = 2)))
+
+count_ev <- function(m) {
+  e <- svd(m, nu = 0, nv = 0)$d
+  sum(e > 1e-8 * max(e))
+}
+
+c(balanced = count_ev(p1 + p2),
+  ratio_1e12 = count_ev(1e-6 * p1 + 1e6 * p2),
+  from_components = struct_null_basis(list(p1, p2))$rank)
+#>        balanced      ratio_1e12 from_components 
+#>              28              16              28
+```
+
+So `struct_null_basis()` stacks the individually normalised components —
+the null space of a sum of positive semidefinite matrices is the
+intersection of their null spaces — and membership is afterwards tested
+against that basis.
+
+## A user-defined structure needs only its map
+
+Everything else has a numerical method registered on the base class, so
+a new structure is a subclass and one method.
+
+``` r
+Ar1 <- S7::new_class("Ar1", parent = covstruct)
+
+S7::method(struct_matrix, Ar1) <- function(s, eta, ...) {
+  p <- s@dimension
+  exp(eta[1]) * tanh(eta[2])^abs(outer(seq_len(p), seq_len(p), "-"))
+}
+
+ar1 <- Ar1(
+  struct_name = "ar1", dimension = 4L, n_free = 2L,
+  free_names = c("scale", "rho"), rank = 4L,
+  null_basis = matrix(numeric(0), 4, 0), role = "covariance",
+  struct_params = list()
+)
+
+# never implemented, yet available
+round(struct_dmatrix(ar1, c(0.2, 0.6))[["rho"]], 4)
+#>        [,1]   [,2]   [,3]   [,4]
+#> [1,] 0.0000 0.8691 0.9335 0.7520
+#> [2,] 0.8691 0.0000 0.8691 0.9335
+#> [3,] 0.9335 0.8691 0.0000 0.8691
+#> [4,] 0.7520 0.9335 0.8691 0.0000
+struct_logdet(ar1, c(0.2, 0.6))
+#> [1] -0.2208117
+```
+
+## Validating a structure
+
+`check_covstruct()` runs nine checks, each against a route the
+implementation does not take. A quantity that comes from the base class
+is reported as **not checked**, not as passed: comparing a finite
+difference with a finite difference is the same arithmetic twice.
+
+``` r
+invisible(check_covstruct(log_cholesky(3)))
+#> Structure: log_cholesky   (3 x 3, rank 3, 6 free)
+#>   [OK         ] membership           0.00e+00
+#>   [OK         ] round trip           7.77e-16
+#>   [OK         ] first derivatives    2.90e-11
+#>   [OK         ] second derivatives   3.67e-11
+#>   [OK         ] log-determinant      2.47e-15
+#>   [OK         ] logdet gradient      3.38e-14
+#>   [OK         ] logdet hessian       0.00e+00
+#>   [OK         ] solve and factor     3.90e-15
+#>   [OK         ] shapes and names  
+#>   9 passed, 0 failed, 0 not checked
+invisible(check_covstruct(ar1))
+#> Structure: ar1   (4 x 4, rank 4, 2 free)
+#>   [OK         ] membership           0.00e+00
+#>   [NOT CHECKED] round trip        
+#>   [NOT CHECKED] first derivatives 
+#>   [NOT CHECKED] second derivatives
+#>   [NOT CHECKED] log-determinant   
+#>   [NOT CHECKED] logdet gradient   
+#>   [NOT CHECKED] logdet hessian    
+#>   [OK         ] solve and factor     4.79e-15
+#>   [OK         ] shapes and names  
+#>   3 passed, 0 failed, 6 not checked
+```
+
+## What is in the box
+
+|  |  |
+|----|----|
+| families | `log_cholesky()`, `diag_struct()`, `scalar_struct()`, `scaled_struct()` |
+| maps | `struct_matrix()`, `struct_free()` |
+| derivatives | `struct_dmatrix()`, `struct_d2matrix()` |
+| likelihood pieces | `struct_logdet()`, `struct_dlogdet()`, `struct_d2logdet()`, `struct_solve()`, `struct_factor()` |
+| tools | `check_covstruct()`, `struct_is_numerical()`, `struct_null_basis()`, `print()` |
+
+## Related
+
+- [linkfunctions7](https://statmodels7.github.io/linkfunctions7/) — link
+  functions with exact derivatives to fourth order
+- [distributions7](https://statmodels7.github.io/distributions7/) —
+  distributions carrying exact derivatives of the log-likelihood
+- [optimizers7](https://statmodels7.github.io/optimizers7/) —
+  optimisation algorithms and stopping rules as objects
+- [basis7](https://statmodels7.github.io/basis7/) — basis expansions
+  with exact derivatives, integrals and Gram matrices
+- [the book](https://statmodels7.github.io/book/) — the mathematics
+  behind the toolkit

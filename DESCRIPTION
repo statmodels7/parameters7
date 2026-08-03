@@ -1,0 +1,46 @@
+Package: covstructs7
+Title: An S7 Framework for Constrained Matrix Parameters
+Version: 0.1.0
+Authors@R:
+    person("Giovanni", "Tinervia", , "giovannitinervia9@gmail.com", role = c("aut", "cre"))
+Description: Parametrisations of covariance-adjacent constrained matrix
+    spaces as objects. A structure maps an unconstrained vector to a
+    symmetric matrix -- positive definite, a correlation matrix, or a
+    possibly rank-deficient precision -- and answers with exact first and
+    second derivatives, the log-determinant or its pseudo-determinant
+    counterpart, and the solves a likelihood needs. Numerical fallbacks make
+    a user-defined structure work from its map alone, and a diagnostic
+    verifies every component against an independent route.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+URL: https://statmodels7.github.io/covstructs7/,
+    https://github.com/statmodels7/covstructs7
+BugReports: https://github.com/statmodels7/covstructs7/issues
+Depends:
+    R (>= 4.1.0)
+Imports:
+    linkfunctions7,
+    S7,
+    stats
+Suggests:
+    numDeriv,
+    pkgdown,
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown
+Remotes:
+    statmodels7/linkfunctions7
+Config/testthat/edition: 3
+Config/roxygen2/version: 8.0.0
+RoxygenNote: 7.3.3
+Collate: 
+    'covstruct_class.R'
+    'generics.R'
+    'numerical_fallbacks.R'
+    'check_covstruct.R'
+    'covstructs7-package.R'
+    'diag_struct.R'
+    'log_cholesky.R'
+    'methods.R'
+    'scaled_struct.R'
