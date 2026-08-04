@@ -25,23 +25,6 @@ free value. Fixed at construction: every consumer builds parameter tables
 from these.}
 
 \item{param_params}{A list of whatever the family needs to evaluate itself.}
-
-\item{dimension}{The side \eqn{p} of the matrix.}
-
-\item{rank}{The rank of the matrix the family produces. Equal to \code{dimension}
-for a definite family, and strictly less for a rank-deficient precision,
-where it is the dimension of the space the quadratic form penalises.}
-
-\item{null_basis}{A \code{dimension} by \code{dimension - rank} matrix whose columns are
-an orthonormal basis of the null space, or a matrix with no columns when
-the family is of full rank.}
-
-\item{role}{One of \code{"covariance"}, \code{"precision"} or
-\code{"either"}. A label: no method reads it and no result depends on it.
-It exists because the name of a family does not say which side of a model
-it parametrises, and the two are different models -- the inverse of a
-compound-symmetry matrix is compound symmetry, while the inverse of an
-AR(1) is tridiagonal and not AR(1).}
 }
 \value{
 An object of class \code{LogCholeskyParam}. Use

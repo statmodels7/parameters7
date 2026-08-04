@@ -4,9 +4,9 @@
 \name{parameters7-package}
 \alias{parameters7}
 \alias{parameters7-package}
-\title{parameters7: An S7 Framework for Constrained Matrix Parameters}
+\title{parameters7: An S7 Framework for Constrained Parameters}
 \description{
-Parametrisations of covariance-adjacent constrained matrix spaces as objects. A parameter maps an unconstrained vector to a symmetric matrix -- positive definite, a correlation matrix, or a possibly rank-deficient precision -- and answers with exact first and second derivatives, the log-determinant or its pseudo-determinant counterpart, and the solves a likelihood needs. Numerical fallbacks make a user-defined parameter work from its map alone, and a diagnostic verifies every component against an independent route.
+Parametrisations of constrained parameter spaces as objects. A parameter maps an unconstrained vector onto the set where it lives -- a symmetric positive semidefinite matrix, a probability vector on the simplex, a row-stochastic transition matrix -- and answers with exact derivatives to fourth order, the inverse map, and, on the matrix branch, the log-determinant or its pseudo-determinant counterpart and the solves a likelihood needs. Numerical fallbacks make a user-defined parameter work from its map alone, and a diagnostic verifies every component against an independent route.
 }
 \seealso{
 Useful links:
