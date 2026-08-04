@@ -1,5 +1,35 @@
 # Changelog
 
+## parameters7 0.3.0
+
+- Three families for structured covariances.
+  [`correlation_matrix()`](https://statmodels7.github.io/parameters7/reference/correlation_matrix.md)
+  carries a correlation matrix in the spherical parametrisation of
+  Rapisarda, Brigo and Mercurio (2007): the rows of the Cholesky factor
+  are points on the unit sphere in angular coordinates, so the unit
+  diagonal and the positive definiteness hold by construction, and the
+  log-determinant is twice the sum of the logarithms of the sines.
+
+- [`compound_symmetry()`](https://statmodels7.github.io/parameters7/reference/compound_symmetry.md)
+  and
+  [`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md)
+  are the economical families: two free values whatever the dimension, a
+  scale and a correlation. Both have a closed log-determinant separable
+  in the two free values, so every mixed derivative of it is exactly
+  zero, and both return their inverse in closed form – compound
+  symmetric again by Sherman-Morrison, tridiagonal for AR(1), the
+  precision of a Markov process. Compound symmetry bounds its
+  correlation below at `-1/(p-1)`, which is where the matrix stops being
+  definite, rather than at `-1`.
+
+- All three are closed form to fourth order, in the value and in the
+  log-determinant. Two helpers carry that:
+  [`compose4()`](https://statmodels7.github.io/parameters7/reference/compose4.md)
+  for the chain rule to fourth order and
+  [`leibniz_gram()`](https://statmodels7.github.io/parameters7/reference/leibniz_gram.md)
+  for the derivative of a Gram product, which the log-Cholesky family
+  now shares.
+
 ## parameters7 0.2.0
 
 - Renamed from covstructs7, with the API renamed to match: the object is

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,6 +31,12 @@
       <small>Source: <a href="https://github.com/statmodels7/parameters7/blob/master/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.3.0" id="parameters7-030">parameters7 0.3.0<a class="anchor" aria-label="anchor" href="#parameters7-030"></a></h2>
+<ul><li><p>Three families for structured covariances. <code><a href="../reference/correlation_matrix.html">correlation_matrix()</a></code> carries a correlation matrix in the spherical parametrisation of Rapisarda, Brigo and Mercurio (2007): the rows of the Cholesky factor are points on the unit sphere in angular coordinates, so the unit diagonal and the positive definiteness hold by construction, and the log-determinant is twice the sum of the logarithms of the sines.</p></li>
+<li><p><code><a href="../reference/compound_symmetry.html">compound_symmetry()</a></code> and <code><a href="../reference/ar1.html">ar1()</a></code> are the economical families: two free values whatever the dimension, a scale and a correlation. Both have a closed log-determinant separable in the two free values, so every mixed derivative of it is exactly zero, and both return their inverse in closed form – compound symmetric again by Sherman-Morrison, tridiagonal for AR(1), the precision of a Markov process. Compound symmetry bounds its correlation below at <code>-1/(p-1)</code>, which is where the matrix stops being definite, rather than at <code>-1</code>.</p></li>
+<li><p>All three are closed form to fourth order, in the value and in the log-determinant. Two helpers carry that: <code><a href="../reference/compose4.html">compose4()</a></code> for the chain rule to fourth order and <code><a href="../reference/leibniz_gram.html">leibniz_gram()</a></code> for the derivative of a Gram product, which the log-Cholesky family now shares.</p></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.0" id="parameters7-020">parameters7 0.2.0<a class="anchor" aria-label="anchor" href="#parameters7-020"></a></h2>
 <ul><li><p>Renamed from covstructs7, with the API renamed to match: the object is a constrained PARAMETER – a map from an unconstrained vector onto the set where the parameter lives – and not only a covariance. <code>struct_*</code> became <code>param_*</code>, the base class is <code>parameter</code>, and the symmetric positive semidefinite branch moved to the new abstract class <code>matrix_parameter</code>, which owns the rank, the log-determinant, the solve and the factor.</p></li>
