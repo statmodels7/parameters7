@@ -1,6 +1,6 @@
-# The Free Vector Behind a Matrix
+# The Free Vector Behind a Value
 
-The inverse map: given a matrix in the family's set, returns the free
+The inverse map: given a value in the family's set, returns the free
 vector that produces it.
 
 ## Usage
@@ -18,7 +18,8 @@ param_free(s, m, ...)
 
 - m:
 
-  A symmetric numeric matrix of the parameter's dimension.
+  A value of the family's shape: a symmetric matrix on the matrix
+  branch, a probability vector or row-stochastic matrix otherwise.
 
 - ...:
 
@@ -35,7 +36,9 @@ optimisation-based inverse would return a plausible \\\eta\\ for a
 matrix outside the set, which is a wrong answer wearing the shape of a
 right one. A family whose map has no closed-form inverse refuses
 instead, and the base class refuses on behalf of any parameter that does
-not implement this.
+not implement this. A value outside the set – a matrix that is not
+positive definite, a vector off the simplex – is refused rather than
+repaired.
 
 ## See also
 

@@ -1,7 +1,7 @@
-# Second Derivatives of a Parameter's Matrix
+# Second Derivatives of a Parameter's Value
 
-Returns the \\d(d+1)/2\\ distinct second derivatives \\\partial^2 M /
-\partial \eta_k \partial \eta_l\\.
+Returns the \\d(d+1)/2\\ distinct second derivatives \\\partial^2 V /
+\partial \eta_k \partial \eta_l\\, each shaped like the value.
 
 ## Usage
 
@@ -26,7 +26,7 @@ param_d2(s, eta, ...)
 
 ## Value
 
-A named list of symmetric matrices, keyed as `param_tuple_names(s)`.
+A named list keyed as `param_tuple_names(s)`.
 
 ## Details
 

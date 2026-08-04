@@ -1,4 +1,4 @@
-# Print a Covariance Parameter
+# Print a Constrained Parameter
 
 Prints the family, the shape of the matrix, the rank, the free values
 and which of the derived quantities are numerical.

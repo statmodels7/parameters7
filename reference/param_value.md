@@ -1,6 +1,12 @@
-# The Matrix a Parameter Produces
+# The Value a Parameter Produces
 
-Maps the free vector \\\eta\\ to the matrix it parametrises.
+Maps the free vector \\\eta\\ to the constrained value it parametrises:
+a symmetric matrix for the
+[`matrix_parameter`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
+branch, a probability vector for
+[`simplex`](https://statmodels7.github.io/parameters7/reference/simplex.md),
+a row-stochastic matrix for
+[`transition_matrix`](https://statmodels7.github.io/parameters7/reference/transition_matrix.md).
 
 ## Usage
 
@@ -25,7 +31,9 @@ param_value(s, eta, ...)
 
 ## Value
 
-A symmetric numeric matrix with `s@dimension` rows and columns.
+The constrained value, shaped as the family declares: a symmetric
+`s@dimension` by `s@dimension` matrix on the matrix branch, a vector or
+row-stochastic matrix otherwise.
 
 ## Details
 

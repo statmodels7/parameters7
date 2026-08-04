@@ -23,9 +23,9 @@ its own constrained set, and each owns the side of that matrix.
 ## The map and its inverse
 
 - [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
-  : The Matrix a Parameter Produces
+  : The Value a Parameter Produces
 - [`param_free()`](https://statmodels7.github.io/parameters7/reference/param_free.md)
-  : The Free Vector Behind a Matrix
+  : The Free Vector Behind a Value
 
 ## Derivatives
 
@@ -34,9 +34,9 @@ estimation over the coefficients and the constrained parameters
 consumes.
 
 - [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md)
-  : First Derivatives of a Parameter's Matrix
+  : First Derivatives of a Parameter's Value
 - [`param_d2()`](https://statmodels7.github.io/parameters7/reference/param_d2.md)
-  : Second Derivatives of a Parameter's Matrix
+  : Second Derivatives of a Parameter's Value
 - [`param_d3()`](https://statmodels7.github.io/parameters7/reference/param_d3.md)
   : Third Derivatives of a Parameter's Value
 - [`param_d4()`](https://statmodels7.github.io/parameters7/reference/param_d4.md)
@@ -323,7 +323,7 @@ that the derivations can be followed from the code that implements them.
   [`parameters7-package`](https://statmodels7.github.io/parameters7/reference/parameters7-package.md)
   : parameters7: An S7 Framework for Constrained Parameters
 - [`print.parameter`](https://statmodels7.github.io/parameters7/reference/print.parameter.md)
-  : Print a Covariance Parameter
+  : Print a Constrained Parameter
 - [`scaled_scale()`](https://statmodels7.github.io/parameters7/reference/scaled_scale.md)
   : The Scale Behind a Free Vector, and Its Derivatives
 - [`simplex_components()`](https://statmodels7.github.io/parameters7/reference/simplex_components.md)

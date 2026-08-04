@@ -1,24 +1,28 @@
 # parameters7
 
-Every R package that fits a model with a covariance matrix carries its
-own parametrisation of it, written inside the routine that needs it.
-`nlme` has the `pdMat` classes, `lme4` has its `theta` vector, `glmmTMB`
-has its covariance parameters — three private rewritings of the same
-mathematics, none exposing a derivative, none reusable from outside.
+Every R package that fits a model with a constrained parameter carries
+its own parametrisation of it, written inside the routine that needs it.
+`nlme` has the `pdMat` classes for covariances, `lme4` has its `theta`
+vector, `glmmTMB` has its covariance parameters; mixture packages
+re-derive the softmax and hidden-Markov packages re-derive
+row-stochastic matrices — private rewritings of the same mathematics,
+none exposing a derivative, none reusable from outside.
 
-A covariance parameter is a fixed mathematical object. The map from an
-unconstrained vector to a matrix in some constrained set, its inverse,
-its derivatives, and the quantities a likelihood asks of the matrix are
-all determined once and for all, so they can be written once and built
-on.
+A constrained parameter is a fixed mathematical object: a map from an
+unconstrained vector onto the set where the parameter lives — the
+positive definite cone, the simplex, the row-stochastic matrices — with
+its inverse, its derivatives, and the quantities a likelihood asks of
+the value. All of it is determined once and for all, so it can be
+written once and built on.
 
-[parameters7](https://statmodels7.github.io/parameters7/) makes a
-parameter an object that can be **evaluated, inverted, differentiated to
-second order, and asked for its log-determinant and its solves** —
-including when the matrix is **rank deficient**, which a covariance may
-not be but a precision routinely is.
+[parameters7](https://statmodels7.github.io/parameters7/) makes such a
+parameter an object that can be **evaluated, inverted, and
+differentiated to fourth order**, and, on the matrix branch, asked for
+its **log-determinant and its solves** — including when the matrix is
+**rank deficient**, which a covariance may not be but a precision
+routinely is.
 
-It is the matrix-parameter layer of
+It is the constrained-parameter layer of
 [statmodels7](https://statmodels7.github.io), an S7 toolkit for
 statistical modelling, alongside
 [linkfunctions7](https://statmodels7.github.io/linkfunctions7/),
@@ -86,6 +90,46 @@ param_value(diagonal_matrix(3, link = linkfunctions7::sqrt_link()), c(1, 2, 3))
 #> v1  1  0  0
 #> v2  0  4  0
 #> v3  0  0  9
+```
+
+## Beyond covariance matrices
+
+A probability vector lives on the simplex and a Markov chain’s
+transition matrix has rows that do; both are the same kind of object as
+a covariance, and both close their derivatives over the value itself:
+
+``` r
+
+s <- simplex(4)
+round(param_value(s, c(0.5, -0.2, 0.8)), 4)
+#>     p1     p2     p3     p4 
+#> 0.2896 0.1438 0.3909 0.1757
+
+# differentiating sum(pi) = 1 kills every order: each component sums to zero
+range(vapply(param_d3(s, c(0.5, -0.2, 0.8)), sum, numeric(1)))
+#> [1] -1.387779e-17  3.903128e-18
+
+tm <- transition_matrix(3)
+rowSums(param_value(tm, rnorm(6)))
+#> s1 s2 s3 
+#>  1  1  1
+```
+
+The positive definite cone has a second chart, the matrix logarithm
+[`matrix_log()`](https://statmodels7.github.io/parameters7/reference/matrix_log.md),
+whose log-determinant is the trace of $`S`$ — linear in the free values
+— and whose inverse is $`\exp(-S)`$, exact by construction; its
+derivatives are Fréchet derivatives of the matrix exponential, computed
+by the Daleckii–Krein representation with divided differences that stay
+exact under repeated eigenvalues.
+
+``` r
+
+m <- matrix_log(2)
+c(logdet = param_logdet(m, c(0.2, -0.3, 0.4)),
+  trace = 0.2 - 0.3)
+#> logdet  trace 
+#>   -0.1   -0.1
 ```
 
 ## Rank-deficient precisions are the point
@@ -220,7 +264,7 @@ a new parameter is a subclass and one method.
 
 ``` r
 
-Ar1 <- S7::new_class("Ar1", parent = parameter)
+Ar1 <- S7::new_class("Ar1", parent = matrix_parameter)
 
 S7::method(param_value, Ar1) <- function(s, eta, ...) {
   p <- s@dimension
@@ -329,9 +373,9 @@ its own constrained set, and each owns the side of that matrix.
 ## The map and its inverse
 
 - [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
-  : The Matrix a Parameter Produces
+  : The Value a Parameter Produces
 - [`param_free()`](https://statmodels7.github.io/parameters7/reference/param_free.md)
-  : The Free Vector Behind a Matrix
+  : The Free Vector Behind a Value
 
 ## Derivatives
 
@@ -340,9 +384,9 @@ estimation over the coefficients and the constrained parameters
 consumes.
 
 - [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md)
-  : First Derivatives of a Parameter's Matrix
+  : First Derivatives of a Parameter's Value
 - [`param_d2()`](https://statmodels7.github.io/parameters7/reference/param_d2.md)
-  : Second Derivatives of a Parameter's Matrix
+  : Second Derivatives of a Parameter's Value
 - [`param_d3()`](https://statmodels7.github.io/parameters7/reference/param_d3.md)
   : Third Derivatives of a Parameter's Value
 - [`param_d4()`](https://statmodels7.github.io/parameters7/reference/param_d4.md)
@@ -629,7 +673,7 @@ that the derivations can be followed from the code that implements them.
   [`parameters7-package`](https://statmodels7.github.io/parameters7/reference/parameters7-package.md)
   : parameters7: An S7 Framework for Constrained Parameters
 - [`print.parameter`](https://statmodels7.github.io/parameters7/reference/print.parameter.md)
-  : Print a Covariance Parameter
+  : Print a Constrained Parameter
 - [`scaled_scale()`](https://statmodels7.github.io/parameters7/reference/scaled_scale.md)
   : The Scale Behind a Free Vector, and Its Derivatives
 - [`simplex_components()`](https://statmodels7.github.io/parameters7/reference/simplex_components.md)

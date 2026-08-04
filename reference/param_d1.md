@@ -1,7 +1,7 @@
-# First Derivatives of a Parameter's Matrix
+# First Derivatives of a Parameter's Value
 
-Returns \\\partial M / \partial \eta_k\\ for every free value, as a list
-of matrices.
+Returns \\\partial V / \partial \eta_k\\ for every free value, as a list
+of objects each shaped like the value.
 
 ## Usage
 
