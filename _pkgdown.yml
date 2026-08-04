@@ -51,6 +51,14 @@ reference:
   - param_solve
   - param_factor
 
+- title: What a reader reads
+  desc: >
+    The quantities a family is about, with the Jacobian of the map from the
+    free vector and the scale each interval belongs on, so that a consumer can
+    report them by the delta method rather than reporting coordinates.
+  contents:
+  - param_readable
+
 - title: Rank
   desc: >
     A rank read off an assembled matrix is not scale invariant, so it is
