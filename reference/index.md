@@ -321,7 +321,7 @@ that the derivations can be followed from the code that implements them.
   : Value of a Transition Matrix Parameter
 - [`parameters7`](https://statmodels7.github.io/parameters7/reference/parameters7-package.md)
   [`parameters7-package`](https://statmodels7.github.io/parameters7/reference/parameters7-package.md)
-  : parameters7: An S7 Framework for Constrained Matrix Parameters
+  : parameters7: An S7 Framework for Constrained Parameters
 - [`print.parameter`](https://statmodels7.github.io/parameters7/reference/print.parameter.md)
   : Print a Covariance Parameter
 - [`scaled_scale()`](https://statmodels7.github.io/parameters7/reference/scaled_scale.md)

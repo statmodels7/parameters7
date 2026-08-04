@@ -38,31 +38,6 @@ ScaledMatrixParam(
 
   A list of whatever the family needs to evaluate itself.
 
-- dimension:
-
-  The side \\p\\ of the matrix.
-
-- rank:
-
-  The rank of the matrix the family produces. Equal to `dimension` for a
-  definite family, and strictly less for a rank-deficient precision,
-  where it is the dimension of the space the quadratic form penalises.
-
-- null_basis:
-
-  A `dimension` by `dimension - rank` matrix whose columns are an
-  orthonormal basis of the null space, or a matrix with no columns when
-  the family is of full rank.
-
-- role:
-
-  One of `"covariance"`, `"precision"` or `"either"`. A label: no method
-  reads it and no result depends on it. It exists because the name of a
-  family does not say which side of a model it parametrises, and the two
-  are different models – the inverse of a compound-symmetry matrix is
-  compound symmetry, while the inverse of an AR(1) is tridiagonal and
-  not AR(1).
-
 ## Value
 
 An object of class `ScaledMatrixParam`.
