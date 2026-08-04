@@ -9,7 +9,7 @@ NULL
 #' the additive log-ratio parametrisation. Constructed by
 #' \code{\link{transition_matrix}}.
 #'
-#' @inheritParams matrix_parameter
+#' @inheritParams parameter
 #'
 #' @return An object of class \code{TransitionMatrixParam}.
 #'

@@ -16,7 +16,9 @@ TransitionMatrixParam(
 
 \item{n_free}{The length \eqn{d} of the free vector.}
 
-\item{free_names}{A character vector of length \code{n_free}.}
+\item{free_names}{A character vector of length \code{n_free}, one label per
+free value. Fixed at construction: every consumer builds parameter tables
+from these.}
 
 \item{param_params}{A list of whatever the family needs to evaluate itself.}
 }

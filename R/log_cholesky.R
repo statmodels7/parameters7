@@ -8,7 +8,7 @@ NULL
 #' The S7 class of unstructured symmetric positive definite matrices in the
 #' log-Cholesky parametrisation. Constructed by \code{\link{log_cholesky}}.
 #'
-#' @inheritParams parameter
+#' @inheritParams matrix_parameter
 #'
 #' @return An object of class \code{LogCholeskyParam}. Use
 #'   \code{\link{log_cholesky}} rather than calling the class directly.

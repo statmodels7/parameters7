@@ -8,7 +8,7 @@ NULL
 #' The S7 class of a fixed symmetric positive semidefinite matrix carried by a
 #' single scale. Constructed by \code{\link{scaled_matrix}}.
 #'
-#' @inheritParams parameter
+#' @inheritParams matrix_parameter
 #'
 #' @return An object of class \code{ScaledMatrixParam}.
 #'

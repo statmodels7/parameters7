@@ -8,7 +8,7 @@ NULL
 #' The S7 class of probability vectors on the open simplex, in the additive
 #' log-ratio parametrisation. Constructed by \code{\link{simplex}}.
 #'
-#' @inheritParams matrix_parameter
+#' @inheritParams parameter
 #'
 #' @return An object of class \code{SimplexParam}.
 #'

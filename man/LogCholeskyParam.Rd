@@ -20,11 +20,19 @@ LogCholeskyParam(
 
 \item{n_free}{The length \eqn{d} of the free vector.}
 
-\item{free_names}{A character vector of length \code{n_free}, one label per
-free value. Fixed at construction: every consumer builds parameter tables
-from these.}
+\item{free_names}{A character vector of length \code{n_free}.}
 
 \item{param_params}{A list of whatever the family needs to evaluate itself.}
+
+\item{dimension}{The side \eqn{p} of the matrix.}
+
+\item{rank}{The rank of the matrix the family produces.}
+
+\item{null_basis}{A \code{dimension} by \code{dimension - rank} matrix
+whose columns are an orthonormal basis of the null space.}
+
+\item{role}{One of \code{"covariance"}, \code{"precision"} or
+\code{"either"}. A label: no method reads it and no result depends on it.}
 }
 \value{
 An object of class \code{LogCholeskyParam}. Use

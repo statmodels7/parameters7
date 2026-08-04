@@ -8,7 +8,7 @@ NULL
 #' The S7 class of diagonal positive matrices, one free value per entry.
 #' Constructed by \code{\link{diagonal_matrix}} or \code{\link{scalar_matrix}}.
 #'
-#' @inheritParams parameter
+#' @inheritParams matrix_parameter
 #'
 #' @return An object of class \code{DiagMatrixParam}.
 #'
