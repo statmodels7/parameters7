@@ -1,4 +1,4 @@
-#' @include numerical_fallbacks.R
+#' @include numerical_fallbacks.R chain.R
 NULL
 
 
@@ -349,9 +349,29 @@ S7::method(param_d2logdet, LogCholeskyParam) <- function(s, eta, ...) {
 }
 
 
-# The factor's derivative in one free value, and the rule that repeated
-# derivatives in the SAME diagonal value regenerate L_ii E_ii while anything
-# else vanishes. Shared by the third- and fourth-order methods.
+#' The Factor of a Log-Cholesky Parameter, and Its Derivatives
+#'
+#' @description
+#' Returns \eqn{\partial^S L} for a multiset \eqn{S} of free-value indices, or
+#' \code{NULL} when that derivative is identically zero.
+#'
+#' @details
+#' A free value below the diagonal enters \eqn{L} linearly, so its second
+#' derivative vanishes; a diagonal one enters through its exponential, so
+#' every repeated derivative in that same value regenerates
+#' \eqn{L_{ii} E_{ii}}. Everything else is zero, which is what makes the
+#' Leibniz sum of \code{\link{chol_leibniz}} short.
+#'
+#' @param s A \code{\link{LogCholeskyParam}} object.
+#' @param l The factor at the point, from \code{\link{chol_assemble}}.
+#' @param ks A multiset of free-value indices, possibly empty; the empty one
+#'   gives \eqn{L} itself.
+#'
+#' @return A numeric matrix, or \code{NULL}.
+#'
+#' @seealso \code{\link{chol_leibniz}}, \code{\link{leibniz_gram}}
+#'
+#' @keywords internal
 chol_dfactor <- function(s, l, ks) {
   pos <- s@param_params$positions
   k1 <- ks[1L]
@@ -366,28 +386,29 @@ chol_dfactor <- function(s, l, ks) {
   lk
 }
 
+#' Derivative Components of a Log-Cholesky Parameter
+#'
+#' @description
+#' Assembles one derivative order by the Leibniz rule on \eqn{M = LL^	op},
+#' the factor's derivatives coming from \code{\link{chol_dfactor}}.
+#'
+#' @param s A \code{\link{LogCholeskyParam}} object.
+#' @param eta A numeric vector of free values.
+#' @param order The derivative order.
+#'
+#' @return A named list of symmetric matrices.
+#'
+#' @seealso \code{\link{leibniz_gram}}
+#'
+#' @keywords internal
 chol_leibniz <- function(s, eta, order) {
   l <- chol_assemble(s, eta)
+  dfac <- function(ks) chol_dfactor(s, l, ks)
   idx <- param_tuple_indices(s, order)
-  out <- vector("list", length(idx))
-  names(out) <- param_tuple_names(s, order)
-  positions <- seq_len(order)
-  splits <- lapply(0:(2^order - 1L), function(b) {
-    as.logical(bitwAnd(b, bitwShiftL(1L, positions - 1L)) > 0L)
+  out <- lapply(idx, function(t) {
+    name_dims(leibniz_gram(dfac, t, s@dimension), s)
   })
-  for (i in seq_along(idx)) {
-    t <- idx[[i]]
-    acc <- matrix(0, s@dimension, s@dimension)
-    for (sp in splits) {
-      a <- chol_dfactor(s, l, t[sp])
-      if (is.null(a)) next
-      b <- chol_dfactor(s, l, t[!sp])
-      if (is.null(b)) next
-      acc <- acc + a %*% t(b)
-    }
-    out[[i]] <- name_dims(acc, s)
-  }
-  out
+  stats::setNames(out, param_tuple_names(s, order))
 }
 
 #' @title Third Derivatives of a Log-Cholesky Parameter

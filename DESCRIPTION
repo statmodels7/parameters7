@@ -1,6 +1,6 @@
 Package: parameters7
 Title: An S7 Framework for Constrained Parameters
-Version: 0.2.0
+Version: 0.3.0
 Authors@R:
     person("Giovanni", "Tinervia", , "giovannitinervia9@gmail.com", role = c("aut", "cre"))
 Description: Parametrisations of constrained parameter spaces as objects. A
@@ -39,7 +39,11 @@ Collate:
     'parameter_class.R'
     'generics.R'
     'numerical_fallbacks.R'
+    'chain.R'
+    'compound_symmetry.R'
+    'ar1.R'
     'check_parameter.R'
+    'correlation_matrix.R'
     'diagonal_matrix.R'
     'log_cholesky.R'
     'matrix_log.R'

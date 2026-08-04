@@ -11,6 +11,9 @@ reference:
   contents:
   - log_cholesky
   - matrix_log
+  - correlation_matrix
+  - compound_symmetry
+  - ar1
   - diagonal_matrix
   - scalar_matrix
   - scaled_matrix
@@ -72,6 +75,12 @@ reference:
   - LogCholeskyParam
   - ends_with(".MatrixLogParam")
   - MatrixLogParam
+  - CorrelationParam
+  - ends_with(".CorrelationParam")
+  - CompoundSymmetryParam
+  - ends_with(".CompoundSymmetryParam")
+  - Ar1Param
+  - ends_with(".Ar1Param")
   - SimplexParam
   - ends_with(".SimplexParam")
   - TransitionMatrixParam

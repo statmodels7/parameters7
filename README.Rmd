@@ -118,6 +118,34 @@ c(logdet = param_logdet(m, c(0.2, -0.3, 0.4)),
   trace = 0.2 - 0.3)
 ```
 
+## Structure buys degrees of freedom
+
+An unstructured covariance over twenty occasions has 210 free values, which
+no ordinary sample estimates. The economical families collapse that to two --
+a scale and a correlation -- and keep everything exact:
+
+```{r}
+c(unstructured = log_cholesky(20)@n_free,
+  compound_symmetry = compound_symmetry(20)@n_free,
+  ar1 = ar1(20)@n_free)
+
+s <- ar1(5)
+eta <- c(log(2), atanh(0.6))
+round(param_value(s, eta), 3)
+
+# the precision of an AR(1) process is tridiagonal, and is returned as such
+round(param_solve(s, eta), 3)
+```
+
+A correlation matrix on its own -- what a copula or an LKJ prior is written
+against -- is `correlation_matrix()`, whose unit diagonal and positive
+definiteness hold by construction rather than by a repair:
+
+```{r}
+r <- param_value(correlation_matrix(4), c(0.4, -0.2, 0.6, 0.1, -0.5, 0.3))
+round(r, 3)
+```
+
 ## Rank-deficient precisions are the point
 
 A spline penalty is singular by construction: its null space is the functions
