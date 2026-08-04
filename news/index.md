@@ -2,6 +2,44 @@
 
 ## parameters7 0.3.0
 
+- [`param_readable()`](https://statmodels7.github.io/parameters7/reference/param_readable.md)
+  declares the quantities a family is about, with the Jacobian of the
+  map from the free vector and the scale each interval is built on, so
+  that a consumer reports them by the delta method instead of reporting
+  coordinates.
+  [`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md)
+  and
+  [`compound_symmetry()`](https://statmodels7.github.io/parameters7/reference/compound_symmetry.md)
+  declare a marginal variance and a correlation,
+  [`autoregressive()`](https://statmodels7.github.io/parameters7/reference/autoregressive.md)
+  adds the coefficients that the Levinson-Durbin recursion produces –
+  read off the first-order component of jets it already computes –
+  [`scaled_matrix()`](https://statmodels7.github.io/parameters7/reference/scaled_matrix.md)
+  its multiplier and
+  [`simplex()`](https://statmodels7.github.io/parameters7/reference/simplex.md)
+  its probabilities. The base class declares nothing. A multivariate fit
+  in distributions7 prints the result as a block of its own.
+
+- Free names name the coordinate rather than the quantity it produces,
+  and every family now follows the one convention. Where a link carries
+  a constrained quantity onto the free scale the name records that link,
+  so
+  [`scalar_matrix()`](https://statmodels7.github.io/parameters7/reference/scalar_matrix.md)
+  reports `log_scale`,
+  [`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md)
+  reports `log_scale` and `z_rho`,
+  [`compound_symmetry()`](https://statmodels7.github.io/parameters7/reference/compound_symmetry.md)
+  reports `logit_rho`,
+  [`autoregressive()`](https://statmodels7.github.io/parameters7/reference/autoregressive.md)
+  reports `z_pacf1` and so on, and
+  [`diagonal_matrix()`](https://statmodels7.github.io/parameters7/reference/diagonal_matrix.md)
+  reports `log_d1` under its default link and `sqrt_d1` under a
+  square-root one. Names built on a coordinate that is already
+  unrestricted are unchanged: `log_L1` and `L2.1`, `S2.1`, `alr1`,
+  `z2.1`. The previous names promised bounded quantities and were
+  reported on the free scale, so a partial autocorrelation appeared as
+  0.97 with a confidence interval reaching past one.
+
 - `autoregressive(dimension, order)` carries the covariance of a
   stationary autoregression of any order. The stationary region in the
   coefficients is not a box – at order two it is already a triangle – so

@@ -47,7 +47,7 @@ in each component.
 ``` r
 s <- scaled_matrix(diag(2))
 param_d1(s, 0)
-#> $scale
+#> $log_scale
 #>    v1 v2
 #> v1  1  0
 #> v2  0  1

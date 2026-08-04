@@ -87,8 +87,8 @@ A closed form is therefore never an independent claim: it must agree with
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># for a scaled precision the derivative is the rank, whatever the scale</span></span></span>
 <span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="scaled_matrix.html">scaled_matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/crossprod.html" class="external-link">crossprod</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="fl">6</span><span class="op">)</span>, differences <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu">param_dlogdet</span><span class="op">(</span><span class="va">s</span>, <span class="op">-</span><span class="fl">3</span><span class="op">)</span>, <span class="fu">param_dlogdet</span><span class="op">(</span><span class="va">s</span>, <span class="fl">5</span><span class="op">)</span>, rank <span class="op">=</span> <span class="va">s</span><span class="op">@</span><span class="va">rank</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> scale scale  rank </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     4     4     4 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> log_scale log_scale      rank </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         4         4         4 </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

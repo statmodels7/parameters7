@@ -98,8 +98,8 @@ c(dimension = s@dimension, rank = s@rank)
 
 # the derivative of the log pseudo-determinant is the rank, at any scale
 c(param_dlogdet(s, -4), param_dlogdet(s, 4))
-#> scale scale 
-#>     4     4 
+#> log_scale log_scale 
+#>         4         4 
 
 # and a fully known matrix has no free value at all
 scaled_matrix(diag(3), link = NULL)@n_free

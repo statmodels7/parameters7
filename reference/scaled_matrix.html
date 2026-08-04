@@ -131,8 +131,8 @@ is degenerate on a subspace, and a singular precision does not normalise.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># the derivative of the log pseudo-determinant is the rank, at any scale</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="param_dlogdet.html">param_dlogdet</a></span><span class="op">(</span><span class="va">s</span>, <span class="op">-</span><span class="fl">4</span><span class="op">)</span>, <span class="fu"><a href="param_dlogdet.html">param_dlogdet</a></span><span class="op">(</span><span class="va">s</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> scale scale </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     4     4 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> log_scale log_scale </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         4         4 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># and a fully known matrix has no free value at all</span></span></span>
 <span class="r-in"><span><span class="fu">scaled_matrix</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span>, link <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span><span class="op">@</span><span class="va">n_free</span></span></span>

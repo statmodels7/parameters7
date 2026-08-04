@@ -74,6 +74,15 @@ through an explicit inverse.
 - [`param_factor()`](https://statmodels7.github.io/parameters7/reference/param_factor.md)
   : A Factor of a Parameter's Matrix
 
+## What a reader reads
+
+The quantities a family is about, with the Jacobian of the map from the
+free vector and the scale each interval belongs on, so that a consumer
+can report them by the delta method rather than reporting coordinates.
+
+- [`param_readable()`](https://statmodels7.github.io/parameters7/reference/param_readable.md)
+  : Quantities a Family Is About
+
 ## Rank
 
 A rank read off an assembled matrix is not scale invariant, so it is
@@ -201,8 +210,14 @@ that the derivations can be followed from the code that implements them.
   : The Pattern of a Compound-Symmetric Parameter
 - [`dd_exp()`](https://statmodels7.github.io/parameters7/reference/dd_exp.md)
   : Divided Differences of the Exponential
+- [`diag_dlog()`](https://statmodels7.github.io/parameters7/reference/diag_dlog.md)
+  : Derivatives of the Logarithm of a Link
 - [`diag_entries()`](https://statmodels7.github.io/parameters7/reference/diag_entries.md)
   : The Diagonal Entries Behind a Free Vector
+- [`diag_higher()`](https://statmodels7.github.io/parameters7/reference/diag_higher.md)
+  : Third and Fourth Derivatives of a Diagonal Matrix
+- [`diag_logdet_higher()`](https://statmodels7.github.io/parameters7/reference/diag_logdet_higher.md)
+  : Higher Derivatives of a Diagonal Log-Determinant
 - [`diag_multiplicity()`](https://statmodels7.github.io/parameters7/reference/diag_multiplicity.md)
   : The Number of Diagonal Entries Each Free Value Owns
 - [`diag_owner()`](https://statmodels7.github.io/parameters7/reference/diag_owner.md)
@@ -233,6 +248,8 @@ that the derivations can be followed from the code that implements them.
   : A Jet for One Variable
 - [`leibniz_gram()`](https://statmodels7.github.io/parameters7/reference/leibniz_gram.md)
   : A Gram Product's Derivatives From Its Factor's
+- [`link_tag()`](https://statmodels7.github.io/parameters7/reference/link_tag.md)
+  : A Short Name for a Link
 - [`log_affine_derivs()`](https://statmodels7.github.io/parameters7/reference/log_affine_derivs.md)
   : Derivatives of a Sum of Logarithms of Affine Functions
 - [`mixed_stencil()`](https://statmodels7.github.io/parameters7/reference/mixed_stencil.md)
@@ -243,6 +260,8 @@ that the derivations can be followed from the code that implements them.
   : One Derivative Component by the Daleckii-Krein Contraction
 - [`mlog_expm_small()`](https://statmodels7.github.io/parameters7/reference/mlog_expm_small.md)
   : Exponential of a Small Upper Triangular Matrix
+- [`mlog_higher()`](https://statmodels7.github.io/parameters7/reference/mlog_higher.md)
+  : Third and Fourth Derivatives of a Matrix Exponential
 - [`mlog_s()`](https://statmodels7.github.io/parameters7/reference/mlog_s.md)
   : The Symmetric Matrix Behind a Free Vector
 - [`mlog_tables()`](https://statmodels7.github.io/parameters7/reference/mlog_tables.md)
@@ -436,6 +455,18 @@ that the derivations can be followed from the code that implements them.
   : Log-Determinant of a Scaled Parameter
 - [`param_logdet.parameter`](https://statmodels7.github.io/parameters7/reference/param_logdet.parameter.md)
   : Default Log-Determinant
+- [`param_readable.Ar1Param`](https://statmodels7.github.io/parameters7/reference/param_readable.Ar1Param.md)
+  : The Scale and the Correlation of an AR(1)
+- [`param_readable.AutoregressiveParam`](https://statmodels7.github.io/parameters7/reference/param_readable.AutoregressiveParam.md)
+  : The Scale, the Partial Autocorrelations and the Coefficients
+- [`param_readable.CompoundSymmetryParam`](https://statmodels7.github.io/parameters7/reference/param_readable.CompoundSymmetryParam.md)
+  : The Scale and the Common Correlation of a Compound Symmetry
+- [`param_readable.ScaledMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_readable.ScaledMatrixParam.md)
+  : The Scale of a Fixed Matrix
+- [`param_readable.SimplexParam`](https://statmodels7.github.io/parameters7/reference/param_readable.SimplexParam.md)
+  : The Probabilities Behind an Additive Log-Ratio
+- [`param_readable.parameter`](https://statmodels7.github.io/parameters7/reference/param_readable.parameter.md)
+  : No Declared Quantities
 - [`param_solve.Ar1Param`](https://statmodels7.github.io/parameters7/reference/param_solve.Ar1Param.md)
   : Solve of an AR(1) Parameter
 - [`param_solve.AutoregressiveParam`](https://statmodels7.github.io/parameters7/reference/param_solve.AutoregressiveParam.md)
@@ -475,6 +506,10 @@ that the derivations can be followed from the code that implements them.
   : Derivatives of a Power, for Composition
 - [`print.parameter`](https://statmodels7.github.io/parameters7/reference/print.parameter.md)
   : Print a Constrained Parameter
+- [`readable_diagonal()`](https://statmodels7.github.io/parameters7/reference/readable_diagonal.md)
+  : Quantities That Are Separate Links of Separate Free Values
+- [`scaled_dlog()`](https://statmodels7.github.io/parameters7/reference/scaled_dlog.md)
+  : Higher Derivatives of a Scaled Log-Pseudo-Determinant
 - [`scaled_scale()`](https://statmodels7.github.io/parameters7/reference/scaled_scale.md)
   : The Scale Behind a Free Vector, and Its Derivatives
 - [`simplex_components()`](https://statmodels7.github.io/parameters7/reference/simplex_components.md)
@@ -487,6 +522,8 @@ that the derivations can be followed from the code that implements them.
   : Moore-Penrose Inverse From a Parameter's Spectrum
 - [`sweep_etas()`](https://statmodels7.github.io/parameters7/reference/sweep_etas.md)
   : Free Vectors to Sweep a Parameter Over
+- [`tagged_name()`](https://statmodels7.github.io/parameters7/reference/tagged_name.md)
+  : Name a Coordinate After Its Link
 - [`tm_derivative()`](https://statmodels7.github.io/parameters7/reference/tm_derivative.md)
   : Derivative Components of a Transition Matrix Parameter
 - [`tm_positions()`](https://statmodels7.github.io/parameters7/reference/tm_positions.md)

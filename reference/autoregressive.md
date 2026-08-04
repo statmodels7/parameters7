@@ -112,7 +112,7 @@ autoregressive moving average models. *Biometrika* 71, 403-404.
 ``` r
 s <- autoregressive(6, order = 2)
 s@free_names
-#> [1] "scale" "pacf1" "pacf2"
+#> [1] "log_scale" "z_pacf1"   "z_pacf2"  
 
 eta <- c(log(2), atanh(0.7), atanh(-0.3))
 round(param_value(s, eta), 4)

@@ -225,7 +225,7 @@ s
 #> Role:      precision
 #> 
 #> Free values: 1
-#>   scale
+#>   log_scale
 #> 
 #> From the base class: none
 ```
@@ -320,17 +320,37 @@ validator, the fitting routine — applies with no special case.
 
 # in distributions7; not run here, since this package does not depend on its
 # own consumer
-d <- mvgaussian_distrib(2, struct_sigma = parameters7::log_cholesky(2))
+d <- mvgaussian_distrib(2, sigma = parameters7::log_cholesky(2))
 d@params
-#> [1] "mu1"    "mu2"    "log_L1" "log_L2" "L2.1"
+#> [1] "mu1" "mu2" "sigma_log_L1" "sigma_log_L2" "sigma_L2.1"
 
 fit <- fit_distrib(d, y)
 mv_sigma(d, coef(fit))
 ```
 
-The names above are the parameter’s own `free_names`, which is why they
-are fixed at construction: they are the interface every consumer builds
-its parameter tables from.
+The names above are the parameter’s own `free_names` with a prefix
+saying which matrix they build, which is why they are fixed at
+construction: they are the interface every consumer builds its parameter
+tables from.
+
+What a consumer prints is another matter, and a coordinate is not it.
+[`param_readable()`](https://statmodels7.github.io/parameters7/reference/param_readable.md)
+is where a family says which quantities it is about — a marginal
+variance, a correlation, the coefficients of an autoregression —
+together with the Jacobian of the map from the free vector and the scale
+each interval belongs on, so that the consumer reports them by the delta
+method.
+
+``` r
+
+p <- param_readable(autoregressive(8, order = 2), c(log(4), atanh(0.75), atanh(-0.35)))
+round(p$value, 4)
+#>   scale   pacf1   pacf2    phi1    phi2 
+#>  4.0000  0.7500 -0.3500  1.0125 -0.3500
+p$transform
+#>      scale      pacf1      pacf2       phi1       phi2 
+#>      "log"    "atanh"    "atanh" "identity" "identity"
+```
 
 ## A user-defined parameter needs only its map
 
@@ -339,30 +359,43 @@ a new parameter is a subclass and one method.
 
 ``` r
 
-Ar1 <- S7::new_class("Ar1", parent = matrix_parameter)
+ExpDecay <- S7::new_class("ExpDecay", parent = matrix_parameter)
 
-S7::method(param_value, Ar1) <- function(s, eta, ...) {
-  p <- s@dimension
-  exp(eta[1]) * tanh(eta[2])^abs(outer(seq_len(p), seq_len(p), "-"))
+S7::method(param_value, ExpDecay) <- function(s, eta, ...) {
+  d <- abs(outer(s@param_params$times, s@param_params$times, "-"))
+  exp(eta[1]) * exp(-d / exp(eta[2]))
 }
 
-ar1 <- Ar1(
-  param_name = "ar1", dimension = 4L, n_free = 2L,
-  free_names = c("scale", "rho"), rank = 4L,
+decay <- ExpDecay(
+  param_name = "exp_decay", dimension = 4L, n_free = 2L,
+  free_names = c("log_scale", "log_range"), rank = 4L,
   null_basis = matrix(numeric(0), 4, 0), role = "covariance",
-  param_params = list()
+  param_params = list(times = c(0, 0.5, 1.7, 3))
 )
 
 # never implemented, yet available
-round(param_d1(ar1, c(0.2, 0.6))[["rho"]], 4)
+round(param_d1(decay, c(0.2, 0.6))[["log_range"]], 4)
 #>        [,1]   [,2]   [,3]   [,4]
-#> [1,] 0.0000 0.8691 0.9335 0.7520
-#> [2,] 0.8691 0.0000 0.8691 0.9335
-#> [3,] 0.9335 0.8691 0.0000 0.8691
-#> [4,] 0.7520 0.9335 0.8691 0.0000
-param_logdet(ar1, c(0.2, 0.6))
-#> [1] -0.2208117
+#> [1,] 0.0000 0.2547 0.4483 0.3876
+#> [2,] 0.2547 0.0000 0.4163 0.4250
+#> [3,] 0.4483 0.4163 0.0000 0.4269
+#> [4,] 0.3876 0.4250 0.4269 0.0000
+param_logdet(decay, c(0.2, 0.6))
+#> [1] -0.6482252
 ```
+
+The example continues an autoregression to unequally spaced times, which
+[`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md)
+does not cover, and its free names follow the convention every family
+here obeys: a name says which coordinate it is, not which quantity the
+coordinate produces. Where a link carries a constrained quantity onto
+the free scale the name records that link, so a covariance appears as
+`log_scale` and a correlation as `z_rho`; where the coordinate is
+already unrestricted, as the below-diagonal entries of a Cholesky factor
+are, the name is the plain `L2.1`. A consumer flattens the free vector
+into scalars carrying identity links, and a name promising a bounded
+quantity would put a number in front of a reader on a scale that number
+is not on.
 
 ## Validating a parameter
 
@@ -386,8 +419,8 @@ invisible(check_parameter(log_cholesky(3)))
 #>   [OK         ] solve and factor     3.90e-15
 #>   [OK         ] shapes and names  
 #>   9 passed, 0 failed, 0 not checked
-invisible(check_parameter(ar1))
-#> Parameter: ar1   (4 x 4, rank 4, 2 free)
+invisible(check_parameter(decay))
+#> Parameter: exp_decay   (4 x 4, rank 4, 2 free)
 #>   [OK         ] membership           0.00e+00
 #>   [NOT CHECKED] round trip        
 #>   [NOT CHECKED] first derivatives 
@@ -395,7 +428,7 @@ invisible(check_parameter(ar1))
 #>   [NOT CHECKED] log-determinant   
 #>   [NOT CHECKED] logdet gradient   
 #>   [NOT CHECKED] logdet hessian    
-#>   [OK         ] solve and factor     4.79e-15
+#>   [OK         ] solve and factor     6.41e-16
 #>   [OK         ] shapes and names  
 #>   3 passed, 0 failed, 6 not checked
 ```
@@ -404,10 +437,14 @@ invisible(check_parameter(ar1))
 
 |  |  |
 |----|----|
-| families | [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md), [`diagonal_matrix()`](https://statmodels7.github.io/parameters7/reference/diagonal_matrix.md), [`scalar_matrix()`](https://statmodels7.github.io/parameters7/reference/scalar_matrix.md), [`scaled_matrix()`](https://statmodels7.github.io/parameters7/reference/scaled_matrix.md) |
+| unstructured matrices | [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md), [`matrix_log()`](https://statmodels7.github.io/parameters7/reference/matrix_log.md), [`correlation_matrix()`](https://statmodels7.github.io/parameters7/reference/correlation_matrix.md) |
+| economical matrices | [`compound_symmetry()`](https://statmodels7.github.io/parameters7/reference/compound_symmetry.md), [`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md), [`autoregressive()`](https://statmodels7.github.io/parameters7/reference/autoregressive.md) |
+| diagonal and fixed | [`diagonal_matrix()`](https://statmodels7.github.io/parameters7/reference/diagonal_matrix.md), [`scalar_matrix()`](https://statmodels7.github.io/parameters7/reference/scalar_matrix.md), [`scaled_matrix()`](https://statmodels7.github.io/parameters7/reference/scaled_matrix.md) |
+| not matrices | [`simplex()`](https://statmodels7.github.io/parameters7/reference/simplex.md), [`transition_matrix()`](https://statmodels7.github.io/parameters7/reference/transition_matrix.md) |
 | maps | [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md), [`param_free()`](https://statmodels7.github.io/parameters7/reference/param_free.md) |
-| derivatives | [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md), [`param_d2()`](https://statmodels7.github.io/parameters7/reference/param_d2.md) |
-| likelihood pieces | [`param_logdet()`](https://statmodels7.github.io/parameters7/reference/param_logdet.md), [`param_dlogdet()`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.md), [`param_d2logdet()`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.md), [`param_solve()`](https://statmodels7.github.io/parameters7/reference/param_solve.md), [`param_factor()`](https://statmodels7.github.io/parameters7/reference/param_factor.md) |
+| derivatives | [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md) … [`param_d4()`](https://statmodels7.github.io/parameters7/reference/param_d4.md), exact to fourth order |
+| likelihood pieces | [`param_logdet()`](https://statmodels7.github.io/parameters7/reference/param_logdet.md), [`param_dlogdet()`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.md) … [`param_d4logdet()`](https://statmodels7.github.io/parameters7/reference/param_d3logdet.md), [`param_solve()`](https://statmodels7.github.io/parameters7/reference/param_solve.md), [`param_factor()`](https://statmodels7.github.io/parameters7/reference/param_factor.md) |
+| what a reader reads | [`param_readable()`](https://statmodels7.github.io/parameters7/reference/param_readable.md) |
 | tools | [`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md), [`param_is_numerical()`](https://statmodels7.github.io/parameters7/reference/param_is_numerical.md), [`param_null_basis()`](https://statmodels7.github.io/parameters7/reference/param_null_basis.md), [`print()`](https://rdrr.io/r/base/print.html) |
 
 ## Related

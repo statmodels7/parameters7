@@ -51,6 +51,6 @@ compares the two routes.
 # for a scaled precision the derivative is the rank, whatever the scale
 s <- scaled_matrix(crossprod(diff(diag(6), differences = 2)))
 c(param_dlogdet(s, -3), param_dlogdet(s, 5), rank = s@rank)
-#> scale scale  rank 
-#>     4     4     4 
+#> log_scale log_scale      rank 
+#>         4         4         4 
 ```

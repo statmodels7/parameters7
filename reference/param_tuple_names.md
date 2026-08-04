@@ -52,5 +52,5 @@ param_tuple_names(log_cholesky(2))
 #> [1] "log_L1:log_L1" "log_L2:log_L2" "L2.1:L2.1"     "log_L1:log_L2"
 #> [5] "log_L1:L2.1"   "log_L2:L2.1"  
 param_tuple_names(scalar_matrix(2), 3)
-#> [1] "scale:scale:scale"
+#> [1] "log_scale:log_scale:log_scale"
 ```

@@ -46,7 +46,7 @@ layer and not two.
 
 ``` r
 numerical_d2(scalar_matrix(2), 0.3)
-#> $`scale:scale`
+#> $`log_scale:log_scale`
 #>          v1       v2
 #> v1 1.349859 0.000000
 #> v2 0.000000 1.349859

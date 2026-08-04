@@ -38,7 +38,7 @@ scaled_matrix(crossprod(diff(diag(6), differences = 2)))
 #> Role:      precision
 #> 
 #> Free values: 1
-#>   scale
+#>   log_scale
 #> 
 #> From the base class: none
 ```
