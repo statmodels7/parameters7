@@ -15,6 +15,8 @@ its own constrained set, and each owns the side of that matrix.
   : Construct a Compound Symmetry Parameter
 - [`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md)
   : Construct an AR(1) Parameter
+- [`autoregressive()`](https://statmodels7.github.io/parameters7/reference/autoregressive.md)
+  : Construct an Autoregressive Parameter
 - [`diagonal_matrix()`](https://statmodels7.github.io/parameters7/reference/diagonal_matrix.md)
   : Construct a Diagonal Parameter
 - [`scalar_matrix()`](https://statmodels7.github.io/parameters7/reference/scalar_matrix.md)
@@ -114,6 +116,8 @@ The S7 classes; each page lists the methods that dispatch on it.
   : Compound Symmetry Parameter
 - [`Ar1Param()`](https://statmodels7.github.io/parameters7/reference/Ar1Param.md)
   : AR(1) Parameter
+- [`AutoregressiveParam()`](https://statmodels7.github.io/parameters7/reference/AutoregressiveParam.md)
+  : Autoregressive Parameter
 - [`SimplexParam()`](https://statmodels7.github.io/parameters7/reference/SimplexParam.md)
   : Simplex Parameter
 - [`TransitionMatrixParam()`](https://statmodels7.github.io/parameters7/reference/TransitionMatrixParam.md)
@@ -143,6 +147,18 @@ that the derivations can be followed from the code that implements them.
   : The Log-Determinant Terms of an AR(1) Parameter
 - [`ar1_pattern()`](https://statmodels7.github.io/parameters7/reference/ar1_pattern.md)
   : The Pattern of an AR(1) Parameter
+- [`ar_assemble()`](https://statmodels7.github.io/parameters7/reference/ar_assemble.md)
+  : The Matrix and Its Derivatives, From the Jets
+- [`ar_derivative()`](https://statmodels7.github.io/parameters7/reference/ar_derivative.md)
+  : Derivative Components of an Autoregressive Parameter
+- [`ar_jets()`](https://statmodels7.github.io/parameters7/reference/ar_jets.md)
+  : The Jets an Autoregressive Parameter Is Built From
+- [`ar_levinson()`](https://statmodels7.github.io/parameters7/reference/ar_levinson.md)
+  : The Levinson-Durbin Recursion, Carried in Jets
+- [`ar_logdet_derivative()`](https://statmodels7.github.io/parameters7/reference/ar_logdet_derivative.md)
+  : Log-Determinant Components of an Autoregressive Parameter
+- [`ar_prediction()`](https://statmodels7.github.io/parameters7/reference/ar_prediction.md)
+  : The Prediction Form of an Autoregressive Parameter
 - [`check_eta()`](https://statmodels7.github.io/parameters7/reference/check_eta.md)
   : Validate a Free Vector Against a Parameter
 - [`check_matrix()`](https://statmodels7.github.io/parameters7/reference/check_matrix.md)
@@ -203,6 +219,18 @@ that the derivations can be followed from the code that implements them.
   : Finite-Difference Step for a Free Value
 - [`is_base_param_class()`](https://statmodels7.github.io/parameters7/reference/is_base_param_class.md)
   : Is This the Package's Own Base Class?
+- [`jet_add()`](https://statmodels7.github.io/parameters7/reference/jet_add.md)
+  : Sum of Jets
+- [`jet_cmul()`](https://statmodels7.github.io/parameters7/reference/jet_cmul.md)
+  : A Jet Times a Constant
+- [`jet_const()`](https://statmodels7.github.io/parameters7/reference/jet_const.md)
+  : A Constant Jet
+- [`jet_layout()`](https://statmodels7.github.io/parameters7/reference/jet_layout.md)
+  : The Bookkeeping a Jet Needs
+- [`jet_mul()`](https://statmodels7.github.io/parameters7/reference/jet_mul.md)
+  : Product of Jets
+- [`jet_var()`](https://statmodels7.github.io/parameters7/reference/jet_var.md)
+  : A Jet for One Variable
 - [`leibniz_gram()`](https://statmodels7.github.io/parameters7/reference/leibniz_gram.md)
   : A Gram Product's Derivatives From Its Factor's
 - [`log_affine_derivs()`](https://statmodels7.github.io/parameters7/reference/log_affine_derivs.md)
@@ -226,6 +254,11 @@ that the derivations can be followed from the code that implements them.
   [`param_d3.Ar1Param`](https://statmodels7.github.io/parameters7/reference/param_d1.Ar1Param.md)
   [`param_d4.Ar1Param`](https://statmodels7.github.io/parameters7/reference/param_d1.Ar1Param.md)
   : Derivatives of an AR(1) Parameter
+- [`param_d1.AutoregressiveParam`](https://statmodels7.github.io/parameters7/reference/param_d1.AutoregressiveParam.md)
+  [`param_d2.AutoregressiveParam`](https://statmodels7.github.io/parameters7/reference/param_d1.AutoregressiveParam.md)
+  [`param_d3.AutoregressiveParam`](https://statmodels7.github.io/parameters7/reference/param_d1.AutoregressiveParam.md)
+  [`param_d4.AutoregressiveParam`](https://statmodels7.github.io/parameters7/reference/param_d1.AutoregressiveParam.md)
+  : Derivatives of an Autoregressive Parameter
 - [`param_d1.CompoundSymmetryParam`](https://statmodels7.github.io/parameters7/reference/param_d1.CompoundSymmetryParam.md)
   [`param_d2.CompoundSymmetryParam`](https://statmodels7.github.io/parameters7/reference/param_d1.CompoundSymmetryParam.md)
   [`param_d3.CompoundSymmetryParam`](https://statmodels7.github.io/parameters7/reference/param_d1.CompoundSymmetryParam.md)
@@ -330,6 +363,11 @@ that the derivations can be followed from the code that implements them.
   [`param_d3logdet.Ar1Param`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.Ar1Param.md)
   [`param_d4logdet.Ar1Param`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.Ar1Param.md)
   : Log-Determinant Derivatives of an AR(1) Parameter
+- [`param_dlogdet.AutoregressiveParam`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.AutoregressiveParam.md)
+  [`param_d2logdet.AutoregressiveParam`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.AutoregressiveParam.md)
+  [`param_d3logdet.AutoregressiveParam`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.AutoregressiveParam.md)
+  [`param_d4logdet.AutoregressiveParam`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.AutoregressiveParam.md)
+  : Log-Determinant Derivatives of an Autoregressive Parameter
 - [`param_dlogdet.CompoundSymmetryParam`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.CompoundSymmetryParam.md)
   [`param_d2logdet.CompoundSymmetryParam`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.CompoundSymmetryParam.md)
   [`param_d3logdet.CompoundSymmetryParam`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.CompoundSymmetryParam.md)
@@ -360,6 +398,8 @@ that the derivations can be followed from the code that implements them.
   : Default Factor
 - [`param_free.Ar1Param`](https://statmodels7.github.io/parameters7/reference/param_free.Ar1Param.md)
   : Free Vector of an AR(1) Parameter
+- [`param_free.AutoregressiveParam`](https://statmodels7.github.io/parameters7/reference/param_free.AutoregressiveParam.md)
+  : Free Vector of an Autoregressive Parameter
 - [`param_free.CompoundSymmetryParam`](https://statmodels7.github.io/parameters7/reference/param_free.CompoundSymmetryParam.md)
   : Free Vector of a Compound Symmetry Parameter
 - [`param_free.CorrelationParam`](https://statmodels7.github.io/parameters7/reference/param_free.CorrelationParam.md)
@@ -380,6 +420,8 @@ that the derivations can be followed from the code that implements them.
   : Refusal to Invert Without a Closed Form
 - [`param_logdet.Ar1Param`](https://statmodels7.github.io/parameters7/reference/param_logdet.Ar1Param.md)
   : Log-Determinant of an AR(1) Parameter
+- [`param_logdet.AutoregressiveParam`](https://statmodels7.github.io/parameters7/reference/param_logdet.AutoregressiveParam.md)
+  : Log-Determinant of an Autoregressive Parameter
 - [`param_logdet.CompoundSymmetryParam`](https://statmodels7.github.io/parameters7/reference/param_logdet.CompoundSymmetryParam.md)
   : Log-Determinant of a Compound Symmetry Parameter
 - [`param_logdet.CorrelationParam`](https://statmodels7.github.io/parameters7/reference/param_logdet.CorrelationParam.md)
@@ -396,6 +438,8 @@ that the derivations can be followed from the code that implements them.
   : Default Log-Determinant
 - [`param_solve.Ar1Param`](https://statmodels7.github.io/parameters7/reference/param_solve.Ar1Param.md)
   : Solve of an AR(1) Parameter
+- [`param_solve.AutoregressiveParam`](https://statmodels7.github.io/parameters7/reference/param_solve.AutoregressiveParam.md)
+  : Solve of an Autoregressive Parameter
 - [`param_solve.CompoundSymmetryParam`](https://statmodels7.github.io/parameters7/reference/param_solve.CompoundSymmetryParam.md)
   : Solve of a Compound Symmetry Parameter
 - [`param_solve.MatrixLogParam`](https://statmodels7.github.io/parameters7/reference/param_solve.MatrixLogParam.md)
@@ -406,6 +450,8 @@ that the derivations can be followed from the code that implements them.
   : The Spectral Decomposition a Parameter's Quantities Are Read From
 - [`param_value.Ar1Param`](https://statmodels7.github.io/parameters7/reference/param_value.Ar1Param.md)
   : Value of an AR(1) Parameter
+- [`param_value.AutoregressiveParam`](https://statmodels7.github.io/parameters7/reference/param_value.AutoregressiveParam.md)
+  : Value of an Autoregressive Parameter
 - [`param_value.CompoundSymmetryParam`](https://statmodels7.github.io/parameters7/reference/param_value.CompoundSymmetryParam.md)
   : Value of a Compound Symmetry Parameter
 - [`param_value.CorrelationParam`](https://statmodels7.github.io/parameters7/reference/param_value.CorrelationParam.md)
@@ -445,3 +491,5 @@ that the derivations can be followed from the code that implements them.
   : Derivative Components of a Transition Matrix Parameter
 - [`tm_positions()`](https://statmodels7.github.io/parameters7/reference/tm_positions.md)
   : Row and Chart Coordinate of Each Free Value
+- [`tuple_indices()`](https://statmodels7.github.io/parameters7/reference/tuple_indices.md)
+  : The Index Tuples of a Given Width

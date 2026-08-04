@@ -6,6 +6,7 @@
 <url><loc>https://statmodels7.github.io/parameters7/index.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/news/index.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/Ar1Param.html</loc></url>
+<url><loc>https://statmodels7.github.io/parameters7/reference/AutoregressiveParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/CompoundSymmetryParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/CorrelationParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/DiagMatrixParam.html</loc></url>
@@ -17,6 +18,13 @@
 <url><loc>https://statmodels7.github.io/parameters7/reference/ar1.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/ar1_logdet_terms.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/ar1_pattern.html</loc></url>
+<url><loc>https://statmodels7.github.io/parameters7/reference/ar_assemble.html</loc></url>
+<url><loc>https://statmodels7.github.io/parameters7/reference/ar_derivative.html</loc></url>
+<url><loc>https://statmodels7.github.io/parameters7/reference/ar_jets.html</loc></url>
+<url><loc>https://statmodels7.github.io/parameters7/reference/ar_levinson.html</loc></url>
+<url><loc>https://statmodels7.github.io/parameters7/reference/ar_logdet_derivative.html</loc></url>
+<url><loc>https://statmodels7.github.io/parameters7/reference/ar_prediction.html</loc></url>
+<url><loc>https://statmodels7.github.io/parameters7/reference/autoregressive.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/check_eta.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/check_matrix.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/check_param_args.html</loc></url>
@@ -52,6 +60,12 @@
 <url><loc>https://statmodels7.github.io/parameters7/reference/fd_step.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/index.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/is_base_param_class.html</loc></url>
+<url><loc>https://statmodels7.github.io/parameters7/reference/jet_add.html</loc></url>
+<url><loc>https://statmodels7.github.io/parameters7/reference/jet_cmul.html</loc></url>
+<url><loc>https://statmodels7.github.io/parameters7/reference/jet_const.html</loc></url>
+<url><loc>https://statmodels7.github.io/parameters7/reference/jet_layout.html</loc></url>
+<url><loc>https://statmodels7.github.io/parameters7/reference/jet_mul.html</loc></url>
+<url><loc>https://statmodels7.github.io/parameters7/reference/jet_var.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/leibniz_gram.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/log_affine_derivs.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/log_cholesky.html</loc></url>
@@ -69,6 +83,7 @@
 <url><loc>https://statmodels7.github.io/parameters7/reference/numerical_d3.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/numerical_d4.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_d1.Ar1Param.html</loc></url>
+<url><loc>https://statmodels7.github.io/parameters7/reference/param_d1.AutoregressiveParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_d1.CompoundSymmetryParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_d1.CorrelationParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_d1.DiagMatrixParam.html</loc></url>
@@ -124,6 +139,7 @@
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_d4logdet.ScaledMatrixParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_d4logdet.matrix_parameter.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_dlogdet.Ar1Param.html</loc></url>
+<url><loc>https://statmodels7.github.io/parameters7/reference/param_dlogdet.AutoregressiveParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_dlogdet.CompoundSymmetryParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_dlogdet.CorrelationParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_dlogdet.DiagMatrixParam.html</loc></url>
@@ -138,6 +154,7 @@
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_factor.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_factor.parameter.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_free.Ar1Param.html</loc></url>
+<url><loc>https://statmodels7.github.io/parameters7/reference/param_free.AutoregressiveParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_free.CompoundSymmetryParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_free.CorrelationParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_free.DiagMatrixParam.html</loc></url>
@@ -150,6 +167,7 @@
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_free.parameter.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_is_numerical.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_logdet.Ar1Param.html</loc></url>
+<url><loc>https://statmodels7.github.io/parameters7/reference/param_logdet.AutoregressiveParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_logdet.CompoundSymmetryParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_logdet.CorrelationParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_logdet.DiagMatrixParam.html</loc></url>
@@ -160,6 +178,7 @@
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_logdet.parameter.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_null_basis.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_solve.Ar1Param.html</loc></url>
+<url><loc>https://statmodels7.github.io/parameters7/reference/param_solve.AutoregressiveParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_solve.CompoundSymmetryParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_solve.MatrixLogParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_solve.html</loc></url>
@@ -168,6 +187,7 @@
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_tuple_indices.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_tuple_names.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_value.Ar1Param.html</loc></url>
+<url><loc>https://statmodels7.github.io/parameters7/reference/param_value.AutoregressiveParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_value.CompoundSymmetryParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_value.CorrelationParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_value.DiagMatrixParam.html</loc></url>
@@ -193,5 +213,6 @@
 <url><loc>https://statmodels7.github.io/parameters7/reference/tm_derivative.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/tm_positions.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/transition_matrix.html</loc></url>
+<url><loc>https://statmodels7.github.io/parameters7/reference/tuple_indices.html</loc></url>
 </urlset>
 

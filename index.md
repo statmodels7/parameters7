@@ -166,6 +166,30 @@ round(param_solve(s, eta), 3)
 #> [5,]  0.000  0.000  0.000 -0.469  0.781
 ```
 
+An autoregression of any order is
+[`autoregressive()`](https://statmodels7.github.io/parameters7/reference/autoregressive.md).
+Its stationary region in the coefficients is not a box – at order two it
+is already a triangle – so the chart is the partial autocorrelations,
+each free in $`(-1, 1)`$ and carried onto the coefficients by the
+Levinson-Durbin recursion. Every free vector is stationary, and the
+precision comes out banded of the order’s width, an autoregression of
+order $`q`$ being Markov of order $`q`$:
+
+``` r
+
+s <- autoregressive(7, order = 2)
+eta <- c(log(2), atanh(0.7), atanh(-0.3))
+round(param_solve(s, eta), 3)
+#>        [,1]   [,2]   [,3]   [,4]   [,5]   [,6]   [,7]
+#> [1,]  1.077 -0.980  0.323  0.000  0.000  0.000  0.000
+#> [2,] -0.980  1.970 -1.275  0.323  0.000  0.000  0.000
+#> [3,]  0.323 -1.275  2.066 -1.275  0.323  0.000  0.000
+#> [4,]  0.000  0.323 -1.275  2.066 -1.275  0.323  0.000
+#> [5,]  0.000  0.000  0.323 -1.275  2.066 -1.275  0.323
+#> [6,]  0.000  0.000  0.000  0.323 -1.275  1.970 -0.980
+#> [7,]  0.000  0.000  0.000  0.000  0.323 -0.980  1.077
+```
+
 A correlation matrix on its own – what a copula or an LKJ prior is
 written against – is
 [`correlation_matrix()`](https://statmodels7.github.io/parameters7/reference/correlation_matrix.md),
