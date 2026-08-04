@@ -187,6 +187,32 @@ the null space of a sum of positive semidefinite matrices is the
 intersection of their null spaces — and membership is afterwards tested
 against that basis.
 
+## What consumes a structure
+
+A multivariate distribution in
+[distributions7](https://statmodels7.github.io/distributions7/) carries
+its covariance as a structure, and takes it on either side: a structure
+imposed on $\Sigma$ and the same structure imposed on
+$\Omega = \Sigma^{-1}$ are different models whenever the family is not
+closed under inversion. The free values become parameters of the
+distribution, so the whole apparatus of that package — derivatives, the
+validator, the fitting routine — applies with no special case.
+
+``` r
+# in distributions7; not run here, since this package does not depend on its
+# own consumer
+d <- mvgaussian_distrib(2, struct_sigma = covstructs7::log_cholesky(2))
+d@params
+#> [1] "mu1"    "mu2"    "log_L1" "log_L2" "L2.1"
+
+fit <- fit_distrib(d, y)
+mv_sigma(d, coef(fit))
+```
+
+The names above are the structure’s own `free_names`, which is why they
+are fixed at construction: they are the interface every consumer builds
+its parameter tables from.
+
 ## A user-defined structure needs only its map
 
 Everything else has a numerical method registered on the base class, so
