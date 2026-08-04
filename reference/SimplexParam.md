@@ -27,7 +27,8 @@ SimplexParam(
 
 - free_names:
 
-  A character vector of length `n_free`.
+  A character vector of length `n_free`, one label per free value. Fixed
+  at construction: every consumer builds parameter tables from these.
 
 - param_params:
 

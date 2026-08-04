@@ -33,12 +33,29 @@ DiagMatrixParam(
 
 - free_names:
 
-  A character vector of length `n_free`, one label per free value. Fixed
-  at construction: every consumer builds parameter tables from these.
+  A character vector of length `n_free`.
 
 - param_params:
 
   A list of whatever the family needs to evaluate itself.
+
+- dimension:
+
+  The side \\p\\ of the matrix.
+
+- rank:
+
+  The rank of the matrix the family produces.
+
+- null_basis:
+
+  A `dimension` by `dimension - rank` matrix whose columns are an
+  orthonormal basis of the null space.
+
+- role:
+
+  One of `"covariance"`, `"precision"` or `"either"`. A label: no method
+  reads it and no result depends on it.
 
 ## Value
 

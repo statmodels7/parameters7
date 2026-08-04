@@ -67,13 +67,29 @@ Constructed by <code><a href="diagonal_matrix.html">diagonal_matrix</a></code> o
 
 
 <dt id="arg-free-names">free_names<a class="anchor" aria-label="anchor" href="#arg-free-names"></a></dt>
-<dd><p>A character vector of length <code>n_free</code>, one label per
-free value. Fixed at construction: every consumer builds parameter tables
-from these.</p></dd>
+<dd><p>A character vector of length <code>n_free</code>.</p></dd>
 
 
 <dt id="arg-param-params">param_params<a class="anchor" aria-label="anchor" href="#arg-param-params"></a></dt>
 <dd><p>A list of whatever the family needs to evaluate itself.</p></dd>
+
+
+<dt id="arg-dimension">dimension<a class="anchor" aria-label="anchor" href="#arg-dimension"></a></dt>
+<dd><p>The side \(p\) of the matrix.</p></dd>
+
+
+<dt id="arg-rank">rank<a class="anchor" aria-label="anchor" href="#arg-rank"></a></dt>
+<dd><p>The rank of the matrix the family produces.</p></dd>
+
+
+<dt id="arg-null-basis">null_basis<a class="anchor" aria-label="anchor" href="#arg-null-basis"></a></dt>
+<dd><p>A <code>dimension</code> by <code>dimension - rank</code> matrix
+whose columns are an orthonormal basis of the null space.</p></dd>
+
+
+<dt id="arg-role">role<a class="anchor" aria-label="anchor" href="#arg-role"></a></dt>
+<dd><p>One of <code>"covariance"</code>, <code>"precision"</code> or
+<code>"either"</code>. A label: no method reads it and no result depends on it.</p></dd>
 
 </dl></div>
     <div class="section level2">
