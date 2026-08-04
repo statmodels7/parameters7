@@ -18,6 +18,7 @@
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="An S7 Framework for Constrained Parameters">
 <meta name="description" content="Parametrisations of constrained parameter spaces as objects. A parameter maps an unconstrained vector onto the set where it lives -- a symmetric positive semidefinite matrix, a probability vector on the simplex, a row-stochastic transition matrix -- and answers with exact derivatives to fourth order, the inverse map, and, on the matrix branch, the log-determinant or its pseudo-determinant counterpart and the solves a likelihood needs. Numerical fallbacks make a user-defined parameter work from its map alone, and a diagnostic verifies every component against an independent route.">
 <meta property="og:description" content="Parametrisations of constrained parameter spaces as objects. A parameter maps an unconstrained vector onto the set where it lives -- a symmetric positive semidefinite matrix, a probability vector on the simplex, a row-stochastic transition matrix -- and answers with exact derivatives to fourth order, the inverse map, and, on the matrix branch, the log-determinant or its pseudo-determinant counterpart and the solves a likelihood needs. Numerical fallbacks make a user-defined parameter work from its map alone, and a diagnostic verifies every component against an independent route.">
+<meta property="og:image" content="https://statmodels7.github.io/parameters7/logo.png">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -53,8 +54,10 @@
 <div class="row">
   <main id="main" class="col-md-9">
 <div class="section level1">
-<div class="page-header"><h1 id="parameters7">parameters7<a class="anchor" aria-label="anchor" href="#parameters7"></a>
-</h1></div>
+<div class="page-header">
+<img src="logo.png" class="logo" alt=""><h1 id="parameters7-">parameters7 <a class="anchor" aria-label="anchor" href="#parameters7-"></a>
+</h1>
+</div>
 <p>Every R package that fits a model with a constrained parameter carries its own parametrisation of it, written inside the routine that needs it. <code>nlme</code> has the <code>pdMat</code> classes for covariances, <code>lme4</code> has its <code>theta</code> vector, <code>glmmTMB</code> has its covariance parameters; mixture packages re-derive the softmax and hidden-Markov packages re-derive row-stochastic matrices — private rewritings of the same mathematics, none exposing a derivative, none reusable from outside.</p>
 <p>A constrained parameter is a fixed mathematical object: a map from an unconstrained vector onto the set where the parameter lives — the positive definite cone, the simplex, the row-stochastic matrices — with its inverse, its derivatives, and the quantities a likelihood asks of the value. All of it is determined once and for all, so it can be written once and built on.</p>
 <p><a href="https://statmodels7.github.io/parameters7/">parameters7</a> makes such a parameter an object that can be <strong>evaluated, inverted, and differentiated to fourth order</strong>, and, on the matrix branch, asked for its <strong>log-determinant and its solves</strong> — including when the matrix is <strong>rank deficient</strong>, which a covariance may not be but a precision routinely is.</p>

@@ -87,21 +87,21 @@ invisible(check_parameter(log_cholesky(3)))
 #>   [OK         ] round trip           4.94e-16
 #>   [OK         ] first derivatives    2.90e-11
 #>   [OK         ] second derivatives   3.67e-11
-#>   [OK         ] log-determinant      8.94e-15
+#>   [OK         ] log-determinant      6.38e-15
 #>   [OK         ] logdet gradient      2.30e-13
 #>   [OK         ] logdet hessian       0.00e+00
-#>   [OK         ] solve and factor     5.15e-15
+#>   [OK         ] solve and factor     3.76e-15
 #>   [OK         ] shapes and names  
 #>   9 passed, 0 failed, 0 not checked
 
 # a rank-deficient penalty passes the same battery
 invisible(check_parameter(scaled_matrix(crossprod(diff(diag(6), differences = 2)))))
 #> Parameter: scaled   (6 x 6, rank 4, 1 free)
-#>   [OK         ] membership           2.49e-16
+#>   [OK         ] membership           3.29e-16
 #>   [OK         ] round trip           1.11e-16
 #>   [OK         ] first derivatives    2.40e-11
 #>   [OK         ] second derivatives   2.40e-11
-#>   [OK         ] log-determinant      2.65e-16
+#>   [OK         ] log-determinant      1.33e-15
 #>   [OK         ] logdet gradient      1.55e-15
 #>   [OK         ] logdet hessian       0.00e+00
 #>   [NOT CHECKED] solve             

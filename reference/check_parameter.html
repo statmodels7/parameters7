@@ -3,7 +3,7 @@
 implementation does not itself take, and reports what passed, what failed
 and what could not be checked."><meta property="og:description" content="Runs a battery of numerical checks on a parameter, each against a route the
 implementation does not itself take, and reports what passed, what failed
-and what could not be checked."></head><body>
+and what could not be checked."><meta property="og:image" content="https://statmodels7.github.io/parameters7/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -31,8 +31,7 @@ and what could not be checked."></head><body>
 </nav><div class="container template-reference-topic">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-
-      <h1>Validate a Covariance Parameter</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Validate a Covariance Parameter</h1>
       <small class="dont-index">Source: <a href="https://github.com/statmodels7/parameters7/blob/master/R/check_parameter.R" class="external-link"><code>R/check_parameter.R</code></a></small>
       <div class="d-none name"><code>check_parameter.Rd</code></div>
     </div>
@@ -112,21 +111,21 @@ the methods return.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [OK         ] round trip           4.94e-16</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [OK         ] first derivatives    2.90e-11</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [OK         ] second derivatives   3.67e-11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   [OK         ] log-determinant      8.94e-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [OK         ] log-determinant      6.38e-15</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [OK         ] logdet gradient      2.30e-13</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [OK         ] logdet hessian       0.00e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   [OK         ] solve and factor     5.15e-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [OK         ] solve and factor     3.76e-15</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [OK         ] shapes and names  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   9 passed, 0 failed, 0 not checked</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># a rank-deficient penalty passes the same battery</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/invisible.html" class="external-link">invisible</a></span><span class="op">(</span><span class="fu">check_parameter</span><span class="op">(</span><span class="fu"><a href="scaled_matrix.html">scaled_matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/crossprod.html" class="external-link">crossprod</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="fl">6</span><span class="op">)</span>, differences <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Parameter: scaled   (6 x 6, rank 4, 1 free)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   [OK         ] membership           2.49e-16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [OK         ] membership           3.29e-16</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [OK         ] round trip           1.11e-16</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [OK         ] first derivatives    2.40e-11</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [OK         ] second derivatives   2.40e-11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   [OK         ] log-determinant      2.65e-16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [OK         ] log-determinant      1.33e-15</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [OK         ] logdet gradient      1.55e-15</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [OK         ] logdet hessian       0.00e+00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [NOT CHECKED] solve             </span>
