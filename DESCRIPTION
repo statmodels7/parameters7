@@ -42,6 +42,8 @@ Collate:
     'chain.R'
     'compound_symmetry.R'
     'ar1.R'
+    'jet.R'
+    'autoregressive.R'
     'check_parameter.R'
     'correlation_matrix.R'
     'diagonal_matrix.R'

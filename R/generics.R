@@ -480,7 +480,26 @@ param_tuple_names <- function(s, order = 2L) {
 #'
 #' @export
 param_tuple_indices <- function(s, order = 2L) {
-  d <- s@n_free
+  tuple_indices(s@n_free, order)
+}
+
+
+#' The Index Tuples of a Given Width
+#'
+#' @description
+#' The enumeration behind \code{\link{param_tuple_indices}}, taken over a
+#' number of variables rather than over a parameter, so that anything holding
+#' derivatives over \eqn{d} variables -- a jet, for instance -- can share it.
+#'
+#' @param d The number of variables.
+#' @param order The derivative order, 1 to 4.
+#'
+#' @return A list of integer vectors of length \code{order}.
+#'
+#' @seealso \code{\link{param_tuple_indices}}
+#'
+#' @keywords internal
+tuple_indices <- function(d, order = 2L) {
   if (!order %in% 1:4) stop("'order' must be 1, 2, 3 or 4.", call. = FALSE)
   if (d == 0L) return(list())
   if (order == 1L) return(lapply(seq_len(d), as.integer))

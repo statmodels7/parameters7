@@ -1,5 +1,17 @@
 # parameters7 0.3.0
 
+* `autoregressive(dimension, order)` carries the covariance of a stationary
+  autoregression of any order. The stationary region in the coefficients is
+  not a box -- at order two it is already a triangle -- so the chart is the
+  partial autocorrelations, each free in `(-1, 1)` and carried onto the
+  coefficients by the Levinson-Durbin recursion, the transformation of
+  Barndorff-Nielsen and Schou (1973). The map is polynomial, so its
+  derivatives to fourth order come from carrying jets through the recursion
+  rather than from expanding it; `jet_mul()` is the Leibniz rule again, in
+  its scalar form. The log-determinant is `p log(g0) + sum (p-k) log(1-r_k^2)`
+  and the precision is banded of the order's width. `ar1()` stays as the
+  order-one case written out, and the two agree to machine precision.
+
 * Three families for structured covariances. `correlation_matrix()` carries a
   correlation matrix in the spherical parametrisation of Rapisarda, Brigo and
   Mercurio (2007): the rows of the Cholesky factor are points on the unit
