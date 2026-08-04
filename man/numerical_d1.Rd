@@ -18,6 +18,9 @@ A named list of symmetric matrices.
 One central difference of \code{\link{param_value}} in each component of
 \eqn{\eta}.
 }
+\examples{
+numerical_d1(scalar_matrix(2), 0.3)
+}
 \seealso{
 \code{\link{param_d1}}
 }

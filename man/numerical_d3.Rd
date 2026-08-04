@@ -22,6 +22,9 @@ whatever the family implements. A repeated component uses the matching
 higher-order one-dimensional factor; distinct components each contribute a
 central two-point factor, and the product is evaluated in one pass.
 }
+\examples{
+numerical_d3(scalar_matrix(2), 0.3)
+}
 \seealso{
 \code{\link{param_d3}}
 }

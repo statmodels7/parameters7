@@ -29,6 +29,9 @@ off-diagonal pair, so they commute into a four-point mixed stencil rather
 than compounding; the diagonal pairs use the three-point second-difference
 stencil directly, which is again one layer and not two.
 }
+\examples{
+numerical_d2(scalar_matrix(2), 0.3)
+}
 \seealso{
 \code{\link{param_d2}}
 }

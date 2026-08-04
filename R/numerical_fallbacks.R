@@ -210,6 +210,8 @@ fd_step <- function(eta_k, order = 1L) {
 #' @return A named list of symmetric matrices.
 #'
 #' @seealso \code{\link{param_d1}}
+#' @examples
+#' numerical_d1(scalar_matrix(2), 0.3)
 #' @export
 numerical_d1 <- function(s, eta) {
   out <- vector("list", s@n_free)
@@ -249,6 +251,8 @@ numerical_d1 <- function(s, eta) {
 #'   \code{param_tuple_names(s)}.
 #'
 #' @seealso \code{\link{param_d2}}
+#' @examples
+#' numerical_d2(scalar_matrix(2), 0.3)
 #' @export
 numerical_d2 <- function(s, eta) {
   idx <- param_tuple_indices(s)
@@ -465,6 +469,8 @@ S7::method(param_free, parameter) <- function(s, m, ...) {
 #' @return A named list keyed as \code{\link{param_tuple_names}(s, 3)}.
 #'
 #' @seealso \code{\link{param_d3}}
+#' @examples
+#' numerical_d3(scalar_matrix(2), 0.3)
 #' @export
 numerical_d3 <- function(s, eta) {
   idx <- param_tuple_indices(s, 3L)
@@ -496,6 +502,8 @@ numerical_d3 <- function(s, eta) {
 #' @return A named list keyed as \code{\link{param_tuple_names}(s, 4)}.
 #'
 #' @seealso \code{\link{param_d4}}
+#' @examples
+#' numerical_d4(scalar_matrix(2), 0.3)
 #' @export
 numerical_d4 <- function(s, eta) {
   idx <- param_tuple_indices(s, 4L)

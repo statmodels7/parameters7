@@ -21,6 +21,9 @@ fourth power of the step, so this is accurate to roughly four significant
 digits -- a starting point, and the reason every shipped family carries
 closed forms instead.
 }
+\examples{
+numerical_d4(scalar_matrix(2), 0.3)
+}
 \seealso{
 \code{\link{param_d4}}
 }
