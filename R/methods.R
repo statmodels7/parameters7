@@ -2,7 +2,7 @@
 NULL
 
 
-#' @title Print a Covariance Parameter
+#' @title Print a Constrained Parameter
 #' @name print.parameter
 #'
 #' @description

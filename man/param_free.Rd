@@ -2,14 +2,15 @@
 % Please edit documentation in R/generics.R
 \name{param_free}
 \alias{param_free}
-\title{The Free Vector Behind a Matrix}
+\title{The Free Vector Behind a Value}
 \usage{
 param_free(s, m, ...)
 }
 \arguments{
 \item{s}{An object inheriting from class \code{\link{parameter}}.}
 
-\item{m}{A symmetric numeric matrix of the parameter's dimension.}
+\item{m}{A value of the family's shape: a symmetric matrix on the matrix
+branch, a probability vector or row-stochastic matrix otherwise.}
 
 \item{...}{Passed to methods.}
 }
@@ -18,7 +19,7 @@ A numeric vector of length \code{s@n_free}, named by
 \code{s@free_names}.
 }
 \description{
-The inverse map: given a matrix in the family's set, returns the free vector
+The inverse map: given a value in the family's set, returns the free vector
 that produces it.
 }
 \details{
@@ -26,7 +27,9 @@ Exact or refused, never obtained by optimisation. A generic
 optimisation-based inverse would return a plausible \eqn{\eta} for a matrix
 outside the set, which is a wrong answer wearing the shape of a right one.
 A family whose map has no closed-form inverse refuses instead, and the base
-class refuses on behalf of any parameter that does not implement this.
+class refuses on behalf of any parameter that does not implement this. A
+value outside the set -- a matrix that is not positive definite, a vector
+off the simplex -- is refused rather than repaired.
 }
 \examples{
 s <- log_cholesky(2)

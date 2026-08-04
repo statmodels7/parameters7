@@ -2,7 +2,7 @@
 % Please edit documentation in R/generics.R
 \name{param_d2}
 \alias{param_d2}
-\title{Second Derivatives of a Parameter's Matrix}
+\title{Second Derivatives of a Parameter's Value}
 \usage{
 param_d2(s, eta, ...)
 }
@@ -14,12 +14,13 @@ param_d2(s, eta, ...)
 \item{...}{Passed to methods.}
 }
 \value{
-A named list of symmetric matrices, keyed as
+A named list keyed as
 \code{param_tuple_names(s)}.
 }
 \description{
 Returns the \eqn{d(d+1)/2} distinct second derivatives
-\eqn{\partial^2 M / \partial \eta_k \partial \eta_l}.
+\eqn{\partial^2 V / \partial \eta_k \partial \eta_l}, each shaped like
+the value.
 }
 \details{
 The components are keyed by \code{\link{param_tuple_names}}, generated from

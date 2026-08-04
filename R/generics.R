@@ -2,10 +2,13 @@
 NULL
 
 
-#' The Matrix a Parameter Produces
+#' The Value a Parameter Produces
 #'
 #' @description
-#' Maps the free vector \eqn{\eta} to the matrix it parametrises.
+#' Maps the free vector \eqn{\eta} to the constrained value it parametrises:
+#' a symmetric matrix for the \code{\link{matrix_parameter}} branch, a
+#' probability vector for \code{\link{simplex}}, a row-stochastic matrix for
+#' \code{\link{transition_matrix}}.
 #'
 #' @details
 #' This is the only generic a parameter must implement. Everything else in the
@@ -22,7 +25,9 @@ NULL
 #' @param eta A numeric vector of length \code{s@n_free}.
 #' @param ... Passed to methods.
 #'
-#' @return A symmetric numeric matrix with \code{s@dimension} rows and columns.
+#' @return The constrained value, shaped as the family declares: a symmetric
+#'   \code{s@dimension} by \code{s@dimension} matrix on the matrix branch, a
+#'   vector or row-stochastic matrix otherwise.
 #'
 #' @seealso \code{\link{param_free}}, \code{\link{param_d1}},
 #'   \code{\link{param_logdet}}
@@ -38,10 +43,10 @@ param_value <- S7::new_generic("param_value", "s", function(s, eta, ...) {
 })
 
 
-#' The Free Vector Behind a Matrix
+#' The Free Vector Behind a Value
 #'
 #' @description
-#' The inverse map: given a matrix in the family's set, returns the free vector
+#' The inverse map: given a value in the family's set, returns the free vector
 #' that produces it.
 #'
 #' @details
@@ -49,10 +54,13 @@ param_value <- S7::new_generic("param_value", "s", function(s, eta, ...) {
 #' optimisation-based inverse would return a plausible \eqn{\eta} for a matrix
 #' outside the set, which is a wrong answer wearing the shape of a right one.
 #' A family whose map has no closed-form inverse refuses instead, and the base
-#' class refuses on behalf of any parameter that does not implement this.
+#' class refuses on behalf of any parameter that does not implement this. A
+#' value outside the set -- a matrix that is not positive definite, a vector
+#' off the simplex -- is refused rather than repaired.
 #'
 #' @param s An object inheriting from class \code{\link{parameter}}.
-#' @param m A symmetric numeric matrix of the parameter's dimension.
+#' @param m A value of the family's shape: a symmetric matrix on the matrix
+#'   branch, a probability vector or row-stochastic matrix otherwise.
 #' @param ... Passed to methods.
 #'
 #' @return A numeric vector of length \code{s@n_free}, named by
@@ -72,11 +80,11 @@ param_free <- S7::new_generic("param_free", "s", function(s, m, ...) {
 })
 
 
-#' First Derivatives of a Parameter's Matrix
+#' First Derivatives of a Parameter's Value
 #'
 #' @description
-#' Returns \eqn{\partial M / \partial \eta_k} for every free value, as a list
-#' of matrices.
+#' Returns \eqn{\partial V / \partial \eta_k} for every free value, as a
+#' list of objects each shaped like the value.
 #'
 #' @details
 #' A parameter that registers no method for this generic gets the numerical one
@@ -103,11 +111,12 @@ param_d1 <- S7::new_generic("param_d1", "s", function(s, eta, ...) {
 })
 
 
-#' Second Derivatives of a Parameter's Matrix
+#' Second Derivatives of a Parameter's Value
 #'
 #' @description
 #' Returns the \eqn{d(d+1)/2} distinct second derivatives
-#' \eqn{\partial^2 M / \partial \eta_k \partial \eta_l}.
+#' \eqn{\partial^2 V / \partial \eta_k \partial \eta_l}, each shaped like
+#' the value.
 #'
 #' @details
 #' The components are keyed by \code{\link{param_tuple_names}}, generated from
@@ -120,7 +129,7 @@ param_d1 <- S7::new_generic("param_d1", "s", function(s, eta, ...) {
 #' @param eta A numeric vector of length \code{s@n_free}.
 #' @param ... Passed to methods.
 #'
-#' @return A named list of symmetric matrices, keyed as
+#' @return A named list keyed as
 #'   \code{param_tuple_names(s)}.
 #'
 #' @seealso \code{\link{param_d1}}, \code{\link{param_tuple_names}}

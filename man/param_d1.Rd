@@ -2,7 +2,7 @@
 % Please edit documentation in R/generics.R
 \name{param_d1}
 \alias{param_d1}
-\title{First Derivatives of a Parameter's Matrix}
+\title{First Derivatives of a Parameter's Value}
 \usage{
 param_d1(s, eta, ...)
 }
@@ -18,8 +18,8 @@ A list of \code{s@n_free} symmetric matrices, named by
 \code{s@free_names}.
 }
 \description{
-Returns \eqn{\partial M / \partial \eta_k} for every free value, as a list
-of matrices.
+Returns \eqn{\partial V / \partial \eta_k} for every free value, as a
+list of objects each shaped like the value.
 }
 \details{
 A parameter that registers no method for this generic gets the numerical one

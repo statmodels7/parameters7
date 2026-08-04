@@ -2,7 +2,7 @@
 % Please edit documentation in R/methods.R
 \name{print.parameter}
 \alias{print.parameter}
-\title{Print a Covariance Parameter}
+\title{Print a Constrained Parameter}
 \arguments{
 \item{x}{An object inheriting from class \code{\link{parameter}}.}
 

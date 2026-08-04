@@ -2,7 +2,7 @@
 % Please edit documentation in R/generics.R
 \name{param_value}
 \alias{param_value}
-\title{The Matrix a Parameter Produces}
+\title{The Value a Parameter Produces}
 \usage{
 param_value(s, eta, ...)
 }
@@ -14,10 +14,15 @@ param_value(s, eta, ...)
 \item{...}{Passed to methods.}
 }
 \value{
-A symmetric numeric matrix with \code{s@dimension} rows and columns.
+The constrained value, shaped as the family declares: a symmetric
+\code{s@dimension} by \code{s@dimension} matrix on the matrix branch, a
+vector or row-stochastic matrix otherwise.
 }
 \description{
-Maps the free vector \eqn{\eta} to the matrix it parametrises.
+Maps the free vector \eqn{\eta} to the constrained value it parametrises:
+a symmetric matrix for the \code{\link{matrix_parameter}} branch, a
+probability vector for \code{\link{simplex}}, a row-stochastic matrix for
+\code{\link{transition_matrix}}.
 }
 \details{
 This is the only generic a parameter must implement. Everything else in the
