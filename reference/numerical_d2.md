@@ -41,3 +41,14 @@ layer and not two.
 ## See also
 
 [`param_d2`](https://statmodels7.github.io/parameters7/reference/param_d2.md)
+
+## Examples
+
+``` r
+numerical_d2(scalar_matrix(2), 0.3)
+#> $`scale:scale`
+#>          v1       v2
+#> v1 1.349859 0.000000
+#> v2 0.000000 1.349859
+#> 
+```

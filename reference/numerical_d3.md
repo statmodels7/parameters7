@@ -35,3 +35,14 @@ A named list keyed as
 ## See also
 
 [`param_d3`](https://statmodels7.github.io/parameters7/reference/param_d3.md)
+
+## Examples
+
+``` r
+numerical_d3(scalar_matrix(2), 0.3)
+#> $`scale:scale:scale`
+#>          v1       v2
+#> v1 1.349859 0.000000
+#> v2 0.000000 1.349859
+#> 
+```
