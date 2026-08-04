@@ -1,4 +1,4 @@
-# Construct an Unstructured Positive Definite Structure
+# Construct an Unstructured Positive Definite Parameter
 
 The log-Cholesky parametrisation of a symmetric positive definite
 matrix: \\M = L L^\top\\ with \\L\\ lower triangular and positive on the
@@ -27,7 +27,7 @@ log_cholesky(dimension, role = c("either", "covariance", "precision"))
 ## Value
 
 An object of class
-[`LogCholeskyStruct`](https://statmodels7.github.io/covstructs7/reference/LogCholeskyStruct.md).
+[`LogCholeskyParam`](https://statmodels7.github.io/parameters7/reference/LogCholeskyParam.md).
 
 ## Details
 
@@ -58,16 +58,16 @@ for variance-covariance matrices. *Statistics and Computing* 6, 289-296.
 
 ## See also
 
-[`diag_struct`](https://statmodels7.github.io/covstructs7/reference/diag_struct.md),
-[`scaled_struct`](https://statmodels7.github.io/covstructs7/reference/scaled_struct.md),
-[`check_covstruct`](https://statmodels7.github.io/covstructs7/reference/check_covstruct.md)
+[`diagonal_matrix`](https://statmodels7.github.io/parameters7/reference/diagonal_matrix.md),
+[`scaled_matrix`](https://statmodels7.github.io/parameters7/reference/scaled_matrix.md),
+[`check_parameter`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)
 
 ## Examples
 
 ``` r
 s <- log_cholesky(3)
 s
-#> Structure: log_cholesky
+#> Parameter: log_cholesky
 #> Matrix:    3 x 3, symmetric
 #> Rank:      3 of 3
 #> Role:      either
@@ -78,18 +78,18 @@ s
 #> From the base class: none
 
 eta <- c(0.1, -0.2, 0.3, 0.5, -0.4, 0.2)
-round(struct_matrix(s, eta), 4)
+round(param_value(s, eta), 4)
 #>         v1      v2      v3
 #> v1  1.2214  0.5526 -0.4421
 #> v2  0.5526  0.9203 -0.0363
 #> v3 -0.4421 -0.0363  2.0221
 
 # the round trip closes exactly
-max(abs(struct_free(s, struct_matrix(s, eta)) - eta))
+max(abs(param_free(s, param_value(s, eta)) - eta))
 #> [1] 6.938894e-17
 
 # and the log-determinant is linear in the free vector
-struct_dlogdet(s, eta)
+param_dlogdet(s, eta)
 #> log_L1 log_L2 log_L3   L2.1   L3.1   L3.2 
 #>      2      2      2      0      0      0 
 ```

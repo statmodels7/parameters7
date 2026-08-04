@@ -1,19 +1,19 @@
-# covstructs7
+# parameters7
 
 Every R package that fits a model with a covariance matrix carries its
 own parametrisation of it, written inside the routine that needs it.
 `nlme` has the `pdMat` classes, `lme4` has its `theta` vector, `glmmTMB`
-has its covariance structures — three private rewritings of the same
+has its covariance parameters — three private rewritings of the same
 mathematics, none exposing a derivative, none reusable from outside.
 
-A covariance structure is a fixed mathematical object. The map from an
+A covariance parameter is a fixed mathematical object. The map from an
 unconstrained vector to a matrix in some constrained set, its inverse,
 its derivatives, and the quantities a likelihood asks of the matrix are
 all determined once and for all, so they can be written once and built
 on.
 
-[covstructs7](https://statmodels7.github.io/covstructs7/) makes a
-structure an object that can be **evaluated, inverted, differentiated to
+[parameters7](https://statmodels7.github.io/parameters7/) makes a
+parameter an object that can be **evaluated, inverted, differentiated to
 second order, and asked for its log-determinant and its solves** —
 including when the matrix is **rank deficient**, which a covariance may
 not be but a precision routinely is.
@@ -31,16 +31,16 @@ statistical modelling, alongside
 ``` r
 
 # install.packages("pak")
-pak::pak("statmodels7/covstructs7")
+pak::pak("statmodels7/parameters7")
 ```
 
-## A structure is an object
+## A parameter is an object
 
 ``` r
 
 s <- log_cholesky(3)
 s
-#> Structure: log_cholesky
+#> Parameter: log_cholesky
 #> Matrix:    3 x 3, symmetric
 #> Rank:      3 of 3
 #> Role:      either
@@ -51,7 +51,7 @@ s
 #> From the base class: none
 
 eta <- c(0.1, -0.2, 0.3, 0.5, -0.4, 0.2)
-round(struct_matrix(s, eta), 4)
+round(param_value(s, eta), 4)
 #>         v1      v2      v3
 #> v1  1.2214  0.5526 -0.4421
 #> v2  0.5526  0.9203 -0.0363
@@ -63,7 +63,7 @@ exactly:
 
 ``` r
 
-max(abs(struct_free(s, struct_matrix(s, eta)) - eta))
+max(abs(param_free(s, param_value(s, eta)) - eta))
 #> [1] 6.938894e-17
 ```
 
@@ -81,7 +81,7 @@ reused as they are.
 
 ``` r
 
-struct_matrix(diag_struct(3, link = linkfunctions7::sqrt_link()), c(1, 2, 3))
+param_value(diagonal_matrix(3, link = linkfunctions7::sqrt_link()), c(1, 2, 3))
 #>    v1 v2 v3
 #> v1  1  0  0
 #> v2  0  4  0
@@ -98,9 +98,9 @@ not a legitimate density.
 ``` r
 
 p <- crossprod(diff(diag(6), differences = 2))
-s <- scaled_struct(p)
+s <- scaled_matrix(p)
 s
-#> Structure: scaled
+#> Parameter: scaled
 #> Matrix:    6 x 6, symmetric
 #> Rank:      4 of 6 (null space of dimension 2)
 #> Role:      precision
@@ -112,7 +112,7 @@ s
 ```
 
 The null space is the constants and the straight lines — the functions a
-second-difference penalty leaves alone — and the structure carries an
+second-difference penalty leaves alone — and the parameter carries an
 orthonormal basis for it:
 
 ``` r
@@ -129,8 +129,8 @@ derivative is the rank — a constant, whatever the scale:
 
 ``` r
 
-c(at_small_scale = unname(struct_dlogdet(s, -6)),
-  at_large_scale = unname(struct_dlogdet(s, 6)),
+c(at_small_scale = unname(param_dlogdet(s, -6)),
+  at_large_scale = unname(param_dlogdet(s, 6)),
   rank = s@rank)
 #> at_small_scale at_large_scale           rank 
 #>              4              4              4
@@ -175,23 +175,23 @@ count_ev <- function(m) {
 
 c(balanced = count_ev(p1 + p2),
   ratio_1e12 = count_ev(1e-6 * p1 + 1e6 * p2),
-  from_components = struct_null_basis(list(p1, p2))$rank)
+  from_components = param_null_basis(list(p1, p2))$rank)
 #>        balanced      ratio_1e12 from_components 
 #>              28              16              28
 ```
 
 So
-[`struct_null_basis()`](https://statmodels7.github.io/covstructs7/reference/struct_null_basis.md)
+[`param_null_basis()`](https://statmodels7.github.io/parameters7/reference/param_null_basis.md)
 stacks the individually normalised components — the null space of a sum
 of positive semidefinite matrices is the intersection of their null
 spaces — and membership is afterwards tested against that basis.
 
-## What consumes a structure
+## What consumes a parameter
 
 A multivariate distribution in
 [distributions7](https://statmodels7.github.io/distributions7/) carries
-its covariance as a structure, and takes it on either side: a structure
-imposed on $`\Sigma`$ and the same structure imposed on
+its covariance as a parameter, and takes it on either side: a parameter
+imposed on $`\Sigma`$ and the same parameter imposed on
 $`\Omega = \Sigma^{-1}`$ are different models whenever the family is not
 closed under inversion. The free values become parameters of the
 distribution, so the whole apparatus of that package — derivatives, the
@@ -201,7 +201,7 @@ validator, the fitting routine — applies with no special case.
 
 # in distributions7; not run here, since this package does not depend on its
 # own consumer
-d <- mvgaussian_distrib(2, struct_sigma = covstructs7::log_cholesky(2))
+d <- mvgaussian_distrib(2, struct_sigma = parameters7::log_cholesky(2))
 d@params
 #> [1] "mu1"    "mu2"    "log_L1" "log_L2" "L2.1"
 
@@ -209,45 +209,45 @@ fit <- fit_distrib(d, y)
 mv_sigma(d, coef(fit))
 ```
 
-The names above are the structure’s own `free_names`, which is why they
+The names above are the parameter’s own `free_names`, which is why they
 are fixed at construction: they are the interface every consumer builds
 its parameter tables from.
 
-## A user-defined structure needs only its map
+## A user-defined parameter needs only its map
 
 Everything else has a numerical method registered on the base class, so
-a new structure is a subclass and one method.
+a new parameter is a subclass and one method.
 
 ``` r
 
-Ar1 <- S7::new_class("Ar1", parent = covstruct)
+Ar1 <- S7::new_class("Ar1", parent = parameter)
 
-S7::method(struct_matrix, Ar1) <- function(s, eta, ...) {
+S7::method(param_value, Ar1) <- function(s, eta, ...) {
   p <- s@dimension
   exp(eta[1]) * tanh(eta[2])^abs(outer(seq_len(p), seq_len(p), "-"))
 }
 
 ar1 <- Ar1(
-  struct_name = "ar1", dimension = 4L, n_free = 2L,
+  param_name = "ar1", dimension = 4L, n_free = 2L,
   free_names = c("scale", "rho"), rank = 4L,
   null_basis = matrix(numeric(0), 4, 0), role = "covariance",
-  struct_params = list()
+  param_params = list()
 )
 
 # never implemented, yet available
-round(struct_dmatrix(ar1, c(0.2, 0.6))[["rho"]], 4)
+round(param_d1(ar1, c(0.2, 0.6))[["rho"]], 4)
 #>        [,1]   [,2]   [,3]   [,4]
 #> [1,] 0.0000 0.8691 0.9335 0.7520
 #> [2,] 0.8691 0.0000 0.8691 0.9335
 #> [3,] 0.9335 0.8691 0.0000 0.8691
 #> [4,] 0.7520 0.9335 0.8691 0.0000
-struct_logdet(ar1, c(0.2, 0.6))
+param_logdet(ar1, c(0.2, 0.6))
 #> [1] -0.2208117
 ```
 
-## Validating a structure
+## Validating a parameter
 
-[`check_covstruct()`](https://statmodels7.github.io/covstructs7/reference/check_covstruct.md)
+[`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)
 runs nine checks, each against a route the implementation does not take.
 A quantity that comes from the base class is reported as **not
 checked**, not as passed: comparing a finite difference with a finite
@@ -255,8 +255,8 @@ difference is the same arithmetic twice.
 
 ``` r
 
-invisible(check_covstruct(log_cholesky(3)))
-#> Structure: log_cholesky   (3 x 3, rank 3, 6 free)
+invisible(check_parameter(log_cholesky(3)))
+#> Parameter: log_cholesky   (3 x 3, rank 3, 6 free)
 #>   [OK         ] membership           0.00e+00
 #>   [OK         ] round trip           7.77e-16
 #>   [OK         ] first derivatives    2.90e-11
@@ -267,8 +267,8 @@ invisible(check_covstruct(log_cholesky(3)))
 #>   [OK         ] solve and factor     3.90e-15
 #>   [OK         ] shapes and names  
 #>   9 passed, 0 failed, 0 not checked
-invisible(check_covstruct(ar1))
-#> Structure: ar1   (4 x 4, rank 4, 2 free)
+invisible(check_parameter(ar1))
+#> Parameter: ar1   (4 x 4, rank 4, 2 free)
 #>   [OK         ] membership           0.00e+00
 #>   [NOT CHECKED] round trip        
 #>   [NOT CHECKED] first derivatives 
@@ -285,11 +285,11 @@ invisible(check_covstruct(ar1))
 
 |  |  |
 |----|----|
-| families | [`log_cholesky()`](https://statmodels7.github.io/covstructs7/reference/log_cholesky.md), [`diag_struct()`](https://statmodels7.github.io/covstructs7/reference/diag_struct.md), [`scalar_struct()`](https://statmodels7.github.io/covstructs7/reference/scalar_struct.md), [`scaled_struct()`](https://statmodels7.github.io/covstructs7/reference/scaled_struct.md) |
-| maps | [`struct_matrix()`](https://statmodels7.github.io/covstructs7/reference/struct_matrix.md), [`struct_free()`](https://statmodels7.github.io/covstructs7/reference/struct_free.md) |
-| derivatives | [`struct_dmatrix()`](https://statmodels7.github.io/covstructs7/reference/struct_dmatrix.md), [`struct_d2matrix()`](https://statmodels7.github.io/covstructs7/reference/struct_d2matrix.md) |
-| likelihood pieces | [`struct_logdet()`](https://statmodels7.github.io/covstructs7/reference/struct_logdet.md), [`struct_dlogdet()`](https://statmodels7.github.io/covstructs7/reference/struct_dlogdet.md), [`struct_d2logdet()`](https://statmodels7.github.io/covstructs7/reference/struct_d2logdet.md), [`struct_solve()`](https://statmodels7.github.io/covstructs7/reference/struct_solve.md), [`struct_factor()`](https://statmodels7.github.io/covstructs7/reference/struct_factor.md) |
-| tools | [`check_covstruct()`](https://statmodels7.github.io/covstructs7/reference/check_covstruct.md), [`struct_is_numerical()`](https://statmodels7.github.io/covstructs7/reference/struct_is_numerical.md), [`struct_null_basis()`](https://statmodels7.github.io/covstructs7/reference/struct_null_basis.md), [`print()`](https://rdrr.io/r/base/print.html) |
+| families | [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md), [`diagonal_matrix()`](https://statmodels7.github.io/parameters7/reference/diagonal_matrix.md), [`scalar_matrix()`](https://statmodels7.github.io/parameters7/reference/scalar_matrix.md), [`scaled_matrix()`](https://statmodels7.github.io/parameters7/reference/scaled_matrix.md) |
+| maps | [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md), [`param_free()`](https://statmodels7.github.io/parameters7/reference/param_free.md) |
+| derivatives | [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md), [`param_d2()`](https://statmodels7.github.io/parameters7/reference/param_d2.md) |
+| likelihood pieces | [`param_logdet()`](https://statmodels7.github.io/parameters7/reference/param_logdet.md), [`param_dlogdet()`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.md), [`param_d2logdet()`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.md), [`param_solve()`](https://statmodels7.github.io/parameters7/reference/param_solve.md), [`param_factor()`](https://statmodels7.github.io/parameters7/reference/param_factor.md) |
+| tools | [`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md), [`param_is_numerical()`](https://statmodels7.github.io/parameters7/reference/param_is_numerical.md), [`param_null_basis()`](https://statmodels7.github.io/parameters7/reference/param_null_basis.md), [`print()`](https://rdrr.io/r/base/print.html) |
 
 ## Related
 
@@ -311,35 +311,46 @@ invisible(check_covstruct(ar1))
 The parametrisations. Each maps an unconstrained vector to a matrix in
 its own constrained set, and each owns the side of that matrix.
 
-- [`log_cholesky()`](https://statmodels7.github.io/covstructs7/reference/log_cholesky.md)
-  : Construct an Unstructured Positive Definite Structure
-- [`diag_struct()`](https://statmodels7.github.io/covstructs7/reference/diag_struct.md)
-  : Construct a Diagonal Structure
-- [`scalar_struct()`](https://statmodels7.github.io/covstructs7/reference/scalar_struct.md)
+- [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
+  : Construct an Unstructured Positive Definite Parameter
+- [`matrix_log()`](https://statmodels7.github.io/parameters7/reference/matrix_log.md)
+  : Construct a Matrix Logarithm Parameter
+- [`diagonal_matrix()`](https://statmodels7.github.io/parameters7/reference/diagonal_matrix.md)
+  : Construct a Diagonal Parameter
+- [`scalar_matrix()`](https://statmodels7.github.io/parameters7/reference/scalar_matrix.md)
   : Construct a Scalar Multiple of the Identity
-- [`scaled_struct()`](https://statmodels7.github.io/covstructs7/reference/scaled_struct.md)
+- [`scaled_matrix()`](https://statmodels7.github.io/parameters7/reference/scaled_matrix.md)
   : Construct a Scaled Fixed Matrix
+- [`simplex()`](https://statmodels7.github.io/parameters7/reference/simplex.md)
+  : Construct a Simplex Parameter
+- [`transition_matrix()`](https://statmodels7.github.io/parameters7/reference/transition_matrix.md)
+  : Construct a Transition Matrix Parameter
 
 ## The map and its inverse
 
-- [`struct_matrix()`](https://statmodels7.github.io/covstructs7/reference/struct_matrix.md)
-  : The Matrix a Structure Produces
-- [`struct_free()`](https://statmodels7.github.io/covstructs7/reference/struct_free.md)
+- [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
+  : The Matrix a Parameter Produces
+- [`param_free()`](https://statmodels7.github.io/parameters7/reference/param_free.md)
   : The Free Vector Behind a Matrix
 
 ## Derivatives
 
-Exact to second order, on the unconstrained scale, which is what joint
-estimation over the coefficients and the matrix parameters consumes.
+Exact to fourth order, on the unconstrained scale, which is what joint
+estimation over the coefficients and the constrained parameters
+consumes.
 
-- [`struct_dmatrix()`](https://statmodels7.github.io/covstructs7/reference/struct_dmatrix.md)
-  : First Derivatives of a Structure's Matrix
-- [`struct_d2matrix()`](https://statmodels7.github.io/covstructs7/reference/struct_d2matrix.md)
-  : Second Derivatives of a Structure's Matrix
-- [`struct_pair_names()`](https://statmodels7.github.io/covstructs7/reference/struct_pair_names.md)
-  : Names of the Distinct Second-Derivative Components
-- [`struct_pair_indices()`](https://statmodels7.github.io/covstructs7/reference/struct_pair_indices.md)
-  : Index Pairs Behind the Second-Derivative Names
+- [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md)
+  : First Derivatives of a Parameter's Matrix
+- [`param_d2()`](https://statmodels7.github.io/parameters7/reference/param_d2.md)
+  : Second Derivatives of a Parameter's Matrix
+- [`param_d3()`](https://statmodels7.github.io/parameters7/reference/param_d3.md)
+  : Third Derivatives of a Parameter's Value
+- [`param_d4()`](https://statmodels7.github.io/parameters7/reference/param_d4.md)
+  : Fourth Derivatives of a Parameter's Value
+- [`param_tuple_names()`](https://statmodels7.github.io/parameters7/reference/param_tuple_names.md)
+  : Names of the Distinct Derivative Components
+- [`param_tuple_indices()`](https://statmodels7.github.io/parameters7/reference/param_tuple_indices.md)
+  : Index Tuples Behind the Derivative Component Names
 
 ## What a likelihood asks of the matrix
 
@@ -347,16 +358,19 @@ The log-determinant, or the log pseudo-determinant when the family is
 rank deficient, and the solves – computed through a factor rather than
 through an explicit inverse.
 
-- [`struct_logdet()`](https://statmodels7.github.io/covstructs7/reference/struct_logdet.md)
-  : Log-Determinant of a Structure's Matrix
-- [`struct_dlogdet()`](https://statmodels7.github.io/covstructs7/reference/struct_dlogdet.md)
+- [`param_logdet()`](https://statmodels7.github.io/parameters7/reference/param_logdet.md)
+  : Log-Determinant of a Parameter's Matrix
+- [`param_dlogdet()`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.md)
   : Gradient of the Log-Determinant
-- [`struct_d2logdet()`](https://statmodels7.github.io/covstructs7/reference/struct_d2logdet.md)
+- [`param_d2logdet()`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.md)
   : Hessian of the Log-Determinant
-- [`struct_solve()`](https://statmodels7.github.io/covstructs7/reference/struct_solve.md)
-  : Solve Through a Structure's Matrix
-- [`struct_factor()`](https://statmodels7.github.io/covstructs7/reference/struct_factor.md)
-  : A Factor of a Structure's Matrix
+- [`param_d3logdet()`](https://statmodels7.github.io/parameters7/reference/param_d3logdet.md)
+  [`param_d4logdet()`](https://statmodels7.github.io/parameters7/reference/param_d3logdet.md)
+  : Third and Fourth Derivatives of the Log-Determinant
+- [`param_solve()`](https://statmodels7.github.io/parameters7/reference/param_solve.md)
+  : Solve Through a Parameter's Matrix
+- [`param_factor()`](https://statmodels7.github.io/parameters7/reference/param_factor.md)
+  : A Factor of a Parameter's Matrix
 
 ## Rank
 
@@ -364,40 +378,54 @@ A rank read off an assembled matrix is not scale invariant, so it is
 computed once from the components and membership is tested against the
 null space it implies.
 
-- [`struct_null_basis()`](https://statmodels7.github.io/covstructs7/reference/struct_null_basis.md)
+- [`param_null_basis()`](https://statmodels7.github.io/parameters7/reference/param_null_basis.md)
   : An Orthonormal Basis of a Null Space, and the Rank That Goes With It
 
 ## Tools
 
-- [`check_covstruct()`](https://statmodels7.github.io/covstructs7/reference/check_covstruct.md)
-  : Validate a Covariance Structure
-- [`struct_is_numerical()`](https://statmodels7.github.io/covstructs7/reference/struct_is_numerical.md)
-  : Which of a Structure's Quantities Come From the Base Class
-- [`numerical_dmatrix()`](https://statmodels7.github.io/covstructs7/reference/numerical_dmatrix.md)
-  : Numerical First Derivatives of a Structure's Matrix
-- [`numerical_d2matrix()`](https://statmodels7.github.io/covstructs7/reference/numerical_d2matrix.md)
-  : Numerical Second Derivatives of a Structure's Matrix
+- [`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)
+  : Validate a Covariance Parameter
+- [`param_is_numerical()`](https://statmodels7.github.io/parameters7/reference/param_is_numerical.md)
+  : Which of a Parameter's Quantities Come From the Base Class
+- [`numerical_d1()`](https://statmodels7.github.io/parameters7/reference/numerical_d1.md)
+  : Numerical First Derivatives of a Parameter's Matrix
+- [`numerical_d2()`](https://statmodels7.github.io/parameters7/reference/numerical_d2.md)
+  : Numerical Second Derivatives of a Parameter's Matrix
+- [`numerical_d3()`](https://statmodels7.github.io/parameters7/reference/numerical_d3.md)
+  : Numerical Third Derivatives of a Parameter's Value
+- [`numerical_d4()`](https://statmodels7.github.io/parameters7/reference/numerical_d4.md)
+  : Numerical Fourth Derivatives of a Parameter's Value
 
 ## Classes
 
 The S7 classes; each page lists the methods that dispatch on it.
 
-- [`covstruct()`](https://statmodels7.github.io/covstructs7/reference/covstruct.md)
+- [`parameter()`](https://statmodels7.github.io/parameters7/reference/parameter.md)
   : Constrained Matrix Parameter
-- [`LogCholeskyStruct()`](https://statmodels7.github.io/covstructs7/reference/LogCholeskyStruct.md)
-  : Unstructured Positive Definite Structure
-- [`DiagStruct()`](https://statmodels7.github.io/covstructs7/reference/DiagStruct.md)
-  : Diagonal Structure
-- [`ScaledStruct()`](https://statmodels7.github.io/covstructs7/reference/ScaledStruct.md)
-  : Scaled Fixed Matrix Structure
+- [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
+  : Constrained Symmetric Matrix Parameter
+- [`LogCholeskyParam()`](https://statmodels7.github.io/parameters7/reference/LogCholeskyParam.md)
+  : Unstructured Positive Definite Parameter
+- [`MatrixLogParam()`](https://statmodels7.github.io/parameters7/reference/MatrixLogParam.md)
+  : Matrix Logarithm Parameter
+- [`SimplexParam()`](https://statmodels7.github.io/parameters7/reference/SimplexParam.md)
+  : Simplex Parameter
+- [`TransitionMatrixParam()`](https://statmodels7.github.io/parameters7/reference/TransitionMatrixParam.md)
+  : Transition Matrix Parameter
+- [`DiagMatrixParam()`](https://statmodels7.github.io/parameters7/reference/DiagMatrixParam.md)
+  : Diagonal Parameter
+- [`ScaledMatrixParam()`](https://statmodels7.github.io/parameters7/reference/ScaledMatrixParam.md)
+  : Scaled Fixed Matrix Parameter
 
 ## Base-class defaults
 
-The methods registered on the abstract class, which every structure
+The methods registered on the abstract class, which every parameter
 inherits unless it registers something more specific.
 
-- [`check_covstruct()`](https://statmodels7.github.io/covstructs7/reference/check_covstruct.md)
-  : Validate a Covariance Structure
+- [`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)
+  : Validate a Covariance Parameter
+- [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
+  : Constrained Symmetric Matrix Parameter
 
 ## Internals
 
@@ -405,109 +433,217 @@ The machinery the exported functions are built from. None of it is
 exported, and none is needed to use the package; it is documented so
 that the derivations can be followed from the code that implements them.
 
-- [`check_eta()`](https://statmodels7.github.io/covstructs7/reference/check_eta.md)
-  : Validate a Free Vector Against a Structure
-- [`check_matrix()`](https://statmodels7.github.io/covstructs7/reference/check_matrix.md)
-  : Validate a Matrix Handed Back to a Structure
-- [`check_positive_link()`](https://statmodels7.github.io/covstructs7/reference/check_positive_link.md)
-  : Refuse a Link That Does Not Reach the Positive Half Line
-- [`check_row()`](https://statmodels7.github.io/covstructs7/reference/check_row.md)
-  : One Row of a Diagnostic Table
-- [`check_struct_args()`](https://statmodels7.github.io/covstructs7/reference/check_struct_args.md)
+- [`check_eta()`](https://statmodels7.github.io/parameters7/reference/check_eta.md)
+  : Validate a Free Vector Against a Parameter
+- [`check_matrix()`](https://statmodels7.github.io/parameters7/reference/check_matrix.md)
+  : Validate a Matrix Handed Back to a Parameter
+- [`check_param_args()`](https://statmodels7.github.io/parameters7/reference/check_param_args.md)
   : Validate the Arguments Shared by Every Constructor
-- [`chol_assemble()`](https://statmodels7.github.io/covstructs7/reference/chol_assemble.md)
+- [`check_parameter_vector()`](https://statmodels7.github.io/parameters7/reference/check_parameter_vector.md)
+  : The Reduced Battery for a Parameter That Is Not a Matrix
+- [`check_positive_link()`](https://statmodels7.github.io/parameters7/reference/check_positive_link.md)
+  : Refuse a Link That Does Not Reach the Positive Half Line
+- [`check_row()`](https://statmodels7.github.io/parameters7/reference/check_row.md)
+  : One Row of a Diagnostic Table
+- [`chol_assemble()`](https://statmodels7.github.io/parameters7/reference/chol_assemble.md)
   : The Cholesky Factor Behind a Free Vector
-- [`chol_pd()`](https://statmodels7.github.io/covstructs7/reference/chol_pd.md)
+- [`chol_pd()`](https://statmodels7.github.io/parameters7/reference/chol_pd.md)
   : Cholesky Factorisation, With the Rank Decided Before It
-- [`chol_positions()`](https://statmodels7.github.io/covstructs7/reference/chol_positions.md)
+- [`chol_positions()`](https://statmodels7.github.io/parameters7/reference/chol_positions.md)
   : Positions of the Free Values in the Lower Triangle
-- [`covstructs7`](https://statmodels7.github.io/covstructs7/reference/covstructs7-package.md)
-  [`covstructs7-package`](https://statmodels7.github.io/covstructs7/reference/covstructs7-package.md)
-  : covstructs7: An S7 Framework for Constrained Matrix Parameters
-- [`diag_entries()`](https://statmodels7.github.io/covstructs7/reference/diag_entries.md)
+- [`combinat_perms()`](https://statmodels7.github.io/parameters7/reference/combinat_perms.md)
+  : All Orderings of a Tuple
+- [`dd_exp()`](https://statmodels7.github.io/parameters7/reference/dd_exp.md)
+  : Divided Differences of the Exponential
+- [`diag_entries()`](https://statmodels7.github.io/parameters7/reference/diag_entries.md)
   : The Diagonal Entries Behind a Free Vector
-- [`diag_multiplicity()`](https://statmodels7.github.io/covstructs7/reference/diag_multiplicity.md)
+- [`diag_multiplicity()`](https://statmodels7.github.io/parameters7/reference/diag_multiplicity.md)
   : The Number of Diagonal Entries Each Free Value Owns
-- [`diag_owner()`](https://statmodels7.github.io/covstructs7/reference/diag_owner.md)
+- [`diag_owner()`](https://statmodels7.github.io/parameters7/reference/diag_owner.md)
   : The Free Value Each Diagonal Entry Belongs To
-- [`empty_null_basis()`](https://statmodels7.github.io/covstructs7/reference/empty_null_basis.md)
+- [`empty_null_basis()`](https://statmodels7.github.io/parameters7/reference/empty_null_basis.md)
   : No Null Space
-- [`fd_step()`](https://statmodels7.github.io/covstructs7/reference/fd_step.md)
+- [`fd_step()`](https://statmodels7.github.io/parameters7/reference/fd_step.md)
   : Finite-Difference Step for a Free Value
-- [`is_base_struct_class()`](https://statmodels7.github.io/covstructs7/reference/is_base_struct_class.md)
+- [`is_base_param_class()`](https://statmodels7.github.io/parameters7/reference/is_base_param_class.md)
   : Is This the Package's Own Base Class?
-- [`name_dims()`](https://statmodels7.github.io/covstructs7/reference/name_dims.md)
-  : Name the Rows and Columns of a Structure's Matrix
-- [`print.covstruct`](https://statmodels7.github.io/covstructs7/reference/print.covstruct.md)
-  : Print a Covariance Structure
-- [`scaled_scale()`](https://statmodels7.github.io/covstructs7/reference/scaled_scale.md)
-  : The Scale Behind a Free Vector, and Its Derivatives
-- [`spectrum_pinv()`](https://statmodels7.github.io/covstructs7/reference/spectrum_pinv.md)
-  : Moore-Penrose Inverse From a Structure's Spectrum
-- [`struct_d2logdet.DiagStruct`](https://statmodels7.github.io/covstructs7/reference/struct_d2logdet.DiagStruct.md)
-  : Log-Determinant Hessian of a Diagonal Structure
-- [`struct_d2logdet.LogCholeskyStruct`](https://statmodels7.github.io/covstructs7/reference/struct_d2logdet.LogCholeskyStruct.md)
-  : Log-Determinant Hessian of a Log-Cholesky Structure
-- [`struct_d2logdet.ScaledStruct`](https://statmodels7.github.io/covstructs7/reference/struct_d2logdet.ScaledStruct.md)
-  : Log-Determinant Hessian of a Scaled Structure
-- [`struct_d2logdet.covstruct`](https://statmodels7.github.io/covstructs7/reference/struct_d2logdet.covstruct.md)
-  : Default Log-Determinant Hessian
-- [`struct_d2matrix.DiagStruct`](https://statmodels7.github.io/covstructs7/reference/struct_d2matrix.DiagStruct.md)
-  : Second Derivatives of a Diagonal Structure
-- [`struct_d2matrix.LogCholeskyStruct`](https://statmodels7.github.io/covstructs7/reference/struct_d2matrix.LogCholeskyStruct.md)
-  : Second Derivatives of a Log-Cholesky Structure
-- [`struct_d2matrix.ScaledStruct`](https://statmodels7.github.io/covstructs7/reference/struct_d2matrix.ScaledStruct.md)
-  : Second Derivative of a Scaled Structure
-- [`struct_d2matrix.covstruct`](https://statmodels7.github.io/covstructs7/reference/struct_d2matrix.covstruct.md)
-  : Default Second Derivatives
-- [`struct_dlogdet.DiagStruct`](https://statmodels7.github.io/covstructs7/reference/struct_dlogdet.DiagStruct.md)
-  : Log-Determinant Gradient of a Diagonal Structure
-- [`struct_dlogdet.LogCholeskyStruct`](https://statmodels7.github.io/covstructs7/reference/struct_dlogdet.LogCholeskyStruct.md)
-  : Log-Determinant Gradient of a Log-Cholesky Structure
-- [`struct_dlogdet.ScaledStruct`](https://statmodels7.github.io/covstructs7/reference/struct_dlogdet.ScaledStruct.md)
-  : Log-Determinant Gradient of a Scaled Structure
-- [`struct_dlogdet.covstruct`](https://statmodels7.github.io/covstructs7/reference/struct_dlogdet.covstruct.md)
-  : Default Log-Determinant Gradient
-- [`struct_dmatrix.DiagStruct`](https://statmodels7.github.io/covstructs7/reference/struct_dmatrix.DiagStruct.md)
-  : First Derivatives of a Diagonal Structure
-- [`struct_dmatrix.LogCholeskyStruct`](https://statmodels7.github.io/covstructs7/reference/struct_dmatrix.LogCholeskyStruct.md)
-  : First Derivatives of a Log-Cholesky Structure
-- [`struct_dmatrix.ScaledStruct`](https://statmodels7.github.io/covstructs7/reference/struct_dmatrix.ScaledStruct.md)
-  : First Derivative of a Scaled Structure
-- [`struct_dmatrix.covstruct`](https://statmodels7.github.io/covstructs7/reference/struct_dmatrix.covstruct.md)
+- [`mixed_stencil()`](https://statmodels7.github.io/parameters7/reference/mixed_stencil.md)
+  : One Product Stencil for a Mixed Partial Derivative
+- [`mlog_basis()`](https://statmodels7.github.io/parameters7/reference/mlog_basis.md)
+  : The Basis Direction of One Free Value
+- [`mlog_contract()`](https://statmodels7.github.io/parameters7/reference/mlog_contract.md)
+  : One Derivative Component by the Daleckii-Krein Contraction
+- [`mlog_expm_small()`](https://statmodels7.github.io/parameters7/reference/mlog_expm_small.md)
+  : Exponential of a Small Upper Triangular Matrix
+- [`mlog_s()`](https://statmodels7.github.io/parameters7/reference/mlog_s.md)
+  : The Symmetric Matrix Behind a Free Vector
+- [`mlog_tables()`](https://statmodels7.github.io/parameters7/reference/mlog_tables.md)
+  : The Eigendecomposition and Divided-Difference Tables at a Point
+- [`name_dims()`](https://statmodels7.github.io/parameters7/reference/name_dims.md)
+  : Name the Rows and Columns of a Parameter's Matrix
+- [`param_d1.DiagMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_d1.DiagMatrixParam.md)
+  : First Derivatives of a Diagonal Parameter
+- [`param_d1.LogCholeskyParam`](https://statmodels7.github.io/parameters7/reference/param_d1.LogCholeskyParam.md)
+  : First Derivatives of a Log-Cholesky Parameter
+- [`param_d1.MatrixLogParam`](https://statmodels7.github.io/parameters7/reference/param_d1.MatrixLogParam.md)
+  : First Derivatives of a Matrix Logarithm Parameter
+- [`param_d1.ScaledMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_d1.ScaledMatrixParam.md)
+  : First Derivative of a Scaled Parameter
+- [`param_d1.SimplexParam`](https://statmodels7.github.io/parameters7/reference/param_d1.SimplexParam.md)
+  : First Derivatives of a Simplex Parameter
+- [`param_d1.TransitionMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_d1.TransitionMatrixParam.md)
+  : First Derivatives of a Transition Matrix Parameter
+- [`param_d1.parameter`](https://statmodels7.github.io/parameters7/reference/param_d1.parameter.md)
   : Default First Derivatives
-- [`struct_factor.DiagStruct`](https://statmodels7.github.io/covstructs7/reference/struct_factor.DiagStruct.md)
-  : Factor of a Diagonal Structure
-- [`struct_factor.LogCholeskyStruct`](https://statmodels7.github.io/covstructs7/reference/struct_factor.LogCholeskyStruct.md)
-  : Factor of a Log-Cholesky Structure
-- [`struct_factor.covstruct`](https://statmodels7.github.io/covstructs7/reference/struct_factor.covstruct.md)
+- [`param_d2.DiagMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_d2.DiagMatrixParam.md)
+  : Second Derivatives of a Diagonal Parameter
+- [`param_d2.LogCholeskyParam`](https://statmodels7.github.io/parameters7/reference/param_d2.LogCholeskyParam.md)
+  : Second Derivatives of a Log-Cholesky Parameter
+- [`param_d2.MatrixLogParam`](https://statmodels7.github.io/parameters7/reference/param_d2.MatrixLogParam.md)
+  : Second Derivatives of a Matrix Logarithm Parameter
+- [`param_d2.ScaledMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_d2.ScaledMatrixParam.md)
+  : Second Derivative of a Scaled Parameter
+- [`param_d2.SimplexParam`](https://statmodels7.github.io/parameters7/reference/param_d2.SimplexParam.md)
+  : Second Derivatives of a Simplex Parameter
+- [`param_d2.TransitionMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_d2.TransitionMatrixParam.md)
+  : Second Derivatives of a Transition Matrix Parameter
+- [`param_d2.parameter`](https://statmodels7.github.io/parameters7/reference/param_d2.parameter.md)
+  : Default Second Derivatives
+- [`param_d2logdet.DiagMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.DiagMatrixParam.md)
+  : Log-Determinant Hessian of a Diagonal Parameter
+- [`param_d2logdet.LogCholeskyParam`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.LogCholeskyParam.md)
+  : Log-Determinant Hessian of a Log-Cholesky Parameter
+- [`param_d2logdet.MatrixLogParam`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.MatrixLogParam.md)
+  : Log-Determinant Hessian of a Matrix Logarithm Parameter
+- [`param_d2logdet.ScaledMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.ScaledMatrixParam.md)
+  : Log-Determinant Hessian of a Scaled Parameter
+- [`param_d2logdet.parameter`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.parameter.md)
+  : Default Log-Determinant Hessian
+- [`param_d3.DiagMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_d3.DiagMatrixParam.md)
+  : Third Derivatives of a Diagonal Parameter
+- [`param_d3.LogCholeskyParam`](https://statmodels7.github.io/parameters7/reference/param_d3.LogCholeskyParam.md)
+  : Third Derivatives of a Log-Cholesky Parameter
+- [`param_d3.MatrixLogParam`](https://statmodels7.github.io/parameters7/reference/param_d3.MatrixLogParam.md)
+  : Third Derivatives of a Matrix Logarithm Parameter
+- [`param_d3.ScaledMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_d3.ScaledMatrixParam.md)
+  : Third Derivatives of a Scaled Parameter
+- [`param_d3.SimplexParam`](https://statmodels7.github.io/parameters7/reference/param_d3.SimplexParam.md)
+  : Third Derivatives of a Simplex Parameter
+- [`param_d3.TransitionMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_d3.TransitionMatrixParam.md)
+  : Third Derivatives of a Transition Matrix Parameter
+- [`param_d3.parameter`](https://statmodels7.github.io/parameters7/reference/param_d3.parameter.md)
+  : Default Third Derivatives
+- [`param_d3logdet.DiagMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_d3logdet.DiagMatrixParam.md)
+  : Higher Log-Determinant Derivatives of a Diagonal Parameter
+- [`param_d3logdet.LogCholeskyParam`](https://statmodels7.github.io/parameters7/reference/param_d3logdet.LogCholeskyParam.md)
+  : Higher Log-Determinant Derivatives of a Log-Cholesky Parameter
+- [`param_d3logdet.MatrixLogParam`](https://statmodels7.github.io/parameters7/reference/param_d3logdet.MatrixLogParam.md)
+  : Higher Log-Determinant Derivatives of a Matrix Logarithm Parameter
+- [`param_d3logdet.ScaledMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_d3logdet.ScaledMatrixParam.md)
+  : Higher Log-Determinant Derivatives of a Scaled Parameter
+- [`param_d3logdet.matrix_parameter`](https://statmodels7.github.io/parameters7/reference/param_d3logdet.matrix_parameter.md)
+  : Default Higher Log-Determinant Derivatives
+- [`param_d4.DiagMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_d4.DiagMatrixParam.md)
+  : Fourth Derivatives of a Diagonal Parameter
+- [`param_d4.LogCholeskyParam`](https://statmodels7.github.io/parameters7/reference/param_d4.LogCholeskyParam.md)
+  : Fourth Derivatives of a Log-Cholesky Parameter
+- [`param_d4.MatrixLogParam`](https://statmodels7.github.io/parameters7/reference/param_d4.MatrixLogParam.md)
+  : Fourth Derivatives of a Matrix Logarithm Parameter
+- [`param_d4.ScaledMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_d4.ScaledMatrixParam.md)
+  : Fourth Derivatives of a Scaled Parameter
+- [`param_d4.SimplexParam`](https://statmodels7.github.io/parameters7/reference/param_d4.SimplexParam.md)
+  : Fourth Derivatives of a Simplex Parameter
+- [`param_d4.TransitionMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_d4.TransitionMatrixParam.md)
+  : Fourth Derivatives of a Transition Matrix Parameter
+- [`param_d4.parameter`](https://statmodels7.github.io/parameters7/reference/param_d4.parameter.md)
+  : Default Fourth Derivatives
+- [`param_d4logdet.DiagMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_d4logdet.DiagMatrixParam.md)
+  : Fourth Log-Determinant Derivatives of a Diagonal Parameter
+- [`param_d4logdet.LogCholeskyParam`](https://statmodels7.github.io/parameters7/reference/param_d4logdet.LogCholeskyParam.md)
+  : Fourth Log-Determinant Derivatives of a Log-Cholesky Parameter
+- [`param_d4logdet.MatrixLogParam`](https://statmodels7.github.io/parameters7/reference/param_d4logdet.MatrixLogParam.md)
+  : Fourth Log-Determinant Derivatives of a Matrix Logarithm Parameter
+- [`param_d4logdet.ScaledMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_d4logdet.ScaledMatrixParam.md)
+  : Fourth Log-Determinant Derivatives of a Scaled Parameter
+- [`param_d4logdet.matrix_parameter`](https://statmodels7.github.io/parameters7/reference/param_d4logdet.matrix_parameter.md)
+  : Default Fourth Log-Determinant Derivatives
+- [`param_dlogdet.DiagMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.DiagMatrixParam.md)
+  : Log-Determinant Gradient of a Diagonal Parameter
+- [`param_dlogdet.LogCholeskyParam`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.LogCholeskyParam.md)
+  : Log-Determinant Gradient of a Log-Cholesky Parameter
+- [`param_dlogdet.MatrixLogParam`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.MatrixLogParam.md)
+  : Log-Determinant Gradient of a Matrix Logarithm Parameter
+- [`param_dlogdet.ScaledMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.ScaledMatrixParam.md)
+  : Log-Determinant Gradient of a Scaled Parameter
+- [`param_dlogdet.parameter`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.parameter.md)
+  : Default Log-Determinant Gradient
+- [`param_factor.DiagMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_factor.DiagMatrixParam.md)
+  : Factor of a Diagonal Parameter
+- [`param_factor.LogCholeskyParam`](https://statmodels7.github.io/parameters7/reference/param_factor.LogCholeskyParam.md)
+  : Factor of a Log-Cholesky Parameter
+- [`param_factor.parameter`](https://statmodels7.github.io/parameters7/reference/param_factor.parameter.md)
   : Default Factor
-- [`struct_free.DiagStruct`](https://statmodels7.github.io/covstructs7/reference/struct_free.DiagStruct.md)
-  : Free Vector of a Diagonal Structure
-- [`struct_free.LogCholeskyStruct`](https://statmodels7.github.io/covstructs7/reference/struct_free.LogCholeskyStruct.md)
-  : Free Vector of a Log-Cholesky Structure
-- [`struct_free.ScaledStruct`](https://statmodels7.github.io/covstructs7/reference/struct_free.ScaledStruct.md)
-  : Free Vector of a Scaled Structure
-- [`struct_free.covstruct`](https://statmodels7.github.io/covstructs7/reference/struct_free.covstruct.md)
+- [`param_free.DiagMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_free.DiagMatrixParam.md)
+  : Free Vector of a Diagonal Parameter
+- [`param_free.LogCholeskyParam`](https://statmodels7.github.io/parameters7/reference/param_free.LogCholeskyParam.md)
+  : Free Vector of a Log-Cholesky Parameter
+- [`param_free.MatrixLogParam`](https://statmodels7.github.io/parameters7/reference/param_free.MatrixLogParam.md)
+  : Free Vector of a Matrix Logarithm Parameter
+- [`param_free.ScaledMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_free.ScaledMatrixParam.md)
+  : Free Vector of a Scaled Parameter
+- [`param_free.SimplexParam`](https://statmodels7.github.io/parameters7/reference/param_free.SimplexParam.md)
+  : Free Vector of a Simplex Parameter
+- [`param_free.TransitionMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_free.TransitionMatrixParam.md)
+  : Free Vector of a Transition Matrix Parameter
+- [`param_free.parameter`](https://statmodels7.github.io/parameters7/reference/param_free.parameter.md)
   : Refusal to Invert Without a Closed Form
-- [`struct_logdet.DiagStruct`](https://statmodels7.github.io/covstructs7/reference/struct_logdet.DiagStruct.md)
-  : Log-Determinant of a Diagonal Structure
-- [`struct_logdet.LogCholeskyStruct`](https://statmodels7.github.io/covstructs7/reference/struct_logdet.LogCholeskyStruct.md)
-  : Log-Determinant of a Log-Cholesky Structure
-- [`struct_logdet.ScaledStruct`](https://statmodels7.github.io/covstructs7/reference/struct_logdet.ScaledStruct.md)
-  : Log-Determinant of a Scaled Structure
-- [`struct_logdet.covstruct`](https://statmodels7.github.io/covstructs7/reference/struct_logdet.covstruct.md)
+- [`param_logdet.DiagMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_logdet.DiagMatrixParam.md)
+  : Log-Determinant of a Diagonal Parameter
+- [`param_logdet.LogCholeskyParam`](https://statmodels7.github.io/parameters7/reference/param_logdet.LogCholeskyParam.md)
+  : Log-Determinant of a Log-Cholesky Parameter
+- [`param_logdet.MatrixLogParam`](https://statmodels7.github.io/parameters7/reference/param_logdet.MatrixLogParam.md)
+  : Log-Determinant of a Matrix Logarithm Parameter
+- [`param_logdet.ScaledMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_logdet.ScaledMatrixParam.md)
+  : Log-Determinant of a Scaled Parameter
+- [`param_logdet.parameter`](https://statmodels7.github.io/parameters7/reference/param_logdet.parameter.md)
   : Default Log-Determinant
-- [`struct_matrix.DiagStruct`](https://statmodels7.github.io/covstructs7/reference/struct_matrix.DiagStruct.md)
-  : Matrix of a Diagonal Structure
-- [`struct_matrix.LogCholeskyStruct`](https://statmodels7.github.io/covstructs7/reference/struct_matrix.LogCholeskyStruct.md)
-  : Matrix of a Log-Cholesky Structure
-- [`struct_matrix.ScaledStruct`](https://statmodels7.github.io/covstructs7/reference/struct_matrix.ScaledStruct.md)
-  : Matrix of a Scaled Structure
-- [`struct_solve.covstruct`](https://statmodels7.github.io/covstructs7/reference/struct_solve.covstruct.md)
+- [`param_solve.MatrixLogParam`](https://statmodels7.github.io/parameters7/reference/param_solve.MatrixLogParam.md)
+  : Solve of a Matrix Logarithm Parameter
+- [`param_solve.parameter`](https://statmodels7.github.io/parameters7/reference/param_solve.parameter.md)
   : Default Solve
-- [`struct_spectrum()`](https://statmodels7.github.io/covstructs7/reference/struct_spectrum.md)
-  : The Spectral Decomposition a Structure's Quantities Are Read From
-- [`sweep_etas()`](https://statmodels7.github.io/covstructs7/reference/sweep_etas.md)
-  : Free Vectors to Sweep a Structure Over
+- [`param_spectrum()`](https://statmodels7.github.io/parameters7/reference/param_spectrum.md)
+  : The Spectral Decomposition a Parameter's Quantities Are Read From
+- [`param_value.DiagMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_value.DiagMatrixParam.md)
+  : Matrix of a Diagonal Parameter
+- [`param_value.LogCholeskyParam`](https://statmodels7.github.io/parameters7/reference/param_value.LogCholeskyParam.md)
+  : Matrix of a Log-Cholesky Parameter
+- [`param_value.MatrixLogParam`](https://statmodels7.github.io/parameters7/reference/param_value.MatrixLogParam.md)
+  : Value of a Matrix Logarithm Parameter
+- [`param_value.ScaledMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_value.ScaledMatrixParam.md)
+  : Matrix of a Scaled Parameter
+- [`param_value.SimplexParam`](https://statmodels7.github.io/parameters7/reference/param_value.SimplexParam.md)
+  : Value of a Simplex Parameter
+- [`param_value.TransitionMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_value.TransitionMatrixParam.md)
+  : Value of a Transition Matrix Parameter
+- [`parameters7`](https://statmodels7.github.io/parameters7/reference/parameters7-package.md)
+  [`parameters7-package`](https://statmodels7.github.io/parameters7/reference/parameters7-package.md)
+  : parameters7: An S7 Framework for Constrained Matrix Parameters
+- [`print.parameter`](https://statmodels7.github.io/parameters7/reference/print.parameter.md)
+  : Print a Covariance Parameter
+- [`scaled_scale()`](https://statmodels7.github.io/parameters7/reference/scaled_scale.md)
+  : The Scale Behind a Free Vector, and Its Derivatives
+- [`simplex_components()`](https://statmodels7.github.io/parameters7/reference/simplex_components.md)
+  : Extract Named Components From Softmax Tensors
+- [`simplex_point()`](https://statmodels7.github.io/parameters7/reference/simplex_point.md)
+  : The Softmax Point Behind a Free Vector
+- [`simplex_tensors()`](https://statmodels7.github.io/parameters7/reference/simplex_tensors.md)
+  : Derivative Tensors of the Softmax Map
+- [`spectrum_pinv()`](https://statmodels7.github.io/parameters7/reference/spectrum_pinv.md)
+  : Moore-Penrose Inverse From a Parameter's Spectrum
+- [`sweep_etas()`](https://statmodels7.github.io/parameters7/reference/sweep_etas.md)
+  : Free Vectors to Sweep a Parameter Over
+- [`tm_derivative()`](https://statmodels7.github.io/parameters7/reference/tm_derivative.md)
+  : Derivative Components of a Transition Matrix Parameter
+- [`tm_positions()`](https://statmodels7.github.io/parameters7/reference/tm_positions.md)
+  : Row and Chart Coordinate of Each Free Value
 

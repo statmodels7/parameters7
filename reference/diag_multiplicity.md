@@ -1,6 +1,6 @@
 # The Number of Diagonal Entries Each Free Value Owns
 
-One for an unshared structure, and the whole diagonal for a shared one.
+One for an unshared parameter, and the whole diagonal for a shared one.
 
 ## Usage
 
@@ -13,7 +13,7 @@ diag_multiplicity(s)
 - s:
 
   A
-  [`DiagStruct`](https://statmodels7.github.io/covstructs7/reference/DiagStruct.md)
+  [`DiagMatrixParam`](https://statmodels7.github.io/parameters7/reference/DiagMatrixParam.md)
   object.
 
 ## Value

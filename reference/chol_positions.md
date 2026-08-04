@@ -1,6 +1,6 @@
 # Positions of the Free Values in the Lower Triangle
 
-The row and column of each free value of a log-Cholesky structure, in
+The row and column of each free value of a log-Cholesky parameter, in
 the order the free vector uses: the diagonal first, then the
 below-diagonal entries column by column.
 

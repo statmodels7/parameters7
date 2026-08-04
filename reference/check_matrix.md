@@ -1,6 +1,6 @@
-# Validate a Matrix Handed Back to a Structure
+# Validate a Matrix Handed Back to a Parameter
 
-Checks that `m` is a square symmetric numeric matrix of the structure's
+Checks that `m` is a square symmetric numeric matrix of the parameter's
 dimension.
 
 ## Usage
@@ -14,7 +14,7 @@ check_matrix(s, m, tol = 1e-08)
 - s:
 
   A
-  [`covstruct`](https://statmodels7.github.io/covstructs7/reference/covstruct.md)
+  [`parameter`](https://statmodels7.github.io/parameters7/reference/parameter.md)
   object.
 
 - m:

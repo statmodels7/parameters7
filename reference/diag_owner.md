@@ -1,7 +1,7 @@
 # The Free Value Each Diagonal Entry Belongs To
 
 The index into the free vector of the value controlling each entry: the
-identity for an unshared structure, and all ones for a shared one.
+identity for an unshared parameter, and all ones for a shared one.
 
 ## Usage
 
@@ -14,7 +14,7 @@ diag_owner(s)
 - s:
 
   A
-  [`DiagStruct`](https://statmodels7.github.io/covstructs7/reference/DiagStruct.md)
+  [`DiagMatrixParam`](https://statmodels7.github.io/parameters7/reference/DiagMatrixParam.md)
   object.
 
 ## Value

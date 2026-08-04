@@ -1,4 +1,4 @@
-# Free Vectors to Sweep a Structure Over
+# Free Vectors to Sweep a Parameter Over
 
 A set of free vectors covering the ordinary range and a spread one.
 
@@ -13,7 +13,7 @@ sweep_etas(s, n = 4L)
 - s:
 
   A
-  [`covstruct`](https://statmodels7.github.io/covstructs7/reference/covstruct.md)
+  [`parameter`](https://statmodels7.github.io/parameters7/reference/parameter.md)
   object.
 
 - n:
@@ -29,10 +29,10 @@ A list of numeric vectors.
 The spread of the last vector is deliberately moderate. The free scale
 is unbounded, so no value of \\\eta\\ is inadmissible, but the matrix
 built from widely separated free values can be singular in double
-precision – spreading a log-Cholesky structure over twenty-eight units
+precision – spreading a log-Cholesky parameter over twenty-eight units
 of log gives a condition number around \\10^{28}\\ – and a comparison
 that fails there is a statement about the arithmetic rather than about
-the structure. The scaling that a rank-deficient family must survive is
+the parameter. The scaling that a rank-deficient family must survive is
 a property of its components rather than of a point, so it is tested
 where it arises, against the declared null space, and not by driving
 every family off the edge of double precision.

@@ -1,6 +1,6 @@
-# Name the Rows and Columns of a Structure's Matrix
+# Name the Rows and Columns of a Parameter's Matrix
 
-Applies the dimension labels every matrix a structure produces carries.
+Applies the dimension labels every matrix a parameter produces carries.
 
 ## Usage
 
@@ -17,7 +17,7 @@ name_dims(m, s)
 - s:
 
   A
-  [`covstruct`](https://statmodels7.github.io/covstructs7/reference/covstruct.md)
+  [`parameter`](https://statmodels7.github.io/parameters7/reference/parameter.md)
   object.
 
 ## Value

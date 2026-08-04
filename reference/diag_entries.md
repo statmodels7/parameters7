@@ -1,6 +1,6 @@
 # The Diagonal Entries Behind a Free Vector
 
-Applies the structure's link, recycling a shared value across the
+Applies the parameter's link, recycling a shared value across the
 diagonal.
 
 ## Usage
@@ -14,7 +14,7 @@ diag_entries(s, eta)
 - s:
 
   A
-  [`DiagStruct`](https://statmodels7.github.io/covstructs7/reference/DiagStruct.md)
+  [`DiagMatrixParam`](https://statmodels7.github.io/parameters7/reference/DiagMatrixParam.md)
   object.
 
 - eta:

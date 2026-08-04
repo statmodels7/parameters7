@@ -1,7 +1,7 @@
 # The Scale Behind a Free Vector, and Its Derivatives
 
 The value of the link and its first two derivatives at \\\eta\\, or the
-constant 1 when the structure has no free value.
+constant 1 when the parameter has no free value.
 
 ## Usage
 
@@ -14,7 +14,7 @@ scaled_scale(s, eta)
 - s:
 
   A
-  [`ScaledStruct`](https://statmodels7.github.io/covstructs7/reference/ScaledStruct.md)
+  [`ScaledMatrixParam`](https://statmodels7.github.io/parameters7/reference/ScaledMatrixParam.md)
   object.
 
 - eta:

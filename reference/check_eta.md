@@ -1,6 +1,6 @@
-# Validate a Free Vector Against a Structure
+# Validate a Free Vector Against a Parameter
 
-Checks that `eta` is a finite numeric vector of the length the structure
+Checks that `eta` is a finite numeric vector of the length the parameter
 declares, and returns it unnamed.
 
 ## Usage
@@ -14,7 +14,7 @@ check_eta(s, eta)
 - s:
 
   A
-  [`covstruct`](https://statmodels7.github.io/covstructs7/reference/covstruct.md)
+  [`parameter`](https://statmodels7.github.io/parameters7/reference/parameter.md)
   object.
 
 - eta:
@@ -27,7 +27,7 @@ check_eta(s, eta)
 
 ## Details
 
-Called in the body of every generic before dispatch, so that a structure
+Called in the body of every generic before dispatch, so that a parameter
 written outside the package inherits the check without doing anything.
 The names are stripped for the reason `align_theta()` strips them in
 distributions7: a value that has been through a link comes back carrying

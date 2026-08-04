@@ -1,4 +1,4 @@
-# Moore-Penrose Inverse From a Structure's Spectrum
+# Moore-Penrose Inverse From a Parameter's Spectrum
 
 The pseudo-inverse of \\M(\eta)\\, formed from the directions the
 declared rank keeps.
@@ -14,7 +14,7 @@ spectrum_pinv(sp)
 - sp:
 
   The result of
-  [`struct_spectrum`](https://statmodels7.github.io/covstructs7/reference/struct_spectrum.md).
+  [`param_spectrum`](https://statmodels7.github.io/parameters7/reference/param_spectrum.md).
 
 ## Value
 

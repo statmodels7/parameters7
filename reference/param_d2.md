@@ -1,0 +1,56 @@
+# Second Derivatives of a Parameter's Matrix
+
+Returns the \\d(d+1)/2\\ distinct second derivatives \\\partial^2 M /
+\partial \eta_k \partial \eta_l\\.
+
+## Usage
+
+``` r
+param_d2(s, eta, ...)
+```
+
+## Arguments
+
+- s:
+
+  An object inheriting from class
+  [`parameter`](https://statmodels7.github.io/parameters7/reference/parameter.md).
+
+- eta:
+
+  A numeric vector of length `s@n_free`.
+
+- ...:
+
+  Passed to methods.
+
+## Value
+
+A named list of symmetric matrices, keyed as `param_tuple_names(s)`.
+
+## Details
+
+The components are keyed by
+[`param_tuple_names`](https://statmodels7.github.io/parameters7/reference/param_tuple_names.md),
+generated from the same enumeration that produces the names rather than
+by taking a name apart. Recovering an index by splitting a name on its
+separator is the obvious route and it is wrong, because a free value
+whose own label contains the separator splits into the wrong number of
+pieces.
+
+## See also
+
+[`param_d1`](https://statmodels7.github.io/parameters7/reference/param_d1.md),
+[`param_tuple_names`](https://statmodels7.github.io/parameters7/reference/param_tuple_names.md)
+
+## Examples
+
+``` r
+s <- scaled_matrix(diag(2))
+param_d2(s, 0)
+#> $`scale:scale`
+#>    v1 v2
+#> v1  1  0
+#> v2  0  1
+#> 
+```

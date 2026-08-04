@@ -14,7 +14,7 @@ chol_assemble(s, eta)
 - s:
 
   A
-  [`LogCholeskyStruct`](https://statmodels7.github.io/covstructs7/reference/LogCholeskyStruct.md)
+  [`LogCholeskyParam`](https://statmodels7.github.io/parameters7/reference/LogCholeskyParam.md)
   object.
 
 - eta:
