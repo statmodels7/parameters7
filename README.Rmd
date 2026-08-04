@@ -23,7 +23,7 @@ knitr::opts_chunk$set(
 library(parameters7)
 ```
 
-# parameters7
+# parameters7 <img src="man/figures/logo.png" align="right" height="139" alt="" />
 
 Every R package that fits a model with a constrained parameter carries its
 own parametrisation of it, written inside the routine that needs it. `nlme`

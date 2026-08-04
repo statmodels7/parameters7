@@ -13,7 +13,7 @@ coverage](https://codecov.io/gh/statmodels7/parameters7/graph/badge.svg)](https:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
-# parameters7
+# parameters7 <img src="man/figures/logo.png" align="right" height="139" alt="" />
 
 Every R package that fits a model with a constrained parameter carries
 its own parametrisation of it, written inside the routine that needs it.
