@@ -6,28 +6,28 @@
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/statmodels7/covstructs7/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/statmodels7/covstructs7/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/statmodels7/parameters7/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/statmodels7/parameters7/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
-coverage](https://codecov.io/gh/statmodels7/covstructs7/graph/badge.svg)](https://app.codecov.io/gh/statmodels7/covstructs7)
+coverage](https://codecov.io/gh/statmodels7/parameters7/graph/badge.svg)](https://app.codecov.io/gh/statmodels7/parameters7)
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
-# covstructs7
+# parameters7
 
 Every R package that fits a model with a covariance matrix carries its
 own parametrisation of it, written inside the routine that needs it.
 `nlme` has the `pdMat` classes, `lme4` has its `theta` vector, `glmmTMB`
-has its covariance structures — three private rewritings of the same
+has its covariance parameters — three private rewritings of the same
 mathematics, none exposing a derivative, none reusable from outside.
 
-A covariance structure is a fixed mathematical object. The map from an
+A covariance parameter is a fixed mathematical object. The map from an
 unconstrained vector to a matrix in some constrained set, its inverse,
 its derivatives, and the quantities a likelihood asks of the matrix are
 all determined once and for all, so they can be written once and built
 on.
 
-`{covstructs7}` makes a structure an object that can be **evaluated,
+`{parameters7}` makes a parameter an object that can be **evaluated,
 inverted, differentiated to second order, and asked for its
 log-determinant and its solves** — including when the matrix is **rank
 deficient**, which a covariance may not be but a precision routinely is.
@@ -44,15 +44,15 @@ statistical modelling, alongside
 
 ``` r
 # install.packages("pak")
-pak::pak("statmodels7/covstructs7")
+pak::pak("statmodels7/parameters7")
 ```
 
-## A structure is an object
+## A parameter is an object
 
 ``` r
 s <- log_cholesky(3)
 s
-#> Structure: log_cholesky
+#> Parameter: log_cholesky
 #> Matrix:    3 x 3, symmetric
 #> Rank:      3 of 3
 #> Role:      either
@@ -63,7 +63,7 @@ s
 #> From the base class: none
 
 eta <- c(0.1, -0.2, 0.3, 0.5, -0.4, 0.2)
-round(struct_matrix(s, eta), 4)
+round(param_value(s, eta), 4)
 #>         v1      v2      v3
 #> v1  1.2214  0.5526 -0.4421
 #> v2  0.5526  0.9203 -0.0363
@@ -74,7 +74,7 @@ The map is a bijection onto the positive definite cone, so it inverts
 exactly:
 
 ``` r
-max(abs(struct_free(s, struct_matrix(s, eta)) - eta))
+max(abs(param_free(s, param_value(s, eta)) - eta))
 #> [1] 6.938894e-17
 ```
 
@@ -88,7 +88,7 @@ diagonal block of a structured matrix is a scalar map, and those are
 `{linkfunctions7}` links reused as they are.
 
 ``` r
-struct_matrix(diag_struct(3, link = linkfunctions7::sqrt_link()), c(1, 2, 3))
+param_value(diagonal_matrix(3, link = linkfunctions7::sqrt_link()), c(1, 2, 3))
 #>    v1 v2 v3
 #> v1  1  0  0
 #> v2  0  4  0
@@ -104,9 +104,9 @@ not a legitimate density.
 
 ``` r
 p <- crossprod(diff(diag(6), differences = 2))
-s <- scaled_struct(p)
+s <- scaled_matrix(p)
 s
-#> Structure: scaled
+#> Parameter: scaled
 #> Matrix:    6 x 6, symmetric
 #> Rank:      4 of 6 (null space of dimension 2)
 #> Role:      precision
@@ -118,7 +118,7 @@ s
 ```
 
 The null space is the constants and the straight lines — the functions a
-second-difference penalty leaves alone — and the structure carries an
+second-difference penalty leaves alone — and the parameter carries an
 orthonormal basis for it:
 
 ``` r
@@ -133,8 +133,8 @@ The log-determinant becomes the log **pseudo**-determinant, and its
 derivative is the rank — a constant, whatever the scale:
 
 ``` r
-c(at_small_scale = unname(struct_dlogdet(s, -6)),
-  at_large_scale = unname(struct_dlogdet(s, 6)),
+c(at_small_scale = unname(param_dlogdet(s, -6)),
+  at_large_scale = unname(param_dlogdet(s, 6)),
   rank = s@rank)
 #> at_small_scale at_large_scale           rank 
 #>              4              4              4
@@ -177,22 +177,22 @@ count_ev <- function(m) {
 
 c(balanced = count_ev(p1 + p2),
   ratio_1e12 = count_ev(1e-6 * p1 + 1e6 * p2),
-  from_components = struct_null_basis(list(p1, p2))$rank)
+  from_components = param_null_basis(list(p1, p2))$rank)
 #>        balanced      ratio_1e12 from_components 
 #>              28              16              28
 ```
 
-So `struct_null_basis()` stacks the individually normalised components —
+So `param_null_basis()` stacks the individually normalised components —
 the null space of a sum of positive semidefinite matrices is the
 intersection of their null spaces — and membership is afterwards tested
 against that basis.
 
-## What consumes a structure
+## What consumes a parameter
 
 A multivariate distribution in
 [distributions7](https://statmodels7.github.io/distributions7/) carries
-its covariance as a structure, and takes it on either side: a structure
-imposed on $\Sigma$ and the same structure imposed on
+its covariance as a parameter, and takes it on either side: a parameter
+imposed on $\Sigma$ and the same parameter imposed on
 $\Omega = \Sigma^{-1}$ are different models whenever the family is not
 closed under inversion. The free values become parameters of the
 distribution, so the whole apparatus of that package — derivatives, the
@@ -201,7 +201,7 @@ validator, the fitting routine — applies with no special case.
 ``` r
 # in distributions7; not run here, since this package does not depend on its
 # own consumer
-d <- mvgaussian_distrib(2, struct_sigma = covstructs7::log_cholesky(2))
+d <- mvgaussian_distrib(2, struct_sigma = parameters7::log_cholesky(2))
 d@params
 #> [1] "mu1"    "mu2"    "log_L1" "log_L2" "L2.1"
 
@@ -209,51 +209,51 @@ fit <- fit_distrib(d, y)
 mv_sigma(d, coef(fit))
 ```
 
-The names above are the structure’s own `free_names`, which is why they
+The names above are the parameter’s own `free_names`, which is why they
 are fixed at construction: they are the interface every consumer builds
 its parameter tables from.
 
-## A user-defined structure needs only its map
+## A user-defined parameter needs only its map
 
 Everything else has a numerical method registered on the base class, so
-a new structure is a subclass and one method.
+a new parameter is a subclass and one method.
 
 ``` r
-Ar1 <- S7::new_class("Ar1", parent = covstruct)
+Ar1 <- S7::new_class("Ar1", parent = parameter)
 
-S7::method(struct_matrix, Ar1) <- function(s, eta, ...) {
+S7::method(param_value, Ar1) <- function(s, eta, ...) {
   p <- s@dimension
   exp(eta[1]) * tanh(eta[2])^abs(outer(seq_len(p), seq_len(p), "-"))
 }
 
 ar1 <- Ar1(
-  struct_name = "ar1", dimension = 4L, n_free = 2L,
+  param_name = "ar1", dimension = 4L, n_free = 2L,
   free_names = c("scale", "rho"), rank = 4L,
   null_basis = matrix(numeric(0), 4, 0), role = "covariance",
-  struct_params = list()
+  param_params = list()
 )
 
 # never implemented, yet available
-round(struct_dmatrix(ar1, c(0.2, 0.6))[["rho"]], 4)
+round(param_d1(ar1, c(0.2, 0.6))[["rho"]], 4)
 #>        [,1]   [,2]   [,3]   [,4]
 #> [1,] 0.0000 0.8691 0.9335 0.7520
 #> [2,] 0.8691 0.0000 0.8691 0.9335
 #> [3,] 0.9335 0.8691 0.0000 0.8691
 #> [4,] 0.7520 0.9335 0.8691 0.0000
-struct_logdet(ar1, c(0.2, 0.6))
+param_logdet(ar1, c(0.2, 0.6))
 #> [1] -0.2208117
 ```
 
-## Validating a structure
+## Validating a parameter
 
-`check_covstruct()` runs nine checks, each against a route the
+`check_parameter()` runs nine checks, each against a route the
 implementation does not take. A quantity that comes from the base class
 is reported as **not checked**, not as passed: comparing a finite
 difference with a finite difference is the same arithmetic twice.
 
 ``` r
-invisible(check_covstruct(log_cholesky(3)))
-#> Structure: log_cholesky   (3 x 3, rank 3, 6 free)
+invisible(check_parameter(log_cholesky(3)))
+#> Parameter: log_cholesky   (3 x 3, rank 3, 6 free)
 #>   [OK         ] membership           0.00e+00
 #>   [OK         ] round trip           7.77e-16
 #>   [OK         ] first derivatives    2.90e-11
@@ -264,8 +264,8 @@ invisible(check_covstruct(log_cholesky(3)))
 #>   [OK         ] solve and factor     3.90e-15
 #>   [OK         ] shapes and names  
 #>   9 passed, 0 failed, 0 not checked
-invisible(check_covstruct(ar1))
-#> Structure: ar1   (4 x 4, rank 4, 2 free)
+invisible(check_parameter(ar1))
+#> Parameter: ar1   (4 x 4, rank 4, 2 free)
 #>   [OK         ] membership           0.00e+00
 #>   [NOT CHECKED] round trip        
 #>   [NOT CHECKED] first derivatives 
@@ -282,11 +282,11 @@ invisible(check_covstruct(ar1))
 
 |  |  |
 |----|----|
-| families | `log_cholesky()`, `diag_struct()`, `scalar_struct()`, `scaled_struct()` |
-| maps | `struct_matrix()`, `struct_free()` |
-| derivatives | `struct_dmatrix()`, `struct_d2matrix()` |
-| likelihood pieces | `struct_logdet()`, `struct_dlogdet()`, `struct_d2logdet()`, `struct_solve()`, `struct_factor()` |
-| tools | `check_covstruct()`, `struct_is_numerical()`, `struct_null_basis()`, `print()` |
+| families | `log_cholesky()`, `diagonal_matrix()`, `scalar_matrix()`, `scaled_matrix()` |
+| maps | `param_value()`, `param_free()` |
+| derivatives | `param_d1()`, `param_d2()` |
+| likelihood pieces | `param_logdet()`, `param_dlogdet()`, `param_d2logdet()`, `param_solve()`, `param_factor()` |
+| tools | `check_parameter()`, `param_is_numerical()`, `param_null_basis()`, `print()` |
 
 ## Related
 

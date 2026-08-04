@@ -2,12 +2,12 @@
 % Please edit documentation in R/numerical_fallbacks.R
 \name{spectrum_pinv}
 \alias{spectrum_pinv}
-\title{Moore-Penrose Inverse From a Structure's Spectrum}
+\title{Moore-Penrose Inverse From a Parameter's Spectrum}
 \usage{
 spectrum_pinv(sp)
 }
 \arguments{
-\item{sp}{The result of \code{\link{struct_spectrum}}.}
+\item{sp}{The result of \code{\link{param_spectrum}}.}
 }
 \value{
 A symmetric numeric matrix.

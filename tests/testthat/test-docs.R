@@ -7,7 +7,7 @@ test_that("every object in the namespace has a help topic", {
   # Asked here, on the machine where the evidence is destroyed.
   skip_if_not_installed("tools")
 
-  db <- tryCatch(tools::Rd_db("covstructs7"), error = function(e) NULL)
+  db <- tryCatch(tools::Rd_db("parameters7"), error = function(e) NULL)
   skip_if(is.null(db) || !length(db), "package not installed")
 
   aliases <- unlist(lapply(db, function(rd) {
@@ -17,7 +17,7 @@ test_that("every object in the namespace has a help topic", {
     ))))
   }), use.names = FALSE)
 
-  objs <- getNamespaceExports("covstructs7")
+  objs <- getNamespaceExports("parameters7")
   missing <- setdiff(objs, aliases)
   expect_identical(missing, character(0))
 })
@@ -27,7 +27,7 @@ test_that("no two man pages differ only in case", {
   # On a case-insensitive filesystem the second overwrites the first, and
   # nothing complains: R reads the topic from \name{} inside the file, not from
   # the file name. Caught here, where both files can still exist.
-  path <- system.file("man", package = "covstructs7")
+  path <- system.file("man", package = "parameters7")
   if (!nzchar(path)) path <- "../../man"
   skip_if_not(dir.exists(path), "no man directory")
 

@@ -1,15 +1,15 @@
-#' @include covstruct_class.R
+#' @include parameter_class.R
 NULL
 
 
-#' The Matrix a Structure Produces
+#' The Matrix a Parameter Produces
 #'
 #' @description
 #' Maps the free vector \eqn{\eta} to the matrix it parametrises.
 #'
 #' @details
-#' This is the only generic a structure must implement. Everything else in the
-#' package has a numerical method registered on the \code{\link{covstruct}}
+#' This is the only generic a parameter must implement. Everything else in the
+#' package has a numerical method registered on the \code{\link{parameter}}
 #' class and is therefore available from this one alone.
 #'
 #' The generic validates the free vector before dispatching, so every method,
@@ -18,21 +18,21 @@ NULL
 #' to reach, so a non-finite entry is a defect in the caller rather than a
 #' point of the domain.
 #'
-#' @param s An object inheriting from class \code{\link{covstruct}}.
+#' @param s An object inheriting from class \code{\link{parameter}}.
 #' @param eta A numeric vector of length \code{s@n_free}.
 #' @param ... Passed to methods.
 #'
 #' @return A symmetric numeric matrix with \code{s@dimension} rows and columns.
 #'
-#' @seealso \code{\link{struct_free}}, \code{\link{struct_dmatrix}},
-#'   \code{\link{struct_logdet}}
+#' @seealso \code{\link{param_free}}, \code{\link{param_d1}},
+#'   \code{\link{param_logdet}}
 #'
 #' @examples
 #' s <- log_cholesky(2)
-#' round(struct_matrix(s, c(0, 0, 0.5)), 4)
+#' round(param_value(s, c(0, 0, 0.5)), 4)
 #'
 #' @export
-struct_matrix <- S7::new_generic("struct_matrix", "s", function(s, eta, ...) {
+param_value <- S7::new_generic("param_value", "s", function(s, eta, ...) {
   eta <- check_eta(s, eta)
   S7::S7_dispatch()
 })
@@ -49,94 +49,94 @@ struct_matrix <- S7::new_generic("struct_matrix", "s", function(s, eta, ...) {
 #' optimisation-based inverse would return a plausible \eqn{\eta} for a matrix
 #' outside the set, which is a wrong answer wearing the shape of a right one.
 #' A family whose map has no closed-form inverse refuses instead, and the base
-#' class refuses on behalf of any structure that does not implement this.
+#' class refuses on behalf of any parameter that does not implement this.
 #'
-#' @param s An object inheriting from class \code{\link{covstruct}}.
-#' @param m A symmetric numeric matrix of the structure's dimension.
+#' @param s An object inheriting from class \code{\link{parameter}}.
+#' @param m A symmetric numeric matrix of the parameter's dimension.
 #' @param ... Passed to methods.
 #'
 #' @return A numeric vector of length \code{s@n_free}, named by
 #'   \code{s@free_names}.
 #'
-#' @seealso \code{\link{struct_matrix}}
+#' @seealso \code{\link{param_value}}
 #'
 #' @examples
 #' s <- log_cholesky(2)
 #' eta <- c(0.3, -0.2, 0.5)
-#' struct_free(s, struct_matrix(s, eta))
+#' param_free(s, param_value(s, eta))
 #'
 #' @export
-struct_free <- S7::new_generic("struct_free", "s", function(s, m, ...) {
-  m <- check_matrix(s, m)
+param_free <- S7::new_generic("param_free", "s", function(s, m, ...) {
+  if (S7::S7_inherits(s, matrix_parameter)) m <- check_matrix(s, m)
   S7::S7_dispatch()
 })
 
 
-#' First Derivatives of a Structure's Matrix
+#' First Derivatives of a Parameter's Matrix
 #'
 #' @description
 #' Returns \eqn{\partial M / \partial \eta_k} for every free value, as a list
 #' of matrices.
 #'
 #' @details
-#' A structure that registers no method for this generic gets the numerical one
-#' of the \code{\link{covstruct}} class, which applies a single central
-#' difference to \code{\link{struct_matrix}} in each component.
+#' A parameter that registers no method for this generic gets the numerical one
+#' of the \code{\link{parameter}} class, which applies a single central
+#' difference to \code{\link{param_value}} in each component.
 #'
-#' @param s An object inheriting from class \code{\link{covstruct}}.
+#' @param s An object inheriting from class \code{\link{parameter}}.
 #' @param eta A numeric vector of length \code{s@n_free}.
 #' @param ... Passed to methods.
 #'
 #' @return A list of \code{s@n_free} symmetric matrices, named by
 #'   \code{s@free_names}.
 #'
-#' @seealso \code{\link{struct_d2matrix}}, \code{\link{struct_is_numerical}}
+#' @seealso \code{\link{param_d2}}, \code{\link{param_is_numerical}}
 #'
 #' @examples
-#' s <- scaled_struct(diag(2))
-#' struct_dmatrix(s, 0)
+#' s <- scaled_matrix(diag(2))
+#' param_d1(s, 0)
 #'
 #' @export
-struct_dmatrix <- S7::new_generic("struct_dmatrix", "s", function(s, eta, ...) {
+param_d1 <- S7::new_generic("param_d1", "s", function(s, eta, ...) {
   eta <- check_eta(s, eta)
   S7::S7_dispatch()
 })
 
 
-#' Second Derivatives of a Structure's Matrix
+#' Second Derivatives of a Parameter's Matrix
 #'
 #' @description
 #' Returns the \eqn{d(d+1)/2} distinct second derivatives
 #' \eqn{\partial^2 M / \partial \eta_k \partial \eta_l}.
 #'
 #' @details
-#' The components are keyed by \code{\link{struct_pair_names}}, generated from
+#' The components are keyed by \code{\link{param_tuple_names}}, generated from
 #' the same enumeration that produces the names rather than by taking a name
 #' apart. Recovering an index by splitting a name on its separator is the
 #' obvious route and it is wrong, because a free value whose own label contains
 #' the separator splits into the wrong number of pieces.
 #'
-#' @param s An object inheriting from class \code{\link{covstruct}}.
+#' @param s An object inheriting from class \code{\link{parameter}}.
 #' @param eta A numeric vector of length \code{s@n_free}.
 #' @param ... Passed to methods.
 #'
 #' @return A named list of symmetric matrices, keyed as
-#'   \code{struct_pair_names(s)}.
+#'   \code{param_tuple_names(s)}.
 #'
-#' @seealso \code{\link{struct_dmatrix}}, \code{\link{struct_pair_names}}
+#' @seealso \code{\link{param_d1}}, \code{\link{param_tuple_names}}
 #'
 #' @examples
-#' s <- scaled_struct(diag(2))
-#' struct_d2matrix(s, 0)
+#' s <- scaled_matrix(diag(2))
+#' param_d2(s, 0)
 #'
 #' @export
-struct_d2matrix <- S7::new_generic("struct_d2matrix", "s", function(s, eta, ...) {
+param_d2 <- S7::new_generic("param_d2", "s", function(s, eta, ...) {
   eta <- check_eta(s, eta)
   S7::S7_dispatch()
 })
 
 
-#' Log-Determinant of a Structure's Matrix
+#' Log-Determinant of a Parameter's Matrix
 #'
 #' @description
 #' Returns \eqn{\log|M|} when the family is of full rank, and the log
@@ -151,28 +151,28 @@ struct_d2matrix <- S7::new_generic("struct_d2matrix", "s", function(s, eta, ...)
 #' The sign in front of the result is the consumer's arithmetic. A gaussian
 #' log-density written in the covariance carries \eqn{-\frac{1}{2}\log|\Sigma|}
 #' and one written in the precision carries \eqn{+\frac{1}{2}\log|\Omega|};
-#' the structure answers what the log-determinant is, and the likelihood
+#' the parameter answers what the log-determinant is, and the likelihood
 #' decides where it goes.
 #'
-#' @param s An object inheriting from class \code{\link{covstruct}}.
+#' @param s An object inheriting from class \code{\link{parameter}}.
 #' @param eta A numeric vector of length \code{s@n_free}.
 #' @param ... Passed to methods.
 #'
 #' @return A single number.
 #'
-#' @seealso \code{\link{struct_dlogdet}}, \code{\link{struct_solve}}
+#' @seealso \code{\link{param_dlogdet}}, \code{\link{param_solve}}
 #'
 #' @examples
-#' struct_logdet(log_cholesky(2), c(0, 0, 0))
+#' param_logdet(log_cholesky(2), c(0, 0, 0))
 #'
 #' # a rank-deficient precision: the pseudo-determinant, over the 4 non-zero
 #' # eigenvalues of a second-difference penalty on 6 coefficients
 #' p <- crossprod(diff(diag(6), differences = 2))
-#' s <- scaled_struct(p)
-#' c(rank = s@rank, logdet = struct_logdet(s, 0))
+#' s <- scaled_matrix(p)
+#' c(rank = s@rank, logdet = param_logdet(s, 0))
 #'
 #' @export
-struct_logdet <- S7::new_generic("struct_logdet", "s", function(s, eta, ...) {
+param_logdet <- S7::new_generic("param_logdet", "s", function(s, eta, ...) {
   eta <- check_eta(s, eta)
   S7::S7_dispatch()
 })
@@ -190,25 +190,25 @@ struct_logdet <- S7::new_generic("struct_logdet", "s", function(s, eta, ...) {
 #' \eqn{\partial_k \log|M| = \mathrm{tr}(M^{-1} \partial_k M)}, with the
 #' Moore-Penrose inverse in place of \eqn{M^{-1}} in the rank-deficient case.
 #' A closed form is therefore never an independent claim: it must agree with
-#' \code{\link{struct_dmatrix}} through that identity, and
-#' \code{\link{check_covstruct}} compares the two routes.
+#' \code{\link{param_d1}} through that identity, and
+#' \code{\link{check_parameter}} compares the two routes.
 #'
-#' @param s An object inheriting from class \code{\link{covstruct}}.
+#' @param s An object inheriting from class \code{\link{parameter}}.
 #' @param eta A numeric vector of length \code{s@n_free}.
 #' @param ... Passed to methods.
 #'
 #' @return A numeric vector of length \code{s@n_free}, named by
 #'   \code{s@free_names}.
 #'
-#' @seealso \code{\link{struct_logdet}}, \code{\link{struct_d2logdet}}
+#' @seealso \code{\link{param_logdet}}, \code{\link{param_d2logdet}}
 #'
 #' @examples
 #' # for a scaled precision the derivative is the rank, whatever the scale
-#' s <- scaled_struct(crossprod(diff(diag(6), differences = 2)))
-#' c(struct_dlogdet(s, -3), struct_dlogdet(s, 5), rank = s@rank)
+#' s <- scaled_matrix(crossprod(diff(diag(6), differences = 2)))
+#' c(param_dlogdet(s, -3), param_dlogdet(s, 5), rank = s@rank)
 #'
 #' @export
-struct_dlogdet <- S7::new_generic("struct_dlogdet", "s", function(s, eta, ...) {
+param_dlogdet <- S7::new_generic("param_dlogdet", "s", function(s, eta, ...) {
   eta <- check_eta(s, eta)
   S7::S7_dispatch()
 })
@@ -218,41 +218,41 @@ struct_dlogdet <- S7::new_generic("struct_dlogdet", "s", function(s, eta, ...) {
 #'
 #' @description
 #' Returns the distinct second derivatives of the log-determinant, or of the
-#' log pseudo-determinant, keyed as \code{\link{struct_pair_names}}.
+#' log pseudo-determinant, keyed as \code{\link{param_tuple_names}}.
 #'
-#' @param s An object inheriting from class \code{\link{covstruct}}.
+#' @param s An object inheriting from class \code{\link{parameter}}.
 #' @param eta A numeric vector of length \code{s@n_free}.
 #' @param ... Passed to methods.
 #'
-#' @return A named numeric vector, keyed as \code{struct_pair_names(s)}.
+#' @return A named numeric vector, keyed as \code{param_tuple_names(s)}.
 #'
-#' @seealso \code{\link{struct_dlogdet}}
+#' @seealso \code{\link{param_dlogdet}}
 #'
 #' @examples
-#' struct_d2logdet(log_cholesky(2), c(0.2, -0.1, 0.4))
+#' param_d2logdet(log_cholesky(2), c(0.2, -0.1, 0.4))
 #'
 #' @export
-struct_d2logdet <- S7::new_generic("struct_d2logdet", "s", function(s, eta, ...) {
+param_d2logdet <- S7::new_generic("param_d2logdet", "s", function(s, eta, ...) {
   eta <- check_eta(s, eta)
   S7::S7_dispatch()
 })
 
 
-#' Solve Through a Structure's Matrix
+#' Solve Through a Parameter's Matrix
 #'
 #' @description
 #' Returns \eqn{M^{-1} B}, computed through a factor rather than through an
 #' explicit inverse.
 #'
 #' @details
-#' A rank-deficient structure refuses rather than returning a pseudo-inverse.
+#' A rank-deficient parameter refuses rather than returning a pseudo-inverse.
 #' What a consumer of an improper prior needs is the quadratic form and the
 #' log pseudo-determinant -- the penalised normal equations invert
 #' \eqn{X^\top X + \lambda P}, which is non-singular even when \eqn{P} is not,
 #' and is assembled by the consumer -- so a pseudo-inverse would be a plausible
 #' matrix answering a question nobody asked.
 #'
-#' @param s An object inheriting from class \code{\link{covstruct}}.
+#' @param s An object inheriting from class \code{\link{parameter}}.
 #' @param eta A numeric vector of length \code{s@n_free}.
 #' @param b A numeric matrix or vector with \code{s@dimension} rows. Defaults to the
 #'   identity, which returns the inverse.
@@ -260,22 +260,28 @@ struct_d2logdet <- S7::new_generic("struct_d2logdet", "s", function(s, eta, ...)
 #'
 #' @return A numeric matrix with \code{s@dimension} rows.
 #'
-#' @seealso \code{\link{struct_factor}}, \code{\link{struct_logdet}}
+#' @seealso \code{\link{param_factor}}, \code{\link{param_logdet}}
 #'
 #' @examples
 #' s <- log_cholesky(2)
-#' round(struct_solve(s, c(0, 0, 0.5)), 4)
+#' round(param_solve(s, c(0, 0, 0.5)), 4)
 #'
 #' @export
-struct_solve <- S7::new_generic("struct_solve", "s", function(s, eta, b = NULL, ...) {
+param_solve <- S7::new_generic("param_solve", "s", function(s, eta, b = NULL, ...) {
   eta <- check_eta(s, eta)
+  if (!S7::S7_inherits(s, matrix_parameter)) {
+    stop(sprintf(
+      "param_solve() is not defined for '%s': the value is not a symmetric matrix.",
+      s@param_name
+    ), call. = FALSE)
+  }
   if (s@rank < s@dimension) {
     stop(sprintf(paste0(
       "'%s' is rank deficient (%d of %d), so it has no inverse. A consumer of\n",
       "  an improper prior needs the quadratic form and the log\n",
       "  pseudo-determinant, not a pseudo-inverse: assemble the matrix the\n",
       "  model actually inverts and solve that."
-    ), s@struct_name, s@rank, s@dimension), call. = FALSE)
+    ), s@param_name, s@rank, s@dimension), call. = FALSE)
   }
   if (is.null(b)) b <- diag(s@dimension)
   if (!is.matrix(b)) b <- as.matrix(b)
@@ -286,95 +292,202 @@ struct_solve <- S7::new_generic("struct_solve", "s", function(s, eta, b = NULL, 
 })
 
 
-#' A Factor of a Structure's Matrix
+#' A Factor of a Parameter's Matrix
 #'
 #' @description
 #' Returns a lower triangular \eqn{L} with \eqn{M = L L^\top}.
 #'
 #' @details
 #' Refused for a rank-deficient family, for the reason given in
-#' \code{\link{struct_solve}}.
+#' \code{\link{param_solve}}.
 #'
-#' @param s An object inheriting from class \code{\link{covstruct}}.
+#' @param s An object inheriting from class \code{\link{parameter}}.
 #' @param eta A numeric vector of length \code{s@n_free}.
 #' @param ... Passed to methods.
 #'
 #' @return A lower triangular numeric matrix with \code{s@dimension} rows and
 #'   columns.
 #'
-#' @seealso \code{\link{struct_solve}}
+#' @seealso \code{\link{param_solve}}
 #'
 #' @examples
-#' round(struct_factor(log_cholesky(2), c(0.1, 0.2, -0.3)), 4)
+#' round(param_factor(log_cholesky(2), c(0.1, 0.2, -0.3)), 4)
 #'
 #' @export
-struct_factor <- S7::new_generic("struct_factor", "s", function(s, eta, ...) {
+param_factor <- S7::new_generic("param_factor", "s", function(s, eta, ...) {
   eta <- check_eta(s, eta)
+  if (!S7::S7_inherits(s, matrix_parameter)) {
+    stop(sprintf(
+      "param_factor() is not defined for '%s': the value is not a symmetric matrix.",
+      s@param_name
+    ), call. = FALSE)
+  }
   if (s@rank < s@dimension) {
     stop(sprintf(
       "'%s' is rank deficient (%d of %d), so it has no Cholesky factor.",
-      s@struct_name, s@rank, s@dimension
+      s@param_name, s@rank, s@dimension
     ), call. = FALSE)
   }
   S7::S7_dispatch()
 })
 
 
-#' Names of the Distinct Second-Derivative Components
+#' Third Derivatives of a Parameter's Value
 #'
 #' @description
-#' The keys of \code{\link{struct_d2matrix}} and
-#' \code{\link{struct_d2logdet}}: one per unordered pair of free values,
-#' diagonal first and then the off-diagonal pairs in lexicographic order.
+#' Returns the distinct third derivatives
+#' \eqn{\partial^3 V / \partial \eta_k \partial \eta_l \partial \eta_m},
+#' keyed as \code{\link{param_tuple_names}(s, 3)}, each shaped like the
+#' value.
 #'
-#' @details
-#' This exists so that nothing has to recover a pair by splitting a key apart.
-#' Generating the keys and the index pairs from one enumeration cannot be
-#' fooled by a free name that contains the separator, which splitting can.
-#' Use \code{\link{struct_pair_indices}} for the pairs themselves.
+#' @param s An object inheriting from class \code{\link{parameter}}.
+#' @param eta A numeric vector of length \code{s@n_free}.
+#' @param ... Passed to methods.
 #'
-#' @param s An object inheriting from class \code{\link{covstruct}}.
+#' @return A named list, keyed as \code{param_tuple_names(s, 3)}.
 #'
-#' @return A character vector of length \eqn{d(d+1)/2}.
-#'
-#' @seealso \code{\link{struct_pair_indices}}
+#' @seealso \code{\link{param_d2}}, \code{\link{param_d4}}
 #'
 #' @examples
-#' struct_pair_names(log_cholesky(2))
+#' param_d3(scalar_matrix(2), 0.3)
 #'
 #' @export
-struct_pair_names <- function(s) {
-  idx <- struct_pair_indices(s)
+param_d3 <- S7::new_generic("param_d3", "s", function(s, eta, ...) {
+  eta <- check_eta(s, eta)
+  S7::S7_dispatch()
+})
+
+
+#' Fourth Derivatives of a Parameter's Value
+#'
+#' @description
+#' Returns the distinct fourth derivatives, keyed as
+#' \code{\link{param_tuple_names}(s, 4)}, each shaped like the value.
+#'
+#' @param s An object inheriting from class \code{\link{parameter}}.
+#' @param eta A numeric vector of length \code{s@n_free}.
+#' @param ... Passed to methods.
+#'
+#' @return A named list, keyed as \code{param_tuple_names(s, 4)}.
+#'
+#' @seealso \code{\link{param_d3}}
+#'
+#' @examples
+#' param_d4(scalar_matrix(2), 0.3)
+#'
+#' @export
+param_d4 <- S7::new_generic("param_d4", "s", function(s, eta, ...) {
+  eta <- check_eta(s, eta)
+  S7::S7_dispatch()
+})
+
+
+#' Third and Fourth Derivatives of the Log-Determinant
+#'
+#' @description
+#' The higher derivatives of the log-(pseudo-)determinant, keyed as
+#' \code{\link{param_tuple_names}} of the matching order.
+#'
+#' @param s An object inheriting from class \code{\link{matrix_parameter}}.
+#' @param eta A numeric vector of length \code{s@n_free}.
+#' @param ... Passed to methods.
+#'
+#' @return A named numeric vector.
+#'
+#' @seealso \code{\link{param_d2logdet}}
+#'
+#' @examples
+#' param_d3logdet(log_cholesky(2), c(0.1, -0.2, 0.4))
+#'
+#' @export
+param_d3logdet <- S7::new_generic("param_d3logdet", "s", function(s, eta, ...) {
+  eta <- check_eta(s, eta)
+  S7::S7_dispatch()
+})
+
+#' @rdname param_d3logdet
+#' @export
+param_d4logdet <- S7::new_generic("param_d4logdet", "s", function(s, eta, ...) {
+  eta <- check_eta(s, eta)
+  S7::S7_dispatch()
+})
+
+
+#' Names of the Distinct Derivative Components
+#'
+#' @description
+#' The keys of the derivative lists: one per unordered tuple of free values.
+#' At order 2, the keys of \code{\link{param_d2}} and
+#' \code{\link{param_d2logdet}}, diagonal pairs first; at orders 3 and 4,
+#' the keys of \code{\link{param_d3}} and \code{\link{param_d4}},
+#' lexicographic combinations with repetition.
+#'
+#' @details
+#' This exists so that nothing has to recover a tuple by splitting a key
+#' apart. Generating the keys and the index tuples from one enumeration
+#' cannot be fooled by a free name that contains the separator, which
+#' splitting can. Use \code{\link{param_tuple_indices}} for the tuples
+#' themselves.
+#'
+#' @param s An object inheriting from class \code{\link{parameter}}.
+#' @param order The derivative order: 2 (default), 3 or 4.
+#'
+#' @return A character vector, one entry per distinct component.
+#'
+#' @seealso \code{\link{param_tuple_indices}}
+#'
+#' @examples
+#' param_tuple_names(log_cholesky(2))
+#' param_tuple_names(scalar_matrix(2), 3)
+#'
+#' @export
+param_tuple_names <- function(s, order = 2L) {
+  idx <- param_tuple_indices(s, order)
   nm <- s@free_names
-  vapply(idx, function(p) paste0(nm[p[1L]], ":", nm[p[2L]]), character(1))
+  vapply(idx, function(t) paste(nm[t], collapse = ":"), character(1))
 }
 
 
-#' Index Pairs Behind the Second-Derivative Names
+#' Index Tuples Behind the Derivative Component Names
 #'
 #' @description
-#' The unordered index pairs \code{\link{struct_pair_names}} names, in exactly
-#' the same order: the diagonal \eqn{(k, k)} first, then the off-diagonal
-#' pairs \eqn{(k, l)} with \eqn{k < l} in lexicographic order.
+#' The unordered index tuples \code{\link{param_tuple_names}} names, in
+#' exactly the same order. At order 2 the diagonal pairs come first and then
+#' the off-diagonal ones, because consumers index a Hessian that way; at
+#' orders 3 and 4 the tuples are the lexicographic combinations with
+#' repetition, matching the enumeration \pkg{distributions7} uses for its
+#' higher derivatives.
 #'
-#' @param s An object inheriting from class \code{\link{covstruct}}.
+#' @param s An object inheriting from class \code{\link{parameter}}.
+#' @param order The derivative order: 1 to 4.
 #'
-#' @return A list of integer vectors of length 2.
+#' @return A list of integer vectors of length \code{order}.
 #'
-#' @seealso \code{\link{struct_pair_names}}
+#' @seealso \code{\link{param_tuple_names}}
 #'
 #' @examples
-#' struct_pair_indices(log_cholesky(2))
+#' param_tuple_indices(log_cholesky(2), 2)
+#' length(param_tuple_indices(log_cholesky(2), 3))
 #'
 #' @export
-struct_pair_indices <- function(s) {
+param_tuple_indices <- function(s, order = 2L) {
   d <- s@n_free
+  if (!order %in% 1:4) stop("'order' must be 1, 2, 3 or 4.", call. = FALSE)
   if (d == 0L) return(list())
-  out <- lapply(seq_len(d), function(k) c(k, k))
-  if (d > 1L) {
-    for (k in seq_len(d - 1L)) {
-      for (l in seq.int(k + 1L, d)) out[[length(out) + 1L]] <- c(k, l)
+  if (order == 1L) return(lapply(seq_len(d), as.integer))
+  if (order == 2L) {
+    # Diagonal first: the ordering is part of the contract, because it is the
+    # one a Hessian consumer indexes by.
+    out <- lapply(seq_len(d), function(k) c(k, k))
+    if (d > 1L) {
+      for (k in seq_len(d - 1L)) {
+        for (l in seq.int(k + 1L, d)) out[[length(out) + 1L]] <- c(k, l)
+      }
     }
+    return(lapply(out, as.integer))
   }
-  lapply(out, as.integer)
+  grid <- utils::combn(seq_len(d + order - 1L), order)
+  lapply(seq_len(ncol(grid)), function(j) {
+    as.integer(grid[, j] - seq_len(order) + 1L)
+  })
 }

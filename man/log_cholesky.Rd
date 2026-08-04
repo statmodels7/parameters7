@@ -2,7 +2,7 @@
 % Please edit documentation in R/log_cholesky.R
 \name{log_cholesky}
 \alias{log_cholesky}
-\title{Construct an Unstructured Positive Definite Structure}
+\title{Construct an Unstructured Positive Definite Parameter}
 \usage{
 log_cholesky(dimension, role = c("either", "covariance", "precision"))
 }
@@ -15,7 +15,7 @@ it records which side of a model the matrix parametrises, since the family
 name does not say.}
 }
 \value{
-An object of class \code{\link{LogCholeskyStruct}}.
+An object of class \code{\link{LogCholeskyParam}}.
 }
 \description{
 The log-Cholesky parametrisation of a symmetric positive definite matrix:
@@ -49,13 +49,13 @@ s <- log_cholesky(3)
 s
 
 eta <- c(0.1, -0.2, 0.3, 0.5, -0.4, 0.2)
-round(struct_matrix(s, eta), 4)
+round(param_value(s, eta), 4)
 
 # the round trip closes exactly
-max(abs(struct_free(s, struct_matrix(s, eta)) - eta))
+max(abs(param_free(s, param_value(s, eta)) - eta))
 
 # and the log-determinant is linear in the free vector
-struct_dlogdet(s, eta)
+param_dlogdet(s, eta)
 
 }
 \references{
@@ -63,6 +63,6 @@ Pinheiro, J. C. and Bates, D. M. (1996). Unconstrained parametrizations for
 variance-covariance matrices. \emph{Statistics and Computing} 6, 289-296.
 }
 \seealso{
-\code{\link{diag_struct}}, \code{\link{scaled_struct}},
-\code{\link{check_covstruct}}
+\code{\link{diagonal_matrix}}, \code{\link{scaled_matrix}},
+\code{\link{check_parameter}}
 }

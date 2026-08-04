@@ -1,22 +1,23 @@
-Package: covstructs7
-Title: An S7 Framework for Constrained Matrix Parameters
-Version: 0.1.0
+Package: parameters7
+Title: An S7 Framework for Constrained Parameters
+Version: 0.2.0
 Authors@R:
     person("Giovanni", "Tinervia", , "giovannitinervia9@gmail.com", role = c("aut", "cre"))
-Description: Parametrisations of covariance-adjacent constrained matrix
-    spaces as objects. A structure maps an unconstrained vector to a
-    symmetric matrix -- positive definite, a correlation matrix, or a
-    possibly rank-deficient precision -- and answers with exact first and
-    second derivatives, the log-determinant or its pseudo-determinant
-    counterpart, and the solves a likelihood needs. Numerical fallbacks make
-    a user-defined structure work from its map alone, and a diagnostic
-    verifies every component against an independent route.
+Description: Parametrisations of constrained parameter spaces as objects. A
+    parameter maps an unconstrained vector onto the set where it lives -- a
+    symmetric positive semidefinite matrix, a probability vector on the
+    simplex, a row-stochastic transition matrix -- and answers with exact
+    derivatives to fourth order, the inverse map, and, on the matrix branch,
+    the log-determinant or its pseudo-determinant counterpart and the solves
+    a likelihood needs. Numerical fallbacks make a user-defined parameter
+    work from its map alone, and a diagnostic verifies every component
+    against an independent route.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-URL: https://statmodels7.github.io/covstructs7/,
-    https://github.com/statmodels7/covstructs7
-BugReports: https://github.com/statmodels7/covstructs7/issues
+URL: https://statmodels7.github.io/parameters7/,
+    https://github.com/statmodels7/parameters7
+BugReports: https://github.com/statmodels7/parameters7/issues
 Depends:
     R (>= 4.1.0)
 Imports:
@@ -35,12 +36,15 @@ Config/testthat/edition: 3
 Config/roxygen2/version: 8.0.0
 RoxygenNote: 7.3.3
 Collate: 
-    'covstruct_class.R'
+    'parameter_class.R'
     'generics.R'
     'numerical_fallbacks.R'
-    'check_covstruct.R'
-    'covstructs7-package.R'
-    'diag_struct.R'
+    'check_parameter.R'
+    'diagonal_matrix.R'
     'log_cholesky.R'
+    'matrix_log.R'
     'methods.R'
-    'scaled_struct.R'
+    'parameters7-package.R'
+    'scaled_matrix.R'
+    'simplex.R'
+    'transition_matrix.R'

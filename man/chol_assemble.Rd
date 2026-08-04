@@ -7,7 +7,7 @@
 chol_assemble(s, eta)
 }
 \arguments{
-\item{s}{A \code{\link{LogCholeskyStruct}} object.}
+\item{s}{A \code{\link{LogCholeskyParam}} object.}
 
 \item{eta}{A numeric vector of free values.}
 }

@@ -1,4 +1,4 @@
 library(testthat)
-library(covstructs7)
+library(parameters7)
 
-test_check("covstructs7")
+test_check("parameters7")

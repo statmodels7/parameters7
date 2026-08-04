@@ -1,7 +1,7 @@
 #' @include generics.R
 NULL
 
-# What a structure gets for free when it implements only struct_matrix().
+# What a parameter gets for free when it implements only param_value().
 # Every method here is registered on the base class, so a subclass that
 # supplies a closed form takes over through dispatch with no registration step.
 
@@ -9,7 +9,7 @@ NULL
 #' Is This the Package's Own Base Class?
 #'
 #' @description
-#' Asks whether an S7 class is the abstract \code{\link{covstruct}} class,
+#' Asks whether an S7 class is the abstract \code{\link{parameter}} class,
 #' which is how a method registered on it is told apart from one a subclass
 #' supplied.
 #'
@@ -24,67 +24,79 @@ NULL
 #' @return \code{TRUE} or \code{FALSE}.
 #'
 #' @keywords internal
-is_base_struct_class <- function(cls) {
-  if (identical(cls, covstruct)) return(TRUE)
-  identical(attr(cls, "name"), attr(covstruct, "name")) &&
-    identical(attr(cls, "package"), attr(covstruct, "package"))
+is_base_param_class <- function(cls) {
+  for (base in list(parameter, matrix_parameter)) {
+    if (identical(cls, base)) return(TRUE)
+    if (identical(attr(cls, "name"), attr(base, "name")) &&
+        identical(attr(cls, "package"), attr(base, "package"))) {
+      return(TRUE)
+    }
+  }
+  FALSE
 }
 
 
-#' Which of a Structure's Quantities Come From the Base Class
+#' Which of a Parameter's Quantities Come From the Base Class
 #'
 #' @description
-#' Reports, for each of the five derivative quantities, whether the structure
+#' Reports, for each of the five derivative quantities, whether the parameter
 #' supplies its own method or falls back to the one registered on
-#' \code{\link{covstruct}}.
+#' \code{\link{parameter}}.
 #'
 #' @details
 #' The distinction that matters is whether an independent check exists. A
 #' derivative computed by finite differences cannot be checked against a finite
 #' difference, and a log-determinant read off an eigendecomposition cannot be
 #' checked against an eigendecomposition; the comparison is the same arithmetic
-#' twice, and it agrees however wrong the structure is.
-#' \code{\link{check_covstruct}} uses this to report such a quantity as not
+#' twice, and it agrees however wrong the parameter is.
+#' \code{\link{check_parameter}} uses this to report such a quantity as not
 #' checked rather than as passed.
 #'
-#' \code{struct_solve()} and \code{struct_factor()} are deliberately absent.
+#' \code{param_solve()} and \code{param_factor()} are deliberately absent.
 #' Their base-class versions are a Cholesky factorisation, which is exact
 #' whoever performs it, and the validator compares them with
 #' \code{base::solve} either way. Calling them numerical would suggest an
 #' approximation that is not there.
 #'
-#' @param s An object inheriting from class \code{\link{covstruct}}.
+#' @param s An object inheriting from class \code{\link{parameter}}.
 #'
-#' @return A named logical vector over \code{struct_dmatrix},
-#'   \code{struct_d2matrix}, \code{struct_logdet}, \code{struct_dlogdet} and
-#'   \code{struct_d2logdet}, \code{TRUE} where the base-class method is in
+#' @return A named logical vector over \code{param_d1},
+#'   \code{param_d2}, \code{param_logdet}, \code{param_dlogdet} and
+#'   \code{param_d2logdet}, \code{TRUE} where the base-class method is in
 #'   force.
 #'
 #' @examples
 #' # everything closed form except the second-order log-determinant of a
-#' # structure that does not supply one
-#' struct_is_numerical(log_cholesky(3))
-#' struct_is_numerical(diag_struct(3))
+#' # parameter that does not supply one
+#' param_is_numerical(log_cholesky(3))
+#' param_is_numerical(diagonal_matrix(3))
 #'
 #' @export
-struct_is_numerical <- function(s) {
+param_is_numerical <- function(s) {
   cls <- S7::S7_class(s)
   gens <- list(
-    struct_dmatrix = struct_dmatrix,
-    struct_d2matrix = struct_d2matrix,
-    struct_logdet = struct_logdet,
-    struct_dlogdet = struct_dlogdet,
-    struct_d2logdet = struct_d2logdet
+    param_d1 = param_d1,
+    param_d2 = param_d2,
+    param_d3 = param_d3,
+    param_d4 = param_d4,
+    param_logdet = param_logdet,
+    param_dlogdet = param_dlogdet,
+    param_d2logdet = param_d2logdet,
+    param_d3logdet = param_d3logdet,
+    param_d4logdet = param_d4logdet
   )
+  if (!S7::S7_inherits(s, matrix_parameter)) {
+    gens <- gens[c("param_d1", "param_d2", "param_d3", "param_d4")]
+  }
   vapply(gens, function(g) {
     m <- tryCatch(S7::method(g, cls), error = function(e) NULL)
     if (is.null(m)) return(TRUE)
-    is_base_struct_class(attr(m, "signature")[[1L]])
+    is_base_param_class(attr(m, "signature")[[1L]])
   }, logical(1))
 }
 
 
-#' The Spectral Decomposition a Structure's Quantities Are Read From
+#' The Spectral Decomposition a Parameter's Quantities Are Read From
 #'
 #' @description
 #' The eigenvalues and eigenvectors of \eqn{M(\eta)}, with the eigenvalues the
@@ -93,20 +105,20 @@ struct_is_numerical <- function(s) {
 #' @details
 #' The rank is taken from the object and never re-derived here. Counting
 #' eigenvalues above a relative tolerance is not scale invariant, so a
-#' structure whose components differ by many orders of magnitude would be
+#' parameter whose components differ by many orders of magnitude would be
 #' assigned a different rank at different \eqn{\eta} -- and a fitted model with
 #' smoothing parameters that far apart is ordinary. The object settled the
 #' question once, at construction, from the components.
 #'
-#' @param s A \code{\link{covstruct}} object.
+#' @param s A \code{\link{parameter}} object.
 #' @param eta A numeric vector of free values.
 #'
 #' @return A list with \code{values}, \code{vectors}, and \code{keep}, a
 #'   logical vector marking the \code{s@rank} directions that carry the matrix.
 #'
 #' @keywords internal
-struct_spectrum <- function(s, eta) {
-  m <- struct_matrix(s, eta)
+param_spectrum <- function(s, eta) {
+  m <- param_value(s, eta)
   e <- eigen((m + t(m)) / 2, symmetric = TRUE)
   keep <- rep(FALSE, s@dimension)
   if (s@rank > 0L) keep[seq_len(s@rank)] <- TRUE
@@ -114,13 +126,13 @@ struct_spectrum <- function(s, eta) {
 }
 
 
-#' Moore-Penrose Inverse From a Structure's Spectrum
+#' Moore-Penrose Inverse From a Parameter's Spectrum
 #'
 #' @description
 #' The pseudo-inverse of \eqn{M(\eta)}, formed from the directions the declared
 #' rank keeps.
 #'
-#' @param sp The result of \code{\link{struct_spectrum}}.
+#' @param sp The result of \code{\link{param_spectrum}}.
 #'
 #' @return A symmetric numeric matrix.
 #'
@@ -186,20 +198,20 @@ fd_step <- function(eta_k, order = 1L) {
 }
 
 
-#' Numerical First Derivatives of a Structure's Matrix
+#' Numerical First Derivatives of a Parameter's Matrix
 #'
 #' @description
-#' One central difference of \code{\link{struct_matrix}} in each component of
+#' One central difference of \code{\link{param_value}} in each component of
 #' \eqn{\eta}.
 #'
-#' @param s A \code{\link{covstruct}} object.
+#' @param s A \code{\link{parameter}} object.
 #' @param eta A numeric vector of free values.
 #'
 #' @return A named list of symmetric matrices.
 #'
-#' @seealso \code{\link{struct_dmatrix}}
+#' @seealso \code{\link{param_d1}}
 #' @export
-numerical_dmatrix <- function(s, eta) {
+numerical_d1 <- function(s, eta) {
   out <- vector("list", s@n_free)
   names(out) <- s@free_names
   for (k in seq_len(s@n_free)) {
@@ -208,17 +220,17 @@ numerical_dmatrix <- function(s, eta) {
     dn <- eta
     up[k] <- eta[k] + h
     dn[k] <- eta[k] - h
-    out[[k]] <- (struct_matrix(s, up) - struct_matrix(s, dn)) / (2 * h)
+    out[[k]] <- (param_value(s, up) - param_value(s, dn)) / (2 * h)
   }
   out
 }
 
 
-#' Numerical Second Derivatives of a Structure's Matrix
+#' Numerical Second Derivatives of a Parameter's Matrix
 #'
 #' @description
-#' One central difference of the analytic first derivatives where a structure
-#' supplies them, and a single mixed stencil on \code{\link{struct_matrix}}
+#' One central difference of the analytic first derivatives where a parameter
+#' supplies them, and a single mixed stencil on \code{\link{param_value}}
 #' where it does not.
 #'
 #' @details
@@ -230,21 +242,21 @@ numerical_dmatrix <- function(s, eta) {
 #' than compounding; the diagonal pairs use the three-point second-difference
 #' stencil directly, which is again one layer and not two.
 #'
-#' @param s A \code{\link{covstruct}} object.
+#' @param s A \code{\link{parameter}} object.
 #' @param eta A numeric vector of free values.
 #'
 #' @return A named list of symmetric matrices, keyed as
-#'   \code{struct_pair_names(s)}.
+#'   \code{param_tuple_names(s)}.
 #'
-#' @seealso \code{\link{struct_d2matrix}}
+#' @seealso \code{\link{param_d2}}
 #' @export
-numerical_d2matrix <- function(s, eta) {
-  idx <- struct_pair_indices(s)
+numerical_d2 <- function(s, eta) {
+  idx <- param_tuple_indices(s)
   out <- vector("list", length(idx))
-  names(out) <- struct_pair_names(s)
+  names(out) <- param_tuple_names(s)
   if (!length(idx)) return(out)
 
-  analytic <- !struct_is_numerical(s)[["struct_dmatrix"]]
+  analytic <- !param_is_numerical(s)[["param_d1"]]
 
   for (i in seq_along(idx)) {
     k <- idx[[i]][1L]
@@ -256,7 +268,7 @@ numerical_d2matrix <- function(s, eta) {
       dn <- eta
       up[l] <- eta[l] + h
       dn[l] <- eta[l] - h
-      out[[i]] <- (struct_dmatrix(s, up)[[k]] - struct_dmatrix(s, dn)[[k]]) /
+      out[[i]] <- (param_d1(s, up)[[k]] - param_d1(s, dn)[[k]]) /
         (2 * h)
     } else if (k == l) {
       h <- fd_step(eta[k], 2L)
@@ -264,8 +276,8 @@ numerical_d2matrix <- function(s, eta) {
       dn <- eta
       up[k] <- eta[k] + h
       dn[k] <- eta[k] - h
-      out[[i]] <- (struct_matrix(s, up) - 2 * struct_matrix(s, eta) +
-        struct_matrix(s, dn)) / h^2
+      out[[i]] <- (param_value(s, up) - 2 * param_value(s, eta) +
+        param_value(s, dn)) / h^2
     } else {
       hk <- fd_step(eta[k], 2L)
       hl <- fd_step(eta[l], 2L)
@@ -274,79 +286,81 @@ numerical_d2matrix <- function(s, eta) {
       pm[k] <- pm[k] + hk; pm[l] <- pm[l] - hl
       mp[k] <- mp[k] - hk; mp[l] <- mp[l] + hl
       mm[k] <- mm[k] - hk; mm[l] <- mm[l] - hl
-      out[[i]] <- (struct_matrix(s, pp) - struct_matrix(s, pm) -
-        struct_matrix(s, mp) + struct_matrix(s, mm)) / (4 * hk * hl)
+      out[[i]] <- (param_value(s, pp) - param_value(s, pm) -
+        param_value(s, mp) + param_value(s, mm)) / (4 * hk * hl)
     }
-    out[[i]] <- (out[[i]] + t(out[[i]])) / 2
+    if (S7::S7_inherits(s, matrix_parameter)) {
+      out[[i]] <- (out[[i]] + t(out[[i]])) / 2
+    }
   }
   out
 }
 
 
 #' @title Default First Derivatives
-#' @name struct_dmatrix.covstruct
+#' @name param_d1.parameter
 #' @description Fallback: one central difference of
-#'   \code{\link{struct_matrix}} per component (see
-#'   \code{\link{numerical_dmatrix}}).
-#' @param s A \code{\link{covstruct}} object.
+#'   \code{\link{param_value}} per component (see
+#'   \code{\link{numerical_d1}}).
+#' @param s A \code{\link{parameter}} object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named list of symmetric matrices.
 #' @keywords internal
-S7::method(struct_dmatrix, covstruct) <- function(s, eta, ...) {
-  numerical_dmatrix(s, eta)
+S7::method(param_d1, parameter) <- function(s, eta, ...) {
+  numerical_d1(s, eta)
 }
 
 #' @title Default Second Derivatives
-#' @name struct_d2matrix.covstruct
-#' @description Fallback: see \code{\link{numerical_d2matrix}}.
-#' @param s A \code{\link{covstruct}} object.
+#' @name param_d2.parameter
+#' @description Fallback: see \code{\link{numerical_d2}}.
+#' @param s A \code{\link{parameter}} object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named list of symmetric matrices.
 #' @keywords internal
-S7::method(struct_d2matrix, covstruct) <- function(s, eta, ...) {
-  numerical_d2matrix(s, eta)
+S7::method(param_d2, parameter) <- function(s, eta, ...) {
+  numerical_d2(s, eta)
 }
 
 #' @title Default Log-Determinant
-#' @name struct_logdet.covstruct
+#' @name param_logdet.parameter
 #' @description
 #' Fallback: the sum of the logs of the eigenvalues the declared rank keeps,
 #' which is the log-determinant for a full-rank family and the log
 #' pseudo-determinant otherwise.
-#' @param s A \code{\link{covstruct}} object.
+#' @param s A \code{\link{parameter}} object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A single number.
 #' @keywords internal
-S7::method(struct_logdet, covstruct) <- function(s, eta, ...) {
-  sp <- struct_spectrum(s, eta)
+S7::method(param_logdet, matrix_parameter) <- function(s, eta, ...) {
+  sp <- param_spectrum(s, eta)
   v <- sp$values[sp$keep]
   if (any(v <= 0)) {
     stop(sprintf(paste0(
       "'%s' produced %d non-positive eigenvalue(s) among the %d its rank\n",
       "  keeps, so it is outside the set it claims to parametrise."
-    ), s@struct_name, sum(v <= 0), s@rank), call. = FALSE)
+    ), s@param_name, sum(v <= 0), s@rank), call. = FALSE)
   }
   sum(log(v))
 }
 
 #' @title Default Log-Determinant Gradient
-#' @name struct_dlogdet.covstruct
+#' @name param_dlogdet.parameter
 #' @description
 #' Fallback: \eqn{\mathrm{tr}(M^{+} \partial_k M)}, with the pseudo-inverse
 #' formed from the directions the declared rank keeps, which is the ordinary
 #' inverse when the family is of full rank.
-#' @param s A \code{\link{covstruct}} object.
+#' @param s A \code{\link{parameter}} object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named numeric vector.
 #' @keywords internal
-S7::method(struct_dlogdet, covstruct) <- function(s, eta, ...) {
-  sp <- struct_spectrum(s, eta)
+S7::method(param_dlogdet, matrix_parameter) <- function(s, eta, ...) {
+  sp <- param_spectrum(s, eta)
   mi <- spectrum_pinv(sp)
-  d <- struct_dmatrix(s, eta)
+  d <- param_d1(s, eta)
   stats::setNames(
     vapply(d, function(dk) sum(mi * dk), numeric(1)),
     s@free_names
@@ -354,82 +368,295 @@ S7::method(struct_dlogdet, covstruct) <- function(s, eta, ...) {
 }
 
 #' @title Default Log-Determinant Hessian
-#' @name struct_d2logdet.covstruct
+#' @name param_d2logdet.parameter
 #' @description
 #' Fallback: \eqn{\mathrm{tr}(M^{+} \partial_{kl} M) -
 #' \mathrm{tr}(M^{+} \partial_k M\, M^{+} \partial_l M)}, the derivative of the
-#' identity behind \code{\link{struct_dlogdet}}.
-#' @param s A \code{\link{covstruct}} object.
+#' identity behind \code{\link{param_dlogdet}}.
+#' @param s A \code{\link{parameter}} object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named numeric vector.
 #' @keywords internal
-S7::method(struct_d2logdet, covstruct) <- function(s, eta, ...) {
-  sp <- struct_spectrum(s, eta)
+S7::method(param_d2logdet, matrix_parameter) <- function(s, eta, ...) {
+  sp <- param_spectrum(s, eta)
   mi <- spectrum_pinv(sp)
-  d <- struct_dmatrix(s, eta)
-  d2 <- struct_d2matrix(s, eta)
-  idx <- struct_pair_indices(s)
+  d <- param_d1(s, eta)
+  d2 <- param_d2(s, eta)
+  idx <- param_tuple_indices(s)
   out <- vapply(seq_along(idx), function(i) {
     k <- idx[[i]][1L]
     l <- idx[[i]][2L]
     sum(mi * d2[[i]]) - sum(t(mi %*% d[[k]]) * (mi %*% d[[l]]))
   }, numeric(1))
-  stats::setNames(out, struct_pair_names(s))
+  stats::setNames(out, param_tuple_names(s))
 }
 
 #' @title Default Solve
-#' @name struct_solve.covstruct
-#' @description Fallback: a Cholesky of \code{\link{struct_matrix}}, with the
+#' @name param_solve.parameter
+#' @description Fallback: a Cholesky of \code{\link{param_value}}, with the
 #'   definiteness verdict taken spectrally (see \code{\link{chol_pd}}).
-#' @param s A \code{\link{covstruct}} object.
+#' @param s A \code{\link{parameter}} object.
 #' @param eta A numeric vector of free values.
 #' @param b A numeric matrix with \code{s@dimension} rows.
 #' @param ... Unused.
 #' @return A numeric matrix.
 #' @keywords internal
-S7::method(struct_solve, covstruct) <- function(s, eta, b = NULL, ...) {
-  l <- struct_factor(s, eta)
+S7::method(param_solve, matrix_parameter) <- function(s, eta, b = NULL, ...) {
+  l <- param_factor(s, eta)
   backsolve(t(l), forwardsolve(l, b))
 }
 
 #' @title Default Factor
-#' @name struct_factor.covstruct
+#' @name param_factor.parameter
 #' @description Fallback: the lower Cholesky factor of
-#'   \code{\link{struct_matrix}}, refused when the matrix is not positive
+#'   \code{\link{param_value}}, refused when the matrix is not positive
 #'   definite spectrally.
-#' @param s A \code{\link{covstruct}} object.
+#' @param s A \code{\link{parameter}} object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A lower triangular numeric matrix.
 #' @keywords internal
-S7::method(struct_factor, covstruct) <- function(s, eta, ...) {
-  l <- chol_pd(struct_matrix(s, eta))
+S7::method(param_factor, matrix_parameter) <- function(s, eta, ...) {
+  l <- chol_pd(param_value(s, eta))
   if (is.null(l)) {
     stop(sprintf(paste0(
       "'%s' is not positive definite at this eta, although it declares full\n",
       "  rank. The verdict is spectral, so this is a statement about the\n",
       "  matrix rather than about a factorisation that happened to fail."
-    ), s@struct_name), call. = FALSE)
+    ), s@param_name), call. = FALSE)
   }
   l
 }
 
 #' @title Refusal to Invert Without a Closed Form
-#' @name struct_free.covstruct
+#' @name param_free.parameter
 #' @description
 #' The base class refuses rather than inverting the map numerically: an
 #' optimisation-based inverse would return a plausible \eqn{\eta} for a matrix
 #' outside the set the family parametrises.
-#' @param s A \code{\link{covstruct}} object.
+#' @param s A \code{\link{parameter}} object.
 #' @param m A symmetric numeric matrix.
 #' @param ... Unused.
 #' @return Never returns; raises an error.
 #' @keywords internal
-S7::method(struct_free, covstruct) <- function(s, m, ...) {
+S7::method(param_free, parameter) <- function(s, m, ...) {
   stop(sprintf(paste0(
-    "'%s' does not implement struct_free(). The inverse map is exact or\n",
+    "'%s' does not implement param_free(). The inverse map is exact or\n",
     "  refused, never obtained by optimisation, because a numerical inverse\n",
     "  would return a plausible eta for a matrix outside the set."
-  ), s@struct_name), call. = FALSE)
+  ), s@param_name), call. = FALSE)
+}
+
+
+#' Numerical Third Derivatives of a Parameter's Value
+#'
+#' @description
+#' One product stencil applied directly to \code{\link{param_value}} for each
+#' distinct index tuple: a single stencil on the map itself, never a stencil
+#' on a lower-order numerical derivative, so the no-nesting rule holds
+#' whatever the family implements. A repeated component uses the matching
+#' higher-order one-dimensional factor; distinct components each contribute a
+#' central two-point factor, and the product is evaluated in one pass.
+#'
+#' @param s A \code{\link{parameter}} object.
+#' @param eta A numeric vector of free values.
+#'
+#' @return A named list keyed as \code{\link{param_tuple_names}(s, 3)}.
+#'
+#' @seealso \code{\link{param_d3}}
+#' @export
+numerical_d3 <- function(s, eta) {
+  idx <- param_tuple_indices(s, 3L)
+  out <- vector("list", length(idx))
+  names(out) <- param_tuple_names(s, 3L)
+  f <- function(e) param_value(s, e)
+  for (i in seq_along(idx)) {
+    out[[i]] <- mixed_stencil(f, eta, idx[[i]])
+    if (S7::S7_inherits(s, matrix_parameter)) {
+      out[[i]] <- (out[[i]] + t(out[[i]])) / 2
+    }
+  }
+  out
+}
+
+
+#' Numerical Fourth Derivatives of a Parameter's Value
+#'
+#' @description
+#' The order-four analogue of \code{\link{numerical_d3}}: one stencil per
+#' component, applied directly to the map. Rounding is amplified by the
+#' fourth power of the step, so this is accurate to roughly four significant
+#' digits -- a starting point, and the reason every shipped family carries
+#' closed forms instead.
+#'
+#' @param s A \code{\link{parameter}} object.
+#' @param eta A numeric vector of free values.
+#'
+#' @return A named list keyed as \code{\link{param_tuple_names}(s, 4)}.
+#'
+#' @seealso \code{\link{param_d4}}
+#' @export
+numerical_d4 <- function(s, eta) {
+  idx <- param_tuple_indices(s, 4L)
+  out <- vector("list", length(idx))
+  names(out) <- param_tuple_names(s, 4L)
+  f <- function(e) param_value(s, e)
+  for (i in seq_along(idx)) {
+    out[[i]] <- mixed_stencil(f, eta, idx[[i]])
+    if (S7::S7_inherits(s, matrix_parameter)) {
+      out[[i]] <- (out[[i]] + t(out[[i]])) / 2
+    }
+  }
+  out
+}
+
+
+#' One Product Stencil for a Mixed Partial Derivative
+#'
+#' @description
+#' Differentiates \code{f} once in each component the index tuple names, a
+#' central factor per distinct component of the order its multiplicity asks:
+#' two points at order one, three at two, the five-point forms at three and
+#' four. The result is a single product stencil, not a composition of
+#' lower-order numerical derivatives.
+#'
+#' @param f A function of the free vector.
+#' @param eta The point.
+#' @param tuple An integer vector of component indices, possibly repeated.
+#'
+#' @return The stencil's value, shaped like \code{f(eta)}.
+#'
+#' @keywords internal
+mixed_stencil <- function(f, eta, tuple) {
+  counts <- table(tuple)
+  ks <- as.integer(names(counts))
+  ms <- as.integer(counts)
+  hs <- vapply(seq_along(ks), function(j) {
+    fd_step(eta[ks[j]], sum(ms))
+  }, numeric(1))
+
+  one_dim <- function(m) {
+    switch(m,
+      list(offsets = c(-1, 1), weights = c(-0.5, 0.5), power = 1),
+      list(offsets = c(-1, 0, 1), weights = c(1, -2, 1), power = 2),
+      list(offsets = c(-2, -1, 1, 2), weights = c(-0.5, 1, -1, 0.5), power = 3),
+      list(offsets = c(-2, -1, 0, 1, 2), weights = c(1, -4, 6, -4, 1), power = 4)
+    )
+  }
+  facs <- lapply(ms, one_dim)
+
+  combos <- expand.grid(lapply(facs, function(fc) seq_along(fc$offsets)))
+  acc <- NULL
+  for (r in seq_len(nrow(combos))) {
+    e <- eta
+    w <- 1
+    for (j in seq_along(ks)) {
+      pick <- combos[r, j]
+      e[ks[j]] <- e[ks[j]] + facs[[j]]$offsets[pick] * hs[j]
+      w <- w * facs[[j]]$weights[pick]
+    }
+    term <- w * f(e)
+    acc <- if (is.null(acc)) term else acc + term
+  }
+  denom <- prod(vapply(seq_along(ks), function(j) {
+    hs[j]^facs[[j]]$power
+  }, numeric(1)))
+  acc / denom
+}
+
+
+#' @title Default Third Derivatives
+#' @name param_d3.parameter
+#' @description Fallback: see \code{\link{numerical_d3}}.
+#' @param s A \code{\link{parameter}} object.
+#' @param eta A numeric vector of free values.
+#' @param ... Unused.
+#' @return A named list.
+#' @keywords internal
+S7::method(param_d3, parameter) <- function(s, eta, ...) {
+  numerical_d3(s, eta)
+}
+
+#' @title Default Fourth Derivatives
+#' @name param_d4.parameter
+#' @description Fallback: see \code{\link{numerical_d4}}.
+#' @param s A \code{\link{parameter}} object.
+#' @param eta A numeric vector of free values.
+#' @param ... Unused.
+#' @return A named list.
+#' @keywords internal
+S7::method(param_d4, parameter) <- function(s, eta, ...) {
+  numerical_d4(s, eta)
+}
+
+#' @title Default Higher Log-Determinant Derivatives
+#' @name param_d3logdet.matrix_parameter
+#' @description
+#' Fallback: one central stencil on \code{\link{param_d2logdet}}, which is
+#' the exact trace identity given the matrix derivatives -- a single layer on
+#' an analytic quantity, per the toolkit's rule.
+#' @param s A \code{\link{matrix_parameter}} object.
+#' @param eta A numeric vector of free values.
+#' @param ... Unused.
+#' @return A named numeric vector.
+#' @keywords internal
+S7::method(param_d3logdet, matrix_parameter) <- function(s, eta, ...) {
+  idx3 <- param_tuple_indices(s, 3L)
+  idx2 <- param_tuple_indices(s, 2L)
+  key2 <- vapply(idx2, function(t) paste(sort(t), collapse = ","), character(1))
+  out <- vapply(seq_along(idx3), function(i) {
+    t3 <- idx3[[i]]
+    k <- t3[3L]
+    pos <- match(paste(sort(t3[1:2]), collapse = ","), key2)
+    h <- fd_step(eta[k], 1L)
+    up <- eta
+    dn <- eta
+    up[k] <- eta[k] + h
+    dn[k] <- eta[k] - h
+    (param_d2logdet(s, up)[[pos]] - param_d2logdet(s, dn)[[pos]]) / (2 * h)
+  }, numeric(1))
+  stats::setNames(out, param_tuple_names(s, 3L))
+}
+
+#' @title Default Fourth Log-Determinant Derivatives
+#' @name param_d4logdet.matrix_parameter
+#' @description
+#' Fallback: one second-order stencil on \code{\link{param_d2logdet}} in the
+#' last two components of the tuple -- one layer, mixed across components
+#' where they differ.
+#' @param s A \code{\link{matrix_parameter}} object.
+#' @param eta A numeric vector of free values.
+#' @param ... Unused.
+#' @return A named numeric vector.
+#' @keywords internal
+S7::method(param_d4logdet, matrix_parameter) <- function(s, eta, ...) {
+  idx4 <- param_tuple_indices(s, 4L)
+  idx2 <- param_tuple_indices(s, 2L)
+  key2 <- vapply(idx2, function(t) paste(sort(t), collapse = ","), character(1))
+  out <- vapply(seq_along(idx4), function(i) {
+    t4 <- idx4[[i]]
+    pos <- match(paste(sort(t4[1:2]), collapse = ","), key2)
+    k <- t4[3L]
+    l <- t4[4L]
+    g <- function(e) param_d2logdet(s, e)[[pos]]
+    if (k == l) {
+      h <- fd_step(eta[k], 2L)
+      up <- eta
+      dn <- eta
+      up[k] <- eta[k] + h
+      dn[k] <- eta[k] - h
+      (g(up) - 2 * g(eta) + g(dn)) / h^2
+    } else {
+      hk <- fd_step(eta[k], 2L)
+      hl <- fd_step(eta[l], 2L)
+      pp <- pm <- mp <- mm <- eta
+      pp[k] <- pp[k] + hk; pp[l] <- pp[l] + hl
+      pm[k] <- pm[k] + hk; pm[l] <- pm[l] - hl
+      mp[k] <- mp[k] - hk; mp[l] <- mp[l] + hl
+      mm[k] <- mm[k] - hk; mm[l] <- mm[l] - hl
+      (g(pp) - g(pm) - g(mp) + g(mm)) / (4 * hk * hl)
+    }
+  }, numeric(1))
+  stats::setNames(out, param_tuple_names(s, 4L))
 }

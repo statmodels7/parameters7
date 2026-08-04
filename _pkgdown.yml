@@ -1,4 +1,4 @@
-url: https://statmodels7.github.io/covstructs7/
+url: https://statmodels7.github.io/parameters7/
 
 template:
   bootstrap: 5
@@ -10,24 +10,29 @@ reference:
     own constrained set, and each owns the side of that matrix.
   contents:
   - log_cholesky
-  - diag_struct
-  - scalar_struct
-  - scaled_struct
+  - matrix_log
+  - diagonal_matrix
+  - scalar_matrix
+  - scaled_matrix
+  - simplex
+  - transition_matrix
 
 - title: The map and its inverse
   contents:
-  - struct_matrix
-  - struct_free
+  - param_value
+  - param_free
 
 - title: Derivatives
   desc: >
-    Exact to second order, on the unconstrained scale, which is what joint
-    estimation over the coefficients and the matrix parameters consumes.
+    Exact to fourth order, on the unconstrained scale, which is what joint
+    estimation over the coefficients and the constrained parameters consumes.
   contents:
-  - struct_dmatrix
-  - struct_d2matrix
-  - struct_pair_names
-  - struct_pair_indices
+  - param_d1
+  - param_d2
+  - param_d3
+  - param_d4
+  - param_tuple_names
+  - param_tuple_indices
 
 - title: What a likelihood asks of the matrix
   desc: >
@@ -35,11 +40,12 @@ reference:
     deficient, and the solves -- computed through a factor rather than through
     an explicit inverse.
   contents:
-  - struct_logdet
-  - struct_dlogdet
-  - struct_d2logdet
-  - struct_solve
-  - struct_factor
+  - param_logdet
+  - param_dlogdet
+  - param_d2logdet
+  - param_d3logdet
+  - param_solve
+  - param_factor
 
 - title: Rank
   desc: >
@@ -47,32 +53,42 @@ reference:
     computed once from the components and membership is tested against the null
     space it implies.
   contents:
-  - struct_null_basis
+  - param_null_basis
 
 - title: Tools
   contents:
-  - check_covstruct
-  - struct_is_numerical
-  - numerical_dmatrix
-  - numerical_d2matrix
+  - check_parameter
+  - param_is_numerical
+  - numerical_d1
+  - numerical_d2
+  - numerical_d3
+  - numerical_d4
 
 - title: Classes
   desc: The S7 classes; each page lists the methods that dispatch on it.
   contents:
-  - covstruct
-  - LogCholeskyStruct
-  - ends_with(".LogCholeskyStruct")
-  - DiagStruct
-  - ends_with(".DiagStruct")
-  - ScaledStruct
-  - ends_with(".ScaledStruct")
+  - parameter
+  - matrix_parameter
+  - LogCholeskyParam
+  - ends_with(".MatrixLogParam")
+  - MatrixLogParam
+  - SimplexParam
+  - ends_with(".SimplexParam")
+  - TransitionMatrixParam
+  - ends_with(".TransitionMatrixParam")
+  - ends_with(".LogCholeskyParam")
+  - DiagMatrixParam
+  - ends_with(".DiagMatrixParam")
+  - ScaledMatrixParam
+  - ends_with(".ScaledMatrixParam")
 
 - title: Base-class defaults
   desc: >
-    The methods registered on the abstract class, which every structure
+    The methods registered on the abstract class, which every parameter
     inherits unless it registers something more specific.
   contents:
-  - ends_with(".covstruct")
+  - ends_with(".parameter")
+  - ends_with(".matrix_parameter")
 
 - title: Internals
   desc: >

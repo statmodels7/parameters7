@@ -14,7 +14,7 @@ A list with the integer vectors \code{row}, \code{col} and the
 logical \code{on_diagonal}.
 }
 \description{
-The row and column of each free value of a log-Cholesky structure, in the
+The row and column of each free value of a log-Cholesky parameter, in the
 order the free vector uses: the diagonal first, then the below-diagonal
 entries column by column.
 }
