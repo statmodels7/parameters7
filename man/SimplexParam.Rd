@@ -18,7 +18,17 @@ SimplexParam(
 
 \item{free_names}{A character vector of length \code{n_free}, one label per
 free value. Fixed at construction: every consumer builds parameter tables
-from these.}
+from these. A label names the coordinate rather than the quantity the
+coordinate produces, and the families here follow one convention for it.
+Where a link carries a constrained quantity onto the free scale, the
+label records that link, so a variance appears as \code{"log_scale"} and
+a correlation as \code{"z_rho"}; where the coordinate is already
+unrestricted the label is the plain name of the quantity, as the
+below-diagonal entries \code{"L2.1"} of a Cholesky factor are. The
+distinction matters outside the family: a consumer flattens the free
+vector into scalar parameters carrying identity links, so a label
+promising a bounded quantity reports a number on a scale that number is
+not on.}
 
 \item{param_params}{A list of whatever the family needs to evaluate itself.}
 }

@@ -324,6 +324,32 @@ combinat_perms <- function(x) {
 }
 
 
+#' Third and Fourth Derivatives of a Matrix Exponential
+#'
+#' @description
+#' The derivative components of orders three and four of \eqn{M = e^{S}} with
+#' respect to the free entries of the symmetric matrix \eqn{S}.
+#'
+#' @details
+#' The Frechet derivatives of the exponential contract chains of directions
+#' against divided differences of \eqn{\exp} in the eigenvalues, and the sum
+#' runs over every ordering of the directions rather than over the distinct
+#' ones, so a tuple with repeated indices is counted with its multiplicity
+#' rather than corrected for it afterwards. The divided differences come from
+#' the Opitz representation, an exponential of a small bidiagonal matrix read
+#' off its corner, which stays exact where the quotient recursion cancels
+#' catastrophically under near-repeated eigenvalues.
+#'
+#' @param s A \code{\link{MatrixLogParam}} object.
+#' @param eta A numeric vector of free values.
+#' @param order The derivative order, 3 or 4.
+#'
+#' @return A named list of matrices, keyed by
+#'   \code{\link{param_tuple_names}(s, order)}.
+#'
+#' @seealso \code{\link{matrix_log}}
+#'
+#' @keywords internal
 mlog_higher <- function(s, eta, order) {
   tb <- mlog_tables(s, eta, order)
   idx <- param_tuple_indices(s, order)

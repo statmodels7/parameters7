@@ -244,17 +244,29 @@ special case.
 ``` r
 # in distributions7; not run here, since this package does not depend on its
 # own consumer
-d <- mvgaussian_distrib(2, struct_sigma = parameters7::log_cholesky(2))
+d <- mvgaussian_distrib(2, sigma = parameters7::log_cholesky(2))
 d@params
-#> [1] "mu1"    "mu2"    "log_L1" "log_L2" "L2.1"
+#> [1] "mu1" "mu2" "sigma_log_L1" "sigma_log_L2" "sigma_L2.1"
 
 fit <- fit_distrib(d, y)
 mv_sigma(d, coef(fit))
 ```
 
-The names above are the parameter's own `free_names`, which is why they are
-fixed at construction: they are the interface every consumer builds its
-parameter tables from.
+The names above are the parameter's own `free_names` with a prefix saying
+which matrix they build, which is why they are fixed at construction: they are
+the interface every consumer builds its parameter tables from.
+
+What a consumer prints is another matter, and a coordinate is not it.
+`param_readable()` is where a family says which quantities it is about — a
+marginal variance, a correlation, the coefficients of an autoregression —
+together with the Jacobian of the map from the free vector and the scale each
+interval belongs on, so that the consumer reports them by the delta method.
+
+```{r}
+p <- param_readable(autoregressive(8, order = 2), c(log(4), atanh(0.75), atanh(-0.35)))
+round(p$value, 4)
+p$transform
+```
 
 ## A user-defined parameter needs only its map
 
@@ -262,24 +274,35 @@ Everything else has a numerical method registered on the base class, so a new
 parameter is a subclass and one method.
 
 ```{r}
-Ar1 <- S7::new_class("Ar1", parent = matrix_parameter)
+ExpDecay <- S7::new_class("ExpDecay", parent = matrix_parameter)
 
-S7::method(param_value, Ar1) <- function(s, eta, ...) {
-  p <- s@dimension
-  exp(eta[1]) * tanh(eta[2])^abs(outer(seq_len(p), seq_len(p), "-"))
+S7::method(param_value, ExpDecay) <- function(s, eta, ...) {
+  d <- abs(outer(s@param_params$times, s@param_params$times, "-"))
+  exp(eta[1]) * exp(-d / exp(eta[2]))
 }
 
-ar1 <- Ar1(
-  param_name = "ar1", dimension = 4L, n_free = 2L,
-  free_names = c("scale", "rho"), rank = 4L,
+decay <- ExpDecay(
+  param_name = "exp_decay", dimension = 4L, n_free = 2L,
+  free_names = c("log_scale", "log_range"), rank = 4L,
   null_basis = matrix(numeric(0), 4, 0), role = "covariance",
-  param_params = list()
+  param_params = list(times = c(0, 0.5, 1.7, 3))
 )
 
 # never implemented, yet available
-round(param_d1(ar1, c(0.2, 0.6))[["rho"]], 4)
-param_logdet(ar1, c(0.2, 0.6))
+round(param_d1(decay, c(0.2, 0.6))[["log_range"]], 4)
+param_logdet(decay, c(0.2, 0.6))
 ```
+
+The example continues an autoregression to unequally spaced times, which
+`ar1()` does not cover, and its free names follow the convention every family
+here obeys: a name says which coordinate it is, not which quantity the
+coordinate produces. Where a link carries a constrained quantity onto the
+free scale the name records that link, so a covariance appears as
+`log_scale` and a correlation as `z_rho`; where the coordinate is already
+unrestricted, as the below-diagonal entries of a Cholesky factor are, the
+name is the plain `L2.1`. A consumer flattens the free vector into scalars
+carrying identity links, and a name promising a bounded quantity would put a
+number in front of a reader on a scale that number is not on.
 
 ## Validating a parameter
 
@@ -290,17 +313,21 @@ difference is the same arithmetic twice.
 
 ```{r}
 invisible(check_parameter(log_cholesky(3)))
-invisible(check_parameter(ar1))
+invisible(check_parameter(decay))
 ```
 
 ## What is in the box
 
 | | |
 |---|---|
-| families | `log_cholesky()`, `diagonal_matrix()`, `scalar_matrix()`, `scaled_matrix()` |
+| unstructured matrices | `log_cholesky()`, `matrix_log()`, `correlation_matrix()` |
+| economical matrices | `compound_symmetry()`, `ar1()`, `autoregressive()` |
+| diagonal and fixed | `diagonal_matrix()`, `scalar_matrix()`, `scaled_matrix()` |
+| not matrices | `simplex()`, `transition_matrix()` |
 | maps | `param_value()`, `param_free()` |
-| derivatives | `param_d1()`, `param_d2()` |
-| likelihood pieces | `param_logdet()`, `param_dlogdet()`, `param_d2logdet()`, `param_solve()`, `param_factor()` |
+| derivatives | `param_d1()` … `param_d4()`, exact to fourth order |
+| likelihood pieces | `param_logdet()`, `param_dlogdet()` … `param_d4logdet()`, `param_solve()`, `param_factor()` |
+| what a reader reads | `param_readable()` |
 | tools | `check_parameter()`, `param_is_numerical()`, `param_null_basis()`, `print()` |
 
 ## Related
