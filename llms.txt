@@ -38,6 +38,14 @@ statistical modelling, alongside
 pak::pak("statmodels7/parameters7")
 ```
 
+Or the whole toolkit at once, which also installs the four sibling
+packages:
+
+``` r
+
+pak::pak("statmodels7/statmodels7")
+```
+
 ## A parameter is an object
 
 ``` r
