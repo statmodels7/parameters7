@@ -173,10 +173,25 @@
 <p>So <code><a href="reference/struct_null_basis.html">struct_null_basis()</a></code> stacks the individually normalised components — the null space of a sum of positive semidefinite matrices is the intersection of their null spaces — and membership is afterwards tested against that basis.</p>
 </div>
 <div class="section level2">
+<h2 id="what-consumes-a-structure">What consumes a structure<a class="anchor" aria-label="anchor" href="#what-consumes-a-structure"></a>
+</h2>
+<p>A multivariate distribution in <a href="https://statmodels7.github.io/distributions7/" class="external-link">distributions7</a> carries its covariance as a structure, and takes it on either side: a structure imposed on <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="normal">Σ</mi><annotation encoding="application/x-tex">\Sigma</annotation></semantics></math> and the same structure imposed on <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Ω</mi><mo>=</mo><msup><mi mathvariant="normal">Σ</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup></mrow><annotation encoding="application/x-tex">\Omega = \Sigma^{-1}</annotation></semantics></math> are different models whenever the family is not closed under inversion. The free values become parameters of the distribution, so the whole apparatus of that package — derivatives, the validator, the fitting routine — applies with no special case.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># in distributions7; not run here, since this package does not depend on its</span></span>
+<span><span class="co"># own consumer</span></span>
+<span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu">mvgaussian_distrib</span><span class="op">(</span><span class="fl">2</span>, struct_sigma <span class="op">=</span> <span class="fu">covstructs7</span><span class="fu">::</span><span class="fu"><a href="reference/log_cholesky.html">log_cholesky</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">d</span><span class="op">@</span><span class="va">params</span></span>
+<span><span class="co">#&gt; [1] "mu1"    "mu2"    "log_L1" "log_L2" "L2.1"</span></span>
+<span></span>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">fit_distrib</span><span class="op">(</span><span class="va">d</span>, <span class="va">y</span><span class="op">)</span></span>
+<span><span class="fu">mv_sigma</span><span class="op">(</span><span class="va">d</span>, <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>The names above are the structure’s own <code>free_names</code>, which is why they are fixed at construction: they are the interface every consumer builds its parameter tables from.</p>
+</div>
+<div class="section level2">
 <h2 id="a-user-defined-structure-needs-only-its-map">A user-defined structure needs only its map<a class="anchor" aria-label="anchor" href="#a-user-defined-structure-needs-only-its-map"></a>
 </h2>
 <p>Everything else has a numerical method registered on the base class, so a new structure is a subclass and one method.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Ar1</span> <span class="op">&lt;-</span> <span class="fu">S7</span><span class="fu">::</span><span class="fu"><a href="https://rconsortium.github.io/S7/reference/new_class.html" class="external-link">new_class</a></span><span class="op">(</span><span class="st">"Ar1"</span>, parent <span class="op">=</span> <span class="va">covstruct</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">S7</span><span class="fu">::</span><span class="fu"><a href="https://rconsortium.github.io/S7/reference/method.html" class="external-link">method</a></span><span class="op">(</span><span class="va">struct_matrix</span>, <span class="va">Ar1</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">s</span>, <span class="va">eta</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
@@ -205,7 +220,7 @@
 <h2 id="validating-a-structure">Validating a structure<a class="anchor" aria-label="anchor" href="#validating-a-structure"></a>
 </h2>
 <p><code><a href="reference/check_covstruct.html">check_covstruct()</a></code> runs nine checks, each against a route the implementation does not take. A quantity that comes from the base class is reported as <strong>not checked</strong>, not as passed: comparing a finite difference with a finite difference is the same arithmetic twice.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/invisible.html" class="external-link">invisible</a></span><span class="op">(</span><span class="fu"><a href="reference/check_covstruct.html">check_covstruct</a></span><span class="op">(</span><span class="fu"><a href="reference/log_cholesky.html">log_cholesky</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Structure: log_cholesky   (3 x 3, rank 3, 6 free)</span></span>
 <span><span class="co">#&gt;   [OK         ] membership           0.00e+00</span></span>
