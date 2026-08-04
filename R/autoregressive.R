@@ -132,19 +132,21 @@ autoregressive <- function(dimension, order,
     ), p, q, p, q), call. = FALSE)
   }
   check_positive_link(link_scale)
+  link_pacf <- linkfunctions7::rhobit_link()
 
   AutoregressiveParam(
     param_name = sprintf("ar(%d)", q),
     dimension = p,
     n_free = q + 1L,
-    free_names = c("scale", paste0("pacf", seq_len(q))),
+    free_names = c(tagged_name(link_scale, "scale"),
+                   tagged_name(link_pacf, paste0("pacf", seq_len(q)))),
     rank = p,
     null_basis = empty_null_basis(p),
     role = role,
     param_params = list(
       order = q,
       link_scale = link_scale,
-      link_pacf = linkfunctions7::rhobit_link()
+      link_pacf = link_pacf
     )
   )
 }

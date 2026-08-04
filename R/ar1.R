@@ -86,18 +86,20 @@ ar1 <- function(dimension,
     ), call. = FALSE)
   }
   check_positive_link(link_scale)
+  link_rho <- linkfunctions7::rhobit_link()
 
   Ar1Param(
     param_name = "ar1",
     dimension = p,
     n_free = 2L,
-    free_names = c("scale", "rho"),
+    free_names = c(tagged_name(link_scale, "scale"),
+                   tagged_name(link_rho, "rho")),
     rank = p,
     null_basis = empty_null_basis(p),
     role = role,
     param_params = list(
       link_scale = link_scale,
-      link_rho = linkfunctions7::rhobit_link()
+      link_rho = link_rho
     )
   )
 }

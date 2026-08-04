@@ -99,18 +99,20 @@ compound_symmetry <- function(dimension,
     ), call. = FALSE)
   }
   check_positive_link(link_scale)
+  link_rho <- linkfunctions7::bounded_link(lwr = -1 / (p - 1), upr = 1)
 
   CompoundSymmetryParam(
     param_name = "compound_symmetry",
     dimension = p,
     n_free = 2L,
-    free_names = c("scale", "rho"),
+    free_names = c(tagged_name(link_scale, "scale"),
+                   tagged_name(link_rho, "rho")),
     rank = p,
     null_basis = empty_null_basis(p),
     role = role,
     param_params = list(
       link_scale = link_scale,
-      link_rho = linkfunctions7::bounded_link(lwr = -1 / (p - 1), upr = 1)
+      link_rho = link_rho
     )
   )
 }

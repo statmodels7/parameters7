@@ -60,7 +60,7 @@ test_that("the second-derivative keys and their index pairs agree", {
 
 test_that("the diagonal families behave", {
   d <- diagonal_matrix(3)
-  expect_identical(d@free_names, c("d1", "d2", "d3"))
+  expect_identical(d@free_names, c("log_d1", "log_d2", "log_d3"))
   expect_equal(
     param_value(d, log(c(1, 2, 3))), diag(c(1, 2, 3)),
     ignore_attr = TRUE
@@ -70,7 +70,7 @@ test_that("the diagonal families behave", {
 
   sc <- scalar_matrix(4)
   expect_identical(sc@n_free, 1L)
-  expect_identical(sc@free_names, "scale")
+  expect_identical(sc@free_names, "log_scale")
   expect_equal(param_value(sc, log(2.5)), diag(2.5, 4), ignore_attr = TRUE)
   expect_equal(param_logdet(sc, log(2.5)), 4 * log(2.5))
   expect_equal(unname(param_dlogdet(sc, log(2.5))), 4)

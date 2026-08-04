@@ -64,7 +64,7 @@ diagonal_matrix <- function(dimension, link = linkfunctions7::log_link(),
     param_name = "diag",
     dimension = p,
     n_free = p,
-    free_names = paste0("d", seq_len(p)),
+    free_names = tagged_name(link, paste0("d", seq_len(p))),
     rank = p,
     null_basis = empty_null_basis(p),
     role = role,
@@ -109,7 +109,7 @@ scalar_matrix <- function(dimension, link = linkfunctions7::log_link(),
     param_name = "scalar",
     dimension = p,
     n_free = 1L,
-    free_names = "scale",
+    free_names = tagged_name(link, "scale"),
     rank = p,
     null_basis = empty_null_basis(p),
     role = role,
@@ -372,8 +372,29 @@ S7::method(param_d2logdet, DiagMatrixParam) <- function(s, eta, ...) {
 }
 
 
-# d^m of log(h(eta)) from the link's own derivatives, orders 1 to 4: the
-# Faa di Bruno chain of the logarithm.
+#' Derivatives of the Logarithm of a Link
+#'
+#' @description
+#' The derivatives of \eqn{\log h(\eta)} up to fourth order, from the inverse
+#' link's own derivatives.
+#'
+#' @details
+#' Faa di Bruno's formula for the logarithm, written out: with
+#' \eqn{u_m = h^{(m)}/h} the successive orders are \eqn{u_1},
+#' \eqn{u_2 - u_1^2}, \eqn{u_3 - 3u_1u_2 + 2u_1^3} and
+#' \eqn{u_4 - 4u_1u_3 - 3u_2^2 + 12u_1^2u_2 - 6u_1^4}. Dividing by \eqn{h}
+#' once at the start keeps every term of order one in the ratio rather than in
+#' the derivative, which matters at the ends of a link's range.
+#'
+#' @param link A \pkg{linkfunctions7} link.
+#' @param eta A numeric vector of free values.
+#' @param order The derivative order, 1 to 4.
+#'
+#' @return A numeric vector the length of \code{eta}.
+#'
+#' @seealso \code{\link{diagonal_matrix}}, \code{\link{scaled_dlog}}
+#'
+#' @keywords internal
 diag_dlog <- function(link, eta, order) {
   h <- linkfunctions7::linkinv(link, eta)
   u1 <- linkfunctions7::dlinkinv(link, eta) / h
@@ -386,6 +407,28 @@ diag_dlog <- function(link, eta, order) {
   u4 - 4 * u1 * u3 - 3 * u2^2 + 12 * u1^2 * u2 - 6 * u1^4
 }
 
+#' Third and Fourth Derivatives of a Diagonal Matrix
+#'
+#' @description
+#' The derivative components of orders three and four, each a diagonal matrix
+#' with a single non-zero entry.
+#'
+#' @details
+#' A diagonal family is separable, so a component is zero unless every index of
+#' the tuple names the same free value, and it then carries the corresponding
+#' derivative of the inverse link in the entry that value owns. A shared free
+#' value owns every entry, which is what \code{diag_owner()} answers.
+#'
+#' @param s A \code{\link{DiagMatrixParam}} object.
+#' @param eta A numeric vector of free values.
+#' @param order The derivative order, 3 or 4.
+#'
+#' @return A named list of matrices, keyed by
+#'   \code{\link{param_tuple_names}(s, order)}.
+#'
+#' @seealso \code{\link{diagonal_matrix}}
+#'
+#' @keywords internal
 diag_higher <- function(s, eta, order) {
   idx <- param_tuple_indices(s, order)
   out <- vector("list", length(idx))
@@ -434,6 +477,28 @@ S7::method(param_d4, DiagMatrixParam) <- function(s, eta, ...) {
   diag_higher(s, eta, 4L)
 }
 
+#' Higher Derivatives of a Diagonal Log-Determinant
+#'
+#' @description
+#' The derivative components of orders two to four of \eqn{\log\lvert M\rvert}
+#' for a diagonal family.
+#'
+#' @details
+#' The log-determinant is the sum of the logarithms of the diagonal entries,
+#' so it is a sum of functions of one free value each. Every mixed component
+#' therefore vanishes, and a pure one is the corresponding derivative of
+#' \code{\link{diag_dlog}} counted once per entry the free value owns.
+#'
+#' @param s A \code{\link{DiagMatrixParam}} object.
+#' @param eta A numeric vector of free values.
+#' @param order The derivative order, 2 to 4.
+#'
+#' @return A named numeric vector, keyed by
+#'   \code{\link{param_tuple_names}(s, order)}.
+#'
+#' @seealso \code{\link{diagonal_matrix}}, \code{\link{param_logdet}}
+#'
+#' @keywords internal
 diag_logdet_higher <- function(s, eta, order) {
   idx <- param_tuple_indices(s, order)
   owner <- diag_owner(s)

@@ -128,7 +128,7 @@ scaled_matrix <- function(p, link = linkfunctions7::log_link(),
     param_name = if (is.null(link)) "fixed" else "scaled",
     dimension = dim_p,
     n_free = if (is.null(link)) 0L else 1L,
-    free_names = if (is.null(link)) character(0) else "scale",
+    free_names = if (is.null(link)) character(0) else tagged_name(link, "scale"),
     rank = ns$rank,
     null_basis = ns$null_basis,
     role = role,
@@ -331,6 +331,28 @@ S7::method(param_d4, ScaledMatrixParam) <- function(s, eta, ...) {
   )
 }
 
+#' Higher Derivatives of a Scaled Log-Pseudo-Determinant
+#'
+#' @description
+#' The derivative components of orders two to four of
+#' \eqn{r\log\lambda(\eta) + \log\lvert P\rvert_+} in the single free value.
+#'
+#' @details
+#' The constant contributes nothing beyond order zero, so every component is
+#' the rank times the corresponding derivative of \eqn{\log\lambda}, which is
+#' Faa di Bruno's chain for the logarithm as in \code{\link{diag_dlog}}. With
+#' one free value there is exactly one component per order.
+#'
+#' @param s A \code{\link{ScaledMatrixParam}} object.
+#' @param eta A numeric vector of one free value.
+#' @param order The derivative order, 2 to 4.
+#'
+#' @return A named numeric vector of length one, keyed by
+#'   \code{\link{param_tuple_names}(s, order)}.
+#'
+#' @seealso \code{\link{scaled_matrix}}, \code{\link{diag_dlog}}
+#'
+#' @keywords internal
 scaled_dlog <- function(s, eta, order) {
   link <- s@param_params$link
   h <- linkfunctions7::linkinv(link, eta)
