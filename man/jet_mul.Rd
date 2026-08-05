@@ -4,12 +4,13 @@
 \alias{jet_mul}
 \title{Product of Jets}
 \usage{
-jet_mul(a, b, lay)
+jet_mul(a, b, lay = a$lay)
 }
 \arguments{
 \item{a, b}{Jets over the same layout.}
 
-\item{lay}{A layout from \code{\link{jet_layout}}.}
+\item{lay}{A layout from \code{\link{jet_layout}}; taken from the jet
+itself unless given.}
 }
 \value{
 A jet.

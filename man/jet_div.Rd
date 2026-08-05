@@ -4,12 +4,13 @@
 \alias{jet_div}
 \title{The Quotient of Two Jets}
 \usage{
-jet_div(a, b, lay)
+jet_div(a, b, lay = a$lay)
 }
 \arguments{
 \item{a, b}{Jets over the same layout.}
 
-\item{lay}{A layout from \code{\link{jet_layout}}.}
+\item{lay}{A layout from \code{\link{jet_layout}}; taken from the jet
+itself unless given.}
 }
 \value{
 A jet.

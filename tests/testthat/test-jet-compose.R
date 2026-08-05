@@ -206,3 +206,88 @@ test_that("one numerical differentiation of an exact gradient agrees", {
   expect_equal(jet_at(j, s$lay, c(2L, 2L)), H[2, 2], tolerance = 1e-7)
   expect_equal(H[1, 2], H[2, 1], tolerance = 1e-8)
 })
+
+
+test_that("a map written in ordinary R differentiates itself", {
+  # The point of the operators: the expression below says nothing about
+  # derivatives, and carries all thirty-five of them.
+  s <- jet_seed(c(1.3, 0.8))
+  x <- s$v[[1]]
+  y <- s$v[[2]]
+  X <- 1.3
+  Y <- 0.8
+
+  j <- x^2 * y^3
+  expect_equal(j$v, X^2 * Y^3)
+  expect_equal(jet_at(j, s$lay, 1L), 2 * X * Y^3)
+  expect_equal(jet_at(j, s$lay, c(1L, 2L)), 6 * X * Y^2)
+  expect_equal(jet_at(j, s$lay, c(1L, 1L, 2L, 2L)), 12 * Y)
+
+  # a number on either side is a constant
+  expect_equal((3 * x)$v, 3 * X)
+  expect_equal((x * 3)$v, 3 * X)
+  expect_equal((x + 3)$v, X + 3)
+  expect_equal((3 - x)$v, 3 - X)
+  expect_equal((x / 4)$v, X / 4)
+  expect_equal((-x)$v, -X)
+  expect_equal(jet_at(3 - x, s$lay, 1L), -1)
+  expect_equal(jet_at(2 / x, s$lay, 1L), -2 / X^2)
+
+  # and the operators agree with the functions they stand for
+  expect_equal((x * y)$d, jet_mul(x, y, s$lay)$d)
+  expect_equal((x / y)$d, jet_div(x, y, s$lay)$d)
+  expect_equal((x^2.5)$d, jet_pow(x, 2.5, s$lay)$d)
+  expect_equal(exp(x)$d, jet_exp(x, s$lay)$d)
+  expect_equal(log(x)$d, jet_log(x, s$lay)$d)
+  expect_equal(sqrt(x)$d, jet_sqrt(x, s$lay)$d)
+  expect_equal(gamma(x)$d, jet_gamma(x, s$lay)$d)
+  expect_equal(lgamma(x)$d, jet_lgamma(x, s$lay)$d)
+  expect_equal(digamma(x)$d, jet_digamma(x, s$lay)$d)
+})
+
+
+test_that("the Weibull mean map differentiates itself", {
+  # The map that reparametrising a Weibull to its mean needs, written as a
+  # reader would write it. Its first derivative in sigma is checked against the
+  # formula, which involves digamma through the gamma function.
+  s <- jet_seed(c(4, 1.7))
+  m <- s$v[[1]]
+  sg <- s$v[[2]]
+  M <- 4
+  S <- 1.7
+
+  scale <- m / gamma(1 + 1 / sg)
+  g <- gamma(1 + 1 / S)
+  expect_equal(scale$v, M / g)
+
+  # d scale / d m = 1/g
+  expect_equal(jet_at(scale, s$lay, 1L), 1 / g)
+  # d scale / d sigma = M * digamma(1+1/S) / (S^2 g), by the chain rule
+  expect_equal(jet_at(scale, s$lay, 2L), M * digamma(1 + 1 / S) / (S^2 * g))
+  # and the pure second derivative in m vanishes, the map being linear in it
+  expect_equal(jet_at(scale, s$lay, c(1L, 1L)), 0)
+  # while the mixed one does not
+  expect_equal(jet_at(scale, s$lay, c(1L, 2L)),
+               digamma(1 + 1 / S) / (S^2 * g))
+})
+
+
+test_that("a jet refuses what it cannot carry", {
+  s <- jet_seed(c(1.5, 2))
+  x <- s$v[[1]]
+  expect_error(x > 1, "not defined for a jet")
+  expect_error(x == 1, "not defined for a jet")
+  expect_error(abs(x), "not defined for a jet")
+  expect_error(floor(x), "not defined for a jet")
+  expect_error(log(x, base = 2), "no further arguments")
+  expect_error(!x, "not defined for a jet")
+})
+
+
+test_that("a jet prints its value and its gradient", {
+  s <- jet_seed(c(2, 3))
+  out <- capture.output(print(s$v[[1]] * s$v[[2]]))
+  expect_match(out[1], "<jet> value 6")
+  expect_match(out[1], "2 variables")
+  expect_match(out[2], "gradient")
+})

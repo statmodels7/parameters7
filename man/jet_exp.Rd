@@ -4,12 +4,13 @@
 \alias{jet_exp}
 \title{The Exponential of a Jet}
 \usage{
-jet_exp(a, lay)
+jet_exp(a, lay = a$lay)
 }
 \arguments{
 \item{a}{A jet.}
 
-\item{lay}{A layout from \code{\link{jet_layout}}.}
+\item{lay}{A layout from \code{\link{jet_layout}}; taken from the jet
+itself unless given.}
 }
 \value{
 A jet.

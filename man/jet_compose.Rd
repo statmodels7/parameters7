@@ -4,7 +4,7 @@
 \alias{jet_compose}
 \title{A Smooth Function of a Jet}
 \usage{
-jet_compose(a, fd, lay)
+jet_compose(a, fd, lay = a$lay)
 }
 \arguments{
 \item{a}{A jet.}
@@ -12,7 +12,8 @@ jet_compose(a, fd, lay)
 \item{fd}{A numeric vector of five values: \eqn{f} and its first four
 derivatives, all evaluated at \code{a$v}.}
 
-\item{lay}{A layout from \code{\link{jet_layout}}.}
+\item{lay}{A layout from \code{\link{jet_layout}}; taken from the jet
+itself unless given.}
 }
 \value{
 A jet.

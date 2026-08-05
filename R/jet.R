@@ -51,13 +51,19 @@ jet_layout <- function(d) {
 #' A number with every derivative zero.
 #'
 #' @param v The value.
-#' @param lay A layout from \code{\link{jet_layout}}.
+#' @param lay A layout from \code{\link{jet_layout}}; taken from the jet
+#'   itself unless given.
 #'
 #' @return A jet.
 #'
 #' @keywords internal
 jet_const <- function(v, lay) {
-  list(v = v, d = lapply(1:4, function(o) numeric(length(lay$tuples[[o]]))))
+  structure(
+    list(v = v,
+         d = lapply(1:4, function(o) numeric(length(lay$tuples[[o]]))),
+         lay = lay),
+    class = "jet"
+  )
 }
 
 
@@ -70,7 +76,8 @@ jet_const <- function(v, lay) {
 #'
 #' @param k The index of the free value.
 #' @param dv A list of five numbers: the value and four derivatives.
-#' @param lay A layout from \code{\link{jet_layout}}.
+#' @param lay A layout from \code{\link{jet_layout}}; taken from the jet
+#'   itself unless given.
 #'
 #' @return A jet.
 #'
@@ -96,7 +103,12 @@ jet_var <- function(k, dv, lay) {
 #'
 #' @keywords internal
 jet_add <- function(a, b) {
-  list(v = a$v + b$v, d = lapply(1:4, function(o) a$d[[o]] + b$d[[o]]))
+  structure(
+    list(v = a$v + b$v,
+         d = lapply(1:4, function(o) a$d[[o]] + b$d[[o]]),
+         lay = a$lay),
+    class = "jet"
+  )
 }
 
 
@@ -113,12 +125,13 @@ jet_add <- function(a, b) {
 #' the same enumeration \code{\link{leibniz_gram}} uses for a matrix product.
 #'
 #' @param a,b Jets over the same layout.
-#' @param lay A layout from \code{\link{jet_layout}}.
+#' @param lay A layout from \code{\link{jet_layout}}; taken from the jet
+#'   itself unless given.
 #'
 #' @return A jet.
 #'
 #' @keywords internal
-jet_mul <- function(a, b, lay) {
+jet_mul <- function(a, b, lay = a$lay) {
   grab <- function(x, tup) {
     if (!length(tup)) return(x$v)
     slot <- get(paste(sort(tup), collapse = ","), envir = lay$pos)
@@ -157,7 +170,8 @@ jet_mul <- function(a, b, lay) {
 #'
 #' @keywords internal
 jet_cmul <- function(a, c) {
-  list(v = a$v * c, d = lapply(a$d, function(x) x * c))
+  structure(list(v = a$v * c, d = lapply(a$d, function(x) x * c), lay = a$lay),
+            class = "jet")
 }
 
 
@@ -221,14 +235,15 @@ set_partitions <- function(n) {
 #' @param a A jet.
 #' @param fd A numeric vector of five values: \eqn{f} and its first four
 #'   derivatives, all evaluated at \code{a$v}.
-#' @param lay A layout from \code{\link{jet_layout}}.
+#' @param lay A layout from \code{\link{jet_layout}}; taken from the jet
+#'   itself unless given.
 #'
 #' @return A jet.
 #'
 #' @seealso \code{\link{jet_mul}}, \code{\link{set_partitions}}
 #'
 #' @keywords internal
-jet_compose <- function(a, fd, lay) {
+jet_compose <- function(a, fd, lay = a$lay) {
   grab <- function(tup) {
     slot <- get(paste(sort(tup), collapse = ","), envir = lay$pos)
     a$d[[slot[1L]]][slot[2L]]
@@ -259,11 +274,12 @@ jet_compose <- function(a, fd, lay) {
 #'
 #' @description \eqn{e^a}, whose four derivatives are all \eqn{e^a}.
 #' @param a A jet.
-#' @param lay A layout from \code{\link{jet_layout}}.
+#' @param lay A layout from \code{\link{jet_layout}}; taken from the jet
+#'   itself unless given.
 #' @return A jet.
 #' @seealso \code{\link{jet_compose}}
 #' @keywords internal
-jet_exp <- function(a, lay) {
+jet_exp <- function(a, lay = a$lay) {
   e <- exp(a$v)
   jet_compose(a, rep(e, 5L), lay)
 }
@@ -273,11 +289,12 @@ jet_exp <- function(a, lay) {
 #'
 #' @description \eqn{\log a}, with derivatives \eqn{(-1)^{k-1}(k-1)!/a^k}.
 #' @param a A jet.
-#' @param lay A layout from \code{\link{jet_layout}}.
+#' @param lay A layout from \code{\link{jet_layout}}; taken from the jet
+#'   itself unless given.
 #' @return A jet.
 #' @seealso \code{\link{jet_compose}}
 #' @keywords internal
-jet_log <- function(a, lay) {
+jet_log <- function(a, lay = a$lay) {
   v <- a$v
   jet_compose(a, c(log(v), 1 / v, -1 / v^2, 2 / v^3, -6 / v^4), lay)
 }
@@ -290,11 +307,12 @@ jet_log <- function(a, lay) {
 #' reciprocal and the square without a routine for each.
 #' @param a A jet.
 #' @param p The exponent.
-#' @param lay A layout from \code{\link{jet_layout}}.
+#' @param lay A layout from \code{\link{jet_layout}}; taken from the jet
+#'   itself unless given.
 #' @return A jet.
 #' @seealso \code{\link{jet_compose}}
 #' @keywords internal
-jet_pow <- function(a, p, lay) {
+jet_pow <- function(a, p, lay = a$lay) {
   v <- a$v
   fd <- c(v^p,
           p * v^(p - 1),
@@ -309,33 +327,36 @@ jet_pow <- function(a, p, lay) {
 #'
 #' @description \eqn{1/a}, the common case of \code{\link{jet_pow}}.
 #' @param a A jet.
-#' @param lay A layout from \code{\link{jet_layout}}.
+#' @param lay A layout from \code{\link{jet_layout}}; taken from the jet
+#'   itself unless given.
 #' @return A jet.
 #' @seealso \code{\link{jet_pow}}
 #' @keywords internal
-jet_inv <- function(a, lay) jet_pow(a, -1, lay)
+jet_inv <- function(a, lay = a$lay) jet_pow(a, -1, lay)
 
 
 #' The Square Root of a Jet
 #'
 #' @description \eqn{\sqrt{a}}, the common case of \code{\link{jet_pow}}.
 #' @param a A jet.
-#' @param lay A layout from \code{\link{jet_layout}}.
+#' @param lay A layout from \code{\link{jet_layout}}; taken from the jet
+#'   itself unless given.
 #' @return A jet.
 #' @seealso \code{\link{jet_pow}}
 #' @keywords internal
-jet_sqrt <- function(a, lay) jet_pow(a, 0.5, lay)
+jet_sqrt <- function(a, lay = a$lay) jet_pow(a, 0.5, lay)
 
 
 #' The Quotient of Two Jets
 #'
 #' @description \eqn{a/b}, as a product with the reciprocal.
 #' @param a,b Jets over the same layout.
-#' @param lay A layout from \code{\link{jet_layout}}.
+#' @param lay A layout from \code{\link{jet_layout}}; taken from the jet
+#'   itself unless given.
 #' @return A jet.
 #' @seealso \code{\link{jet_mul}}
 #' @keywords internal
-jet_div <- function(a, b, lay) jet_mul(a, jet_inv(b, lay), lay)
+jet_div <- function(a, b, lay = a$lay) jet_mul(a, jet_inv(b, lay), lay)
 
 
 #' The Log-Gamma of a Jet
@@ -343,11 +364,12 @@ jet_div <- function(a, b, lay) jet_mul(a, jet_inv(b, lay), lay)
 #' @description
 #' \eqn{\log\Gamma(a)}, whose derivatives are the polygamma functions.
 #' @param a A jet.
-#' @param lay A layout from \code{\link{jet_layout}}.
+#' @param lay A layout from \code{\link{jet_layout}}; taken from the jet
+#'   itself unless given.
 #' @return A jet.
 #' @seealso \code{\link{jet_compose}}
 #' @keywords internal
-jet_lgamma <- function(a, lay) {
+jet_lgamma <- function(a, lay = a$lay) {
   v <- a$v
   jet_compose(a, c(lgamma(v), digamma(v), trigamma(v),
                    psigamma(v, 2L), psigamma(v, 3L)), lay)
@@ -360,23 +382,190 @@ jet_lgamma <- function(a, lay) {
 #' \eqn{\Gamma(a)}, formed as \eqn{\exp\log\Gamma(a)} so that the derivatives
 #' come from the polygamma functions rather than from a second table.
 #' @param a A jet.
-#' @param lay A layout from \code{\link{jet_layout}}.
+#' @param lay A layout from \code{\link{jet_layout}}; taken from the jet
+#'   itself unless given.
 #' @return A jet.
 #' @seealso \code{\link{jet_lgamma}}
 #' @keywords internal
-jet_gamma <- function(a, lay) jet_exp(jet_lgamma(a, lay), lay)
+jet_gamma <- function(a, lay = a$lay) jet_exp(jet_lgamma(a, lay), lay)
 
 
 #' The Digamma of a Jet
 #'
 #' @description \eqn{\psi(a)}, with the polygamma functions above it.
 #' @param a A jet.
-#' @param lay A layout from \code{\link{jet_layout}}.
+#' @param lay A layout from \code{\link{jet_layout}}; taken from the jet
+#'   itself unless given.
 #' @return A jet.
 #' @seealso \code{\link{jet_compose}}
 #' @keywords internal
-jet_digamma <- function(a, lay) {
+jet_digamma <- function(a, lay = a$lay) {
   v <- a$v
   jet_compose(a, c(digamma(v), trigamma(v), psigamma(v, 2L),
                    psigamma(v, 3L), psigamma(v, 4L)), lay)
+}
+
+
+#' The Trigamma of a Jet
+#'
+#' @description \eqn{\psi'(a)}, with the polygamma functions above it.
+#' @param a A jet.
+#' @param lay A layout from \code{\link{jet_layout}}; taken from the jet
+#'   itself unless given.
+#' @return A jet.
+#' @seealso \code{\link{jet_compose}}
+#' @keywords internal
+jet_trigamma <- function(a, lay = a$lay) {
+  v <- a$v
+  jet_compose(a, c(trigamma(v), psigamma(v, 2L), psigamma(v, 3L),
+                   psigamma(v, 4L), psigamma(v, 5L)), lay)
+}
+
+
+#' Arithmetic on Jets
+#'
+#' @description
+#' The arithmetic operators applied to jets, so that a map is written in
+#' ordinary R and its derivatives come out exact.
+#'
+#' @details
+#' This is what makes a jet worth having. A quantity written as
+#' \code{mu / gamma(1 + 1 / sigma)} carries every partial derivative to fourth
+#' order with it, and whoever wrote the expression need not know that: the
+#' operators dispatch, and nothing about the derivative machinery appears in
+#' the expression.
+#'
+#' A number mixed with a jet is treated as a constant. Multiplication and
+#' division by one take the cheap route rather than building a constant jet and
+#' running the full Leibniz rule. A jet raised to a numeric power goes through
+#' \code{\link{jet_pow}}; a jet raised to a jet through
+#' \eqn{\exp(b\log a)}.
+#'
+#' Comparison and logical operators are refused. A jet is a value with its
+#' derivatives attached, and a branch taken on it would silently discard them:
+#' whichever side the comparison chose, the result would carry the derivatives
+#' of that side alone and claim to be the derivative of the whole expression.
+#'
+#' @param e1,e2 Jets, or a jet and a number.
+#'
+#' @return A jet.
+#'
+#' @seealso \code{\link{Math.jet}}, \code{\link{jet_compose}}
+#'
+#' @keywords internal
+#' @export
+Ops.jet <- function(e1, e2) {
+  op <- .Generic
+  if (missing(e2)) {
+    if (op == "+") return(e1)
+    if (op == "-") return(jet_cmul(e1, -1))
+    stop(sprintf("unary '%s' is not defined for a jet.", op), call. = FALSE)
+  }
+  if (!op %in% c("+", "-", "*", "/", "^")) {
+    stop(sprintf(paste0(
+      "'%s' is not defined for a jet. A jet is a value with its derivatives\n",
+      "  attached, so a branch taken on it would keep one side's derivatives\n",
+      "  and report them as the whole expression's."
+    ), op), call. = FALSE)
+  }
+  j1 <- inherits(e1, "jet")
+  j2 <- inherits(e2, "jet")
+  lay <- if (j1) e1$lay else e2$lay
+  as_jet <- function(x) if (inherits(x, "jet")) x else jet_const(x, lay)
+
+  switch(op,
+    "+" = jet_add(as_jet(e1), as_jet(e2)),
+    "-" = jet_add(as_jet(e1), jet_cmul(as_jet(e2), -1)),
+    "*" = if (!j1) jet_cmul(e2, e1) else if (!j2) jet_cmul(e1, e2) else
+      jet_mul(e1, e2, lay),
+    "/" = if (!j2) jet_cmul(e1, 1 / e2) else jet_div(as_jet(e1), e2, lay),
+    "^" = if (j2) jet_exp(jet_mul(e2, jet_log(as_jet(e1), lay), lay), lay) else
+      jet_pow(as_jet(e1), e2, lay)
+  )
+}
+
+
+#' Mathematical Functions of a Jet
+#'
+#' @description
+#' The mathematical functions a jet understands, so that a map written in
+#' ordinary R differentiates itself.
+#'
+#' @details
+#' Each is one call to \code{\link{jet_compose}} with the function's own five
+#' derivatives, so extending the vocabulary means writing five derivatives and
+#' not a chain rule.
+#'
+#' A function that is not smooth is refused rather than approximated:
+#' \code{abs}, \code{floor}, \code{ceiling}, \code{round} and \code{sign} have
+#' no fourth derivative to carry, and returning one would be a wrong answer in
+#' the shape of a right one.
+#'
+#' @param x A jet.
+#' @param ... Further arguments; refused, since a second argument would change
+#'   what is being differentiated.
+#'
+#' @return A jet.
+#'
+#' @seealso \code{\link{Ops.jet}}, \code{\link{jet_compose}}
+#'
+#' @keywords internal
+#' @export
+Math.jet <- function(x, ...) {
+  if (length(list(...))) {
+    stop(sprintf("'%s' takes no further arguments on a jet.", .Generic),
+         call. = FALSE)
+  }
+  v <- x$v
+  fd <- switch(.Generic,
+    exp = rep(exp(v), 5L),
+    log = c(log(v), 1 / v, -1 / v^2, 2 / v^3, -6 / v^4),
+    sqrt = NULL,
+    gamma = NULL,
+    lgamma = c(lgamma(v), digamma(v), trigamma(v),
+               psigamma(v, 2L), psigamma(v, 3L)),
+    digamma = c(digamma(v), trigamma(v), psigamma(v, 2L),
+                psigamma(v, 3L), psigamma(v, 4L)),
+    trigamma = c(trigamma(v), psigamma(v, 2L), psigamma(v, 3L),
+                 psigamma(v, 4L), psigamma(v, 5L)),
+    sin = c(sin(v), cos(v), -sin(v), -cos(v), sin(v)),
+    cos = c(cos(v), -sin(v), -cos(v), sin(v), cos(v)),
+    expm1 = c(expm1(v), exp(v), exp(v), exp(v), exp(v)),
+    log1p = c(log1p(v), 1 / (1 + v), -1 / (1 + v)^2,
+              2 / (1 + v)^3, -6 / (1 + v)^4),
+    stop(sprintf(paste0(
+      "'%s' is not defined for a jet. A function without four derivatives\n",
+      "  has nothing to carry; one that has them is added by writing those\n",
+      "  five numbers in Math.jet()."
+    ), .Generic), call. = FALSE)
+  )
+  if (.Generic == "sqrt") return(jet_pow(x, 0.5, x$lay))
+  if (.Generic == "gamma") return(jet_gamma(x, x$lay))
+  jet_compose(x, fd, x$lay)
+}
+
+
+#' Print a Jet
+#'
+#' @description
+#' Shows the value and how many variables the derivatives are taken in, rather
+#' than the whole list of components, which is thirty-five numbers even in two
+#' variables.
+#'
+#' @param x A jet.
+#' @param ... Unused.
+#'
+#' @return \code{x}, invisibly.
+#'
+#' @seealso \code{\link{Ops.jet}}
+#'
+#' @keywords internal
+#' @export
+print.jet <- function(x, ...) {
+  cat(sprintf("<jet> value %s, derivatives to order 4 in %d variable%s\n",
+              format(x$v, digits = 7), x$lay$d,
+              if (x$lay$d == 1L) "" else "s"))
+  cat("  gradient: ", paste(format(x$d[[1]], digits = 5), collapse = "  "),
+      "\n", sep = "")
+  invisible(x)
 }

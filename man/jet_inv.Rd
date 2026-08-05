@@ -4,12 +4,13 @@
 \alias{jet_inv}
 \title{The Reciprocal of a Jet}
 \usage{
-jet_inv(a, lay)
+jet_inv(a, lay = a$lay)
 }
 \arguments{
 \item{a}{A jet.}
 
-\item{lay}{A layout from \code{\link{jet_layout}}.}
+\item{lay}{A layout from \code{\link{jet_layout}}; taken from the jet
+itself unless given.}
 }
 \value{
 A jet.

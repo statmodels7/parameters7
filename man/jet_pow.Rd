@@ -4,14 +4,15 @@
 \alias{jet_pow}
 \title{A Power of a Jet}
 \usage{
-jet_pow(a, p, lay)
+jet_pow(a, p, lay = a$lay)
 }
 \arguments{
 \item{a}{A jet.}
 
 \item{p}{The exponent.}
 
-\item{lay}{A layout from \code{\link{jet_layout}}.}
+\item{lay}{A layout from \code{\link{jet_layout}}; taken from the jet
+itself unless given.}
 }
 \value{
 A jet.

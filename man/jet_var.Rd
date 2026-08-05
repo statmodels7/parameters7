@@ -11,7 +11,8 @@ jet_var(k, dv, lay)
 
 \item{dv}{A list of five numbers: the value and four derivatives.}
 
-\item{lay}{A layout from \code{\link{jet_layout}}.}
+\item{lay}{A layout from \code{\link{jet_layout}}; taken from the jet
+itself unless given.}
 }
 \value{
 A jet.

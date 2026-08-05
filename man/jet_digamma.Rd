@@ -4,12 +4,13 @@
 \alias{jet_digamma}
 \title{The Digamma of a Jet}
 \usage{
-jet_digamma(a, lay)
+jet_digamma(a, lay = a$lay)
 }
 \arguments{
 \item{a}{A jet.}
 
-\item{lay}{A layout from \code{\link{jet_layout}}.}
+\item{lay}{A layout from \code{\link{jet_layout}}; taken from the jet
+itself unless given.}
 }
 \value{
 A jet.
