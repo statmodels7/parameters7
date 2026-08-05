@@ -37,7 +37,7 @@ no link is given.
 This is the commonest penalty in semiparametric regression, and the reason
 the package admits rank-deficient matrices at all. \eqn{P} may be a Gram
 matrix of a basis derivative, a difference penalty
-\eqn{\Delta^\top \Delta}, a neighbourhood matrix, or the identity, which
+\eqn{\Delta^\top \Delta}, a neighborhood matrix, or the identity, which
 makes the parameter a ridge.
 
 Everything is a constant times a function of the scale, so nothing needs
@@ -54,13 +54,13 @@ the scale estimable. Writing a penalty as a negative log prior,
 \eqn{\frac{\lambda}{2}\beta^\top P \beta - \frac{r}{2}\log\lambda}, the
 stationary point is \eqn{\lambda = r / (\beta^\top P \beta)}, whereas
 dropping the second term leaves a derivative of one sign and sends the scale
-to zero. That second term is exactly the normalising constant of the prior,
+to zero. That second term is exactly the normalizing constant of the prior,
 which is the reason this package keeps it.
 
 A rank-deficient \eqn{P} makes the corresponding gaussian improper, which is
 what makes it a legitimate penalty and not a legitimate density. Both
 readings of a multivariate gaussian require full rank: a singular covariance
-is degenerate on a subspace, and a singular precision does not normalise.
+is degenerate on a subspace, and a singular precision does not normalize.
 }
 \examples{
 # a ridge: the identity, scaled

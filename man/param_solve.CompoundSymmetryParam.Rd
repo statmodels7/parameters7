@@ -19,6 +19,6 @@ A numeric matrix.
 Exact, by Sherman-Morrison: the inverse of
 \eqn{\sigma^2\{(1-\rho)I + \rho J\}} is
 \eqn{\{\sigma^2(1-\rho)\}^{-1}[I - \rho J/\{1 + (p-1)\rho\}]}, compound
-symmetric again, so no factorisation is performed.
+symmetric again, so no factorization is performed.
 }
 \keyword{internal}

@@ -23,8 +23,8 @@ The inverse map: given a value in the family's set, returns the free vector
 that produces it.
 }
 \details{
-Exact or refused, never obtained by optimisation. A generic
-optimisation-based inverse would return a plausible \eqn{\eta} for a matrix
+Exact or refused, never obtained by optimization. A generic
+optimization-based inverse would return a plausible \eqn{\eta} for a matrix
 outside the set, which is a wrong answer wearing the shape of a right one.
 A family whose map has no closed-form inverse refuses instead, and the base
 class refuses on behalf of any parameter that does not implement this. A

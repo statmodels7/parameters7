@@ -66,8 +66,8 @@ test_that("counting eigenvalues of the assembled sum is not scale invariant", {
   }
 })
 
-test_that("the components are normalised before being stacked", {
-  # Without the individual normalisation the stack itself would lose the
+test_that("the components are normalized before being stacked", {
+  # Without the individual normalization the stack itself would lose the
   # smaller component, which is the same defect one level down.
   p1 <- crossprod(diff(diag(6), differences = 2))
   p2 <- crossprod(diff(diag(6)))

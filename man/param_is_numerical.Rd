@@ -30,7 +30,7 @@ twice, and it agrees however wrong the parameter is.
 checked rather than as passed.
 
 \code{param_solve()} and \code{param_factor()} are deliberately absent.
-Their base-class versions are a Cholesky factorisation, which is exact
+Their base-class versions are a Cholesky factorization, which is exact
 whoever performs it, and the validator compares them with
 \code{base::solve} either way. Calling them numerical would suggest an
 approximation that is not there.

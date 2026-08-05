@@ -32,7 +32,7 @@ ScaledMatrixParam <- S7::new_class("ScaledMatrixParam", parent = matrix_paramete
 #' This is the commonest penalty in semiparametric regression, and the reason
 #' the package admits rank-deficient matrices at all. \eqn{P} may be a Gram
 #' matrix of a basis derivative, a difference penalty
-#' \eqn{\Delta^\top \Delta}, a neighbourhood matrix, or the identity, which
+#' \eqn{\Delta^\top \Delta}, a neighborhood matrix, or the identity, which
 #' makes the parameter a ridge.
 #'
 #' Everything is a constant times a function of the scale, so nothing needs
@@ -49,13 +49,13 @@ ScaledMatrixParam <- S7::new_class("ScaledMatrixParam", parent = matrix_paramete
 #' \eqn{\frac{\lambda}{2}\beta^\top P \beta - \frac{r}{2}\log\lambda}, the
 #' stationary point is \eqn{\lambda = r / (\beta^\top P \beta)}, whereas
 #' dropping the second term leaves a derivative of one sign and sends the scale
-#' to zero. That second term is exactly the normalising constant of the prior,
+#' to zero. That second term is exactly the normalizing constant of the prior,
 #' which is the reason this package keeps it.
 #'
 #' A rank-deficient \eqn{P} makes the corresponding gaussian improper, which is
 #' what makes it a legitimate penalty and not a legitimate density. Both
 #' readings of a multivariate gaussian require full rank: a singular covariance
-#' is degenerate on a subspace, and a singular precision does not normalise.
+#' is degenerate on a subspace, and a singular precision does not normalize.
 #'
 #' @param p A symmetric positive semidefinite matrix.
 #' @param link A \pkg{linkfunctions7} link mapping the free scale to the
@@ -284,7 +284,7 @@ S7::method(param_free, ScaledMatrixParam) <- function(s, m, ...) {
   if (max(abs(m - h * p)) > 1e-8 * max(abs(m))) {
     stop(paste0(
       "'m' is not a multiple of the parameter's fixed matrix, so it is not\n",
-      "  in the set this parameter parametrises."
+      "  in the set this parameter parametrizes."
     ), call. = FALSE)
   }
   if (!s@n_free) {

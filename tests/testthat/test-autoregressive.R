@@ -41,7 +41,7 @@ test_that("every order matches one stencil on the map", {
 })
 
 test_that("the chart lands inside the stationary region", {
-  # The reason the family is parametrised by partial autocorrelations at all:
+  # The reason the family is parametrized by partial autocorrelations at all:
   # the region is not a box, so this is a claim about the chart rather than
   # about a bound. The roots of the autoregressive polynomial must lie
   # outside the unit circle for every free vector.

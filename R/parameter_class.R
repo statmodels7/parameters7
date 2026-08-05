@@ -230,7 +230,7 @@ check_eta <- function(s, eta) {
 #' @param m The matrix supplied by the caller.
 #' @param tol The relative tolerance for the symmetry check.
 #'
-#' @return \code{m}, symmetrised.
+#' @return \code{m}, symmetrized.
 #'
 #' @keywords internal
 check_matrix <- function(s, m, tol = 1e-8) {
@@ -276,7 +276,7 @@ name_dims <- function(m, s) {
 #' of symmetric positive semidefinite matrices.
 #'
 #' @details
-#' The components are normalised individually before being stacked, and the
+#' The components are normalized individually before being stacked, and the
 #' rank is read off the stack rather than off any assembled combination. The
 #' reason is that a rank read off a sum is not scale invariant: on a
 #' tensor-product penalty of true rank 28 out of 32, counting eigenvalues above

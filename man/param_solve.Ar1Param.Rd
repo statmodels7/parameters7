@@ -19,6 +19,6 @@ A numeric matrix.
 Exact and tridiagonal. The precision of an AR(1) pattern is
 \eqn{(1-\rho^2)^{-1}} times the matrix with \eqn{1} at the two corners of
 the diagonal, \eqn{1+\rho^2} elsewhere on it and \eqn{-\rho} on the first
-off-diagonals; no factorisation is performed.
+off-diagonals; no factorization is performed.
 }
 \keyword{internal}

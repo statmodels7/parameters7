@@ -16,6 +16,6 @@ A single number.
 \description{
 Closed form from the two distinct eigenvalues:
 \eqn{p\log\sigma^2 + \log\{1+(p-1)\rho\} + (p-1)\log(1-\rho)}. No
-factorisation and no determinant is computed.
+factorization and no determinant is computed.
 }
 \keyword{internal}

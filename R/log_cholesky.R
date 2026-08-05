@@ -6,7 +6,7 @@ NULL
 #'
 #' @description
 #' The S7 class of unstructured symmetric positive definite matrices in the
-#' log-Cholesky parametrisation. Constructed by \code{\link{log_cholesky}}.
+#' log-Cholesky parametrization. Constructed by \code{\link{log_cholesky}}.
 #'
 #' @inheritParams matrix_parameter
 #'
@@ -60,13 +60,13 @@ chol_positions <- function(p) {
 #' Construct an Unstructured Positive Definite Parameter
 #'
 #' @description
-#' The log-Cholesky parametrisation of a symmetric positive definite matrix:
+#' The log-Cholesky parametrization of a symmetric positive definite matrix:
 #' \eqn{M = L L^\top} with \eqn{L} lower triangular and positive on the
 #' diagonal, the free values being the logarithms of the diagonal entries of
 #' \eqn{L} and the entries below it.
 #'
 #' @details
-#' The parametrisation is that of Pinheiro and Bates (1996), and it is the one
+#' The parametrization is that of Pinheiro and Bates (1996), and it is the one
 #' to reach for when nothing is known about the matrix. It is a bijection onto
 #' the positive definite cone, smooth in both directions, with no boundary to
 #' reach on the free scale, and unique because the Cholesky factor with a
@@ -83,13 +83,13 @@ chol_positions <- function(p) {
 #' the diagonal directions and 0 elsewhere, and its Hessian vanishes. Both are
 #' supplied in closed form.
 #'
-#' The log on the diagonal is intrinsic to the parametrisation and not a
+#' The log on the diagonal is intrinsic to the parametrization and not a
 #' swappable link, which is why it appears in the free names.
 #'
 #' @param dimension The side \eqn{p} of the matrix.
 #' @param role A label, one of \code{"either"} (the default),
 #'   \code{"covariance"} or \code{"precision"}. Nothing computed depends on it;
-#'   it records which side of a model the matrix parametrises, since the family
+#'   it records which side of a model the matrix parametrizes, since the family
 #'   name does not say.
 #'
 #' @return An object of class \code{\link{LogCholeskyParam}}.
@@ -179,7 +179,7 @@ S7::method(param_value, LogCholeskyParam) <- function(s, eta, ...) {
 
 #' @title Factor of a Log-Cholesky Parameter
 #' @name param_factor.LogCholeskyParam
-#' @description The factor is the parametrisation, so it needs no computing.
+#' @description The factor is the parametrization, so it needs no computing.
 #' @param s A \code{\link{LogCholeskyParam}} object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
@@ -206,7 +206,7 @@ S7::method(param_free, LogCholeskyParam) <- function(s, m, ...) {
   if (is.null(l)) {
     stop(paste0(
       "'m' is not positive definite, so it is not in the set log_cholesky()\n",
-      "  parametrises. The verdict is spectral, not a failed factorisation."
+      "  parametrizes. The verdict is spectral, not a failed factorization."
     ), call. = FALSE)
   }
   pos <- s@param_params$positions
@@ -225,7 +225,7 @@ S7::method(param_free, LogCholeskyParam) <- function(s, m, ...) {
 #' Closed form. Writing \eqn{L_k} for the derivative of the factor in the
 #' \eqn{k}-th free value,
 #' \eqn{\partial_k M = L_k L^\top + L L_k^\top}. The factor's derivative is
-#' \eqn{L_{ii} E_{ii}} for a diagonal value, because the parametrisation is
+#' \eqn{L_{ii} E_{ii}} for a diagonal value, because the parametrization is
 #' its logarithm, and \eqn{E_{ij}} for a value below the diagonal.
 #' @param s A \code{\link{LogCholeskyParam}} object.
 #' @param eta A numeric vector of free values.
@@ -306,7 +306,7 @@ S7::method(param_d2, LogCholeskyParam) <- function(s, eta, ...) {
 #' @description
 #' Closed form and linear in the free vector:
 #' \eqn{\log|M| = 2 \sum_i \log L_{ii}}, which is twice the sum of the free
-#' values on the diagonal. No factorisation and no determinant is computed.
+#' values on the diagonal. No factorization and no determinant is computed.
 #' @param s A \code{\link{LogCholeskyParam}} object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.

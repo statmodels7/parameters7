@@ -17,7 +17,7 @@ A named list of symmetric matrices.
 Closed form. Writing \eqn{L_k} for the derivative of the factor in the
 \eqn{k}-th free value,
 \eqn{\partial_k M = L_k L^\top + L L_k^\top}. The factor's derivative is
-\eqn{L_{ii} E_{ii}} for a diagonal value, because the parametrisation is
+\eqn{L_{ii} E_{ii}} for a diagonal value, because the parametrization is
 its logarithm, and \eqn{E_{ij}} for a value below the diagonal.
 }
 \keyword{internal}

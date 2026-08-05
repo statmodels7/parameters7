@@ -19,7 +19,7 @@ The constrained value, shaped as the family declares: a symmetric
 vector or row-stochastic matrix otherwise.
 }
 \description{
-Maps the free vector \eqn{\eta} to the constrained value it parametrises:
+Maps the free vector \eqn{\eta} to the constrained value it parametrizes:
 a symmetric matrix for the \code{\link{matrix_parameter}} branch, a
 probability vector for \code{\link{simplex}}, a row-stochastic matrix for
 \code{\link{transition_matrix}}.

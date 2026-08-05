@@ -15,7 +15,7 @@ A single number.
 }
 \description{
 Closed form from the innovation variances:
-\eqn{p\log\gamma_0 + \sum_k (p-k)\log(1 - r_k^2)}. No factorisation and no
+\eqn{p\log\gamma_0 + \sum_k (p-k)\log(1 - r_k^2)}. No factorization and no
 determinant is computed.
 }
 \keyword{internal}

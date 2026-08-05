@@ -41,7 +41,7 @@ with every mixed derivative exactly zero. And the inverse is
 \strong{tridiagonal}, which is the property the family is used for: an
 AR(1) process is Markov, so its precision has no entries beyond the first
 off-diagonal, and the solve is returned from that form rather than from a
-factorisation.
+factorization.
 
 The pattern is not linear in the correlation as compound symmetry's is: an
 entry is \eqn{\rho^{m}} for the lag \eqn{m}, so its derivatives in the free

@@ -65,7 +65,7 @@
   order-one case written out, and the two agree to machine precision.
 
 * Three families for structured covariances. `correlation_matrix()` carries a
-  correlation matrix in the spherical parametrisation of Rapisarda, Brigo and
+  correlation matrix in the spherical parametrization of Rapisarda, Brigo and
   Mercurio (2007): the rows of the Cholesky factor are points on the unit
   sphere in angular coordinates, so the unit diagonal and the positive
   definiteness hold by construction, and the log-determinant is twice the sum
@@ -116,7 +116,7 @@
   parameter is a subclass and one method.
 
 * Four families. `log_cholesky()` is the unstructured positive definite case
-  in the parametrisation of Pinheiro and Bates (1996), whose log-determinant
+  in the parametrization of Pinheiro and Bates (1996), whose log-determinant
   is linear in the free vector. `diagonal_matrix()` and `scalar_matrix()` carry
   their entries through a `linkfunctions7` link, which is where the two
   packages compose: the Jacobian of a diagonal block is diagonal, which is

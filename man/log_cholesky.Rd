@@ -11,20 +11,20 @@ log_cholesky(dimension, role = c("either", "covariance", "precision"))
 
 \item{role}{A label, one of \code{"either"} (the default),
 \code{"covariance"} or \code{"precision"}. Nothing computed depends on it;
-it records which side of a model the matrix parametrises, since the family
+it records which side of a model the matrix parametrizes, since the family
 name does not say.}
 }
 \value{
 An object of class \code{\link{LogCholeskyParam}}.
 }
 \description{
-The log-Cholesky parametrisation of a symmetric positive definite matrix:
+The log-Cholesky parametrization of a symmetric positive definite matrix:
 \eqn{M = L L^\top} with \eqn{L} lower triangular and positive on the
 diagonal, the free values being the logarithms of the diagonal entries of
 \eqn{L} and the entries below it.
 }
 \details{
-The parametrisation is that of Pinheiro and Bates (1996), and it is the one
+The parametrization is that of Pinheiro and Bates (1996), and it is the one
 to reach for when nothing is known about the matrix. It is a bijection onto
 the positive definite cone, smooth in both directions, with no boundary to
 reach on the free scale, and unique because the Cholesky factor with a
@@ -41,7 +41,7 @@ The log-determinant is linear in the free vector,
 the diagonal directions and 0 elsewhere, and its Hessian vanishes. Both are
 supplied in closed form.
 
-The log on the diagonal is intrinsic to the parametrisation and not a
+The log on the diagonal is intrinsic to the parametrization and not a
 swappable link, which is why it appears in the free names.
 }
 \examples{

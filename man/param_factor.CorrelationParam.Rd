@@ -14,6 +14,6 @@
 A lower triangular numeric matrix.
 }
 \description{
-The factor is the parametrisation, so it needs no computing.
+The factor is the parametrization, so it needs no computing.
 }
 \keyword{internal}

@@ -37,7 +37,7 @@ An object of class \code{TransitionMatrixParam}.
 }
 \description{
 The S7 class of row-stochastic matrices, each row on the open simplex in
-the additive log-ratio parametrisation. Constructed by
+the additive log-ratio parametrization. Constructed by
 \code{\link{transition_matrix}}.
 }
 \examples{

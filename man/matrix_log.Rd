@@ -15,7 +15,7 @@ matrix_log(dimension, role = c("either", "covariance", "precision"))
 An object of class \code{\link{MatrixLogParam}}.
 }
 \description{
-The matrix logarithm parametrisation of a symmetric positive definite
+The matrix logarithm parametrization of a symmetric positive definite
 matrix: \eqn{M = \exp(S)} with \eqn{S} symmetric and genuinely free -- no
 entry is transformed, the free values fill the lower triangle of \eqn{S}
 directly, diagonal first and then below the diagonal column by column.
@@ -25,7 +25,7 @@ Two quantities are exact by construction and cost nothing. The
 log-determinant is \eqn{\log|M| = \mathrm{tr}(S)}, the sum of the diagonal
 free values, so it is linear and its higher derivatives vanish; and the
 inverse is \eqn{M^{-1} = \exp(-S)}, through the same eigendecomposition
-that evaluates the map, with no factorisation.
+that evaluates the map, with no factorization.
 
 The derivatives of the map are the Frechet derivatives of the matrix
 exponential, by the Daleckii-Krein representation: with

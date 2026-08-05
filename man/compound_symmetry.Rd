@@ -42,7 +42,7 @@ Two quantities are closed form and cost nothing. The eigenvalues above give
 a sum of a function of one free value and a function of the other, so every
 mixed derivative of the log-determinant is exactly zero. And the inverse is
 compound symmetric again, by the Sherman-Morrison identity, so it is
-returned in closed form rather than factorised: the inverse of an
+returned in closed form rather than factorized: the inverse of an
 exchangeable covariance is an exchangeable precision, which is what makes
 this family closed under the choice of side.
 
@@ -57,7 +57,7 @@ c(n_free = s@n_free)
 eta <- c(log(2), 0.8)
 round(param_value(s, eta), 4)
 
-# the inverse is compound symmetric too, and is not factorised
+# the inverse is compound symmetric too, and is not factorized
 round(param_solve(s, eta), 4)
 
 # the round trip closes exactly

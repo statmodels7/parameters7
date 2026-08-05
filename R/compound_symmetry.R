@@ -56,7 +56,7 @@ CompoundSymmetryParam <- S7::new_class("CompoundSymmetryParam",
 #' a sum of a function of one free value and a function of the other, so every
 #' mixed derivative of the log-determinant is exactly zero. And the inverse is
 #' compound symmetric again, by the Sherman-Morrison identity, so it is
-#' returned in closed form rather than factorised: the inverse of an
+#' returned in closed form rather than factorized: the inverse of an
 #' exchangeable covariance is an exchangeable precision, which is what makes
 #' this family closed under the choice of side.
 #'
@@ -80,7 +80,7 @@ CompoundSymmetryParam <- S7::new_class("CompoundSymmetryParam",
 #' eta <- c(log(2), 0.8)
 #' round(param_value(s, eta), 4)
 #'
-#' # the inverse is compound symmetric too, and is not factorised
+#' # the inverse is compound symmetric too, and is not factorized
 #' round(param_solve(s, eta), 4)
 #'
 #' # the round trip closes exactly
@@ -331,7 +331,7 @@ S7::method(param_free, CompoundSymmetryParam) <- function(s, m, ...) {
 #' Exact, by Sherman-Morrison: the inverse of
 #' \eqn{\sigma^2\{(1-\rho)I + \rho J\}} is
 #' \eqn{\{\sigma^2(1-\rho)\}^{-1}[I - \rho J/\{1 + (p-1)\rho\}]}, compound
-#' symmetric again, so no factorisation is performed.
+#' symmetric again, so no factorization is performed.
 #' @param s A \code{\link{CompoundSymmetryParam}} object.
 #' @param eta A numeric vector of two free values.
 #' @param b A numeric matrix with \code{s@dimension} rows.
@@ -407,7 +407,7 @@ cs_logdet_terms <- function(s) {
 #' @description
 #' Closed form from the two distinct eigenvalues:
 #' \eqn{p\log\sigma^2 + \log\{1+(p-1)\rho\} + (p-1)\log(1-\rho)}. No
-#' factorisation and no determinant is computed.
+#' factorization and no determinant is computed.
 #' @param s A \code{\link{CompoundSymmetryParam}} object.
 #' @param eta A numeric vector of two free values.
 #' @param ... Unused.

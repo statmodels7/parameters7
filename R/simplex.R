@@ -6,7 +6,7 @@ NULL
 #'
 #' @description
 #' The S7 class of probability vectors on the open simplex, in the additive
-#' log-ratio parametrisation. Constructed by \code{\link{simplex}}.
+#' log-ratio parametrization. Constructed by \code{\link{simplex}}.
 #'
 #' @inheritParams parameter
 #'
@@ -40,7 +40,7 @@ SimplexParam <- S7::new_class("SimplexParam", parent = parameter)
 #'
 #' The inverse is \eqn{\eta_a = \log(\pi_a / \pi_K)}, exact; a vector outside
 #' the open simplex, or one that does not sum to one, is refused rather than
-#' repaired, because a silent renormalisation would mask the caller's defect.
+#' repaired, because a silent renormalization would mask the caller's defect.
 #'
 #' Stick-breaking is the other common chart and was not chosen: its
 #' derivatives chain through \eqn{K - 1} nested logistic maps and are not
@@ -253,7 +253,7 @@ S7::method(param_free, SimplexParam) <- function(s, m, ...) {
   if (abs(sum(m) - 1) > 1e-8) {
     stop(paste0(
       "'m' does not sum to one, so it is not on the simplex. It is refused\n",
-      "  rather than renormalised, because a silent repair would mask the\n",
+      "  rather than renormalized, because a silent repair would mask the\n",
       "  caller's defect."
     ), call. = FALSE)
   }

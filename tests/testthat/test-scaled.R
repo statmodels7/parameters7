@@ -1,6 +1,6 @@
 # The scaled fixed matrix, and with it the rank-deficient path the package
 # exists to admit. The identities the family rests on are checked against
-# eigendecompositions and against numerical optimisation, neither of which the
+# eigendecompositions and against numerical optimization, neither of which the
 # implementation uses.
 
 pen2 <- function(k) crossprod(diff(diag(k), differences = 2))
@@ -90,7 +90,7 @@ test_that("the derivative of the log pseudo-determinant is the rank", {
 })
 
 test_that("the constant is what makes the scale estimable", {
-  # The identity the package keeps the normalising constant for: minimising
+  # The identity the package keeps the normalizing constant for: minimizing
   # (lambda/2) b'Pb - (r/2) log lambda gives lambda = r / (b'Pb), while
   # dropping the constant sends it to zero. Checked against optimize(), which
   # knows nothing about the closed form.

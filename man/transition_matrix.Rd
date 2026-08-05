@@ -19,7 +19,7 @@ Markov chain on \eqn{K} states -- with each row an independent
 \eqn{K(K-1)} free values in all.
 }
 \details{
-The rows are independent in the parametrisation, so every derivative
+The rows are independent in the parametrization, so every derivative
 tensor is block diagonal by row: a component pairing free values of two
 different rows is exactly zero, and the implementation evaluates the
 simplex kernels row by row rather than storing those zeros.

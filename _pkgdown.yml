@@ -6,7 +6,7 @@ template:
 reference:
 - title: Families
   desc: >
-    The parametrisations. Each maps an unconstrained vector to a matrix in its
+    The parametrizations. Each maps an unconstrained vector to a matrix in its
     own constrained set, and each owns the side of that matrix.
   contents:
   - log_cholesky

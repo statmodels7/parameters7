@@ -29,7 +29,7 @@ All four orders are closed form.
 
 The inverse is \eqn{\eta_a = \log(\pi_a / \pi_K)}, exact; a vector outside
 the open simplex, or one that does not sum to one, is refused rather than
-repaired, because a silent renormalisation would mask the caller's defect.
+repaired, because a silent renormalization would mask the caller's defect.
 
 Stick-breaking is the other common chart and was not chosen: its
 derivatives chain through \eqn{K - 1} nested logistic maps and are not

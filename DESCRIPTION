@@ -3,7 +3,7 @@ Title: An S7 Framework for Constrained Parameters
 Version: 0.5.0
 Authors@R:
     person("Giovanni", "Tinervia", , "giovannitinervia9@gmail.com", role = c("aut", "cre"))
-Description: Parametrisations of constrained parameter spaces as objects. A
+Description: Parametrizations of constrained parameter spaces as objects. A
     parameter maps an unconstrained vector onto the set where it lives -- a
     symmetric positive semidefinite matrix, a probability vector on the
     simplex, a row-stochastic transition matrix -- and answers with exact

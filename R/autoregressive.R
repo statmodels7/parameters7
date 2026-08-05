@@ -28,11 +28,11 @@ AutoregressiveParam <- S7::new_class("AutoregressiveParam",
 #' The covariance of \eqn{p} consecutive observations of a stationary
 #' autoregression of order \eqn{q},
 #' \deqn{y_t = \phi_1 y_{t-1} + \cdots + \phi_q y_{t-q} + \varepsilon_t,}
-#' parametrised by its marginal variance and its \eqn{q} partial
+#' parametrized by its marginal variance and its \eqn{q} partial
 #' autocorrelations, so \eqn{q + 1} free values whatever the dimension.
 #'
 #' @details
-#' The parametrisation is forced by the shape of the stationary region. The
+#' The parametrization is forced by the shape of the stationary region. The
 #' coefficients \eqn{\phi} are stationary exactly when the roots of
 #' \eqn{1 - \phi_1 z - \cdots - \phi_q z^{q}} lie outside the unit circle, and
 #' that set is not a box: already at \eqn{q = 2} it is a triangle, so no
@@ -67,7 +67,7 @@ AutoregressiveParam <- S7::new_class("AutoregressiveParam",
 #' \eqn{q}-th off-diagonal. It is assembled from the prediction form
 #' \eqn{M^{-1} = U^\top D^{-1} U}, with \eqn{U} unit lower triangular holding
 #' the predictor coefficients and \eqn{D} the innovation variances, rather
-#' than by a factorisation.
+#' than by a factorization.
 #'
 #' \code{\link{ar1}} is the case \eqn{q = 1} written out: there the
 #' autocorrelation is simply \eqn{\rho^{h}}, the determinant is
@@ -483,7 +483,7 @@ S7::method(param_solve, AutoregressiveParam) <- function(s, eta, b = NULL, ...) 
 #' @name param_logdet.AutoregressiveParam
 #' @description
 #' Closed form from the innovation variances:
-#' \eqn{p\log\gamma_0 + \sum_k (p-k)\log(1 - r_k^2)}. No factorisation and no
+#' \eqn{p\log\gamma_0 + \sum_k (p-k)\log(1 - r_k^2)}. No factorization and no
 #' determinant is computed.
 #' @param s An \code{\link{AutoregressiveParam}} object.
 #' @param eta A numeric vector of free values.

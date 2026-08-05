@@ -38,7 +38,7 @@ whose columns are an orthonormal basis of the null space.}
 An object of class \code{CorrelationParam}.
 }
 \description{
-The S7 class of correlation matrices in the spherical parametrisation.
+The S7 class of correlation matrices in the spherical parametrization.
 Constructed by \code{\link{correlation_matrix}}.
 }
 \examples{

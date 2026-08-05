@@ -40,7 +40,7 @@ An object of class \code{LogCholeskyParam}. Use
 }
 \description{
 The S7 class of unstructured symmetric positive definite matrices in the
-log-Cholesky parametrisation. Constructed by \code{\link{log_cholesky}}.
+log-Cholesky parametrization. Constructed by \code{\link{log_cholesky}}.
 }
 \examples{
 S7::S7_inherits(log_cholesky(2), LogCholeskyParam)

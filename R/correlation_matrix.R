@@ -5,7 +5,7 @@ NULL
 #' Correlation Matrix Parameter
 #'
 #' @description
-#' The S7 class of correlation matrices in the spherical parametrisation.
+#' The S7 class of correlation matrices in the spherical parametrization.
 #' Constructed by \code{\link{correlation_matrix}}.
 #'
 #' @inheritParams matrix_parameter
@@ -25,7 +25,7 @@ CorrelationParam <- S7::new_class("CorrelationParam", parent = matrix_parameter)
 #'
 #' @description
 #' A correlation matrix -- symmetric positive definite with a unit diagonal --
-#' carried by the spherical parametrisation: \eqn{R = LL^\top} with each row
+#' carried by the spherical parametrization: \eqn{R = LL^\top} with each row
 #' of \eqn{L} a point on the unit sphere written in angular coordinates, and
 #' each angle carried onto the real line by a bounded link.
 #'
@@ -252,7 +252,7 @@ S7::method(param_value, CorrelationParam) <- function(s, eta, ...) {
 
 #' @title Factor of a Correlation Parameter
 #' @name param_factor.CorrelationParam
-#' @description The factor is the parametrisation, so it needs no computing.
+#' @description The factor is the parametrization, so it needs no computing.
 #' @param s A \code{\link{CorrelationParam}} object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
@@ -287,7 +287,7 @@ S7::method(param_free, CorrelationParam) <- function(s, m, ...) {
   if (is.null(l)) {
     stop(paste0(
       "'m' is not positive definite, so it is not in the set\n",
-      "  correlation_matrix() parametrises. The verdict is spectral."
+      "  correlation_matrix() parametrizes. The verdict is spectral."
     ), call. = FALSE)
   }
   pos <- s@param_params
@@ -428,7 +428,7 @@ corr_logdet_chains <- function(s, eta) {
 #' @description
 #' Closed form: twice the sum of the logarithms of the sines of the angles,
 #' the factor being triangular with those products on its diagonal. No
-#' factorisation and no determinant is computed.
+#' factorization and no determinant is computed.
 #' @param s A \code{\link{CorrelationParam}} object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.

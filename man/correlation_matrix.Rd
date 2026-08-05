@@ -16,7 +16,7 @@ An object of class \code{\link{CorrelationParam}}.
 }
 \description{
 A correlation matrix -- symmetric positive definite with a unit diagonal --
-carried by the spherical parametrisation: \eqn{R = LL^\top} with each row
+carried by the spherical parametrization: \eqn{R = LL^\top} with each row
 of \eqn{L} a point on the unit sphere written in angular coordinates, and
 each angle carried onto the real line by a bounded link.
 }

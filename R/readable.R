@@ -207,7 +207,7 @@ S7::method(param_readable, SimplexParam) <- function(s, eta, ...) {
 #'
 #' @description
 #' Declares the marginal variance, the partial autocorrelations that
-#' parametrise the family, and the autoregressive coefficients they produce.
+#' parametrize the family, and the autoregressive coefficients they produce.
 #'
 #' @details
 #' The coefficients are the quantity an autoregression is usually reported in

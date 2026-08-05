@@ -15,7 +15,7 @@ Never returns; raises an error.
 }
 \description{
 The base class refuses rather than inverting the map numerically: an
-optimisation-based inverse would return a plausible \eqn{\eta} for a matrix
-outside the set the family parametrises.
+optimization-based inverse would return a plausible \eqn{\eta} for a matrix
+outside the set the family parametrizes.
 }
 \keyword{internal}

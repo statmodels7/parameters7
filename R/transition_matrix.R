@@ -6,7 +6,7 @@ NULL
 #'
 #' @description
 #' The S7 class of row-stochastic matrices, each row on the open simplex in
-#' the additive log-ratio parametrisation. Constructed by
+#' the additive log-ratio parametrization. Constructed by
 #' \code{\link{transition_matrix}}.
 #'
 #' @inheritParams parameter
@@ -31,7 +31,7 @@ TransitionMatrixParam <- S7::new_class("TransitionMatrixParam", parent = paramet
 #' \eqn{K(K-1)} free values in all.
 #'
 #' @details
-#' The rows are independent in the parametrisation, so every derivative
+#' The rows are independent in the parametrization, so every derivative
 #' tensor is block diagonal by row: a component pairing free values of two
 #' different rows is exactly zero, and the implementation evaluates the
 #' simplex kernels row by row rather than storing those zeros.
@@ -134,7 +134,7 @@ S7::method(param_free, TransitionMatrixParam) <- function(s, m, ...) {
   if (max(abs(rowSums(m) - 1)) > 1e-8) {
     stop(paste0(
       "the rows of 'm' do not all sum to one, so it is not row stochastic.\n",
-      "  It is refused rather than renormalised."
+      "  It is refused rather than renormalized."
     ), call. = FALSE)
   }
   out <- numeric(s@n_free)

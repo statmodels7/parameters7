@@ -44,7 +44,7 @@ Ar1Param <- S7::new_class("Ar1Param", parent = matrix_parameter)
 #' \strong{tridiagonal}, which is the property the family is used for: an
 #' AR(1) process is Markov, so its precision has no entries beyond the first
 #' off-diagonal, and the solve is returned from that form rather than from a
-#' factorisation.
+#' factorization.
 #'
 #' The pattern is not linear in the correlation as compound symmetry's is: an
 #' entry is \eqn{\rho^{m}} for the lag \eqn{m}, so its derivatives in the free
@@ -196,7 +196,7 @@ S7::method(param_free, Ar1Param) <- function(s, m, ...) {
 #' Exact and tridiagonal. The precision of an AR(1) pattern is
 #' \eqn{(1-\rho^2)^{-1}} times the matrix with \eqn{1} at the two corners of
 #' the diagonal, \eqn{1+\rho^2} elsewhere on it and \eqn{-\rho} on the first
-#' off-diagonals; no factorisation is performed.
+#' off-diagonals; no factorization is performed.
 #' @param s An \code{\link{Ar1Param}} object.
 #' @param eta A numeric vector of two free values.
 #' @param b A numeric matrix with \code{s@dimension} rows.

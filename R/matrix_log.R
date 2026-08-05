@@ -6,7 +6,7 @@ NULL
 #'
 #' @description
 #' The S7 class of unstructured symmetric positive definite matrices in the
-#' matrix logarithm parametrisation. Constructed by \code{\link{matrix_log}}.
+#' matrix logarithm parametrization. Constructed by \code{\link{matrix_log}}.
 #'
 #' @inheritParams matrix_parameter
 #'
@@ -24,7 +24,7 @@ MatrixLogParam <- S7::new_class("MatrixLogParam", parent = matrix_parameter)
 #' Construct a Matrix Logarithm Parameter
 #'
 #' @description
-#' The matrix logarithm parametrisation of a symmetric positive definite
+#' The matrix logarithm parametrization of a symmetric positive definite
 #' matrix: \eqn{M = \exp(S)} with \eqn{S} symmetric and genuinely free -- no
 #' entry is transformed, the free values fill the lower triangle of \eqn{S}
 #' directly, diagonal first and then below the diagonal column by column.
@@ -34,7 +34,7 @@ MatrixLogParam <- S7::new_class("MatrixLogParam", parent = matrix_parameter)
 #' log-determinant is \eqn{\log|M| = \mathrm{tr}(S)}, the sum of the diagonal
 #' free values, so it is linear and its higher derivatives vanish; and the
 #' inverse is \eqn{M^{-1} = \exp(-S)}, through the same eigendecomposition
-#' that evaluates the map, with no factorisation.
+#' that evaluates the map, with no factorization.
 #'
 #' The derivatives of the map are the Frechet derivatives of the matrix
 #' exponential, by the Daleckii-Krein representation: with
@@ -393,7 +393,7 @@ S7::method(param_free, MatrixLogParam) <- function(s, m, ...) {
   if (any(es$values <= 0)) {
     stop(paste0(
       "'m' is not positive definite, so it is not in the set matrix_log()\n",
-      "  parametrises."
+      "  parametrizes."
     ), call. = FALSE)
   }
   sm <- es$vectors %*% (log(es$values) * t(es$vectors))

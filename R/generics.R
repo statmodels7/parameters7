@@ -5,7 +5,7 @@ NULL
 #' The Value a Parameter Produces
 #'
 #' @description
-#' Maps the free vector \eqn{\eta} to the constrained value it parametrises:
+#' Maps the free vector \eqn{\eta} to the constrained value it parametrizes:
 #' a symmetric matrix for the \code{\link{matrix_parameter}} branch, a
 #' probability vector for \code{\link{simplex}}, a row-stochastic matrix for
 #' \code{\link{transition_matrix}}.
@@ -50,8 +50,8 @@ param_value <- S7::new_generic("param_value", "s", function(s, eta, ...) {
 #' that produces it.
 #'
 #' @details
-#' Exact or refused, never obtained by optimisation. A generic
-#' optimisation-based inverse would return a plausible \eqn{\eta} for a matrix
+#' Exact or refused, never obtained by optimization. A generic
+#' optimization-based inverse would return a plausible \eqn{\eta} for a matrix
 #' outside the set, which is a wrong answer wearing the shape of a right one.
 #' A family whose map has no closed-form inverse refuses instead, and the base
 #' class refuses on behalf of any parameter that does not implement this. A
@@ -154,7 +154,7 @@ param_d2 <- S7::new_generic("param_d2", "s", function(s, eta, ...) {
 #'
 #' @details
 #' One generic covers both because a consumer asks the same question of either:
-#' what normalising constant does this matrix contribute. The object knows
+#' what normalizing constant does this matrix contribute. The object knows
 #' which answer is the right one, through its declared rank.
 #'
 #' The sign in front of the result is the consumer's arithmetic. A gaussian
@@ -256,7 +256,7 @@ param_d2logdet <- S7::new_generic("param_d2logdet", "s", function(s, eta, ...) {
 #' @details
 #' A rank-deficient parameter refuses rather than returning a pseudo-inverse.
 #' What a consumer of an improper prior needs is the quadratic form and the
-#' log pseudo-determinant -- the penalised normal equations invert
+#' log pseudo-determinant -- the penalized normal equations invert
 #' \eqn{X^\top X + \lambda P}, which is non-singular even when \eqn{P} is not,
 #' and is assembled by the consumer -- so a pseudo-inverse would be a plausible
 #' matrix answering a question nobody asked.

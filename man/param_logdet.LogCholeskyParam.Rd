@@ -16,6 +16,6 @@ A single number.
 \description{
 Closed form and linear in the free vector:
 \eqn{\log|M| = 2 \sum_i \log L_{ii}}, which is twice the sum of the free
-values on the diagonal. No factorisation and no determinant is computed.
+values on the diagonal. No factorization and no determinant is computed.
 }
 \keyword{internal}

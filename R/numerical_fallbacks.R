@@ -53,7 +53,7 @@ is_base_param_class <- function(cls) {
 #' checked rather than as passed.
 #'
 #' \code{param_solve()} and \code{param_factor()} are deliberately absent.
-#' Their base-class versions are a Cholesky factorisation, which is exact
+#' Their base-class versions are a Cholesky factorization, which is exact
 #' whoever performs it, and the validator compares them with
 #' \code{base::solve} either way. Calling them numerical would suggest an
 #' approximation that is not there.
@@ -145,7 +145,7 @@ spectrum_pinv <- function(sp) {
 }
 
 
-#' Cholesky Factorisation, With the Rank Decided Before It
+#' Cholesky Factorization, With the Rank Decided Before It
 #'
 #' @description
 #' The lower triangular Cholesky factor of a symmetric matrix, or \code{NULL}
@@ -344,7 +344,7 @@ S7::method(param_logdet, matrix_parameter) <- function(s, eta, ...) {
   if (any(v <= 0)) {
     stop(sprintf(paste0(
       "'%s' produced %d non-positive eigenvalue(s) among the %d its rank\n",
-      "  keeps, so it is outside the set it claims to parametrise."
+      "  keeps, so it is outside the set it claims to parametrize."
     ), s@param_name, sum(v <= 0), s@rank), call. = FALSE)
   }
   sum(log(v))
@@ -427,7 +427,7 @@ S7::method(param_factor, matrix_parameter) <- function(s, eta, ...) {
     stop(sprintf(paste0(
       "'%s' is not positive definite at this eta, although it declares full\n",
       "  rank. The verdict is spectral, so this is a statement about the\n",
-      "  matrix rather than about a factorisation that happened to fail."
+      "  matrix rather than about a factorization that happened to fail."
     ), s@param_name), call. = FALSE)
   }
   l
@@ -437,8 +437,8 @@ S7::method(param_factor, matrix_parameter) <- function(s, eta, ...) {
 #' @name param_free.parameter
 #' @description
 #' The base class refuses rather than inverting the map numerically: an
-#' optimisation-based inverse would return a plausible \eqn{\eta} for a matrix
-#' outside the set the family parametrises.
+#' optimization-based inverse would return a plausible \eqn{\eta} for a matrix
+#' outside the set the family parametrizes.
 #' @param s A \code{\link{parameter}} object.
 #' @param m A symmetric numeric matrix.
 #' @param ... Unused.
@@ -447,7 +447,7 @@ S7::method(param_factor, matrix_parameter) <- function(s, eta, ...) {
 S7::method(param_free, parameter) <- function(s, m, ...) {
   stop(sprintf(paste0(
     "'%s' does not implement param_free(). The inverse map is exact or\n",
-    "  refused, never obtained by optimisation, because a numerical inverse\n",
+    "  refused, never obtained by optimization, because a numerical inverse\n",
     "  would return a plausible eta for a matrix outside the set."
   ), s@param_name), call. = FALSE)
 }

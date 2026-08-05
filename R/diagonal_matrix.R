@@ -210,7 +210,7 @@ S7::method(param_free, DiagMatrixParam) <- function(s, m, ...) {
   d <- diag(m)
   off <- m - diag(d, nrow = s@dimension)
   if (max(abs(off)) > 1e-10 * max(1, max(abs(d)))) {
-    stop("'m' is not diagonal, so it is not in the set this parameter parametrises.",
+    stop("'m' is not diagonal, so it is not in the set this parameter parametrizes.",
       call. = FALSE
     )
   }
