@@ -1,26 +1,37 @@
 # Changelog
 
+## parameters7 0.5.0
+
+- The jets move to numericals7, where the toolkit’s numerical layer now
+  lives: nothing about them concerned constrained parameters, and they
+  landed here only because their first consumer – the Levinson-Durbin
+  recursion – did.
+  [`autoregressive()`](https://statmodels7.github.io/parameters7/reference/autoregressive.md)
+  now consumes them through numericals7, and its recursion is written on
+  the arithmetic operators the jets dispatch on, which is what they
+  exist for. A clean cut: `jet_layout()`, `jet_var()` and
+  `set_partitions()` are no longer exported from here, and
+  [`tuple_indices()`](https://statmodels7.github.io/parameters7/reference/tuple_indices.md)
+  delegates to the one enumeration in numericals7, so the two copies
+  that could have disagreed no longer exist.
+
 ## parameters7 0.4.0
 
 - Jets gain a composition rule and a vocabulary of functions, and can be
-  written in ordinary R.
-  [`jet_compose()`](https://statmodels7.github.io/parameters7/reference/jet_compose.md)
-  applies a smooth scalar function to a jet given that function’s own
-  five derivatives, summing over the set partitions of the positions of
-  an index tuple, so `exp`, `log`, an arbitrary power, `sqrt`, `gamma`,
-  `lgamma`, `digamma` and `trigamma` each cost five numbers rather than
-  a chain rule of their own. `Ops` and `Math` dispatch on the class, so
-  a map reads `mu / gamma(1 + 1 / sigma)` and carries every partial
-  derivative to fourth order with it. Comparison operators and the
-  non-smooth functions are refused: a branch taken on a jet would keep
-  one side’s derivatives and report them as the whole expression’s.
+  written in ordinary R. `jet_compose()` applies a smooth scalar
+  function to a jet given that function’s own five derivatives, summing
+  over the set partitions of the positions of an index tuple, so `exp`,
+  `log`, an arbitrary power, `sqrt`, `gamma`, `lgamma`, `digamma` and
+  `trigamma` each cost five numbers rather than a chain rule of their
+  own. `Ops` and `Math` dispatch on the class, so a map reads
+  `mu / gamma(1 + 1 / sigma)` and carries every partial derivative to
+  fourth order with it. Comparison operators and the non-smooth
+  functions are refused: a branch taken on a jet would keep one side’s
+  derivatives and report them as the whole expression’s.
 
-- [`jet_layout()`](https://statmodels7.github.io/parameters7/reference/jet_layout.md),
-  [`jet_var()`](https://statmodels7.github.io/parameters7/reference/jet_var.md)
-  and
-  [`set_partitions()`](https://statmodels7.github.io/parameters7/reference/set_partitions.md)
-  are exported, which is the seam a consumer needs to seed jets and to
-  enumerate partitions. distributions7 uses it for `reparametrize()`.
+- `jet_layout()`, `jet_var()` and `set_partitions()` are exported, which
+  is the seam a consumer needs to seed jets and to enumerate partitions.
+  distributions7 uses it for `reparametrize()`.
 
 ## parameters7 0.3.0
 
@@ -69,9 +80,8 @@
   carried onto the coefficients by the Levinson-Durbin recursion, the
   transformation of Barndorff-Nielsen and Schou (1973). The map is
   polynomial, so its derivatives to fourth order come from carrying jets
-  through the recursion rather than from expanding it;
-  [`jet_mul()`](https://statmodels7.github.io/parameters7/reference/jet_mul.md)
-  is the Leibniz rule again, in its scalar form. The log-determinant is
+  through the recursion rather than from expanding it; `jet_mul()` is
+  the Leibniz rule again, in its scalar form. The log-determinant is
   `p log(g0) + sum (p-k) log(1-r_k^2)` and the precision is banded of
   the order’s width.
   [`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md)

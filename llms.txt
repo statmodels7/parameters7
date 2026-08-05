@@ -622,10 +622,6 @@ The machinery the exported functions are built from. None of it is
 exported, and none is needed to use the package; it is documented so
 that the derivations can be followed from the code that implements them.
 
-- [`Math(`*`<jet>`*`)`](https://statmodels7.github.io/parameters7/reference/Math.jet.md)
-  : Mathematical Functions of a Jet
-- [`Ops(`*`<jet>`*`)`](https://statmodels7.github.io/parameters7/reference/Ops.jet.md)
-  : Arithmetic on Jets
 - [`ar1_logdet_terms()`](https://statmodels7.github.io/parameters7/reference/ar1_logdet_terms.md)
   : The Log-Determinant Terms of an AR(1) Parameter
 - [`ar1_pattern()`](https://statmodels7.github.io/parameters7/reference/ar1_pattern.md)
@@ -708,36 +704,6 @@ that the derivations can be followed from the code that implements them.
   : Finite-Difference Step for a Free Value
 - [`is_base_param_class()`](https://statmodels7.github.io/parameters7/reference/is_base_param_class.md)
   : Is This the Package's Own Base Class?
-- [`jet_add()`](https://statmodels7.github.io/parameters7/reference/jet_add.md)
-  : Sum of Jets
-- [`jet_cmul()`](https://statmodels7.github.io/parameters7/reference/jet_cmul.md)
-  : A Jet Times a Constant
-- [`jet_compose()`](https://statmodels7.github.io/parameters7/reference/jet_compose.md)
-  : A Smooth Function of a Jet
-- [`jet_const()`](https://statmodels7.github.io/parameters7/reference/jet_const.md)
-  : A Constant Jet
-- [`jet_digamma()`](https://statmodels7.github.io/parameters7/reference/jet_digamma.md)
-  : The Digamma of a Jet
-- [`jet_div()`](https://statmodels7.github.io/parameters7/reference/jet_div.md)
-  : The Quotient of Two Jets
-- [`jet_exp()`](https://statmodels7.github.io/parameters7/reference/jet_exp.md)
-  : The Exponential of a Jet
-- [`jet_gamma()`](https://statmodels7.github.io/parameters7/reference/jet_gamma.md)
-  : The Gamma Function of a Jet
-- [`jet_inv()`](https://statmodels7.github.io/parameters7/reference/jet_inv.md)
-  : The Reciprocal of a Jet
-- [`jet_lgamma()`](https://statmodels7.github.io/parameters7/reference/jet_lgamma.md)
-  : The Log-Gamma of a Jet
-- [`jet_log()`](https://statmodels7.github.io/parameters7/reference/jet_log.md)
-  : The Logarithm of a Jet
-- [`jet_mul()`](https://statmodels7.github.io/parameters7/reference/jet_mul.md)
-  : Product of Jets
-- [`jet_pow()`](https://statmodels7.github.io/parameters7/reference/jet_pow.md)
-  : A Power of a Jet
-- [`jet_sqrt()`](https://statmodels7.github.io/parameters7/reference/jet_sqrt.md)
-  : The Square Root of a Jet
-- [`jet_trigamma()`](https://statmodels7.github.io/parameters7/reference/jet_trigamma.md)
-  : The Trigamma of a Jet
 - [`leibniz_gram()`](https://statmodels7.github.io/parameters7/reference/leibniz_gram.md)
   : A Gram Product's Derivatives From Its Factor's
 - [`link_tag()`](https://statmodels7.github.io/parameters7/reference/link_tag.md)
@@ -996,8 +962,6 @@ that the derivations can be followed from the code that implements them.
   : parameters7: An S7 Framework for Constrained Parameters
 - [`power_derivs()`](https://statmodels7.github.io/parameters7/reference/power_derivs.md)
   : Derivatives of a Power, for Composition
-- [`print(`*`<jet>`*`)`](https://statmodels7.github.io/parameters7/reference/print.jet.md)
-  : Print a Jet
 - [`print.parameter`](https://statmodels7.github.io/parameters7/reference/print.parameter.md)
   : Print a Constrained Parameter
 - [`readable_diagonal()`](https://statmodels7.github.io/parameters7/reference/readable_diagonal.md)
@@ -1024,18 +988,4 @@ that the derivations can be followed from the code that implements them.
   : Row and Chart Coordinate of Each Free Value
 - [`tuple_indices()`](https://statmodels7.github.io/parameters7/reference/tuple_indices.md)
   : The Index Tuples of a Given Width
-
-## Jets
-
-A jet is a value carried together with every partial derivative up to
-fourth order. Seeding one and writing a map in ordinary R is how a
-consumer obtains exact higher derivatives of a map without transcribing
-a chain rule.
-
-- [`jet_layout()`](https://statmodels7.github.io/parameters7/reference/jet_layout.md)
-  : The Bookkeeping a Jet Needs
-- [`jet_var()`](https://statmodels7.github.io/parameters7/reference/jet_var.md)
-  : A Jet for One Variable
-- [`set_partitions()`](https://statmodels7.github.io/parameters7/reference/set_partitions.md)
-  : The Set Partitions of the First n Integers
 
