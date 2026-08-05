@@ -1,3 +1,20 @@
+# parameters7 0.4.0
+
+* Jets gain a composition rule and a vocabulary of functions, and can be
+  written in ordinary R. `jet_compose()` applies a smooth scalar function to a
+  jet given that function's own five derivatives, summing over the set
+  partitions of the positions of an index tuple, so `exp`, `log`, an arbitrary
+  power, `sqrt`, `gamma`, `lgamma`, `digamma` and `trigamma` each cost five
+  numbers rather than a chain rule of their own. `Ops` and `Math` dispatch on
+  the class, so a map reads `mu / gamma(1 + 1 / sigma)` and carries every
+  partial derivative to fourth order with it. Comparison operators and the
+  non-smooth functions are refused: a branch taken on a jet would keep one
+  side's derivatives and report them as the whole expression's.
+
+* `jet_layout()`, `jet_var()` and `set_partitions()` are exported, which is
+  the seam a consumer needs to seed jets and to enumerate partitions.
+  distributions7 uses it for `reparametrize()`.
+
 # parameters7 0.3.0
 
 * `param_readable()` declares the quantities a family is about, with the

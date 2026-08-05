@@ -22,4 +22,16 @@ The jet of a scalar map of a single free value: its value and its four
 derivatives sit in the pure components of that variable, everything else
 being zero.
 }
-\keyword{internal}
+\examples{
+# seed two variables, then write a map in ordinary R
+lay <- jet_layout(2)
+x <- jet_var(1, list(1.3, 1, 0, 0, 0), lay)
+y <- jet_var(2, list(0.8, 1, 0, 0, 0), lay)
+z <- x / gamma(1 + 1 / y)
+z$v
+z$d[[1]]
+
+}
+\seealso{
+\code{\link{jet_layout}}, \code{\link{Ops.jet}}
+}

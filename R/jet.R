@@ -28,9 +28,14 @@ NULL
 #' @return A list with \code{d}, the tuple lists \code{tuples}, and the
 #'   environment \code{pos} mapping a sorted tuple to its order and position.
 #'
-#' @seealso \code{\link{jet_mul}}
+#' @seealso \code{\link{jet_var}}, \code{\link{Ops.jet}}
 #'
-#' @keywords internal
+#' @examples
+#' lay <- jet_layout(2)
+#' lay$d
+#' length(lay$tuples[[2]])
+#'
+#' @export
 jet_layout <- function(d) {
   tuples <- lapply(1:4, function(o) tuple_indices(d, o))
   # The empty tuple gets no key: R has no zero-length variable name, and the
@@ -81,7 +86,18 @@ jet_const <- function(v, lay) {
 #'
 #' @return A jet.
 #'
-#' @keywords internal
+#' @seealso \code{\link{jet_layout}}, \code{\link{Ops.jet}}
+#'
+#' @examples
+#' # seed two variables, then write a map in ordinary R
+#' lay <- jet_layout(2)
+#' x <- jet_var(1, list(1.3, 1, 0, 0, 0), lay)
+#' y <- jet_var(2, list(0.8, 1, 0, 0, 0), lay)
+#' z <- x / gamma(1 + 1 / y)
+#' z$v
+#' z$d[[1]]
+#'
+#' @export
 jet_var <- function(k, dv, lay) {
   out <- jet_const(dv[[1L]], lay)
   for (o in 1:4) {
@@ -198,7 +214,11 @@ jet_cmul <- function(a, c) {
 #'
 #' @seealso \code{\link{jet_compose}}
 #'
-#' @keywords internal
+#' @examples
+#' set_partitions(3)
+#' lengths(lapply(1:4, set_partitions))
+#'
+#' @export
 set_partitions <- function(n) {
   if (n == 1L) return(list(list(1L)))
   prev <- set_partitions(n - 1L)

@@ -23,7 +23,12 @@ The tuples are the package's own enumeration, so a jet's components are
 keyed exactly as \code{\link{param_tuple_names}} keys a derivative list and
 nothing has to be reordered on the way out.
 }
-\seealso{
-\code{\link{jet_mul}}
+\examples{
+lay <- jet_layout(2)
+lay$d
+length(lay$tuples[[2]])
+
 }
-\keyword{internal}
+\seealso{
+\code{\link{jet_var}}, \code{\link{Ops.jet}}
+}

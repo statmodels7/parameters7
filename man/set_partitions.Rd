@@ -27,7 +27,11 @@ makes a repeated variable count with the right multiplicity without any
 bookkeeping of its own -- the same device \code{\link{jet_mul}} uses with
 subsets of positions.
 }
+\examples{
+set_partitions(3)
+lengths(lapply(1:4, set_partitions))
+
+}
 \seealso{
 \code{\link{jet_compose}}
 }
-\keyword{internal}
