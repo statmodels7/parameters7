@@ -17,7 +17,8 @@ jet_const(v, lay)
 - lay:
 
   A layout from
-  [`jet_layout`](https://statmodels7.github.io/parameters7/reference/jet_layout.md).
+  [`jet_layout`](https://statmodels7.github.io/parameters7/reference/jet_layout.md);
+  taken from the jet itself unless given.
 
 ## Value
 

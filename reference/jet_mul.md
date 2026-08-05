@@ -5,7 +5,7 @@ Multiplies two jets, propagating every derivative exactly.
 ## Usage
 
 ``` r
-jet_mul(a, b, lay)
+jet_mul(a, b, lay = a$lay)
 ```
 
 ## Arguments
@@ -17,7 +17,8 @@ jet_mul(a, b, lay)
 - lay:
 
   A layout from
-  [`jet_layout`](https://statmodels7.github.io/parameters7/reference/jet_layout.md).
+  [`jet_layout`](https://statmodels7.github.io/parameters7/reference/jet_layout.md);
+  taken from the jet itself unless given.
 
 ## Value
 
