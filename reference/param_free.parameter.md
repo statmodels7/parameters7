@@ -1,8 +1,8 @@
 # Refusal to Invert Without a Closed Form
 
 The base class refuses rather than inverting the map numerically: an
-optimisation-based inverse would return a plausible \\\eta\\ for a
-matrix outside the set the family parametrises.
+optimization-based inverse would return a plausible \\\eta\\ for a
+matrix outside the set the family parametrizes.
 
 ## Arguments
 

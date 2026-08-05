@@ -1,7 +1,7 @@
 # Simplex Parameter
 
 The S7 class of probability vectors on the open simplex, in the additive
-log-ratio parametrisation. Constructed by
+log-ratio parametrization. Constructed by
 [`simplex`](https://statmodels7.github.io/parameters7/reference/simplex.md).
 
 ## Usage

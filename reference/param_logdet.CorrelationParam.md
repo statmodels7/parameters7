@@ -2,7 +2,7 @@
 
 Closed form: twice the sum of the logarithms of the sines of the angles,
 the factor being triangular with those products on its diagonal. No
-factorisation and no determinant is computed.
+factorization and no determinant is computed.
 
 ## Arguments
 

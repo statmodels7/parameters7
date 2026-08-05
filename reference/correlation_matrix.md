@@ -1,7 +1,7 @@
 # Construct a Correlation Matrix Parameter
 
 A correlation matrix – symmetric positive definite with a unit diagonal
-– carried by the spherical parametrisation: \\R = LL^\top\\ with each
+– carried by the spherical parametrization: \\R = LL^\top\\ with each
 row of \\L\\ a point on the unit sphere written in angular coordinates,
 and each angle carried onto the real line by a bounded link.
 

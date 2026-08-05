@@ -2,7 +2,7 @@
 
 The covariance of \\p\\ consecutive observations of a stationary
 autoregression of order \\q\\, \$\$y_t = \phi_1 y\_{t-1} + \cdots +
-\phi_q y\_{t-q} + \varepsilon_t,\$\$ parametrised by its marginal
+\phi_q y\_{t-q} + \varepsilon_t,\$\$ parametrized by its marginal
 variance and its \\q\\ partial autocorrelations, so \\q + 1\\ free
 values whatever the dimension.
 
@@ -47,7 +47,7 @@ An object of class
 
 ## Details
 
-The parametrisation is forced by the shape of the stationary region. The
+The parametrization is forced by the shape of the stationary region. The
 coefficients \\\phi\\ are stationary exactly when the roots of \\1 -
 \phi_1 z - \cdots - \phi_q z^{q}\\ lie outside the unit circle, and that
 set is not a box: already at \\q = 2\\ it is a triangle, so no
@@ -80,7 +80,7 @@ autoregression of order \\q\\ is Markov of that order, so its precision
 carries no entry beyond the \\q\\-th off-diagonal. It is assembled from
 the prediction form \\M^{-1} = U^\top D^{-1} U\\, with \\U\\ unit lower
 triangular holding the predictor coefficients and \\D\\ the innovation
-variances, rather than by a factorisation.
+variances, rather than by a factorization.
 
 [`ar1`](https://statmodels7.github.io/parameters7/reference/ar1.md) is
 the case \\q = 1\\ written out: there the autocorrelation is simply

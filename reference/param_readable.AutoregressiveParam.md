@@ -1,7 +1,7 @@
 # The Scale, the Partial Autocorrelations and the Coefficients
 
 Declares the marginal variance, the partial autocorrelations that
-parametrise the family, and the autoregressive coefficients they
+parametrize the family, and the autoregressive coefficients they
 produce.
 
 ## Arguments

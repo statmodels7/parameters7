@@ -2,7 +2,7 @@
 
 Exact, by Sherman-Morrison: the inverse of \\\sigma^2\\(1-\rho)I + \rho
 J\\\\ is \\\\\sigma^2(1-\rho)\\^{-1}\[I - \rho J/\\1 + (p-1)\rho\\\]\\,
-compound symmetric again, so no factorisation is performed.
+compound symmetric again, so no factorization is performed.
 
 ## Arguments
 

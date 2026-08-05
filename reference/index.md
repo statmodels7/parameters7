@@ -2,7 +2,7 @@
 
 ## Families
 
-The parametrisations. Each maps an unconstrained vector to a matrix in
+The parametrizations. Each maps an unconstrained vector to a matrix in
 its own constrained set, and each owns the side of that matrix.
 
 - [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
@@ -187,7 +187,7 @@ that the derivations can be followed from the code that implements them.
 - [`chol_leibniz()`](https://statmodels7.github.io/parameters7/reference/chol_leibniz.md)
   : Derivative Components of a Log-Cholesky Parameter
 - [`chol_pd()`](https://statmodels7.github.io/parameters7/reference/chol_pd.md)
-  : Cholesky Factorisation, With the Rank Decided Before It
+  : Cholesky Factorization, With the Rank Decided Before It
 - [`chol_positions()`](https://statmodels7.github.io/parameters7/reference/chol_positions.md)
   : Positions of the Free Values in the Lower Triangle
 - [`combinat_perms()`](https://statmodels7.github.io/parameters7/reference/combinat_perms.md)

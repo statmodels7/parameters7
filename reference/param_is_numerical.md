@@ -38,7 +38,7 @@ passed.
 and
 [`param_factor()`](https://statmodels7.github.io/parameters7/reference/param_factor.md)
 are deliberately absent. Their base-class versions are a Cholesky
-factorisation, which is exact whoever performs it, and the validator
+factorization, which is exact whoever performs it, and the validator
 compares them with [`base::solve`](https://rdrr.io/r/base/solve.html)
 either way. Calling them numerical would suggest an approximation that
 is not there.

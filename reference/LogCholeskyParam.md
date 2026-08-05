@@ -1,7 +1,7 @@
 # Unstructured Positive Definite Parameter
 
 The S7 class of unstructured symmetric positive definite matrices in the
-log-Cholesky parametrisation. Constructed by
+log-Cholesky parametrization. Constructed by
 [`log_cholesky`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md).
 
 ## Usage

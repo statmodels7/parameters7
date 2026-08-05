@@ -49,7 +49,7 @@ An object of class
 This is the commonest penalty in semiparametric regression, and the
 reason the package admits rank-deficient matrices at all. \\P\\ may be a
 Gram matrix of a basis derivative, a difference penalty \\\Delta^\top
-\Delta\\, a neighbourhood matrix, or the identity, which makes the
+\Delta\\, a neighborhood matrix, or the identity, which makes the
 parameter a ridge.
 
 Everything is a constant times a function of the scale, so nothing needs
@@ -65,14 +65,14 @@ makes the scale estimable. Writing a penalty as a negative log prior,
 \\\frac{\lambda}{2}\beta^\top P \beta - \frac{r}{2}\log\lambda\\, the
 stationary point is \\\lambda = r / (\beta^\top P \beta)\\, whereas
 dropping the second term leaves a derivative of one sign and sends the
-scale to zero. That second term is exactly the normalising constant of
+scale to zero. That second term is exactly the normalizing constant of
 the prior, which is the reason this package keeps it.
 
 A rank-deficient \\P\\ makes the corresponding gaussian improper, which
 is what makes it a legitimate penalty and not a legitimate density. Both
 readings of a multivariate gaussian require full rank: a singular
 covariance is degenerate on a subspace, and a singular precision does
-not normalise.
+not normalize.
 
 ## See also
 

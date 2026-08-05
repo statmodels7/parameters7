@@ -1,7 +1,7 @@
 # Matrix Logarithm Parameter
 
 The S7 class of unstructured symmetric positive definite matrices in the
-matrix logarithm parametrisation. Constructed by
+matrix logarithm parametrization. Constructed by
 [`matrix_log`](https://statmodels7.github.io/parameters7/reference/matrix_log.md).
 
 ## Usage

@@ -1,6 +1,6 @@
 # parameters7: An S7 Framework for Constrained Parameters
 
-Parametrisations of constrained parameter spaces as objects. A parameter
+Parametrizations of constrained parameter spaces as objects. A parameter
 maps an unconstrained vector onto the set where it lives – a symmetric
 positive semidefinite matrix, a probability vector on the simplex, a
 row-stochastic transition matrix – and answers with exact derivatives to

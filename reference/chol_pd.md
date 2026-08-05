@@ -1,4 +1,4 @@
-# Cholesky Factorisation, With the Rank Decided Before It
+# Cholesky Factorization, With the Rank Decided Before It
 
 The lower triangular Cholesky factor of a symmetric matrix, or `NULL`
 when the matrix is not positive definite to the given relative

@@ -1,6 +1,6 @@
 # Factor of a Log-Cholesky Parameter
 
-The factor is the parametrisation, so it needs no computing.
+The factor is the parametrization, so it needs no computing.
 
 ## Arguments
 

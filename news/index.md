@@ -90,7 +90,7 @@
 
 - Three families for structured covariances.
   [`correlation_matrix()`](https://statmodels7.github.io/parameters7/reference/correlation_matrix.md)
-  carries a correlation matrix in the spherical parametrisation of
+  carries a correlation matrix in the spherical parametrization of
   Rapisarda, Brigo and Mercurio (2007): the rows of the Cholesky factor
   are points on the unit sphere in angular coordinates, so the unit
   diagonal and the positive definiteness hold by construction, and the
@@ -157,7 +157,7 @@
 
 - Four families.
   [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
-  is the unstructured positive definite case in the parametrisation of
+  is the unstructured positive definite case in the parametrization of
   Pinheiro and Bates (1996), whose log-determinant is linear in the free
   vector.
   [`diagonal_matrix()`](https://statmodels7.github.io/parameters7/reference/diagonal_matrix.md)

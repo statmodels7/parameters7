@@ -3,7 +3,7 @@
 Closed form. Writing \\L_k\\ for the derivative of the factor in the
 \\k\\-th free value, \\\partial_k M = L_k L^\top + L L_k^\top\\. The
 factor's derivative is \\L\_{ii} E\_{ii}\\ for a diagonal value, because
-the parametrisation is its logarithm, and \\E\_{ij}\\ for a value below
+the parametrization is its logarithm, and \\E\_{ij}\\ for a value below
 the diagonal.
 
 ## Arguments

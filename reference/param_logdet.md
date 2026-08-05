@@ -32,7 +32,7 @@ A single number.
 ## Details
 
 One generic covers both because a consumer asks the same question of
-either: what normalising constant does this matrix contribute. The
+either: what normalizing constant does this matrix contribute. The
 object knows which answer is the right one, through its declared rank.
 
 The sign in front of the result is the consumer's arithmetic. A gaussian

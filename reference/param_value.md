@@ -1,6 +1,6 @@
 # The Value a Parameter Produces
 
-Maps the free vector \\\eta\\ to the constrained value it parametrises:
+Maps the free vector \\\eta\\ to the constrained value it parametrizes:
 a symmetric matrix for the
 [`matrix_parameter`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
 branch, a probability vector for

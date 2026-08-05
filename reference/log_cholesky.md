@@ -1,6 +1,6 @@
 # Construct an Unstructured Positive Definite Parameter
 
-The log-Cholesky parametrisation of a symmetric positive definite
+The log-Cholesky parametrization of a symmetric positive definite
 matrix: \\M = L L^\top\\ with \\L\\ lower triangular and positive on the
 diagonal, the free values being the logarithms of the diagonal entries
 of \\L\\ and the entries below it.
@@ -21,7 +21,7 @@ log_cholesky(dimension, role = c("either", "covariance", "precision"))
 
   A label, one of `"either"` (the default), `"covariance"` or
   `"precision"`. Nothing computed depends on it; it records which side
-  of a model the matrix parametrises, since the family name does not
+  of a model the matrix parametrizes, since the family name does not
   say.
 
 ## Value
@@ -31,7 +31,7 @@ An object of class
 
 ## Details
 
-The parametrisation is that of Pinheiro and Bates (1996), and it is the
+The parametrization is that of Pinheiro and Bates (1996), and it is the
 one to reach for when nothing is known about the matrix. It is a
 bijection onto the positive definite cone, smooth in both directions,
 with no boundary to reach on the free scale, and unique because the
@@ -48,7 +48,7 @@ The log-determinant is linear in the free vector, \\\log\|M\| = 2\sum_i
 directions and 0 elsewhere, and its Hessian vanishes. Both are supplied
 in closed form.
 
-The log on the diagonal is intrinsic to the parametrisation and not a
+The log on the diagonal is intrinsic to the parametrization and not a
 swappable link, which is why it appears in the free names.
 
 ## References

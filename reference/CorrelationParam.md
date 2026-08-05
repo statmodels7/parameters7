@@ -1,6 +1,6 @@
 # Correlation Matrix Parameter
 
-The S7 class of correlation matrices in the spherical parametrisation.
+The S7 class of correlation matrices in the spherical parametrization.
 Constructed by
 [`correlation_matrix`](https://statmodels7.github.io/parameters7/reference/correlation_matrix.md).
 

@@ -37,7 +37,7 @@ A numeric matrix with `s@dimension` rows.
 
 A rank-deficient parameter refuses rather than returning a
 pseudo-inverse. What a consumer of an improper prior needs is the
-quadratic form and the log pseudo-determinant – the penalised normal
+quadratic form and the log pseudo-determinant – the penalized normal
 equations invert \\X^\top X + \lambda P\\, which is non-singular even
 when \\P\\ is not, and is assembled by the consumer – so a
 pseudo-inverse would be a plausible matrix answering a question nobody

@@ -54,7 +54,7 @@ give \$\$\log\lvert M \rvert = p\log\sigma^2 + \log\\1 + (p-1)\rho\\ +
 function of the other, so every mixed derivative of the log-determinant
 is exactly zero. And the inverse is compound symmetric again, by the
 Sherman-Morrison identity, so it is returned in closed form rather than
-factorised: the inverse of an exchangeable covariance is an exchangeable
+factorized: the inverse of an exchangeable covariance is an exchangeable
 precision, which is what makes this family closed under the choice of
 side.
 
@@ -83,7 +83,7 @@ round(param_value(s, eta), 4)
 #> v3 1.1733 1.1733 2.0000 1.1733
 #> v4 1.1733 1.1733 1.1733 2.0000
 
-# the inverse is compound symmetric too, and is not factorised
+# the inverse is compound symmetric too, and is not factorized
 round(param_solve(s, eta), 4)
 #>         [,1]    [,2]    [,3]    [,4]
 #> [1,]  0.9525 -0.2571 -0.2571 -0.2571

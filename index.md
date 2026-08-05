@@ -1,7 +1,7 @@
 # parameters7
 
 Every R package that fits a model with a constrained parameter carries
-its own parametrisation of it, written inside the routine that needs it.
+its own parametrization of it, written inside the routine that needs it.
 `nlme` has the `pdMat` classes for covariances, `lme4` has its `theta`
 vector, `glmmTMB` has its covariance parameters; mixture packages
 re-derive the softmax and hidden-Markov packages re-derive
@@ -24,7 +24,7 @@ routinely is.
 
 It is the constrained-parameter layer of
 [statmodels7](https://statmodels7.github.io), an S7 toolkit for
-statistical modelling, alongside
+statistical modeling, alongside
 [linkfunctions7](https://statmodels7.github.io/linkfunctions7/),
 [distributions7](https://statmodels7.github.io/distributions7/),
 [optimizers7](https://statmodels7.github.io/optimizers7/) and
@@ -309,7 +309,7 @@ c(balanced = count_ev(p1 + p2),
 
 So
 [`param_null_basis()`](https://statmodels7.github.io/parameters7/reference/param_null_basis.md)
-stacks the individually normalised components — the null space of a sum
+stacks the individually normalized components — the null space of a sum
 of positive semidefinite matrices is the intersection of their null
 spaces — and membership is afterwards tested against that basis.
 
@@ -462,7 +462,7 @@ invisible(check_parameter(decay))
 - [distributions7](https://statmodels7.github.io/distributions7/) —
   distributions carrying exact derivatives of the log-likelihood
 - [optimizers7](https://statmodels7.github.io/optimizers7/) —
-  optimisation algorithms and stopping rules as objects
+  optimization algorithms and stopping rules as objects
 - [basis7](https://statmodels7.github.io/basis7/) — basis expansions
   with exact derivatives, integrals and Gram matrices
 - [the book](https://statmodels7.github.io/book/) — the mathematics

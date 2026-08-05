@@ -27,4 +27,4 @@ check_matrix(s, m, tol = 1e-08)
 
 ## Value
 
-`m`, symmetrised.
+`m`, symmetrized.

@@ -25,7 +25,7 @@ A list with `rank` and `null_basis`.
 
 ## Details
 
-The components are normalised individually before being stacked, and the
+The components are normalized individually before being stacked, and the
 rank is read off the stack rather than off any assembled combination.
 The reason is that a rank read off a sum is not scale invariant: on a
 tensor-product penalty of true rank 28 out of 32, counting eigenvalues

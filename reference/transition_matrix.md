@@ -24,7 +24,7 @@ An object of class
 
 ## Details
 
-The rows are independent in the parametrisation, so every derivative
+The rows are independent in the parametrization, so every derivative
 tensor is block diagonal by row: a component pairing free values of two
 different rows is exactly zero, and the implementation evaluates the
 simplex kernels row by row rather than storing those zeros.

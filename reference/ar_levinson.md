@@ -25,7 +25,7 @@ ar_levinson(s, r, lay)
 - lay:
 
   A layout from
-  [`jet_layout`](https://rdrr.io/pkg/numericals7/man/jet_layout.html).
+  [`jet_layout`](https://statmodels7.github.io/numericals7/reference/jet_layout.html).
 
 ## Value
 
