@@ -1,4 +1,4 @@
-#' @include jet.R compound_symmetry.R
+#' @include compound_symmetry.R
 NULL
 
 
@@ -167,7 +167,7 @@ autoregressive <- function(dimension, order,
 #'
 #' @param s An \code{\link{AutoregressiveParam}} object.
 #' @param r A list of \eqn{q} jets, the partial autocorrelations.
-#' @param lay A layout from \code{\link{jet_layout}}.
+#' @param lay A layout from \code{\link[numericals7]{jet_layout}}.
 #'
 #' @return A list with \code{phi}, the coefficient jets of the last order, and
 #'   \code{rho}, the autocorrelation jets from lag 0 to \code{dimension - 1}.
@@ -176,7 +176,7 @@ autoregressive <- function(dimension, order,
 ar_levinson <- function(s, r, lay) {
   q <- s@param_params$order
   p <- s@dimension
-  one <- jet_const(1, lay)
+  one <- numericals7::jet_const(1, lay)
 
   phi <- list()
   rho <- list(one)
@@ -185,15 +185,14 @@ ar_levinson <- function(s, r, lay) {
     new[[k]] <- r[[k]]
     if (k > 1L) {
       for (j in seq_len(k - 1L)) {
-        new[[j]] <- jet_add(phi[[j]],
-                            jet_cmul(jet_mul(r[[k]], phi[[k - j]], lay), -1))
+        new[[j]] <- phi[[j]] - r[[k]] * phi[[k - j]]
       }
     }
     phi <- new
     acc <- r[[k]]
     if (k > 1L) {
       for (j in seq_len(k - 1L)) {
-        acc <- jet_add(acc, jet_mul(phi[[j]], rho[[k - j + 1L]], lay))
+        acc <- acc + phi[[j]] * rho[[k - j + 1L]]
       }
     }
     rho[[k + 1L]] <- acc
@@ -201,9 +200,9 @@ ar_levinson <- function(s, r, lay) {
   # beyond the order, the Yule-Walker equations carry the recursion on
   if (p - 1L > q) {
     for (h in seq.int(q + 1L, p - 1L)) {
-      acc <- jet_const(0, lay)
+      acc <- numericals7::jet_const(0, lay)
       for (j in seq_len(q)) {
-        acc <- jet_add(acc, jet_mul(phi[[j]], rho[[h - j + 1L]], lay))
+        acc <- acc + phi[[j]] * rho[[h - j + 1L]]
       }
       rho[[h + 1L]] <- acc
     }
@@ -227,7 +226,7 @@ ar_levinson <- function(s, r, lay) {
 #' @keywords internal
 ar_jets <- function(s, eta) {
   q <- s@param_params$order
-  lay <- jet_layout(s@n_free)
+  lay <- numericals7::jet_layout(s@n_free)
   grab <- function(link, e) {
     list(
       linkfunctions7::linkinv(link, e),
@@ -237,9 +236,9 @@ ar_jets <- function(s, eta) {
       linkfunctions7::d4linkinv(link, e)
     )
   }
-  scale <- jet_var(1L, grab(s@param_params$link_scale, eta[1L]), lay)
+  scale <- numericals7::jet_var(1L, grab(s@param_params$link_scale, eta[1L]), lay)
   r <- lapply(seq_len(q), function(k) {
-    jet_var(k + 1L, grab(s@param_params$link_pacf, eta[k + 1L]), lay)
+    numericals7::jet_var(k + 1L, grab(s@param_params$link_pacf, eta[k + 1L]), lay)
   })
   ld <- ar_levinson(s, r, lay)
   list(lay = lay, scale = scale, r = r, phi = ld$phi, rho = ld$rho)
@@ -265,7 +264,7 @@ ar_assemble <- function(s, j, order = 0L, position = 1L) {
   lag <- abs(outer(seq_len(p), seq_len(p), "-"))
   pick <- function(x) if (order == 0L) x$v else x$d[[order]][position]
   vals <- vapply(seq_len(p), function(h) {
-    pick(jet_mul(j$scale, j$rho[[h]], j$lay))
+    pick(j$scale * j$rho[[h]])
   }, numeric(1))
   matrix(vals[lag + 1L], p, p)
 }

@@ -117,14 +117,3 @@ reference:
     the derivations can be followed from the code that implements them.
   contents:
   - has_keyword("internal")
-
-- title: Jets
-  desc: >
-    A jet is a value carried together with every partial derivative up to
-    fourth order. Seeding one and writing a map in ordinary R is how a
-    consumer obtains exact higher derivatives of a map without transcribing
-    a chain rule.
-  contents:
-  - jet_layout
-  - jet_var
-  - set_partitions

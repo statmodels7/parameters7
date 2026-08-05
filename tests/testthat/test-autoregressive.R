@@ -139,19 +139,20 @@ test_that("the validator passes over orders and dimensions", {
 })
 
 test_that("jet arithmetic reproduces a polynomial's derivatives", {
-  # The helper the whole family rests on, checked against a polynomial whose
-  # derivatives can be written down: f(x, y) = x^3 y^2.
-  lay <- parameters7:::jet_layout(2L)
+  # The machinery the whole family rests on now lives in numericals7 and is
+  # consumed through its exported seam and the operators; this checks the
+  # integration against a polynomial whose derivatives can be written down:
+  # f(x, y) = x^3 y^2.
+  lay <- numericals7::jet_layout(2L)
   x <- 1.3
   y <- -0.7
-  jx <- parameters7:::jet_var(1L, list(x, 1, 0, 0, 0), lay)
-  jy <- parameters7:::jet_var(2L, list(y, 1, 0, 0, 0), lay)
-  mul <- function(a, b) parameters7:::jet_mul(a, b, lay)
-  f <- mul(mul(mul(jx, jx), jx), mul(jy, jy))
+  jx <- numericals7::jet_var(1L, list(x, 1, 0, 0, 0), lay)
+  jy <- numericals7::jet_var(2L, list(y, 1, 0, 0, 0), lay)
+  f <- jx * jx * jx * (jy * jy)
 
   at <- function(tup) {
     o <- length(tup)
-    i <- which(vapply(parameters7:::tuple_indices(2L, o), function(t) {
+    i <- which(vapply(numericals7::tuple_indices(2L, o), function(t) {
       identical(sort(t), sort(as.integer(tup)))
     }, logical(1)))
     f$d[[o]][i]

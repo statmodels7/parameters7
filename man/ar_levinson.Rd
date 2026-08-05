@@ -11,7 +11,7 @@ ar_levinson(s, r, lay)
 
 \item{r}{A list of \eqn{q} jets, the partial autocorrelations.}
 
-\item{lay}{A layout from \code{\link{jet_layout}}.}
+\item{lay}{A layout from \code{\link[numericals7]{jet_layout}}.}
 }
 \value{
 A list with \code{phi}, the coefficient jets of the last order, and

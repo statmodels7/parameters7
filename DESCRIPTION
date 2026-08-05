@@ -1,6 +1,6 @@
 Package: parameters7
 Title: An S7 Framework for Constrained Parameters
-Version: 0.4.0
+Version: 0.5.0
 Authors@R:
     person("Giovanni", "Tinervia", , "giovannitinervia9@gmail.com", role = c("aut", "cre"))
 Description: Parametrisations of constrained parameter spaces as objects. A
@@ -22,6 +22,7 @@ Depends:
     R (>= 4.1.0)
 Imports:
     linkfunctions7,
+    numericals7,
     S7,
     stats
 Suggests:
@@ -31,7 +32,8 @@ Suggests:
     knitr,
     rmarkdown
 Remotes:
-    statmodels7/linkfunctions7
+    statmodels7/linkfunctions7,
+    statmodels7/numericals7
 Config/testthat/edition: 3
 Config/roxygen2/version: 8.0.0
 RoxygenNote: 7.3.3
@@ -42,7 +44,6 @@ Collate:
     'chain.R'
     'compound_symmetry.R'
     'ar1.R'
-    'jet.R'
     'autoregressive.R'
     'check_parameter.R'
     'correlation_matrix.R'

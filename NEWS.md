@@ -1,3 +1,15 @@
+# parameters7 0.5.0
+
+* The jets move to numericals7, where the toolkit's numerical layer now
+  lives: nothing about them concerned constrained parameters, and they landed
+  here only because their first consumer -- the Levinson-Durbin recursion --
+  did. `autoregressive()` now consumes them through numericals7, and its
+  recursion is written on the arithmetic operators the jets dispatch on,
+  which is what they exist for. A clean cut: `jet_layout()`, `jet_var()` and
+  `set_partitions()` are no longer exported from here, and `tuple_indices()`
+  delegates to the one enumeration in numericals7, so the two copies that
+  could have disagreed no longer exist.
+
 # parameters7 0.4.0
 
 * Jets gain a composition rule and a vocabulary of functions, and can be

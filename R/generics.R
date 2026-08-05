@@ -500,22 +500,7 @@ param_tuple_indices <- function(s, order = 2L) {
 #'
 #' @keywords internal
 tuple_indices <- function(d, order = 2L) {
-  if (!order %in% 1:4) stop("'order' must be 1, 2, 3 or 4.", call. = FALSE)
-  if (d == 0L) return(list())
-  if (order == 1L) return(lapply(seq_len(d), as.integer))
-  if (order == 2L) {
-    # Diagonal first: the ordering is part of the contract, because it is the
-    # one a Hessian consumer indexes by.
-    out <- lapply(seq_len(d), function(k) c(k, k))
-    if (d > 1L) {
-      for (k in seq_len(d - 1L)) {
-        for (l in seq.int(k + 1L, d)) out[[length(out) + 1L]] <- c(k, l)
-      }
-    }
-    return(lapply(out, as.integer))
-  }
-  grid <- utils::combn(seq_len(d + order - 1L), order)
-  lapply(seq_len(ncol(grid)), function(j) {
-    as.integer(grid[, j] - seq_len(order) + 1L)
-  })
+  # One enumeration for the whole toolkit: delegating is what makes it
+  # impossible for this copy to disagree with the one a jet is keyed by.
+  numericals7::tuple_indices(d, order)
 }
