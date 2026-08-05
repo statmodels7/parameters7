@@ -30,4 +30,15 @@ keys a derivative list and nothing has to be reordered on the way out.
 
 ## See also
 
-[`jet_mul`](https://statmodels7.github.io/parameters7/reference/jet_mul.md)
+[`jet_var`](https://statmodels7.github.io/parameters7/reference/jet_var.md),
+[`Ops.jet`](https://statmodels7.github.io/parameters7/reference/Ops.jet.md)
+
+## Examples
+
+``` r
+lay <- jet_layout(2)
+lay$d
+#> [1] 2
+length(lay$tuples[[2]])
+#> [1] 3
+```

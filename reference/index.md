@@ -256,8 +256,6 @@ that the derivations can be followed from the code that implements them.
   : The Gamma Function of a Jet
 - [`jet_inv()`](https://statmodels7.github.io/parameters7/reference/jet_inv.md)
   : The Reciprocal of a Jet
-- [`jet_layout()`](https://statmodels7.github.io/parameters7/reference/jet_layout.md)
-  : The Bookkeeping a Jet Needs
 - [`jet_lgamma()`](https://statmodels7.github.io/parameters7/reference/jet_lgamma.md)
   : The Log-Gamma of a Jet
 - [`jet_log()`](https://statmodels7.github.io/parameters7/reference/jet_log.md)
@@ -270,8 +268,6 @@ that the derivations can be followed from the code that implements them.
   : The Square Root of a Jet
 - [`jet_trigamma()`](https://statmodels7.github.io/parameters7/reference/jet_trigamma.md)
   : The Trigamma of a Jet
-- [`jet_var()`](https://statmodels7.github.io/parameters7/reference/jet_var.md)
-  : A Jet for One Variable
 - [`leibniz_gram()`](https://statmodels7.github.io/parameters7/reference/leibniz_gram.md)
   : A Gram Product's Derivatives From Its Factor's
 - [`link_tag()`](https://statmodels7.github.io/parameters7/reference/link_tag.md)
@@ -540,8 +536,6 @@ that the derivations can be followed from the code that implements them.
   : Higher Derivatives of a Scaled Log-Pseudo-Determinant
 - [`scaled_scale()`](https://statmodels7.github.io/parameters7/reference/scaled_scale.md)
   : The Scale Behind a Free Vector, and Its Derivatives
-- [`set_partitions()`](https://statmodels7.github.io/parameters7/reference/set_partitions.md)
-  : The Set Partitions of the First n Integers
 - [`simplex_components()`](https://statmodels7.github.io/parameters7/reference/simplex_components.md)
   : Extract Named Components From Softmax Tensors
 - [`simplex_point()`](https://statmodels7.github.io/parameters7/reference/simplex_point.md)
@@ -560,3 +554,17 @@ that the derivations can be followed from the code that implements them.
   : Row and Chart Coordinate of Each Free Value
 - [`tuple_indices()`](https://statmodels7.github.io/parameters7/reference/tuple_indices.md)
   : The Index Tuples of a Given Width
+
+## Jets
+
+A jet is a value carried together with every partial derivative up to
+fourth order. Seeding one and writing a map in ordinary R is how a
+consumer obtains exact higher derivatives of a map without transcribing
+a chain rule.
+
+- [`jet_layout()`](https://statmodels7.github.io/parameters7/reference/jet_layout.md)
+  : The Bookkeeping a Jet Needs
+- [`jet_var()`](https://statmodels7.github.io/parameters7/reference/jet_var.md)
+  : A Jet for One Variable
+- [`set_partitions()`](https://statmodels7.github.io/parameters7/reference/set_partitions.md)
+  : The Set Partitions of the First n Integers
