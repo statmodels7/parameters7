@@ -233,23 +233,7 @@ S7::method(param_free, LogCholeskyParam) <- function(s, m, ...) {
 #' @return A named list of symmetric matrices.
 #' @keywords internal
 S7::method(param_d1, LogCholeskyParam) <- function(s, eta, ...) {
-  p <- s@dimension
-  pos <- s@param_params$positions
-  l <- chol_assemble(s, eta)
-
-  out <- vector("list", s@n_free)
-  names(out) <- s@free_names
-  for (k in seq_len(s@n_free)) {
-    lk <- matrix(0, p, p)
-    lk[pos$row[k], pos$col[k]] <- if (pos$on_diagonal[k]) {
-      l[pos$row[k], pos$col[k]]
-    } else {
-      1
-    }
-    a <- tcrossprod(lk, l)
-    out[[k]] <- name_dims(a + t(a), s)
-  }
-  out
+  chol_leibniz(s, eta, 1L)
 }
 
 
@@ -268,36 +252,7 @@ S7::method(param_d1, LogCholeskyParam) <- function(s, eta, ...) {
 #' @return A named list of symmetric matrices.
 #' @keywords internal
 S7::method(param_d2, LogCholeskyParam) <- function(s, eta, ...) {
-  p <- s@dimension
-  pos <- s@param_params$positions
-  l <- chol_assemble(s, eta)
-
-  dfac <- lapply(seq_len(s@n_free), function(k) {
-    lk <- matrix(0, p, p)
-    lk[pos$row[k], pos$col[k]] <- if (pos$on_diagonal[k]) {
-      l[pos$row[k], pos$col[k]]
-    } else {
-      1
-    }
-    lk
-  })
-
-  idx <- param_tuple_indices(s)
-  out <- vector("list", length(idx))
-  names(out) <- param_tuple_names(s)
-  for (i in seq_along(idx)) {
-    k <- idx[[i]][1L]
-    l2 <- idx[[i]][2L]
-    a <- tcrossprod(dfac[[k]], dfac[[l2]])
-    m <- a + t(a)
-    if (k == l2 && pos$on_diagonal[k]) {
-      # The factor bends only in a diagonal direction, and only in its own.
-      b <- tcrossprod(dfac[[k]], l)
-      m <- m + b + t(b)
-    }
-    out[[i]] <- name_dims(m, s)
-  }
-  out
+  chol_leibniz(s, eta, 2L)
 }
 
 
@@ -402,6 +357,34 @@ chol_dfactor <- function(s, l, ks) {
 #'
 #' @keywords internal
 chol_leibniz <- function(s, eta, order) {
+  l <- chol_assemble(s, eta)
+  idx <- param_tuple_indices(s, order)
+  tup <- matrix(unlist(idx, use.names = FALSE),
+                ncol = order, byrow = TRUE)
+  pos <- s@param_params$positions
+  chol_leibniz_cpp(s@dimension, tup, pos$row, pos$col, pos$on_diagonal, l,
+                   s@free_names, paste0("v", seq_len(s@dimension)))
+}
+
+#' The R Twin of the Compiled Leibniz Assembly
+#'
+#' @description
+#' The same components as \code{chol_leibniz_cpp}, built through the dense
+#' products of \code{\link{leibniz_gram}}. It is not the production route:
+#' the compiled kernel exploits that every derivative of the factor is a
+#' single-entry matrix, so each Leibniz term is one row, one column or one
+#' cell, and at \eqn{p = 8}, order 4, it measured four orders of magnitude
+#' faster. The twin is kept as the independent reference the tests compare
+#' against.
+#'
+#' @param s A \code{\link{LogCholeskyParam}} object.
+#' @param eta A numeric vector of free values.
+#' @param order The derivative order.
+#'
+#' @return A named list of symmetric matrices.
+#'
+#' @keywords internal
+.chol_leibniz_r <- function(s, eta, order) {
   l <- chol_assemble(s, eta)
   dfac <- function(ks) chol_dfactor(s, l, ks)
   idx <- param_tuple_indices(s, order)

@@ -23,9 +23,28 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// chol_leibniz_cpp
+List chol_leibniz_cpp(int p, IntegerMatrix tuples, IntegerVector row, IntegerVector col, LogicalVector ondiag, NumericMatrix L, CharacterVector free_names, CharacterVector dim_names);
+RcppExport SEXP _parameters7_chol_leibniz_cpp(SEXP pSEXP, SEXP tuplesSEXP, SEXP rowSEXP, SEXP colSEXP, SEXP ondiagSEXP, SEXP LSEXP, SEXP free_namesSEXP, SEXP dim_namesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type p(pSEXP);
+    Rcpp::traits::input_parameter< IntegerMatrix >::type tuples(tuplesSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type row(rowSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type col(colSEXP);
+    Rcpp::traits::input_parameter< LogicalVector >::type ondiag(ondiagSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type L(LSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type free_names(free_namesSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type dim_names(dim_namesSEXP);
+    rcpp_result_gen = Rcpp::wrap(chol_leibniz_cpp(p, tuples, row, col, ondiag, L, free_names, dim_names));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_parameters7_ar_taylor_cpp", (DL_FUNC) &_parameters7_ar_taylor_cpp, 3},
+    {"_parameters7_chol_leibniz_cpp", (DL_FUNC) &_parameters7_chol_leibniz_cpp, 8},
     {NULL, NULL, 0}
 };
 

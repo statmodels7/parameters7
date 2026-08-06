@@ -5,3 +5,7 @@ ar_taylor_cpp <- function(p, q, seeds) {
     .Call(`_parameters7_ar_taylor_cpp`, p, q, seeds)
 }
 
+chol_leibniz_cpp <- function(p, tuples, row, col, ondiag, L, free_names, dim_names) {
+    .Call(`_parameters7_chol_leibniz_cpp`, p, tuples, row, col, ondiag, L, free_names, dim_names)
+}
+

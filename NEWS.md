@@ -1,3 +1,14 @@
+# parameters7 0.7.0
+
+* The log-Cholesky derivative assembly is compiled. Every derivative of
+  the factor is a single-entry matrix, so each Leibniz term is one row,
+  one column or one cell rather than a dense product; `chol_leibniz_cpp`
+  exploits that and serves all four orders, `param_d1` and `param_d2`
+  included. Measured at p = 8: order 4 from 8.44 s to 0.28 s (30x, the
+  remainder being the 82,251 result matrices the contract returns),
+  order 2 from 6 ms to 1.2 ms. The dense R assembly stays as the twin
+  `.chol_leibniz_r`, compared at machine precision in the tests.
+
 # parameters7 0.6.0
 
 * `autoregressive()` no longer consumes jets: the Levinson-Durbin recursion
