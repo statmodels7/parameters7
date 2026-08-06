@@ -222,6 +222,8 @@ that the derivations can be followed from the code that implements them.
   : The Number of Diagonal Entries Each Free Value Owns
 - [`diag_owner()`](https://statmodels7.github.io/parameters7/reference/diag_owner.md)
   : The Free Value Each Diagonal Entry Belongs To
+- [`.chol_leibniz_r()`](https://statmodels7.github.io/parameters7/reference/dot-chol_leibniz_r.md)
+  : The R Twin of the Compiled Leibniz Assembly
 - [`econ_derivative()`](https://statmodels7.github.io/parameters7/reference/econ_derivative.md)
   : Derivative Components of an Economical Parameter
 - [`econ_logdet_derivative()`](https://statmodels7.github.io/parameters7/reference/econ_logdet_derivative.md)
