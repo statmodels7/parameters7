@@ -1,4 +1,6 @@
 #' @keywords internal
+#' @importFrom Rcpp sourceCpp
+#' @useDynLib parameters7, .registration = TRUE
 "_PACKAGE"
 
 ## usethis namespace: start

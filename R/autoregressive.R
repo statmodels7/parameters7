@@ -53,8 +53,9 @@ AutoregressiveParam <- S7::new_class("AutoregressiveParam",
 #' \eqn{\rho_h = \sum_j \phi_j \rho_{h-j}} for every lag beyond the order. The
 #' whole map from the partial autocorrelations to the matrix is therefore
 #' \strong{polynomial}, built from sums and products alone, and its
-#' derivatives to fourth order are obtained by carrying jets through the
-#' recursion rather than by expanding it.
+#' derivatives to fourth order are obtained by propagating the derivative
+#' arrays through the recursion in compiled code, the product rule written
+#' out per order, rather than by expanding it.
 #'
 #' Two quantities are closed form. The innovation variances of the
 #' Levinson-Durbin recursion give
@@ -152,83 +153,32 @@ autoregressive <- function(dimension, order,
 }
 
 
-#' The Levinson-Durbin Recursion, Carried in Jets
+#' The Levinson-Durbin Recursion With Its Derivatives
 #'
 #' @description
-#' From the partial autocorrelations as jets, the predictor coefficients of
-#' every order and the autocorrelations out to the dimension, each a jet in
-#' the free values.
+#' Runs the compiled recursion of \code{ar_taylor_cpp}: the scale and
+#' the partial autocorrelations enter as their link inverses with four
+#' derivatives each, and the autocorrelations, the coefficients and every
+#' partial derivative to fourth order come out as packed arrays.
 #'
 #' @details
-#' The recursion is sums and products only, so carrying jets through it gives
-#' every derivative to fourth order exactly. The coefficients of the last
-#' order are the autoregression's own, and the autocorrelations beyond the
-#' order come from the Yule-Walker equations.
-#'
-#' @param s An \code{\link{AutoregressiveParam}} object.
-#' @param r A list of \eqn{q} jets, the partial autocorrelations.
-#' @param lay A layout from \code{\link[numericals7]{jet_layout}}.
-#'
-#' @return A list with \code{phi}, the coefficient jets of the last order, and
-#'   \code{rho}, the autocorrelation jets from lag 0 to \code{dimension - 1}.
-#'
-#' @keywords internal
-ar_levinson <- function(s, r, lay) {
-  q <- s@param_params$order
-  p <- s@dimension
-  one <- numericals7::jet_const(1, lay)
-
-  phi <- list()
-  rho <- list(one)
-  for (k in seq_len(q)) {
-    new <- vector("list", k)
-    new[[k]] <- r[[k]]
-    if (k > 1L) {
-      for (j in seq_len(k - 1L)) {
-        new[[j]] <- phi[[j]] - r[[k]] * phi[[k - j]]
-      }
-    }
-    phi <- new
-    acc <- r[[k]]
-    if (k > 1L) {
-      for (j in seq_len(k - 1L)) {
-        acc <- acc + phi[[j]] * rho[[k - j + 1L]]
-      }
-    }
-    rho[[k + 1L]] <- acc
-  }
-  # beyond the order, the Yule-Walker equations carry the recursion on
-  if (p - 1L > q) {
-    for (h in seq.int(q + 1L, p - 1L)) {
-      acc <- numericals7::jet_const(0, lay)
-      for (j in seq_len(q)) {
-        acc <- acc + phi[[j]] * rho[[h - j + 1L]]
-      }
-      rho[[h + 1L]] <- acc
-    }
-  }
-  list(phi = phi, rho = rho)
-}
-
-
-#' The Jets an Autoregressive Parameter Is Built From
-#'
-#' @description
-#' The scale and the partial autocorrelations as jets, and the recursion's
-#' output, computed once for a free vector.
+#' The recursion is sums and products only, so the propagation rules are the
+#' product rule written out per order; every derivative is exact and nothing
+#' is differenced.
 #'
 #' @param s An \code{\link{AutoregressiveParam}} object.
 #' @param eta A numeric vector of free values.
 #'
-#' @return A list with \code{lay}, \code{scale}, \code{r}, \code{phi} and
-#'   \code{rho}.
+#' @return A list with \code{n}, the number of free values; \code{gamma}, a
+#'   matrix with one row per lag; and \code{phi}, one row per coefficient.
+#'   Each row packs the value, then the full derivative tensors of orders one
+#'   to four, in row-major order.
 #'
 #' @keywords internal
-ar_jets <- function(s, eta) {
+ar_taylor <- function(s, eta) {
   q <- s@param_params$order
-  lay <- numericals7::jet_layout(s@n_free)
   grab <- function(link, e) {
-    list(
+    c(
       linkfunctions7::linkinv(link, e),
       linkfunctions7::dlinkinv(link, e),
       linkfunctions7::d2linkinv(link, e),
@@ -236,37 +186,61 @@ ar_jets <- function(s, eta) {
       linkfunctions7::d4linkinv(link, e)
     )
   }
-  scale <- numericals7::jet_var(1L, grab(s@param_params$link_scale, eta[1L]), lay)
-  r <- lapply(seq_len(q), function(k) {
-    numericals7::jet_var(k + 1L, grab(s@param_params$link_pacf, eta[k + 1L]), lay)
-  })
-  ld <- ar_levinson(s, r, lay)
-  list(lay = lay, scale = scale, r = r, phi = ld$phi, rho = ld$rho)
+  seeds <- rbind(
+    grab(s@param_params$link_scale, eta[1L]),
+    t(vapply(seq_len(q), function(k) {
+      grab(s@param_params$link_pacf, eta[k + 1L])
+    }, numeric(5)))
+  )
+  out <- ar_taylor_cpp(s@dimension, q, seeds)
+  out$n <- q + 1L
+  out
 }
 
 
-#' The Matrix and Its Derivatives, From the Jets
+#' The Matrix and Its Derivatives, From the Packed Arrays
 #'
 #' @description
 #' Fills the Toeplitz matrix of the scaled autocorrelations, taking either the
-#' value or one derivative component from each jet.
+#' value column or one derivative component out of the packed rows of
+#' \code{\link{ar_taylor}}.
 #'
 #' @param s An \code{\link{AutoregressiveParam}} object.
-#' @param j The jets of \code{\link{ar_jets}}.
+#' @param tay The arrays of \code{\link{ar_taylor}}.
 #' @param order The derivative order, or 0 for the value.
-#' @param position Which component of that order.
+#' @param tuple The index tuple of that order, ignored at order 0.
 #'
 #' @return A symmetric numeric matrix.
 #'
 #' @keywords internal
-ar_assemble <- function(s, j, order = 0L, position = 1L) {
+ar_assemble <- function(s, tay, order = 0L, tuple = NULL) {
   p <- s@dimension
   lag <- abs(outer(seq_len(p), seq_len(p), "-"))
-  pick <- function(x) if (order == 0L) x$v else x$d[[order]][position]
-  vals <- vapply(seq_len(p), function(h) {
-    pick(j$scale * j$rho[[h]])
-  }, numeric(1))
+  vals <- tay$gamma[, ar_pack_col(tay$n, order, tuple)]
   matrix(vals[lag + 1L], p, p)
+}
+
+
+#' The Column of a Packed Derivative Record
+#'
+#' @description
+#' Where a derivative component sits in a row of \code{\link{ar_taylor}}'s
+#' output: the value first, then the tensors of orders one to four in
+#' row-major order.
+#'
+#' @param n The number of free values.
+#' @param order The derivative order, or 0 for the value.
+#' @param tuple The index tuple, 1-based.
+#'
+#' @return A single column index.
+#'
+#' @keywords internal
+ar_pack_col <- function(n, order = 0L, tuple = NULL) {
+  if (order == 0L) return(1L)
+  off <- 1L + cumsum(c(0L, n^(1:3)))[order]
+  idx <- 0L
+  for (t in tuple) idx <- idx * n + (t - 1L)
+  off + idx + 1L
 }
 
 
@@ -281,7 +255,7 @@ ar_assemble <- function(s, j, order = 0L, position = 1L) {
 #' @return A positive definite Toeplitz matrix.
 #' @keywords internal
 S7::method(param_value, AutoregressiveParam) <- function(s, eta, ...) {
-  name_dims(ar_assemble(s, ar_jets(s, eta)), s)
+  name_dims(ar_assemble(s, ar_taylor(s, eta)), s)
 }
 
 
@@ -289,7 +263,7 @@ S7::method(param_value, AutoregressiveParam) <- function(s, eta, ...) {
 #'
 #' @description
 #' Assembles one derivative order by reading the matching component out of
-#' every jet.
+#' the packed arrays.
 #'
 #' @param s An \code{\link{AutoregressiveParam}} object.
 #' @param eta A numeric vector of free values.
@@ -299,12 +273,12 @@ S7::method(param_value, AutoregressiveParam) <- function(s, eta, ...) {
 #'
 #' @keywords internal
 ar_derivative <- function(s, eta, order) {
-  j <- ar_jets(s, eta)
-  nm <- param_tuple_names(s, order)
-  out <- lapply(seq_along(nm), function(i) {
-    name_dims(ar_assemble(s, j, order, i), s)
+  tay <- ar_taylor(s, eta)
+  idx <- param_tuple_indices(s, order)
+  out <- lapply(idx, function(t) {
+    name_dims(ar_assemble(s, tay, order, t), s)
   })
-  stats::setNames(out, nm)
+  stats::setNames(out, param_tuple_names(s, order))
 }
 
 
@@ -312,8 +286,9 @@ ar_derivative <- function(s, eta, order) {
 #' @name param_d1.AutoregressiveParam
 #' @description
 #' Closed form at every order. The map from the partial autocorrelations to
-#' the matrix is polynomial, so jets carried through the Levinson-Durbin
-#' recursion give each derivative exactly; nothing is differenced.
+#' the matrix is polynomial, so the derivative arrays propagated through the
+#' Levinson-Durbin recursion give each derivative exactly; nothing is
+#' differenced.
 #' @param s An \code{\link{AutoregressiveParam}} object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
@@ -438,9 +413,10 @@ S7::method(param_free, AutoregressiveParam) <- function(s, m, ...) {
 ar_prediction <- function(s, eta) {
   p <- s@dimension
   q <- s@param_params$order
-  j <- ar_jets(s, eta)
-  r <- vapply(j$r, function(x) x$v, numeric(1))
-  v0 <- j$scale$v
+  r <- vapply(seq_len(q), function(k) {
+    linkfunctions7::linkinv(s@param_params$link_pacf, eta[k + 1L])
+  }, numeric(1))
+  v0 <- linkfunctions7::linkinv(s@param_params$link_scale, eta[1L])
 
   # the predictor coefficients of every order, from the same recursion
   coef <- vector("list", q)
@@ -493,9 +469,11 @@ S7::method(param_solve, AutoregressiveParam) <- function(s, eta, b = NULL, ...) 
 S7::method(param_logdet, AutoregressiveParam) <- function(s, eta, ...) {
   p <- s@dimension
   q <- s@param_params$order
-  j <- ar_jets(s, eta)
-  r <- vapply(j$r, function(x) x$v, numeric(1))
-  p * log(j$scale$v) + sum((p - seq_len(q)) * log(1 - r^2))
+  r <- vapply(seq_len(q), function(k) {
+    linkfunctions7::linkinv(s@param_params$link_pacf, eta[k + 1L])
+  }, numeric(1))
+  v0 <- linkfunctions7::linkinv(s@param_params$link_scale, eta[1L])
+  p * log(v0) + sum((p - seq_len(q)) * log(1 - r^2))
 }
 
 

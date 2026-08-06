@@ -2,24 +2,25 @@
 % Please edit documentation in R/autoregressive.R
 \name{ar_assemble}
 \alias{ar_assemble}
-\title{The Matrix and Its Derivatives, From the Jets}
+\title{The Matrix and Its Derivatives, From the Packed Arrays}
 \usage{
-ar_assemble(s, j, order = 0L, position = 1L)
+ar_assemble(s, tay, order = 0L, tuple = NULL)
 }
 \arguments{
 \item{s}{An \code{\link{AutoregressiveParam}} object.}
 
-\item{j}{The jets of \code{\link{ar_jets}}.}
+\item{tay}{The arrays of \code{\link{ar_taylor}}.}
 
 \item{order}{The derivative order, or 0 for the value.}
 
-\item{position}{Which component of that order.}
+\item{tuple}{The index tuple of that order, ignored at order 0.}
 }
 \value{
 A symmetric numeric matrix.
 }
 \description{
 Fills the Toeplitz matrix of the scaled autocorrelations, taking either the
-value or one derivative component from each jet.
+value column or one derivative component out of the packed rows of
+\code{\link{ar_taylor}}.
 }
 \keyword{internal}

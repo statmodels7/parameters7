@@ -1,6 +1,6 @@
 Package: parameters7
 Title: An S7 Framework for Constrained Parameters
-Version: 0.5.0
+Version: 0.6.0
 Authors@R:
     person("Giovanni", "Tinervia", , "giovannitinervia9@gmail.com", role = c("aut", "cre"))
 Description: Parametrizations of constrained parameter spaces as objects. A
@@ -23,8 +23,11 @@ Depends:
 Imports:
     linkfunctions7,
     numericals7,
+    Rcpp,
     S7,
     stats
+LinkingTo:
+    Rcpp
 Suggests:
     numDeriv,
     pkgdown,
@@ -38,6 +41,7 @@ Config/testthat/edition: 3
 Config/roxygen2/version: 8.0.0
 RoxygenNote: 7.3.3
 Collate: 
+    'RcppExports.R'
     'parameter_class.R'
     'generics.R'
     'numerical_fallbacks.R'

@@ -18,6 +18,6 @@ A named list of symmetric matrices.
 }
 \description{
 Assembles one derivative order by reading the matching component out of
-every jet.
+the packed arrays.
 }
 \keyword{internal}

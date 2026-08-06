@@ -40,7 +40,7 @@ its interval. The Jacobians here are closed form: for the families whose
 coordinates are separate scalar links it is the diagonal of the inverse
 link's derivative, and for \code{\link{autoregressive}} the autoregressive
 coefficients carry their own derivatives out of the Levinson-Durbin
-recursion, which is already run in jets.
+recursion, which already carries their derivatives.
 
 The base class declares nothing, so a family that has no quantity beyond
 the matrix it builds loses nothing by saying so: the matrix itself is what

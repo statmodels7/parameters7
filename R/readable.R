@@ -27,7 +27,7 @@ NULL
 #' coordinates are separate scalar links it is the diagonal of the inverse
 #' link's derivative, and for \code{\link{autoregressive}} the autoregressive
 #' coefficients carry their own derivatives out of the Levinson-Durbin
-#' recursion, which is already run in jets.
+#' recursion, which already carries their derivatives.
 #'
 #' The base class declares nothing, so a family that has no quantity beyond
 #' the matrix it builds loses nothing by saying so: the matrix itself is what
@@ -212,9 +212,10 @@ S7::method(param_readable, SimplexParam) <- function(s, eta, ...) {
 #' @details
 #' The coefficients are the quantity an autoregression is usually reported in
 #' and are not obtainable from the covariance the fit prints. They come out of
-#' the Levinson-Durbin recursion the family already runs in jets, so their
-#' derivatives with respect to every free value are read off the first-order
-#' component of those jets rather than computed again. The stationary region
+#' the Levinson-Durbin recursion the family already propagates derivatives
+#' through, so their derivatives with respect to every free value are read
+#' off the first-order block of those arrays rather than computed again. The
+#' stationary region
 #' in the coefficients is not a box, so their intervals are built on the
 #' identity scale: no scalar transformation expresses the constraint they are
 #' under, and an interval that respected it would not be an interval.
@@ -229,13 +230,26 @@ S7::method(param_readable, SimplexParam) <- function(s, eta, ...) {
 #' @keywords internal
 S7::method(param_readable, AutoregressiveParam) <- function(s, eta, ...) {
   q <- s@param_params$order
-  j <- ar_jets(s, eta)
-  jets <- c(list(j$scale), j$r, j$phi)
+  n <- q + 1L
+  tay <- ar_taylor(s, eta)
+  scl <- c(
+    linkfunctions7::linkinv(s@param_params$link_scale, eta[1L]),
+    linkfunctions7::dlinkinv(s@param_params$link_scale, eta[1L])
+  )
+  rv <- vapply(seq_len(q), function(k) {
+    c(
+      linkfunctions7::linkinv(s@param_params$link_pacf, eta[k + 1L]),
+      linkfunctions7::dlinkinv(s@param_params$link_pacf, eta[k + 1L])
+    )
+  }, numeric(2))
+  rv <- matrix(rv, nrow = 2L)
   nm <- c("scale", paste0("pacf", seq_len(q)), paste0("phi", seq_len(q)))
   jac <- matrix(0, length(nm), s@n_free, dimnames = list(nm, NULL))
-  for (i in seq_along(jets)) jac[i, ] <- jets[[i]]$d[[1L]]
+  jac[1L, 1L] <- scl[2L]
+  for (k in seq_len(q)) jac[1L + k, 1L + k] <- rv[2L, k]
+  for (j in seq_len(q)) jac[1L + q + j, ] <- tay$phi[j, 1L + seq_len(n)]
   list(
-    value = stats::setNames(vapply(jets, function(x) x$v, numeric(1)), nm),
+    value = stats::setNames(c(scl[1L], rv[1L, ], tay$phi[, 1L]), nm),
     jacobian = jac,
     transform = stats::setNames(
       c("log", rep("atanh", q), rep("identity", q)), nm

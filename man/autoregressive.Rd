@@ -56,8 +56,9 @@ and the Yule-Walker equations at order \eqn{k} give
 \eqn{\rho_h = \sum_j \phi_j \rho_{h-j}} for every lag beyond the order. The
 whole map from the partial autocorrelations to the matrix is therefore
 \strong{polynomial}, built from sums and products alone, and its
-derivatives to fourth order are obtained by carrying jets through the
-recursion rather than by expanding it.
+derivatives to fourth order are obtained by propagating the derivative
+arrays through the recursion in compiled code, the product rule written
+out per order, rather than by expanding it.
 
 Two quantities are closed form. The innovation variances of the
 Levinson-Durbin recursion give

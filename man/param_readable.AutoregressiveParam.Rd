@@ -20,9 +20,10 @@ parametrize the family, and the autoregressive coefficients they produce.
 \details{
 The coefficients are the quantity an autoregression is usually reported in
 and are not obtainable from the covariance the fit prints. They come out of
-the Levinson-Durbin recursion the family already runs in jets, so their
-derivatives with respect to every free value are read off the first-order
-component of those jets rather than computed again. The stationary region
+the Levinson-Durbin recursion the family already propagates derivatives
+through, so their derivatives with respect to every free value are read
+off the first-order block of those arrays rather than computed again. The
+stationary region
 in the coefficients is not a box, so their intervals are built on the
 identity scale: no scalar transformation expresses the constraint they are
 under, and an interval that respected it would not be an interval.

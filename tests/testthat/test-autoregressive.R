@@ -50,8 +50,7 @@ test_that("the chart lands inside the stationary region", {
     s <- autoregressive(q + 4L, order = q)
     for (i in 1:20) {
       eta <- c(rnorm(1), rnorm(q, sd = 2.5))
-      phi <- vapply(parameters7:::ar_jets(s, eta)$phi, function(x) x$v,
-                    numeric(1))
+      phi <- parameters7:::ar_taylor(s, eta)$phi[, 1L]
       expect_gt(min(Mod(polyroot(c(1, -phi)))), 1)
       m <- param_value(s, eta)
       expect_gt(min(eigen(m, symmetric = TRUE, only.values = TRUE)$values), 0)
@@ -138,37 +137,46 @@ test_that("the validator passes over orders and dimensions", {
   }
 })
 
-test_that("jet arithmetic reproduces a polynomial's derivatives", {
-  # The machinery the whole family rests on now lives in numericals7 and is
-  # consumed through its exported seam and the operators; this checks the
-  # integration against a polynomial whose derivatives can be written down:
-  # f(x, y) = x^3 y^2.
-  lay <- numericals7::jet_layout(2L)
-  x <- 1.3
-  y <- -0.7
-  jx <- numericals7::jet_var(1L, list(x, 1, 0, 0, 0), lay)
-  jy <- numericals7::jet_var(2L, list(y, 1, 0, 0, 0), lay)
-  f <- jx * jx * jx * (jy * jy)
+test_that("the compiled propagation matches written derivatives at q = 1", {
+  # At order one the lag-one entry is gamma_1 = s(eta_1) r(eta_2), a product
+  # of two univariate link inverses, so every mixed partial to fourth order
+  # is a product of link derivatives that can be written down directly. This
+  # pins the compiled Leibniz rules against formulas sharing no code with
+  # them.
+  s <- autoregressive(2, order = 1)
+  eta <- c(0.4, 0.3)
+  ls <- s@param_params$link_scale
+  lr <- s@param_params$link_pacf
+  sd <- vapply(list(linkfunctions7::linkinv, linkfunctions7::dlinkinv,
+                    linkfunctions7::d2linkinv, linkfunctions7::d3linkinv,
+                    linkfunctions7::d4linkinv),
+               function(f) f(ls, eta[1L]), numeric(1))
+  rd <- vapply(list(linkfunctions7::linkinv, linkfunctions7::dlinkinv,
+                    linkfunctions7::d2linkinv, linkfunctions7::d3linkinv,
+                    linkfunctions7::d4linkinv),
+               function(f) f(lr, eta[2L]), numeric(1))
+  g1 <- function(a, b) sd[a + 1L] * rd[b + 1L]
 
-  at <- function(tup) {
-    o <- length(tup)
-    i <- which(vapply(numericals7::tuple_indices(2L, o), function(t) {
-      identical(sort(t), sort(as.integer(tup)))
-    }, logical(1)))
-    f$d[[o]][i]
+  pick <- function(d, order, tup) {
+    idx <- parameters7:::param_tuple_indices(s, order)
+    at <- which(vapply(idx, function(t) identical(sort(t), sort(tup)),
+                       logical(1)))
+    d[[at]][1L, 2L]
   }
-  expect_equal(f$v, x^3 * y^2)
-  expect_equal(at(1L), 3 * x^2 * y^2)
-  expect_equal(at(2L), 2 * x^3 * y)
-  expect_equal(at(c(1L, 1L)), 6 * x * y^2)
-  expect_equal(at(c(1L, 2L)), 6 * x^2 * y)
-  expect_equal(at(c(2L, 2L)), 2 * x^3)
-  expect_equal(at(c(1L, 1L, 1L)), 6 * y^2)
-  expect_equal(at(c(1L, 1L, 2L)), 12 * x * y)
-  expect_equal(at(c(1L, 2L, 2L)), 6 * x^2)
-  expect_equal(at(c(2L, 2L, 2L)), 0)
-  expect_equal(at(c(1L, 1L, 1L, 1L)), 0)
-  expect_equal(at(c(1L, 1L, 1L, 2L)), 12 * y)
-  expect_equal(at(c(1L, 1L, 2L, 2L)), 12 * x)
-  expect_equal(at(c(1L, 2L, 2L, 2L)), 0)
+
+  expect_equal(param_value(s, eta)[1L, 2L], g1(0, 0), tolerance = 1e-14)
+  d1 <- param_d1(s, eta)
+  expect_equal(pick(d1, 1L, 1L), g1(1, 0), tolerance = 1e-14)
+  expect_equal(pick(d1, 1L, 2L), g1(0, 1), tolerance = 1e-14)
+  d2 <- param_d2(s, eta)
+  expect_equal(pick(d2, 2L, c(1L, 1L)), g1(2, 0), tolerance = 1e-14)
+  expect_equal(pick(d2, 2L, c(1L, 2L)), g1(1, 1), tolerance = 1e-14)
+  expect_equal(pick(d2, 2L, c(2L, 2L)), g1(0, 2), tolerance = 1e-14)
+  d3 <- param_d3(s, eta)
+  expect_equal(pick(d3, 3L, c(1L, 2L, 2L)), g1(1, 2), tolerance = 1e-14)
+  expect_equal(pick(d3, 3L, c(2L, 2L, 2L)), g1(0, 3), tolerance = 1e-14)
+  d4 <- param_d4(s, eta)
+  expect_equal(pick(d4, 4L, c(1L, 1L, 2L, 2L)), g1(2, 2), tolerance = 1e-14)
+  expect_equal(pick(d4, 4L, c(1L, 2L, 2L, 2L)), g1(1, 3), tolerance = 1e-14)
+  expect_equal(pick(d4, 4L, c(2L, 2L, 2L, 2L)), g1(0, 4), tolerance = 1e-14)
 })
