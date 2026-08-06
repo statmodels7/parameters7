@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,6 +31,11 @@
       <small>Source: <a href="https://github.com/statmodels7/parameters7/blob/master/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.6.0" id="parameters7-060">parameters7 0.6.0<a class="anchor" aria-label="anchor" href="#parameters7-060"></a></h2>
+<ul><li>
+<code><a href="../reference/autoregressive.html">autoregressive()</a></code> no longer consumes jets: the Levinson-Durbin recursion now propagates its derivative arrays in compiled code (<code>ar_taylor_cpp</code>), each tracked quantity holding its value and full symmetric tensors to fourth order, combined by the product rule written out per order. The package gains its first compiled code, and Rcpp enters Imports and LinkingTo. <code><a href="../reference/ar_prediction.html">ar_prediction()</a></code> and the log-determinant, which need no derivatives, read the link inverses directly. The q = 1 derivatives are pinned in the tests against products of link derivatives, formulas that share no code with the kernel.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.5.0" id="parameters7-050">parameters7 0.5.0<a class="anchor" aria-label="anchor" href="#parameters7-050"></a></h2>
 <ul><li>The jets move to numericals7, where the toolkit’s numerical layer now lives: nothing about them concerned constrained parameters, and they landed here only because their first consumer – the Levinson-Durbin recursion – did. <code><a href="../reference/autoregressive.html">autoregressive()</a></code> now consumes them through numericals7, and its recursion is written on the arithmetic operators the jets dispatch on, which is what they exist for. A clean cut: <code>jet_layout()</code>, <code>jet_var()</code> and <code>set_partitions()</code> are no longer exported from here, and <code><a href="../reference/tuple_indices.html">tuple_indices()</a></code> delegates to the one enumeration in numericals7, so the two copies that could have disagreed no longer exist.</li>

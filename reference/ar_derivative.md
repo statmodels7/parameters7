@@ -1,7 +1,7 @@
 # Derivative Components of an Autoregressive Parameter
 
 Assembles one derivative order by reading the matching component out of
-every jet.
+the packed arrays.
 
 ## Usage
 

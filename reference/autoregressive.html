@@ -15,7 +15,7 @@ autocorrelations, so \(q + 1\) free values whatever the dimension."><meta proper
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -108,8 +108,9 @@ and the Yule-Walker equations at order \(k\) give
 \(\rho_h = \sum_j \phi_j \rho_{h-j}\) for every lag beyond the order. The
 whole map from the partial autocorrelations to the matrix is therefore
 <strong>polynomial</strong>, built from sums and products alone, and its
-derivatives to fourth order are obtained by carrying jets through the
-recursion rather than by expanding it.</p>
+derivatives to fourth order are obtained by propagating the derivative
+arrays through the recursion in compiled code, the product rule written
+out per order, rather than by expanding it.</p>
 <p>Two quantities are closed form. The innovation variances of the
 Levinson-Durbin recursion give
 $$\log\lvert M \rvert = p\log\gamma_0

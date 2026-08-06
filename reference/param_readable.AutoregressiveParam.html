@@ -9,7 +9,7 @@ parametrize the family, and the autoregressive coefficients they produce."><meta
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,9 +64,10 @@ parametrize the family, and the autoregressive coefficients they produce.</p>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The coefficients are the quantity an autoregression is usually reported in
 and are not obtainable from the covariance the fit prints. They come out of
-the Levinson-Durbin recursion the family already runs in jets, so their
-derivatives with respect to every free value are read off the first-order
-component of those jets rather than computed again. The stationary region
+the Levinson-Durbin recursion the family already propagates derivatives
+through, so their derivatives with respect to every free value are read
+off the first-order block of those arrays rather than computed again. The
+stationary region
 in the coefficients is not a box, so their intervals are built on the
 identity scale: no scalar transformation expresses the constraint they are
 under, and an interval that respected it would not be an interval.</p>

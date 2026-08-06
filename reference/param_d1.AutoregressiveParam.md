@@ -1,8 +1,9 @@
 # Derivatives of an Autoregressive Parameter
 
 Closed form at every order. The map from the partial autocorrelations to
-the matrix is polynomial, so jets carried through the Levinson-Durbin
-recursion give each derivative exactly; nothing is differenced.
+the matrix is polynomial, so the derivative arrays propagated through
+the Levinson-Durbin recursion give each derivative exactly; nothing is
+differenced.
 
 ## Arguments
 

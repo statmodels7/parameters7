@@ -1,5 +1,19 @@
 # Changelog
 
+## parameters7 0.6.0
+
+- [`autoregressive()`](https://statmodels7.github.io/parameters7/reference/autoregressive.md)
+  no longer consumes jets: the Levinson-Durbin recursion now propagates
+  its derivative arrays in compiled code (`ar_taylor_cpp`), each tracked
+  quantity holding its value and full symmetric tensors to fourth order,
+  combined by the product rule written out per order. The package gains
+  its first compiled code, and Rcpp enters Imports and LinkingTo.
+  [`ar_prediction()`](https://statmodels7.github.io/parameters7/reference/ar_prediction.md)
+  and the log-determinant, which need no derivatives, read the link
+  inverses directly. The q = 1 derivatives are pinned in the tests
+  against products of link derivatives, formulas that share no code with
+  the kernel.
+
 ## parameters7 0.5.0
 
 - The jets move to numericals7, where the toolkit’s numerical layer now

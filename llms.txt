@@ -627,17 +627,17 @@ that the derivations can be followed from the code that implements them.
 - [`ar1_pattern()`](https://statmodels7.github.io/parameters7/reference/ar1_pattern.md)
   : The Pattern of an AR(1) Parameter
 - [`ar_assemble()`](https://statmodels7.github.io/parameters7/reference/ar_assemble.md)
-  : The Matrix and Its Derivatives, From the Jets
+  : The Matrix and Its Derivatives, From the Packed Arrays
 - [`ar_derivative()`](https://statmodels7.github.io/parameters7/reference/ar_derivative.md)
   : Derivative Components of an Autoregressive Parameter
-- [`ar_jets()`](https://statmodels7.github.io/parameters7/reference/ar_jets.md)
-  : The Jets an Autoregressive Parameter Is Built From
-- [`ar_levinson()`](https://statmodels7.github.io/parameters7/reference/ar_levinson.md)
-  : The Levinson-Durbin Recursion, Carried in Jets
 - [`ar_logdet_derivative()`](https://statmodels7.github.io/parameters7/reference/ar_logdet_derivative.md)
   : Log-Determinant Components of an Autoregressive Parameter
+- [`ar_pack_col()`](https://statmodels7.github.io/parameters7/reference/ar_pack_col.md)
+  : The Column of a Packed Derivative Record
 - [`ar_prediction()`](https://statmodels7.github.io/parameters7/reference/ar_prediction.md)
   : The Prediction Form of an Autoregressive Parameter
+- [`ar_taylor()`](https://statmodels7.github.io/parameters7/reference/ar_taylor.md)
+  : The Levinson-Durbin Recursion With Its Derivatives
 - [`check_eta()`](https://statmodels7.github.io/parameters7/reference/check_eta.md)
   : Validate a Free Vector Against a Parameter
 - [`check_matrix()`](https://statmodels7.github.io/parameters7/reference/check_matrix.md)

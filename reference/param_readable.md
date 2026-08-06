@@ -60,7 +60,7 @@ families whose coordinates are separate scalar links it is the diagonal
 of the inverse link's derivative, and for
 [`autoregressive`](https://statmodels7.github.io/parameters7/reference/autoregressive.md)
 the autoregressive coefficients carry their own derivatives out of the
-Levinson-Durbin recursion, which is already run in jets.
+Levinson-Durbin recursion, which already carries their derivatives.
 
 The base class declares nothing, so a family that has no quantity beyond
 the matrix it builds loses nothing by saying so: the matrix itself is
