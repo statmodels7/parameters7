@@ -83,7 +83,7 @@ directly, so
 [`param_logdet`](https://statmodels7.github.io/parameters7/reference/param_logdet.md)
 and
 [`param_solve`](https://statmodels7.github.io/parameters7/reference/param_solve.md)
-do not exist for it by construction rather than by a run-time refusal.
+do not exist for it by construction rather than by a run-time rejection.
 
 ## See also
 

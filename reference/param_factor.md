@@ -29,7 +29,7 @@ A lower triangular numeric matrix with `s@dimension` rows and columns.
 
 ## Details
 
-Refused for a rank-deficient family, for the reason given in
+Rejected for a rank-deficient family, for the reason given in
 [`param_solve`](https://statmodels7.github.io/parameters7/reference/param_solve.md).
 
 ## See also

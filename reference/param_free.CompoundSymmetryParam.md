@@ -3,7 +3,7 @@
 The scale is the common diagonal entry and the correlation is the common
 off-diagonal one divided by it, both exact. A matrix whose diagonal is
 not constant, or whose off-diagonal entries are not all equal, is
-refused rather than averaged.
+rejected rather than averaged.
 
 ## Arguments
 

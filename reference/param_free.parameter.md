@@ -1,6 +1,6 @@
-# Refusal to Invert Without a Closed Form
+# Rejection to Invert Without a Closed Form
 
-The base class refuses rather than inverting the map numerically: an
+The base class rejects rather than inverting the map numerically: an
 optimization-based inverse would return a plausible \\\eta\\ for a
 matrix outside the set the family parametrizes.
 

@@ -43,7 +43,7 @@ the package has a numerical method registered on the
 class and is therefore available from this one alone.
 
 The generic validates the free vector before dispatching, so every
-method, including one written outside the package, refuses a vector of
+method, including one written outside the package, rejects a vector of
 the wrong length or one containing a non-finite value. The free scale
 has no boundary to reach, so a non-finite entry is a defect in the
 caller rather than a point of the domain.

@@ -33,7 +33,7 @@ A single number.
 
 One generic covers both because a consumer asks the same question of
 either: what normalizing constant does this matrix contribute. The
-object knows which answer is the right one, through its declared rank.
+object records which answer is the right one, through its declared rank.
 
 The sign in front of the result is the consumer's arithmetic. A gaussian
 log-density written in the covariance carries

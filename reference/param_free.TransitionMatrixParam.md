@@ -1,6 +1,6 @@
 # Free Vector of a Transition Matrix Parameter
 
-The additive log-ratio of each row, exact; refused when any row is
+The additive log-ratio of each row, exact; rejected when any row is
 outside the open simplex or fails to sum to one.
 
 ## Arguments

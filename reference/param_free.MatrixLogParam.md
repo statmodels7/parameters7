@@ -1,7 +1,7 @@
 # Free Vector of a Matrix Logarithm Parameter
 
 The matrix logarithm by eigendecomposition, exact for a symmetric
-positive definite input and refused otherwise.
+positive definite input and rejected otherwise.
 
 ## Arguments
 

@@ -31,14 +31,13 @@ A numeric vector of length `s@n_free`, named by `s@free_names`.
 
 ## Details
 
-Exact or refused, never obtained by optimization. A generic
+Implemented exactly or not at all, never by optimization. An
 optimization-based inverse would return a plausible \\\eta\\ for a
-matrix outside the set, which is a wrong answer wearing the shape of a
-right one. A family whose map has no closed-form inverse refuses
-instead, and the base class refuses on behalf of any parameter that does
-not implement this. A value outside the set – a matrix that is not
-positive definite, a vector off the simplex – is refused rather than
-repaired.
+matrix outside the set, indistinguishable from a correct answer. A
+family whose map has no closed-form inverse signals an error, and the
+base class does so on behalf of any parameter that does not implement
+this. A value outside the set – a matrix that is not positive definite,
+a vector off the simplex – is rejected rather than repaired.
 
 ## See also
 

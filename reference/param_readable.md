@@ -46,7 +46,7 @@ param_readable(s, eta, ...)
 - `label`:
 
   a single string naming the group, for a consumer laying out a printed
-  summary. The family supplies it because the family is what knows the
+  summary. The family supplies it because the family is what holds the
   reading.
 
 ## Details

@@ -3,7 +3,7 @@
 The angles read off the Cholesky factor, exact: \\\theta\_{i1}\\ is the
 arc cosine of \\L\_{i1}\\, and each subsequent angle divides out the
 sines already recovered. A matrix that is not a correlation matrix, or
-one whose factor reaches an angle of \\0\\ or \\\pi\\, is refused.
+one whose factor reaches an angle of \\0\\ or \\\pi\\, is rejected.
 
 ## Arguments
 

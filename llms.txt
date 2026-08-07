@@ -896,7 +896,7 @@ that the derivations can be followed from the code that implements them.
 - [`param_free.TransitionMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_free.TransitionMatrixParam.md)
   : Free Vector of a Transition Matrix Parameter
 - [`param_free.parameter`](https://statmodels7.github.io/parameters7/reference/param_free.parameter.md)
-  : Refusal to Invert Without a Closed Form
+  : Rejection to Invert Without a Closed Form
 - [`param_logdet.Ar1Param`](https://statmodels7.github.io/parameters7/reference/param_logdet.Ar1Param.md)
   : Log-Determinant of an AR(1) Parameter
 - [`param_logdet.AutoregressiveParam`](https://statmodels7.github.io/parameters7/reference/param_logdet.AutoregressiveParam.md)

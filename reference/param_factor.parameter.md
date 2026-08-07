@@ -2,7 +2,7 @@
 
 Fallback: the lower Cholesky factor of
 [`param_value`](https://statmodels7.github.io/parameters7/reference/param_value.md),
-refused when the matrix is not positive definite spectrally.
+rejected when the matrix is not positive definite spectrally.
 
 ## Arguments
 

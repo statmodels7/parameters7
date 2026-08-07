@@ -1,7 +1,7 @@
 # Free Vector of a Diagonal Parameter
 
 The link applied in the forward direction to the diagonal, after
-refusing a matrix that is not diagonal or not positive.
+rejecting a matrix that is not diagonal or not positive.
 
 ## Arguments
 

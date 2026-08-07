@@ -1,6 +1,6 @@
 # Free Vector of a Simplex Parameter
 
-The additive log-ratio, exact: \\\eta_a = \log(\pi_a/\pi_K)\\. Refused
+The additive log-ratio, exact: \\\eta_a = \log(\pi_a/\pi_K)\\. Rejected
 outside the open simplex or when the vector does not sum to one.
 
 ## Arguments

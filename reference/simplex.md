@@ -33,7 +33,7 @@ categorical indicator and follow from the one rule \\\partial_b \pi_a =
 closed form.
 
 The inverse is \\\eta_a = \log(\pi_a / \pi_K)\\, exact; a vector outside
-the open simplex, or one that does not sum to one, is refused rather
+the open simplex, or one that does not sum to one, is rejected rather
 than repaired, because a silent renormalization would mask the caller's
 defect.
 
