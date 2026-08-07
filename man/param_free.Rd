@@ -23,13 +23,13 @@ The inverse map: given a value in the family's set, returns the free vector
 that produces it.
 }
 \details{
-Exact or refused, never obtained by optimization. A generic
+Implemented exactly or not at all, never by optimization. An
 optimization-based inverse would return a plausible \eqn{\eta} for a matrix
-outside the set, which is a wrong answer wearing the shape of a right one.
-A family whose map has no closed-form inverse refuses instead, and the base
-class refuses on behalf of any parameter that does not implement this. A
+outside the set, indistinguishable from a correct answer.
+A family whose map has no closed-form inverse signals an error, and the base
+class does so on behalf of any parameter that does not implement this. A
 value outside the set -- a matrix that is not positive definite, a vector
-off the simplex -- is refused rather than repaired.
+off the simplex -- is rejected rather than repaired.
 }
 \examples{
 s <- log_cholesky(2)

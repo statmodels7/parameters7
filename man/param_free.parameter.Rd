@@ -2,7 +2,7 @@
 % Please edit documentation in R/numerical_fallbacks.R
 \name{param_free.parameter}
 \alias{param_free.parameter}
-\title{Refusal to Invert Without a Closed Form}
+\title{Rejection to Invert Without a Closed Form}
 \arguments{
 \item{s}{A \code{\link{parameter}} object.}
 
@@ -14,7 +14,7 @@
 Never returns; raises an error.
 }
 \description{
-The base class refuses rather than inverting the map numerically: an
+The base class rejects rather than inverting the map numerically: an
 optimization-based inverse would return a plausible \eqn{\eta} for a matrix
 outside the set the family parametrizes.
 }

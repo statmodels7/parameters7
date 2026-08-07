@@ -14,7 +14,7 @@
 A named numeric vector of free values.
 }
 \description{
-The additive log-ratio, exact: \eqn{\eta_a = \log(\pi_a/\pi_K)}. Refused
+The additive log-ratio, exact: \eqn{\eta_a = \log(\pi_a/\pi_K)}. Rejected
 outside the open simplex or when the vector does not sum to one.
 }
 \keyword{internal}

@@ -15,6 +15,6 @@ A named numeric vector of free values.
 }
 \description{
 The matrix logarithm by eigendecomposition, exact for a symmetric positive
-definite input and refused otherwise.
+definite input and rejected otherwise.
 }
 \keyword{internal}

@@ -24,7 +24,7 @@ Returns \eqn{M^{-1} B}, computed through a factor rather than through an
 explicit inverse.
 }
 \details{
-A rank-deficient parameter refuses rather than returning a pseudo-inverse.
+A rank-deficient parameter rejects rather than returning a pseudo-inverse.
 What a consumer of an improper prior needs is the quadratic form and the
 log pseudo-determinant -- the penalized normal equations invert
 \eqn{X^\top X + \lambda P}, which is non-singular even when \eqn{P} is not,

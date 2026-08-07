@@ -100,7 +100,7 @@ parameter <- S7::new_class(
 #' A parameter that is not a matrix -- \code{\link{simplex}}, a
 #' \code{\link{transition_matrix}} -- inherits from \code{\link{parameter}}
 #' directly, so \code{\link{param_logdet}} and \code{\link{param_solve}} do
-#' not exist for it by construction rather than by a run-time refusal.
+#' not exist for it by construction rather than by a run-time rejection.
 #'
 #' @param param_name A single character string naming the family.
 #' @param n_free The length \eqn{d} of the free vector.

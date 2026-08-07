@@ -199,7 +199,7 @@ S7::method(param_value, DiagMatrixParam) <- function(s, eta, ...) {
 #' @title Free Vector of a Diagonal Parameter
 #' @name param_free.DiagMatrixParam
 #' @description
-#' The link applied in the forward direction to the diagonal, after refusing a
+#' The link applied in the forward direction to the diagonal, after rejecting a
 #' matrix that is not diagonal or not positive.
 #' @param s A \code{\link{DiagMatrixParam}} object.
 #' @param m A diagonal positive definite matrix.

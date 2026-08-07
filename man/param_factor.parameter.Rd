@@ -15,7 +15,7 @@ A lower triangular numeric matrix.
 }
 \description{
 Fallback: the lower Cholesky factor of
-\code{\link{param_value}}, refused when the matrix is not positive
+\code{\link{param_value}}, rejected when the matrix is not positive
 definite spectrally.
 }
 \keyword{internal}

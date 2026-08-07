@@ -39,7 +39,7 @@ SimplexParam <- S7::new_class("SimplexParam", parent = parameter)
 #' All four orders are closed form.
 #'
 #' The inverse is \eqn{\eta_a = \log(\pi_a / \pi_K)}, exact; a vector outside
-#' the open simplex, or one that does not sum to one, is refused rather than
+#' the open simplex, or one that does not sum to one, is rejected rather than
 #' repaired, because a silent renormalization would mask the caller's defect.
 #'
 #' Stick-breaking is the other common chart and was not chosen: its
@@ -233,7 +233,7 @@ S7::method(param_value, SimplexParam) <- function(s, eta, ...) {
 #' @title Free Vector of a Simplex Parameter
 #' @name param_free.SimplexParam
 #' @description
-#' The additive log-ratio, exact: \eqn{\eta_a = \log(\pi_a/\pi_K)}. Refused
+#' The additive log-ratio, exact: \eqn{\eta_a = \log(\pi_a/\pi_K)}. Rejected
 #' outside the open simplex or when the vector does not sum to one.
 #' @param s A \code{\link{SimplexParam}} object.
 #' @param m A probability vector of length \eqn{K}.

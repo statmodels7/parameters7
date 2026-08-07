@@ -327,7 +327,7 @@ S7::method(param_d4, AutoregressiveParam) <- function(s, eta, ...) {
 #' autocorrelations come from the Levinson-Durbin recursion run forwards on
 #' the autocorrelations. The matrix is then checked against the pattern those
 #' values imply, so a Toeplitz matrix that is not the covariance of an
-#' autoregression of this order is refused rather than fitted.
+#' autoregression of this order is rejected rather than fitted.
 #' @param s An \code{\link{AutoregressiveParam}} object.
 #' @param m A covariance matrix of a stationary autoregression.
 #' @param ... Unused.

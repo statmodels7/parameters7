@@ -116,7 +116,7 @@ S7::method(param_value, TransitionMatrixParam) <- function(s, eta, ...) {
 #' @title Free Vector of a Transition Matrix Parameter
 #' @name param_free.TransitionMatrixParam
 #' @description
-#' The additive log-ratio of each row, exact; refused when any row is outside
+#' The additive log-ratio of each row, exact; rejected when any row is outside
 #' the open simplex or fails to sum to one.
 #' @param s A \code{\link{TransitionMatrixParam}} object.
 #' @param m A \eqn{K \times K} row-stochastic matrix.

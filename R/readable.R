@@ -47,7 +47,7 @@ NULL
 #'       \code{"atanh"} or \code{"logit"};}
 #'     \item{\code{label}}{a single string naming the group, for a consumer
 #'       laying out a printed summary. The family supplies it because the
-#'       family is what knows the reading.}
+#'       family is what holds the reading.}
 #'   }
 #'
 #' @seealso \code{\link{param_value}}, \code{\link{autoregressive}}

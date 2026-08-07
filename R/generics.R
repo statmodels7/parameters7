@@ -16,7 +16,7 @@ NULL
 #' class and is therefore available from this one alone.
 #'
 #' The generic validates the free vector before dispatching, so every method,
-#' including one written outside the package, refuses a vector of the wrong
+#' including one written outside the package, rejects a vector of the wrong
 #' length or one containing a non-finite value. The free scale has no boundary
 #' to reach, so a non-finite entry is a defect in the caller rather than a
 #' point of the domain.
@@ -50,13 +50,13 @@ param_value <- S7::new_generic("param_value", "s", function(s, eta, ...) {
 #' that produces it.
 #'
 #' @details
-#' Exact or refused, never obtained by optimization. A generic
+#' Implemented exactly or not at all, never by optimization. An
 #' optimization-based inverse would return a plausible \eqn{\eta} for a matrix
-#' outside the set, which is a wrong answer wearing the shape of a right one.
-#' A family whose map has no closed-form inverse refuses instead, and the base
-#' class refuses on behalf of any parameter that does not implement this. A
+#' outside the set, indistinguishable from a correct answer.
+#' A family whose map has no closed-form inverse signals an error, and the base
+#' class does so on behalf of any parameter that does not implement this. A
 #' value outside the set -- a matrix that is not positive definite, a vector
-#' off the simplex -- is refused rather than repaired.
+#' off the simplex -- is rejected rather than repaired.
 #'
 #' @param s An object inheriting from class \code{\link{parameter}}.
 #' @param m A value of the family's shape: a symmetric matrix on the matrix
@@ -154,7 +154,7 @@ param_d2 <- S7::new_generic("param_d2", "s", function(s, eta, ...) {
 #'
 #' @details
 #' One generic covers both because a consumer asks the same question of either:
-#' what normalizing constant does this matrix contribute. The object knows
+#' what normalizing constant does this matrix contribute. The object records
 #' which answer is the right one, through its declared rank.
 #'
 #' The sign in front of the result is the consumer's arithmetic. A gaussian
@@ -254,7 +254,7 @@ param_d2logdet <- S7::new_generic("param_d2logdet", "s", function(s, eta, ...) {
 #' explicit inverse.
 #'
 #' @details
-#' A rank-deficient parameter refuses rather than returning a pseudo-inverse.
+#' A rank-deficient parameter rejects rather than returning a pseudo-inverse.
 #' What a consumer of an improper prior needs is the quadratic form and the
 #' log pseudo-determinant -- the penalized normal equations invert
 #' \eqn{X^\top X + \lambda P}, which is non-singular even when \eqn{P} is not,
@@ -307,7 +307,7 @@ param_solve <- S7::new_generic("param_solve", "s", function(s, eta, b = NULL, ..
 #' Returns a lower triangular \eqn{L} with \eqn{M = L L^\top}.
 #'
 #' @details
-#' Refused for a rank-deficient family, for the reason given in
+#' Rejected for a rank-deficient family, for the reason given in
 #' \code{\link{param_solve}}.
 #'
 #' @param s An object inheriting from class \code{\link{parameter}}.

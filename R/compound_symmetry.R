@@ -294,7 +294,7 @@ S7::method(param_value, CompoundSymmetryParam) <- function(s, eta, ...) {
 #' @description
 #' The scale is the common diagonal entry and the correlation is the common
 #' off-diagonal one divided by it, both exact. A matrix whose diagonal is not
-#' constant, or whose off-diagonal entries are not all equal, is refused
+#' constant, or whose off-diagonal entries are not all equal, is rejected
 #' rather than averaged.
 #' @param s A \code{\link{CompoundSymmetryParam}} object.
 #' @param m A compound-symmetric matrix.

@@ -382,7 +382,7 @@ S7::method(param_value, MatrixLogParam) <- function(s, eta, ...) {
 #' @name param_free.MatrixLogParam
 #' @description
 #' The matrix logarithm by eigendecomposition, exact for a symmetric positive
-#' definite input and refused otherwise.
+#' definite input and rejected otherwise.
 #' @param s A \code{\link{MatrixLogParam}} object.
 #' @param m A symmetric positive definite matrix.
 #' @param ... Unused.

@@ -414,7 +414,7 @@ S7::method(param_solve, matrix_parameter) <- function(s, eta, b = NULL, ...) {
 #' @title Default Factor
 #' @name param_factor.parameter
 #' @description Fallback: the lower Cholesky factor of
-#'   \code{\link{param_value}}, refused when the matrix is not positive
+#'   \code{\link{param_value}}, rejected when the matrix is not positive
 #'   definite spectrally.
 #' @param s A \code{\link{parameter}} object.
 #' @param eta A numeric vector of free values.
@@ -433,10 +433,10 @@ S7::method(param_factor, matrix_parameter) <- function(s, eta, ...) {
   l
 }
 
-#' @title Refusal to Invert Without a Closed Form
+#' @title Rejection to Invert Without a Closed Form
 #' @name param_free.parameter
 #' @description
-#' The base class refuses rather than inverting the map numerically: an
+#' The base class rejects rather than inverting the map numerically: an
 #' optimization-based inverse would return a plausible \eqn{\eta} for a matrix
 #' outside the set the family parametrizes.
 #' @param s A \code{\link{parameter}} object.

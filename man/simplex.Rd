@@ -28,7 +28,7 @@ cumulants of a categorical indicator and follow from the one rule
 All four orders are closed form.
 
 The inverse is \eqn{\eta_a = \log(\pi_a / \pi_K)}, exact; a vector outside
-the open simplex, or one that does not sum to one, is refused rather than
+the open simplex, or one that does not sum to one, is rejected rather than
 repaired, because a silent renormalization would mask the caller's defect.
 
 Stick-breaking is the other common chart and was not chosen: its

@@ -269,7 +269,7 @@ S7::method(param_factor, CorrelationParam) <- function(s, eta, ...) {
 #' The angles read off the Cholesky factor, exact: \eqn{\theta_{i1}} is the
 #' arc cosine of \eqn{L_{i1}}, and each subsequent angle divides out the sines
 #' already recovered. A matrix that is not a correlation matrix, or one whose
-#' factor reaches an angle of \eqn{0} or \eqn{\pi}, is refused.
+#' factor reaches an angle of \eqn{0} or \eqn{\pi}, is rejected.
 #' @param s A \code{\link{CorrelationParam}} object.
 #' @param m A correlation matrix.
 #' @param ... Unused.

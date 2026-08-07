@@ -21,7 +21,7 @@ columns.
 Returns a lower triangular \eqn{L} with \eqn{M = L L^\top}.
 }
 \details{
-Refused for a rank-deficient family, for the reason given in
+Rejected for a rank-deficient family, for the reason given in
 \code{\link{param_solve}}.
 }
 \examples{

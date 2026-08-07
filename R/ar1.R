@@ -155,7 +155,7 @@ S7::method(param_value, Ar1Param) <- function(s, eta, ...) {
 #' The scale is the common diagonal entry and the correlation is the first
 #' off-diagonal one divided by it, both exact; the rest of the matrix is then
 #' checked against the pattern those two imply, and a matrix that does not
-#' match is refused rather than fitted.
+#' match is rejected rather than fitted.
 #' @param s An \code{\link{Ar1Param}} object.
 #' @param m An AR(1) matrix.
 #' @param ... Unused.

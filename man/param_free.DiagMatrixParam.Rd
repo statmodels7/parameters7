@@ -14,7 +14,7 @@
 A named numeric vector of free values.
 }
 \description{
-The link applied in the forward direction to the diagonal, after refusing a
+The link applied in the forward direction to the diagonal, after rejecting a
 matrix that is not diagonal or not positive.
 }
 \keyword{internal}

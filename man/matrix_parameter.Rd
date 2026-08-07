@@ -56,7 +56,7 @@ matrix is not scale invariant while the null space is. See
 A parameter that is not a matrix -- \code{\link{simplex}}, a
 \code{\link{transition_matrix}} -- inherits from \code{\link{parameter}}
 directly, so \code{\link{param_logdet}} and \code{\link{param_solve}} do
-not exist for it by construction rather than by a run-time refusal.
+not exist for it by construction rather than by a run-time rejection.
 }
 \examples{
 S7::S7_inherits(log_cholesky(3), matrix_parameter)
