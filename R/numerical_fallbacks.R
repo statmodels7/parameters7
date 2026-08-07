@@ -447,7 +447,7 @@ S7::method(param_factor, matrix_parameter) <- function(s, eta, ...) {
 S7::method(param_free, parameter) <- function(s, m, ...) {
   stop(sprintf(paste0(
     "'%s' does not implement param_free(). The inverse map is exact or\n",
-    "  refused, never obtained by optimization, because a numerical inverse\n",
+    "  rejected, never obtained by optimization, because a numerical inverse\n",
     "  would return a plausible eta for a matrix outside the set."
   ), s@param_name), call. = FALSE)
 }

@@ -280,7 +280,7 @@ S7::method(param_free, CorrelationParam) <- function(s, m, ...) {
   if (max(abs(diag(m) - 1)) > 1e-8) {
     stop(paste0(
       "'m' does not have a unit diagonal, so it is not a correlation matrix.\n",
-      "  It is refused rather than rescaled."
+      "  It is rejected rather than rescaled."
     ), call. = FALSE)
   }
   l <- chol_pd(m)

@@ -179,7 +179,7 @@ S7::method(param_free, Ar1Param) <- function(s, m, ...) {
   if (max(abs(m - want)) > 1e-8 * scl) {
     stop(paste0(
       "'m' does not follow the geometric pattern its first two entries\n",
-      "  imply, so it is not AR(1). It is refused rather than fitted."
+      "  imply, so it is not AR(1). It is rejected rather than fitted."
     ), call. = FALSE)
   }
   stats::setNames(

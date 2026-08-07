@@ -348,7 +348,7 @@ S7::method(param_free, AutoregressiveParam) <- function(s, m, ...) {
   if (max(abs(m - d[1L] * matrix(rho[lag + 1L], p, p))) > 1e-8 * scl) {
     stop(paste0(
       "'m' is not Toeplitz, so it is not the covariance of a stationary\n",
-      "  process. It is refused rather than averaged along its diagonals."
+      "  process. It is rejected rather than averaged along its diagonals."
     ), call. = FALSE)
   }
 

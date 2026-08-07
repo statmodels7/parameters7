@@ -134,7 +134,7 @@ S7::method(param_free, TransitionMatrixParam) <- function(s, m, ...) {
   if (max(abs(rowSums(m) - 1)) > 1e-8) {
     stop(paste0(
       "the rows of 'm' do not all sum to one, so it is not row stochastic.\n",
-      "  It is refused rather than renormalized."
+      "  It is rejected rather than renormalized."
     ), call. = FALSE)
   }
   out <- numeric(s@n_free)

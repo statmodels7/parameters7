@@ -314,7 +314,7 @@ S7::method(param_free, CompoundSymmetryParam) <- function(s, m, ...) {
   if (diff(range(off)) > 1e-8 * scl) {
     stop(paste0(
       "the off-diagonal entries of 'm' are not all equal, so it is not\n",
-      "  compound symmetric. It is refused rather than averaged."
+      "  compound symmetric. It is rejected rather than averaged."
     ), call. = FALSE)
   }
   stats::setNames(

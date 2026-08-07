@@ -252,7 +252,7 @@ S7::method(param_free, SimplexParam) <- function(s, m, ...) {
   }
   if (abs(sum(m) - 1) > 1e-8) {
     stop(paste0(
-      "'m' does not sum to one, so it is not on the simplex. It is refused\n",
+      "'m' does not sum to one, so it is not on the simplex. It is rejected\n",
       "  rather than renormalized, because a silent repair would mask the\n",
       "  caller's defect."
     ), call. = FALSE)
