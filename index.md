@@ -38,7 +38,7 @@ statistical modeling, alongside
 pak::pak("statmodels7/parameters7")
 ```
 
-Or the whole toolkit at once, which also installs the four sibling
+Or the whole toolkit at once, which also installs the six sibling
 packages:
 
 ``` r
