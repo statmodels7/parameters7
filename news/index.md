@@ -51,7 +51,7 @@
   own. `Ops` and `Math` dispatch on the class, so a map reads
   `mu / gamma(1 + 1 / sigma)` and carries every partial derivative to
   fourth order with it. Comparison operators and the non-smooth
-  functions are refused: a branch taken on a jet would keep one side’s
+  functions are rejected: a branch taken on a jet would keep one side’s
   derivatives and report them as the whole expression’s.
 
 - `jet_layout()`, `jet_var()` and `set_partitions()` are exported, which
