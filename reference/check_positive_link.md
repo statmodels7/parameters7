@@ -1,4 +1,4 @@
-# Refuse a Link That Does Not Reach the Positive Half Line
+# Reject a Link That Does Not Reach the Positive Half Line
 
 Checks that an object is a linkfunctions7 link whose bounds are
 contained in \\(0, \infty)\\.

@@ -647,7 +647,7 @@ that the derivations can be followed from the code that implements them.
 - [`check_parameter_vector()`](https://statmodels7.github.io/parameters7/reference/check_parameter_vector.md)
   : The Reduced Battery for a Parameter That Is Not a Matrix
 - [`check_positive_link()`](https://statmodels7.github.io/parameters7/reference/check_positive_link.md)
-  : Refuse a Link That Does Not Reach the Positive Half Line
+  : Reject a Link That Does Not Reach the Positive Half Line
 - [`check_row()`](https://statmodels7.github.io/parameters7/reference/check_row.md)
   : One Row of a Diagnostic Table
 - [`chol_assemble()`](https://statmodels7.github.io/parameters7/reference/chol_assemble.md)
