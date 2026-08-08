@@ -27,6 +27,10 @@ its own constrained set, and each owns the side of that matrix.
   : Construct a Simplex Parameter
 - [`transition_matrix()`](https://statmodels7.github.io/parameters7/reference/transition_matrix.md)
   : Construct a Transition Matrix Parameter
+- [`kron_identity()`](https://statmodels7.github.io/parameters7/reference/kron_identity.md)
+  : Construct a Block Replication of a Matrix Parameter
+- [`KronIdentityParam()`](https://statmodels7.github.io/parameters7/reference/KronIdentityParam.md)
+  : Identical Blocks of a Matrix Parameter
 
 ## The map and its inverse
 

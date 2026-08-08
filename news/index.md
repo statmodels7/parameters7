@@ -1,5 +1,12 @@
 # Changelog
 
+## parameters7 0.8.0
+
+- kron_identity(structure, m): m identical diagonal blocks of one matrix
+  parameter sharing a free vector, every contract quantity a linear lift
+  of the inner one. The first composition wrapper; built for grouped
+  random effects.
+
 ## parameters7 0.7.0
 
 - The log-Cholesky derivative assembly is compiled. Every derivative of
