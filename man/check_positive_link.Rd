@@ -2,7 +2,7 @@
 % Please edit documentation in R/diagonal_matrix.R
 \name{check_positive_link}
 \alias{check_positive_link}
-\title{Refuse a Link That Does Not Reach the Positive Half Line}
+\title{Reject a Link That Does Not Reach the Positive Half Line}
 \usage{
 check_positive_link(link)
 }

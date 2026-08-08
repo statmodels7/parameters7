@@ -118,7 +118,7 @@ scalar_matrix <- function(dimension, link = linkfunctions7::log_link(),
 }
 
 
-#' Refuse a Link That Does Not Reach the Positive Half Line
+#' Reject a Link That Does Not Reach the Positive Half Line
 #'
 #' @description
 #' Checks that an object is a \pkg{linkfunctions7} link whose bounds are
