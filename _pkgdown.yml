@@ -20,6 +20,8 @@ reference:
   - scaled_matrix
   - simplex
   - transition_matrix
+  - kron_identity
+  - KronIdentityParam
 
 - title: The map and its inverse
   contents:
