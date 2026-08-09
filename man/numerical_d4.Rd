@@ -21,6 +21,13 @@ fourth power of the step, so this is accurate to roughly four significant
 digits -- a starting point, and the reason every shipped family carries
 closed forms instead.
 }
+\details{
+The tensor-product stencil is the one written out under
+\code{\link{numerical_d3}}, with the multiplicities summing to four.
+Truncation is of order \eqn{h^{2}} and rounding of order
+\eqn{\varepsilon / h^{4}}, so the attainable accuracy is roughly
+\eqn{\varepsilon^{1/3}}.
+}
 \examples{
 numerical_d4(scalar_matrix(2), 0.3)
 }

@@ -21,6 +21,24 @@ supplies them, and a single mixed stencil on \code{\link{param_value}}
 where it does not.
 }
 \details{
+Writing \eqn{M(\eta)} for \code{\link{param_value}} and
+\eqn{\partial_k M} for its analytic first derivative, the entry
+\eqn{(k, l)} is
+
+\deqn{\partial_{kl} M \approx
+  \frac{\partial_k M(\eta + h e_l) - \partial_k M(\eta - h e_l)}{2h},}
+
+one central difference of an analytic quantity. Where the first
+derivatives are themselves numerical the four-point mixed stencil
+
+\deqn{\partial_{kl} M \approx \frac{M(\eta + h e_k + h e_l)
+  - M(\eta + h e_k - h e_l) - M(\eta - h e_k + h e_l)
+  + M(\eta - h e_k - h e_l)}{4h^{2}}, \qquad k \ne l,}
+
+is used instead, with the three-point second difference on the diagonal.
+Both are a single layer, and both carry a truncation error of order
+\eqn{h^{2}}.
+
 Differentiating the analytic first derivative costs one finite-difference
 layer rather than two, which is the rule the whole toolkit follows: never
 compose differences in the same variable. When the first derivatives are

@@ -17,7 +17,7 @@ chol_leibniz(s, eta, order)
 A named list of symmetric matrices.
 }
 \description{
-Assembles one derivative order by the Leibniz rule on \eqn{M = LL^	op},
+Assembles one derivative order by the Leibniz rule on \eqn{M = LL^\top},
 the factor's derivatives coming from \code{\link{chol_dfactor}}.
 }
 \seealso{

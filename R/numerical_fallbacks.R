@@ -236,6 +236,24 @@ numerical_d1 <- function(s, eta) {
 #' where it does not.
 #'
 #' @details
+#' Writing \eqn{M(\eta)} for \code{\link{param_value}} and
+#' \eqn{\partial_k M} for its analytic first derivative, the entry
+#' \eqn{(k, l)} is
+#'
+#' \deqn{\partial_{kl} M \approx
+#'   \frac{\partial_k M(\eta + h e_l) - \partial_k M(\eta - h e_l)}{2h},}
+#'
+#' one central difference of an analytic quantity. Where the first
+#' derivatives are themselves numerical the four-point mixed stencil
+#'
+#' \deqn{\partial_{kl} M \approx \frac{M(\eta + h e_k + h e_l)
+#'   - M(\eta + h e_k - h e_l) - M(\eta - h e_k + h e_l)
+#'   + M(\eta - h e_k - h e_l)}{4h^{2}}, \qquad k \ne l,}
+#'
+#' is used instead, with the three-point second difference on the diagonal.
+#' Both are a single layer, and both carry a truncation error of order
+#' \eqn{h^{2}}.
+#'
 #' Differentiating the analytic first derivative costs one finite-difference
 #' layer rather than two, which is the rule the whole toolkit follows: never
 #' compose differences in the same variable. When the first derivatives are
@@ -463,6 +481,22 @@ S7::method(param_free, parameter) <- function(s, m, ...) {
 #' higher-order one-dimensional factor; distinct components each contribute a
 #' central two-point factor, and the product is evaluated in one pass.
 #'
+#' @details
+#' Let the tuple's distinct components be \eqn{c_1, \dots, c_r} with
+#' multiplicities \eqn{m_1, \dots, m_r} summing to the order, and let
+#' \eqn{(o^{(m)}_i, w^{(m)}_i)} be the offsets and weights of the central
+#' stencil for an \eqn{m}-th derivative in one variable. The estimate is
+#' their tensor product,
+#'
+#' \deqn{\partial_{c_1}^{m_1} \cdots \partial_{c_r}^{m_r} M \approx
+#'   \frac{1}{\prod_{j} h_j^{m_j}}
+#'   \sum_{i_1, \dots, i_r} \left(\prod_{j=1}^{r} w^{(m_j)}_{i_j}\right)
+#'   M\Bigl(\eta + \textstyle\sum_{j=1}^{r} o^{(m_j)}_{i_j} h_j e_{c_j}\Bigr),}
+#'
+#' evaluated at \eqn{\prod_j (m_j + 1)} points of the map itself. Applying
+#' one such stencil rather than differencing a lower-order numerical
+#' derivative keeps the rounding at a single layer.
+#'
 #' @param s A \code{\link{parameter}} object.
 #' @param eta A numeric vector of free values.
 #'
@@ -495,6 +529,13 @@ numerical_d3 <- function(s, eta) {
 #' fourth power of the step, so this is accurate to roughly four significant
 #' digits -- a starting point, and the reason every shipped family carries
 #' closed forms instead.
+#'
+#' @details
+#' The tensor-product stencil is the one written out under
+#' \code{\link{numerical_d3}}, with the multiplicities summing to four.
+#' Truncation is of order \eqn{h^{2}} and rounding of order
+#' \eqn{\varepsilon / h^{4}}, so the attainable accuracy is roughly
+#' \eqn{\varepsilon^{1/3}}.
 #'
 #' @param s A \code{\link{parameter}} object.
 #' @param eta A numeric vector of free values.

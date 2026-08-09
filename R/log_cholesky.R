@@ -344,7 +344,7 @@ chol_dfactor <- function(s, l, ks) {
 #' Derivative Components of a Log-Cholesky Parameter
 #'
 #' @description
-#' Assembles one derivative order by the Leibniz rule on \eqn{M = LL^	op},
+#' Assembles one derivative order by the Leibniz rule on \eqn{M = LL^\top},
 #' the factor's derivatives coming from \code{\link{chol_dfactor}}.
 #'
 #' @param s A \code{\link{LogCholeskyParam}} object.

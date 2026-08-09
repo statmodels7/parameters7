@@ -22,6 +22,22 @@ whatever the family implements. A repeated component uses the matching
 higher-order one-dimensional factor; distinct components each contribute a
 central two-point factor, and the product is evaluated in one pass.
 }
+\details{
+Let the tuple's distinct components be \eqn{c_1, \dots, c_r} with
+multiplicities \eqn{m_1, \dots, m_r} summing to the order, and let
+\eqn{(o^{(m)}_i, w^{(m)}_i)} be the offsets and weights of the central
+stencil for an \eqn{m}-th derivative in one variable. The estimate is
+their tensor product,
+
+\deqn{\partial_{c_1}^{m_1} \cdots \partial_{c_r}^{m_r} M \approx
+  \frac{1}{\prod_{j} h_j^{m_j}}
+  \sum_{i_1, \dots, i_r} \left(\prod_{j=1}^{r} w^{(m_j)}_{i_j}\right)
+  M\Bigl(\eta + \textstyle\sum_{j=1}^{r} o^{(m_j)}_{i_j} h_j e_{c_j}\Bigr),}
+
+evaluated at \eqn{\prod_j (m_j + 1)} points of the map itself. Applying
+one such stencil rather than differencing a lower-order numerical
+derivative keeps the rounding at a single layer.
+}
 \examples{
 numerical_d3(scalar_matrix(2), 0.3)
 }
