@@ -29,6 +29,21 @@ param_d4(s, eta, ...)
 
 A named list, keyed as `param_tuple_names(s, 4)`.
 
+## Details
+
+The entry keyed \\k:l:m:n\\ is
+
+\$\$\frac{\partial^{4} M(\eta)}
+{\partial\eta_k\\\partial\eta_l\\\partial\eta_m\\\partial\eta_n},\$\$
+
+a matrix of the same shape as \\M(\eta)\\. The derivative is symmetric
+in its indices, so only the distinct multi-indices are returned, which
+is what
+[`param_tuple_names`](https://statmodels7.github.io/parameters7/reference/param_tuple_names.md)
+enumerates. Fourth order is where the contract stops: it is what a
+fourth-order chain rule through a link needs, and nothing in the toolkit
+asks for more.
+
 ## See also
 
 [`param_d3`](https://statmodels7.github.io/parameters7/reference/param_d3.md)

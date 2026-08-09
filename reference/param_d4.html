@@ -65,6 +65,17 @@ param_tuple_names(s, 4), each shaped like the value."><meta property="og:image" 
     <p>A named list, keyed as <code>param_tuple_names(s, 4)</code>.</p>
     </div>
     <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>The entry keyed \(k:l:m:n\) is</p>
+<p>$$\frac{\partial^{4} M(\eta)}
+  {\partial\eta_k\,\partial\eta_l\,\partial\eta_m\,\partial\eta_n},$$</p>
+<p>a matrix of the same shape as \(M(\eta)\). The derivative is symmetric
+in its indices, so only the distinct multi-indices are returned, which is
+what <code><a href="param_tuple_names.html">param_tuple_names</a></code> enumerates. Fourth order is where the
+contract stops: it is what a fourth-order chain rule through a link
+needs, and nothing in the toolkit asks for more.</p>
+    </div>
+    <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="param_d3.html">param_d3</a></code></p></div>
     </div>

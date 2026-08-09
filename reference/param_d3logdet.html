@@ -67,6 +67,20 @@ param_tuple_names of the matching order."><meta property="og:image" content="htt
     <p>A named numeric vector.</p>
     </div>
     <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>They follow from the second derivative of <code><a href="param_d2logdet.html">param_d2logdet</a></code>
+by the same two rules, applied again: the trace is linear, and</p>
+<p>$$\partial_m M^{-1} = -M^{-1}(\partial_m M)M^{-1}.$$</p>
+<p>Every term of the result is therefore a trace of an alternating product
+\(M^{-1}(\partial_{I_1}M)M^{-1}(\partial_{I_2}M)\cdots\), one factor
+per block of a partition of the index set, with the sign and the
+multiplicity the two rules produce. The expansion is not transcribed:
+the package differentiates <code><a href="param_d1.html">param_d1</a></code> through
+<code><a href="param_d4.html">param_d4</a></code> directly, and <code><a href="check_parameter.html">check_parameter</a></code> holds
+the result against a numerical differentiation of the order below, which
+shares none of its arithmetic.</p>
+    </div>
+    <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="param_d2logdet.html">param_d2logdet</a></code></p></div>
     </div>

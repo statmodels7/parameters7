@@ -65,6 +65,19 @@ log pseudo-determinant, keyed as <code><a href="param_tuple_names.html">param_tu
     <p>A named numeric vector, keyed as <code>param_tuple_names(s)</code>.</p>
     </div>
     <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>Differentiating \(\partial_k \log|M| = \mathrm{tr}(M^{-1}\partial_k M)\)
+once more, and using \(\partial_l M^{-1} = -M^{-1}(\partial_l M)M^{-1}\),</p>
+<p>$$\partial_{kl} \log|M| = \mathrm{tr}\!\left(M^{-1}\partial_{kl}M\right)
+  - \mathrm{tr}\!\left(M^{-1}(\partial_k M) M^{-1} (\partial_l M)\right),$$</p>
+<p>with the Moore-Penrose inverse in place of \(M^{-1}\) when the family is
+rank deficient. The second term is what makes the Hessian of the
+log-determinant differ from the trace of the second derivative of the
+matrix, and it is where a closed form is usually got wrong;
+<code><a href="check_parameter.html">check_parameter</a></code> compares this route against
+<code><a href="param_d2.html">param_d2</a></code>.</p>
+    </div>
+    <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="param_dlogdet.html">param_dlogdet</a></code></p></div>
     </div>
