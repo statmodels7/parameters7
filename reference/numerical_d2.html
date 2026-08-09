@@ -66,7 +66,20 @@ where it does not.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Differentiating the analytic first derivative costs one finite-difference
+    <p>Writing \(M(\eta)\) for <code><a href="param_value.html">param_value</a></code> and
+\(\partial_k M\) for its analytic first derivative, the entry
+\((k, l)\) is</p>
+<p>$$\partial_{kl} M \approx
+  \frac{\partial_k M(\eta + h e_l) - \partial_k M(\eta - h e_l)}{2h},$$</p>
+<p>one central difference of an analytic quantity. Where the first
+derivatives are themselves numerical the four-point mixed stencil</p>
+<p>$$\partial_{kl} M \approx \frac{M(\eta + h e_k + h e_l)
+  - M(\eta + h e_k - h e_l) - M(\eta - h e_k + h e_l)
+  + M(\eta - h e_k - h e_l)}{4h^{2}}, \qquad k \ne l,$$</p>
+<p>is used instead, with the three-point second difference on the diagonal.
+Both are a single layer, and both carry a truncation error of order
+\(h^{2}\).</p>
+<p>Differentiating the analytic first derivative costs one finite-difference
 layer rather than two, which is the rule the whole toolkit follows: never
 compose differences in the same variable. When the first derivatives are
 themselves numerical the two differences act on different components for an

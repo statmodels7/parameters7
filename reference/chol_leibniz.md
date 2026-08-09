@@ -1,6 +1,6 @@
 # Derivative Components of a Log-Cholesky Parameter
 
-Assembles one derivative order by the Leibniz rule on \\M = LL^ op\\,
+Assembles one derivative order by the Leibniz rule on \\M = LL^\top\\,
 the factor's derivatives coming from
 [`chol_dfactor`](https://statmodels7.github.io/parameters7/reference/chol_dfactor.md).
 

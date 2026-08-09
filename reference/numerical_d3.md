@@ -32,6 +32,23 @@ numerical_d3(s, eta)
 A named list keyed as
 [`param_tuple_names`](https://statmodels7.github.io/parameters7/reference/param_tuple_names.md)`(s, 3)`.
 
+## Details
+
+Let the tuple's distinct components be \\c_1, \dots, c_r\\ with
+multiplicities \\m_1, \dots, m_r\\ summing to the order, and let
+\\(o^{(m)}\_i, w^{(m)}\_i)\\ be the offsets and weights of the central
+stencil for an \\m\\-th derivative in one variable. The estimate is
+their tensor product,
+
+\$\$\partial\_{c_1}^{m_1} \cdots \partial\_{c_r}^{m_r} M \approx
+\frac{1}{\prod\_{j} h_j^{m_j}} \sum\_{i_1, \dots, i_r}
+\left(\prod\_{j=1}^{r} w^{(m_j)}\_{i_j}\right) M\Bigl(\eta +
+\textstyle\sum\_{j=1}^{r} o^{(m_j)}\_{i_j} h_j e\_{c_j}\Bigr),\$\$
+
+evaluated at \\\prod_j (m_j + 1)\\ points of the map itself. Applying
+one such stencil rather than differencing a lower-order numerical
+derivative keeps the rounding at a single layer.
+
 ## See also
 
 [`param_d3`](https://statmodels7.github.io/parameters7/reference/param_d3.md)

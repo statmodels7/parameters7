@@ -29,6 +29,25 @@ A named list of symmetric matrices, keyed as `param_tuple_names(s)`.
 
 ## Details
 
+Writing \\M(\eta)\\ for
+[`param_value`](https://statmodels7.github.io/parameters7/reference/param_value.md)
+and \\\partial_k M\\ for its analytic first derivative, the entry \\(k,
+l)\\ is
+
+\$\$\partial\_{kl} M \approx \frac{\partial_k M(\eta + h e_l) -
+\partial_k M(\eta - h e_l)}{2h},\$\$
+
+one central difference of an analytic quantity. Where the first
+derivatives are themselves numerical the four-point mixed stencil
+
+\$\$\partial\_{kl} M \approx \frac{M(\eta + h e_k + h e_l) - M(\eta + h
+e_k - h e_l) - M(\eta - h e_k + h e_l) + M(\eta - h e_k - h
+e_l)}{4h^{2}}, \qquad k \ne l,\$\$
+
+is used instead, with the three-point second difference on the diagonal.
+Both are a single layer, and both carry a truncation error of order
+\\h^{2}\\.
+
 Differentiating the analytic first derivative costs one
 finite-difference layer rather than two, which is the rule the whole
 toolkit follows: never compose differences in the same variable. When

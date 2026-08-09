@@ -34,6 +34,16 @@ A character vector, one entry per distinct component.
 
 ## Details
 
+A mixed partial derivative does not depend on the order in which the
+free values are differentiated, so the components at order \\k\\ are the
+multisets of size \\k\\ drawn from the \\n\\ free values, of which there
+are
+
+\$\$\binom{n + k - 1}{k},\$\$
+
+rather than the \\n^k\\ ordered tuples. That is the length of the vector
+returned and of every derivative list of that order.
+
 This exists so that nothing has to recover a tuple by splitting a key
 apart. Generating the keys and the index tuples from one enumeration
 cannot be fooled by a free name that contains the separator, which

@@ -30,6 +30,14 @@ numerical_d4(s, eta)
 A named list keyed as
 [`param_tuple_names`](https://statmodels7.github.io/parameters7/reference/param_tuple_names.md)`(s, 4)`.
 
+## Details
+
+The tensor-product stencil is the one written out under
+[`numerical_d3`](https://statmodels7.github.io/parameters7/reference/numerical_d3.md),
+with the multiplicities summing to four. Truncation is of order
+\\h^{2}\\ and rounding of order \\\varepsilon / h^{4}\\, so the
+attainable accuracy is roughly \\\varepsilon^{1/3}\\.
+
 ## See also
 
 [`param_d4`](https://statmodels7.github.io/parameters7/reference/param_d4.md)
