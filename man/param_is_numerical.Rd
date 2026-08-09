@@ -42,3 +42,6 @@ param_is_numerical(log_cholesky(3))
 param_is_numerical(diagonal_matrix(3))
 
 }
+\seealso{
+\code{\link{param_value}}, \code{\link{param_free}}
+}

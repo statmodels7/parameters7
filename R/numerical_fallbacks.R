@@ -71,6 +71,7 @@ is_base_param_class <- function(cls) {
 #' param_is_numerical(log_cholesky(3))
 #' param_is_numerical(diagonal_matrix(3))
 #'
+#' @seealso \code{\link{param_value}}, \code{\link{param_free}}
 #' @export
 param_is_numerical <- function(s) {
   cls <- S7::S7_class(s)
