@@ -42,6 +42,11 @@ derivatives chain through \\K - 1\\ nested logistic maps and are not
 symmetric in the categories, while the additive log-ratio's close over
 \\\pi\\ in one rule.
 
+## References
+
+Aitchison, J. (1986). *The Statistical Analysis of Compositional Data*.
+Chapman and Hall, London. The additive log-ratio chart is chapter 6.
+
 ## See also
 
 [`transition_matrix`](https://statmodels7.github.io/parameters7/reference/transition_matrix.md),
