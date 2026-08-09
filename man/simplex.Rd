@@ -45,6 +45,11 @@ eta <- c(0.5, -0.2)
 max(abs(param_free(s, param_value(s, eta)) - eta))
 
 }
+\references{
+Aitchison, J. (1986). \emph{The Statistical Analysis of Compositional
+Data}. Chapman and Hall, London. The additive log-ratio chart is
+chapter 6.
+}
 \seealso{
 \code{\link{transition_matrix}}, \code{\link{param_value}}
 }

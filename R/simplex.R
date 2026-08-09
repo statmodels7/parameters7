@@ -61,6 +61,11 @@ SimplexParam <- S7::new_class("SimplexParam", parent = parameter)
 #' eta <- c(0.5, -0.2)
 #' max(abs(param_free(s, param_value(s, eta)) - eta))
 #'
+#' @references
+#' Aitchison, J. (1986). \emph{The Statistical Analysis of Compositional
+#' Data}. Chapman and Hall, London. The additive log-ratio chart is
+#' chapter 6.
+#'
 #' @export
 simplex <- function(n_cat) {
   if (!is.numeric(n_cat) || length(n_cat) != 1L || !is.finite(n_cat) ||
