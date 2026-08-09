@@ -43,6 +43,11 @@ compares them with [`base::solve`](https://rdrr.io/r/base/solve.html)
 either way. Calling them numerical would suggest an approximation that
 is not there.
 
+## See also
+
+[`param_value`](https://statmodels7.github.io/parameters7/reference/param_value.md),
+[`param_free`](https://statmodels7.github.io/parameters7/reference/param_free.md)
+
 ## Examples
 
 ``` r
