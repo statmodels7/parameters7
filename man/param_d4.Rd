@@ -20,6 +20,18 @@ A named list, keyed as \code{param_tuple_names(s, 4)}.
 Returns the distinct fourth derivatives, keyed as
 \code{\link{param_tuple_names}(s, 4)}, each shaped like the value.
 }
+\details{
+The entry keyed \eqn{k:l:m:n} is
+
+\deqn{\frac{\partial^{4} M(\eta)}
+  {\partial\eta_k\,\partial\eta_l\,\partial\eta_m\,\partial\eta_n},}
+
+a matrix of the same shape as \eqn{M(\eta)}. The derivative is symmetric
+in its indices, so only the distinct multi-indices are returned, which is
+what \code{\link{param_tuple_names}} enumerates. Fourth order is where the
+contract stops: it is what a fourth-order chain rule through a link
+needs, and nothing in the toolkit asks for more.
+}
 \examples{
 param_d4(scalar_matrix(2), 0.3)
 

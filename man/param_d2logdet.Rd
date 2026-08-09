@@ -20,6 +20,20 @@ A named numeric vector, keyed as \code{param_tuple_names(s)}.
 Returns the distinct second derivatives of the log-determinant, or of the
 log pseudo-determinant, keyed as \code{\link{param_tuple_names}}.
 }
+\details{
+Differentiating \eqn{\partial_k \log|M| = \mathrm{tr}(M^{-1}\partial_k M)}
+once more, and using \eqn{\partial_l M^{-1} = -M^{-1}(\partial_l M)M^{-1}},
+
+\deqn{\partial_{kl} \log|M| = \mathrm{tr}\!\left(M^{-1}\partial_{kl}M\right)
+  - \mathrm{tr}\!\left(M^{-1}(\partial_k M) M^{-1} (\partial_l M)\right),}
+
+with the Moore-Penrose inverse in place of \eqn{M^{-1}} when the family is
+rank deficient. The second term is what makes the Hessian of the
+log-determinant differ from the trace of the second derivative of the
+matrix, and it is where a closed form is usually got wrong;
+\code{\link{check_parameter}} compares this route against
+\code{\link{param_d2}}.
+}
 \examples{
 param_d2logdet(log_cholesky(2), c(0.2, -0.1, 0.4))
 

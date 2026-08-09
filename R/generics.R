@@ -229,6 +229,20 @@ param_dlogdet <- S7::new_generic("param_dlogdet", "s", function(s, eta, ...) {
 #' Returns the distinct second derivatives of the log-determinant, or of the
 #' log pseudo-determinant, keyed as \code{\link{param_tuple_names}}.
 #'
+#' @details
+#' Differentiating \eqn{\partial_k \log|M| = \mathrm{tr}(M^{-1}\partial_k M)}
+#' once more, and using \eqn{\partial_l M^{-1} = -M^{-1}(\partial_l M)M^{-1}},
+#'
+#' \deqn{\partial_{kl} \log|M| = \mathrm{tr}\!\left(M^{-1}\partial_{kl}M\right)
+#'   - \mathrm{tr}\!\left(M^{-1}(\partial_k M) M^{-1} (\partial_l M)\right),}
+#'
+#' with the Moore-Penrose inverse in place of \eqn{M^{-1}} when the family is
+#' rank deficient. The second term is what makes the Hessian of the
+#' log-determinant differ from the trace of the second derivative of the
+#' matrix, and it is where a closed form is usually got wrong;
+#' \code{\link{check_parameter}} compares this route against
+#' \code{\link{param_d2}}.
+#'
 #' @param s An object inheriting from class \code{\link{parameter}}.
 #' @param eta A numeric vector of length \code{s@n_free}.
 #' @param ... Passed to methods.
@@ -373,6 +387,18 @@ param_d3 <- S7::new_generic("param_d3", "s", function(s, eta, ...) {
 #' Returns the distinct fourth derivatives, keyed as
 #' \code{\link{param_tuple_names}(s, 4)}, each shaped like the value.
 #'
+#' @details
+#' The entry keyed \eqn{k:l:m:n} is
+#'
+#' \deqn{\frac{\partial^{4} M(\eta)}
+#'   {\partial\eta_k\,\partial\eta_l\,\partial\eta_m\,\partial\eta_n},}
+#'
+#' a matrix of the same shape as \eqn{M(\eta)}. The derivative is symmetric
+#' in its indices, so only the distinct multi-indices are returned, which is
+#' what \code{\link{param_tuple_names}} enumerates. Fourth order is where the
+#' contract stops: it is what a fourth-order chain rule through a link
+#' needs, and nothing in the toolkit asks for more.
+#'
 #' @param s An object inheriting from class \code{\link{parameter}}.
 #' @param eta A numeric vector of length \code{s@n_free}.
 #' @param ... Passed to methods.
@@ -396,6 +422,21 @@ param_d4 <- S7::new_generic("param_d4", "s", function(s, eta, ...) {
 #' @description
 #' The higher derivatives of the log-(pseudo-)determinant, keyed as
 #' \code{\link{param_tuple_names}} of the matching order.
+#'
+#' @details
+#' They follow from the second derivative of \code{\link{param_d2logdet}}
+#' by the same two rules, applied again: the trace is linear, and
+#'
+#' \deqn{\partial_m M^{-1} = -M^{-1}(\partial_m M)M^{-1}.}
+#'
+#' Every term of the result is therefore a trace of an alternating product
+#' \eqn{M^{-1}(\partial_{I_1}M)M^{-1}(\partial_{I_2}M)\cdots}, one factor
+#' per block of a partition of the index set, with the sign and the
+#' multiplicity the two rules produce. The expansion is not transcribed:
+#' the package differentiates \code{\link{param_d1}} through
+#' \code{\link{param_d4}} directly, and \code{\link{check_parameter}} holds
+#' the result against a numerical differentiation of the order below, which
+#' shares none of its arithmetic.
 #'
 #' @param s An object inheriting from class \code{\link{matrix_parameter}}.
 #' @param eta A numeric vector of length \code{s@n_free}.
