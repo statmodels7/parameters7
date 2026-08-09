@@ -473,6 +473,16 @@ param_d4logdet <- S7::new_generic("param_d4logdet", "s", function(s, eta, ...) {
 #' lexicographic combinations with repetition.
 #'
 #' @details
+#' A mixed partial derivative does not depend on the order in which the
+#' free values are differentiated, so the components at order \eqn{k} are
+#' the multisets of size \eqn{k} drawn from the \eqn{n} free values, of
+#' which there are
+#'
+#' \deqn{\binom{n + k - 1}{k},}
+#'
+#' rather than the \eqn{n^k} ordered tuples. That is the length of the
+#' vector returned and of every derivative list of that order.
+#'
 #' This exists so that nothing has to recover a tuple by splitting a key
 #' apart. Generating the keys and the index tuples from one enumeration
 #' cannot be fooled by a free name that contains the separator, which
