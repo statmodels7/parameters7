@@ -501,6 +501,14 @@ its own constrained set, and each owns the side of that matrix.
   : Construct a Block Replication of a Matrix Parameter
 - [`KronIdentityParam()`](https://statmodels7.github.io/parameters7/reference/KronIdentityParam.md)
   : Identical Blocks of a Matrix Parameter
+- [`block_diag()`](https://statmodels7.github.io/parameters7/reference/block_diag.md)
+  : Construct a Block Diagonal of Matrix Parameters
+- [`BlockDiagParam()`](https://statmodels7.github.io/parameters7/reference/BlockDiagParam.md)
+  : Distinct Blocks of a Matrix Parameter
+- [`dr_prod()`](https://statmodels7.github.io/parameters7/reference/dr_prod.md)
+  : Construct a Covariance as Scales Times a Correlation
+- [`DrProdParam()`](https://statmodels7.github.io/parameters7/reference/DrProdParam.md)
+  : Scales Times a Correlation Matrix
 
 ## The map and its inverse
 
@@ -642,6 +650,12 @@ that the derivations can be followed from the code that implements them.
   : The Prediction Form of an Autoregressive Parameter
 - [`ar_taylor()`](https://statmodels7.github.io/parameters7/reference/ar_taylor.md)
   : The Levinson-Durbin Recursion With Its Derivatives
+- [`block_derivs_by_tuple()`](https://statmodels7.github.io/parameters7/reference/block_derivs_by_tuple.md)
+  : The Blocks' Derivative Components, Keyed by Local Index Tuple
+- [`block_diag_derivs()`](https://statmodels7.github.io/parameters7/reference/block_diag_derivs.md)
+  : Assemble a Block Diagonal's Derivatives of a Given Order
+- [`block_diag_logdet_derivs()`](https://statmodels7.github.io/parameters7/reference/block_diag_logdet_derivs.md)
+  : Assemble a Block Diagonal's Log-Determinant Derivatives
 - [`check_eta()`](https://statmodels7.github.io/parameters7/reference/check_eta.md)
   : Validate a Free Vector Against a Parameter
 - [`check_matrix()`](https://statmodels7.github.io/parameters7/reference/check_matrix.md)
@@ -698,6 +712,14 @@ that the derivations can be followed from the code that implements them.
   : The Free Value Each Diagonal Entry Belongs To
 - [`.chol_leibniz_r()`](https://statmodels7.github.io/parameters7/reference/dot-chol_leibniz_r.md)
   : The R Twin of the Compiled Leibniz Assembly
+- [`dr_prod_derivs()`](https://statmodels7.github.io/parameters7/reference/dr_prod_derivs.md)
+  : Assemble a Scales-Times-Correlation Derivative of a Given Order
+- [`dr_prod_logdet_derivs()`](https://statmodels7.github.io/parameters7/reference/dr_prod_logdet_derivs.md)
+  : Assemble a Scales-Times-Correlation Log-Determinant Derivative
+- [`dr_scale_derivs()`](https://statmodels7.github.io/parameters7/reference/dr_scale_derivs.md)
+  : Derivatives of the Inverse Link at Every Scale Coordinate
+- [`dr_scale_factor()`](https://statmodels7.github.io/parameters7/reference/dr_scale_factor.md)
+  : The Scale Factor of a Derivative Component
 - [`econ_derivative()`](https://statmodels7.github.io/parameters7/reference/econ_derivative.md)
   : Derivative Components of an Economical Parameter
 - [`econ_logdet_derivative()`](https://statmodels7.github.io/parameters7/reference/econ_logdet_derivative.md)
@@ -742,6 +764,11 @@ that the derivations can be followed from the code that implements them.
   [`param_d3.AutoregressiveParam`](https://statmodels7.github.io/parameters7/reference/param_d1.AutoregressiveParam.md)
   [`param_d4.AutoregressiveParam`](https://statmodels7.github.io/parameters7/reference/param_d1.AutoregressiveParam.md)
   : Derivatives of an Autoregressive Parameter
+- [`param_d1.BlockDiagParam`](https://statmodels7.github.io/parameters7/reference/param_d1.BlockDiagParam.md)
+  [`param_d2.BlockDiagParam`](https://statmodels7.github.io/parameters7/reference/param_d1.BlockDiagParam.md)
+  [`param_d3.BlockDiagParam`](https://statmodels7.github.io/parameters7/reference/param_d1.BlockDiagParam.md)
+  [`param_d4.BlockDiagParam`](https://statmodels7.github.io/parameters7/reference/param_d1.BlockDiagParam.md)
+  : Derivatives of a Block-Diagonal Parameter
 - [`param_d1.CompoundSymmetryParam`](https://statmodels7.github.io/parameters7/reference/param_d1.CompoundSymmetryParam.md)
   [`param_d2.CompoundSymmetryParam`](https://statmodels7.github.io/parameters7/reference/param_d1.CompoundSymmetryParam.md)
   [`param_d3.CompoundSymmetryParam`](https://statmodels7.github.io/parameters7/reference/param_d1.CompoundSymmetryParam.md)
@@ -751,6 +778,11 @@ that the derivations can be followed from the code that implements them.
   : First Derivatives of a Correlation Parameter
 - [`param_d1.DiagMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_d1.DiagMatrixParam.md)
   : First Derivatives of a Diagonal Parameter
+- [`param_d1.DrProdParam`](https://statmodels7.github.io/parameters7/reference/param_d1.DrProdParam.md)
+  [`param_d2.DrProdParam`](https://statmodels7.github.io/parameters7/reference/param_d1.DrProdParam.md)
+  [`param_d3.DrProdParam`](https://statmodels7.github.io/parameters7/reference/param_d1.DrProdParam.md)
+  [`param_d4.DrProdParam`](https://statmodels7.github.io/parameters7/reference/param_d1.DrProdParam.md)
+  : Derivatives of a Scales-Times-Correlation Parameter
 - [`param_d1.LogCholeskyParam`](https://statmodels7.github.io/parameters7/reference/param_d1.LogCholeskyParam.md)
   : First Derivatives of a Log-Cholesky Parameter
 - [`param_d1.MatrixLogParam`](https://statmodels7.github.io/parameters7/reference/param_d1.MatrixLogParam.md)
@@ -851,6 +883,11 @@ that the derivations can be followed from the code that implements them.
   [`param_d3logdet.AutoregressiveParam`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.AutoregressiveParam.md)
   [`param_d4logdet.AutoregressiveParam`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.AutoregressiveParam.md)
   : Log-Determinant Derivatives of an Autoregressive Parameter
+- [`param_dlogdet.BlockDiagParam`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.BlockDiagParam.md)
+  [`param_d2logdet.BlockDiagParam`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.BlockDiagParam.md)
+  [`param_d3logdet.BlockDiagParam`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.BlockDiagParam.md)
+  [`param_d4logdet.BlockDiagParam`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.BlockDiagParam.md)
+  : Log-Determinant Derivatives of a Block-Diagonal Parameter
 - [`param_dlogdet.CompoundSymmetryParam`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.CompoundSymmetryParam.md)
   [`param_d2logdet.CompoundSymmetryParam`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.CompoundSymmetryParam.md)
   [`param_d3logdet.CompoundSymmetryParam`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.CompoundSymmetryParam.md)
@@ -863,6 +900,11 @@ that the derivations can be followed from the code that implements them.
   : Log-Determinant Derivatives of a Correlation Parameter
 - [`param_dlogdet.DiagMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.DiagMatrixParam.md)
   : Log-Determinant Gradient of a Diagonal Parameter
+- [`param_dlogdet.DrProdParam`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.DrProdParam.md)
+  [`param_d2logdet.DrProdParam`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.DrProdParam.md)
+  [`param_d3logdet.DrProdParam`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.DrProdParam.md)
+  [`param_d4logdet.DrProdParam`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.DrProdParam.md)
+  : Log-Determinant Derivatives of a Scales-Times-Correlation Parameter
 - [`param_dlogdet.LogCholeskyParam`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.LogCholeskyParam.md)
   : Log-Determinant Gradient of a Log-Cholesky Parameter
 - [`param_dlogdet.MatrixLogParam`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.MatrixLogParam.md)
@@ -883,12 +925,16 @@ that the derivations can be followed from the code that implements them.
   : Free Vector of an AR(1) Parameter
 - [`param_free.AutoregressiveParam`](https://statmodels7.github.io/parameters7/reference/param_free.AutoregressiveParam.md)
   : Free Vector of an Autoregressive Parameter
+- [`param_free.BlockDiagParam`](https://statmodels7.github.io/parameters7/reference/param_free.BlockDiagParam.md)
+  : Free Vector of a Block-Diagonal Parameter
 - [`param_free.CompoundSymmetryParam`](https://statmodels7.github.io/parameters7/reference/param_free.CompoundSymmetryParam.md)
   : Free Vector of a Compound Symmetry Parameter
 - [`param_free.CorrelationParam`](https://statmodels7.github.io/parameters7/reference/param_free.CorrelationParam.md)
   : Free Vector of a Correlation Parameter
 - [`param_free.DiagMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_free.DiagMatrixParam.md)
   : Free Vector of a Diagonal Parameter
+- [`param_free.DrProdParam`](https://statmodels7.github.io/parameters7/reference/param_free.DrProdParam.md)
+  : Free Vector of a Scales-Times-Correlation Parameter
 - [`param_free.LogCholeskyParam`](https://statmodels7.github.io/parameters7/reference/param_free.LogCholeskyParam.md)
   : Free Vector of a Log-Cholesky Parameter
 - [`param_free.MatrixLogParam`](https://statmodels7.github.io/parameters7/reference/param_free.MatrixLogParam.md)
@@ -905,12 +951,16 @@ that the derivations can be followed from the code that implements them.
   : Log-Determinant of an AR(1) Parameter
 - [`param_logdet.AutoregressiveParam`](https://statmodels7.github.io/parameters7/reference/param_logdet.AutoregressiveParam.md)
   : Log-Determinant of an Autoregressive Parameter
+- [`param_logdet.BlockDiagParam`](https://statmodels7.github.io/parameters7/reference/param_logdet.BlockDiagParam.md)
+  : Log-Determinant of a Block-Diagonal Parameter
 - [`param_logdet.CompoundSymmetryParam`](https://statmodels7.github.io/parameters7/reference/param_logdet.CompoundSymmetryParam.md)
   : Log-Determinant of a Compound Symmetry Parameter
 - [`param_logdet.CorrelationParam`](https://statmodels7.github.io/parameters7/reference/param_logdet.CorrelationParam.md)
   : Log-Determinant of a Correlation Parameter
 - [`param_logdet.DiagMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_logdet.DiagMatrixParam.md)
   : Log-Determinant of a Diagonal Parameter
+- [`param_logdet.DrProdParam`](https://statmodels7.github.io/parameters7/reference/param_logdet.DrProdParam.md)
+  : Log-Determinant of a Scales-Times-Correlation Parameter
 - [`param_logdet.LogCholeskyParam`](https://statmodels7.github.io/parameters7/reference/param_logdet.LogCholeskyParam.md)
   : Log-Determinant of a Log-Cholesky Parameter
 - [`param_logdet.MatrixLogParam`](https://statmodels7.github.io/parameters7/reference/param_logdet.MatrixLogParam.md)
@@ -935,8 +985,14 @@ that the derivations can be followed from the code that implements them.
   : Solve of an AR(1) Parameter
 - [`param_solve.AutoregressiveParam`](https://statmodels7.github.io/parameters7/reference/param_solve.AutoregressiveParam.md)
   : Solve of an Autoregressive Parameter
+- [`param_solve.BlockDiagParam`](https://statmodels7.github.io/parameters7/reference/param_solve.BlockDiagParam.md)
+  [`param_factor.BlockDiagParam`](https://statmodels7.github.io/parameters7/reference/param_solve.BlockDiagParam.md)
+  : Solve and Factor of a Block-Diagonal Parameter
 - [`param_solve.CompoundSymmetryParam`](https://statmodels7.github.io/parameters7/reference/param_solve.CompoundSymmetryParam.md)
   : Solve of a Compound Symmetry Parameter
+- [`param_solve.DrProdParam`](https://statmodels7.github.io/parameters7/reference/param_solve.DrProdParam.md)
+  [`param_factor.DrProdParam`](https://statmodels7.github.io/parameters7/reference/param_solve.DrProdParam.md)
+  : Solve and Factor of a Scales-Times-Correlation Parameter
 - [`param_solve.MatrixLogParam`](https://statmodels7.github.io/parameters7/reference/param_solve.MatrixLogParam.md)
   : Solve of a Matrix Logarithm Parameter
 - [`param_solve.parameter`](https://statmodels7.github.io/parameters7/reference/param_solve.parameter.md)
@@ -947,12 +1003,16 @@ that the derivations can be followed from the code that implements them.
   : Value of an AR(1) Parameter
 - [`param_value.AutoregressiveParam`](https://statmodels7.github.io/parameters7/reference/param_value.AutoregressiveParam.md)
   : Value of an Autoregressive Parameter
+- [`param_value.BlockDiagParam`](https://statmodels7.github.io/parameters7/reference/param_value.BlockDiagParam.md)
+  : Value of a Block-Diagonal Parameter
 - [`param_value.CompoundSymmetryParam`](https://statmodels7.github.io/parameters7/reference/param_value.CompoundSymmetryParam.md)
   : Value of a Compound Symmetry Parameter
 - [`param_value.CorrelationParam`](https://statmodels7.github.io/parameters7/reference/param_value.CorrelationParam.md)
   : Value of a Correlation Parameter
 - [`param_value.DiagMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_value.DiagMatrixParam.md)
   : Matrix of a Diagonal Parameter
+- [`param_value.DrProdParam`](https://statmodels7.github.io/parameters7/reference/param_value.DrProdParam.md)
+  : Value of a Scales-Times-Correlation Parameter
 - [`param_value.LogCholeskyParam`](https://statmodels7.github.io/parameters7/reference/param_value.LogCholeskyParam.md)
   : Matrix of a Log-Cholesky Parameter
 - [`param_value.MatrixLogParam`](https://statmodels7.github.io/parameters7/reference/param_value.MatrixLogParam.md)
@@ -984,6 +1044,8 @@ that the derivations can be followed from the code that implements them.
   : Derivative Tensors of the Softmax Map
 - [`spectrum_pinv()`](https://statmodels7.github.io/parameters7/reference/spectrum_pinv.md)
   : Moore-Penrose Inverse From a Parameter's Spectrum
+- [`split_ranges()`](https://statmodels7.github.io/parameters7/reference/split_ranges.md)
+  : Consecutive Index Ranges of Given Widths
 - [`sweep_etas()`](https://statmodels7.github.io/parameters7/reference/sweep_etas.md)
   : Free Vectors to Sweep a Parameter Over
 - [`tagged_name()`](https://statmodels7.github.io/parameters7/reference/tagged_name.md)

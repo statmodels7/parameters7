@@ -1,5 +1,26 @@
 # Changelog
 
+## parameters7 0.9.0
+
+- `block_diag(...)`: a block diagonal of distinct matrix parameters,
+  each carrying its own stretch of the free vector. Where
+  [`kron_identity()`](https://statmodels7.github.io/parameters7/reference/kron_identity.md)
+  replicates one block, this composes several, which is what a model
+  with more than one random-effect term needs. Every component whose
+  indices do not all belong to one block is exactly zero, at every order
+  and for the log-determinant as well as for the value, because the free
+  values of one block do not enter another; the rank and the null basis
+  come from the components rather than from an assembled matrix.
+
+- `dr_prod(dimension, correlation, link)`: a covariance written as , so
+  that the coordinates are the standard deviations and the correlations
+  rather than a function of them. Every derivative factorizes as , the
+  two groups of free values being disjoint, and the log-determinant is
+  separable in the scales and separable from the correlation. The
+  correlation block must have full rank: a deficient one would give the
+  product the null space , which moves with the free vector, while the
+  class records the rank and the null space as properties of the family.
+
 ## parameters7 0.8.0
 
 - kron_identity(structure, m): m identical diagonal blocks of one matrix

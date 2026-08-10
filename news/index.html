@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,6 +31,11 @@
       <small>Source: <a href="https://github.com/statmodels7/parameters7/blob/master/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.9.0" id="parameters7-090">parameters7 0.9.0<a class="anchor" aria-label="anchor" href="#parameters7-090"></a></h2>
+<ul><li><p><code>block_diag(...)</code>: a block diagonal of distinct matrix parameters, each carrying its own stretch of the free vector. Where <code><a href="../reference/kron_identity.html">kron_identity()</a></code> replicates one block, this composes several, which is what a model with more than one random-effect term needs. Every component whose indices do not all belong to one block is exactly zero, at every order and for the log-determinant as well as for the value, because the free values of one block do not enter another; the rank and the null basis come from the components rather than from an assembled matrix.</p></li>
+<li><p><code>dr_prod(dimension, correlation, link)</code>: a covariance written as , so that the coordinates are the standard deviations and the correlations rather than a function of them. Every derivative factorizes as , the two groups of free values being disjoint, and the log-determinant  is separable in the scales and separable from the correlation. The correlation block must have full rank: a deficient one would give the product the null space , which moves with the free vector, while the class records the rank and the null space as properties of the family.</p></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.8.0" id="parameters7-080">parameters7 0.8.0<a class="anchor" aria-label="anchor" href="#parameters7-080"></a></h2>
 <ul><li>kron_identity(structure, m): m identical diagonal blocks of one matrix parameter sharing a free vector, every contract quantity a linear lift of the inner one. The first composition wrapper; built for grouped random effects.</li>

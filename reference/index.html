@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -130,6 +130,34 @@
 
         </dt>
         <dd>Identical Blocks of a Matrix Parameter</dd>
+
+        <dt>
+
+          <code><a href="block_diag.html">block_diag()</a></code>
+
+        </dt>
+        <dd>Construct a Block Diagonal of Matrix Parameters</dd>
+
+        <dt>
+
+          <code><a href="BlockDiagParam.html">BlockDiagParam()</a></code>
+
+        </dt>
+        <dd>Distinct Blocks of a Matrix Parameter</dd>
+
+        <dt>
+
+          <code><a href="dr_prod.html">dr_prod()</a></code>
+
+        </dt>
+        <dd>Construct a Covariance as Scales Times a Correlation</dd>
+
+        <dt>
+
+          <code><a href="DrProdParam.html">DrProdParam()</a></code>
+
+        </dt>
+        <dd>Scales Times a Correlation Matrix</dd>
       </dl></div><div class="section level2">
       <h2 id="the-map-and-its-inverse">The map and its inverse<a class="anchor" aria-label="anchor" href="#the-map-and-its-inverse"></a></h2>
 
@@ -522,6 +550,27 @@
 
         <dt>
 
+          <code><a href="block_derivs_by_tuple.html">block_derivs_by_tuple()</a></code>
+
+        </dt>
+        <dd>The Blocks' Derivative Components, Keyed by Local Index Tuple</dd>
+
+        <dt>
+
+          <code><a href="block_diag_derivs.html">block_diag_derivs()</a></code>
+
+        </dt>
+        <dd>Assemble a Block Diagonal's Derivatives of a Given Order</dd>
+
+        <dt>
+
+          <code><a href="block_diag_logdet_derivs.html">block_diag_logdet_derivs()</a></code>
+
+        </dt>
+        <dd>Assemble a Block Diagonal's Log-Determinant Derivatives</dd>
+
+        <dt>
+
           <code><a href="check_eta.html">check_eta()</a></code>
 
         </dt>
@@ -718,6 +767,34 @@
 
         <dt>
 
+          <code><a href="dr_prod_derivs.html">dr_prod_derivs()</a></code>
+
+        </dt>
+        <dd>Assemble a Scales-Times-Correlation Derivative of a Given Order</dd>
+
+        <dt>
+
+          <code><a href="dr_prod_logdet_derivs.html">dr_prod_logdet_derivs()</a></code>
+
+        </dt>
+        <dd>Assemble a Scales-Times-Correlation Log-Determinant Derivative</dd>
+
+        <dt>
+
+          <code><a href="dr_scale_derivs.html">dr_scale_derivs()</a></code>
+
+        </dt>
+        <dd>Derivatives of the Inverse Link at Every Scale Coordinate</dd>
+
+        <dt>
+
+          <code><a href="dr_scale_factor.html">dr_scale_factor()</a></code>
+
+        </dt>
+        <dd>The Scale Factor of a Derivative Component</dd>
+
+        <dt>
+
           <code><a href="econ_derivative.html">econ_derivative()</a></code>
 
         </dt>
@@ -851,6 +928,13 @@
 
         <dt>
 
+          <code><a href="param_d1.BlockDiagParam.html">param_d1.BlockDiagParam</a></code> <code><a href="param_d1.BlockDiagParam.html">param_d2.BlockDiagParam</a></code> <code><a href="param_d1.BlockDiagParam.html">param_d3.BlockDiagParam</a></code> <code><a href="param_d1.BlockDiagParam.html">param_d4.BlockDiagParam</a></code>
+
+        </dt>
+        <dd>Derivatives of a Block-Diagonal Parameter</dd>
+
+        <dt>
+
           <code><a href="param_d1.CompoundSymmetryParam.html">param_d1.CompoundSymmetryParam</a></code> <code><a href="param_d1.CompoundSymmetryParam.html">param_d2.CompoundSymmetryParam</a></code> <code><a href="param_d1.CompoundSymmetryParam.html">param_d3.CompoundSymmetryParam</a></code> <code><a href="param_d1.CompoundSymmetryParam.html">param_d4.CompoundSymmetryParam</a></code>
 
         </dt>
@@ -869,6 +953,13 @@
 
         </dt>
         <dd>First Derivatives of a Diagonal Parameter</dd>
+
+        <dt>
+
+          <code><a href="param_d1.DrProdParam.html">param_d1.DrProdParam</a></code> <code><a href="param_d1.DrProdParam.html">param_d2.DrProdParam</a></code> <code><a href="param_d1.DrProdParam.html">param_d3.DrProdParam</a></code> <code><a href="param_d1.DrProdParam.html">param_d4.DrProdParam</a></code>
+
+        </dt>
+        <dd>Derivatives of a Scales-Times-Correlation Parameter</dd>
 
         <dt>
 
@@ -1201,6 +1292,13 @@
 
         <dt>
 
+          <code><a href="param_dlogdet.BlockDiagParam.html">param_dlogdet.BlockDiagParam</a></code> <code><a href="param_dlogdet.BlockDiagParam.html">param_d2logdet.BlockDiagParam</a></code> <code><a href="param_dlogdet.BlockDiagParam.html">param_d3logdet.BlockDiagParam</a></code> <code><a href="param_dlogdet.BlockDiagParam.html">param_d4logdet.BlockDiagParam</a></code>
+
+        </dt>
+        <dd>Log-Determinant Derivatives of a Block-Diagonal Parameter</dd>
+
+        <dt>
+
           <code><a href="param_dlogdet.CompoundSymmetryParam.html">param_dlogdet.CompoundSymmetryParam</a></code> <code><a href="param_dlogdet.CompoundSymmetryParam.html">param_d2logdet.CompoundSymmetryParam</a></code> <code><a href="param_dlogdet.CompoundSymmetryParam.html">param_d3logdet.CompoundSymmetryParam</a></code> <code><a href="param_dlogdet.CompoundSymmetryParam.html">param_d4logdet.CompoundSymmetryParam</a></code>
 
         </dt>
@@ -1219,6 +1317,13 @@
 
         </dt>
         <dd>Log-Determinant Gradient of a Diagonal Parameter</dd>
+
+        <dt>
+
+          <code><a href="param_dlogdet.DrProdParam.html">param_dlogdet.DrProdParam</a></code> <code><a href="param_dlogdet.DrProdParam.html">param_d2logdet.DrProdParam</a></code> <code><a href="param_dlogdet.DrProdParam.html">param_d3logdet.DrProdParam</a></code> <code><a href="param_dlogdet.DrProdParam.html">param_d4logdet.DrProdParam</a></code>
+
+        </dt>
+        <dd>Log-Determinant Derivatives of a Scales-Times-Correlation Parameter</dd>
 
         <dt>
 
@@ -1292,6 +1397,13 @@
 
         <dt>
 
+          <code><a href="param_free.BlockDiagParam.html">param_free.BlockDiagParam</a></code>
+
+        </dt>
+        <dd>Free Vector of a Block-Diagonal Parameter</dd>
+
+        <dt>
+
           <code><a href="param_free.CompoundSymmetryParam.html">param_free.CompoundSymmetryParam</a></code>
 
         </dt>
@@ -1310,6 +1422,13 @@
 
         </dt>
         <dd>Free Vector of a Diagonal Parameter</dd>
+
+        <dt>
+
+          <code><a href="param_free.DrProdParam.html">param_free.DrProdParam</a></code>
+
+        </dt>
+        <dd>Free Vector of a Scales-Times-Correlation Parameter</dd>
 
         <dt>
 
@@ -1369,6 +1488,13 @@
 
         <dt>
 
+          <code><a href="param_logdet.BlockDiagParam.html">param_logdet.BlockDiagParam</a></code>
+
+        </dt>
+        <dd>Log-Determinant of a Block-Diagonal Parameter</dd>
+
+        <dt>
+
           <code><a href="param_logdet.CompoundSymmetryParam.html">param_logdet.CompoundSymmetryParam</a></code>
 
         </dt>
@@ -1387,6 +1513,13 @@
 
         </dt>
         <dd>Log-Determinant of a Diagonal Parameter</dd>
+
+        <dt>
+
+          <code><a href="param_logdet.DrProdParam.html">param_logdet.DrProdParam</a></code>
+
+        </dt>
+        <dd>Log-Determinant of a Scales-Times-Correlation Parameter</dd>
 
         <dt>
 
@@ -1474,10 +1607,24 @@
 
         <dt>
 
+          <code><a href="param_solve.BlockDiagParam.html">param_solve.BlockDiagParam</a></code> <code><a href="param_solve.BlockDiagParam.html">param_factor.BlockDiagParam</a></code>
+
+        </dt>
+        <dd>Solve and Factor of a Block-Diagonal Parameter</dd>
+
+        <dt>
+
           <code><a href="param_solve.CompoundSymmetryParam.html">param_solve.CompoundSymmetryParam</a></code>
 
         </dt>
         <dd>Solve of a Compound Symmetry Parameter</dd>
+
+        <dt>
+
+          <code><a href="param_solve.DrProdParam.html">param_solve.DrProdParam</a></code> <code><a href="param_solve.DrProdParam.html">param_factor.DrProdParam</a></code>
+
+        </dt>
+        <dd>Solve and Factor of a Scales-Times-Correlation Parameter</dd>
 
         <dt>
 
@@ -1516,6 +1663,13 @@
 
         <dt>
 
+          <code><a href="param_value.BlockDiagParam.html">param_value.BlockDiagParam</a></code>
+
+        </dt>
+        <dd>Value of a Block-Diagonal Parameter</dd>
+
+        <dt>
+
           <code><a href="param_value.CompoundSymmetryParam.html">param_value.CompoundSymmetryParam</a></code>
 
         </dt>
@@ -1534,6 +1688,13 @@
 
         </dt>
         <dd>Matrix of a Diagonal Parameter</dd>
+
+        <dt>
+
+          <code><a href="param_value.DrProdParam.html">param_value.DrProdParam</a></code>
+
+        </dt>
+        <dd>Value of a Scales-Times-Correlation Parameter</dd>
 
         <dt>
 
@@ -1639,6 +1800,13 @@
 
         </dt>
         <dd>Moore-Penrose Inverse From a Parameter's Spectrum</dd>
+
+        <dt>
+
+          <code><a href="split_ranges.html">split_ranges()</a></code>
+
+        </dt>
+        <dd>Consecutive Index Ranges of Given Widths</dd>
 
         <dt>
 
