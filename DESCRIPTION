@@ -1,6 +1,6 @@
 Package: parameters7
 Title: An S7 Framework for Constrained Parameters
-Version: 0.9.0
+Version: 0.10.0
 Authors@R:
     person("Giovanni", "Tinervia", , "giovannitinervia9@gmail.com", role = c("aut", "cre"))
 Description: Parametrizations of constrained parameter spaces as objects. A
@@ -63,4 +63,5 @@ Collate:
     'simplex.R'
     'scaled_matrix.R'
     'readable.R'
+    'sum_struct.R'
     'transition_matrix.R'

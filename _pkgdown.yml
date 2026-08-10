@@ -26,6 +26,8 @@ reference:
   - BlockDiagParam
   - dr_prod
   - DrProdParam
+  - sum_struct
+  - SumStructParam
 
 - title: The map and its inverse
   contents:
