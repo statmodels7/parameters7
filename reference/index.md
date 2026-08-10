@@ -39,6 +39,10 @@ its own constrained set, and each owns the side of that matrix.
   : Construct a Covariance as Scales Times a Correlation
 - [`DrProdParam()`](https://statmodels7.github.io/parameters7/reference/DrProdParam.md)
   : Scales Times a Correlation Matrix
+- [`sum_struct()`](https://statmodels7.github.io/parameters7/reference/sum_struct.md)
+  : Construct a Sum of Fixed Matrices
+- [`SumStructParam()`](https://statmodels7.github.io/parameters7/reference/SumStructParam.md)
+  : A Non-Negative Combination of Fixed Matrices
 
 ## The map and its inverse
 
@@ -282,6 +286,8 @@ that the derivations can be followed from the code that implements them.
   : The Symmetric Matrix Behind a Free Vector
 - [`mlog_tables()`](https://statmodels7.github.io/parameters7/reference/mlog_tables.md)
   : The Eigendecomposition and Divided-Difference Tables at a Point
+- [`multiset_orderings()`](https://statmodels7.github.io/parameters7/reference/multiset_orderings.md)
+  : Orderings of a Multiset, Counted With Multiplicity
 - [`name_dims()`](https://statmodels7.github.io/parameters7/reference/name_dims.md)
   : Name the Rows and Columns of a Parameter's Matrix
 - [`param_d1.Ar1Param`](https://statmodels7.github.io/parameters7/reference/param_d1.Ar1Param.md)
@@ -321,6 +327,11 @@ that the derivations can be followed from the code that implements them.
   : First Derivative of a Scaled Parameter
 - [`param_d1.SimplexParam`](https://statmodels7.github.io/parameters7/reference/param_d1.SimplexParam.md)
   : First Derivatives of a Simplex Parameter
+- [`param_d1.SumStructParam`](https://statmodels7.github.io/parameters7/reference/param_d1.SumStructParam.md)
+  [`param_d2.SumStructParam`](https://statmodels7.github.io/parameters7/reference/param_d1.SumStructParam.md)
+  [`param_d3.SumStructParam`](https://statmodels7.github.io/parameters7/reference/param_d1.SumStructParam.md)
+  [`param_d4.SumStructParam`](https://statmodels7.github.io/parameters7/reference/param_d1.SumStructParam.md)
+  : Derivatives of a Sum of Fixed Matrices
 - [`param_d1.TransitionMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_d1.TransitionMatrixParam.md)
   : First Derivatives of a Transition Matrix Parameter
 - [`param_d1.parameter`](https://statmodels7.github.io/parameters7/reference/param_d1.parameter.md)
@@ -441,6 +452,11 @@ that the derivations can be followed from the code that implements them.
   : Log-Determinant Gradient of a Matrix Logarithm Parameter
 - [`param_dlogdet.ScaledMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.ScaledMatrixParam.md)
   : Log-Determinant Gradient of a Scaled Parameter
+- [`param_dlogdet.SumStructParam`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.SumStructParam.md)
+  [`param_d2logdet.SumStructParam`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.SumStructParam.md)
+  [`param_d3logdet.SumStructParam`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.SumStructParam.md)
+  [`param_d4logdet.SumStructParam`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.SumStructParam.md)
+  : Log-Determinant Derivatives of a Sum of Fixed Matrices
 - [`param_dlogdet.parameter`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.parameter.md)
   : Default Log-Determinant Gradient
 - [`param_factor.CorrelationParam`](https://statmodels7.github.io/parameters7/reference/param_factor.CorrelationParam.md)
@@ -473,6 +489,8 @@ that the derivations can be followed from the code that implements them.
   : Free Vector of a Scaled Parameter
 - [`param_free.SimplexParam`](https://statmodels7.github.io/parameters7/reference/param_free.SimplexParam.md)
   : Free Vector of a Simplex Parameter
+- [`param_free.SumStructParam`](https://statmodels7.github.io/parameters7/reference/param_free.SumStructParam.md)
+  : Free Vector of a Sum of Fixed Matrices
 - [`param_free.TransitionMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_free.TransitionMatrixParam.md)
   : Free Vector of a Transition Matrix Parameter
 - [`param_free.parameter`](https://statmodels7.github.io/parameters7/reference/param_free.parameter.md)
@@ -497,6 +515,8 @@ that the derivations can be followed from the code that implements them.
   : Log-Determinant of a Matrix Logarithm Parameter
 - [`param_logdet.ScaledMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_logdet.ScaledMatrixParam.md)
   : Log-Determinant of a Scaled Parameter
+- [`param_logdet.SumStructParam`](https://statmodels7.github.io/parameters7/reference/param_logdet.SumStructParam.md)
+  : Log-Determinant of a Sum of Fixed Matrices
 - [`param_logdet.parameter`](https://statmodels7.github.io/parameters7/reference/param_logdet.parameter.md)
   : Default Log-Determinant
 - [`param_readable.Ar1Param`](https://statmodels7.github.io/parameters7/reference/param_readable.Ar1Param.md)
@@ -525,6 +545,9 @@ that the derivations can be followed from the code that implements them.
   : Solve and Factor of a Scales-Times-Correlation Parameter
 - [`param_solve.MatrixLogParam`](https://statmodels7.github.io/parameters7/reference/param_solve.MatrixLogParam.md)
   : Solve of a Matrix Logarithm Parameter
+- [`param_solve.SumStructParam`](https://statmodels7.github.io/parameters7/reference/param_solve.SumStructParam.md)
+  [`param_factor.SumStructParam`](https://statmodels7.github.io/parameters7/reference/param_solve.SumStructParam.md)
+  : Solve and Factor of a Sum of Fixed Matrices
 - [`param_solve.parameter`](https://statmodels7.github.io/parameters7/reference/param_solve.parameter.md)
   : Default Solve
 - [`param_spectrum()`](https://statmodels7.github.io/parameters7/reference/param_spectrum.md)
@@ -551,6 +574,8 @@ that the derivations can be followed from the code that implements them.
   : Matrix of a Scaled Parameter
 - [`param_value.SimplexParam`](https://statmodels7.github.io/parameters7/reference/param_value.SimplexParam.md)
   : Value of a Simplex Parameter
+- [`param_value.SumStructParam`](https://statmodels7.github.io/parameters7/reference/param_value.SumStructParam.md)
+  : Value of a Sum of Fixed Matrices
 - [`param_value.TransitionMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_value.TransitionMatrixParam.md)
   : Value of a Transition Matrix Parameter
 - [`parameters7`](https://statmodels7.github.io/parameters7/reference/parameters7-package.md)
@@ -576,6 +601,16 @@ that the derivations can be followed from the code that implements them.
   : Moore-Penrose Inverse From a Parameter's Spectrum
 - [`split_ranges()`](https://statmodels7.github.io/parameters7/reference/split_ranges.md)
   : Consecutive Index Ranges of Given Widths
+- [`sum_struct_derivs()`](https://statmodels7.github.io/parameters7/reference/sum_struct_derivs.md)
+  : Assemble a Sum of Fixed Matrices' Derivatives of a Given Order
+- [`sum_struct_logdet_derivs()`](https://statmodels7.github.io/parameters7/reference/sum_struct_logdet_derivs.md)
+  : Assemble a Sum of Fixed Matrices' Log-Determinant Derivatives
+- [`sum_struct_null_basis()`](https://statmodels7.github.io/parameters7/reference/sum_struct_null_basis.md)
+  : The Shared Null Space of a Set of Positive Semidefinite Matrices
+- [`sum_struct_trace_term()`](https://statmodels7.github.io/parameters7/reference/sum_struct_trace_term.md)
+  : Log-Determinant Derivatives in the Weights
+- [`sum_struct_weight_derivs()`](https://statmodels7.github.io/parameters7/reference/sum_struct_weight_derivs.md)
+  : Derivatives of the Weights of a Sum of Fixed Matrices
 - [`sweep_etas()`](https://statmodels7.github.io/parameters7/reference/sweep_etas.md)
   : Free Vectors to Sweep a Parameter Over
 - [`tagged_name()`](https://statmodels7.github.io/parameters7/reference/tagged_name.md)

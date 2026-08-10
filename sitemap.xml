@@ -17,6 +17,7 @@
 <url><loc>https://statmodels7.github.io/parameters7/reference/MatrixLogParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/ScaledMatrixParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/SimplexParam.html</loc></url>
+<url><loc>https://statmodels7.github.io/parameters7/reference/SumStructParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/TransitionMatrixParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/ar1.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/ar1_logdet_terms.html</loc></url>
@@ -90,6 +91,7 @@
 <url><loc>https://statmodels7.github.io/parameters7/reference/mlog_higher.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/mlog_s.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/mlog_tables.html</loc></url>
+<url><loc>https://statmodels7.github.io/parameters7/reference/multiset_orderings.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/name_dims.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/numerical_d1.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/numerical_d2.html</loc></url>
@@ -106,6 +108,7 @@
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_d1.MatrixLogParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_d1.ScaledMatrixParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_d1.SimplexParam.html</loc></url>
+<url><loc>https://statmodels7.github.io/parameters7/reference/param_d1.SumStructParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_d1.TransitionMatrixParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_d1.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_d1.parameter.html</loc></url>
@@ -163,6 +166,7 @@
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_dlogdet.LogCholeskyParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_dlogdet.MatrixLogParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_dlogdet.ScaledMatrixParam.html</loc></url>
+<url><loc>https://statmodels7.github.io/parameters7/reference/param_dlogdet.SumStructParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_dlogdet.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_dlogdet.parameter.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_factor.CorrelationParam.html</loc></url>
@@ -181,6 +185,7 @@
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_free.MatrixLogParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_free.ScaledMatrixParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_free.SimplexParam.html</loc></url>
+<url><loc>https://statmodels7.github.io/parameters7/reference/param_free.SumStructParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_free.TransitionMatrixParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_free.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_free.parameter.html</loc></url>
@@ -195,6 +200,7 @@
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_logdet.LogCholeskyParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_logdet.MatrixLogParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_logdet.ScaledMatrixParam.html</loc></url>
+<url><loc>https://statmodels7.github.io/parameters7/reference/param_logdet.SumStructParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_logdet.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_logdet.parameter.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_null_basis.html</loc></url>
@@ -211,6 +217,7 @@
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_solve.CompoundSymmetryParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_solve.DrProdParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_solve.MatrixLogParam.html</loc></url>
+<url><loc>https://statmodels7.github.io/parameters7/reference/param_solve.SumStructParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_solve.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_solve.parameter.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_spectrum.html</loc></url>
@@ -227,6 +234,7 @@
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_value.MatrixLogParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_value.ScaledMatrixParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_value.SimplexParam.html</loc></url>
+<url><loc>https://statmodels7.github.io/parameters7/reference/param_value.SumStructParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_value.TransitionMatrixParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_value.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/parameter.html</loc></url>
@@ -244,6 +252,12 @@
 <url><loc>https://statmodels7.github.io/parameters7/reference/simplex_tensors.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/spectrum_pinv.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/split_ranges.html</loc></url>
+<url><loc>https://statmodels7.github.io/parameters7/reference/sum_struct.html</loc></url>
+<url><loc>https://statmodels7.github.io/parameters7/reference/sum_struct_derivs.html</loc></url>
+<url><loc>https://statmodels7.github.io/parameters7/reference/sum_struct_logdet_derivs.html</loc></url>
+<url><loc>https://statmodels7.github.io/parameters7/reference/sum_struct_null_basis.html</loc></url>
+<url><loc>https://statmodels7.github.io/parameters7/reference/sum_struct_trace_term.html</loc></url>
+<url><loc>https://statmodels7.github.io/parameters7/reference/sum_struct_weight_derivs.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/sweep_etas.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/tagged_name.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/tm_derivative.html</loc></url>

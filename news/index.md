@@ -1,5 +1,38 @@
 # Changelog
 
+## parameters7 0.10.0
+
+- `sum_struct(components, link)`: a non-negative combination of fixed
+  symmetric positive semidefinite matrices, which is the
+  variance-components covariance and also the matrix a penalty with one
+  smoothing parameter per component assembles. The value is linear in
+  the weights, so a derivative component is zero unless every index
+  names the same free value. The log-determinant is not separable and
+  its derivatives come from the cyclic trace expansion , carried onto
+  the free scale by a chain rule with a diagonal Jacobian.
+
+  The orderings are counted WITH MULTIPLICITY. Deduplicating the ones
+  that coincide because an index repeats makes a third derivative in one
+  weight too small by a factor of two and a fourth by six, which is
+  exactly what the first check of the expansion reported before the
+  check itself was fixed.
+
+  The rank is fixed at construction from the components stacked and
+  individually normalized, the null space of a sum of positive
+  semidefinite matrices being the intersection of theirs. Measured on
+  second and first differences over five coefficients, the null residual
+  stays at 1e-16 with the weights fourteen orders of magnitude apart,
+  where a count of small eigenvalues of the assembled matrix would not.
+
+  This completes the three compositions of `piano_parameters7.txt`,
+  after
+  [`kron_identity()`](https://statmodels7.github.io/parameters7/reference/kron_identity.md)
+  in 0.8.0 and
+  [`block_diag()`](https://statmodels7.github.io/parameters7/reference/block_diag.md)
+  and
+  [`dr_prod()`](https://statmodels7.github.io/parameters7/reference/dr_prod.md)
+  in 0.9.0.
+
 ## parameters7 0.9.0
 
 - `block_diag(...)`: a block diagonal of distinct matrix parameters,
