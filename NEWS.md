@@ -1,3 +1,25 @@
+# parameters7 0.9.0
+
+* `block_diag(...)`: a block diagonal of distinct matrix parameters, each
+  carrying its own stretch of the free vector. Where `kron_identity()`
+  replicates one block, this composes several, which is what a model with
+  more than one random-effect term needs. Every component whose indices do
+  not all belong to one block is exactly zero, at every order and for the
+  log-determinant as well as for the value, because the free values of one
+  block do not enter another; the rank and the null basis come from the
+  components rather than from an assembled matrix.
+
+* `dr_prod(dimension, correlation, link)`: a covariance written as
+  \eqn{D R D}, so that the coordinates are the standard deviations and the
+  correlations rather than a function of them. Every derivative factorizes
+  as \eqn{\partial^{S_D}(d_i d_j)\,\partial^{S_R} R_{ij}}, the two groups
+  of free values being disjoint, and the log-determinant
+  \eqn{2\sum_j \log d_j + \log|R|} is separable in the scales and separable
+  from the correlation. The correlation block must have full rank: a
+  deficient one would give the product the null space \eqn{D^{-1}\ker R},
+  which moves with the free vector, while the class records the rank and the
+  null space as properties of the family.
+
 # parameters7 0.8.0
 
 * kron_identity(structure, m): m identical diagonal blocks of one

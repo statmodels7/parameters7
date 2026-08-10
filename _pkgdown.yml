@@ -22,6 +22,10 @@ reference:
   - transition_matrix
   - kron_identity
   - KronIdentityParam
+  - block_diag
+  - BlockDiagParam
+  - dr_prod
+  - DrProdParam
 
 - title: The map and its inverse
   contents:
