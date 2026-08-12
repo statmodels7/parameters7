@@ -18,9 +18,19 @@ The stencil's value, shaped like \code{f(eta)}.
 }
 \description{
 Differentiates \code{f} once in each component the index tuple names, a
-central factor per distinct component of the order its multiplicity asks:
+central factor per distinct component of the order its multiplicity asks.
+The result is a single product stencil, not a composition of lower-order
+numerical derivatives.
+}
+\details{
+Each factor's nodes and weights are \pkg{numericals7}'s, read from
+\code{\link[numericals7]{fd_offsets}} and
+\code{\link[numericals7]{fd_weights}}. They were transcribed here once --
 two points at order one, three at two, the five-point forms at three and
-four. The result is a single product stencil, not a composition of
-lower-order numerical derivatives.
+four -- and a table of stencil coefficients written out in a second place
+is a table that can disagree with the first.
+}
+\seealso{
+\code{\link[numericals7]{fd_weights}}
 }
 \keyword{internal}

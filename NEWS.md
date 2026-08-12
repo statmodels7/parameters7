@@ -1,3 +1,15 @@
+# parameters7 0.11.0
+
+* The numerical fallbacks take their stencils from numericals7. The package
+  imported it for the enumerations and used none of its differentiation:
+  `mixed_stencil()` carried a transcribed table of the offsets and weights for
+  orders one to four, which is a second copy of `fd_weights()`, and every
+  fallback wrote its own central difference. The table is read from
+  numericals7 now, `fd_step()` delegates rather than restating
+  `eps^(1/(order+2))`, and `fd_along()` is the one place a difference along a
+  free value is assembled. The rules are the same rules, so every number is
+  unchanged; what moves is where they live.
+
 # parameters7 0.10.0
 
 * `sum_struct(components, link)`: a non-negative combination of fixed

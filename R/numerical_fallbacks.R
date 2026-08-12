@@ -186,16 +186,65 @@ chol_pd <- function(m, tol = 1e-12) {
 #' @details
 #' The free scale is unbounded, so unlike the response and parameter steps of
 #' \pkg{distributions7} this one has no boundary to be clamped away from: the
-#' whole point of the unconstrained scale is that there is nowhere to fall off.
+#' whole point of the unconstrained scale is that there is nowhere to fall off,
+#' and \code{bounds} is left at its default for that reason.
+#'
+#' The rule is \pkg{numericals7}'s and is read from it rather than written out
+#' again, so the step a fallback takes and the step the stencil library
+#' documents cannot drift apart.
 #'
 #' @param eta_k The value of the component.
 #' @param order The derivative order the step is for.
 #'
 #' @return A single positive number.
 #'
+#' @seealso \code{\link[numericals7]{fd_step}}
+#'
 #' @keywords internal
 fd_step <- function(eta_k, order = 1L) {
-  .Machine$double.eps^(1 / (order + 2)) * max(1, abs(eta_k))
+  numericals7::fd_step(eta_k, order = order, accuracy = 2L)
+}
+
+
+#' One Stencil Along One Free Value
+#'
+#' @description
+#' Applies a \pkg{numericals7} central stencil to a function of the free
+#' vector, along one of its components.
+#'
+#' @details
+#' The nodes and the weights come from \code{\link[numericals7]{fd_offsets}}
+#' and \code{\link[numericals7]{fd_weights}} rather than being written out
+#' here, so a difference in this package is the same object the rest of the
+#' toolkit differentiates with. \code{\link[numericals7]{fd_derivative}}
+#' cannot be used directly: its \code{f} maps a vector of points to the values
+#' at those points, and what is differentiated here maps a whole free vector
+#' to a matrix.
+#'
+#' @param f A function of the free vector.
+#' @param eta The free vector.
+#' @param k The component to differentiate along.
+#' @param order The derivative order.
+#' @param h The step; \code{\link{fd_step}} when missing.
+#'
+#' @return Whatever \code{f} returns, differentiated.
+#'
+#' @seealso \code{\link[numericals7]{fd_weights}}
+#'
+#' @keywords internal
+fd_along <- function(f, eta, k, order = 1L, h = NULL) {
+  s <- numericals7::fd_offsets(order, accuracy = 2L)$central
+  w <- numericals7::fd_weights(s, order)
+  if (is.null(h)) h <- fd_step(eta[k], order)
+  acc <- NULL
+  for (j in seq_along(s)) {
+    if (w[j] == 0) next
+    e <- eta
+    e[k] <- eta[k] + s[j] * h
+    v <- w[j] * f(e)
+    acc <- if (is.null(acc)) v else acc + v
+  }
+  acc / h^order
 }
 
 
@@ -218,12 +267,7 @@ numerical_d1 <- function(s, eta) {
   out <- vector("list", s@n_free)
   names(out) <- s@free_names
   for (k in seq_len(s@n_free)) {
-    h <- fd_step(eta[k], 1L)
-    up <- eta
-    dn <- eta
-    up[k] <- eta[k] + h
-    dn[k] <- eta[k] - h
-    out[[k]] <- (param_value(s, up) - param_value(s, dn)) / (2 * h)
+    out[[k]] <- fd_along(function(e) param_value(s, e), eta, k, 1L)
   }
   out
 }
@@ -286,31 +330,19 @@ numerical_d2 <- function(s, eta) {
     l <- idx[[i]][2L]
     if (analytic) {
       # One layer on the analytic first derivative in the other component.
-      h <- fd_step(eta[l], 1L)
-      up <- eta
-      dn <- eta
-      up[l] <- eta[l] + h
-      dn[l] <- eta[l] - h
-      out[[i]] <- (param_d1(s, up)[[k]] - param_d1(s, dn)[[k]]) /
-        (2 * h)
+      out[[i]] <- fd_along(function(e) param_d1(s, e)[[k]], eta, l, 1L)
     } else if (k == l) {
-      h <- fd_step(eta[k], 2L)
-      up <- eta
-      dn <- eta
-      up[k] <- eta[k] + h
-      dn[k] <- eta[k] - h
-      out[[i]] <- (param_value(s, up) - 2 * param_value(s, eta) +
-        param_value(s, dn)) / h^2
+      out[[i]] <- fd_along(function(e) param_value(s, e), eta, k, 2L)
     } else {
+      # Two stencils in two DIFFERENT components, which is one mixed stencil
+      # and not a difference of a difference: nesting is forbidden along one
+      # variable and is what a mixed derivative is along two. The steps are
+      # the order-2 ones, as a second derivative asks for.
       hk <- fd_step(eta[k], 2L)
       hl <- fd_step(eta[l], 2L)
-      pp <- pm <- mp <- mm <- eta
-      pp[k] <- pp[k] + hk; pp[l] <- pp[l] + hl
-      pm[k] <- pm[k] + hk; pm[l] <- pm[l] - hl
-      mp[k] <- mp[k] - hk; mp[l] <- mp[l] + hl
-      mm[k] <- mm[k] - hk; mm[l] <- mm[l] - hl
-      out[[i]] <- (param_value(s, pp) - param_value(s, pm) -
-        param_value(s, mp) + param_value(s, mm)) / (4 * hk * hl)
+      out[[i]] <- fd_along(function(e) {
+        fd_along(function(e2) param_value(s, e2), e, l, 1L, h = hl)
+      }, eta, k, 1L, h = hk)
     }
     if (S7::S7_inherits(s, matrix_parameter)) {
       out[[i]] <- (out[[i]] + t(out[[i]])) / 2
@@ -566,16 +598,25 @@ numerical_d4 <- function(s, eta) {
 #'
 #' @description
 #' Differentiates \code{f} once in each component the index tuple names, a
-#' central factor per distinct component of the order its multiplicity asks:
+#' central factor per distinct component of the order its multiplicity asks.
+#' The result is a single product stencil, not a composition of lower-order
+#' numerical derivatives.
+#'
+#' @details
+#' Each factor's nodes and weights are \pkg{numericals7}'s, read from
+#' \code{\link[numericals7]{fd_offsets}} and
+#' \code{\link[numericals7]{fd_weights}}. They were transcribed here once --
 #' two points at order one, three at two, the five-point forms at three and
-#' four. The result is a single product stencil, not a composition of
-#' lower-order numerical derivatives.
+#' four -- and a table of stencil coefficients written out in a second place
+#' is a table that can disagree with the first.
 #'
 #' @param f A function of the free vector.
 #' @param eta The point.
 #' @param tuple An integer vector of component indices, possibly repeated.
 #'
 #' @return The stencil's value, shaped like \code{f(eta)}.
+#'
+#' @seealso \code{\link[numericals7]{fd_weights}}
 #'
 #' @keywords internal
 mixed_stencil <- function(f, eta, tuple) {
@@ -587,12 +628,10 @@ mixed_stencil <- function(f, eta, tuple) {
   }, numeric(1))
 
   one_dim <- function(m) {
-    switch(m,
-      list(offsets = c(-1, 1), weights = c(-0.5, 0.5), power = 1),
-      list(offsets = c(-1, 0, 1), weights = c(1, -2, 1), power = 2),
-      list(offsets = c(-2, -1, 1, 2), weights = c(-0.5, 1, -1, 0.5), power = 3),
-      list(offsets = c(-2, -1, 0, 1, 2), weights = c(1, -4, 6, -4, 1), power = 4)
-    )
+    s <- numericals7::fd_offsets(m, accuracy = 2L)$central
+    w <- numericals7::fd_weights(s, m)
+    keep <- w != 0
+    list(offsets = s[keep], weights = w[keep], power = m)
   }
   facs <- lapply(ms, one_dim)
 

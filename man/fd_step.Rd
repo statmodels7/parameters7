@@ -21,6 +21,14 @@ the size of that component.
 \details{
 The free scale is unbounded, so unlike the response and parameter steps of
 \pkg{distributions7} this one has no boundary to be clamped away from: the
-whole point of the unconstrained scale is that there is nowhere to fall off.
+whole point of the unconstrained scale is that there is nowhere to fall off,
+and \code{bounds} is left at its default for that reason.
+
+The rule is \pkg{numericals7}'s and is read from it rather than written out
+again, so the step a fallback takes and the step the stencil library
+documents cannot drift apart.
+}
+\seealso{
+\code{\link[numericals7]{fd_step}}
 }
 \keyword{internal}
