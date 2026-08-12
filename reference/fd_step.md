@@ -28,4 +28,12 @@ A single positive number.
 The free scale is unbounded, so unlike the response and parameter steps
 of distributions7 this one has no boundary to be clamped away from: the
 whole point of the unconstrained scale is that there is nowhere to fall
-off.
+off, and `bounds` is left at its default for that reason.
+
+The rule is numericals7's and is read from it rather than written out
+again, so the step a fallback takes and the step the stencil library
+documents cannot drift apart.
+
+## See also
+
+[`fd_step`](https://statmodels7.github.io/numericals7/reference/fd_step.html)

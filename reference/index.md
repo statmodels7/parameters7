@@ -262,6 +262,8 @@ that the derivations can be followed from the code that implements them.
   : The Scale and the Correlation of an Economical Parameter
 - [`empty_null_basis()`](https://statmodels7.github.io/parameters7/reference/empty_null_basis.md)
   : No Null Space
+- [`fd_along()`](https://statmodels7.github.io/parameters7/reference/fd_along.md)
+  : One Stencil Along One Free Value
 - [`fd_step()`](https://statmodels7.github.io/parameters7/reference/fd_step.md)
   : Finite-Difference Step for a Free Value
 - [`is_base_param_class()`](https://statmodels7.github.io/parameters7/reference/is_base_param_class.md)

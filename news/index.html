@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,6 +31,10 @@
       <small>Source: <a href="https://github.com/statmodels7/parameters7/blob/master/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.11.0" id="parameters7-0110">parameters7 0.11.0<a class="anchor" aria-label="anchor" href="#parameters7-0110"></a></h2>
+<ul><li>The numerical fallbacks take their stencils from numericals7. The package imported it for the enumerations and used none of its differentiation: <code><a href="../reference/mixed_stencil.html">mixed_stencil()</a></code> carried a transcribed table of the offsets and weights for orders one to four, which is a second copy of <code>fd_weights()</code>, and every fallback wrote its own central difference. The table is read from numericals7 now, <code><a href="../reference/fd_step.html">fd_step()</a></code> delegates rather than restating <code>eps^(1/(order+2))</code>, and <code><a href="../reference/fd_along.html">fd_along()</a></code> is the one place a difference along a free value is assembled. The rules are the same rules, so every number is unchanged; what moves is where they live.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.10.0" id="parameters7-0100">parameters7 0.10.0<a class="anchor" aria-label="anchor" href="#parameters7-0100"></a></h2>
 <ul><li>

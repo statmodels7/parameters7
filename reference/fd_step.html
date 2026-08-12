@@ -9,7 +9,7 @@ the size of that component."><meta property="og:image" content="https://statmode
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,7 +64,15 @@ the size of that component.</p>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The free scale is unbounded, so unlike the response and parameter steps of
 <span class="pkg">distributions7</span> this one has no boundary to be clamped away from: the
-whole point of the unconstrained scale is that there is nowhere to fall off.</p>
+whole point of the unconstrained scale is that there is nowhere to fall off,
+and <code>bounds</code> is left at its default for that reason.</p>
+<p>The rule is <span class="pkg">numericals7</span>'s and is read from it rather than written out
+again, so the step a fallback takes and the step the stencil library
+documents cannot drift apart.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p><code><a href="https://statmodels7.github.io/numericals7/reference/fd_step.html" class="external-link">fd_step</a></code></p></div>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

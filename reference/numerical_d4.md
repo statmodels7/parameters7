@@ -48,7 +48,7 @@ attainable accuracy is roughly \\\varepsilon^{1/3}\\.
 numerical_d4(scalar_matrix(2), 0.3)
 #> $`log_scale:log_scale:log_scale:log_scale`
 #>          v1       v2
-#> v1 1.349858 0.000000
-#> v2 0.000000 1.349858
+#> v1 1.349852 0.000000
+#> v2 0.000000 1.349852
 #> 
 ```
