@@ -4,7 +4,7 @@
 \alias{param_d4.CorrelationParam}
 \title{Fourth Derivatives of a Correlation Parameter}
 \arguments{
-\item{s}{A \code{\link{CorrelationParam}} object.}
+\item{s}{A \code{\link[=CorrelationParam]{CorrelationParam()}} object.}
 
 \item{eta}{A numeric vector of free values.}
 
@@ -14,6 +14,6 @@
 A named list of symmetric matrices.
 }
 \description{
-Closed form; see \code{\link{param_d1.CorrelationParam}}.
+Closed form; see \code{\link[=param_d1.CorrelationParam]{param_d1.CorrelationParam()}}.
 }
 \keyword{internal}

@@ -6,13 +6,13 @@ NULL
 #'
 #' @description
 #' The S7 class of probability vectors on the open simplex, in the additive
-#' log-ratio parametrization. Constructed by \code{\link{simplex}}.
+#' log-ratio parametrization. Constructed by [simplex()].
 #'
 #' @inheritParams parameter
 #'
-#' @return An object of class \code{SimplexParam}.
+#' @return An object of class `SimplexParam`.
 #'
-#' @seealso \code{\link{simplex}}
+#' @seealso [simplex()]
 #'
 #' @examples
 #' S7::S7_inherits(simplex(3), SimplexParam)
@@ -49,9 +49,9 @@ SimplexParam <- S7::new_class("SimplexParam", parent = parameter)
 #'
 #' @param n_cat The number of categories \eqn{K}, at least 2.
 #'
-#' @return An object of class \code{\link{SimplexParam}}.
+#' @return An object of class [SimplexParam()].
 #'
-#' @seealso \code{\link{transition_matrix}}, \code{\link{param_value}}
+#' @seealso [transition_matrix()], [param_value()]
 #'
 #' @examples
 #' s <- simplex(3)
@@ -62,8 +62,8 @@ SimplexParam <- S7::new_class("SimplexParam", parent = parameter)
 #' max(abs(param_free(s, param_value(s, eta)) - eta))
 #'
 #' @references
-#' Aitchison, J. (1986). \emph{The Statistical Analysis of Compositional
-#' Data}. Chapman and Hall, London. The additive log-ratio chart is
+#' Aitchison, J. (1986). *The Statistical Analysis of Compositional
+#' Data*. Chapman and Hall, London. The additive log-ratio chart is
 #' chapter 6.
 #'
 #' @export
@@ -113,7 +113,7 @@ simplex_point <- function(eta) {
 #' @param pi_full The value, a vector of length \eqn{K}.
 #' @param order The highest order wanted, 1 to 4.
 #'
-#' @return A list with elements \code{d1} to \code{d\{order\}}.
+#' @return A list with elements `d1` to \code{d\{order\}}.
 #'
 #' @keywords internal
 simplex_tensors <- function(pi_full, order = 4L) {
@@ -191,7 +191,7 @@ simplex_tensors <- function(pi_full, order = 4L) {
 #' Extract Named Components From Softmax Tensors
 #'
 #' @description
-#' Slices the tensors of \code{\link{simplex_tensors}} into the named lists
+#' Slices the tensors of [simplex_tensors()] into the named lists
 #' the derivative generics return.
 #'
 #' @param s The parameter the tuples belong to.
@@ -200,7 +200,7 @@ simplex_tensors <- function(pi_full, order = 4L) {
 #' @param wrap A function applied to each raw slice, for the transition
 #'   matrix to embed a row; the identity here.
 #'
-#' @return A named list keyed as \code{param_tuple_names(s, order)}.
+#' @return A named list keyed as `param_tuple_names(s, order)`.
 #'
 #' @keywords internal
 simplex_components <- function(s, tens, order, wrap = identity) {
@@ -224,8 +224,8 @@ simplex_components <- function(s, tens, order, wrap = identity) {
 
 #' @title Value of a Simplex Parameter
 #' @name param_value.SimplexParam
-#' @description The softmax point, named \code{p1..pK}.
-#' @param s A \code{\link{SimplexParam}} object.
+#' @description The softmax point, named `p1..pK`.
+#' @param s A [SimplexParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A numeric vector of length \eqn{K} summing to one.
@@ -240,7 +240,7 @@ S7::method(param_value, SimplexParam) <- function(s, eta, ...) {
 #' @description
 #' The additive log-ratio, exact: \eqn{\eta_a = \log(\pi_a/\pi_K)}. Rejected
 #' outside the open simplex or when the vector does not sum to one.
-#' @param s A \code{\link{SimplexParam}} object.
+#' @param s A [SimplexParam()] object.
 #' @param m A probability vector of length \eqn{K}.
 #' @param ... Unused.
 #' @return A named numeric vector of free values.
@@ -271,7 +271,7 @@ S7::method(param_free, SimplexParam) <- function(s, m, ...) {
 #' @description
 #' Closed form: \eqn{\partial_b \pi_a = \pi_a(\delta_{ab} - \pi_b)}, the
 #' covariance structure of a categorical indicator.
-#' @param s A \code{\link{SimplexParam}} object.
+#' @param s A [SimplexParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named list of vectors of length \eqn{K}.
@@ -286,7 +286,7 @@ S7::method(param_d1, SimplexParam) <- function(s, eta, ...) {
 #' @title Second Derivatives of a Simplex Parameter
 #' @name param_d2.SimplexParam
 #' @description Closed form, one further product rule.
-#' @param s A \code{\link{SimplexParam}} object.
+#' @param s A [SimplexParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named list of vectors of length \eqn{K}.
@@ -300,7 +300,7 @@ S7::method(param_d2, SimplexParam) <- function(s, eta, ...) {
 #' @title Third Derivatives of a Simplex Parameter
 #' @name param_d3.SimplexParam
 #' @description Closed form, the cumulant recursion at third order.
-#' @param s A \code{\link{SimplexParam}} object.
+#' @param s A [SimplexParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named list of vectors of length \eqn{K}.
@@ -314,7 +314,7 @@ S7::method(param_d3, SimplexParam) <- function(s, eta, ...) {
 #' @title Fourth Derivatives of a Simplex Parameter
 #' @name param_d4.SimplexParam
 #' @description Closed form, the cumulant recursion at fourth order.
-#' @param s A \code{\link{SimplexParam}} object.
+#' @param s A [SimplexParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named list of vectors of length \eqn{K}.

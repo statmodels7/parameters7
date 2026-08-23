@@ -4,7 +4,7 @@
 \alias{param_d3.DiagMatrixParam}
 \title{Third Derivatives of a Diagonal Parameter}
 \arguments{
-\item{s}{A \code{\link{DiagMatrixParam}} object.}
+\item{s}{A \code{\link[=DiagMatrixParam]{DiagMatrixParam()}} object.}
 
 \item{eta}{A numeric vector of free values.}
 

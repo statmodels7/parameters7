@@ -6,13 +6,13 @@ NULL
 #'
 #' @description
 #' Maps the free vector \eqn{\eta} to the constrained value it parametrizes:
-#' a symmetric matrix for the \code{\link{matrix_parameter}} branch, a
-#' probability vector for \code{\link{simplex}}, a row-stochastic matrix for
-#' \code{\link{transition_matrix}}.
+#' a symmetric matrix for the [matrix_parameter()] branch, a
+#' probability vector for [simplex()], a row-stochastic matrix for
+#' [transition_matrix()].
 #'
 #' @details
 #' This is the only generic a parameter must implement. Everything else in the
-#' package has a numerical method registered on the \code{\link{parameter}}
+#' package has a numerical method registered on the [parameter()]
 #' class and is therefore available from this one alone.
 #'
 #' The generic validates the free vector before dispatching, so every method,
@@ -21,16 +21,16 @@ NULL
 #' to reach, so a non-finite entry is a defect in the caller rather than a
 #' point of the domain.
 #'
-#' @param s An object inheriting from class \code{\link{parameter}}.
-#' @param eta A numeric vector of length \code{s@n_free}.
+#' @param s An object inheriting from class [parameter()].
+#' @param eta A numeric vector of length `s@n_free`.
 #' @param ... Passed to methods.
 #'
 #' @return The constrained value, shaped as the family declares: a symmetric
-#'   \code{s@dimension} by \code{s@dimension} matrix on the matrix branch, a
+#'   `s@dimension` by `s@dimension` matrix on the matrix branch, a
 #'   vector or row-stochastic matrix otherwise.
 #'
-#' @seealso \code{\link{param_free}}, \code{\link{param_d1}},
-#'   \code{\link{param_logdet}}
+#' @seealso [param_free()], [param_d1()],
+#'   [param_logdet()]
 #'
 #' @examples
 #' s <- log_cholesky(2)
@@ -58,15 +58,15 @@ param_value <- S7::new_generic("param_value", "s", function(s, eta, ...) {
 #' value outside the set -- a matrix that is not positive definite, a vector
 #' off the simplex -- is rejected rather than repaired.
 #'
-#' @param s An object inheriting from class \code{\link{parameter}}.
+#' @param s An object inheriting from class [parameter()].
 #' @param m A value of the family's shape: a symmetric matrix on the matrix
 #'   branch, a probability vector or row-stochastic matrix otherwise.
 #' @param ... Passed to methods.
 #'
-#' @return A numeric vector of length \code{s@n_free}, named by
-#'   \code{s@free_names}.
+#' @return A numeric vector of length `s@n_free`, named by
+#'   `s@free_names`.
 #'
-#' @seealso \code{\link{param_value}}
+#' @seealso [param_value()]
 #'
 #' @examples
 #' s <- log_cholesky(2)
@@ -88,17 +88,17 @@ param_free <- S7::new_generic("param_free", "s", function(s, m, ...) {
 #'
 #' @details
 #' A parameter that registers no method for this generic gets the numerical one
-#' of the \code{\link{parameter}} class, which applies a single central
-#' difference to \code{\link{param_value}} in each component.
+#' of the [parameter()] class, which applies a single central
+#' difference to [param_value()] in each component.
 #'
-#' @param s An object inheriting from class \code{\link{parameter}}.
-#' @param eta A numeric vector of length \code{s@n_free}.
+#' @param s An object inheriting from class [parameter()].
+#' @param eta A numeric vector of length `s@n_free`.
 #' @param ... Passed to methods.
 #'
-#' @return A list of \code{s@n_free} symmetric matrices, named by
-#'   \code{s@free_names}.
+#' @return A list of `s@n_free` symmetric matrices, named by
+#'   `s@free_names`.
 #'
-#' @seealso \code{\link{param_d2}}, \code{\link{param_is_numerical}}
+#' @seealso [param_d2()], [param_is_numerical()]
 #'
 #' @examples
 #' s <- scaled_matrix(diag(2))
@@ -119,20 +119,20 @@ param_d1 <- S7::new_generic("param_d1", "s", function(s, eta, ...) {
 #' the value.
 #'
 #' @details
-#' The components are keyed by \code{\link{param_tuple_names}}, generated from
+#' The components are keyed by [param_tuple_names()], generated from
 #' the same enumeration that produces the names rather than by taking a name
 #' apart. Recovering an index by splitting a name on its separator is the
 #' obvious route and it is wrong, because a free value whose own label contains
 #' the separator splits into the wrong number of pieces.
 #'
-#' @param s An object inheriting from class \code{\link{parameter}}.
-#' @param eta A numeric vector of length \code{s@n_free}.
+#' @param s An object inheriting from class [parameter()].
+#' @param eta A numeric vector of length `s@n_free`.
 #' @param ... Passed to methods.
 #'
 #' @return A named list keyed as
-#'   \code{param_tuple_names(s)}.
+#'   `param_tuple_names(s)`.
 #'
-#' @seealso \code{\link{param_d1}}, \code{\link{param_tuple_names}}
+#' @seealso [param_d1()], [param_tuple_names()]
 #'
 #' @examples
 #' s <- scaled_matrix(diag(2))
@@ -163,13 +163,13 @@ param_d2 <- S7::new_generic("param_d2", "s", function(s, eta, ...) {
 #' the parameter answers what the log-determinant is, and the likelihood
 #' decides where it goes.
 #'
-#' @param s An object inheriting from class \code{\link{parameter}}.
-#' @param eta A numeric vector of length \code{s@n_free}.
+#' @param s An object inheriting from class [parameter()].
+#' @param eta A numeric vector of length `s@n_free`.
 #' @param ... Passed to methods.
 #'
 #' @return A single number.
 #'
-#' @seealso \code{\link{param_dlogdet}}, \code{\link{param_solve}}
+#' @seealso [param_dlogdet()], [param_solve()]
 #'
 #' @examples
 #' param_logdet(log_cholesky(2), c(0, 0, 0))
@@ -199,17 +199,17 @@ param_logdet <- S7::new_generic("param_logdet", "s", function(s, eta, ...) {
 #' \eqn{\partial_k \log|M| = \mathrm{tr}(M^{-1} \partial_k M)}, with the
 #' Moore-Penrose inverse in place of \eqn{M^{-1}} in the rank-deficient case.
 #' A closed form is therefore never an independent claim: it must agree with
-#' \code{\link{param_d1}} through that identity, and
-#' \code{\link{check_parameter}} compares the two routes.
+#' [param_d1()] through that identity, and
+#' [check_parameter()] compares the two routes.
 #'
-#' @param s An object inheriting from class \code{\link{parameter}}.
-#' @param eta A numeric vector of length \code{s@n_free}.
+#' @param s An object inheriting from class [parameter()].
+#' @param eta A numeric vector of length `s@n_free`.
 #' @param ... Passed to methods.
 #'
-#' @return A numeric vector of length \code{s@n_free}, named by
-#'   \code{s@free_names}.
+#' @return A numeric vector of length `s@n_free`, named by
+#'   `s@free_names`.
 #'
-#' @seealso \code{\link{param_logdet}}, \code{\link{param_d2logdet}}
+#' @seealso [param_logdet()], [param_d2logdet()]
 #'
 #' @examples
 #' # for a scaled precision the derivative is the rank, whatever the scale
@@ -227,7 +227,7 @@ param_dlogdet <- S7::new_generic("param_dlogdet", "s", function(s, eta, ...) {
 #'
 #' @description
 #' Returns the distinct second derivatives of the log-determinant, or of the
-#' log pseudo-determinant, keyed as \code{\link{param_tuple_names}}.
+#' log pseudo-determinant, keyed as [param_tuple_names()].
 #'
 #' @details
 #' Differentiating \eqn{\partial_k \log|M| = \mathrm{tr}(M^{-1}\partial_k M)}
@@ -240,16 +240,16 @@ param_dlogdet <- S7::new_generic("param_dlogdet", "s", function(s, eta, ...) {
 #' rank deficient. The second term is what makes the Hessian of the
 #' log-determinant differ from the trace of the second derivative of the
 #' matrix, and it is where a closed form is usually got wrong;
-#' \code{\link{check_parameter}} compares this route against
-#' \code{\link{param_d2}}.
+#' [check_parameter()] compares this route against
+#' [param_d2()].
 #'
-#' @param s An object inheriting from class \code{\link{parameter}}.
-#' @param eta A numeric vector of length \code{s@n_free}.
+#' @param s An object inheriting from class [parameter()].
+#' @param eta A numeric vector of length `s@n_free`.
 #' @param ... Passed to methods.
 #'
-#' @return A named numeric vector, keyed as \code{param_tuple_names(s)}.
+#' @return A named numeric vector, keyed as `param_tuple_names(s)`.
 #'
-#' @seealso \code{\link{param_dlogdet}}
+#' @seealso [param_dlogdet()]
 #'
 #' @examples
 #' param_d2logdet(log_cholesky(2), c(0.2, -0.1, 0.4))
@@ -275,15 +275,15 @@ param_d2logdet <- S7::new_generic("param_d2logdet", "s", function(s, eta, ...) {
 #' and is assembled by the consumer -- so a pseudo-inverse would be a plausible
 #' matrix answering a question nobody asked.
 #'
-#' @param s An object inheriting from class \code{\link{parameter}}.
-#' @param eta A numeric vector of length \code{s@n_free}.
-#' @param b A numeric matrix or vector with \code{s@dimension} rows. Defaults to the
+#' @param s An object inheriting from class [parameter()].
+#' @param eta A numeric vector of length `s@n_free`.
+#' @param b A numeric matrix or vector with `s@dimension` rows. Defaults to the
 #'   identity, which returns the inverse.
 #' @param ... Passed to methods.
 #'
-#' @return A numeric matrix with \code{s@dimension} rows.
+#' @return A numeric matrix with `s@dimension` rows.
 #'
-#' @seealso \code{\link{param_factor}}, \code{\link{param_logdet}}
+#' @seealso [param_factor()], [param_logdet()]
 #'
 #' @examples
 #' s <- log_cholesky(2)
@@ -322,16 +322,16 @@ param_solve <- S7::new_generic("param_solve", "s", function(s, eta, b = NULL, ..
 #'
 #' @details
 #' Rejected for a rank-deficient family, for the reason given in
-#' \code{\link{param_solve}}.
+#' [param_solve()].
 #'
-#' @param s An object inheriting from class \code{\link{parameter}}.
-#' @param eta A numeric vector of length \code{s@n_free}.
+#' @param s An object inheriting from class [parameter()].
+#' @param eta A numeric vector of length `s@n_free`.
 #' @param ... Passed to methods.
 #'
-#' @return A lower triangular numeric matrix with \code{s@dimension} rows and
+#' @return A lower triangular numeric matrix with `s@dimension` rows and
 #'   columns.
 #'
-#' @seealso \code{\link{param_solve}}
+#' @seealso [param_solve()]
 #'
 #' @examples
 #' round(param_factor(log_cholesky(2), c(0.1, 0.2, -0.3)), 4)
@@ -360,16 +360,16 @@ param_factor <- S7::new_generic("param_factor", "s", function(s, eta, ...) {
 #' @description
 #' Returns the distinct third derivatives
 #' \eqn{\partial^3 V / \partial \eta_k \partial \eta_l \partial \eta_m},
-#' keyed as \code{\link{param_tuple_names}(s, 3)}, each shaped like the
+#' keyed as [`param_tuple_names(s, 3)`][param_tuple_names], each shaped like the
 #' value.
 #'
-#' @param s An object inheriting from class \code{\link{parameter}}.
-#' @param eta A numeric vector of length \code{s@n_free}.
+#' @param s An object inheriting from class [parameter()].
+#' @param eta A numeric vector of length `s@n_free`.
 #' @param ... Passed to methods.
 #'
-#' @return A named list, keyed as \code{param_tuple_names(s, 3)}.
+#' @return A named list, keyed as `param_tuple_names(s, 3)`.
 #'
-#' @seealso \code{\link{param_d2}}, \code{\link{param_d4}}
+#' @seealso [param_d2()], [param_d4()]
 #'
 #' @examples
 #' param_d3(scalar_matrix(2), 0.3)
@@ -385,7 +385,7 @@ param_d3 <- S7::new_generic("param_d3", "s", function(s, eta, ...) {
 #'
 #' @description
 #' Returns the distinct fourth derivatives, keyed as
-#' \code{\link{param_tuple_names}(s, 4)}, each shaped like the value.
+#' [`param_tuple_names(s, 4)`][param_tuple_names], each shaped like the value.
 #'
 #' @details
 #' The entry keyed \eqn{k:l:m:n} is
@@ -395,17 +395,17 @@ param_d3 <- S7::new_generic("param_d3", "s", function(s, eta, ...) {
 #'
 #' a matrix of the same shape as \eqn{M(\eta)}. The derivative is symmetric
 #' in its indices, so only the distinct multi-indices are returned, which is
-#' what \code{\link{param_tuple_names}} enumerates. Fourth order is where the
+#' what [param_tuple_names()] enumerates. Fourth order is where the
 #' contract stops: it is what a fourth-order chain rule through a link
 #' needs, and nothing in the toolkit asks for more.
 #'
-#' @param s An object inheriting from class \code{\link{parameter}}.
-#' @param eta A numeric vector of length \code{s@n_free}.
+#' @param s An object inheriting from class [parameter()].
+#' @param eta A numeric vector of length `s@n_free`.
 #' @param ... Passed to methods.
 #'
-#' @return A named list, keyed as \code{param_tuple_names(s, 4)}.
+#' @return A named list, keyed as `param_tuple_names(s, 4)`.
 #'
-#' @seealso \code{\link{param_d3}}
+#' @seealso [param_d3()]
 #'
 #' @examples
 #' param_d4(scalar_matrix(2), 0.3)
@@ -421,10 +421,10 @@ param_d4 <- S7::new_generic("param_d4", "s", function(s, eta, ...) {
 #'
 #' @description
 #' The higher derivatives of the log-(pseudo-)determinant, keyed as
-#' \code{\link{param_tuple_names}} of the matching order.
+#' [param_tuple_names()] of the matching order.
 #'
 #' @details
-#' They follow from the second derivative of \code{\link{param_d2logdet}}
+#' They follow from the second derivative of [param_d2logdet()]
 #' by the same two rules, applied again: the trace is linear, and
 #'
 #' \deqn{\partial_m M^{-1} = -M^{-1}(\partial_m M)M^{-1}.}
@@ -433,18 +433,18 @@ param_d4 <- S7::new_generic("param_d4", "s", function(s, eta, ...) {
 #' \eqn{M^{-1}(\partial_{I_1}M)M^{-1}(\partial_{I_2}M)\cdots}, one factor
 #' per block of a partition of the index set, with the sign and the
 #' multiplicity the two rules produce. The expansion is not transcribed:
-#' the package differentiates \code{\link{param_d1}} through
-#' \code{\link{param_d4}} directly, and \code{\link{check_parameter}} holds
+#' the package differentiates [param_d1()] through
+#' [param_d4()] directly, and [check_parameter()] holds
 #' the result against a numerical differentiation of the order below, which
 #' shares none of its arithmetic.
 #'
-#' @param s An object inheriting from class \code{\link{matrix_parameter}}.
-#' @param eta A numeric vector of length \code{s@n_free}.
+#' @param s An object inheriting from class [matrix_parameter()].
+#' @param eta A numeric vector of length `s@n_free`.
 #' @param ... Passed to methods.
 #'
 #' @return A named numeric vector.
 #'
-#' @seealso \code{\link{param_d2logdet}}
+#' @seealso [param_d2logdet()]
 #'
 #' @examples
 #' param_d3logdet(log_cholesky(2), c(0.1, -0.2, 0.4))
@@ -467,9 +467,9 @@ param_d4logdet <- S7::new_generic("param_d4logdet", "s", function(s, eta, ...) {
 #'
 #' @description
 #' The keys of the derivative lists: one per unordered tuple of free values.
-#' At order 2, the keys of \code{\link{param_d2}} and
-#' \code{\link{param_d2logdet}}, diagonal pairs first; at orders 3 and 4,
-#' the keys of \code{\link{param_d3}} and \code{\link{param_d4}},
+#' At order 2, the keys of [param_d2()] and
+#' [param_d2logdet()], diagonal pairs first; at orders 3 and 4,
+#' the keys of [param_d3()] and [param_d4()],
 #' lexicographic combinations with repetition.
 #'
 #' @details
@@ -486,15 +486,15 @@ param_d4logdet <- S7::new_generic("param_d4logdet", "s", function(s, eta, ...) {
 #' This exists so that nothing has to recover a tuple by splitting a key
 #' apart. Generating the keys and the index tuples from one enumeration
 #' cannot be fooled by a free name that contains the separator, which
-#' splitting can. Use \code{\link{param_tuple_indices}} for the tuples
+#' splitting can. Use [param_tuple_indices()] for the tuples
 #' themselves.
 #'
-#' @param s An object inheriting from class \code{\link{parameter}}.
+#' @param s An object inheriting from class [parameter()].
 #' @param order The derivative order: 2 (default), 3 or 4.
 #'
 #' @return A character vector, one entry per distinct component.
 #'
-#' @seealso \code{\link{param_tuple_indices}}
+#' @seealso [param_tuple_indices()]
 #'
 #' @examples
 #' param_tuple_names(log_cholesky(2))
@@ -511,19 +511,19 @@ param_tuple_names <- function(s, order = 2L) {
 #' Index Tuples Behind the Derivative Component Names
 #'
 #' @description
-#' The unordered index tuples \code{\link{param_tuple_names}} names, in
+#' The unordered index tuples [param_tuple_names()] names, in
 #' exactly the same order. At order 2 the diagonal pairs come first and then
 #' the off-diagonal ones, because consumers index a Hessian that way; at
 #' orders 3 and 4 the tuples are the lexicographic combinations with
 #' repetition, matching the enumeration \pkg{distributions7} uses for its
 #' higher derivatives.
 #'
-#' @param s An object inheriting from class \code{\link{parameter}}.
+#' @param s An object inheriting from class [parameter()].
 #' @param order The derivative order: 1 to 4.
 #'
-#' @return A list of integer vectors of length \code{order}.
+#' @return A list of integer vectors of length `order`.
 #'
-#' @seealso \code{\link{param_tuple_names}}
+#' @seealso [param_tuple_names()]
 #'
 #' @examples
 #' param_tuple_indices(log_cholesky(2), 2)
@@ -538,16 +538,16 @@ param_tuple_indices <- function(s, order = 2L) {
 #' The Index Tuples of a Given Width
 #'
 #' @description
-#' The enumeration behind \code{\link{param_tuple_indices}}, taken over a
+#' The enumeration behind [param_tuple_indices()], taken over a
 #' number of variables rather than over a parameter, so that anything holding
 #' derivatives over \eqn{d} variables -- a jet, for instance -- can share it.
 #'
 #' @param d The number of variables.
 #' @param order The derivative order, 1 to 4.
 #'
-#' @return A list of integer vectors of length \code{order}.
+#' @return A list of integer vectors of length `order`.
 #'
-#' @seealso \code{\link{param_tuple_indices}}
+#' @seealso [param_tuple_indices()]
 #'
 #' @keywords internal
 tuple_indices <- function(d, order = 2L) {

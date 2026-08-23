@@ -4,7 +4,7 @@
 \alias{param_free.SimplexParam}
 \title{Free Vector of a Simplex Parameter}
 \arguments{
-\item{s}{A \code{\link{SimplexParam}} object.}
+\item{s}{A \code{\link[=SimplexParam]{SimplexParam()}} object.}
 
 \item{m}{A probability vector of length \eqn{K}.}
 

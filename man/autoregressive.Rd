@@ -22,10 +22,10 @@ identify the last partial autocorrelation.}
 carrying the marginal variance. Defaults to
 \code{linkfunctions7::log_link()}.}
 
-\item{role}{A label; see \code{\link{log_cholesky}}.}
+\item{role}{A label; see \code{\link[=log_cholesky]{log_cholesky()}}.}
 }
 \value{
-An object of class \code{\link{AutoregressiveParam}}.
+An object of class \code{\link[=AutoregressiveParam]{AutoregressiveParam()}}.
 }
 \description{
 The covariance of \eqn{p} consecutive observations of a stationary
@@ -44,7 +44,7 @@ autocorrelations do not have this problem. Each lies in \eqn{(-1, 1)}
 independently of the others, and the Levinson-Durbin recursion carries them
 onto the stationary coefficients bijectively, which is the transformation
 of Barndorff-Nielsen and Schou (1973) and Monahan (1984). Each partial
-autocorrelation therefore takes an \code{\link[linkfunctions7]{rhobit_link}}
+autocorrelation therefore takes an \code{\link[linkfunctions7:rhobit_link]{linkfunctions7::rhobit_link()}}
 and every free vector gives a stationary, positive definite matrix.
 
 The autocorrelations follow from the same recursion. Writing
@@ -73,13 +73,13 @@ Markov of that order, so its precision carries no entry beyond the
 the predictor coefficients and \eqn{D} the innovation variances, rather
 than by a factorization.
 
-\code{\link{ar1}} is the case \eqn{q = 1} written out: there the
+\code{\link[=ar1]{ar1()}} is the case \eqn{q = 1} written out: there the
 autocorrelation is simply \eqn{\rho^{h}}, the determinant is
 \eqn{(1-\rho^2)^{p-1}} and the inverse is tridiagonal in three lines, so it
 keeps its own closed forms and does not go through the recursion.
 
 The name is \code{autoregressive()} rather than \code{ar()} because
-\code{\link[stats]{ar}} is a function of \pkg{stats}, and a package meant
+\code{\link[stats:ar]{stats::ar()}} is a function of \pkg{stats}, and a package meant
 to be attached alongside others should not mask one.
 }
 \examples{
@@ -106,5 +106,5 @@ Monahan, J. F. (1984). A note on enforcing stationarity in autoregressive
 moving average models. \emph{Biometrika} 71, 403-404.
 }
 \seealso{
-\code{\link{ar1}}, \code{\link{compound_symmetry}}
+\code{\link[=ar1]{ar1()}}, \code{\link[=compound_symmetry]{compound_symmetry()}}
 }

@@ -7,7 +7,7 @@
 ar_logdet_derivative(s, eta, order)
 }
 \arguments{
-\item{s}{An \code{\link{AutoregressiveParam}} object.}
+\item{s}{An \code{\link[=AutoregressiveParam]{AutoregressiveParam()}} object.}
 
 \item{eta}{A numeric vector of free values.}
 

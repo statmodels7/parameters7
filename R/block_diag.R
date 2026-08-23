@@ -6,13 +6,13 @@ NULL
 #' @description
 #' The S7 class of a block-diagonal matrix built from several matrix
 #' parameters, each carrying its own free values. Constructed by
-#' \code{\link{block_diag}}.
+#' [block_diag()].
 #'
 #' @inheritParams matrix_parameter
 #'
-#' @return An object of class \code{BlockDiagParam}.
+#' @return An object of class `BlockDiagParam`.
 #'
-#' @seealso \code{\link{block_diag}}, \code{\link{kron_identity}}
+#' @seealso [block_diag()], [kron_identity()]
 #'
 #' @examples
 #' S7::S7_inherits(block_diag(log_cholesky(2), ar1(3)), BlockDiagParam)
@@ -32,7 +32,7 @@ BlockDiagParam <- S7::new_class("BlockDiagParam", parent = matrix_parameter)
 #' This is the covariance (or precision) of several independent groups of
 #' coefficients whose structures differ, which is what a model carrying more
 #' than one random-effect term needs. It differs from
-#' \code{\link{kron_identity}}, where the blocks are identical and share one
+#' [kron_identity()], where the blocks are identical and share one
 #' free vector; here the free vectors are concatenated, so the composite has
 #' \eqn{\sum_b d_b} free values.
 #'
@@ -50,18 +50,18 @@ BlockDiagParam <- S7::new_class("BlockDiagParam", parent = matrix_parameter)
 #' The free names are prefixed by the block's label, since two blocks of the
 #' same family would otherwise report the same names and the class requires
 #' them to be unique. Labels come from the names of the arguments where they
-#' are given, and are \code{b1}, \code{b2}, ... otherwise.
+#' are given, and are `b1`, `b2`, ... otherwise.
 #'
 #' @param ... Two or more objects inheriting from
-#'   \code{\link{matrix_parameter}}, or a single list of them. Named arguments
+#'   [matrix_parameter()], or a single list of them. Named arguments
 #'   supply the block labels.
-#' @param role One of \code{"covariance"}, \code{"precision"} or
-#'   \code{"either"}. Defaults to the blocks' common role, and to
-#'   \code{"either"} when they disagree.
+#' @param role One of `"covariance"`, `"precision"` or
+#'   `"either"`. Defaults to the blocks' common role, and to
+#'   `"either"` when they disagree.
 #'
-#' @return An object of class \code{\link{BlockDiagParam}}.
+#' @return An object of class [BlockDiagParam()].
 #'
-#' @seealso \code{\link{kron_identity}}, \code{\link{log_cholesky}}
+#' @seealso [kron_identity()], [log_cholesky()]
 #'
 #' @examples
 #' s <- block_diag(subject = log_cholesky(2), time = ar1(3))
@@ -169,11 +169,11 @@ split_ranges <- function(widths) {
 #' sorted local index tuple, so that a lookup from the composite's enumeration
 #' needs no assumption about how the two orderings correspond.
 #'
-#' @param block A \code{\link{matrix_parameter}}.
+#' @param block A [matrix_parameter()].
 #' @param eta The block's own stretch of the free vector.
 #' @param order The derivative order, 1 to 4.
 #'
-#' @return A named list of matrices, keyed as \code{"1"}, \code{"1,2"} and so
+#' @return A named list of matrices, keyed as `"1"`, `"1,2"` and so
 #'   on over the block's own free indices.
 #'
 #' @keywords internal
@@ -197,11 +197,11 @@ block_derivs_by_tuple <- function(block, eta, order) {
 #' occupies, and returns a zero matrix for any tuple whose indices are not all
 #' owned by one block.
 #'
-#' @param s A \code{\link{BlockDiagParam}}.
-#' @param eta A numeric vector of length \code{s@n_free}.
+#' @param s A [BlockDiagParam()].
+#' @param eta A numeric vector of length `s@n_free`.
 #' @param order The derivative order, 1 to 4.
 #'
-#' @return A named list of matrices keyed as \code{param_tuple_names(s, order)}.
+#' @return A named list of matrices keyed as `param_tuple_names(s, order)`.
 #'
 #' @keywords internal
 block_diag_derivs <- function(s, eta, order) {
@@ -234,11 +234,11 @@ block_diag_derivs <- function(s, eta, order) {
 #' blocks, so a component is the owning block's own and zero for any tuple
 #' spanning two blocks.
 #'
-#' @param s A \code{\link{BlockDiagParam}}.
-#' @param eta A numeric vector of length \code{s@n_free}.
+#' @param s A [BlockDiagParam()].
+#' @param eta A numeric vector of length `s@n_free`.
 #' @param order The derivative order, 1 to 4.
 #'
-#' @return A named numeric vector keyed as \code{param_tuple_names(s, order)}.
+#' @return A named numeric vector keyed as `param_tuple_names(s, order)`.
 #'
 #' @keywords internal
 block_diag_logdet_derivs <- function(s, eta, order) {
@@ -272,10 +272,10 @@ block_diag_logdet_derivs <- function(s, eta, order) {
 #' @title Value of a Block-Diagonal Parameter
 #' @name param_value.BlockDiagParam
 #' @description Assembles the blocks along the diagonal.
-#' @param s A \code{\link{BlockDiagParam}} object.
-#' @param eta A numeric vector of length \code{s@n_free}.
+#' @param s A [BlockDiagParam()] object.
+#' @param eta A numeric vector of length `s@n_free`.
 #' @param ... Unused.
-#' @return A symmetric matrix of side \code{s@dimension}.
+#' @return A symmetric matrix of side `s@dimension`.
 #' @keywords internal
 S7::method(param_value, BlockDiagParam) <- function(s, eta, ...) {
   b <- .bd(s)
@@ -292,10 +292,10 @@ S7::method(param_value, BlockDiagParam) <- function(s, eta, ...) {
 #' Inverts each diagonal block through its own parameter and concatenates the
 #' results. A matrix whose off-diagonal blocks are not zero is rejected, that
 #' being a matrix the family cannot represent.
-#' @param s A \code{\link{BlockDiagParam}} object.
-#' @param m A symmetric matrix of side \code{s@dimension}.
+#' @param s A [BlockDiagParam()] object.
+#' @param m A symmetric matrix of side `s@dimension`.
 #' @param ... Unused.
-#' @return A numeric vector of length \code{s@n_free}.
+#' @return A numeric vector of length `s@n_free`.
 #' @keywords internal
 S7::method(param_free, BlockDiagParam) <- function(s, m, ...) {
   b <- .bd(s)
@@ -323,8 +323,8 @@ S7::method(param_free, BlockDiagParam) <- function(s, m, ...) {
 #' Each block's own derivatives, placed in the rows and columns that block
 #' occupies. A component whose indices span two blocks is exactly zero, the
 #' free values of one block not entering another.
-#' @param s A \code{\link{BlockDiagParam}} object.
-#' @param eta A numeric vector of length \code{s@n_free}.
+#' @param s A [BlockDiagParam()] object.
+#' @param eta A numeric vector of length `s@n_free`.
 #' @param ... Unused.
 #' @return A named list of symmetric matrices.
 #' @keywords internal
@@ -358,8 +358,8 @@ S7::method(param_d4, BlockDiagParam) <- function(s, eta, ...) {
 #' @description
 #' The sum of the blocks' log-(pseudo-)determinants, which is what the
 #' determinant of a block-diagonal matrix is.
-#' @param s A \code{\link{BlockDiagParam}} object.
-#' @param eta A numeric vector of length \code{s@n_free}.
+#' @param s A [BlockDiagParam()] object.
+#' @param eta A numeric vector of length `s@n_free`.
 #' @param ... Unused.
 #' @return A single number.
 #' @keywords internal
@@ -376,8 +376,8 @@ S7::method(param_logdet, BlockDiagParam) <- function(s, eta, ...) {
 #' The blocks' own, concatenated at the first order and placed by owner above
 #' it, every cross-block component being zero because the log-determinant is a
 #' sum over the blocks.
-#' @param s A \code{\link{BlockDiagParam}} object.
-#' @param eta A numeric vector of length \code{s@n_free}.
+#' @param s A [BlockDiagParam()] object.
+#' @param eta A numeric vector of length `s@n_free`.
 #' @param ... Unused.
 #' @return A named numeric vector.
 #' @keywords internal
@@ -411,9 +411,9 @@ S7::method(param_d4logdet, BlockDiagParam) <- function(s, eta, ...) {
 #' @description
 #' Both are blockwise: the inverse of a block-diagonal matrix is the block
 #' diagonal of the inverses, and the same holds of a triangular factor.
-#' @param s A \code{\link{BlockDiagParam}} object.
-#' @param eta A numeric vector of length \code{s@n_free}.
-#' @param b A matrix with \code{s@dimension} rows, or \code{NULL}.
+#' @param s A [BlockDiagParam()] object.
+#' @param eta A numeric vector of length `s@n_free`.
+#' @param b A matrix with `s@dimension` rows, or `NULL`.
 #' @param ... Unused.
 #' @return A matrix.
 #' @keywords internal

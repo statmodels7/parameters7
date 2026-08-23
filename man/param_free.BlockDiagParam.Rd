@@ -4,7 +4,7 @@
 \alias{param_free.BlockDiagParam}
 \title{Free Vector of a Block-Diagonal Parameter}
 \arguments{
-\item{s}{A \code{\link{BlockDiagParam}} object.}
+\item{s}{A \code{\link[=BlockDiagParam]{BlockDiagParam()}} object.}
 
 \item{m}{A symmetric matrix of side \code{s@dimension}.}
 

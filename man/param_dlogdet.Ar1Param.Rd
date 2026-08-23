@@ -7,7 +7,7 @@
 \alias{param_d4logdet.Ar1Param}
 \title{Log-Determinant Derivatives of an AR(1) Parameter}
 \arguments{
-\item{s}{An \code{\link{Ar1Param}} object.}
+\item{s}{An \code{\link[=Ar1Param]{Ar1Param()}} object.}
 
 \item{eta}{A numeric vector of two free values.}
 

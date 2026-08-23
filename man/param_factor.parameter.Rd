@@ -4,7 +4,7 @@
 \alias{param_factor.parameter}
 \title{Default Factor}
 \arguments{
-\item{s}{A \code{\link{parameter}} object.}
+\item{s}{A \code{\link[=parameter]{parameter()}} object.}
 
 \item{eta}{A numeric vector of free values.}
 
@@ -15,7 +15,7 @@ A lower triangular numeric matrix.
 }
 \description{
 Fallback: the lower Cholesky factor of
-\code{\link{param_value}}, rejected when the matrix is not positive
+\code{\link[=param_value]{param_value()}}, rejected when the matrix is not positive
 definite spectrally.
 }
 \keyword{internal}

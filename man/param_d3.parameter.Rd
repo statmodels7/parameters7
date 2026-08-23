@@ -4,7 +4,7 @@
 \alias{param_d3.parameter}
 \title{Default Third Derivatives}
 \arguments{
-\item{s}{A \code{\link{parameter}} object.}
+\item{s}{A \code{\link[=parameter]{parameter()}} object.}
 
 \item{eta}{A numeric vector of free values.}
 
@@ -14,6 +14,6 @@
 A named list.
 }
 \description{
-Fallback: see \code{\link{numerical_d3}}.
+Fallback: see \code{\link[=numerical_d3]{numerical_d3()}}.
 }
 \keyword{internal}

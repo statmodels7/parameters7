@@ -6,13 +6,13 @@ NULL
 #' @description
 #' The S7 class of a block-diagonal matrix built from \eqn{m} identical
 #' copies of an inner matrix parameter. Constructed by
-#' \code{\link{kron_identity}}.
+#' [kron_identity()].
 #'
 #' @inheritParams matrix_parameter
 #'
-#' @return An object of class \code{KronIdentityParam}.
+#' @return An object of class `KronIdentityParam`.
 #'
-#' @seealso \code{\link{kron_identity}}
+#' @seealso [kron_identity()]
 #'
 #' @examples
 #' S7::S7_inherits(kron_identity(log_cholesky(2), 3), KronIdentityParam)
@@ -46,12 +46,12 @@ KronIdentityParam <- S7::new_class("KronIdentityParam", parent = matrix_paramete
 #' from a general block-diagonal of distinct structures.
 #'
 #' @param structure An object inheriting from
-#'   \code{\link{matrix_parameter}}: the per-block parameter.
+#'   [matrix_parameter()]: the per-block parameter.
 #' @param m The number of blocks, a single integer of at least 1.
 #'
-#' @return An object of class \code{\link{KronIdentityParam}}.
+#' @return An object of class [KronIdentityParam()].
 #'
-#' @seealso \code{\link{log_cholesky}}, \code{\link{diagonal_matrix}}
+#' @seealso [log_cholesky()], [diagonal_matrix()]
 #'
 #' @examples
 #' s <- kron_identity(log_cholesky(2), 3)

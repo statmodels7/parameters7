@@ -4,7 +4,7 @@
 \alias{param_d1.SimplexParam}
 \title{First Derivatives of a Simplex Parameter}
 \arguments{
-\item{s}{A \code{\link{SimplexParam}} object.}
+\item{s}{A \code{\link[=SimplexParam]{SimplexParam()}} object.}
 
 \item{eta}{A numeric vector of free values.}
 

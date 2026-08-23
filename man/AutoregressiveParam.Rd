@@ -39,12 +39,12 @@ An object of class \code{AutoregressiveParam}.
 }
 \description{
 The S7 class of covariance matrices of a stationary autoregression of any
-order. Constructed by \code{\link{autoregressive}}.
+order. Constructed by \code{\link[=autoregressive]{autoregressive()}}.
 }
 \examples{
 S7::S7_inherits(autoregressive(5, order = 2), AutoregressiveParam)
 
 }
 \seealso{
-\code{\link{autoregressive}}
+\code{\link[=autoregressive]{autoregressive()}}
 }

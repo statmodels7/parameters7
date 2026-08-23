@@ -9,10 +9,10 @@ NULL
 #' Prints the family, the shape of the matrix, the rank, the free values and
 #' which of the derived quantities are numerical.
 #'
-#' @param x An object inheriting from class \code{\link{parameter}}.
+#' @param x An object inheriting from class [parameter()].
 #' @param ... Unused.
 #'
-#' @return Invisibly \code{x}.
+#' @return Invisibly `x`.
 #'
 #' @examples
 #' log_cholesky(3)

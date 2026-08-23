@@ -7,11 +7,11 @@
 #' likelihood asks of the matrix.
 #'
 #' @details
-#' A parameter owns its dimension: \code{log_cholesky(dimension = 3)} and
-#' \code{log_cholesky(dimension = 4)} are different objects, with \eqn{d = 6} and
+#' A parameter owns its dimension: `log_cholesky(dimension = 3)` and
+#' `log_cholesky(dimension = 4)` are different objects, with \eqn{d = 6} and
 #' \eqn{d = 10} free values respectively. The alternative, a dimensionless
-#' recipe applied to whatever arrives, would leave \code{n_free} and
-#' \code{free_names} unanswerable before any data exist, and both are needed
+#' recipe applied to whatever arrives, would leave `n_free` and
+#' `free_names` unanswerable before any data exist, and both are needed
 #' then.
 #'
 #' The rank and the null space are properties of the family rather than of a
@@ -20,35 +20,35 @@
 #' once, at construction, from the components rather than from an assembled
 #' matrix, because the numerical determination of a rank from an assembled
 #' matrix is not scale invariant while the null space is. See
-#' \code{\link{param_null_basis}}.
+#' [param_null_basis()].
 #'
-#' Only \code{\link{param_value}} is compulsory. Every other generic has a
+#' Only [param_value()] is compulsory. Every other generic has a
 #' numerical method registered on this class, so a new parameter is a subclass
 #' and one method, and a closed form supplied later replaces the corresponding
 #' numerical method through dispatch.
 #'
 #' @param param_name A single character string naming the family.
 #' @param n_free The length \eqn{d} of the free vector.
-#' @param free_names A character vector of length \code{n_free}, one label per
+#' @param free_names A character vector of length `n_free`, one label per
 #'   free value. Fixed at construction: every consumer builds parameter tables
 #'   from these. A label names the coordinate rather than the quantity the
 #'   coordinate produces, and the families here follow one convention for it.
 #'   Where a link carries a constrained quantity onto the free scale, the
-#'   label records that link, so a variance appears as \code{"log_scale"} and
-#'   a correlation as \code{"z_rho"}; where the coordinate is already
+#'   label records that link, so a variance appears as `"log_scale"` and
+#'   a correlation as `"z_rho"`; where the coordinate is already
 #'   unrestricted the label is the plain name of the quantity, as the
-#'   below-diagonal entries \code{"L2.1"} of a Cholesky factor are. The
+#'   below-diagonal entries `"L2.1"` of a Cholesky factor are. The
 #'   distinction matters outside the family: a consumer flattens the free
 #'   vector into scalar parameters carrying identity links, so a label
 #'   promising a bounded quantity reports a number on a scale that number is
 #'   not on.
 #' @param param_params A list of whatever the family needs to evaluate itself.
 #'
-#' @return An object of class \code{parameter}. The class is abstract; use one
-#'   of the constructors, such as \code{\link{log_cholesky}}.
+#' @return An object of class `parameter`. The class is abstract; use one
+#'   of the constructors, such as [log_cholesky()].
 #'
-#' @seealso \code{\link{log_cholesky}}, \code{\link{scaled_matrix}},
-#'   \code{\link{param_value}}, \code{\link{check_parameter}}
+#' @seealso [log_cholesky()], [scaled_matrix()],
+#'   [param_value()], [check_parameter()]
 #'
 #' @examples
 #' s <- log_cholesky(3)
@@ -84,7 +84,7 @@ parameter <- S7::new_class(
 #'
 #' @description
 #' The abstract S7 class of the symmetric positive semidefinite branch: a
-#' \code{\link{parameter}} whose value is a symmetric matrix, together with
+#' [parameter()] whose value is a symmetric matrix, together with
 #' the quantities only a matrix can answer -- the rank, the null space, the
 #' log-(pseudo-)determinant, the solve and the factor.
 #'
@@ -95,28 +95,28 @@ parameter <- S7::new_class(
 #' once, at construction, from the components rather than from an assembled
 #' matrix, because the numerical determination of a rank from an assembled
 #' matrix is not scale invariant while the null space is. See
-#' \code{\link{param_null_basis}}.
+#' [param_null_basis()].
 #'
-#' A parameter that is not a matrix -- \code{\link{simplex}}, a
-#' \code{\link{transition_matrix}} -- inherits from \code{\link{parameter}}
-#' directly, so \code{\link{param_logdet}} and \code{\link{param_solve}} do
+#' A parameter that is not a matrix -- [simplex()], a
+#' [transition_matrix()] -- inherits from [parameter()]
+#' directly, so [param_logdet()] and [param_solve()] do
 #' not exist for it by construction rather than by a run-time rejection.
 #'
 #' @param param_name A single character string naming the family.
 #' @param n_free The length \eqn{d} of the free vector.
-#' @param free_names A character vector of length \code{n_free}.
+#' @param free_names A character vector of length `n_free`.
 #' @param param_params A list of whatever the family needs to evaluate itself.
 #' @param dimension The side \eqn{p} of the matrix.
 #' @param rank The rank of the matrix the family produces.
-#' @param null_basis A \code{dimension} by \code{dimension - rank} matrix
+#' @param null_basis A `dimension` by `dimension - rank` matrix
 #'   whose columns are an orthonormal basis of the null space.
-#' @param role One of \code{"covariance"}, \code{"precision"} or
-#'   \code{"either"}. A label: no method reads it and no result depends on it.
+#' @param role One of `"covariance"`, `"precision"` or
+#'   `"either"`. A label: no method reads it and no result depends on it.
 #'
-#' @return An object of class \code{matrix_parameter}. The class is abstract;
-#'   use one of the constructors, such as \code{\link{log_cholesky}}.
+#' @return An object of class `matrix_parameter`. The class is abstract;
+#'   use one of the constructors, such as [log_cholesky()].
 #'
-#' @seealso \code{\link{parameter}}, \code{\link{log_cholesky}}
+#' @seealso [parameter()], [log_cholesky()]
 #'
 #' @examples
 #' S7::S7_inherits(log_cholesky(3), matrix_parameter)
@@ -161,7 +161,7 @@ matrix_parameter <- S7::new_class(
 #' @param dimension The side of the matrix.
 #' @param role The role label.
 #'
-#' @return \code{dimension}, as a single integer.
+#' @return `dimension`, as a single integer.
 #'
 #' @keywords internal
 check_param_args <- function(dimension, role) {
@@ -183,21 +183,21 @@ check_param_args <- function(dimension, role) {
 #' Validate a Free Vector Against a Parameter
 #'
 #' @description
-#' Checks that \code{eta} is a finite numeric vector of the length the
+#' Checks that `eta` is a finite numeric vector of the length the
 #' parameter declares, and returns it unnamed.
 #'
 #' @details
 #' Called in the body of every generic before dispatch, so that a parameter
 #' written outside the package inherits the check without doing anything. The
-#' names are stripped for the reason \code{align_theta()} strips them in
+#' names are stripped for the reason `align_theta()` strips them in
 #' \pkg{distributions7}: a value that has been through a link comes back
 #' carrying its own name, which is meaningless on a number and would leak into
 #' the dimnames of the result.
 #'
-#' @param s A \code{\link{parameter}} object.
+#' @param s A [parameter()] object.
 #' @param eta The free vector supplied by the caller.
 #'
-#' @return \code{eta}, as an unnamed numeric vector.
+#' @return `eta`, as an unnamed numeric vector.
 #'
 #' @keywords internal
 check_eta <- function(s, eta) {
@@ -223,14 +223,14 @@ check_eta <- function(s, eta) {
 #' Validate a Matrix Handed Back to a Parameter
 #'
 #' @description
-#' Checks that \code{m} is a square symmetric numeric matrix of the parameter's
+#' Checks that `m` is a square symmetric numeric matrix of the parameter's
 #' dimension.
 #'
-#' @param s A \code{\link{parameter}} object.
+#' @param s A [parameter()] object.
 #' @param m The matrix supplied by the caller.
 #' @param tol The relative tolerance for the symmetry check.
 #'
-#' @return \code{m}, symmetrized.
+#' @return `m`, symmetrized.
 #'
 #' @keywords internal
 check_matrix <- function(s, m, tol = 1e-8) {
@@ -257,9 +257,9 @@ check_matrix <- function(s, m, tol = 1e-8) {
 #' Applies the dimension labels every matrix a parameter produces carries.
 #'
 #' @param m A numeric matrix.
-#' @param s A \code{\link{parameter}} object.
+#' @param s A [parameter()] object.
 #'
-#' @return \code{m}, with dimnames.
+#' @return `m`, with dimnames.
 #'
 #' @keywords internal
 name_dims <- function(m, s) {
@@ -294,9 +294,9 @@ name_dims <- function(m, s) {
 #' @param tol The relative tolerance below which a singular value counts as
 #'   zero.
 #'
-#' @return A list with \code{rank} and \code{null_basis}.
+#' @return A list with `rank` and `null_basis`.
 #'
-#' @seealso \code{\link{parameter}}
+#' @seealso [parameter()]
 #'
 #' @examples
 #' # a second-difference penalty: its null space is the constants and the lines
@@ -331,7 +331,7 @@ param_null_basis <- function(mats, tol = 1e-10) {
 #'
 #' @param dimension The side of the matrix.
 #'
-#' @return A \code{dimension} by 0 numeric matrix.
+#' @return A `dimension` by 0 numeric matrix.
 #'
 #' @keywords internal
 empty_null_basis <- function(dimension) {

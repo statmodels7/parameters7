@@ -7,9 +7,9 @@
 ar_assemble(s, tay, order = 0L, tuple = NULL)
 }
 \arguments{
-\item{s}{An \code{\link{AutoregressiveParam}} object.}
+\item{s}{An \code{\link[=AutoregressiveParam]{AutoregressiveParam()}} object.}
 
-\item{tay}{The arrays of \code{\link{ar_taylor}}.}
+\item{tay}{The arrays of \code{\link[=ar_taylor]{ar_taylor()}}.}
 
 \item{order}{The derivative order, or 0 for the value.}
 
@@ -21,6 +21,6 @@ A symmetric numeric matrix.
 \description{
 Fills the Toeplitz matrix of the scaled autocorrelations, taking either the
 value column or one derivative component out of the packed rows of
-\code{\link{ar_taylor}}.
+\code{\link[=ar_taylor]{ar_taylor()}}.
 }
 \keyword{internal}

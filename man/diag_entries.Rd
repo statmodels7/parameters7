@@ -7,7 +7,7 @@
 diag_entries(s, eta)
 }
 \arguments{
-\item{s}{A \code{\link{DiagMatrixParam}} object.}
+\item{s}{A \code{\link[=DiagMatrixParam]{DiagMatrixParam()}} object.}
 
 \item{eta}{A numeric vector of free values.}
 }

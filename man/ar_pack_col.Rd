@@ -17,7 +17,7 @@ ar_pack_col(n, order = 0L, tuple = NULL)
 A single column index.
 }
 \description{
-Where a derivative component sits in a row of \code{\link{ar_taylor}}'s
+Where a derivative component sits in a row of \code{\link[=ar_taylor]{ar_taylor()}}'s
 output: the value first, then the tensors of orders one to four in
 row-major order.
 }

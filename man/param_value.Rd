@@ -7,7 +7,7 @@
 param_value(s, eta, ...)
 }
 \arguments{
-\item{s}{An object inheriting from class \code{\link{parameter}}.}
+\item{s}{An object inheriting from class \code{\link[=parameter]{parameter()}}.}
 
 \item{eta}{A numeric vector of length \code{s@n_free}.}
 
@@ -20,13 +20,13 @@ vector or row-stochastic matrix otherwise.
 }
 \description{
 Maps the free vector \eqn{\eta} to the constrained value it parametrizes:
-a symmetric matrix for the \code{\link{matrix_parameter}} branch, a
-probability vector for \code{\link{simplex}}, a row-stochastic matrix for
-\code{\link{transition_matrix}}.
+a symmetric matrix for the \code{\link[=matrix_parameter]{matrix_parameter()}} branch, a
+probability vector for \code{\link[=simplex]{simplex()}}, a row-stochastic matrix for
+\code{\link[=transition_matrix]{transition_matrix()}}.
 }
 \details{
 This is the only generic a parameter must implement. Everything else in the
-package has a numerical method registered on the \code{\link{parameter}}
+package has a numerical method registered on the \code{\link[=parameter]{parameter()}}
 class and is therefore available from this one alone.
 
 The generic validates the free vector before dispatching, so every method,
@@ -41,6 +41,6 @@ round(param_value(s, c(0, 0, 0.5)), 4)
 
 }
 \seealso{
-\code{\link{param_free}}, \code{\link{param_d1}},
-\code{\link{param_logdet}}
+\code{\link[=param_free]{param_free()}}, \code{\link[=param_d1]{param_d1()}},
+\code{\link[=param_logdet]{param_logdet()}}
 }

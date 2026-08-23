@@ -6,13 +6,13 @@ NULL
 #'
 #' @description
 #' The S7 class of covariance matrices of a stationary autoregression of any
-#' order. Constructed by \code{\link{autoregressive}}.
+#' order. Constructed by [autoregressive()].
 #'
 #' @inheritParams matrix_parameter
 #'
-#' @return An object of class \code{AutoregressiveParam}.
+#' @return An object of class `AutoregressiveParam`.
 #'
-#' @seealso \code{\link{autoregressive}}
+#' @seealso [autoregressive()]
 #'
 #' @examples
 #' S7::S7_inherits(autoregressive(5, order = 2), AutoregressiveParam)
@@ -41,7 +41,7 @@ AutoregressiveParam <- S7::new_class("AutoregressiveParam",
 #' independently of the others, and the Levinson-Durbin recursion carries them
 #' onto the stationary coefficients bijectively, which is the transformation
 #' of Barndorff-Nielsen and Schou (1973) and Monahan (1984). Each partial
-#' autocorrelation therefore takes an \code{\link[linkfunctions7]{rhobit_link}}
+#' autocorrelation therefore takes an [linkfunctions7::rhobit_link()]
 #' and every free vector gives a stationary, positive definite matrix.
 #'
 #' The autocorrelations follow from the same recursion. Writing
@@ -52,7 +52,7 @@ AutoregressiveParam <- S7::new_class("AutoregressiveParam",
 #' \eqn{\rho_k = \sum_{j<k} \phi^{(k)}_j \rho_{k-j} + r_k}, after which
 #' \eqn{\rho_h = \sum_j \phi_j \rho_{h-j}} for every lag beyond the order. The
 #' whole map from the partial autocorrelations to the matrix is therefore
-#' \strong{polynomial}, built from sums and products alone, and its
+#' **polynomial**, built from sums and products alone, and its
 #' derivatives to fourth order are obtained by propagating the derivative
 #' arrays through the recursion in compiled code, the product rule written
 #' out per order, rather than by expanding it.
@@ -70,13 +70,13 @@ AutoregressiveParam <- S7::new_class("AutoregressiveParam",
 #' the predictor coefficients and \eqn{D} the innovation variances, rather
 #' than by a factorization.
 #'
-#' \code{\link{ar1}} is the case \eqn{q = 1} written out: there the
+#' [ar1()] is the case \eqn{q = 1} written out: there the
 #' autocorrelation is simply \eqn{\rho^{h}}, the determinant is
 #' \eqn{(1-\rho^2)^{p-1}} and the inverse is tridiagonal in three lines, so it
 #' keeps its own closed forms and does not go through the recursion.
 #'
-#' The name is \code{autoregressive()} rather than \code{ar()} because
-#' \code{\link[stats]{ar}} is a function of \pkg{stats}, and a package meant
+#' The name is `autoregressive()` rather than `ar()` because
+#' [stats::ar()] is a function of \pkg{stats}, and a package meant
 #' to be attached alongside others should not mask one.
 #'
 #' @param dimension The side \eqn{p} of the matrix: the number of consecutive
@@ -85,20 +85,20 @@ AutoregressiveParam <- S7::new_class("AutoregressiveParam",
 #' @param order The order \eqn{q} of the autoregression, at least 1.
 #' @param link_scale A \pkg{linkfunctions7} link onto the positive scale,
 #'   carrying the marginal variance. Defaults to
-#'   \code{linkfunctions7::log_link()}.
-#' @param role A label; see \code{\link{log_cholesky}}.
+#'   `linkfunctions7::log_link()`.
+#' @param role A label; see [log_cholesky()].
 #'
-#' @return An object of class \code{\link{AutoregressiveParam}}.
+#' @return An object of class [AutoregressiveParam()].
 #'
 #' @references
 #' Barndorff-Nielsen, O. and Schou, G. (1973). On the parametrization of
-#' autoregressive models by partial autocorrelations. \emph{Journal of
-#' Multivariate Analysis} 3, 408-419.
+#' autoregressive models by partial autocorrelations. *Journal of
+#' Multivariate Analysis* 3, 408-419.
 #'
 #' Monahan, J. F. (1984). A note on enforcing stationarity in autoregressive
-#' moving average models. \emph{Biometrika} 71, 403-404.
+#' moving average models. *Biometrika* 71, 403-404.
 #'
-#' @seealso \code{\link{ar1}}, \code{\link{compound_symmetry}}
+#' @seealso [ar1()], [compound_symmetry()]
 #'
 #' @examples
 #' s <- autoregressive(6, order = 2)
@@ -156,7 +156,7 @@ autoregressive <- function(dimension, order,
 #' The Levinson-Durbin Recursion With Its Derivatives
 #'
 #' @description
-#' Runs the compiled recursion of \code{ar_taylor_cpp}: the scale and
+#' Runs the compiled recursion of `ar_taylor_cpp`: the scale and
 #' the partial autocorrelations enter as their link inverses with four
 #' derivatives each, and the autocorrelations, the coefficients and every
 #' partial derivative to fourth order come out as packed arrays.
@@ -166,11 +166,11 @@ autoregressive <- function(dimension, order,
 #' product rule written out per order; every derivative is exact and nothing
 #' is differenced.
 #'
-#' @param s An \code{\link{AutoregressiveParam}} object.
+#' @param s An [AutoregressiveParam()] object.
 #' @param eta A numeric vector of free values.
 #'
-#' @return A list with \code{n}, the number of free values; \code{gamma}, a
-#'   matrix with one row per lag; and \code{phi}, one row per coefficient.
+#' @return A list with `n`, the number of free values; `gamma`, a
+#'   matrix with one row per lag; and `phi`, one row per coefficient.
 #'   Each row packs the value, then the full derivative tensors of orders one
 #'   to four, in row-major order.
 #'
@@ -203,10 +203,10 @@ ar_taylor <- function(s, eta) {
 #' @description
 #' Fills the Toeplitz matrix of the scaled autocorrelations, taking either the
 #' value column or one derivative component out of the packed rows of
-#' \code{\link{ar_taylor}}.
+#' [ar_taylor()].
 #'
-#' @param s An \code{\link{AutoregressiveParam}} object.
-#' @param tay The arrays of \code{\link{ar_taylor}}.
+#' @param s An [AutoregressiveParam()] object.
+#' @param tay The arrays of [ar_taylor()].
 #' @param order The derivative order, or 0 for the value.
 #' @param tuple The index tuple of that order, ignored at order 0.
 #'
@@ -224,7 +224,7 @@ ar_assemble <- function(s, tay, order = 0L, tuple = NULL) {
 #' The Column of a Packed Derivative Record
 #'
 #' @description
-#' Where a derivative component sits in a row of \code{\link{ar_taylor}}'s
+#' Where a derivative component sits in a row of [ar_taylor()]'s
 #' output: the value first, then the tensors of orders one to four in
 #' row-major order.
 #'
@@ -249,7 +249,7 @@ ar_pack_col <- function(n, order = 0L, tuple = NULL) {
 #' @description
 #' The Toeplitz matrix \eqn{\gamma_0 \rho_{\lvert i-j \rvert}}, the
 #' autocorrelations coming from the Levinson-Durbin recursion.
-#' @param s An \code{\link{AutoregressiveParam}} object.
+#' @param s An [AutoregressiveParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A positive definite Toeplitz matrix.
@@ -265,7 +265,7 @@ S7::method(param_value, AutoregressiveParam) <- function(s, eta, ...) {
 #' Assembles one derivative order by reading the matching component out of
 #' the packed arrays.
 #'
-#' @param s An \code{\link{AutoregressiveParam}} object.
+#' @param s An [AutoregressiveParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param order The derivative order, 1 to 4.
 #'
@@ -289,7 +289,7 @@ ar_derivative <- function(s, eta, order) {
 #' the matrix is polynomial, so the derivative arrays propagated through the
 #' Levinson-Durbin recursion give each derivative exactly; nothing is
 #' differenced.
-#' @param s An \code{\link{AutoregressiveParam}} object.
+#' @param s An [AutoregressiveParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named list of symmetric matrices.
@@ -328,7 +328,7 @@ S7::method(param_d4, AutoregressiveParam) <- function(s, eta, ...) {
 #' the autocorrelations. The matrix is then checked against the pattern those
 #' values imply, so a Toeplitz matrix that is not the covariance of an
 #' autoregression of this order is rejected rather than fitted.
-#' @param s An \code{\link{AutoregressiveParam}} object.
+#' @param s An [AutoregressiveParam()] object.
 #' @param m A covariance matrix of a stationary autoregression.
 #' @param ... Unused.
 #' @return A named numeric vector of free values.
@@ -404,10 +404,10 @@ S7::method(param_free, AutoregressiveParam) <- function(s, m, ...) {
 #' innovation variances fall by a factor \eqn{1 - r_k^2} at each of the first
 #' \eqn{q} steps and are constant thereafter.
 #'
-#' @param s An \code{\link{AutoregressiveParam}} object.
+#' @param s An [AutoregressiveParam()] object.
 #' @param eta A numeric vector of free values.
 #'
-#' @return A list with the matrix \code{u} and the vector \code{v}.
+#' @return A list with the matrix `u` and the vector `v`.
 #'
 #' @keywords internal
 ar_prediction <- function(s, eta) {
@@ -441,11 +441,11 @@ ar_prediction <- function(s, eta) {
 #' @description
 #' Exact and banded of bandwidth \eqn{q}. The precision is
 #' \eqn{U^\top D^{-1} U} in the prediction form of
-#' \code{\link{ar_prediction}}, which is what an order-\eqn{q} Markov property
+#' [ar_prediction()], which is what an order-\eqn{q} Markov property
 #' means: no partial correlation beyond the lag.
-#' @param s An \code{\link{AutoregressiveParam}} object.
+#' @param s An [AutoregressiveParam()] object.
 #' @param eta A numeric vector of free values.
-#' @param b A numeric matrix with \code{s@dimension} rows.
+#' @param b A numeric matrix with `s@dimension` rows.
 #' @param ... Unused.
 #' @return A numeric matrix.
 #' @keywords internal
@@ -461,7 +461,7 @@ S7::method(param_solve, AutoregressiveParam) <- function(s, eta, b = NULL, ...) 
 #' Closed form from the innovation variances:
 #' \eqn{p\log\gamma_0 + \sum_k (p-k)\log(1 - r_k^2)}. No factorization and no
 #' determinant is computed.
-#' @param s An \code{\link{AutoregressiveParam}} object.
+#' @param s An [AutoregressiveParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A single number.
@@ -483,7 +483,7 @@ S7::method(param_logdet, AutoregressiveParam) <- function(s, eta, ...) {
 #' Assembles one derivative order of the log-determinant. It is a sum with one
 #' term per free value, so every mixed component is exactly zero.
 #'
-#' @param s An \code{\link{AutoregressiveParam}} object.
+#' @param s An [AutoregressiveParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param order The derivative order, 1 to 4.
 #'
@@ -527,7 +527,7 @@ ar_logdet_derivative <- function(s, eta, order) {
 #' @description
 #' Closed form at every order, with every mixed component exactly zero: the
 #' log-determinant is a sum with one term per free value.
-#' @param s An \code{\link{AutoregressiveParam}} object.
+#' @param s An [AutoregressiveParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named numeric vector.

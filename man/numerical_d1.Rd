@@ -7,7 +7,7 @@
 numerical_d1(s, eta)
 }
 \arguments{
-\item{s}{A \code{\link{parameter}} object.}
+\item{s}{A \code{\link[=parameter]{parameter()}} object.}
 
 \item{eta}{A numeric vector of free values.}
 }
@@ -15,12 +15,12 @@ numerical_d1(s, eta)
 A named list of symmetric matrices.
 }
 \description{
-One central difference of \code{\link{param_value}} in each component of
+One central difference of \code{\link[=param_value]{param_value()}} in each component of
 \eqn{\eta}.
 }
 \examples{
 numerical_d1(scalar_matrix(2), 0.3)
 }
 \seealso{
-\code{\link{param_d1}}
+\code{\link[=param_d1]{param_d1()}}
 }

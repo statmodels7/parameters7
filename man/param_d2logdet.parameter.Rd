@@ -4,7 +4,7 @@
 \alias{param_d2logdet.parameter}
 \title{Default Log-Determinant Hessian}
 \arguments{
-\item{s}{A \code{\link{parameter}} object.}
+\item{s}{A \code{\link[=parameter]{parameter()}} object.}
 
 \item{eta}{A numeric vector of free values.}
 
@@ -16,6 +16,6 @@ A named numeric vector.
 \description{
 Fallback: \eqn{\mathrm{tr}(M^{+} \partial_{kl} M) -
 \mathrm{tr}(M^{+} \partial_k M\, M^{+} \partial_l M)}, the derivative of the
-identity behind \code{\link{param_dlogdet}}.
+identity behind \code{\link[=param_dlogdet]{param_dlogdet()}}.
 }
 \keyword{internal}

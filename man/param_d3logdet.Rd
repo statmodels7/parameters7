@@ -10,7 +10,7 @@ param_d3logdet(s, eta, ...)
 param_d4logdet(s, eta, ...)
 }
 \arguments{
-\item{s}{An object inheriting from class \code{\link{matrix_parameter}}.}
+\item{s}{An object inheriting from class \code{\link[=matrix_parameter]{matrix_parameter()}}.}
 
 \item{eta}{A numeric vector of length \code{s@n_free}.}
 
@@ -21,10 +21,10 @@ A named numeric vector.
 }
 \description{
 The higher derivatives of the log-(pseudo-)determinant, keyed as
-\code{\link{param_tuple_names}} of the matching order.
+\code{\link[=param_tuple_names]{param_tuple_names()}} of the matching order.
 }
 \details{
-They follow from the second derivative of \code{\link{param_d2logdet}}
+They follow from the second derivative of \code{\link[=param_d2logdet]{param_d2logdet()}}
 by the same two rules, applied again: the trace is linear, and
 
 \deqn{\partial_m M^{-1} = -M^{-1}(\partial_m M)M^{-1}.}
@@ -33,8 +33,8 @@ Every term of the result is therefore a trace of an alternating product
 \eqn{M^{-1}(\partial_{I_1}M)M^{-1}(\partial_{I_2}M)\cdots}, one factor
 per block of a partition of the index set, with the sign and the
 multiplicity the two rules produce. The expansion is not transcribed:
-the package differentiates \code{\link{param_d1}} through
-\code{\link{param_d4}} directly, and \code{\link{check_parameter}} holds
+the package differentiates \code{\link[=param_d1]{param_d1()}} through
+\code{\link[=param_d4]{param_d4()}} directly, and \code{\link[=check_parameter]{check_parameter()}} holds
 the result against a numerical differentiation of the order below, which
 shares none of its arithmetic.
 }
@@ -43,5 +43,5 @@ param_d3logdet(log_cholesky(2), c(0.1, -0.2, 0.4))
 
 }
 \seealso{
-\code{\link{param_d2logdet}}
+\code{\link[=param_d2logdet]{param_d2logdet()}}
 }

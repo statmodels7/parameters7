@@ -7,7 +7,7 @@
 mlog_basis(s, k)
 }
 \arguments{
-\item{s}{A \code{\link{MatrixLogParam}} object.}
+\item{s}{A \code{\link[=MatrixLogParam]{MatrixLogParam()}} object.}
 
 \item{k}{The free-value index.}
 }

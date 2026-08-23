@@ -7,7 +7,7 @@
 tm_derivative(s, eta, order)
 }
 \arguments{
-\item{s}{A \code{\link{TransitionMatrixParam}} object.}
+\item{s}{A \code{\link[=TransitionMatrixParam]{TransitionMatrixParam()}} object.}
 
 \item{eta}{A numeric vector of free values.}
 

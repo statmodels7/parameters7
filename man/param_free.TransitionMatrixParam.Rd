@@ -4,7 +4,7 @@
 \alias{param_free.TransitionMatrixParam}
 \title{Free Vector of a Transition Matrix Parameter}
 \arguments{
-\item{s}{A \code{\link{TransitionMatrixParam}} object.}
+\item{s}{A \code{\link[=TransitionMatrixParam]{TransitionMatrixParam()}} object.}
 
 \item{m}{A \eqn{K \times K} row-stochastic matrix.}
 

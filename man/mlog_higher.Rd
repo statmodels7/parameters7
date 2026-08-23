@@ -7,7 +7,7 @@
 mlog_higher(s, eta, order)
 }
 \arguments{
-\item{s}{A \code{\link{MatrixLogParam}} object.}
+\item{s}{A \code{\link[=MatrixLogParam]{MatrixLogParam()}} object.}
 
 \item{eta}{A numeric vector of free values.}
 
@@ -15,7 +15,7 @@ mlog_higher(s, eta, order)
 }
 \value{
 A named list of matrices, keyed by
-\code{\link{param_tuple_names}(s, order)}.
+\code{\link[=param_tuple_names]{param_tuple_names(s, order)}}.
 }
 \description{
 The derivative components of orders three and four of \eqn{M = e^{S}} with
@@ -32,6 +32,6 @@ off its corner, which stays exact where the quotient recursion cancels
 catastrophically under near-repeated eigenvalues.
 }
 \seealso{
-\code{\link{matrix_log}}
+\code{\link[=matrix_log]{matrix_log()}}
 }
 \keyword{internal}

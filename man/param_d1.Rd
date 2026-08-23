@@ -7,7 +7,7 @@
 param_d1(s, eta, ...)
 }
 \arguments{
-\item{s}{An object inheriting from class \code{\link{parameter}}.}
+\item{s}{An object inheriting from class \code{\link[=parameter]{parameter()}}.}
 
 \item{eta}{A numeric vector of length \code{s@n_free}.}
 
@@ -23,8 +23,8 @@ list of objects each shaped like the value.
 }
 \details{
 A parameter that registers no method for this generic gets the numerical one
-of the \code{\link{parameter}} class, which applies a single central
-difference to \code{\link{param_value}} in each component.
+of the \code{\link[=parameter]{parameter()}} class, which applies a single central
+difference to \code{\link[=param_value]{param_value()}} in each component.
 }
 \examples{
 s <- scaled_matrix(diag(2))
@@ -32,5 +32,5 @@ param_d1(s, 0)
 
 }
 \seealso{
-\code{\link{param_d2}}, \code{\link{param_is_numerical}}
+\code{\link[=param_d2]{param_d2()}}, \code{\link[=param_is_numerical]{param_is_numerical()}}
 }

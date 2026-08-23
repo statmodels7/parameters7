@@ -7,7 +7,7 @@
 mlog_s(s, eta)
 }
 \arguments{
-\item{s}{A \code{\link{MatrixLogParam}} object.}
+\item{s}{A \code{\link[=MatrixLogParam]{MatrixLogParam()}} object.}
 
 \item{eta}{A numeric vector of free values.}
 }

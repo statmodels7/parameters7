@@ -36,6 +36,6 @@ Every argument may be a vector, in which case the composition is applied
 elementwise and the result has the same length.
 }
 \seealso{
-\code{\link{leibniz_gram}}
+\code{\link[=leibniz_gram]{leibniz_gram()}}
 }
 \keyword{internal}

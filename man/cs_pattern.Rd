@@ -7,9 +7,9 @@
 cs_pattern(s, sc)
 }
 \arguments{
-\item{s}{A \code{\link{CompoundSymmetryParam}} object.}
+\item{s}{A \code{\link[=CompoundSymmetryParam]{CompoundSymmetryParam()}} object.}
 
-\item{sc}{The scalars of \code{\link{econ_scalars}}.}
+\item{sc}{The scalars of \code{\link[=econ_scalars]{econ_scalars()}}.}
 }
 \value{
 A list of five matrices.

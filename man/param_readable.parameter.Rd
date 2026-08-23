@@ -4,7 +4,7 @@
 \alias{param_readable.parameter}
 \title{No Declared Quantities}
 \arguments{
-\item{s}{A \code{\link{parameter}} object.}
+\item{s}{A \code{\link[=parameter]{parameter()}} object.}
 
 \item{eta}{A numeric vector of free values.}
 

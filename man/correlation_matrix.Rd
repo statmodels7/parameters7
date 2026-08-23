@@ -9,10 +9,10 @@ correlation_matrix(dimension, role = c("either", "covariance", "precision"))
 \arguments{
 \item{dimension}{The side \eqn{p} of the matrix.}
 
-\item{role}{A label; see \code{\link{log_cholesky}}.}
+\item{role}{A label; see \code{\link[=log_cholesky]{log_cholesky()}}.}
 }
 \value{
-An object of class \code{\link{CorrelationParam}}.
+An object of class \code{\link[=CorrelationParam]{CorrelationParam()}}.
 }
 \description{
 A correlation matrix -- symmetric positive definite with a unit diagonal --
@@ -30,7 +30,7 @@ has a unit diagonal by construction rather than by a correction, and it is
 positive definite for every value of the angles because \eqn{L} is
 triangular with a positive diagonal. The construction is that of Rapisarda,
 Brigo and Mercurio (2007), and the free values are the angles carried onto
-\eqn{\mathbb{R}} by \code{\link[linkfunctions7]{bounded_link}}, so
+\eqn{\mathbb{R}} by \code{\link[linkfunctions7:bounded_link]{linkfunctions7::bounded_link()}}, so
 there is nothing to constrain and no boundary to reach.
 
 Derivatives follow from the same Leibniz rule the log-Cholesky family uses,
@@ -46,7 +46,7 @@ there it is zero whenever the two angles differentiated sit beyond the
 columns the two rows share.
 
 The free vector runs row by row, and the names \code{z\{i\}.\{j\}} say which
-row and which angle, the row.column convention \code{\link{log_cholesky}}
+row and which angle, the row.column convention \code{\link[=log_cholesky]{log_cholesky()}}
 already uses. The ordering is part of the contract: every consumer builds
 its parameter tables from these names.
 
@@ -74,6 +74,6 @@ correlations: a geometric interpretation. \emph{IMA Journal of Management
 Mathematics} 18, 55-73.
 }
 \seealso{
-\code{\link{log_cholesky}}, \code{\link{compound_symmetry}},
-\code{\link{ar1}}
+\code{\link[=log_cholesky]{log_cholesky()}}, \code{\link[=compound_symmetry]{compound_symmetry()}},
+\code{\link[=ar1]{ar1()}}
 }

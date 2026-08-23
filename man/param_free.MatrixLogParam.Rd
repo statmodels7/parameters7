@@ -4,7 +4,7 @@
 \alias{param_free.MatrixLogParam}
 \title{Free Vector of a Matrix Logarithm Parameter}
 \arguments{
-\item{s}{A \code{\link{MatrixLogParam}} object.}
+\item{s}{A \code{\link[=MatrixLogParam]{MatrixLogParam()}} object.}
 
 \item{m}{A symmetric positive definite matrix.}
 

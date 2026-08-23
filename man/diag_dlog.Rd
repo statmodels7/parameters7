@@ -29,6 +29,6 @@ once at the start keeps every term of order one in the ratio rather than in
 the derivative, which matters at the ends of a link's range.
 }
 \seealso{
-\code{\link{diagonal_matrix}}, \code{\link{scaled_dlog}}
+\code{\link[=diagonal_matrix]{diagonal_matrix()}}, \code{\link[=scaled_dlog]{scaled_dlog()}}
 }
 \keyword{internal}

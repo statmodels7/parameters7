@@ -37,12 +37,12 @@ An object of class \code{SimplexParam}.
 }
 \description{
 The S7 class of probability vectors on the open simplex, in the additive
-log-ratio parametrization. Constructed by \code{\link{simplex}}.
+log-ratio parametrization. Constructed by \code{\link[=simplex]{simplex()}}.
 }
 \examples{
 S7::S7_inherits(simplex(3), SimplexParam)
 
 }
 \seealso{
-\code{\link{simplex}}
+\code{\link[=simplex]{simplex()}}
 }

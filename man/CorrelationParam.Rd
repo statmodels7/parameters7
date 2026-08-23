@@ -39,12 +39,12 @@ An object of class \code{CorrelationParam}.
 }
 \description{
 The S7 class of correlation matrices in the spherical parametrization.
-Constructed by \code{\link{correlation_matrix}}.
+Constructed by \code{\link[=correlation_matrix]{correlation_matrix()}}.
 }
 \examples{
 S7::S7_inherits(correlation_matrix(3), CorrelationParam)
 
 }
 \seealso{
-\code{\link{correlation_matrix}}
+\code{\link[=correlation_matrix]{correlation_matrix()}}
 }

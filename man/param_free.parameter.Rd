@@ -4,7 +4,7 @@
 \alias{param_free.parameter}
 \title{Rejection to Invert Without a Closed Form}
 \arguments{
-\item{s}{A \code{\link{parameter}} object.}
+\item{s}{A \code{\link[=parameter]{parameter()}} object.}
 
 \item{m}{A symmetric numeric matrix.}
 

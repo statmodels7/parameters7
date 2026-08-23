@@ -7,7 +7,7 @@
 check_eta(s, eta)
 }
 \arguments{
-\item{s}{A \code{\link{parameter}} object.}
+\item{s}{A \code{\link[=parameter]{parameter()}} object.}
 
 \item{eta}{The free vector supplied by the caller.}
 }

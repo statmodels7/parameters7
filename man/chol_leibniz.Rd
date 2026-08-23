@@ -7,7 +7,7 @@
 chol_leibniz(s, eta, order)
 }
 \arguments{
-\item{s}{A \code{\link{LogCholeskyParam}} object.}
+\item{s}{A \code{\link[=LogCholeskyParam]{LogCholeskyParam()}} object.}
 
 \item{eta}{A numeric vector of free values.}
 
@@ -18,9 +18,9 @@ A named list of symmetric matrices.
 }
 \description{
 Assembles one derivative order by the Leibniz rule on \eqn{M = LL^\top},
-the factor's derivatives coming from \code{\link{chol_dfactor}}.
+the factor's derivatives coming from \code{\link[=chol_dfactor]{chol_dfactor()}}.
 }
 \seealso{
-\code{\link{leibniz_gram}}
+\code{\link[=leibniz_gram]{leibniz_gram()}}
 }
 \keyword{internal}

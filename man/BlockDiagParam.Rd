@@ -40,12 +40,12 @@ An object of class \code{BlockDiagParam}.
 \description{
 The S7 class of a block-diagonal matrix built from several matrix
 parameters, each carrying its own free values. Constructed by
-\code{\link{block_diag}}.
+\code{\link[=block_diag]{block_diag()}}.
 }
 \examples{
 S7::S7_inherits(block_diag(log_cholesky(2), ar1(3)), BlockDiagParam)
 
 }
 \seealso{
-\code{\link{block_diag}}, \code{\link{kron_identity}}
+\code{\link[=block_diag]{block_diag()}}, \code{\link[=kron_identity]{kron_identity()}}
 }

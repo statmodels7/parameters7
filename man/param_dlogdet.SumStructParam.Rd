@@ -7,7 +7,7 @@
 \alias{param_d4logdet.SumStructParam}
 \title{Log-Determinant Derivatives of a Sum of Fixed Matrices}
 \arguments{
-\item{s}{A \code{\link{SumStructParam}} object.}
+\item{s}{A \code{\link[=SumStructParam]{SumStructParam()}} object.}
 
 \item{eta}{A numeric vector of length \code{s@n_free}.}
 

@@ -36,7 +36,7 @@ NULL
 #'
 #' @return A list of four elements, the composite derivatives in order.
 #'
-#' @seealso \code{\link{leibniz_gram}}
+#' @seealso [leibniz_gram()]
 #'
 #' @keywords internal
 compose4 <- function(fd, gd) {
@@ -83,20 +83,20 @@ power_derivs <- function(r, m) {
 #' two factors in every way, so
 #' \deqn{\partial^T (L L^\top) = \sum_{S \subseteq T}
 #'   (\partial^S L)(\partial^{T \setminus S} L)^\top,}
-#' the sum running over subsets of \emph{positions} in the tuple, which
+#' the sum running over subsets of *positions* in the tuple, which
 #' handles a repeated index correctly without a multiplicity bookkeeping of
 #' its own.
 #'
 #' @param dfactor A function of a (possibly empty, possibly repeating) integer
 #'   vector of free-value indices, returning the corresponding derivative of
-#'   \eqn{L}, or \code{NULL} when that derivative is identically zero. The
+#'   \eqn{L}, or `NULL` when that derivative is identically zero. The
 #'   empty vector must give \eqn{L} itself.
 #' @param tuple The index tuple.
 #' @param p The side of the matrix.
 #'
 #' @return A symmetric numeric matrix.
 #'
-#' @seealso \code{\link{compose4}}
+#' @seealso [compose4()]
 #'
 #' @keywords internal
 leibniz_gram <- function(dfactor, tuple, p) {

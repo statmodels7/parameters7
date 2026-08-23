@@ -20,6 +20,6 @@ onto the free scale, leaving the name alone when the link is the identity
 and the coordinate therefore is the quantity.
 }
 \seealso{
-\code{\link{link_tag}}
+\code{\link[=link_tag]{link_tag()}}
 }
 \keyword{internal}

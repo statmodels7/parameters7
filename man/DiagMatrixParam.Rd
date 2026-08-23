@@ -39,12 +39,12 @@ An object of class \code{DiagMatrixParam}.
 }
 \description{
 The S7 class of diagonal positive matrices, one free value per entry.
-Constructed by \code{\link{diagonal_matrix}} or \code{\link{scalar_matrix}}.
+Constructed by \code{\link[=diagonal_matrix]{diagonal_matrix()}} or \code{\link[=scalar_matrix]{scalar_matrix()}}.
 }
 \examples{
 S7::S7_inherits(diagonal_matrix(3), DiagMatrixParam)
 
 }
 \seealso{
-\code{\link{diagonal_matrix}}, \code{\link{scalar_matrix}}
+\code{\link[=diagonal_matrix]{diagonal_matrix()}}, \code{\link[=scalar_matrix]{scalar_matrix()}}
 }

@@ -7,7 +7,7 @@
 param_factor(s, eta, ...)
 }
 \arguments{
-\item{s}{An object inheriting from class \code{\link{parameter}}.}
+\item{s}{An object inheriting from class \code{\link[=parameter]{parameter()}}.}
 
 \item{eta}{A numeric vector of length \code{s@n_free}.}
 
@@ -22,12 +22,12 @@ Returns a lower triangular \eqn{L} with \eqn{M = L L^\top}.
 }
 \details{
 Rejected for a rank-deficient family, for the reason given in
-\code{\link{param_solve}}.
+\code{\link[=param_solve]{param_solve()}}.
 }
 \examples{
 round(param_factor(log_cholesky(2), c(0.1, 0.2, -0.3)), 4)
 
 }
 \seealso{
-\code{\link{param_solve}}
+\code{\link[=param_solve]{param_solve()}}
 }

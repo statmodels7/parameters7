@@ -4,7 +4,7 @@
 \alias{param_free.ScaledMatrixParam}
 \title{Free Vector of a Scaled Parameter}
 \arguments{
-\item{s}{A \code{\link{ScaledMatrixParam}} object.}
+\item{s}{A \code{\link[=ScaledMatrixParam]{ScaledMatrixParam()}} object.}
 
 \item{m}{A symmetric matrix.}
 

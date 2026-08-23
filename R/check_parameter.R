@@ -5,8 +5,8 @@ NULL
 #' One Row of a Diagnostic Table
 #'
 #' @param name The name of the check.
-#' @param status \code{"OK"}, \code{"FAIL"} or \code{"NOT CHECKED"}.
-#' @param statistic The number the verdict rests on, or \code{NA}.
+#' @param status `"OK"`, `"FAIL"` or `"NOT CHECKED"`.
+#' @param statistic The number the verdict rests on, or `NA`.
 #'
 #' @return A one-row data frame.
 #'
@@ -36,7 +36,7 @@ check_row <- function(name, status, statistic = NA_real_) {
 #' the declared null space, and not by driving every family off the edge of
 #' double precision.
 #'
-#' @param s A \code{\link{parameter}} object.
+#' @param s A [parameter()] object.
 #' @param n The number of random vectors.
 #'
 #' @return A list of numeric vectors.
@@ -60,46 +60,46 @@ sweep_etas <- function(s, n = 4L) {
 #' and what could not be checked.
 #'
 #' @details
-#' A quantity that comes from a numerical fallback is reported as \strong{not
-#' checked} rather than as passed. Comparing a finite difference against a
+#' A quantity that comes from a numerical fallback is reported as **not
+#' checked** rather than as passed. Comparing a finite difference against a
 #' finite difference is the same arithmetic twice, and it agrees however wrong
 #' the parameter is; saying so is the difference between a validator and a
 #' formality.
 #'
 #' The checks are:
 #' \enumerate{
-#'   \item \strong{membership}: the matrix is symmetric and positive
+#'   \item **membership**: the matrix is symmetric and positive
 #'     semidefinite, a full-rank family has a positive smallest eigenvalue, and
 #'     a rank-deficient one annihilates its declared null space. The last is
 #'     tested through the null basis rather than by counting eigenvalues,
 #'     because a count is not scale invariant.
-#'   \item \strong{round trip}: \code{param_free()} recovers the free vector
+#'   \item **round trip**: `param_free()` recovers the free vector
 #'     from the matrix, where the family implements it.
-#'   \item \strong{first derivatives} against one central difference of
-#'     \code{\link{param_value}}.
-#'   \item \strong{second derivatives} against one central difference of the
+#'   \item **first derivatives** against one central difference of
+#'     [param_value()].
+#'   \item **second derivatives** against one central difference of the
 #'     analytic first derivatives.
-#'   \item \strong{log-determinant} against the sum of the logs of the
+#'   \item **log-determinant** against the sum of the logs of the
 #'     eigenvalues the rank keeps.
-#'   \item \strong{log-determinant gradient} against
+#'   \item **log-determinant gradient** against
 #'     \eqn{\mathrm{tr}(M^{+} \partial_k M)}, with the pseudo-inverse formed
-#'     from an eigendecomposition rather than from \code{\link{param_solve}}.
-#'   \item \strong{log-determinant Hessian} against one central difference of
+#'     from an eigendecomposition rather than from [param_solve()].
+#'   \item **log-determinant Hessian** against one central difference of
 #'     the analytic gradient.
-#'   \item \strong{solve} against \code{base::solve}, where the family is of
+#'   \item **solve** against `base::solve`, where the family is of
 #'     full rank.
-#'   \item \strong{shapes}: the declared dimension, length and names match what
+#'   \item **shapes**: the declared dimension, length and names match what
 #'     the methods return.
 #' }
 #'
-#' @param s An object inheriting from class \code{\link{parameter}}.
+#' @param s An object inheriting from class [parameter()].
 #' @param tol The relative tolerance for the comparisons.
 #' @param verbose Whether to print the table.
 #'
-#' @return Invisibly, a data frame with columns \code{check}, \code{status} and
-#'   \code{statistic}.
+#' @return Invisibly, a data frame with columns `check`, `status` and
+#'   `statistic`.
 #'
-#' @seealso \code{\link{param_is_numerical}}
+#' @seealso [param_is_numerical()]
 #'
 #' @examples
 #' invisible(check_parameter(log_cholesky(3)))
@@ -312,7 +312,7 @@ check_parameter <- function(s, tol = 1e-6, verbose = TRUE) {
 #' The Reduced Battery for a Parameter That Is Not a Matrix
 #'
 #' @description
-#' What \code{\link{check_parameter}} runs for a family whose value is not a
+#' What [check_parameter()] runs for a family whose value is not a
 #' symmetric matrix: the inverse round trip, every derivative order against
 #' the single-stencil numerical construction, and the identities the value's
 #' own set supplies -- on the simplex the entries sum to one and every
@@ -320,7 +320,7 @@ check_parameter <- function(s, tol = 1e-6, verbose = TRUE) {
 #' differentiating \eqn{\sum_a \pi_a = 1} kills every order; a transition
 #' matrix satisfies the same row by row.
 #'
-#' @param s A \code{\link{parameter}} object.
+#' @param s A [parameter()] object.
 #' @param tol The relative tolerance.
 #' @param verbose Whether to print the table.
 #'

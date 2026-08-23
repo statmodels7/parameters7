@@ -34,7 +34,7 @@ not on.}
 }
 \value{
 An object of class \code{parameter}. The class is abstract; use one
-of the constructors, such as \code{\link{log_cholesky}}.
+of the constructors, such as \code{\link[=log_cholesky]{log_cholesky()}}.
 }
 \description{
 The abstract S7 class of covariance parameters: a map from an unconstrained
@@ -56,9 +56,9 @@ semidefinite matrices both leave the null space alone. They are computed
 once, at construction, from the components rather than from an assembled
 matrix, because the numerical determination of a rank from an assembled
 matrix is not scale invariant while the null space is. See
-\code{\link{param_null_basis}}.
+\code{\link[=param_null_basis]{param_null_basis()}}.
 
-Only \code{\link{param_value}} is compulsory. Every other generic has a
+Only \code{\link[=param_value]{param_value()}} is compulsory. Every other generic has a
 numerical method registered on this class, so a new parameter is a subclass
 and one method, and a closed form supplied later replaces the corresponding
 numerical method through dispatch.
@@ -70,6 +70,6 @@ c(dimension = s@dimension, n_free = s@n_free, rank = s@rank)
 
 }
 \seealso{
-\code{\link{log_cholesky}}, \code{\link{scaled_matrix}},
-\code{\link{param_value}}, \code{\link{check_parameter}}
+\code{\link[=log_cholesky]{log_cholesky()}}, \code{\link[=scaled_matrix]{scaled_matrix()}},
+\code{\link[=param_value]{param_value()}}, \code{\link[=check_parameter]{check_parameter()}}
 }

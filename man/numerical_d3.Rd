@@ -7,15 +7,15 @@
 numerical_d3(s, eta)
 }
 \arguments{
-\item{s}{A \code{\link{parameter}} object.}
+\item{s}{A \code{\link[=parameter]{parameter()}} object.}
 
 \item{eta}{A numeric vector of free values.}
 }
 \value{
-A named list keyed as \code{\link{param_tuple_names}(s, 3)}.
+A named list keyed as \code{\link[=param_tuple_names]{param_tuple_names(s, 3)}}.
 }
 \description{
-One product stencil applied directly to \code{\link{param_value}} for each
+One product stencil applied directly to \code{\link[=param_value]{param_value()}} for each
 distinct index tuple: a single stencil on the map itself, never a stencil
 on a lower-order numerical derivative, so the no-nesting rule holds
 whatever the family implements. A repeated component uses the matching
@@ -42,5 +42,5 @@ derivative keeps the rounding at a single layer.
 numerical_d3(scalar_matrix(2), 0.3)
 }
 \seealso{
-\code{\link{param_d3}}
+\code{\link[=param_d3]{param_d3()}}
 }

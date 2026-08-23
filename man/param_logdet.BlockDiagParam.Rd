@@ -4,7 +4,7 @@
 \alias{param_logdet.BlockDiagParam}
 \title{Log-Determinant of a Block-Diagonal Parameter}
 \arguments{
-\item{s}{A \code{\link{BlockDiagParam}} object.}
+\item{s}{A \code{\link[=BlockDiagParam]{BlockDiagParam()}} object.}
 
 \item{eta}{A numeric vector of length \code{s@n_free}.}
 

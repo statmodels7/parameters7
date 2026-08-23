@@ -16,10 +16,10 @@ compound_symmetry(
 \item{link_scale}{A \pkg{linkfunctions7} link onto the positive scale.
 Defaults to \code{linkfunctions7::log_link()}.}
 
-\item{role}{A label; see \code{\link{log_cholesky}}.}
+\item{role}{A label; see \code{\link[=log_cholesky]{log_cholesky()}}.}
 }
 \value{
-An object of class \code{\link{CompoundSymmetryParam}}.
+An object of class \code{\link[=CompoundSymmetryParam]{CompoundSymmetryParam()}}.
 }
 \description{
 The exchangeable covariance
@@ -32,8 +32,8 @@ Positive definiteness bounds the correlation below as well as above:
 the eigenvalues are \eqn{\sigma^2\{1 + (p-1)\rho\}} once and
 \eqn{\sigma^2(1-\rho)} with multiplicity \eqn{p-1}, so the matrix is
 definite exactly when \eqn{-1/(p-1) < \rho < 1}. The correlation is
-therefore carried by \code{\link[linkfunctions7]{bounded_link}} onto that
-interval and not by \code{\link[linkfunctions7]{rhobit_link}}, which would
+therefore carried by \code{\link[linkfunctions7:bounded_link]{linkfunctions7::bounded_link()}} onto that
+interval and not by \code{\link[linkfunctions7:rhobit_link]{linkfunctions7::rhobit_link()}}, which would
 let a caller build an indefinite matrix at a perfectly ordinary free value.
 
 Two quantities are closed form and cost nothing. The eigenvalues above give
@@ -65,5 +65,5 @@ max(abs(param_free(s, param_value(s, eta)) - eta))
 
 }
 \seealso{
-\code{\link{ar1}}, \code{\link{correlation_matrix}}
+\code{\link[=ar1]{ar1()}}, \code{\link[=correlation_matrix]{correlation_matrix()}}
 }

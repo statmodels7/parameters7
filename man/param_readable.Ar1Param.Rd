@@ -4,14 +4,14 @@
 \alias{param_readable.Ar1Param}
 \title{The Scale and the Correlation of an AR(1)}
 \arguments{
-\item{s}{An \code{\link{Ar1Param}} object.}
+\item{s}{An \code{\link[=Ar1Param]{Ar1Param()}} object.}
 
 \item{eta}{A numeric vector of two free values.}
 
 \item{...}{Ignored.}
 }
 \value{
-A list as described in \code{\link{param_readable}}.
+A list as described in \code{\link[=param_readable]{param_readable()}}.
 }
 \description{
 Declares the marginal variance and the correlation at lag one.

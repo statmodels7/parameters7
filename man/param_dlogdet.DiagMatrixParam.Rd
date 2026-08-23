@@ -4,7 +4,7 @@
 \alias{param_dlogdet.DiagMatrixParam}
 \title{Log-Determinant Gradient of a Diagonal Parameter}
 \arguments{
-\item{s}{A \code{\link{DiagMatrixParam}} object.}
+\item{s}{A \code{\link[=DiagMatrixParam]{DiagMatrixParam()}} object.}
 
 \item{eta}{A numeric vector of free values.}
 

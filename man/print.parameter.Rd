@@ -4,7 +4,7 @@
 \alias{print.parameter}
 \title{Print a Constrained Parameter}
 \arguments{
-\item{x}{An object inheriting from class \code{\link{parameter}}.}
+\item{x}{An object inheriting from class \code{\link[=parameter]{parameter()}}.}
 
 \item{...}{Unused.}
 }

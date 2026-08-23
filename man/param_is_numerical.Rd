@@ -7,7 +7,7 @@
 param_is_numerical(s)
 }
 \arguments{
-\item{s}{An object inheriting from class \code{\link{parameter}}.}
+\item{s}{An object inheriting from class \code{\link[=parameter]{parameter()}}.}
 }
 \value{
 A named logical vector over \code{param_d1},
@@ -18,7 +18,7 @@ force.
 \description{
 Reports, for each of the five derivative quantities, whether the parameter
 supplies its own method or falls back to the one registered on
-\code{\link{parameter}}.
+\code{\link[=parameter]{parameter()}}.
 }
 \details{
 The distinction that matters is whether an independent check exists. A
@@ -26,7 +26,7 @@ derivative computed by finite differences cannot be checked against a finite
 difference, and a log-determinant read off an eigendecomposition cannot be
 checked against an eigendecomposition; the comparison is the same arithmetic
 twice, and it agrees however wrong the parameter is.
-\code{\link{check_parameter}} uses this to report such a quantity as not
+\code{\link[=check_parameter]{check_parameter()}} uses this to report such a quantity as not
 checked rather than as passed.
 
 \code{param_solve()} and \code{param_factor()} are deliberately absent.
@@ -43,5 +43,5 @@ param_is_numerical(diagonal_matrix(3))
 
 }
 \seealso{
-\code{\link{param_value}}, \code{\link{param_free}}
+\code{\link[=param_value]{param_value()}}, \code{\link[=param_free]{param_free()}}
 }

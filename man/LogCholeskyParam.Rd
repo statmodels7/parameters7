@@ -36,16 +36,16 @@ whose columns are an orthonormal basis of the null space.}
 }
 \value{
 An object of class \code{LogCholeskyParam}. Use
-\code{\link{log_cholesky}} rather than calling the class directly.
+\code{\link[=log_cholesky]{log_cholesky()}} rather than calling the class directly.
 }
 \description{
 The S7 class of unstructured symmetric positive definite matrices in the
-log-Cholesky parametrization. Constructed by \code{\link{log_cholesky}}.
+log-Cholesky parametrization. Constructed by \code{\link[=log_cholesky]{log_cholesky()}}.
 }
 \examples{
 S7::S7_inherits(log_cholesky(2), LogCholeskyParam)
 
 }
 \seealso{
-\code{\link{log_cholesky}}
+\code{\link[=log_cholesky]{log_cholesky()}}
 }

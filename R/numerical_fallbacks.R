@@ -9,7 +9,7 @@ NULL
 #' Is This the Package's Own Base Class?
 #'
 #' @description
-#' Asks whether an S7 class is the abstract \code{\link{parameter}} class,
+#' Asks whether an S7 class is the abstract [parameter()] class,
 #' which is how a method registered on it is told apart from one a subclass
 #' supplied.
 #'
@@ -21,7 +21,7 @@ NULL
 #'
 #' @param cls An S7 class.
 #'
-#' @return \code{TRUE} or \code{FALSE}.
+#' @return `TRUE` or `FALSE`.
 #'
 #' @keywords internal
 is_base_param_class <- function(cls) {
@@ -41,7 +41,7 @@ is_base_param_class <- function(cls) {
 #' @description
 #' Reports, for each of the five derivative quantities, whether the parameter
 #' supplies its own method or falls back to the one registered on
-#' \code{\link{parameter}}.
+#' [parameter()].
 #'
 #' @details
 #' The distinction that matters is whether an independent check exists. A
@@ -49,20 +49,20 @@ is_base_param_class <- function(cls) {
 #' difference, and a log-determinant read off an eigendecomposition cannot be
 #' checked against an eigendecomposition; the comparison is the same arithmetic
 #' twice, and it agrees however wrong the parameter is.
-#' \code{\link{check_parameter}} uses this to report such a quantity as not
+#' [check_parameter()] uses this to report such a quantity as not
 #' checked rather than as passed.
 #'
-#' \code{param_solve()} and \code{param_factor()} are deliberately absent.
+#' `param_solve()` and `param_factor()` are deliberately absent.
 #' Their base-class versions are a Cholesky factorization, which is exact
 #' whoever performs it, and the validator compares them with
-#' \code{base::solve} either way. Calling them numerical would suggest an
+#' `base::solve` either way. Calling them numerical would suggest an
 #' approximation that is not there.
 #'
-#' @param s An object inheriting from class \code{\link{parameter}}.
+#' @param s An object inheriting from class [parameter()].
 #'
-#' @return A named logical vector over \code{param_d1},
-#'   \code{param_d2}, \code{param_logdet}, \code{param_dlogdet} and
-#'   \code{param_d2logdet}, \code{TRUE} where the base-class method is in
+#' @return A named logical vector over `param_d1`,
+#'   `param_d2`, `param_logdet`, `param_dlogdet` and
+#'   `param_d2logdet`, `TRUE` where the base-class method is in
 #'   force.
 #'
 #' @examples
@@ -71,7 +71,7 @@ is_base_param_class <- function(cls) {
 #' param_is_numerical(log_cholesky(3))
 #' param_is_numerical(diagonal_matrix(3))
 #'
-#' @seealso \code{\link{param_value}}, \code{\link{param_free}}
+#' @seealso [param_value()], [param_free()]
 #' @export
 param_is_numerical <- function(s) {
   cls <- S7::S7_class(s)
@@ -111,11 +111,11 @@ param_is_numerical <- function(s) {
 #' smoothing parameters that far apart is ordinary. The object settled the
 #' question once, at construction, from the components.
 #'
-#' @param s A \code{\link{parameter}} object.
+#' @param s A [parameter()] object.
 #' @param eta A numeric vector of free values.
 #'
-#' @return A list with \code{values}, \code{vectors}, and \code{keep}, a
-#'   logical vector marking the \code{s@rank} directions that carry the matrix.
+#' @return A list with `values`, `vectors`, and `keep`, a
+#'   logical vector marking the `s@rank` directions that carry the matrix.
 #'
 #' @keywords internal
 param_spectrum <- function(s, eta) {
@@ -133,7 +133,7 @@ param_spectrum <- function(s, eta) {
 #' The pseudo-inverse of \eqn{M(\eta)}, formed from the directions the declared
 #' rank keeps.
 #'
-#' @param sp The result of \code{\link{param_spectrum}}.
+#' @param sp The result of [param_spectrum()].
 #'
 #' @return A symmetric numeric matrix.
 #'
@@ -149,14 +149,14 @@ spectrum_pinv <- function(sp) {
 #' Cholesky Factorization, With the Rank Decided Before It
 #'
 #' @description
-#' The lower triangular Cholesky factor of a symmetric matrix, or \code{NULL}
+#' The lower triangular Cholesky factor of a symmetric matrix, or `NULL`
 #' when the matrix is not positive definite to the given relative tolerance.
 #'
 #' @details
 #' The verdict comes from the eigenvalues rather than from whether
-#' \code{\link[base]{chol}} raises. On a matrix with an exactly zero eigenvalue
+#' [base::chol()] raises. On a matrix with an exactly zero eigenvalue
 #' the pivot that should be zero comes out positive or negative according to
-#' rounding, so \code{chol()} succeeds on some platforms and fails on others,
+#' rounding, so `chol()` succeeds on some platforms and fails on others,
 #' and a construction that asks it whether a matrix is usable gets a different
 #' answer on different machines.
 #'
@@ -165,7 +165,7 @@ spectrum_pinv <- function(sp) {
 #'   as zero.
 #'
 #' @return The lower triangular factor \eqn{L} with \eqn{M = L L^\top}, or
-#'   \code{NULL}.
+#'   `NULL`.
 #'
 #' @keywords internal
 chol_pd <- function(m, tol = 1e-12) {
@@ -187,7 +187,7 @@ chol_pd <- function(m, tol = 1e-12) {
 #' The free scale is unbounded, so unlike the response and parameter steps of
 #' \pkg{distributions7} this one has no boundary to be clamped away from: the
 #' whole point of the unconstrained scale is that there is nowhere to fall off,
-#' and \code{bounds} is left at its default for that reason.
+#' and `bounds` is left at its default for that reason.
 #'
 #' The rule is \pkg{numericals7}'s and is read from it rather than written out
 #' again, so the step a fallback takes and the step the stencil library
@@ -198,7 +198,7 @@ chol_pd <- function(m, tol = 1e-12) {
 #'
 #' @return A single positive number.
 #'
-#' @seealso \code{\link[numericals7]{fd_step}}
+#' @seealso [numericals7::fd_step()]
 #'
 #' @keywords internal
 fd_step <- function(eta_k, order = 1L) {
@@ -213,11 +213,11 @@ fd_step <- function(eta_k, order = 1L) {
 #' vector, along one of its components.
 #'
 #' @details
-#' The nodes and the weights come from \code{\link[numericals7]{fd_offsets}}
-#' and \code{\link[numericals7]{fd_weights}} rather than being written out
+#' The nodes and the weights come from [numericals7::fd_offsets()]
+#' and [numericals7::fd_weights()] rather than being written out
 #' here, so a difference in this package is the same object the rest of the
-#' toolkit differentiates with. \code{\link[numericals7]{fd_derivative}}
-#' cannot be used directly: its \code{f} maps a vector of points to the values
+#' toolkit differentiates with. [numericals7::fd_derivative()]
+#' cannot be used directly: its `f` maps a vector of points to the values
 #' at those points, and what is differentiated here maps a whole free vector
 #' to a matrix.
 #'
@@ -225,11 +225,11 @@ fd_step <- function(eta_k, order = 1L) {
 #' @param eta The free vector.
 #' @param k The component to differentiate along.
 #' @param order The derivative order.
-#' @param h The step; \code{\link{fd_step}} when missing.
+#' @param h The step; [fd_step()] when missing.
 #'
-#' @return Whatever \code{f} returns, differentiated.
+#' @return Whatever `f` returns, differentiated.
 #'
-#' @seealso \code{\link[numericals7]{fd_weights}}
+#' @seealso [numericals7::fd_weights()]
 #'
 #' @keywords internal
 fd_along <- function(f, eta, k, order = 1L, h = NULL) {
@@ -251,15 +251,15 @@ fd_along <- function(f, eta, k, order = 1L, h = NULL) {
 #' Numerical First Derivatives of a Parameter's Matrix
 #'
 #' @description
-#' One central difference of \code{\link{param_value}} in each component of
+#' One central difference of [param_value()] in each component of
 #' \eqn{\eta}.
 #'
-#' @param s A \code{\link{parameter}} object.
+#' @param s A [parameter()] object.
 #' @param eta A numeric vector of free values.
 #'
 #' @return A named list of symmetric matrices.
 #'
-#' @seealso \code{\link{param_d1}}
+#' @seealso [param_d1()]
 #' @examples
 #' numerical_d1(scalar_matrix(2), 0.3)
 #' @export
@@ -277,11 +277,11 @@ numerical_d1 <- function(s, eta) {
 #'
 #' @description
 #' One central difference of the analytic first derivatives where a parameter
-#' supplies them, and a single mixed stencil on \code{\link{param_value}}
+#' supplies them, and a single mixed stencil on [param_value()]
 #' where it does not.
 #'
 #' @details
-#' Writing \eqn{M(\eta)} for \code{\link{param_value}} and
+#' Writing \eqn{M(\eta)} for [param_value()] and
 #' \eqn{\partial_k M} for its analytic first derivative, the entry
 #' \eqn{(k, l)} is
 #'
@@ -307,13 +307,13 @@ numerical_d1 <- function(s, eta) {
 #' than compounding; the diagonal pairs use the three-point second-difference
 #' stencil directly, which is again one layer and not two.
 #'
-#' @param s A \code{\link{parameter}} object.
+#' @param s A [parameter()] object.
 #' @param eta A numeric vector of free values.
 #'
 #' @return A named list of symmetric matrices, keyed as
-#'   \code{param_tuple_names(s)}.
+#'   `param_tuple_names(s)`.
 #'
-#' @seealso \code{\link{param_d2}}
+#' @seealso [param_d2()]
 #' @examples
 #' numerical_d2(scalar_matrix(2), 0.3)
 #' @export
@@ -355,9 +355,9 @@ numerical_d2 <- function(s, eta) {
 #' @title Default First Derivatives
 #' @name param_d1.parameter
 #' @description Fallback: one central difference of
-#'   \code{\link{param_value}} per component (see
-#'   \code{\link{numerical_d1}}).
-#' @param s A \code{\link{parameter}} object.
+#'   [param_value()] per component (see
+#'   [numerical_d1()]).
+#' @param s A [parameter()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named list of symmetric matrices.
@@ -368,8 +368,8 @@ S7::method(param_d1, parameter) <- function(s, eta, ...) {
 
 #' @title Default Second Derivatives
 #' @name param_d2.parameter
-#' @description Fallback: see \code{\link{numerical_d2}}.
-#' @param s A \code{\link{parameter}} object.
+#' @description Fallback: see [numerical_d2()].
+#' @param s A [parameter()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named list of symmetric matrices.
@@ -384,7 +384,7 @@ S7::method(param_d2, parameter) <- function(s, eta, ...) {
 #' Fallback: the sum of the logs of the eigenvalues the declared rank keeps,
 #' which is the log-determinant for a full-rank family and the log
 #' pseudo-determinant otherwise.
-#' @param s A \code{\link{parameter}} object.
+#' @param s A [parameter()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A single number.
@@ -407,7 +407,7 @@ S7::method(param_logdet, matrix_parameter) <- function(s, eta, ...) {
 #' Fallback: \eqn{\mathrm{tr}(M^{+} \partial_k M)}, with the pseudo-inverse
 #' formed from the directions the declared rank keeps, which is the ordinary
 #' inverse when the family is of full rank.
-#' @param s A \code{\link{parameter}} object.
+#' @param s A [parameter()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named numeric vector.
@@ -427,8 +427,8 @@ S7::method(param_dlogdet, matrix_parameter) <- function(s, eta, ...) {
 #' @description
 #' Fallback: \eqn{\mathrm{tr}(M^{+} \partial_{kl} M) -
 #' \mathrm{tr}(M^{+} \partial_k M\, M^{+} \partial_l M)}, the derivative of the
-#' identity behind \code{\link{param_dlogdet}}.
-#' @param s A \code{\link{parameter}} object.
+#' identity behind [param_dlogdet()].
+#' @param s A [parameter()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named numeric vector.
@@ -449,11 +449,11 @@ S7::method(param_d2logdet, matrix_parameter) <- function(s, eta, ...) {
 
 #' @title Default Solve
 #' @name param_solve.parameter
-#' @description Fallback: a Cholesky of \code{\link{param_value}}, with the
-#'   definiteness verdict taken spectrally (see \code{\link{chol_pd}}).
-#' @param s A \code{\link{parameter}} object.
+#' @description Fallback: a Cholesky of [param_value()], with the
+#'   definiteness verdict taken spectrally (see [chol_pd()]).
+#' @param s A [parameter()] object.
 #' @param eta A numeric vector of free values.
-#' @param b A numeric matrix with \code{s@dimension} rows.
+#' @param b A numeric matrix with `s@dimension` rows.
 #' @param ... Unused.
 #' @return A numeric matrix.
 #' @keywords internal
@@ -465,9 +465,9 @@ S7::method(param_solve, matrix_parameter) <- function(s, eta, b = NULL, ...) {
 #' @title Default Factor
 #' @name param_factor.parameter
 #' @description Fallback: the lower Cholesky factor of
-#'   \code{\link{param_value}}, rejected when the matrix is not positive
+#'   [param_value()], rejected when the matrix is not positive
 #'   definite spectrally.
-#' @param s A \code{\link{parameter}} object.
+#' @param s A [parameter()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A lower triangular numeric matrix.
@@ -490,7 +490,7 @@ S7::method(param_factor, matrix_parameter) <- function(s, eta, ...) {
 #' The base class rejects rather than inverting the map numerically: an
 #' optimization-based inverse would return a plausible \eqn{\eta} for a matrix
 #' outside the set the family parametrizes.
-#' @param s A \code{\link{parameter}} object.
+#' @param s A [parameter()] object.
 #' @param m A symmetric numeric matrix.
 #' @param ... Unused.
 #' @return Never returns; raises an error.
@@ -507,7 +507,7 @@ S7::method(param_free, parameter) <- function(s, m, ...) {
 #' Numerical Third Derivatives of a Parameter's Value
 #'
 #' @description
-#' One product stencil applied directly to \code{\link{param_value}} for each
+#' One product stencil applied directly to [param_value()] for each
 #' distinct index tuple: a single stencil on the map itself, never a stencil
 #' on a lower-order numerical derivative, so the no-nesting rule holds
 #' whatever the family implements. A repeated component uses the matching
@@ -530,12 +530,12 @@ S7::method(param_free, parameter) <- function(s, m, ...) {
 #' one such stencil rather than differencing a lower-order numerical
 #' derivative keeps the rounding at a single layer.
 #'
-#' @param s A \code{\link{parameter}} object.
+#' @param s A [parameter()] object.
 #' @param eta A numeric vector of free values.
 #'
-#' @return A named list keyed as \code{\link{param_tuple_names}(s, 3)}.
+#' @return A named list keyed as [`param_tuple_names(s, 3)`][param_tuple_names].
 #'
-#' @seealso \code{\link{param_d3}}
+#' @seealso [param_d3()]
 #' @examples
 #' numerical_d3(scalar_matrix(2), 0.3)
 #' @export
@@ -557,7 +557,7 @@ numerical_d3 <- function(s, eta) {
 #' Numerical Fourth Derivatives of a Parameter's Value
 #'
 #' @description
-#' The order-four analogue of \code{\link{numerical_d3}}: one stencil per
+#' The order-four analogue of [numerical_d3()]: one stencil per
 #' component, applied directly to the map. Rounding is amplified by the
 #' fourth power of the step, so this is accurate to roughly four significant
 #' digits -- a starting point, and the reason every shipped family carries
@@ -565,17 +565,17 @@ numerical_d3 <- function(s, eta) {
 #'
 #' @details
 #' The tensor-product stencil is the one written out under
-#' \code{\link{numerical_d3}}, with the multiplicities summing to four.
+#' [numerical_d3()], with the multiplicities summing to four.
 #' Truncation is of order \eqn{h^{2}} and rounding of order
 #' \eqn{\varepsilon / h^{4}}, so the attainable accuracy is roughly
 #' \eqn{\varepsilon^{1/3}}.
 #'
-#' @param s A \code{\link{parameter}} object.
+#' @param s A [parameter()] object.
 #' @param eta A numeric vector of free values.
 #'
-#' @return A named list keyed as \code{\link{param_tuple_names}(s, 4)}.
+#' @return A named list keyed as [`param_tuple_names(s, 4)`][param_tuple_names].
 #'
-#' @seealso \code{\link{param_d4}}
+#' @seealso [param_d4()]
 #' @examples
 #' numerical_d4(scalar_matrix(2), 0.3)
 #' @export
@@ -597,15 +597,15 @@ numerical_d4 <- function(s, eta) {
 #' One Product Stencil for a Mixed Partial Derivative
 #'
 #' @description
-#' Differentiates \code{f} once in each component the index tuple names, a
+#' Differentiates `f` once in each component the index tuple names, a
 #' central factor per distinct component of the order its multiplicity asks.
 #' The result is a single product stencil, not a composition of lower-order
 #' numerical derivatives.
 #'
 #' @details
 #' Each factor's nodes and weights are \pkg{numericals7}'s, read from
-#' \code{\link[numericals7]{fd_offsets}} and
-#' \code{\link[numericals7]{fd_weights}}. They were transcribed here once --
+#' [numericals7::fd_offsets()] and
+#' [numericals7::fd_weights()]. They were transcribed here once --
 #' two points at order one, three at two, the five-point forms at three and
 #' four -- and a table of stencil coefficients written out in a second place
 #' is a table that can disagree with the first.
@@ -614,9 +614,9 @@ numerical_d4 <- function(s, eta) {
 #' @param eta The point.
 #' @param tuple An integer vector of component indices, possibly repeated.
 #'
-#' @return The stencil's value, shaped like \code{f(eta)}.
+#' @return The stencil's value, shaped like `f(eta)`.
 #'
-#' @seealso \code{\link[numericals7]{fd_weights}}
+#' @seealso [numericals7::fd_weights()]
 #'
 #' @keywords internal
 mixed_stencil <- function(f, eta, tuple) {
@@ -657,8 +657,8 @@ mixed_stencil <- function(f, eta, tuple) {
 
 #' @title Default Third Derivatives
 #' @name param_d3.parameter
-#' @description Fallback: see \code{\link{numerical_d3}}.
-#' @param s A \code{\link{parameter}} object.
+#' @description Fallback: see [numerical_d3()].
+#' @param s A [parameter()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named list.
@@ -669,8 +669,8 @@ S7::method(param_d3, parameter) <- function(s, eta, ...) {
 
 #' @title Default Fourth Derivatives
 #' @name param_d4.parameter
-#' @description Fallback: see \code{\link{numerical_d4}}.
-#' @param s A \code{\link{parameter}} object.
+#' @description Fallback: see [numerical_d4()].
+#' @param s A [parameter()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named list.
@@ -682,10 +682,10 @@ S7::method(param_d4, parameter) <- function(s, eta, ...) {
 #' @title Default Higher Log-Determinant Derivatives
 #' @name param_d3logdet.matrix_parameter
 #' @description
-#' Fallback: one central stencil on \code{\link{param_d2logdet}}, which is
+#' Fallback: one central stencil on [param_d2logdet()], which is
 #' the exact trace identity given the matrix derivatives -- a single layer on
 #' an analytic quantity, per the toolkit's rule.
-#' @param s A \code{\link{matrix_parameter}} object.
+#' @param s A [matrix_parameter()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named numeric vector.
@@ -711,10 +711,10 @@ S7::method(param_d3logdet, matrix_parameter) <- function(s, eta, ...) {
 #' @title Default Fourth Log-Determinant Derivatives
 #' @name param_d4logdet.matrix_parameter
 #' @description
-#' Fallback: one second-order stencil on \code{\link{param_d2logdet}} in the
+#' Fallback: one second-order stencil on [param_d2logdet()] in the
 #' last two components of the tuple -- one layer, mixed across components
 #' where they differ.
-#' @param s A \code{\link{matrix_parameter}} object.
+#' @param s A [matrix_parameter()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named numeric vector.

@@ -4,7 +4,7 @@
 \alias{param_logdet.DrProdParam}
 \title{Log-Determinant of a Scales-Times-Correlation Parameter}
 \arguments{
-\item{s}{A \code{\link{DrProdParam}} object.}
+\item{s}{A \code{\link[=DrProdParam]{DrProdParam()}} object.}
 
 \item{eta}{A numeric vector of length \code{s@n_free}.}
 

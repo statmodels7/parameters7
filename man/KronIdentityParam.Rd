@@ -40,12 +40,12 @@ An object of class \code{KronIdentityParam}.
 \description{
 The S7 class of a block-diagonal matrix built from \eqn{m} identical
 copies of an inner matrix parameter. Constructed by
-\code{\link{kron_identity}}.
+\code{\link[=kron_identity]{kron_identity()}}.
 }
 \examples{
 S7::S7_inherits(kron_identity(log_cholesky(2), 3), KronIdentityParam)
 
 }
 \seealso{
-\code{\link{kron_identity}}
+\code{\link[=kron_identity]{kron_identity()}}
 }

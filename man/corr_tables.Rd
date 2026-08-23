@@ -7,7 +7,7 @@
 corr_tables(s, eta)
 }
 \arguments{
-\item{s}{A \code{\link{CorrelationParam}} object.}
+\item{s}{A \code{\link[=CorrelationParam]{CorrelationParam()}} object.}
 
 \item{eta}{A numeric vector of free values.}
 }
@@ -24,6 +24,6 @@ Each angle depends on exactly one free value, so these tables are all the
 derivative machinery the family needs: an entry of \eqn{L} is a product of
 such factors, and differentiating it replaces each factor by the derivative
 of the matching order. The composition of the trigonometric function with
-the link is done by \code{\link{compose4}}.
+the link is done by \code{\link[=compose4]{compose4()}}.
 }
 \keyword{internal}

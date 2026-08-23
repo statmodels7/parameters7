@@ -7,7 +7,7 @@
 param_solve(s, eta, b = NULL, ...)
 }
 \arguments{
-\item{s}{An object inheriting from class \code{\link{parameter}}.}
+\item{s}{An object inheriting from class \code{\link[=parameter]{parameter()}}.}
 
 \item{eta}{A numeric vector of length \code{s@n_free}.}
 
@@ -37,5 +37,5 @@ round(param_solve(s, c(0, 0, 0.5)), 4)
 
 }
 \seealso{
-\code{\link{param_factor}}, \code{\link{param_logdet}}
+\code{\link[=param_factor]{param_factor()}}, \code{\link[=param_logdet]{param_logdet()}}
 }

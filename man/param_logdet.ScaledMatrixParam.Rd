@@ -4,7 +4,7 @@
 \alias{param_logdet.ScaledMatrixParam}
 \title{Log-Determinant of a Scaled Parameter}
 \arguments{
-\item{s}{A \code{\link{ScaledMatrixParam}} object.}
+\item{s}{A \code{\link[=ScaledMatrixParam]{ScaledMatrixParam()}} object.}
 
 \item{eta}{A numeric vector of free values.}
 

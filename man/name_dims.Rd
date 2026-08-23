@@ -9,7 +9,7 @@ name_dims(m, s)
 \arguments{
 \item{m}{A numeric matrix.}
 
-\item{s}{A \code{\link{parameter}} object.}
+\item{s}{A \code{\link[=parameter]{parameter()}} object.}
 }
 \value{
 \code{m}, with dimnames.

@@ -4,7 +4,7 @@
 \alias{param_d2logdet.ScaledMatrixParam}
 \title{Log-Determinant Hessian of a Scaled Parameter}
 \arguments{
-\item{s}{A \code{\link{ScaledMatrixParam}} object.}
+\item{s}{A \code{\link[=ScaledMatrixParam]{ScaledMatrixParam()}} object.}
 
 \item{eta}{A numeric vector of free values.}
 

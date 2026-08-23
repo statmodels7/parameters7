@@ -4,7 +4,7 @@
 \alias{param_d2.parameter}
 \title{Default Second Derivatives}
 \arguments{
-\item{s}{A \code{\link{parameter}} object.}
+\item{s}{A \code{\link[=parameter]{parameter()}} object.}
 
 \item{eta}{A numeric vector of free values.}
 
@@ -14,6 +14,6 @@
 A named list of symmetric matrices.
 }
 \description{
-Fallback: see \code{\link{numerical_d2}}.
+Fallback: see \code{\link[=numerical_d2]{numerical_d2()}}.
 }
 \keyword{internal}

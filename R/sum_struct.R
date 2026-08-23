@@ -6,13 +6,13 @@ NULL
 #' @description
 #' The S7 class of a matrix parameter that is a sum of fixed symmetric positive
 #' semidefinite matrices, each carried by one positive free value. Constructed
-#' by \code{\link{sum_struct}}.
+#' by [sum_struct()].
 #'
 #' @inheritParams matrix_parameter
 #'
-#' @return An object of class \code{SumStructParam}.
+#' @return An object of class `SumStructParam`.
 #'
-#' @seealso \code{\link{sum_struct}}
+#' @seealso [sum_struct()]
 #'
 #' @examples
 #' S7::S7_inherits(sum_struct(list(diag(3), matrix(1, 3, 3))), SumStructParam)
@@ -31,7 +31,7 @@ SumStructParam <- S7::new_class("SumStructParam", parent = matrix_parameter)
 #' @details
 #' This is the variance-components covariance, \eqn{\sum_k \sigma_k^2 Z_kZ_k'},
 #' and it is also the matrix a penalty with one smoothing parameter per
-#' component assembles. \pkg{penalties7}'s \code{additive_penalty()} builds the
+#' component assembles. \pkg{penalties7}'s `additive_penalty()` builds the
 #' same sum for its own purposes; the difference is that a penalty is a
 #' function of the coefficients while this is a matrix map, so a distribution
 #' can take it as a covariance.
@@ -51,7 +51,7 @@ SumStructParam <- S7::new_class("SumStructParam", parent = matrix_parameter)
 #' multiplicity, and are then carried onto the free scale by a chain rule whose
 #' Jacobian is diagonal.
 #'
-#' \strong{Rank.} The null space of a sum of positive semidefinite matrices is
+#' **Rank.** The null space of a sum of positive semidefinite matrices is
 #' the intersection of theirs, so it does not move with the weights and the
 #' rank is fixed at construction. It is read from the components stacked and
 #' individually normalized, never from an assembled matrix: a count of small
@@ -61,14 +61,14 @@ SumStructParam <- S7::new_class("SumStructParam", parent = matrix_parameter)
 #' @param components A list of symmetric matrices of the same side, each
 #'   positive semidefinite. Named entries supply the free-value labels.
 #' @param link The positive link carrying each weight onto the free scale.
-#'   Defaults to \code{\link[linkfunctions7]{log_link}()}.
-#' @param role One of \code{"covariance"}, \code{"precision"} or
-#'   \code{"either"}.
+#'   Defaults to [linkfunctions7::log_link()].
+#' @param role One of `"covariance"`, `"precision"` or
+#'   `"either"`.
 #'
-#' @return An object of class \code{\link{SumStructParam}}.
+#' @return An object of class [SumStructParam()].
 #'
-#' @seealso \code{\link{scaled_matrix}}, \code{\link{block_diag}},
-#'   \code{\link[penalties7]{additive_penalty}}
+#' @seealso [scaled_matrix()], [block_diag()],
+#'   [penalties7::additive_penalty()]
 #'
 #' @examples
 #' # two variance components on three coefficients
@@ -170,10 +170,10 @@ sum_struct_null_basis <- function(components) {
 #' Returns each weight and its first four derivatives in the free value that
 #' carries it, as a matrix with one row per order.
 #'
-#' @param s A \code{\link{SumStructParam}} object.
-#' @param eta A numeric vector of length \code{s@n_free}.
+#' @param s A [SumStructParam()] object.
+#' @param eta A numeric vector of length `s@n_free`.
 #'
-#' @return A 5 by \code{K} numeric matrix, rows being orders 0 to 4.
+#' @return A 5 by `K` numeric matrix, rows being orders 0 to 4.
 #'
 #' @keywords internal
 sum_struct_weight_derivs <- function(s, eta) {
@@ -191,11 +191,11 @@ sum_struct_weight_derivs <- function(s, eta) {
 #' The value is linear in the weights, so a component is zero unless every
 #' index of the tuple names the same free value.
 #'
-#' @param s A \code{\link{SumStructParam}} object.
-#' @param eta A numeric vector of length \code{s@n_free}.
+#' @param s A [SumStructParam()] object.
+#' @param eta A numeric vector of length `s@n_free`.
 #' @param order The derivative order, 1 to 4.
 #'
-#' @return A named list of matrices keyed as \code{param_tuple_names(s, order)}.
+#' @return A named list of matrices keyed as `param_tuple_names(s, order)`.
 #'
 #' @keywords internal
 sum_struct_derivs <- function(s, eta, order) {
@@ -272,11 +272,11 @@ sum_struct_trace_term <- function(minv, comp, t) {
 #' partition per group, each block contributing a derivative of the inverse
 #' link and one differentiation in that weight.
 #'
-#' @param s A \code{\link{SumStructParam}} object.
-#' @param eta A numeric vector of length \code{s@n_free}.
+#' @param s A [SumStructParam()] object.
+#' @param eta A numeric vector of length `s@n_free`.
 #' @param order The derivative order, 1 to 4.
 #'
-#' @return A named numeric vector keyed as \code{param_tuple_names(s, order)}.
+#' @return A named numeric vector keyed as `param_tuple_names(s, order)`.
 #'
 #' @keywords internal
 sum_struct_logdet_derivs <- function(s, eta, order) {
@@ -310,10 +310,10 @@ sum_struct_logdet_derivs <- function(s, eta, order) {
 #' @title Value of a Sum of Fixed Matrices
 #' @name param_value.SumStructParam
 #' @description The weighted sum of the components.
-#' @param s A \code{\link{SumStructParam}} object.
-#' @param eta A numeric vector of length \code{s@n_free}.
+#' @param s A [SumStructParam()] object.
+#' @param eta A numeric vector of length `s@n_free`.
 #' @param ... Unused.
-#' @return A symmetric matrix of side \code{s@dimension}.
+#' @return A symmetric matrix of side `s@dimension`.
 #' @keywords internal
 S7::method(param_value, SumStructParam) <- function(s, eta, ...) {
   w <- .ss_weights(s, eta)
@@ -329,10 +329,10 @@ S7::method(param_value, SumStructParam) <- function(s, eta, ...) {
 #' Recovers the weights by least squares on the components' entries and rejects
 #' a matrix the combination cannot reproduce. Non-positive weights are rejected
 #' too, the family carrying them through a positive link.
-#' @param s A \code{\link{SumStructParam}} object.
-#' @param m A symmetric matrix of side \code{s@dimension}.
+#' @param s A [SumStructParam()] object.
+#' @param m A symmetric matrix of side `s@dimension`.
 #' @param ... Unused.
-#' @return A numeric vector of length \code{s@n_free}.
+#' @return A numeric vector of length `s@n_free`.
 #' @keywords internal
 S7::method(param_free, SumStructParam) <- function(s, m, ...) {
   comp <- .ss(s)$components
@@ -356,8 +356,8 @@ S7::method(param_free, SumStructParam) <- function(s, m, ...) {
 #' The value being linear in the weights, a component is zero unless every
 #' index names the same free value, and is then that weight's derivative times
 #' its component.
-#' @param s A \code{\link{SumStructParam}} object.
-#' @param eta A numeric vector of length \code{s@n_free}.
+#' @param s A [SumStructParam()] object.
+#' @param eta A numeric vector of length `s@n_free`.
 #' @param ... Unused.
 #' @return A named list of symmetric matrices.
 #' @keywords internal
@@ -391,8 +391,8 @@ S7::method(param_d4, SumStructParam) <- function(s, eta, ...) {
 #' @description
 #' The log-determinant of the assembled matrix, or its log pseudo-determinant
 #' over the non-zero eigenvalues when the family is rank deficient.
-#' @param s A \code{\link{SumStructParam}} object.
-#' @param eta A numeric vector of length \code{s@n_free}.
+#' @param s A [SumStructParam()] object.
+#' @param eta A numeric vector of length `s@n_free`.
 #' @param ... Unused.
 #' @return A single number.
 #' @keywords internal
@@ -410,8 +410,8 @@ S7::method(param_logdet, SumStructParam) <- function(s, eta, ...) {
 #' @description
 #' The cyclic trace expansion in the weights, carried onto the free scale by a
 #' chain rule with a diagonal Jacobian.
-#' @param s A \code{\link{SumStructParam}} object.
-#' @param eta A numeric vector of length \code{s@n_free}.
+#' @param s A [SumStructParam()] object.
+#' @param eta A numeric vector of length `s@n_free`.
 #' @param ... Unused.
 #' @return A named numeric vector.
 #' @keywords internal
@@ -446,9 +446,9 @@ S7::method(param_d4logdet, SumStructParam) <- function(s, eta, ...) {
 #' Both come from the assembled matrix: a sum of fixed matrices has no
 #' structure a solve could exploit, unlike the families whose factor is written
 #' out.
-#' @param s A \code{\link{SumStructParam}} object.
-#' @param eta A numeric vector of length \code{s@n_free}.
-#' @param b A matrix with \code{s@dimension} rows, or \code{NULL}.
+#' @param s A [SumStructParam()] object.
+#' @param eta A numeric vector of length `s@n_free`.
+#' @param b A matrix with `s@dimension` rows, or `NULL`.
 #' @param ... Unused.
 #' @return A matrix.
 #' @keywords internal

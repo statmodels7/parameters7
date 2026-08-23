@@ -10,7 +10,7 @@ simplex(n_cat)
 \item{n_cat}{The number of categories \eqn{K}, at least 2.}
 }
 \value{
-An object of class \code{\link{SimplexParam}}.
+An object of class \code{\link[=SimplexParam]{SimplexParam()}}.
 }
 \description{
 A probability vector of length \eqn{K} on the open simplex, carried by the
@@ -51,5 +51,5 @@ Data}. Chapman and Hall, London. The additive log-ratio chart is
 chapter 6.
 }
 \seealso{
-\code{\link{transition_matrix}}, \code{\link{param_value}}
+\code{\link[=transition_matrix]{transition_matrix()}}, \code{\link[=param_value]{param_value()}}
 }

@@ -15,7 +15,7 @@ it records which side of a model the matrix parametrizes, since the family
 name does not say.}
 }
 \value{
-An object of class \code{\link{LogCholeskyParam}}.
+An object of class \code{\link[=LogCholeskyParam]{LogCholeskyParam()}}.
 }
 \description{
 The log-Cholesky parametrization of a symmetric positive definite matrix:
@@ -63,6 +63,6 @@ Pinheiro, J. C. and Bates, D. M. (1996). Unconstrained parametrizations for
 variance-covariance matrices. \emph{Statistics and Computing} 6, 289-296.
 }
 \seealso{
-\code{\link{diagonal_matrix}}, \code{\link{scaled_matrix}},
-\code{\link{check_parameter}}
+\code{\link[=diagonal_matrix]{diagonal_matrix()}}, \code{\link[=scaled_matrix]{scaled_matrix()}},
+\code{\link[=check_parameter]{check_parameter()}}
 }

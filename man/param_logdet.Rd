@@ -7,7 +7,7 @@
 param_logdet(s, eta, ...)
 }
 \arguments{
-\item{s}{An object inheriting from class \code{\link{parameter}}.}
+\item{s}{An object inheriting from class \code{\link[=parameter]{parameter()}}.}
 
 \item{eta}{A numeric vector of length \code{s@n_free}.}
 
@@ -43,5 +43,5 @@ c(rank = s@rank, logdet = param_logdet(s, 0))
 
 }
 \seealso{
-\code{\link{param_dlogdet}}, \code{\link{param_solve}}
+\code{\link[=param_dlogdet]{param_dlogdet()}}, \code{\link[=param_solve]{param_solve()}}
 }

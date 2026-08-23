@@ -39,12 +39,12 @@ An object of class \code{ScaledMatrixParam}.
 }
 \description{
 The S7 class of a fixed symmetric positive semidefinite matrix carried by a
-single scale. Constructed by \code{\link{scaled_matrix}}.
+single scale. Constructed by \code{\link[=scaled_matrix]{scaled_matrix()}}.
 }
 \examples{
 S7::S7_inherits(scaled_matrix(diag(3)), ScaledMatrixParam)
 
 }
 \seealso{
-\code{\link{scaled_matrix}}
+\code{\link[=scaled_matrix]{scaled_matrix()}}
 }

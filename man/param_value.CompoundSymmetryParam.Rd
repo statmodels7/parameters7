@@ -4,7 +4,7 @@
 \alias{param_value.CompoundSymmetryParam}
 \title{Value of a Compound Symmetry Parameter}
 \arguments{
-\item{s}{A \code{\link{CompoundSymmetryParam}} object.}
+\item{s}{A \code{\link[=CompoundSymmetryParam]{CompoundSymmetryParam()}} object.}
 
 \item{eta}{A numeric vector of two free values.}
 

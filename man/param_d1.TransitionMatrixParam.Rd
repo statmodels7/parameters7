@@ -4,7 +4,7 @@
 \alias{param_d1.TransitionMatrixParam}
 \title{First Derivatives of a Transition Matrix Parameter}
 \arguments{
-\item{s}{A \code{\link{TransitionMatrixParam}} object.}
+\item{s}{A \code{\link[=TransitionMatrixParam]{TransitionMatrixParam()}} object.}
 
 \item{eta}{A numeric vector of free values.}
 
@@ -14,6 +14,6 @@
 A named list of matrices.
 }
 \description{
-Closed form, row by row; see \code{\link{tm_derivative}}.
+Closed form, row by row; see \code{\link[=tm_derivative]{tm_derivative()}}.
 }
 \keyword{internal}

@@ -4,7 +4,7 @@
 \alias{param_solve.AutoregressiveParam}
 \title{Solve of an Autoregressive Parameter}
 \arguments{
-\item{s}{An \code{\link{AutoregressiveParam}} object.}
+\item{s}{An \code{\link[=AutoregressiveParam]{AutoregressiveParam()}} object.}
 
 \item{eta}{A numeric vector of free values.}
 
@@ -18,7 +18,7 @@ A numeric matrix.
 \description{
 Exact and banded of bandwidth \eqn{q}. The precision is
 \eqn{U^\top D^{-1} U} in the prediction form of
-\code{\link{ar_prediction}}, which is what an order-\eqn{q} Markov property
+\code{\link[=ar_prediction]{ar_prediction()}}, which is what an order-\eqn{q} Markov property
 means: no partial correlation beyond the lag.
 }
 \keyword{internal}

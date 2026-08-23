@@ -7,7 +7,7 @@
 spectrum_pinv(sp)
 }
 \arguments{
-\item{sp}{The result of \code{\link{param_spectrum}}.}
+\item{sp}{The result of \code{\link[=param_spectrum]{param_spectrum()}}.}
 }
 \value{
 A symmetric numeric matrix.

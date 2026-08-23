@@ -7,7 +7,7 @@
 param_dlogdet(s, eta, ...)
 }
 \arguments{
-\item{s}{An object inheriting from class \code{\link{parameter}}.}
+\item{s}{An object inheriting from class \code{\link[=parameter]{parameter()}}.}
 
 \item{eta}{A numeric vector of length \code{s@n_free}.}
 
@@ -27,8 +27,8 @@ The identity behind it is
 \eqn{\partial_k \log|M| = \mathrm{tr}(M^{-1} \partial_k M)}, with the
 Moore-Penrose inverse in place of \eqn{M^{-1}} in the rank-deficient case.
 A closed form is therefore never an independent claim: it must agree with
-\code{\link{param_d1}} through that identity, and
-\code{\link{check_parameter}} compares the two routes.
+\code{\link[=param_d1]{param_d1()}} through that identity, and
+\code{\link[=check_parameter]{check_parameter()}} compares the two routes.
 }
 \examples{
 # for a scaled precision the derivative is the rank, whatever the scale
@@ -37,5 +37,5 @@ c(param_dlogdet(s, -3), param_dlogdet(s, 5), rank = s@rank)
 
 }
 \seealso{
-\code{\link{param_logdet}}, \code{\link{param_d2logdet}}
+\code{\link[=param_logdet]{param_logdet()}}, \code{\link[=param_d2logdet]{param_d2logdet()}}
 }

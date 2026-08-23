@@ -25,7 +25,7 @@ NULL
 #' it back, so that a variance stays positive and a correlation stays inside
 #' its interval. The Jacobians here are closed form: for the families whose
 #' coordinates are separate scalar links it is the diagonal of the inverse
-#' link's derivative, and for \code{\link{autoregressive}} the autoregressive
+#' link's derivative, and for [autoregressive()] the autoregressive
 #' coefficients carry their own derivatives out of the Levinson-Durbin
 #' recursion, which already carries their derivatives.
 #'
@@ -33,24 +33,24 @@ NULL
 #' the matrix it builds loses nothing by saying so: the matrix itself is what
 #' a consumer already reports.
 #'
-#' @param s A \code{\link{parameter}} object.
+#' @param s A [parameter()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Passed to methods.
 #'
-#' @return \code{NULL} when the family declares nothing, otherwise a list with
+#' @return `NULL` when the family declares nothing, otherwise a list with
 #'   \describe{
-#'     \item{\code{value}}{a named numeric vector of the quantities;}
-#'     \item{\code{jacobian}}{a matrix with one row per quantity and one column
+#'     \item{`value`}{a named numeric vector of the quantities;}
+#'     \item{`jacobian`}{a matrix with one row per quantity and one column
 #'       per free value;}
-#'     \item{\code{transform}}{a character vector naming the scale each
-#'       interval is built on, one of \code{"identity"}, \code{"log"},
-#'       \code{"atanh"} or \code{"logit"};}
-#'     \item{\code{label}}{a single string naming the group, for a consumer
+#'     \item{`transform`}{a character vector naming the scale each
+#'       interval is built on, one of `"identity"`, `"log"`,
+#'       `"atanh"` or `"logit"`;}
+#'     \item{`label`}{a single string naming the group, for a consumer
 #'       laying out a printed summary. The family supplies it because the
 #'       family is what holds the reading.}
 #'   }
 #'
-#' @seealso \code{\link{param_value}}, \code{\link{autoregressive}}
+#' @seealso [param_value()], [autoregressive()]
 #'
 #' @examples
 #' param_readable(ar1(5), c(log(2), atanh(0.6)))$value
@@ -67,11 +67,11 @@ param_readable <- S7::new_generic("param_readable", "s",
 #' @description
 #' The base-class method, which declares nothing.
 #'
-#' @param s A \code{\link{parameter}} object.
+#' @param s A [parameter()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Ignored.
 #'
-#' @return \code{NULL}.
+#' @return `NULL`.
 #'
 #' @name param_readable.parameter
 #' @keywords internal
@@ -93,7 +93,7 @@ S7::method(param_readable, parameter) <- function(s, eta, ...) NULL
 #'   on.
 #' @param label A single string naming the group.
 #'
-#' @return A list as described in \code{\link{param_readable}}.
+#' @return A list as described in [param_readable()].
 #'
 #' @keywords internal
 readable_diagonal <- function(links, eta, nm, transform, label) {
@@ -114,11 +114,11 @@ readable_diagonal <- function(links, eta, nm, transform, label) {
 #' @description
 #' Declares the marginal variance and the correlation at lag one.
 #'
-#' @param s An \code{\link{Ar1Param}} object.
+#' @param s An [Ar1Param()] object.
 #' @param eta A numeric vector of two free values.
 #' @param ... Ignored.
 #'
-#' @return A list as described in \code{\link{param_readable}}.
+#' @return A list as described in [param_readable()].
 #'
 #' @name param_readable.Ar1Param
 #' @keywords internal
@@ -135,11 +135,11 @@ S7::method(param_readable, Ar1Param) <- function(s, eta, ...) {
 #' @description
 #' Declares the marginal variance and the correlation shared by every pair.
 #'
-#' @param s A \code{\link{CompoundSymmetryParam}} object.
+#' @param s A [CompoundSymmetryParam()] object.
 #' @param eta A numeric vector of two free values.
 #' @param ... Ignored.
 #'
-#' @return A list as described in \code{\link{param_readable}}.
+#' @return A list as described in [param_readable()].
 #'
 #' @name param_readable.CompoundSymmetryParam
 #' @keywords internal
@@ -156,11 +156,11 @@ S7::method(param_readable, CompoundSymmetryParam) <- function(s, eta, ...) {
 #' @description
 #' Declares the multiplier, when the family carries one.
 #'
-#' @param s A \code{\link{ScaledMatrixParam}} object.
+#' @param s A [ScaledMatrixParam()] object.
 #' @param eta A numeric vector of at most one free value.
 #' @param ... Ignored.
 #'
-#' @return A list as described in \code{\link{param_readable}}, or \code{NULL}
+#' @return A list as described in [param_readable()], or `NULL`
 #'   when the matrix is fixed and carries no free value.
 #'
 #' @name param_readable.ScaledMatrixParam
@@ -179,11 +179,11 @@ S7::method(param_readable, ScaledMatrixParam) <- function(s, eta, ...) {
 #' map: \eqn{\partial p_i/\partial\eta_j = p_i(\delta_{ij} - p_j)}, the last
 #' coordinate contributing \eqn{-p_k p_j}.
 #'
-#' @param s A \code{\link{SimplexParam}} object.
+#' @param s A [SimplexParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Ignored.
 #'
-#' @return A list as described in \code{\link{param_readable}}.
+#' @return A list as described in [param_readable()].
 #'
 #' @name param_readable.SimplexParam
 #' @keywords internal
@@ -220,11 +220,11 @@ S7::method(param_readable, SimplexParam) <- function(s, eta, ...) {
 #' identity scale: no scalar transformation expresses the constraint they are
 #' under, and an interval that respected it would not be an interval.
 #'
-#' @param s An \code{\link{AutoregressiveParam}} object.
+#' @param s An [AutoregressiveParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Ignored.
 #'
-#' @return A list as described in \code{\link{param_readable}}.
+#' @return A list as described in [param_readable()].
 #'
 #' @name param_readable.AutoregressiveParam
 #' @keywords internal

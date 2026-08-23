@@ -4,7 +4,7 @@
 \alias{param_d4logdet.matrix_parameter}
 \title{Default Fourth Log-Determinant Derivatives}
 \arguments{
-\item{s}{A \code{\link{matrix_parameter}} object.}
+\item{s}{A \code{\link[=matrix_parameter]{matrix_parameter()}} object.}
 
 \item{eta}{A numeric vector of free values.}
 
@@ -14,7 +14,7 @@
 A named numeric vector.
 }
 \description{
-Fallback: one second-order stencil on \code{\link{param_d2logdet}} in the
+Fallback: one second-order stencil on \code{\link[=param_d2logdet]{param_d2logdet()}} in the
 last two components of the tuple -- one layer, mixed across components
 where they differ.
 }

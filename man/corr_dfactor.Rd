@@ -7,9 +7,9 @@
 corr_dfactor(s, tb, ks)
 }
 \arguments{
-\item{s}{A \code{\link{CorrelationParam}} object.}
+\item{s}{A \code{\link[=CorrelationParam]{CorrelationParam()}} object.}
 
-\item{tb}{The tables of \code{\link{corr_tables}}.}
+\item{tb}{The tables of \code{\link[=corr_tables]{corr_tables()}}.}
 
 \item{ks}{A multiset of free-value indices, possibly empty.}
 }

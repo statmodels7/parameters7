@@ -4,14 +4,14 @@
 \alias{param_readable.SimplexParam}
 \title{The Probabilities Behind an Additive Log-Ratio}
 \arguments{
-\item{s}{A \code{\link{SimplexParam}} object.}
+\item{s}{A \code{\link[=SimplexParam]{SimplexParam()}} object.}
 
 \item{eta}{A numeric vector of free values.}
 
 \item{...}{Ignored.}
 }
 \value{
-A list as described in \code{\link{param_readable}}.
+A list as described in \code{\link[=param_readable]{param_readable()}}.
 }
 \description{
 Declares the probability vector, whose Jacobian is the one of the softmax

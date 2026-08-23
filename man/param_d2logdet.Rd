@@ -7,7 +7,7 @@
 param_d2logdet(s, eta, ...)
 }
 \arguments{
-\item{s}{An object inheriting from class \code{\link{parameter}}.}
+\item{s}{An object inheriting from class \code{\link[=parameter]{parameter()}}.}
 
 \item{eta}{A numeric vector of length \code{s@n_free}.}
 
@@ -18,7 +18,7 @@ A named numeric vector, keyed as \code{param_tuple_names(s)}.
 }
 \description{
 Returns the distinct second derivatives of the log-determinant, or of the
-log pseudo-determinant, keyed as \code{\link{param_tuple_names}}.
+log pseudo-determinant, keyed as \code{\link[=param_tuple_names]{param_tuple_names()}}.
 }
 \details{
 Differentiating \eqn{\partial_k \log|M| = \mathrm{tr}(M^{-1}\partial_k M)}
@@ -31,13 +31,13 @@ with the Moore-Penrose inverse in place of \eqn{M^{-1}} when the family is
 rank deficient. The second term is what makes the Hessian of the
 log-determinant differ from the trace of the second derivative of the
 matrix, and it is where a closed form is usually got wrong;
-\code{\link{check_parameter}} compares this route against
-\code{\link{param_d2}}.
+\code{\link[=check_parameter]{check_parameter()}} compares this route against
+\code{\link[=param_d2]{param_d2()}}.
 }
 \examples{
 param_d2logdet(log_cholesky(2), c(0.2, -0.1, 0.4))
 
 }
 \seealso{
-\code{\link{param_dlogdet}}
+\code{\link[=param_dlogdet]{param_dlogdet()}}
 }

@@ -4,7 +4,7 @@
 \alias{param_d4.LogCholeskyParam}
 \title{Fourth Derivatives of a Log-Cholesky Parameter}
 \arguments{
-\item{s}{A \code{\link{LogCholeskyParam}} object.}
+\item{s}{A \code{\link[=LogCholeskyParam]{LogCholeskyParam()}} object.}
 
 \item{eta}{A numeric vector of free values.}
 
@@ -14,6 +14,6 @@
 A named list of symmetric matrices.
 }
 \description{
-Closed form; see \code{\link{param_d3.LogCholeskyParam}}.
+Closed form; see \code{\link[=param_d3.LogCholeskyParam]{param_d3.LogCholeskyParam()}}.
 }
 \keyword{internal}

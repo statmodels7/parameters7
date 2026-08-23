@@ -7,7 +7,7 @@
 param_readable(s, eta, ...)
 }
 \arguments{
-\item{s}{A \code{\link{parameter}} object.}
+\item{s}{A \code{\link[=parameter]{parameter()}} object.}
 
 \item{eta}{A numeric vector of free values.}
 
@@ -38,7 +38,7 @@ A consumer that has estimated the free vector and its variance matrix
 it back, so that a variance stays positive and a correlation stays inside
 its interval. The Jacobians here are closed form: for the families whose
 coordinates are separate scalar links it is the diagonal of the inverse
-link's derivative, and for \code{\link{autoregressive}} the autoregressive
+link's derivative, and for \code{\link[=autoregressive]{autoregressive()}} the autoregressive
 coefficients carry their own derivatives out of the Levinson-Durbin
 recursion, which already carries their derivatives.
 
@@ -52,5 +52,5 @@ param_readable(autoregressive(8, 2), c(0, 0.9, -0.4))$value
 
 }
 \seealso{
-\code{\link{param_value}}, \code{\link{autoregressive}}
+\code{\link[=param_value]{param_value()}}, \code{\link[=autoregressive]{autoregressive()}}
 }

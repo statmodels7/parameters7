@@ -39,12 +39,12 @@ An object of class \code{MatrixLogParam}.
 }
 \description{
 The S7 class of unstructured symmetric positive definite matrices in the
-matrix logarithm parametrization. Constructed by \code{\link{matrix_log}}.
+matrix logarithm parametrization. Constructed by \code{\link[=matrix_log]{matrix_log()}}.
 }
 \examples{
 S7::S7_inherits(matrix_log(2), MatrixLogParam)
 
 }
 \seealso{
-\code{\link{matrix_log}}
+\code{\link[=matrix_log]{matrix_log()}}
 }

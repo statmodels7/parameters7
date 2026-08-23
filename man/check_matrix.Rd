@@ -7,7 +7,7 @@
 check_matrix(s, m, tol = 1e-08)
 }
 \arguments{
-\item{s}{A \code{\link{parameter}} object.}
+\item{s}{A \code{\link[=parameter]{parameter()}} object.}
 
 \item{m}{The matrix supplied by the caller.}
 

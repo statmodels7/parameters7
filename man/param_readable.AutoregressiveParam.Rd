@@ -4,14 +4,14 @@
 \alias{param_readable.AutoregressiveParam}
 \title{The Scale, the Partial Autocorrelations and the Coefficients}
 \arguments{
-\item{s}{An \code{\link{AutoregressiveParam}} object.}
+\item{s}{An \code{\link[=AutoregressiveParam]{AutoregressiveParam()}} object.}
 
 \item{eta}{A numeric vector of free values.}
 
 \item{...}{Ignored.}
 }
 \value{
-A list as described in \code{\link{param_readable}}.
+A list as described in \code{\link[=param_readable]{param_readable()}}.
 }
 \description{
 Declares the marginal variance, the partial autocorrelations that

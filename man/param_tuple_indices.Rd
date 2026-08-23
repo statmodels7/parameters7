@@ -7,7 +7,7 @@
 param_tuple_indices(s, order = 2L)
 }
 \arguments{
-\item{s}{An object inheriting from class \code{\link{parameter}}.}
+\item{s}{An object inheriting from class \code{\link[=parameter]{parameter()}}.}
 
 \item{order}{The derivative order: 1 to 4.}
 }
@@ -15,7 +15,7 @@ param_tuple_indices(s, order = 2L)
 A list of integer vectors of length \code{order}.
 }
 \description{
-The unordered index tuples \code{\link{param_tuple_names}} names, in
+The unordered index tuples \code{\link[=param_tuple_names]{param_tuple_names()}} names, in
 exactly the same order. At order 2 the diagonal pairs come first and then
 the off-diagonal ones, because consumers index a Hessian that way; at
 orders 3 and 4 the tuples are the lexicographic combinations with
@@ -28,5 +28,5 @@ length(param_tuple_indices(log_cholesky(2), 3))
 
 }
 \seealso{
-\code{\link{param_tuple_names}}
+\code{\link[=param_tuple_names]{param_tuple_names()}}
 }

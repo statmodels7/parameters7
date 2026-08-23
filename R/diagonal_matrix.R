@@ -6,13 +6,13 @@ NULL
 #'
 #' @description
 #' The S7 class of diagonal positive matrices, one free value per entry.
-#' Constructed by \code{\link{diagonal_matrix}} or \code{\link{scalar_matrix}}.
+#' Constructed by [diagonal_matrix()] or [scalar_matrix()].
 #'
 #' @inheritParams matrix_parameter
 #'
-#' @return An object of class \code{DiagMatrixParam}.
+#' @return An object of class `DiagMatrixParam`.
 #'
-#' @seealso \code{\link{diagonal_matrix}}, \code{\link{scalar_matrix}}
+#' @seealso [diagonal_matrix()], [scalar_matrix()]
 #'
 #' @examples
 #' S7::S7_inherits(diagonal_matrix(3), DiagMatrixParam)
@@ -34,16 +34,16 @@ DiagMatrixParam <- S7::new_class("DiagMatrixParam", parent = matrix_parameter)
 #' contract a scalar link satisfies, so the link objects are reused as they
 #' are and their exact derivatives come with them.
 #'
-#' A single free value shared by every entry is \code{\link{scalar_matrix}}.
+#' A single free value shared by every entry is [scalar_matrix()].
 #'
 #' @param dimension The side \eqn{p} of the matrix.
 #' @param link A \pkg{linkfunctions7} link mapping the free scale to the
-#'   positive entries. Defaults to \code{linkfunctions7::log_link()}.
-#' @param role A label; see \code{\link{log_cholesky}}.
+#'   positive entries. Defaults to `linkfunctions7::log_link()`.
+#' @param role A label; see [log_cholesky()].
 #'
-#' @return An object of class \code{\link{DiagMatrixParam}}.
+#' @return An object of class [DiagMatrixParam()].
 #'
-#' @seealso \code{\link{scalar_matrix}}, \code{\link{log_cholesky}}
+#' @seealso [scalar_matrix()], [log_cholesky()]
 #'
 #' @examples
 #' s <- diagonal_matrix(3)
@@ -82,16 +82,16 @@ diagonal_matrix <- function(dimension, link = linkfunctions7::log_link(),
 #' @details
 #' The simplest parameter there is, and the one a random effect with a single
 #' variance component uses. With the default log link it is the same matrix as
-#' \code{scaled_matrix(diag(dimension))}, reached from the other direction.
+#' `scaled_matrix(diag(dimension))`, reached from the other direction.
 #'
 #' @param dimension The side \eqn{p} of the matrix.
 #' @param link A \pkg{linkfunctions7} link mapping the free scale to the
-#'   positive scale. Defaults to \code{linkfunctions7::log_link()}.
-#' @param role A label; see \code{\link{log_cholesky}}.
+#'   positive scale. Defaults to `linkfunctions7::log_link()`.
+#' @param role A label; see [log_cholesky()].
 #'
-#' @return An object of class \code{\link{DiagMatrixParam}}.
+#' @return An object of class [DiagMatrixParam()].
 #'
-#' @seealso \code{\link{diagonal_matrix}}, \code{\link{scaled_matrix}}
+#' @seealso [diagonal_matrix()], [scaled_matrix()]
 #'
 #' @examples
 #' s <- scalar_matrix(3)
@@ -132,7 +132,7 @@ scalar_matrix <- function(dimension, link = linkfunctions7::log_link(),
 #'
 #' @param link The object to check.
 #'
-#' @return Invisibly \code{TRUE}; raises an error otherwise.
+#' @return Invisibly `TRUE`; raises an error otherwise.
 #'
 #' @keywords internal
 check_positive_link <- function(link) {
@@ -155,10 +155,10 @@ check_positive_link <- function(link) {
 #' @description
 #' Applies the parameter's link, recycling a shared value across the diagonal.
 #'
-#' @param s A \code{\link{DiagMatrixParam}} object.
+#' @param s A [DiagMatrixParam()] object.
 #' @param eta A numeric vector of free values.
 #'
-#' @return A numeric vector of length \code{s@dimension}.
+#' @return A numeric vector of length `s@dimension`.
 #'
 #' @keywords internal
 diag_entries <- function(s, eta) {
@@ -173,9 +173,9 @@ diag_entries <- function(s, eta) {
 #' The index into the free vector of the value controlling each entry: the
 #' identity for an unshared parameter, and all ones for a shared one.
 #'
-#' @param s A \code{\link{DiagMatrixParam}} object.
+#' @param s A [DiagMatrixParam()] object.
 #'
-#' @return An integer vector of length \code{s@dimension}.
+#' @return An integer vector of length `s@dimension`.
 #'
 #' @keywords internal
 diag_owner <- function(s) {
@@ -186,7 +186,7 @@ diag_owner <- function(s) {
 #' @title Matrix of a Diagonal Parameter
 #' @name param_value.DiagMatrixParam
 #' @description The link applied entrywise, on the diagonal.
-#' @param s A \code{\link{DiagMatrixParam}} object.
+#' @param s A [DiagMatrixParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A diagonal positive definite matrix.
@@ -201,7 +201,7 @@ S7::method(param_value, DiagMatrixParam) <- function(s, eta, ...) {
 #' @description
 #' The link applied in the forward direction to the diagonal, after rejecting a
 #' matrix that is not diagonal or not positive.
-#' @param s A \code{\link{DiagMatrixParam}} object.
+#' @param s A [DiagMatrixParam()] object.
 #' @param m A diagonal positive definite matrix.
 #' @param ... Unused.
 #' @return A named numeric vector of free values.
@@ -237,7 +237,7 @@ S7::method(param_free, DiagMatrixParam) <- function(s, m, ...) {
 #' @description
 #' Closed form from the link's own first derivative: the entries a free value
 #' owns carry \eqn{h'(\eta_k)} and everything else is zero.
-#' @param s A \code{\link{DiagMatrixParam}} object.
+#' @param s A [DiagMatrixParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named list of diagonal matrices.
@@ -261,7 +261,7 @@ S7::method(param_d1, DiagMatrixParam) <- function(s, eta, ...) {
 #' @description
 #' Closed form from the link's second derivative. The entries are independent
 #' unless the parameter shares one value, so every cross pair vanishes.
-#' @param s A \code{\link{DiagMatrixParam}} object.
+#' @param s A [DiagMatrixParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named list of diagonal matrices.
@@ -288,7 +288,7 @@ S7::method(param_d2, DiagMatrixParam) <- function(s, eta, ...) {
 #' @title Factor of a Diagonal Parameter
 #' @name param_factor.DiagMatrixParam
 #' @description The square roots of the entries, on the diagonal.
-#' @param s A \code{\link{DiagMatrixParam}} object.
+#' @param s A [DiagMatrixParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A diagonal numeric matrix.
@@ -301,7 +301,7 @@ S7::method(param_factor, DiagMatrixParam) <- function(s, eta, ...) {
 #' @title Log-Determinant of a Diagonal Parameter
 #' @name param_logdet.DiagMatrixParam
 #' @description The sum of the logs of the entries.
-#' @param s A \code{\link{DiagMatrixParam}} object.
+#' @param s A [DiagMatrixParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A single number.
@@ -316,9 +316,9 @@ S7::method(param_logdet, DiagMatrixParam) <- function(s, eta, ...) {
 #' @description
 #' One for an unshared parameter, and the whole diagonal for a shared one.
 #'
-#' @param s A \code{\link{DiagMatrixParam}} object.
+#' @param s A [DiagMatrixParam()] object.
 #'
-#' @return An integer vector of length \code{s@n_free}.
+#' @return An integer vector of length `s@n_free`.
 #'
 #' @keywords internal
 diag_multiplicity <- function(s) {
@@ -332,7 +332,7 @@ diag_multiplicity <- function(s) {
 #' Closed form: \eqn{m_k h'(\eta_k)/h(\eta_k)}, with \eqn{m_k} the number of
 #' diagonal entries the free value owns -- one, or the whole diagonal when the
 #' parameter shares a single value.
-#' @param s A \code{\link{DiagMatrixParam}} object.
+#' @param s A [DiagMatrixParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named numeric vector.
@@ -351,7 +351,7 @@ S7::method(param_dlogdet, DiagMatrixParam) <- function(s, eta, ...) {
 #' Closed form: \eqn{m_k\{h''/h - (h'/h)^2\}} on the diagonal and zero
 #' elsewhere, the entries being controlled independently unless the parameter
 #' shares one value, in which case there is only one free value.
-#' @param s A \code{\link{DiagMatrixParam}} object.
+#' @param s A [DiagMatrixParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named numeric vector.
@@ -390,9 +390,9 @@ S7::method(param_d2logdet, DiagMatrixParam) <- function(s, eta, ...) {
 #' @param eta A numeric vector of free values.
 #' @param order The derivative order, 1 to 4.
 #'
-#' @return A numeric vector the length of \code{eta}.
+#' @return A numeric vector the length of `eta`.
 #'
-#' @seealso \code{\link{diagonal_matrix}}, \code{\link{scaled_dlog}}
+#' @seealso [diagonal_matrix()], [scaled_dlog()]
 #'
 #' @keywords internal
 diag_dlog <- function(link, eta, order) {
@@ -417,16 +417,16 @@ diag_dlog <- function(link, eta, order) {
 #' A diagonal family is separable, so a component is zero unless every index of
 #' the tuple names the same free value, and it then carries the corresponding
 #' derivative of the inverse link in the entry that value owns. A shared free
-#' value owns every entry, which is what \code{diag_owner()} answers.
+#' value owns every entry, which is what `diag_owner()` answers.
 #'
-#' @param s A \code{\link{DiagMatrixParam}} object.
+#' @param s A [DiagMatrixParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param order The derivative order, 3 or 4.
 #'
 #' @return A named list of matrices, keyed by
-#'   \code{\link{param_tuple_names}(s, order)}.
+#'   [`param_tuple_names(s, order)`][param_tuple_names].
 #'
-#' @seealso \code{\link{diagonal_matrix}}
+#' @seealso [diagonal_matrix()]
 #'
 #' @keywords internal
 diag_higher <- function(s, eta, order) {
@@ -456,7 +456,7 @@ diag_higher <- function(s, eta, order) {
 #' Closed form: a diagonal entry depends on one free value through its link,
 #' so the only surviving components are the pure ones, carrying
 #' \eqn{h'''(\eta_k)} on the entries the value owns.
-#' @param s A \code{\link{DiagMatrixParam}} object.
+#' @param s A [DiagMatrixParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named list of diagonal matrices.
@@ -468,7 +468,7 @@ S7::method(param_d3, DiagMatrixParam) <- function(s, eta, ...) {
 #' @title Fourth Derivatives of a Diagonal Parameter
 #' @name param_d4.DiagMatrixParam
 #' @description Closed form, with \eqn{h''''} in place of \eqn{h'''}.
-#' @param s A \code{\link{DiagMatrixParam}} object.
+#' @param s A [DiagMatrixParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named list of diagonal matrices.
@@ -487,16 +487,16 @@ S7::method(param_d4, DiagMatrixParam) <- function(s, eta, ...) {
 #' The log-determinant is the sum of the logarithms of the diagonal entries,
 #' so it is a sum of functions of one free value each. Every mixed component
 #' therefore vanishes, and a pure one is the corresponding derivative of
-#' \code{\link{diag_dlog}} counted once per entry the free value owns.
+#' [diag_dlog()] counted once per entry the free value owns.
 #'
-#' @param s A \code{\link{DiagMatrixParam}} object.
+#' @param s A [DiagMatrixParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param order The derivative order, 2 to 4.
 #'
 #' @return A named numeric vector, keyed by
-#'   \code{\link{param_tuple_names}(s, order)}.
+#'   [`param_tuple_names(s, order)`][param_tuple_names].
 #'
-#' @seealso \code{\link{diagonal_matrix}}, \code{\link{param_logdet}}
+#' @seealso [diagonal_matrix()], [param_logdet()]
 #'
 #' @keywords internal
 diag_logdet_higher <- function(s, eta, order) {
@@ -518,7 +518,7 @@ diag_logdet_higher <- function(s, eta, order) {
 #' Closed form: the log-determinant is a sum of \eqn{\log h(\eta_k)} terms,
 #' so each pure component is the matching derivative of \eqn{\log h} times
 #' the number of entries the value owns, and every mixed component is zero.
-#' @param s A \code{\link{DiagMatrixParam}} object.
+#' @param s A [DiagMatrixParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named numeric vector.
@@ -529,8 +529,8 @@ S7::method(param_d3logdet, DiagMatrixParam) <- function(s, eta, ...) {
 
 #' @title Fourth Log-Determinant Derivatives of a Diagonal Parameter
 #' @name param_d4logdet.DiagMatrixParam
-#' @description Closed form; see \code{\link{param_d3logdet.DiagMatrixParam}}.
-#' @param s A \code{\link{DiagMatrixParam}} object.
+#' @description Closed form; see [param_d3logdet.DiagMatrixParam()].
+#' @param s A [DiagMatrixParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named numeric vector.

@@ -4,7 +4,7 @@
 \alias{param_free.SumStructParam}
 \title{Free Vector of a Sum of Fixed Matrices}
 \arguments{
-\item{s}{A \code{\link{SumStructParam}} object.}
+\item{s}{A \code{\link[=SumStructParam]{SumStructParam()}} object.}
 
 \item{m}{A symmetric matrix of side \code{s@dimension}.}
 

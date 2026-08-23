@@ -40,12 +40,12 @@ An object of class \code{SumStructParam}.
 \description{
 The S7 class of a matrix parameter that is a sum of fixed symmetric positive
 semidefinite matrices, each carried by one positive free value. Constructed
-by \code{\link{sum_struct}}.
+by \code{\link[=sum_struct]{sum_struct()}}.
 }
 \examples{
 S7::S7_inherits(sum_struct(list(diag(3), matrix(1, 3, 3))), SumStructParam)
 
 }
 \seealso{
-\code{\link{sum_struct}}
+\code{\link[=sum_struct]{sum_struct()}}
 }

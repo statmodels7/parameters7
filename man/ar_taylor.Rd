@@ -7,7 +7,7 @@
 ar_taylor(s, eta)
 }
 \arguments{
-\item{s}{An \code{\link{AutoregressiveParam}} object.}
+\item{s}{An \code{\link[=AutoregressiveParam]{AutoregressiveParam()}} object.}
 
 \item{eta}{A numeric vector of free values.}
 }

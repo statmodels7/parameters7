@@ -19,8 +19,8 @@ NULL
 #'
 #' @details
 #' The tag comes from the link's class rather than from its
-#' \code{link_name}, because a parametric link names itself with its
-#' parameters -- \code{"bounded(lwr=-0.25, upr=1)"} -- and that cannot appear
+#' `link_name`, because a parametric link names itself with its
+#' parameters -- `"bounded(lwr=-0.25, upr=1)"` -- and that cannot appear
 #' inside an identifier. The identity link has no tag, so a coordinate that
 #' is already free keeps the plain name of the quantity. A bounded link is
 #' tagged by the transformation it performs: a doubly bounded one is a scaled
@@ -32,7 +32,7 @@ NULL
 #'
 #' @return A single character string, empty for the identity link.
 #'
-#' @seealso \code{\link{tagged_name}}
+#' @seealso [tagged_name()]
 #'
 #' @keywords internal
 link_tag <- function(link) {
@@ -74,9 +74,9 @@ link_tag <- function(link) {
 #' @param link A \pkg{linkfunctions7} link.
 #' @param quantity A character vector of quantity names.
 #'
-#' @return A character vector the same length as \code{quantity}.
+#' @return A character vector the same length as `quantity`.
 #'
-#' @seealso \code{\link{link_tag}}
+#' @seealso [link_tag()]
 #'
 #' @keywords internal
 tagged_name <- function(link, quantity) {

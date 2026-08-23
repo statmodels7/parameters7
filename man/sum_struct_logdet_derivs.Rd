@@ -7,7 +7,7 @@
 sum_struct_logdet_derivs(s, eta, order)
 }
 \arguments{
-\item{s}{A \code{\link{SumStructParam}} object.}
+\item{s}{A \code{\link[=SumStructParam]{SumStructParam()}} object.}
 
 \item{eta}{A numeric vector of length \code{s@n_free}.}
 

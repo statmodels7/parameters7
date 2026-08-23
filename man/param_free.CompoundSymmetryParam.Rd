@@ -4,7 +4,7 @@
 \alias{param_free.CompoundSymmetryParam}
 \title{Free Vector of a Compound Symmetry Parameter}
 \arguments{
-\item{s}{A \code{\link{CompoundSymmetryParam}} object.}
+\item{s}{A \code{\link[=CompoundSymmetryParam]{CompoundSymmetryParam()}} object.}
 
 \item{m}{A compound-symmetric matrix.}
 

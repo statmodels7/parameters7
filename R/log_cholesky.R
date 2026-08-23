@@ -6,14 +6,14 @@ NULL
 #'
 #' @description
 #' The S7 class of unstructured symmetric positive definite matrices in the
-#' log-Cholesky parametrization. Constructed by \code{\link{log_cholesky}}.
+#' log-Cholesky parametrization. Constructed by [log_cholesky()].
 #'
 #' @inheritParams matrix_parameter
 #'
-#' @return An object of class \code{LogCholeskyParam}. Use
-#'   \code{\link{log_cholesky}} rather than calling the class directly.
+#' @return An object of class `LogCholeskyParam`. Use
+#'   [log_cholesky()] rather than calling the class directly.
 #'
-#' @seealso \code{\link{log_cholesky}}
+#' @seealso [log_cholesky()]
 #'
 #' @examples
 #' S7::S7_inherits(log_cholesky(2), LogCholeskyParam)
@@ -31,13 +31,13 @@ LogCholeskyParam <- S7::new_class("LogCholeskyParam", parent = matrix_parameter)
 #'
 #' @details
 #' The ordering is fixed and is part of the contract, because
-#' \code{free_names} depends on it and every consumer builds parameter tables
+#' `free_names` depends on it and every consumer builds parameter tables
 #' from those names.
 #'
 #' @param p The side of the matrix.
 #'
-#' @return A list with the integer vectors \code{row}, \code{col} and the
-#'   logical \code{on_diagonal}.
+#' @return A list with the integer vectors `row`, `col` and the
+#'   logical `on_diagonal`.
 #'
 #' @keywords internal
 chol_positions <- function(p) {
@@ -75,7 +75,7 @@ chol_positions <- function(p) {
 #' The free vector runs the logarithms of the diagonal first and then the
 #' below-diagonal entries column by column, so for \eqn{p = 3} it is
 #' \eqn{(\log L_{11}, \log L_{22}, \log L_{33}, L_{21}, L_{31}, L_{32})}. The
-#' ordering is fixed rather than incidental: \code{free_names} follows it and
+#' ordering is fixed rather than incidental: `free_names` follows it and
 #' every consumer builds its parameter tables from those names.
 #'
 #' The log-determinant is linear in the free vector,
@@ -87,19 +87,19 @@ chol_positions <- function(p) {
 #' swappable link, which is why it appears in the free names.
 #'
 #' @param dimension The side \eqn{p} of the matrix.
-#' @param role A label, one of \code{"either"} (the default),
-#'   \code{"covariance"} or \code{"precision"}. Nothing computed depends on it;
+#' @param role A label, one of `"either"` (the default),
+#'   `"covariance"` or `"precision"`. Nothing computed depends on it;
 #'   it records which side of a model the matrix parametrizes, since the family
 #'   name does not say.
 #'
-#' @return An object of class \code{\link{LogCholeskyParam}}.
+#' @return An object of class [LogCholeskyParam()].
 #'
 #' @references
 #' Pinheiro, J. C. and Bates, D. M. (1996). Unconstrained parametrizations for
-#' variance-covariance matrices. \emph{Statistics and Computing} 6, 289-296.
+#' variance-covariance matrices. *Statistics and Computing* 6, 289-296.
 #'
-#' @seealso \code{\link{diagonal_matrix}}, \code{\link{scaled_matrix}},
-#'   \code{\link{check_parameter}}
+#' @seealso [diagonal_matrix()], [scaled_matrix()],
+#'   [check_parameter()]
 #'
 #' @examples
 #' s <- log_cholesky(3)
@@ -140,9 +140,9 @@ log_cholesky <- function(dimension, role = c("either", "covariance", "precision"
 #'
 #' @description
 #' Assembles \eqn{L} from the free vector: the diagonal is the exponential of
-#' the first \code{dimension} values, the rest are placed below it.
+#' the first `dimension` values, the rest are placed below it.
 #'
-#' @param s A \code{\link{LogCholeskyParam}} object.
+#' @param s A [LogCholeskyParam()] object.
 #' @param eta A numeric vector of free values.
 #'
 #' @return A lower triangular numeric matrix.
@@ -166,7 +166,7 @@ chol_assemble <- function(s, eta) {
 #' @title Matrix of a Log-Cholesky Parameter
 #' @name param_value.LogCholeskyParam
 #' @description \eqn{M = L L^\top}, with \eqn{L} assembled from the free vector.
-#' @param s A \code{\link{LogCholeskyParam}} object.
+#' @param s A [LogCholeskyParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A symmetric positive definite matrix.
@@ -180,7 +180,7 @@ S7::method(param_value, LogCholeskyParam) <- function(s, eta, ...) {
 #' @title Factor of a Log-Cholesky Parameter
 #' @name param_factor.LogCholeskyParam
 #' @description The factor is the parametrization, so it needs no computing.
-#' @param s A \code{\link{LogCholeskyParam}} object.
+#' @param s A [LogCholeskyParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A lower triangular numeric matrix.
@@ -194,9 +194,9 @@ S7::method(param_factor, LogCholeskyParam) <- function(s, eta, ...) {
 #' @name param_free.LogCholeskyParam
 #' @description
 #' The Cholesky factor of the matrix, with its diagonal logged. Exact, and the
-#' inverse of \code{\link{param_value}} because the factor with a positive
+#' inverse of [param_value()] because the factor with a positive
 #' diagonal is unique.
-#' @param s A \code{\link{LogCholeskyParam}} object.
+#' @param s A [LogCholeskyParam()] object.
 #' @param m A symmetric positive definite matrix.
 #' @param ... Unused.
 #' @return A named numeric vector of free values.
@@ -227,7 +227,7 @@ S7::method(param_free, LogCholeskyParam) <- function(s, m, ...) {
 #' \eqn{\partial_k M = L_k L^\top + L L_k^\top}. The factor's derivative is
 #' \eqn{L_{ii} E_{ii}} for a diagonal value, because the parametrization is
 #' its logarithm, and \eqn{E_{ij}} for a value below the diagonal.
-#' @param s A \code{\link{LogCholeskyParam}} object.
+#' @param s A [LogCholeskyParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named list of symmetric matrices.
@@ -246,7 +246,7 @@ S7::method(param_d1, LogCholeskyParam) <- function(s, eta, ...) {
 #' L L_{kl}^\top}, and the factor's second derivative \eqn{L_{kl}} is
 #' non-zero only when \eqn{k = l} is a diagonal value, where it is
 #' \eqn{L_{ii} E_{ii}} again.
-#' @param s A \code{\link{LogCholeskyParam}} object.
+#' @param s A [LogCholeskyParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named list of symmetric matrices.
@@ -262,7 +262,7 @@ S7::method(param_d2, LogCholeskyParam) <- function(s, eta, ...) {
 #' Closed form and linear in the free vector:
 #' \eqn{\log|M| = 2 \sum_i \log L_{ii}}, which is twice the sum of the free
 #' values on the diagonal. No factorization and no determinant is computed.
-#' @param s A \code{\link{LogCholeskyParam}} object.
+#' @param s A [LogCholeskyParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A single number.
@@ -277,7 +277,7 @@ S7::method(param_logdet, LogCholeskyParam) <- function(s, eta, ...) {
 #' @description
 #' Closed form: 2 in each diagonal direction and 0 elsewhere, since the
 #' log-determinant is linear in the free vector.
-#' @param s A \code{\link{LogCholeskyParam}} object.
+#' @param s A [LogCholeskyParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named numeric vector.
@@ -293,7 +293,7 @@ S7::method(param_dlogdet, LogCholeskyParam) <- function(s, eta, ...) {
 #' @title Log-Determinant Hessian of a Log-Cholesky Parameter
 #' @name param_d2logdet.LogCholeskyParam
 #' @description Closed form: zero, the log-determinant being linear.
-#' @param s A \code{\link{LogCholeskyParam}} object.
+#' @param s A [LogCholeskyParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named numeric vector of zeros.
@@ -308,23 +308,23 @@ S7::method(param_d2logdet, LogCholeskyParam) <- function(s, eta, ...) {
 #'
 #' @description
 #' Returns \eqn{\partial^S L} for a multiset \eqn{S} of free-value indices, or
-#' \code{NULL} when that derivative is identically zero.
+#' `NULL` when that derivative is identically zero.
 #'
 #' @details
 #' A free value below the diagonal enters \eqn{L} linearly, so its second
 #' derivative vanishes; a diagonal one enters through its exponential, so
 #' every repeated derivative in that same value regenerates
 #' \eqn{L_{ii} E_{ii}}. Everything else is zero, which is what makes the
-#' Leibniz sum of \code{\link{chol_leibniz}} short.
+#' Leibniz sum of [chol_leibniz()] short.
 #'
-#' @param s A \code{\link{LogCholeskyParam}} object.
-#' @param l The factor at the point, from \code{\link{chol_assemble}}.
+#' @param s A [LogCholeskyParam()] object.
+#' @param l The factor at the point, from [chol_assemble()].
 #' @param ks A multiset of free-value indices, possibly empty; the empty one
 #'   gives \eqn{L} itself.
 #'
-#' @return A numeric matrix, or \code{NULL}.
+#' @return A numeric matrix, or `NULL`.
 #'
-#' @seealso \code{\link{chol_leibniz}}, \code{\link{leibniz_gram}}
+#' @seealso [chol_leibniz()], [leibniz_gram()]
 #'
 #' @keywords internal
 chol_dfactor <- function(s, l, ks) {
@@ -345,15 +345,15 @@ chol_dfactor <- function(s, l, ks) {
 #'
 #' @description
 #' Assembles one derivative order by the Leibniz rule on \eqn{M = LL^\top},
-#' the factor's derivatives coming from \code{\link{chol_dfactor}}.
+#' the factor's derivatives coming from [chol_dfactor()].
 #'
-#' @param s A \code{\link{LogCholeskyParam}} object.
+#' @param s A [LogCholeskyParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param order The derivative order.
 #'
 #' @return A named list of symmetric matrices.
 #'
-#' @seealso \code{\link{leibniz_gram}}
+#' @seealso [leibniz_gram()]
 #'
 #' @keywords internal
 chol_leibniz <- function(s, eta, order) {
@@ -369,15 +369,15 @@ chol_leibniz <- function(s, eta, order) {
 #' The R Twin of the Compiled Leibniz Assembly
 #'
 #' @description
-#' The same components as \code{chol_leibniz_cpp}, built through the dense
-#' products of \code{\link{leibniz_gram}}. It is not the production route:
+#' The same components as `chol_leibniz_cpp`, built through the dense
+#' products of [leibniz_gram()]. It is not the production route:
 #' the compiled kernel exploits that every derivative of the factor is a
 #' single-entry matrix, so each Leibniz term is one row, one column or one
 #' cell, and at \eqn{p = 8}, order 4, it measured four orders of magnitude
 #' faster. The twin is kept as the independent reference the tests compare
 #' against.
 #'
-#' @param s A \code{\link{LogCholeskyParam}} object.
+#' @param s A [LogCholeskyParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param order The derivative order.
 #'
@@ -401,7 +401,7 @@ chol_leibniz <- function(s, eta, order) {
 #' distributes its three differentiations over the two factors, and a factor
 #' differentiated more than once survives only in a repeated diagonal
 #' direction, where every derivative of \eqn{e^{\eta_k}} is itself.
-#' @param s A \code{\link{LogCholeskyParam}} object.
+#' @param s A [LogCholeskyParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named list of symmetric matrices.
@@ -412,8 +412,8 @@ S7::method(param_d3, LogCholeskyParam) <- function(s, eta, ...) {
 
 #' @title Fourth Derivatives of a Log-Cholesky Parameter
 #' @name param_d4.LogCholeskyParam
-#' @description Closed form; see \code{\link{param_d3.LogCholeskyParam}}.
-#' @param s A \code{\link{LogCholeskyParam}} object.
+#' @description Closed form; see [param_d3.LogCholeskyParam()].
+#' @param s A [LogCholeskyParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named list of symmetric matrices.
@@ -426,7 +426,7 @@ S7::method(param_d4, LogCholeskyParam) <- function(s, eta, ...) {
 #' @name param_d3logdet.LogCholeskyParam
 #' @description Closed form: zero, the log-determinant being linear in the
 #'   free vector.
-#' @param s A \code{\link{LogCholeskyParam}} object.
+#' @param s A [LogCholeskyParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named numeric vector of zeros.
@@ -439,7 +439,7 @@ S7::method(param_d3logdet, LogCholeskyParam) <- function(s, eta, ...) {
 #' @title Fourth Log-Determinant Derivatives of a Log-Cholesky Parameter
 #' @name param_d4logdet.LogCholeskyParam
 #' @description Closed form: zero, as at third order.
-#' @param s A \code{\link{LogCholeskyParam}} object.
+#' @param s A [LogCholeskyParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named numeric vector of zeros.

@@ -7,7 +7,7 @@
 diag_logdet_higher(s, eta, order)
 }
 \arguments{
-\item{s}{A \code{\link{DiagMatrixParam}} object.}
+\item{s}{A \code{\link[=DiagMatrixParam]{DiagMatrixParam()}} object.}
 
 \item{eta}{A numeric vector of free values.}
 
@@ -15,7 +15,7 @@ diag_logdet_higher(s, eta, order)
 }
 \value{
 A named numeric vector, keyed by
-\code{\link{param_tuple_names}(s, order)}.
+\code{\link[=param_tuple_names]{param_tuple_names(s, order)}}.
 }
 \description{
 The derivative components of orders two to four of \eqn{\log\lvert M\rvert}
@@ -25,9 +25,9 @@ for a diagonal family.
 The log-determinant is the sum of the logarithms of the diagonal entries,
 so it is a sum of functions of one free value each. Every mixed component
 therefore vanishes, and a pure one is the corresponding derivative of
-\code{\link{diag_dlog}} counted once per entry the free value owns.
+\code{\link[=diag_dlog]{diag_dlog()}} counted once per entry the free value owns.
 }
 \seealso{
-\code{\link{diagonal_matrix}}, \code{\link{param_logdet}}
+\code{\link[=diagonal_matrix]{diagonal_matrix()}}, \code{\link[=param_logdet]{param_logdet()}}
 }
 \keyword{internal}

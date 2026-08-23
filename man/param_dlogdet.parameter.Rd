@@ -4,7 +4,7 @@
 \alias{param_dlogdet.parameter}
 \title{Default Log-Determinant Gradient}
 \arguments{
-\item{s}{A \code{\link{parameter}} object.}
+\item{s}{A \code{\link[=parameter]{parameter()}} object.}
 
 \item{eta}{A numeric vector of free values.}
 

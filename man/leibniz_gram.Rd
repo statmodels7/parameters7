@@ -33,6 +33,6 @@ handles a repeated index correctly without a multiplicity bookkeeping of
 its own.
 }
 \seealso{
-\code{\link{compose4}}
+\code{\link[=compose4]{compose4()}}
 }
 \keyword{internal}

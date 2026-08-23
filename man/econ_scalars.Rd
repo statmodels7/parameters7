@@ -7,7 +7,7 @@
 econ_scalars(s, eta)
 }
 \arguments{
-\item{s}{A \code{\link{CompoundSymmetryParam}} or \code{\link{Ar1Param}}
+\item{s}{A \code{\link[=CompoundSymmetryParam]{CompoundSymmetryParam()}} or \code{\link[=Ar1Param]{Ar1Param()}}
 object.}
 
 \item{eta}{A numeric vector of two free values.}

@@ -6,13 +6,13 @@ NULL
 #'
 #' @description
 #' The S7 class of unstructured symmetric positive definite matrices in the
-#' matrix logarithm parametrization. Constructed by \code{\link{matrix_log}}.
+#' matrix logarithm parametrization. Constructed by [matrix_log()].
 #'
 #' @inheritParams matrix_parameter
 #'
-#' @return An object of class \code{MatrixLogParam}.
+#' @return An object of class `MatrixLogParam`.
 #'
-#' @seealso \code{\link{matrix_log}}
+#' @seealso [matrix_log()]
 #'
 #' @examples
 #' S7::S7_inherits(matrix_log(2), MatrixLogParam)
@@ -46,25 +46,25 @@ MatrixLogParam <- S7::new_class("MatrixLogParam", parent = matrix_parameter)
 #' off its corner -- which stays exact under repeated and nearly repeated
 #' eigenvalues, where the quotient formula cancels catastrophically.
 #'
-#' Next to \code{\link{log_cholesky}}: the log-Cholesky derivatives are
+#' Next to [log_cholesky()]: the log-Cholesky derivatives are
 #' sparse products and cheaper, while here the log-determinant and the
 #' inverse are the free quantities. The matrix logarithm is the chart to
 #' reach for when both the covariance and the precision are wanted at once.
 #'
 #' @param dimension The side \eqn{p} of the matrix.
-#' @param role A label; see \code{\link{log_cholesky}}.
+#' @param role A label; see [log_cholesky()].
 #'
-#' @return An object of class \code{\link{MatrixLogParam}}.
+#' @return An object of class [MatrixLogParam()].
 #'
 #' @references
 #' Daleckii, J. L. and Krein, S. G. (1965). Integration and differentiation
-#' of functions of Hermitian operators. \emph{American Mathematical Society
-#' Translations} 47, 1-30.
+#' of functions of Hermitian operators. *American Mathematical Society
+#' Translations* 47, 1-30.
 #'
-#' Opitz, G. (1964). Steigungsmatrizen. \emph{Zeitschrift fur Angewandte
-#' Mathematik und Mechanik} 44, T52-T54.
+#' Opitz, G. (1964). Steigungsmatrizen. *Zeitschrift fur Angewandte
+#' Mathematik und Mechanik* 44, T52-T54.
 #'
-#' @seealso \code{\link{log_cholesky}}, \code{\link{param_value}}
+#' @seealso [log_cholesky()], [param_value()]
 #'
 #' @examples
 #' s <- matrix_log(2)
@@ -103,7 +103,7 @@ matrix_log <- function(dimension, role = c("either", "covariance", "precision"))
 #' @description
 #' Fills the lower triangle of \eqn{S} with the free values and mirrors it.
 #'
-#' @param s A \code{\link{MatrixLogParam}} object.
+#' @param s A [MatrixLogParam()] object.
 #' @param eta A numeric vector of free values.
 #'
 #' @return A symmetric numeric matrix.
@@ -125,7 +125,7 @@ mlog_s <- function(s, eta) {
 #' The symmetric matrix \eqn{\partial S / \partial \eta_k}: a single diagonal
 #' entry, or a symmetric pair below and above the diagonal.
 #'
-#' @param s A \code{\link{MatrixLogParam}} object.
+#' @param s A [MatrixLogParam()] object.
 #' @param k The free-value index.
 #'
 #' @return A symmetric numeric matrix.
@@ -198,12 +198,12 @@ dd_exp <- function(lams) {
 #' \eqn{S}, the rotated basis directions, and the divided-difference tables
 #' of the orders asked for, computed once per free vector.
 #'
-#' @param s A \code{\link{MatrixLogParam}} object.
+#' @param s A [MatrixLogParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param order The highest derivative order wanted.
 #'
-#' @return A list with \code{q}, \code{lam}, \code{e} (rotated directions)
-#'   and the tables \code{dd2} to \code{dd5} up to \code{order + 1} points.
+#' @return A list with `q`, `lam`, `e` (rotated directions)
+#'   and the tables `dd2` to `dd5` up to `order + 1` points.
 #'
 #' @keywords internal
 mlog_tables <- function(s, eta, order) {
@@ -254,7 +254,7 @@ mlog_tables <- function(s, eta, order) {
 #' divided-difference table of the matching order, summing over the
 #' orderings of the directions, and rotates back.
 #'
-#' @param tb The tables of \code{\link{mlog_tables}}.
+#' @param tb The tables of [mlog_tables()].
 #' @param dirs The free-value indices of the tuple, possibly repeated.
 #'
 #' @return A symmetric numeric matrix.
@@ -340,14 +340,14 @@ combinat_perms <- function(x) {
 #' off its corner, which stays exact where the quotient recursion cancels
 #' catastrophically under near-repeated eigenvalues.
 #'
-#' @param s A \code{\link{MatrixLogParam}} object.
+#' @param s A [MatrixLogParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param order The derivative order, 3 or 4.
 #'
 #' @return A named list of matrices, keyed by
-#'   \code{\link{param_tuple_names}(s, order)}.
+#'   [`param_tuple_names(s, order)`][param_tuple_names].
 #'
-#' @seealso \code{\link{matrix_log}}
+#' @seealso [matrix_log()]
 #'
 #' @keywords internal
 mlog_higher <- function(s, eta, order) {
@@ -367,7 +367,7 @@ mlog_higher <- function(s, eta, order) {
 #' @title Value of a Matrix Logarithm Parameter
 #' @name param_value.MatrixLogParam
 #' @description \eqn{M = \exp(S)}, through the eigendecomposition of \eqn{S}.
-#' @param s A \code{\link{MatrixLogParam}} object.
+#' @param s A [MatrixLogParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A symmetric positive definite matrix.
@@ -383,7 +383,7 @@ S7::method(param_value, MatrixLogParam) <- function(s, eta, ...) {
 #' @description
 #' The matrix logarithm by eigendecomposition, exact for a symmetric positive
 #' definite input and rejected otherwise.
-#' @param s A \code{\link{MatrixLogParam}} object.
+#' @param s A [MatrixLogParam()] object.
 #' @param m A symmetric positive definite matrix.
 #' @param ... Unused.
 #' @return A named numeric vector of free values.
@@ -408,7 +408,7 @@ S7::method(param_free, MatrixLogParam) <- function(s, m, ...) {
 #' The Frechet derivative of the exponential by Daleckii-Krein: the rotated
 #' direction weighted entrywise by first divided differences of \eqn{e^x} at
 #' the eigenvalues.
-#' @param s A \code{\link{MatrixLogParam}} object.
+#' @param s A [MatrixLogParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named list of symmetric matrices.
@@ -428,7 +428,7 @@ S7::method(param_d1, MatrixLogParam) <- function(s, eta, ...) {
 #' @description
 #' The second Frechet derivative: chains of two rotated directions against
 #' three-point divided differences, summed over the two orderings.
-#' @param s A \code{\link{MatrixLogParam}} object.
+#' @param s A [MatrixLogParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named list of symmetric matrices.
@@ -442,7 +442,7 @@ S7::method(param_d2, MatrixLogParam) <- function(s, eta, ...) {
 #' @name param_d3.MatrixLogParam
 #' @description Chains of three directions against four-point divided
 #'   differences, over the six orderings.
-#' @param s A \code{\link{MatrixLogParam}} object.
+#' @param s A [MatrixLogParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named list of symmetric matrices.
@@ -456,7 +456,7 @@ S7::method(param_d3, MatrixLogParam) <- function(s, eta, ...) {
 #' @name param_d4.MatrixLogParam
 #' @description Chains of four directions against five-point divided
 #'   differences, over the twenty-four orderings.
-#' @param s A \code{\link{MatrixLogParam}} object.
+#' @param s A [MatrixLogParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named list of symmetric matrices.
@@ -470,7 +470,7 @@ S7::method(param_d4, MatrixLogParam) <- function(s, eta, ...) {
 #' @name param_logdet.MatrixLogParam
 #' @description Closed form and linear: \eqn{\log|M| = \mathrm{tr}(S)}, the
 #'   sum of the diagonal free values.
-#' @param s A \code{\link{MatrixLogParam}} object.
+#' @param s A [MatrixLogParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A single number.
@@ -482,7 +482,7 @@ S7::method(param_logdet, MatrixLogParam) <- function(s, eta, ...) {
 #' @title Log-Determinant Gradient of a Matrix Logarithm Parameter
 #' @name param_dlogdet.MatrixLogParam
 #' @description Closed form: 1 in each diagonal direction and 0 elsewhere.
-#' @param s A \code{\link{MatrixLogParam}} object.
+#' @param s A [MatrixLogParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named numeric vector.
@@ -496,7 +496,7 @@ S7::method(param_dlogdet, MatrixLogParam) <- function(s, eta, ...) {
 #' @title Log-Determinant Hessian of a Matrix Logarithm Parameter
 #' @name param_d2logdet.MatrixLogParam
 #' @description Closed form: zero, the trace being linear.
-#' @param s A \code{\link{MatrixLogParam}} object.
+#' @param s A [MatrixLogParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named numeric vector of zeros.
@@ -509,7 +509,7 @@ S7::method(param_d2logdet, MatrixLogParam) <- function(s, eta, ...) {
 #' @title Higher Log-Determinant Derivatives of a Matrix Logarithm Parameter
 #' @name param_d3logdet.MatrixLogParam
 #' @description Closed form: zero at both orders, the trace being linear.
-#' @param s A \code{\link{MatrixLogParam}} object.
+#' @param s A [MatrixLogParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named numeric vector of zeros.
@@ -522,7 +522,7 @@ S7::method(param_d3logdet, MatrixLogParam) <- function(s, eta, ...) {
 #' @title Fourth Log-Determinant Derivatives of a Matrix Logarithm Parameter
 #' @name param_d4logdet.MatrixLogParam
 #' @description Closed form: zero.
-#' @param s A \code{\link{MatrixLogParam}} object.
+#' @param s A [MatrixLogParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named numeric vector of zeros.
@@ -535,10 +535,10 @@ S7::method(param_d4logdet, MatrixLogParam) <- function(s, eta, ...) {
 #' @title Solve of a Matrix Logarithm Parameter
 #' @name param_solve.MatrixLogParam
 #' @description Exact: \eqn{M^{-1} = \exp(-S)}, through the same
-#'   eigendecomposition as the value, applied to \code{b}.
-#' @param s A \code{\link{MatrixLogParam}} object.
+#'   eigendecomposition as the value, applied to `b`.
+#' @param s A [MatrixLogParam()] object.
 #' @param eta A numeric vector of free values.
-#' @param b A numeric matrix with \code{s@dimension} rows.
+#' @param b A numeric matrix with `s@dimension` rows.
 #' @param ... Unused.
 #' @return A numeric matrix.
 #' @keywords internal

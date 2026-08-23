@@ -4,7 +4,7 @@
 \alias{param_free.DiagMatrixParam}
 \title{Free Vector of a Diagonal Parameter}
 \arguments{
-\item{s}{A \code{\link{DiagMatrixParam}} object.}
+\item{s}{A \code{\link[=DiagMatrixParam]{DiagMatrixParam()}} object.}
 
 \item{m}{A diagonal positive definite matrix.}
 

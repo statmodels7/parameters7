@@ -29,6 +29,6 @@ again, so the step a fallback takes and the step the stencil library
 documents cannot drift apart.
 }
 \seealso{
-\code{\link[numericals7]{fd_step}}
+\code{\link[numericals7:fd_step]{numericals7::fd_step()}}
 }
 \keyword{internal}

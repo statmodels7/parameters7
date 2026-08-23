@@ -5,7 +5,7 @@
 \alias{param_factor.SumStructParam}
 \title{Solve and Factor of a Sum of Fixed Matrices}
 \arguments{
-\item{s}{A \code{\link{SumStructParam}} object.}
+\item{s}{A \code{\link[=SumStructParam]{SumStructParam()}} object.}
 
 \item{eta}{A numeric vector of length \code{s@n_free}.}
 

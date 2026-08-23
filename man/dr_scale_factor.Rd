@@ -8,7 +8,7 @@ dr_scale_factor(sd, tuple)
 }
 \arguments{
 \item{sd}{A 5 by \code{p} matrix of inverse-link derivatives, as returned by
-\code{\link{dr_scale_derivs}}.}
+\code{\link[=dr_scale_derivs]{dr_scale_derivs()}}.}
 
 \item{tuple}{An integer vector of scale indices, possibly empty and possibly
 with repeats.}

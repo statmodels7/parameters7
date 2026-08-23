@@ -7,7 +7,7 @@
 numerical_d2(s, eta)
 }
 \arguments{
-\item{s}{A \code{\link{parameter}} object.}
+\item{s}{A \code{\link[=parameter]{parameter()}} object.}
 
 \item{eta}{A numeric vector of free values.}
 }
@@ -17,11 +17,11 @@ A named list of symmetric matrices, keyed as
 }
 \description{
 One central difference of the analytic first derivatives where a parameter
-supplies them, and a single mixed stencil on \code{\link{param_value}}
+supplies them, and a single mixed stencil on \code{\link[=param_value]{param_value()}}
 where it does not.
 }
 \details{
-Writing \eqn{M(\eta)} for \code{\link{param_value}} and
+Writing \eqn{M(\eta)} for \code{\link[=param_value]{param_value()}} and
 \eqn{\partial_k M} for its analytic first derivative, the entry
 \eqn{(k, l)} is
 
@@ -51,5 +51,5 @@ stencil directly, which is again one layer and not two.
 numerical_d2(scalar_matrix(2), 0.3)
 }
 \seealso{
-\code{\link{param_d2}}
+\code{\link[=param_d2]{param_d2()}}
 }

@@ -40,12 +40,12 @@ An object of class \code{Ar1Param}.
 \description{
 The S7 class of first-order autoregressive covariance matrices: equal
 variances and a correlation falling geometrically with the lag.
-Constructed by \code{\link{ar1}}.
+Constructed by \code{\link[=ar1]{ar1()}}.
 }
 \examples{
 S7::S7_inherits(ar1(3), Ar1Param)
 
 }
 \seealso{
-\code{\link{ar1}}
+\code{\link[=ar1]{ar1()}}
 }

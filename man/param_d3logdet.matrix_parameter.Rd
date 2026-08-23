@@ -4,7 +4,7 @@
 \alias{param_d3logdet.matrix_parameter}
 \title{Default Higher Log-Determinant Derivatives}
 \arguments{
-\item{s}{A \code{\link{matrix_parameter}} object.}
+\item{s}{A \code{\link[=matrix_parameter]{matrix_parameter()}} object.}
 
 \item{eta}{A numeric vector of free values.}
 
@@ -14,7 +14,7 @@
 A named numeric vector.
 }
 \description{
-Fallback: one central stencil on \code{\link{param_d2logdet}}, which is
+Fallback: one central stencil on \code{\link[=param_d2logdet]{param_d2logdet()}}, which is
 the exact trace identity given the matrix derivatives -- a single layer on
 an analytic quantity, per the toolkit's rule.
 }

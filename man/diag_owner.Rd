@@ -7,7 +7,7 @@
 diag_owner(s)
 }
 \arguments{
-\item{s}{A \code{\link{DiagMatrixParam}} object.}
+\item{s}{A \code{\link[=DiagMatrixParam]{DiagMatrixParam()}} object.}
 }
 \value{
 An integer vector of length \code{s@dimension}.

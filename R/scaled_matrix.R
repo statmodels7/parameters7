@@ -6,13 +6,13 @@ NULL
 #'
 #' @description
 #' The S7 class of a fixed symmetric positive semidefinite matrix carried by a
-#' single scale. Constructed by \code{\link{scaled_matrix}}.
+#' single scale. Constructed by [scaled_matrix()].
 #'
 #' @inheritParams matrix_parameter
 #'
-#' @return An object of class \code{ScaledMatrixParam}.
+#' @return An object of class `ScaledMatrixParam`.
 #'
-#' @seealso \code{\link{scaled_matrix}}
+#' @seealso [scaled_matrix()]
 #'
 #' @examples
 #' S7::S7_inherits(scaled_matrix(diag(3)), ScaledMatrixParam)
@@ -59,17 +59,17 @@ ScaledMatrixParam <- S7::new_class("ScaledMatrixParam", parent = matrix_paramete
 #'
 #' @param p A symmetric positive semidefinite matrix.
 #' @param link A \pkg{linkfunctions7} link mapping the free scale to the
-#'   positive scale, or \code{NULL} for a fully known matrix with no free
-#'   value. Defaults to \code{linkfunctions7::log_link()}.
-#' @param role A label; see \code{\link{log_cholesky}}. Defaults to
-#'   \code{"precision"}, since the consumer of a scaled fixed matrix is a
+#'   positive scale, or `NULL` for a fully known matrix with no free
+#'   value. Defaults to `linkfunctions7::log_link()`.
+#' @param role A label; see [log_cholesky()]. Defaults to
+#'   `"precision"`, since the consumer of a scaled fixed matrix is a
 #'   penalty.
-#' @param tol The relative tolerance below which a singular value of \code{p}
+#' @param tol The relative tolerance below which a singular value of `p`
 #'   counts as zero when its rank is determined.
 #'
-#' @return An object of class \code{\link{ScaledMatrixParam}}.
+#' @return An object of class [ScaledMatrixParam()].
 #'
-#' @seealso \code{\link{log_cholesky}}, \code{\link{param_null_basis}}
+#' @seealso [log_cholesky()], [param_null_basis()]
 #'
 #' @examples
 #' # a ridge: the identity, scaled
@@ -143,10 +143,10 @@ scaled_matrix <- function(p, link = linkfunctions7::log_link(),
 #' The value of the link and its first two derivatives at \eqn{\eta}, or the
 #' constant 1 when the parameter has no free value.
 #'
-#' @param s A \code{\link{ScaledMatrixParam}} object.
+#' @param s A [ScaledMatrixParam()] object.
 #' @param eta A numeric vector of free values.
 #'
-#' @return A list with \code{h}, \code{d1} and \code{d2}.
+#' @return A list with `h`, `d1` and `d2`.
 #'
 #' @keywords internal
 scaled_scale <- function(s, eta) {
@@ -163,7 +163,7 @@ scaled_scale <- function(s, eta) {
 #' @title Matrix of a Scaled Parameter
 #' @name param_value.ScaledMatrixParam
 #' @description The fixed matrix times the scale.
-#' @param s A \code{\link{ScaledMatrixParam}} object.
+#' @param s A [ScaledMatrixParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A symmetric positive semidefinite matrix.
@@ -176,7 +176,7 @@ S7::method(param_value, ScaledMatrixParam) <- function(s, eta, ...) {
 #' @title First Derivative of a Scaled Parameter
 #' @name param_d1.ScaledMatrixParam
 #' @description Closed form: \eqn{h'(\eta) P}.
-#' @param s A \code{\link{ScaledMatrixParam}} object.
+#' @param s A [ScaledMatrixParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named list with one symmetric matrix.
@@ -193,7 +193,7 @@ S7::method(param_d1, ScaledMatrixParam) <- function(s, eta, ...) {
 #' @title Second Derivative of a Scaled Parameter
 #' @name param_d2.ScaledMatrixParam
 #' @description Closed form: \eqn{h''(\eta) P}.
-#' @param s A \code{\link{ScaledMatrixParam}} object.
+#' @param s A [ScaledMatrixParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named list with one symmetric matrix.
@@ -214,7 +214,7 @@ S7::method(param_d2, ScaledMatrixParam) <- function(s, eta, ...) {
 #' second term a constant of the parameter. This is the log-determinant when
 #' the family is of full rank and the log pseudo-determinant otherwise, in one
 #' expression.
-#' @param s A \code{\link{ScaledMatrixParam}} object.
+#' @param s A [ScaledMatrixParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A single number.
@@ -229,7 +229,7 @@ S7::method(param_logdet, ScaledMatrixParam) <- function(s, eta, ...) {
 #' @description
 #' Closed form: \eqn{r\, h'(\eta)/h(\eta)}, which under the default log link is
 #' the rank itself, whatever the scale.
-#' @param s A \code{\link{ScaledMatrixParam}} object.
+#' @param s A [ScaledMatrixParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named numeric vector.
@@ -246,7 +246,7 @@ S7::method(param_dlogdet, ScaledMatrixParam) <- function(s, eta, ...) {
 #' @description
 #' Closed form: \eqn{r\{h''/h - (h'/h)^2\}}, which under the default log link
 #' is zero, the log pseudo-determinant being linear in the free value.
-#' @param s A \code{\link{ScaledMatrixParam}} object.
+#' @param s A [ScaledMatrixParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named numeric vector.
@@ -267,7 +267,7 @@ S7::method(param_d2logdet, ScaledMatrixParam) <- function(s, eta, ...) {
 #' The scale read off the ratio to the fixed matrix, after checking that the
 #' matrix really is a multiple of it. The ratio is taken at the entry of
 #' \eqn{P} of largest magnitude, which is where it is best determined.
-#' @param s A \code{\link{ScaledMatrixParam}} object.
+#' @param s A [ScaledMatrixParam()] object.
 #' @param m A symmetric matrix.
 #' @param ... Unused.
 #' @return A named numeric vector of free values.
@@ -302,7 +302,7 @@ S7::method(param_free, ScaledMatrixParam) <- function(s, m, ...) {
 #' @title Third Derivatives of a Scaled Parameter
 #' @name param_d3.ScaledMatrixParam
 #' @description Closed form: \eqn{h'''(\eta)\, M_0}.
-#' @param s A \code{\link{ScaledMatrixParam}} object.
+#' @param s A [ScaledMatrixParam()] object.
 #' @param eta A numeric vector with one free value.
 #' @param ... Unused.
 #' @return A named list with one matrix.
@@ -318,7 +318,7 @@ S7::method(param_d3, ScaledMatrixParam) <- function(s, eta, ...) {
 #' @title Fourth Derivatives of a Scaled Parameter
 #' @name param_d4.ScaledMatrixParam
 #' @description Closed form: \eqn{h''''(\eta)\, M_0}.
-#' @param s A \code{\link{ScaledMatrixParam}} object.
+#' @param s A [ScaledMatrixParam()] object.
 #' @param eta A numeric vector with one free value.
 #' @param ... Unused.
 #' @return A named list with one matrix.
@@ -340,17 +340,17 @@ S7::method(param_d4, ScaledMatrixParam) <- function(s, eta, ...) {
 #' @details
 #' The constant contributes nothing beyond order zero, so every component is
 #' the rank times the corresponding derivative of \eqn{\log\lambda}, which is
-#' Faa di Bruno's chain for the logarithm as in \code{\link{diag_dlog}}. With
+#' Faa di Bruno's chain for the logarithm as in [diag_dlog()]. With
 #' one free value there is exactly one component per order.
 #'
-#' @param s A \code{\link{ScaledMatrixParam}} object.
+#' @param s A [ScaledMatrixParam()] object.
 #' @param eta A numeric vector of one free value.
 #' @param order The derivative order, 2 to 4.
 #'
 #' @return A named numeric vector of length one, keyed by
-#'   \code{\link{param_tuple_names}(s, order)}.
+#'   [`param_tuple_names(s, order)`][param_tuple_names].
 #'
-#' @seealso \code{\link{scaled_matrix}}, \code{\link{diag_dlog}}
+#' @seealso [scaled_matrix()], [diag_dlog()]
 #'
 #' @keywords internal
 scaled_dlog <- function(s, eta, order) {
@@ -371,7 +371,7 @@ scaled_dlog <- function(s, eta, order) {
 #' \eqn{r \log h(\eta) + \log\mathrm{pdet}(M_0)} with \eqn{r} the rank, so
 #' every derivative is \eqn{r} times the matching derivative of
 #' \eqn{\log h}.
-#' @param s A \code{\link{ScaledMatrixParam}} object.
+#' @param s A [ScaledMatrixParam()] object.
 #' @param eta A numeric vector with one free value.
 #' @param ... Unused.
 #' @return A named numeric vector with one entry.
@@ -382,8 +382,8 @@ S7::method(param_d3logdet, ScaledMatrixParam) <- function(s, eta, ...) {
 
 #' @title Fourth Log-Determinant Derivatives of a Scaled Parameter
 #' @name param_d4logdet.ScaledMatrixParam
-#' @description Closed form; see \code{\link{param_d3logdet.ScaledMatrixParam}}.
-#' @param s A \code{\link{ScaledMatrixParam}} object.
+#' @description Closed form; see [param_d3logdet.ScaledMatrixParam()].
+#' @param s A [ScaledMatrixParam()] object.
 #' @param eta A numeric vector with one free value.
 #' @param ... Unused.
 #' @return A named numeric vector with one entry.

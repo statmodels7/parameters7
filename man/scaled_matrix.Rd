@@ -18,7 +18,7 @@ scaled_matrix(
 positive scale, or \code{NULL} for a fully known matrix with no free
 value. Defaults to \code{linkfunctions7::log_link()}.}
 
-\item{role}{A label; see \code{\link{log_cholesky}}. Defaults to
+\item{role}{A label; see \code{\link[=log_cholesky]{log_cholesky()}}. Defaults to
 \code{"precision"}, since the consumer of a scaled fixed matrix is a
 penalty.}
 
@@ -26,7 +26,7 @@ penalty.}
 counts as zero when its rank is determined.}
 }
 \value{
-An object of class \code{\link{ScaledMatrixParam}}.
+An object of class \code{\link[=ScaledMatrixParam]{ScaledMatrixParam()}}.
 }
 \description{
 \eqn{M(\eta) = h(\eta)\,P} for a fixed symmetric positive semidefinite
@@ -81,5 +81,5 @@ scaled_matrix(diag(3), link = NULL)@n_free
 
 }
 \seealso{
-\code{\link{log_cholesky}}, \code{\link{param_null_basis}}
+\code{\link[=log_cholesky]{log_cholesky()}}, \code{\link[=param_null_basis]{param_null_basis()}}
 }

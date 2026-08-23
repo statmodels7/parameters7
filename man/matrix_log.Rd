@@ -9,10 +9,10 @@ matrix_log(dimension, role = c("either", "covariance", "precision"))
 \arguments{
 \item{dimension}{The side \eqn{p} of the matrix.}
 
-\item{role}{A label; see \code{\link{log_cholesky}}.}
+\item{role}{A label; see \code{\link[=log_cholesky]{log_cholesky()}}.}
 }
 \value{
-An object of class \code{\link{MatrixLogParam}}.
+An object of class \code{\link[=MatrixLogParam]{MatrixLogParam()}}.
 }
 \description{
 The matrix logarithm parametrization of a symmetric positive definite
@@ -37,7 +37,7 @@ Opitz theorem -- the exponential of a small upper bidiagonal matrix, read
 off its corner -- which stays exact under repeated and nearly repeated
 eigenvalues, where the quotient formula cancels catastrophically.
 
-Next to \code{\link{log_cholesky}}: the log-Cholesky derivatives are
+Next to \code{\link[=log_cholesky]{log_cholesky()}}: the log-Cholesky derivatives are
 sparse products and cheaper, while here the log-determinant and the
 inverse are the free quantities. The matrix logarithm is the chart to
 reach for when both the covariance and the precision are wanted at once.
@@ -63,5 +63,5 @@ Opitz, G. (1964). Steigungsmatrizen. \emph{Zeitschrift fur Angewandte
 Mathematik und Mechanik} 44, T52-T54.
 }
 \seealso{
-\code{\link{log_cholesky}}, \code{\link{param_value}}
+\code{\link[=log_cholesky]{log_cholesky()}}, \code{\link[=param_value]{param_value()}}
 }

@@ -7,7 +7,7 @@
 block_derivs_by_tuple(block, eta, order)
 }
 \arguments{
-\item{block}{A \code{\link{matrix_parameter}}.}
+\item{block}{A \code{\link[=matrix_parameter]{matrix_parameter()}}.}
 
 \item{eta}{The block's own stretch of the free vector.}
 

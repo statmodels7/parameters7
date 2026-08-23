@@ -7,7 +7,7 @@
 ar1_logdet_terms(s)
 }
 \arguments{
-\item{s}{An \code{\link{Ar1Param}} object.}
+\item{s}{An \code{\link[=Ar1Param]{Ar1Param()}} object.}
 }
 \value{
 A list of numeric triples.

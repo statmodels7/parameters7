@@ -14,18 +14,18 @@ dr_prod(
 \arguments{
 \item{dimension}{The side \eqn{p} of the matrix, at least 2.}
 
-\item{correlation}{A \code{\link{matrix_parameter}} of side
+\item{correlation}{A \code{\link[=matrix_parameter]{matrix_parameter()}} of side
 \code{dimension} producing correlation matrices. Defaults to
-\code{\link{correlation_matrix}(dimension)}.}
+\code{\link[=correlation_matrix]{correlation_matrix(dimension)}}.}
 
 \item{link}{The positive link carrying each standard deviation onto the
-free scale. Defaults to \code{\link[linkfunctions7]{log_link}()}.}
+free scale. Defaults to \code{\link[linkfunctions7:log_link]{linkfunctions7::log_link()}}.}
 
 \item{role}{One of \code{"covariance"}, \code{"precision"} or
 \code{"either"}.}
 }
 \value{
-An object of class \code{\link{DrProdParam}}.
+An object of class \code{\link[=DrProdParam]{DrProdParam()}}.
 }
 \description{
 \eqn{\Sigma(\eta) = D(\eta_D)\, R(\eta_R)\, D(\eta_D)} with
@@ -70,6 +70,6 @@ c(p = 4, n_free = dr_prod(4)@n_free)
 
 }
 \seealso{
-\code{\link{correlation_matrix}}, \code{\link{log_cholesky}},
-\code{\link{block_diag}}
+\code{\link[=correlation_matrix]{correlation_matrix()}}, \code{\link[=log_cholesky]{log_cholesky()}},
+\code{\link[=block_diag]{block_diag()}}
 }

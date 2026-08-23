@@ -28,6 +28,6 @@ outside \pkg{linkfunctions7} falls back on its own name reduced to
 lowercase letters, digits and underscores.
 }
 \seealso{
-\code{\link{tagged_name}}
+\code{\link[=tagged_name]{tagged_name()}}
 }
 \keyword{internal}

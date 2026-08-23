@@ -17,13 +17,13 @@ NULL
 #'
 #' @description
 #' The S7 class of compound-symmetric covariance matrices: equal variances and
-#' one common correlation. Constructed by \code{\link{compound_symmetry}}.
+#' one common correlation. Constructed by [compound_symmetry()].
 #'
 #' @inheritParams matrix_parameter
 #'
-#' @return An object of class \code{CompoundSymmetryParam}.
+#' @return An object of class `CompoundSymmetryParam`.
 #'
-#' @seealso \code{\link{compound_symmetry}}
+#' @seealso [compound_symmetry()]
 #'
 #' @examples
 #' S7::S7_inherits(compound_symmetry(3), CompoundSymmetryParam)
@@ -46,8 +46,8 @@ CompoundSymmetryParam <- S7::new_class("CompoundSymmetryParam",
 #' the eigenvalues are \eqn{\sigma^2\{1 + (p-1)\rho\}} once and
 #' \eqn{\sigma^2(1-\rho)} with multiplicity \eqn{p-1}, so the matrix is
 #' definite exactly when \eqn{-1/(p-1) < \rho < 1}. The correlation is
-#' therefore carried by \code{\link[linkfunctions7]{bounded_link}} onto that
-#' interval and not by \code{\link[linkfunctions7]{rhobit_link}}, which would
+#' therefore carried by [linkfunctions7::bounded_link()] onto that
+#' interval and not by [linkfunctions7::rhobit_link()], which would
 #' let a caller build an indefinite matrix at a perfectly ordinary free value.
 #'
 #' Two quantities are closed form and cost nothing. The eigenvalues above give
@@ -60,18 +60,18 @@ CompoundSymmetryParam <- S7::new_class("CompoundSymmetryParam",
 #' exchangeable covariance is an exchangeable precision, which is what makes
 #' this family closed under the choice of side.
 #'
-#' The value is the scale times a pattern that is \emph{linear} in the
+#' The value is the scale times a pattern that is *linear* in the
 #' correlation, \eqn{I + \rho(J - I)}, so all four derivative orders follow
 #' from the two links' own derivatives with no further algebra.
 #'
 #' @param dimension The side \eqn{p} of the matrix, at least 2.
 #' @param link_scale A \pkg{linkfunctions7} link onto the positive scale.
-#'   Defaults to \code{linkfunctions7::log_link()}.
-#' @param role A label; see \code{\link{log_cholesky}}.
+#'   Defaults to `linkfunctions7::log_link()`.
+#' @param role A label; see [log_cholesky()].
 #'
-#' @return An object of class \code{\link{CompoundSymmetryParam}}.
+#' @return An object of class [CompoundSymmetryParam()].
 #'
-#' @seealso \code{\link{ar1}}, \code{\link{correlation_matrix}}
+#' @seealso [ar1()], [correlation_matrix()]
 #'
 #' @examples
 #' s <- compound_symmetry(4)
@@ -124,11 +124,11 @@ compound_symmetry <- function(dimension,
 #' The two scalars a compound-symmetric or AR(1) parameter is built from, with
 #' the first four derivatives of each in its own free value.
 #'
-#' @param s A \code{\link{CompoundSymmetryParam}} or \code{\link{Ar1Param}}
+#' @param s A [CompoundSymmetryParam()] or [Ar1Param()]
 #'   object.
 #' @param eta A numeric vector of two free values.
 #'
-#' @return A list with \code{scale} and \code{rho}, each a list of five
+#' @return A list with `scale` and `rho`, each a list of five
 #'   numbers: the value and four derivatives.
 #'
 #' @keywords internal
@@ -163,7 +163,7 @@ econ_scalars <- function(s, eta) {
 #' once rather than transcribed twice.
 #'
 #' @param r The point.
-#' @param terms A list of numeric triples \code{c(coefficient, a, b)}.
+#' @param terms A list of numeric triples `c(coefficient, a, b)`.
 #'
 #' @return A list of four numbers.
 #'
@@ -227,7 +227,7 @@ econ_derivative <- function(s, eta, order, pattern) {
 #' @param eta A numeric vector of two free values.
 #' @param order The derivative order, 1 to 4.
 #' @param terms The affine-logarithm terms of \eqn{q}; see
-#'   \code{\link{log_affine_derivs}}.
+#'   [log_affine_derivs()].
 #'
 #' @return A named numeric vector.
 #'
@@ -261,8 +261,8 @@ econ_logdet_derivative <- function(s, eta, order, terms) {
 #' The pattern is linear in the correlation, so every derivative is the
 #' matching derivative of the correlation times the constant \eqn{J - I}.
 #'
-#' @param s A \code{\link{CompoundSymmetryParam}} object.
-#' @param sc The scalars of \code{\link{econ_scalars}}.
+#' @param s A [CompoundSymmetryParam()] object.
+#' @param sc The scalars of [econ_scalars()].
 #'
 #' @return A list of five matrices.
 #'
@@ -278,7 +278,7 @@ cs_pattern <- function(s, sc) {
 #' @title Value of a Compound Symmetry Parameter
 #' @name param_value.CompoundSymmetryParam
 #' @description \eqn{\sigma^2\{(1-\rho)I + \rho J\}}.
-#' @param s A \code{\link{CompoundSymmetryParam}} object.
+#' @param s A [CompoundSymmetryParam()] object.
 #' @param eta A numeric vector of two free values.
 #' @param ... Unused.
 #' @return A compound-symmetric positive definite matrix.
@@ -296,7 +296,7 @@ S7::method(param_value, CompoundSymmetryParam) <- function(s, eta, ...) {
 #' off-diagonal one divided by it, both exact. A matrix whose diagonal is not
 #' constant, or whose off-diagonal entries are not all equal, is rejected
 #' rather than averaged.
-#' @param s A \code{\link{CompoundSymmetryParam}} object.
+#' @param s A [CompoundSymmetryParam()] object.
 #' @param m A compound-symmetric matrix.
 #' @param ... Unused.
 #' @return A named numeric vector of two free values.
@@ -332,9 +332,9 @@ S7::method(param_free, CompoundSymmetryParam) <- function(s, m, ...) {
 #' \eqn{\sigma^2\{(1-\rho)I + \rho J\}} is
 #' \eqn{\{\sigma^2(1-\rho)\}^{-1}[I - \rho J/\{1 + (p-1)\rho\}]}, compound
 #' symmetric again, so no factorization is performed.
-#' @param s A \code{\link{CompoundSymmetryParam}} object.
+#' @param s A [CompoundSymmetryParam()] object.
 #' @param eta A numeric vector of two free values.
-#' @param b A numeric matrix with \code{s@dimension} rows.
+#' @param b A numeric matrix with `s@dimension` rows.
 #' @param ... Unused.
 #' @return A numeric matrix.
 #' @keywords internal
@@ -354,7 +354,7 @@ S7::method(param_solve, CompoundSymmetryParam) <- function(s, eta, b = NULL, ...
 #' Closed form at every order: the value is the scale times a pattern linear
 #' in the correlation, so a component with \eqn{a} scale indices and \eqn{b}
 #' correlation indices is one derivative of each.
-#' @param s A \code{\link{CompoundSymmetryParam}} object.
+#' @param s A [CompoundSymmetryParam()] object.
 #' @param eta A numeric vector of two free values.
 #' @param ... Unused.
 #' @return A named list of symmetric matrices.
@@ -391,7 +391,7 @@ S7::method(param_d4, CompoundSymmetryParam) <- function(s, eta, ...) {
 #' The affine-logarithm terms of \eqn{q(\rho) = \log\{1 + (p-1)\rho\} +
 #' (p-1)\log(1-\rho)}, the correlation's half of the log-determinant.
 #'
-#' @param s A \code{\link{CompoundSymmetryParam}} object.
+#' @param s A [CompoundSymmetryParam()] object.
 #'
 #' @return A list of numeric triples.
 #'
@@ -408,7 +408,7 @@ cs_logdet_terms <- function(s) {
 #' Closed form from the two distinct eigenvalues:
 #' \eqn{p\log\sigma^2 + \log\{1+(p-1)\rho\} + (p-1)\log(1-\rho)}. No
 #' factorization and no determinant is computed.
-#' @param s A \code{\link{CompoundSymmetryParam}} object.
+#' @param s A [CompoundSymmetryParam()] object.
 #' @param eta A numeric vector of two free values.
 #' @param ... Unused.
 #' @return A single number.
@@ -426,7 +426,7 @@ S7::method(param_logdet, CompoundSymmetryParam) <- function(s, eta, ...) {
 #' Closed form at every order. The log-determinant is a sum of a function of
 #' the scale and a function of the correlation, so every mixed component is
 #' exactly zero.
-#' @param s A \code{\link{CompoundSymmetryParam}} object.
+#' @param s A [CompoundSymmetryParam()] object.
 #' @param eta A numeric vector of two free values.
 #' @param ... Unused.
 #' @return A named numeric vector.

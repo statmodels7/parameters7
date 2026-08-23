@@ -7,7 +7,7 @@
 diag_higher(s, eta, order)
 }
 \arguments{
-\item{s}{A \code{\link{DiagMatrixParam}} object.}
+\item{s}{A \code{\link[=DiagMatrixParam]{DiagMatrixParam()}} object.}
 
 \item{eta}{A numeric vector of free values.}
 
@@ -15,7 +15,7 @@ diag_higher(s, eta, order)
 }
 \value{
 A named list of matrices, keyed by
-\code{\link{param_tuple_names}(s, order)}.
+\code{\link[=param_tuple_names]{param_tuple_names(s, order)}}.
 }
 \description{
 The derivative components of orders three and four, each a diagonal matrix
@@ -28,6 +28,6 @@ derivative of the inverse link in the entry that value owns. A shared free
 value owns every entry, which is what \code{diag_owner()} answers.
 }
 \seealso{
-\code{\link{diagonal_matrix}}
+\code{\link[=diagonal_matrix]{diagonal_matrix()}}
 }
 \keyword{internal}

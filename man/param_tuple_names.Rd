@@ -7,7 +7,7 @@
 param_tuple_names(s, order = 2L)
 }
 \arguments{
-\item{s}{An object inheriting from class \code{\link{parameter}}.}
+\item{s}{An object inheriting from class \code{\link[=parameter]{parameter()}}.}
 
 \item{order}{The derivative order: 2 (default), 3 or 4.}
 }
@@ -16,9 +16,9 @@ A character vector, one entry per distinct component.
 }
 \description{
 The keys of the derivative lists: one per unordered tuple of free values.
-At order 2, the keys of \code{\link{param_d2}} and
-\code{\link{param_d2logdet}}, diagonal pairs first; at orders 3 and 4,
-the keys of \code{\link{param_d3}} and \code{\link{param_d4}},
+At order 2, the keys of \code{\link[=param_d2]{param_d2()}} and
+\code{\link[=param_d2logdet]{param_d2logdet()}}, diagonal pairs first; at orders 3 and 4,
+the keys of \code{\link[=param_d3]{param_d3()}} and \code{\link[=param_d4]{param_d4()}},
 lexicographic combinations with repetition.
 }
 \details{
@@ -35,7 +35,7 @@ vector returned and of every derivative list of that order.
 This exists so that nothing has to recover a tuple by splitting a key
 apart. Generating the keys and the index tuples from one enumeration
 cannot be fooled by a free name that contains the separator, which
-splitting can. Use \code{\link{param_tuple_indices}} for the tuples
+splitting can. Use \code{\link[=param_tuple_indices]{param_tuple_indices()}} for the tuples
 themselves.
 }
 \examples{
@@ -44,5 +44,5 @@ param_tuple_names(scalar_matrix(2), 3)
 
 }
 \seealso{
-\code{\link{param_tuple_indices}}
+\code{\link[=param_tuple_indices]{param_tuple_indices()}}
 }

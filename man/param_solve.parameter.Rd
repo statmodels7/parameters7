@@ -4,7 +4,7 @@
 \alias{param_solve.parameter}
 \title{Default Solve}
 \arguments{
-\item{s}{A \code{\link{parameter}} object.}
+\item{s}{A \code{\link[=parameter]{parameter()}} object.}
 
 \item{eta}{A numeric vector of free values.}
 
@@ -16,7 +16,7 @@
 A numeric matrix.
 }
 \description{
-Fallback: a Cholesky of \code{\link{param_value}}, with the
-definiteness verdict taken spectrally (see \code{\link{chol_pd}}).
+Fallback: a Cholesky of \code{\link[=param_value]{param_value()}}, with the
+definiteness verdict taken spectrally (see \code{\link[=chol_pd]{chol_pd()}}).
 }
 \keyword{internal}

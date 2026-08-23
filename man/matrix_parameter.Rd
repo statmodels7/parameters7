@@ -36,11 +36,11 @@ whose columns are an orthonormal basis of the null space.}
 }
 \value{
 An object of class \code{matrix_parameter}. The class is abstract;
-use one of the constructors, such as \code{\link{log_cholesky}}.
+use one of the constructors, such as \code{\link[=log_cholesky]{log_cholesky()}}.
 }
 \description{
 The abstract S7 class of the symmetric positive semidefinite branch: a
-\code{\link{parameter}} whose value is a symmetric matrix, together with
+\code{\link[=parameter]{parameter()}} whose value is a symmetric matrix, together with
 the quantities only a matrix can answer -- the rank, the null space, the
 log-(pseudo-)determinant, the solve and the factor.
 }
@@ -51,11 +51,11 @@ semidefinite matrices both leave the null space alone. They are computed
 once, at construction, from the components rather than from an assembled
 matrix, because the numerical determination of a rank from an assembled
 matrix is not scale invariant while the null space is. See
-\code{\link{param_null_basis}}.
+\code{\link[=param_null_basis]{param_null_basis()}}.
 
-A parameter that is not a matrix -- \code{\link{simplex}}, a
-\code{\link{transition_matrix}} -- inherits from \code{\link{parameter}}
-directly, so \code{\link{param_logdet}} and \code{\link{param_solve}} do
+A parameter that is not a matrix -- \code{\link[=simplex]{simplex()}}, a
+\code{\link[=transition_matrix]{transition_matrix()}} -- inherits from \code{\link[=parameter]{parameter()}}
+directly, so \code{\link[=param_logdet]{param_logdet()}} and \code{\link[=param_solve]{param_solve()}} do
 not exist for it by construction rather than by a run-time rejection.
 }
 \examples{
@@ -63,5 +63,5 @@ S7::S7_inherits(log_cholesky(3), matrix_parameter)
 
 }
 \seealso{
-\code{\link{parameter}}, \code{\link{log_cholesky}}
+\code{\link[=parameter]{parameter()}}, \code{\link[=log_cholesky]{log_cholesky()}}
 }

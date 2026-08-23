@@ -16,10 +16,10 @@ ar1(
 \item{link_scale}{A \pkg{linkfunctions7} link onto the positive scale.
 Defaults to \code{linkfunctions7::log_link()}.}
 
-\item{role}{A label; see \code{\link{log_cholesky}}.}
+\item{role}{A label; see \code{\link[=log_cholesky]{log_cholesky()}}.}
 }
 \value{
-An object of class \code{\link{Ar1Param}}.
+An object of class \code{\link[=Ar1Param]{Ar1Param()}}.
 }
 \description{
 The first-order autoregressive covariance
@@ -30,7 +30,7 @@ whatever the dimension.
 \details{
 Unlike compound symmetry, the correlation is bounded only by
 \eqn{\lvert\rho\rvert < 1} at every dimension, so it is carried by
-\code{\link[linkfunctions7]{rhobit_link}} -- the inverse hyperbolic tangent
+\code{\link[linkfunctions7:rhobit_link]{linkfunctions7::rhobit_link()}} -- the inverse hyperbolic tangent
 -- and every free value gives a positive definite matrix.
 
 Two quantities are closed form. The determinant of the correlation pattern
@@ -46,7 +46,7 @@ factorization.
 The pattern is not linear in the correlation as compound symmetry's is: an
 entry is \eqn{\rho^{m}} for the lag \eqn{m}, so its derivatives in the free
 value are the composition of a power with the link, taken to fourth order
-by \code{\link{compose4}}. This is also why an AR(1) covariance and an
+by \code{\link[=compose4]{compose4()}}. This is also why an AR(1) covariance and an
 AR(1) precision are different models -- the inverse is tridiagonal but not
 AR(1) -- which is what the \code{role} label exists to record.
 }
@@ -63,5 +63,5 @@ c(p4 = ar1(4)@n_free, p20 = ar1(20)@n_free)
 
 }
 \seealso{
-\code{\link{compound_symmetry}}, \code{\link{correlation_matrix}}
+\code{\link[=compound_symmetry]{compound_symmetry()}}, \code{\link[=correlation_matrix]{correlation_matrix()}}
 }

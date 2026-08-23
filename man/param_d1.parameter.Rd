@@ -4,7 +4,7 @@
 \alias{param_d1.parameter}
 \title{Default First Derivatives}
 \arguments{
-\item{s}{A \code{\link{parameter}} object.}
+\item{s}{A \code{\link[=parameter]{parameter()}} object.}
 
 \item{eta}{A numeric vector of free values.}
 
@@ -15,7 +15,7 @@ A named list of symmetric matrices.
 }
 \description{
 Fallback: one central difference of
-\code{\link{param_value}} per component (see
-\code{\link{numerical_d1}}).
+\code{\link[=param_value]{param_value()}} per component (see
+\code{\link[=numerical_d1]{numerical_d1()}}).
 }
 \keyword{internal}

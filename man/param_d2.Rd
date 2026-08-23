@@ -7,7 +7,7 @@
 param_d2(s, eta, ...)
 }
 \arguments{
-\item{s}{An object inheriting from class \code{\link{parameter}}.}
+\item{s}{An object inheriting from class \code{\link[=parameter]{parameter()}}.}
 
 \item{eta}{A numeric vector of length \code{s@n_free}.}
 
@@ -23,7 +23,7 @@ Returns the \eqn{d(d+1)/2} distinct second derivatives
 the value.
 }
 \details{
-The components are keyed by \code{\link{param_tuple_names}}, generated from
+The components are keyed by \code{\link[=param_tuple_names]{param_tuple_names()}}, generated from
 the same enumeration that produces the names rather than by taking a name
 apart. Recovering an index by splitting a name on its separator is the
 obvious route and it is wrong, because a free value whose own label contains
@@ -35,5 +35,5 @@ param_d2(s, 0)
 
 }
 \seealso{
-\code{\link{param_d1}}, \code{\link{param_tuple_names}}
+\code{\link[=param_d1]{param_d1()}}, \code{\link[=param_tuple_names]{param_tuple_names()}}
 }

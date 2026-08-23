@@ -7,7 +7,7 @@
 block_diag_derivs(s, eta, order)
 }
 \arguments{
-\item{s}{A \code{\link{BlockDiagParam}}.}
+\item{s}{A \code{\link[=BlockDiagParam]{BlockDiagParam()}}.}
 
 \item{eta}{A numeric vector of length \code{s@n_free}.}
 

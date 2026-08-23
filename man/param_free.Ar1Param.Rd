@@ -4,7 +4,7 @@
 \alias{param_free.Ar1Param}
 \title{Free Vector of an AR(1) Parameter}
 \arguments{
-\item{s}{An \code{\link{Ar1Param}} object.}
+\item{s}{An \code{\link[=Ar1Param]{Ar1Param()}} object.}
 
 \item{m}{An AR(1) matrix.}
 

@@ -41,5 +41,5 @@ param_null_basis(crossprod(d))$rank
 
 }
 \seealso{
-\code{\link{parameter}}
+\code{\link[=parameter]{parameter()}}
 }

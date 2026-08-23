@@ -4,14 +4,14 @@
 \alias{param_readable.ScaledMatrixParam}
 \title{The Scale of a Fixed Matrix}
 \arguments{
-\item{s}{A \code{\link{ScaledMatrixParam}} object.}
+\item{s}{A \code{\link[=ScaledMatrixParam]{ScaledMatrixParam()}} object.}
 
 \item{eta}{A numeric vector of at most one free value.}
 
 \item{...}{Ignored.}
 }
 \value{
-A list as described in \code{\link{param_readable}}, or \code{NULL}
+A list as described in \code{\link[=param_readable]{param_readable()}}, or \code{NULL}
 when the matrix is fixed and carries no free value.
 }
 \description{

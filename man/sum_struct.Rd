@@ -15,13 +15,13 @@ sum_struct(
 positive semidefinite. Named entries supply the free-value labels.}
 
 \item{link}{The positive link carrying each weight onto the free scale.
-Defaults to \code{\link[linkfunctions7]{log_link}()}.}
+Defaults to \code{\link[linkfunctions7:log_link]{linkfunctions7::log_link()}}.}
 
 \item{role}{One of \code{"covariance"}, \code{"precision"} or
 \code{"either"}.}
 }
 \value{
-An object of class \code{\link{SumStructParam}}.
+An object of class \code{\link[=SumStructParam]{SumStructParam()}}.
 }
 \description{
 \eqn{M(\eta) = \sum_k c_k(\eta_k) P_k} for fixed symmetric positive
@@ -67,6 +67,6 @@ param_logdet(s, c(log(0.5), log(2)))
 
 }
 \seealso{
-\code{\link{scaled_matrix}}, \code{\link{block_diag}},
-\code{\link[penalties7]{additive_penalty}}
+\code{\link[=scaled_matrix]{scaled_matrix()}}, \code{\link[=block_diag]{block_diag()}},
+\code{\link[penalties7:additive_penalty]{penalties7::additive_penalty()}}
 }

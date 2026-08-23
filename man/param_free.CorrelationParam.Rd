@@ -4,7 +4,7 @@
 \alias{param_free.CorrelationParam}
 \title{Free Vector of a Correlation Parameter}
 \arguments{
-\item{s}{A \code{\link{CorrelationParam}} object.}
+\item{s}{A \code{\link[=CorrelationParam]{CorrelationParam()}} object.}
 
 \item{m}{A correlation matrix.}
 

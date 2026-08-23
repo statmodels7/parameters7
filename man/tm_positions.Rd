@@ -7,7 +7,7 @@
 tm_positions(s)
 }
 \arguments{
-\item{s}{A \code{\link{TransitionMatrixParam}} object.}
+\item{s}{A \code{\link[=TransitionMatrixParam]{TransitionMatrixParam()}} object.}
 }
 \value{
 A list with integer vectors \code{row} and \code{coord}.

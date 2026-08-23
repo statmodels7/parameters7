@@ -15,7 +15,7 @@ fd_along(f, eta, k, order = 1L, h = NULL)
 
 \item{order}{The derivative order.}
 
-\item{h}{The step; \code{\link{fd_step}} when missing.}
+\item{h}{The step; \code{\link[=fd_step]{fd_step()}} when missing.}
 }
 \value{
 Whatever \code{f} returns, differentiated.
@@ -25,15 +25,15 @@ Applies a \pkg{numericals7} central stencil to a function of the free
 vector, along one of its components.
 }
 \details{
-The nodes and the weights come from \code{\link[numericals7]{fd_offsets}}
-and \code{\link[numericals7]{fd_weights}} rather than being written out
+The nodes and the weights come from \code{\link[numericals7:fd_offsets]{numericals7::fd_offsets()}}
+and \code{\link[numericals7:fd_weights]{numericals7::fd_weights()}} rather than being written out
 here, so a difference in this package is the same object the rest of the
-toolkit differentiates with. \code{\link[numericals7]{fd_derivative}}
+toolkit differentiates with. \code{\link[numericals7:fd_derivative]{numericals7::fd_derivative()}}
 cannot be used directly: its \code{f} maps a vector of points to the values
 at those points, and what is differentiated here maps a whole free vector
 to a matrix.
 }
 \seealso{
-\code{\link[numericals7]{fd_weights}}
+\code{\link[numericals7:fd_weights]{numericals7::fd_weights()}}
 }
 \keyword{internal}

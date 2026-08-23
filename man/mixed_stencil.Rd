@@ -24,13 +24,13 @@ numerical derivatives.
 }
 \details{
 Each factor's nodes and weights are \pkg{numericals7}'s, read from
-\code{\link[numericals7]{fd_offsets}} and
-\code{\link[numericals7]{fd_weights}}. They were transcribed here once --
+\code{\link[numericals7:fd_offsets]{numericals7::fd_offsets()}} and
+\code{\link[numericals7:fd_weights]{numericals7::fd_weights()}}. They were transcribed here once --
 two points at order one, three at two, the five-point forms at three and
 four -- and a table of stencil coefficients written out in a second place
 is a table that can disagree with the first.
 }
 \seealso{
-\code{\link[numericals7]{fd_weights}}
+\code{\link[numericals7:fd_weights]{numericals7::fd_weights()}}
 }
 \keyword{internal}

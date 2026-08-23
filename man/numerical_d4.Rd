@@ -7,15 +7,15 @@
 numerical_d4(s, eta)
 }
 \arguments{
-\item{s}{A \code{\link{parameter}} object.}
+\item{s}{A \code{\link[=parameter]{parameter()}} object.}
 
 \item{eta}{A numeric vector of free values.}
 }
 \value{
-A named list keyed as \code{\link{param_tuple_names}(s, 4)}.
+A named list keyed as \code{\link[=param_tuple_names]{param_tuple_names(s, 4)}}.
 }
 \description{
-The order-four analogue of \code{\link{numerical_d3}}: one stencil per
+The order-four analogue of \code{\link[=numerical_d3]{numerical_d3()}}: one stencil per
 component, applied directly to the map. Rounding is amplified by the
 fourth power of the step, so this is accurate to roughly four significant
 digits -- a starting point, and the reason every shipped family carries
@@ -23,7 +23,7 @@ closed forms instead.
 }
 \details{
 The tensor-product stencil is the one written out under
-\code{\link{numerical_d3}}, with the multiplicities summing to four.
+\code{\link[=numerical_d3]{numerical_d3()}}, with the multiplicities summing to four.
 Truncation is of order \eqn{h^{2}} and rounding of order
 \eqn{\varepsilon / h^{4}}, so the attainable accuracy is roughly
 \eqn{\varepsilon^{1/3}}.
@@ -32,5 +32,5 @@ Truncation is of order \eqn{h^{2}} and rounding of order
 numerical_d4(scalar_matrix(2), 0.3)
 }
 \seealso{
-\code{\link{param_d4}}
+\code{\link[=param_d4]{param_d4()}}
 }

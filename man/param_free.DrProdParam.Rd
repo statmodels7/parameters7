@@ -4,7 +4,7 @@
 \alias{param_free.DrProdParam}
 \title{Free Vector of a Scales-Times-Correlation Parameter}
 \arguments{
-\item{s}{A \code{\link{DrProdParam}} object.}
+\item{s}{A \code{\link[=DrProdParam]{DrProdParam()}} object.}
 
 \item{m}{A symmetric positive definite matrix of side \code{s@dimension}.}
 

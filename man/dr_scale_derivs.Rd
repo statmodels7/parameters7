@@ -7,7 +7,7 @@
 dr_scale_derivs(s, eta)
 }
 \arguments{
-\item{s}{A \code{\link{DrProdParam}} object.}
+\item{s}{A \code{\link[=DrProdParam]{DrProdParam()}} object.}
 
 \item{eta}{A numeric vector of length \code{s@n_free}.}
 }

@@ -8,12 +8,12 @@ kron_identity(structure, m)
 }
 \arguments{
 \item{structure}{An object inheriting from
-\code{\link{matrix_parameter}}: the per-block parameter.}
+\code{\link[=matrix_parameter]{matrix_parameter()}}: the per-block parameter.}
 
 \item{m}{The number of blocks, a single integer of at least 1.}
 }
 \value{
-An object of class \code{\link{KronIdentityParam}}.
+An object of class \code{\link[=KronIdentityParam]{KronIdentityParam()}}.
 }
 \description{
 \eqn{M(\eta) = I_m \otimes S(\eta)} for an inner matrix parameter
@@ -44,5 +44,5 @@ param_logdet(s, c(0.1, 0, -0.2))
 
 }
 \seealso{
-\code{\link{log_cholesky}}, \code{\link{diagonal_matrix}}
+\code{\link[=log_cholesky]{log_cholesky()}}, \code{\link[=diagonal_matrix]{diagonal_matrix()}}
 }

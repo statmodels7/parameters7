@@ -7,7 +7,7 @@
 param_free(s, m, ...)
 }
 \arguments{
-\item{s}{An object inheriting from class \code{\link{parameter}}.}
+\item{s}{An object inheriting from class \code{\link[=parameter]{parameter()}}.}
 
 \item{m}{A value of the family's shape: a symmetric matrix on the matrix
 branch, a probability vector or row-stochastic matrix otherwise.}
@@ -38,5 +38,5 @@ param_free(s, param_value(s, eta))
 
 }
 \seealso{
-\code{\link{param_value}}
+\code{\link[=param_value]{param_value()}}
 }

@@ -7,7 +7,7 @@
 param_d3(s, eta, ...)
 }
 \arguments{
-\item{s}{An object inheriting from class \code{\link{parameter}}.}
+\item{s}{An object inheriting from class \code{\link[=parameter]{parameter()}}.}
 
 \item{eta}{A numeric vector of length \code{s@n_free}.}
 
@@ -19,7 +19,7 @@ A named list, keyed as \code{param_tuple_names(s, 3)}.
 \description{
 Returns the distinct third derivatives
 \eqn{\partial^3 V / \partial \eta_k \partial \eta_l \partial \eta_m},
-keyed as \code{\link{param_tuple_names}(s, 3)}, each shaped like the
+keyed as \code{\link[=param_tuple_names]{param_tuple_names(s, 3)}}, each shaped like the
 value.
 }
 \examples{
@@ -27,5 +27,5 @@ param_d3(scalar_matrix(2), 0.3)
 
 }
 \seealso{
-\code{\link{param_d2}}, \code{\link{param_d4}}
+\code{\link[=param_d2]{param_d2()}}, \code{\link[=param_d4]{param_d4()}}
 }

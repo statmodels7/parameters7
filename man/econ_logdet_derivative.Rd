@@ -14,7 +14,7 @@ econ_logdet_derivative(s, eta, order, terms)
 \item{order}{The derivative order, 1 to 4.}
 
 \item{terms}{The affine-logarithm terms of \eqn{q}; see
-\code{\link{log_affine_derivs}}.}
+\code{\link[=log_affine_derivs]{log_affine_derivs()}}.}
 }
 \value{
 A named numeric vector.

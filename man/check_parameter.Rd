@@ -7,7 +7,7 @@
 check_parameter(s, tol = 1e-06, verbose = TRUE)
 }
 \arguments{
-\item{s}{An object inheriting from class \code{\link{parameter}}.}
+\item{s}{An object inheriting from class \code{\link[=parameter]{parameter()}}.}
 
 \item{tol}{The relative tolerance for the comparisons.}
 
@@ -39,14 +39,14 @@ because a count is not scale invariant.
 \item \strong{round trip}: \code{param_free()} recovers the free vector
 from the matrix, where the family implements it.
 \item \strong{first derivatives} against one central difference of
-\code{\link{param_value}}.
+\code{\link[=param_value]{param_value()}}.
 \item \strong{second derivatives} against one central difference of the
 analytic first derivatives.
 \item \strong{log-determinant} against the sum of the logs of the
 eigenvalues the rank keeps.
 \item \strong{log-determinant gradient} against
 \eqn{\mathrm{tr}(M^{+} \partial_k M)}, with the pseudo-inverse formed
-from an eigendecomposition rather than from \code{\link{param_solve}}.
+from an eigendecomposition rather than from \code{\link[=param_solve]{param_solve()}}.
 \item \strong{log-determinant Hessian} against one central difference of
 the analytic gradient.
 \item \strong{solve} against \code{base::solve}, where the family is of
@@ -63,5 +63,5 @@ invisible(check_parameter(scaled_matrix(crossprod(diff(diag(6), differences = 2)
 
 }
 \seealso{
-\code{\link{param_is_numerical}}
+\code{\link[=param_is_numerical]{param_is_numerical()}}
 }

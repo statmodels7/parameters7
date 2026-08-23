@@ -7,9 +7,9 @@
 chol_dfactor(s, l, ks)
 }
 \arguments{
-\item{s}{A \code{\link{LogCholeskyParam}} object.}
+\item{s}{A \code{\link[=LogCholeskyParam]{LogCholeskyParam()}} object.}
 
-\item{l}{The factor at the point, from \code{\link{chol_assemble}}.}
+\item{l}{The factor at the point, from \code{\link[=chol_assemble]{chol_assemble()}}.}
 
 \item{ks}{A multiset of free-value indices, possibly empty; the empty one
 gives \eqn{L} itself.}
@@ -26,9 +26,9 @@ A free value below the diagonal enters \eqn{L} linearly, so its second
 derivative vanishes; a diagonal one enters through its exponential, so
 every repeated derivative in that same value regenerates
 \eqn{L_{ii} E_{ii}}. Everything else is zero, which is what makes the
-Leibniz sum of \code{\link{chol_leibniz}} short.
+Leibniz sum of \code{\link[=chol_leibniz]{chol_leibniz()}} short.
 }
 \seealso{
-\code{\link{chol_leibniz}}, \code{\link{leibniz_gram}}
+\code{\link[=chol_leibniz]{chol_leibniz()}}, \code{\link[=leibniz_gram]{leibniz_gram()}}
 }
 \keyword{internal}

@@ -7,13 +7,13 @@ NULL
 #' @description
 #' The S7 class of row-stochastic matrices, each row on the open simplex in
 #' the additive log-ratio parametrization. Constructed by
-#' \code{\link{transition_matrix}}.
+#' [transition_matrix()].
 #'
 #' @inheritParams parameter
 #'
-#' @return An object of class \code{TransitionMatrixParam}.
+#' @return An object of class `TransitionMatrixParam`.
 #'
-#' @seealso \code{\link{transition_matrix}}
+#' @seealso [transition_matrix()]
 #'
 #' @examples
 #' S7::S7_inherits(transition_matrix(3), TransitionMatrixParam)
@@ -27,7 +27,7 @@ TransitionMatrixParam <- S7::new_class("TransitionMatrixParam", parent = paramet
 #' @description
 #' A \eqn{K \times K} row-stochastic matrix -- the transition matrix of a
 #' Markov chain on \eqn{K} states -- with each row an independent
-#' \code{\link{simplex}} in the additive log-ratio chart, so
+#' [simplex()] in the additive log-ratio chart, so
 #' \eqn{K(K-1)} free values in all.
 #'
 #' @details
@@ -44,9 +44,9 @@ TransitionMatrixParam <- S7::new_class("TransitionMatrixParam", parent = paramet
 #'
 #' @param n_state The number of states \eqn{K}, at least 2.
 #'
-#' @return An object of class \code{\link{TransitionMatrixParam}}.
+#' @return An object of class [TransitionMatrixParam()].
 #'
-#' @seealso \code{\link{simplex}}
+#' @seealso [simplex()]
 #'
 #' @examples
 #' s <- transition_matrix(3)
@@ -78,9 +78,9 @@ transition_matrix <- function(n_state) {
 #' The row each free value belongs to and its position inside that row's
 #' chart, in the order the free vector uses.
 #'
-#' @param s A \code{\link{TransitionMatrixParam}} object.
+#' @param s A [TransitionMatrixParam()] object.
 #'
-#' @return A list with integer vectors \code{row} and \code{coord}.
+#' @return A list with integer vectors `row` and `coord`.
 #'
 #' @keywords internal
 tm_positions <- function(s) {
@@ -95,7 +95,7 @@ tm_positions <- function(s) {
 #' @title Value of a Transition Matrix Parameter
 #' @name param_value.TransitionMatrixParam
 #' @description Each row is the softmax of its own free values.
-#' @param s A \code{\link{TransitionMatrixParam}} object.
+#' @param s A [TransitionMatrixParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A \eqn{K \times K} row-stochastic matrix.
@@ -118,7 +118,7 @@ S7::method(param_value, TransitionMatrixParam) <- function(s, eta, ...) {
 #' @description
 #' The additive log-ratio of each row, exact; rejected when any row is outside
 #' the open simplex or fails to sum to one.
-#' @param s A \code{\link{TransitionMatrixParam}} object.
+#' @param s A [TransitionMatrixParam()] object.
 #' @param m A \eqn{K \times K} row-stochastic matrix.
 #' @param ... Unused.
 #' @return A named numeric vector of free values.
@@ -153,7 +153,7 @@ S7::method(param_free, TransitionMatrixParam) <- function(s, m, ...) {
 #' component whose free values span two rows is zero, and one inside a row
 #' embeds that row's simplex component.
 #'
-#' @param s A \code{\link{TransitionMatrixParam}} object.
+#' @param s A [TransitionMatrixParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param order The derivative order, 1 to 4.
 #'
@@ -197,8 +197,8 @@ tm_derivative <- function(s, eta, order) {
 
 #' @title First Derivatives of a Transition Matrix Parameter
 #' @name param_d1.TransitionMatrixParam
-#' @description Closed form, row by row; see \code{\link{tm_derivative}}.
-#' @param s A \code{\link{TransitionMatrixParam}} object.
+#' @description Closed form, row by row; see [tm_derivative()].
+#' @param s A [TransitionMatrixParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named list of matrices.
@@ -210,7 +210,7 @@ S7::method(param_d1, TransitionMatrixParam) <- function(s, eta, ...) {
 #' @title Second Derivatives of a Transition Matrix Parameter
 #' @name param_d2.TransitionMatrixParam
 #' @description Closed form, row by row.
-#' @param s A \code{\link{TransitionMatrixParam}} object.
+#' @param s A [TransitionMatrixParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named list of matrices.
@@ -222,7 +222,7 @@ S7::method(param_d2, TransitionMatrixParam) <- function(s, eta, ...) {
 #' @title Third Derivatives of a Transition Matrix Parameter
 #' @name param_d3.TransitionMatrixParam
 #' @description Closed form, row by row.
-#' @param s A \code{\link{TransitionMatrixParam}} object.
+#' @param s A [TransitionMatrixParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named list of matrices.
@@ -234,7 +234,7 @@ S7::method(param_d3, TransitionMatrixParam) <- function(s, eta, ...) {
 #' @title Fourth Derivatives of a Transition Matrix Parameter
 #' @name param_d4.TransitionMatrixParam
 #' @description Closed form, row by row.
-#' @param s A \code{\link{TransitionMatrixParam}} object.
+#' @param s A [TransitionMatrixParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named list of matrices.

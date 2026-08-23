@@ -10,12 +10,12 @@ transition_matrix(n_state)
 \item{n_state}{The number of states \eqn{K}, at least 2.}
 }
 \value{
-An object of class \code{\link{TransitionMatrixParam}}.
+An object of class \code{\link[=TransitionMatrixParam]{TransitionMatrixParam()}}.
 }
 \description{
 A \eqn{K \times K} row-stochastic matrix -- the transition matrix of a
 Markov chain on \eqn{K} states -- with each row an independent
-\code{\link{simplex}} in the additive log-ratio chart, so
+\code{\link[=simplex]{simplex()}} in the additive log-ratio chart, so
 \eqn{K(K-1)} free values in all.
 }
 \details{
@@ -37,5 +37,5 @@ rowSums(param_value(s, eta))
 
 }
 \seealso{
-\code{\link{simplex}}
+\code{\link[=simplex]{simplex()}}
 }

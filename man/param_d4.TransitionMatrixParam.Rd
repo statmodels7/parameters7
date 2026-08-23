@@ -4,7 +4,7 @@
 \alias{param_d4.TransitionMatrixParam}
 \title{Fourth Derivatives of a Transition Matrix Parameter}
 \arguments{
-\item{s}{A \code{\link{TransitionMatrixParam}} object.}
+\item{s}{A \code{\link[=TransitionMatrixParam]{TransitionMatrixParam()}} object.}
 
 \item{eta}{A numeric vector of free values.}
 

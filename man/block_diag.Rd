@@ -8,7 +8,7 @@ block_diag(..., role = NULL)
 }
 \arguments{
 \item{...}{Two or more objects inheriting from
-\code{\link{matrix_parameter}}, or a single list of them. Named arguments
+\code{\link[=matrix_parameter]{matrix_parameter()}}, or a single list of them. Named arguments
 supply the block labels.}
 
 \item{role}{One of \code{"covariance"}, \code{"precision"} or
@@ -16,7 +16,7 @@ supply the block labels.}
 \code{"either"} when they disagree.}
 }
 \value{
-An object of class \code{\link{BlockDiagParam}}.
+An object of class \code{\link[=BlockDiagParam]{BlockDiagParam()}}.
 }
 \description{
 \eqn{M(\eta) = \mathrm{diag}(S_1(\eta_1), \ldots, S_B(\eta_B))} for matrix
@@ -27,7 +27,7 @@ distinct families, each governed by its own stretch of the free vector.
 This is the covariance (or precision) of several independent groups of
 coefficients whose structures differ, which is what a model carrying more
 than one random-effect term needs. It differs from
-\code{\link{kron_identity}}, where the blocks are identical and share one
+\code{\link[=kron_identity]{kron_identity()}}, where the blocks are identical and share one
 free vector; here the free vectors are concatenated, so the composite has
 \eqn{\sum_b d_b} free values.
 
@@ -55,5 +55,5 @@ param_logdet(s, c(0, 0, 0, 0, 0))
 
 }
 \seealso{
-\code{\link{kron_identity}}, \code{\link{log_cholesky}}
+\code{\link[=kron_identity]{kron_identity()}}, \code{\link[=log_cholesky]{log_cholesky()}}
 }

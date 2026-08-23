@@ -7,9 +7,9 @@
 ar1_pattern(s, sc)
 }
 \arguments{
-\item{s}{An \code{\link{Ar1Param}} object.}
+\item{s}{An \code{\link[=Ar1Param]{Ar1Param()}} object.}
 
-\item{sc}{The scalars of \code{\link{econ_scalars}}.}
+\item{sc}{The scalars of \code{\link[=econ_scalars]{econ_scalars()}}.}
 }
 \value{
 A list of five matrices.

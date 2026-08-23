@@ -7,7 +7,7 @@
 cs_logdet_terms(s)
 }
 \arguments{
-\item{s}{A \code{\link{CompoundSymmetryParam}} object.}
+\item{s}{A \code{\link[=CompoundSymmetryParam]{CompoundSymmetryParam()}} object.}
 }
 \value{
 A list of numeric triples.

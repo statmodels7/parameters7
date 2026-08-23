@@ -38,12 +38,12 @@ An object of class \code{TransitionMatrixParam}.
 \description{
 The S7 class of row-stochastic matrices, each row on the open simplex in
 the additive log-ratio parametrization. Constructed by
-\code{\link{transition_matrix}}.
+\code{\link[=transition_matrix]{transition_matrix()}}.
 }
 \examples{
 S7::S7_inherits(transition_matrix(3), TransitionMatrixParam)
 
 }
 \seealso{
-\code{\link{transition_matrix}}
+\code{\link[=transition_matrix]{transition_matrix()}}
 }

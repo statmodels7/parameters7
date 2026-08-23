@@ -6,13 +6,13 @@ NULL
 #' @description
 #' The S7 class of a covariance written as \eqn{D R D} for a diagonal matrix
 #' of positive scales and a correlation matrix. Constructed by
-#' \code{\link{dr_prod}}.
+#' [dr_prod()].
 #'
 #' @inheritParams matrix_parameter
 #'
-#' @return An object of class \code{DrProdParam}.
+#' @return An object of class `DrProdParam`.
 #'
-#' @seealso \code{\link{dr_prod}}
+#' @seealso [dr_prod()]
 #'
 #' @examples
 #' S7::S7_inherits(dr_prod(3), DrProdParam)
@@ -57,18 +57,18 @@ DrProdParam <- S7::new_class("DrProdParam", parent = matrix_parameter)
 #' properties of the family rather than of a point.
 #'
 #' @param dimension The side \eqn{p} of the matrix, at least 2.
-#' @param correlation A \code{\link{matrix_parameter}} of side
-#'   \code{dimension} producing correlation matrices. Defaults to
-#'   \code{\link{correlation_matrix}(dimension)}.
+#' @param correlation A [matrix_parameter()] of side
+#'   `dimension` producing correlation matrices. Defaults to
+#'   [`correlation_matrix(dimension)`][correlation_matrix].
 #' @param link The positive link carrying each standard deviation onto the
-#'   free scale. Defaults to \code{\link[linkfunctions7]{log_link}()}.
-#' @param role One of \code{"covariance"}, \code{"precision"} or
-#'   \code{"either"}.
+#'   free scale. Defaults to [linkfunctions7::log_link()].
+#' @param role One of `"covariance"`, `"precision"` or
+#'   `"either"`.
 #'
-#' @return An object of class \code{\link{DrProdParam}}.
+#' @return An object of class [DrProdParam()].
 #'
-#' @seealso \code{\link{correlation_matrix}}, \code{\link{log_cholesky}},
-#'   \code{\link{block_diag}}
+#' @seealso [correlation_matrix()], [log_cholesky()],
+#'   [block_diag()]
 #'
 #' @examples
 #' s <- dr_prod(3)
@@ -129,10 +129,10 @@ dr_prod <- function(dimension, correlation = NULL,
 #' Returns \eqn{d_j} and its first four derivatives in the free value that
 #' carries it, as a matrix with one row per order.
 #'
-#' @param s A \code{\link{DrProdParam}} object.
-#' @param eta A numeric vector of length \code{s@n_free}.
+#' @param s A [DrProdParam()] object.
+#' @param eta A numeric vector of length `s@n_free`.
 #'
-#' @return A 5 by \code{p} numeric matrix, rows being orders 0 to 4.
+#' @return A 5 by `p` numeric matrix, rows being orders 0 to 4.
 #'
 #' @keywords internal
 dr_scale_derivs <- function(s, eta) {
@@ -153,12 +153,12 @@ dr_scale_derivs <- function(s, eta) {
 #' contains an index other than \eqn{i} or \eqn{j}, so the result is supported
 #' on the rows and columns those indices name.
 #'
-#' @param sd A 5 by \code{p} matrix of inverse-link derivatives, as returned by
-#'   \code{\link{dr_scale_derivs}}.
+#' @param sd A 5 by `p` matrix of inverse-link derivatives, as returned by
+#'   [dr_scale_derivs()].
 #' @param tuple An integer vector of scale indices, possibly empty and possibly
 #'   with repeats.
 #'
-#' @return A \code{p} by \code{p} numeric matrix.
+#' @return A `p` by `p` numeric matrix.
 #'
 #' @keywords internal
 dr_scale_factor <- function(sd, tuple) {
@@ -193,11 +193,11 @@ dr_scale_factor <- function(sd, tuple) {
 #' Multiplies the scale factor by the correlation's own component, elementwise,
 #' for every tuple of the composite's enumeration.
 #'
-#' @param s A \code{\link{DrProdParam}} object.
-#' @param eta A numeric vector of length \code{s@n_free}.
+#' @param s A [DrProdParam()] object.
+#' @param eta A numeric vector of length `s@n_free`.
 #' @param order The derivative order, 1 to 4.
 #'
-#' @return A named list of matrices keyed as \code{param_tuple_names(s, order)}.
+#' @return A named list of matrices keyed as `param_tuple_names(s, order)`.
 #'
 #' @keywords internal
 dr_prod_derivs <- function(s, eta, order) {
@@ -238,11 +238,11 @@ dr_prod_derivs <- function(s, eta, order) {
 #' the correlation's own when every index is a correlation coordinate, and zero
 #' otherwise.
 #'
-#' @param s A \code{\link{DrProdParam}} object.
-#' @param eta A numeric vector of length \code{s@n_free}.
+#' @param s A [DrProdParam()] object.
+#' @param eta A numeric vector of length `s@n_free`.
 #' @param order The derivative order, 1 to 4.
 #'
-#' @return A named numeric vector keyed as \code{param_tuple_names(s, order)}.
+#' @return A named numeric vector keyed as `param_tuple_names(s, order)`.
 #'
 #' @keywords internal
 dr_prod_logdet_derivs <- function(s, eta, order) {
@@ -276,10 +276,10 @@ dr_prod_logdet_derivs <- function(s, eta, order) {
 #' @title Value of a Scales-Times-Correlation Parameter
 #' @name param_value.DrProdParam
 #' @description Forms \eqn{D R D} from the scales and the correlation block.
-#' @param s A \code{\link{DrProdParam}} object.
-#' @param eta A numeric vector of length \code{s@n_free}.
+#' @param s A [DrProdParam()] object.
+#' @param eta A numeric vector of length `s@n_free`.
 #' @param ... Unused.
-#' @return A symmetric matrix of side \code{s@dimension}.
+#' @return A symmetric matrix of side `s@dimension`.
 #' @keywords internal
 S7::method(param_value, DrProdParam) <- function(s, eta, ...) {
   d <- .dr_scales(s, eta)
@@ -291,10 +291,10 @@ S7::method(param_value, DrProdParam) <- function(s, eta, ...) {
 #' @description
 #' Reads the standard deviations off the diagonal, divides them out, and hands
 #' the resulting correlation matrix to the correlation block.
-#' @param s A \code{\link{DrProdParam}} object.
-#' @param m A symmetric positive definite matrix of side \code{s@dimension}.
+#' @param s A [DrProdParam()] object.
+#' @param m A symmetric positive definite matrix of side `s@dimension`.
 #' @param ... Unused.
-#' @return A numeric vector of length \code{s@n_free}.
+#' @return A numeric vector of length `s@n_free`.
 #' @keywords internal
 S7::method(param_free, DrProdParam) <- function(s, m, ...) {
   dg <- diag(m)
@@ -312,8 +312,8 @@ S7::method(param_free, DrProdParam) <- function(s, m, ...) {
 #' @description
 #' Each component is the scale factor times the correlation's own component,
 #' elementwise, the two groups of free values being disjoint.
-#' @param s A \code{\link{DrProdParam}} object.
-#' @param eta A numeric vector of length \code{s@n_free}.
+#' @param s A [DrProdParam()] object.
+#' @param eta A numeric vector of length `s@n_free`.
 #' @param ... Unused.
 #' @return A named list of symmetric matrices.
 #' @keywords internal
@@ -347,8 +347,8 @@ S7::method(param_d4, DrProdParam) <- function(s, eta, ...) {
 #' @description
 #' \eqn{2\sum_j \log d_j + \log\lvert R \rvert}, the scales contributing twice
 #' because they multiply on both sides.
-#' @param s A \code{\link{DrProdParam}} object.
-#' @param eta A numeric vector of length \code{s@n_free}.
+#' @param s A [DrProdParam()] object.
+#' @param eta A numeric vector of length `s@n_free`.
 #' @param ... Unused.
 #' @return A single number.
 #' @keywords internal
@@ -362,8 +362,8 @@ S7::method(param_logdet, DrProdParam) <- function(s, eta, ...) {
 #' @description
 #' Separable in the scales and separable from the correlation, so a component
 #' mixing two scales, or a scale with a correlation, is exactly zero.
-#' @param s A \code{\link{DrProdParam}} object.
-#' @param eta A numeric vector of length \code{s@n_free}.
+#' @param s A [DrProdParam()] object.
+#' @param eta A numeric vector of length `s@n_free`.
 #' @param ... Unused.
 #' @return A named numeric vector.
 #' @keywords internal
@@ -398,9 +398,9 @@ S7::method(param_d4logdet, DrProdParam) <- function(s, eta, ...) {
 #' \eqn{\Sigma^{-1} = D^{-1} R^{-1} D^{-1}} and \eqn{\Sigma = (DL)(DL)'} for
 #' \eqn{L} the correlation's factor, so both come from the correlation block
 #' with a scaling on either side.
-#' @param s A \code{\link{DrProdParam}} object.
-#' @param eta A numeric vector of length \code{s@n_free}.
-#' @param b A matrix with \code{s@dimension} rows, or \code{NULL}.
+#' @param s A [DrProdParam()] object.
+#' @param eta A numeric vector of length `s@n_free`.
+#' @param b A matrix with `s@dimension` rows, or `NULL`.
 #' @param ... Unused.
 #' @return A matrix.
 #' @keywords internal

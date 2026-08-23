@@ -6,13 +6,13 @@ NULL
 #'
 #' @description
 #' The S7 class of correlation matrices in the spherical parametrization.
-#' Constructed by \code{\link{correlation_matrix}}.
+#' Constructed by [correlation_matrix()].
 #'
 #' @inheritParams matrix_parameter
 #'
-#' @return An object of class \code{CorrelationParam}.
+#' @return An object of class `CorrelationParam`.
 #'
-#' @seealso \code{\link{correlation_matrix}}
+#' @seealso [correlation_matrix()]
 #'
 #' @examples
 #' S7::S7_inherits(correlation_matrix(3), CorrelationParam)
@@ -39,14 +39,14 @@ CorrelationParam <- S7::new_class("CorrelationParam", parent = matrix_parameter)
 #' positive definite for every value of the angles because \eqn{L} is
 #' triangular with a positive diagonal. The construction is that of Rapisarda,
 #' Brigo and Mercurio (2007), and the free values are the angles carried onto
-#' \eqn{\mathbb{R}} by \code{\link[linkfunctions7]{bounded_link}}, so
+#' \eqn{\mathbb{R}} by [linkfunctions7::bounded_link()], so
 #' there is nothing to constrain and no boundary to reach.
 #'
 #' Derivatives follow from the same Leibniz rule the log-Cholesky family uses,
 #' since \eqn{R} is again a Gram product; what changes is the factor, whose
 #' entries are products of sines and cosines of angles that each depend on one
 #' free value. The rows of \eqn{L} are independent, so a derivative of the
-#' \emph{factor} in free values from two different rows vanishes. The same is
+#' *factor* in free values from two different rows vanishes. The same is
 #' not true of \eqn{R}: its entry \eqn{(i, j)} is the inner product of rows
 #' \eqn{i} and \eqn{j} of \eqn{L}, so a second derivative across those two
 #' rows need not vanish. What holds instead is that such a component is
@@ -55,7 +55,7 @@ CorrelationParam <- S7::new_class("CorrelationParam", parent = matrix_parameter)
 #' columns the two rows share.
 #'
 #' The free vector runs row by row, and the names \code{z\{i\}.\{j\}} say which
-#' row and which angle, the row.column convention \code{\link{log_cholesky}}
+#' row and which angle, the row.column convention [log_cholesky()]
 #' already uses. The ordering is part of the contract: every consumer builds
 #' its parameter tables from these names.
 #'
@@ -65,17 +65,17 @@ CorrelationParam <- S7::new_class("CorrelationParam", parent = matrix_parameter)
 #' of its own.
 #'
 #' @param dimension The side \eqn{p} of the matrix.
-#' @param role A label; see \code{\link{log_cholesky}}.
+#' @param role A label; see [log_cholesky()].
 #'
-#' @return An object of class \code{\link{CorrelationParam}}.
+#' @return An object of class [CorrelationParam()].
 #'
 #' @references
 #' Rapisarda, F., Brigo, D. and Mercurio, F. (2007). Parameterizing
-#' correlations: a geometric interpretation. \emph{IMA Journal of Management
-#' Mathematics} 18, 55-73.
+#' correlations: a geometric interpretation. *IMA Journal of Management
+#' Mathematics* 18, 55-73.
 #'
-#' @seealso \code{\link{log_cholesky}}, \code{\link{compound_symmetry}},
-#'   \code{\link{ar1}}
+#' @seealso [log_cholesky()], [compound_symmetry()],
+#'   [ar1()]
 #'
 #' @examples
 #' s <- correlation_matrix(3)
@@ -131,12 +131,12 @@ correlation_matrix <- function(dimension, role = c("either", "covariance", "prec
 #' derivative machinery the family needs: an entry of \eqn{L} is a product of
 #' such factors, and differentiating it replaces each factor by the derivative
 #' of the matching order. The composition of the trigonometric function with
-#' the link is done by \code{\link{compose4}}.
+#' the link is done by [compose4()].
 #'
-#' @param s A \code{\link{CorrelationParam}} object.
+#' @param s A [CorrelationParam()] object.
 #' @param eta A numeric vector of free values.
 #'
-#' @return A list with \code{sin} and \code{cos}, each a list indexed by free
+#' @return A list with `sin` and `cos`, each a list indexed by free
 #'   value holding five numbers: the value and four derivatives.
 #'
 #' @keywords internal
@@ -167,18 +167,18 @@ corr_tables <- function(s, eta) {
 #'
 #' @description
 #' Returns \eqn{\partial^S L} for a multiset \eqn{S} of free-value indices, or
-#' \code{NULL} when that derivative is identically zero.
+#' `NULL` when that derivative is identically zero.
 #'
 #' @details
 #' An entry of \eqn{L} depends only on the angles of its own row, so a
 #' multiset spanning two rows gives zero; within a row, an entry gives zero
 #' unless every differentiated angle appears among its factors.
 #'
-#' @param s A \code{\link{CorrelationParam}} object.
-#' @param tb The tables of \code{\link{corr_tables}}.
+#' @param s A [CorrelationParam()] object.
+#' @param tb The tables of [corr_tables()].
 #' @param ks A multiset of free-value indices, possibly empty.
 #'
-#' @return A numeric matrix, or \code{NULL}.
+#' @return A numeric matrix, or `NULL`.
 #'
 #' @keywords internal
 corr_dfactor <- function(s, tb, ks) {
@@ -234,7 +234,7 @@ corr_dfactor <- function(s, tb, ks) {
 #' @title Value of a Correlation Parameter
 #' @name param_value.CorrelationParam
 #' @description \eqn{R = LL^\top}, with \eqn{L} assembled from the angles.
-#' @param s A \code{\link{CorrelationParam}} object.
+#' @param s A [CorrelationParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A correlation matrix.
@@ -253,7 +253,7 @@ S7::method(param_value, CorrelationParam) <- function(s, eta, ...) {
 #' @title Factor of a Correlation Parameter
 #' @name param_factor.CorrelationParam
 #' @description The factor is the parametrization, so it needs no computing.
-#' @param s A \code{\link{CorrelationParam}} object.
+#' @param s A [CorrelationParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A lower triangular numeric matrix.
@@ -270,7 +270,7 @@ S7::method(param_factor, CorrelationParam) <- function(s, eta, ...) {
 #' arc cosine of \eqn{L_{i1}}, and each subsequent angle divides out the sines
 #' already recovered. A matrix that is not a correlation matrix, or one whose
 #' factor reaches an angle of \eqn{0} or \eqn{\pi}, is rejected.
-#' @param s A \code{\link{CorrelationParam}} object.
+#' @param s A [CorrelationParam()] object.
 #' @param m A correlation matrix.
 #' @param ... Unused.
 #' @return A named numeric vector of free values.
@@ -320,7 +320,7 @@ S7::method(param_free, CorrelationParam) <- function(s, m, ...) {
 #' @description
 #' Assembles one derivative order by the Leibniz rule on \eqn{R = LL^\top}.
 #'
-#' @param s A \code{\link{CorrelationParam}} object.
+#' @param s A [CorrelationParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param order The derivative order, 1 to 4.
 #'
@@ -343,7 +343,7 @@ corr_derivative <- function(s, eta, order) {
 #' @description
 #' Closed form by the Leibniz rule on \eqn{R = LL^\top}, the factor's
 #' derivatives coming from the trigonometric tables of the angles.
-#' @param s A \code{\link{CorrelationParam}} object.
+#' @param s A [CorrelationParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named list of symmetric matrices with a zero diagonal, the
@@ -355,8 +355,8 @@ S7::method(param_d1, CorrelationParam) <- function(s, eta, ...) {
 
 #' @title Second Derivatives of a Correlation Parameter
 #' @name param_d2.CorrelationParam
-#' @description Closed form; see \code{\link{param_d1.CorrelationParam}}.
-#' @param s A \code{\link{CorrelationParam}} object.
+#' @description Closed form; see [param_d1.CorrelationParam()].
+#' @param s A [CorrelationParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named list of symmetric matrices.
@@ -367,8 +367,8 @@ S7::method(param_d2, CorrelationParam) <- function(s, eta, ...) {
 
 #' @title Third Derivatives of a Correlation Parameter
 #' @name param_d3.CorrelationParam
-#' @description Closed form; see \code{\link{param_d1.CorrelationParam}}.
-#' @param s A \code{\link{CorrelationParam}} object.
+#' @description Closed form; see [param_d1.CorrelationParam()].
+#' @param s A [CorrelationParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named list of symmetric matrices.
@@ -379,8 +379,8 @@ S7::method(param_d3, CorrelationParam) <- function(s, eta, ...) {
 
 #' @title Fourth Derivatives of a Correlation Parameter
 #' @name param_d4.CorrelationParam
-#' @description Closed form; see \code{\link{param_d1.CorrelationParam}}.
-#' @param s A \code{\link{CorrelationParam}} object.
+#' @description Closed form; see [param_d1.CorrelationParam()].
+#' @param s A [CorrelationParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named list of symmetric matrices.
@@ -401,10 +401,10 @@ S7::method(param_d4, CorrelationParam) <- function(s, eta, ...) {
 #' \deqn{\log\lvert R \rvert = 2 \sum_{i,k} \log \sin\theta_{ik},}
 #' a sum with one term per free value. The log-determinant is therefore
 #' separable, every mixed derivative is exactly zero, and each pure one is the
-#' logarithm composed with the sine table \code{\link{corr_tables}} already
+#' logarithm composed with the sine table [corr_tables()] already
 #' holds.
 #'
-#' @param s A \code{\link{CorrelationParam}} object.
+#' @param s A [CorrelationParam()] object.
 #' @param eta A numeric vector of free values.
 #'
 #' @return A list with one element per free value, each a list of four
@@ -429,7 +429,7 @@ corr_logdet_chains <- function(s, eta) {
 #' Closed form: twice the sum of the logarithms of the sines of the angles,
 #' the factor being triangular with those products on its diagonal. No
 #' factorization and no determinant is computed.
-#' @param s A \code{\link{CorrelationParam}} object.
+#' @param s A [CorrelationParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A single number.
@@ -447,7 +447,7 @@ S7::method(param_logdet, CorrelationParam) <- function(s, eta, ...) {
 #' Assembles one derivative order of the log-determinant from the per-angle
 #' chains, every mixed component being exactly zero.
 #'
-#' @param s A \code{\link{CorrelationParam}} object.
+#' @param s A [CorrelationParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param order The derivative order, 1 to 4.
 #'
@@ -473,7 +473,7 @@ corr_logdet_derivative <- function(s, eta, order) {
 #' Closed form at every order. The log-determinant is a sum with one term per
 #' angle, so it is separable: every mixed component is exactly zero and each
 #' pure one is a logarithm composed with that angle's sine.
-#' @param s A \code{\link{CorrelationParam}} object.
+#' @param s A [CorrelationParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param ... Unused.
 #' @return A named numeric vector.

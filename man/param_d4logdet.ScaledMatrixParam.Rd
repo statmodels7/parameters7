@@ -4,7 +4,7 @@
 \alias{param_d4logdet.ScaledMatrixParam}
 \title{Fourth Log-Determinant Derivatives of a Scaled Parameter}
 \arguments{
-\item{s}{A \code{\link{ScaledMatrixParam}} object.}
+\item{s}{A \code{\link[=ScaledMatrixParam]{ScaledMatrixParam()}} object.}
 
 \item{eta}{A numeric vector with one free value.}
 
@@ -14,6 +14,6 @@
 A named numeric vector with one entry.
 }
 \description{
-Closed form; see \code{\link{param_d3logdet.ScaledMatrixParam}}.
+Closed form; see \code{\link[=param_d3logdet.ScaledMatrixParam]{param_d3logdet.ScaledMatrixParam()}}.
 }
 \keyword{internal}

@@ -4,7 +4,7 @@
 \alias{param_free.AutoregressiveParam}
 \title{Free Vector of an Autoregressive Parameter}
 \arguments{
-\item{s}{An \code{\link{AutoregressiveParam}} object.}
+\item{s}{An \code{\link[=AutoregressiveParam]{AutoregressiveParam()}} object.}
 
 \item{m}{A covariance matrix of a stationary autoregression.}
 

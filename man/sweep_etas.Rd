@@ -7,7 +7,7 @@
 sweep_etas(s, n = 4L)
 }
 \arguments{
-\item{s}{A \code{\link{parameter}} object.}
+\item{s}{A \code{\link[=parameter]{parameter()}} object.}
 
 \item{n}{The number of random vectors.}
 }

@@ -7,7 +7,7 @@
 .chol_leibniz_r(s, eta, order)
 }
 \arguments{
-\item{s}{A \code{\link{LogCholeskyParam}} object.}
+\item{s}{A \code{\link[=LogCholeskyParam]{LogCholeskyParam()}} object.}
 
 \item{eta}{A numeric vector of free values.}
 
@@ -18,7 +18,7 @@ A named list of symmetric matrices.
 }
 \description{
 The same components as \code{chol_leibniz_cpp}, built through the dense
-products of \code{\link{leibniz_gram}}. It is not the production route:
+products of \code{\link[=leibniz_gram]{leibniz_gram()}}. It is not the production route:
 the compiled kernel exploits that every derivative of the factor is a
 single-entry matrix, so each Leibniz term is one row, one column or one
 cell, and at \eqn{p = 8}, order 4, it measured four orders of magnitude

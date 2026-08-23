@@ -7,7 +7,7 @@
 \alias{param_d4logdet.CompoundSymmetryParam}
 \title{Log-Determinant Derivatives of a Compound Symmetry Parameter}
 \arguments{
-\item{s}{A \code{\link{CompoundSymmetryParam}} object.}
+\item{s}{A \code{\link[=CompoundSymmetryParam]{CompoundSymmetryParam()}} object.}
 
 \item{eta}{A numeric vector of two free values.}
 

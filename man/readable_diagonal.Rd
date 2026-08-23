@@ -20,7 +20,7 @@ on.}
 \item{label}{A single string naming the group.}
 }
 \value{
-A list as described in \code{\link{param_readable}}.
+A list as described in \code{\link[=param_readable]{param_readable()}}.
 }
 \description{
 Assembles the declaration of a family whose quantities are one scalar link

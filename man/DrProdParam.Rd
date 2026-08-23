@@ -40,12 +40,12 @@ An object of class \code{DrProdParam}.
 \description{
 The S7 class of a covariance written as \eqn{D R D} for a diagonal matrix
 of positive scales and a correlation matrix. Constructed by
-\code{\link{dr_prod}}.
+\code{\link[=dr_prod]{dr_prod()}}.
 }
 \examples{
 S7::S7_inherits(dr_prod(3), DrProdParam)
 
 }
 \seealso{
-\code{\link{dr_prod}}
+\code{\link[=dr_prod]{dr_prod()}}
 }

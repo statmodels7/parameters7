@@ -4,7 +4,7 @@
 \alias{param_d3logdet.ScaledMatrixParam}
 \title{Higher Log-Determinant Derivatives of a Scaled Parameter}
 \arguments{
-\item{s}{A \code{\link{ScaledMatrixParam}} object.}
+\item{s}{A \code{\link[=ScaledMatrixParam]{ScaledMatrixParam()}} object.}
 
 \item{eta}{A numeric vector with one free value.}
 

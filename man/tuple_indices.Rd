@@ -15,11 +15,11 @@ tuple_indices(d, order = 2L)
 A list of integer vectors of length \code{order}.
 }
 \description{
-The enumeration behind \code{\link{param_tuple_indices}}, taken over a
+The enumeration behind \code{\link[=param_tuple_indices]{param_tuple_indices()}}, taken over a
 number of variables rather than over a parameter, so that anything holding
 derivatives over \eqn{d} variables -- a jet, for instance -- can share it.
 }
 \seealso{
-\code{\link{param_tuple_indices}}
+\code{\link[=param_tuple_indices]{param_tuple_indices()}}
 }
 \keyword{internal}

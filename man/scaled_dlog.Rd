@@ -7,7 +7,7 @@
 scaled_dlog(s, eta, order)
 }
 \arguments{
-\item{s}{A \code{\link{ScaledMatrixParam}} object.}
+\item{s}{A \code{\link[=ScaledMatrixParam]{ScaledMatrixParam()}} object.}
 
 \item{eta}{A numeric vector of one free value.}
 
@@ -15,7 +15,7 @@ scaled_dlog(s, eta, order)
 }
 \value{
 A named numeric vector of length one, keyed by
-\code{\link{param_tuple_names}(s, order)}.
+\code{\link[=param_tuple_names]{param_tuple_names(s, order)}}.
 }
 \description{
 The derivative components of orders two to four of
@@ -24,10 +24,10 @@ The derivative components of orders two to four of
 \details{
 The constant contributes nothing beyond order zero, so every component is
 the rank times the corresponding derivative of \eqn{\log\lambda}, which is
-Faa di Bruno's chain for the logarithm as in \code{\link{diag_dlog}}. With
+Faa di Bruno's chain for the logarithm as in \code{\link[=diag_dlog]{diag_dlog()}}. With
 one free value there is exactly one component per order.
 }
 \seealso{
-\code{\link{scaled_matrix}}, \code{\link{diag_dlog}}
+\code{\link[=scaled_matrix]{scaled_matrix()}}, \code{\link[=diag_dlog]{diag_dlog()}}
 }
 \keyword{internal}

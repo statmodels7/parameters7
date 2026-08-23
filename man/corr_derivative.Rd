@@ -7,7 +7,7 @@
 corr_derivative(s, eta, order)
 }
 \arguments{
-\item{s}{A \code{\link{CorrelationParam}} object.}
+\item{s}{A \code{\link[=CorrelationParam]{CorrelationParam()}} object.}
 
 \item{eta}{A numeric vector of free values.}
 

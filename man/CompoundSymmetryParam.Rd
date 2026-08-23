@@ -39,12 +39,12 @@ An object of class \code{CompoundSymmetryParam}.
 }
 \description{
 The S7 class of compound-symmetric covariance matrices: equal variances and
-one common correlation. Constructed by \code{\link{compound_symmetry}}.
+one common correlation. Constructed by \code{\link[=compound_symmetry]{compound_symmetry()}}.
 }
 \examples{
 S7::S7_inherits(compound_symmetry(3), CompoundSymmetryParam)
 
 }
 \seealso{
-\code{\link{compound_symmetry}}
+\code{\link[=compound_symmetry]{compound_symmetry()}}
 }

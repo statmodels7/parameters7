@@ -16,10 +16,10 @@ scalar_matrix(
 \item{link}{A \pkg{linkfunctions7} link mapping the free scale to the
 positive scale. Defaults to \code{linkfunctions7::log_link()}.}
 
-\item{role}{A label; see \code{\link{log_cholesky}}.}
+\item{role}{A label; see \code{\link[=log_cholesky]{log_cholesky()}}.}
 }
 \value{
-An object of class \code{\link{DiagMatrixParam}}.
+An object of class \code{\link[=DiagMatrixParam]{DiagMatrixParam()}}.
 }
 \description{
 A diagonal matrix with one free value shared by every entry, so
@@ -37,5 +37,5 @@ round(param_value(s, log(2)), 4)
 
 }
 \seealso{
-\code{\link{diagonal_matrix}}, \code{\link{scaled_matrix}}
+\code{\link[=diagonal_matrix]{diagonal_matrix()}}, \code{\link[=scaled_matrix]{scaled_matrix()}}
 }

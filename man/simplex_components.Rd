@@ -20,7 +20,7 @@ matrix to embed a row; the identity here.}
 A named list keyed as \code{param_tuple_names(s, order)}.
 }
 \description{
-Slices the tensors of \code{\link{simplex_tensors}} into the named lists
+Slices the tensors of \code{\link[=simplex_tensors]{simplex_tensors()}} into the named lists
 the derivative generics return.
 }
 \keyword{internal}

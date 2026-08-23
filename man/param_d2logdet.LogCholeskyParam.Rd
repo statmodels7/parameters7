@@ -4,7 +4,7 @@
 \alias{param_d2logdet.LogCholeskyParam}
 \title{Log-Determinant Hessian of a Log-Cholesky Parameter}
 \arguments{
-\item{s}{A \code{\link{LogCholeskyParam}} object.}
+\item{s}{A \code{\link[=LogCholeskyParam]{LogCholeskyParam()}} object.}
 
 \item{eta}{A numeric vector of free values.}
 

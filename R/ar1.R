@@ -7,13 +7,13 @@ NULL
 #' @description
 #' The S7 class of first-order autoregressive covariance matrices: equal
 #' variances and a correlation falling geometrically with the lag.
-#' Constructed by \code{\link{ar1}}.
+#' Constructed by [ar1()].
 #'
 #' @inheritParams matrix_parameter
 #'
-#' @return An object of class \code{Ar1Param}.
+#' @return An object of class `Ar1Param`.
 #'
-#' @seealso \code{\link{ar1}}
+#' @seealso [ar1()]
 #'
 #' @examples
 #' S7::S7_inherits(ar1(3), Ar1Param)
@@ -33,7 +33,7 @@ Ar1Param <- S7::new_class("Ar1Param", parent = matrix_parameter)
 #' @details
 #' Unlike compound symmetry, the correlation is bounded only by
 #' \eqn{\lvert\rho\rvert < 1} at every dimension, so it is carried by
-#' \code{\link[linkfunctions7]{rhobit_link}} -- the inverse hyperbolic tangent
+#' [linkfunctions7::rhobit_link()] -- the inverse hyperbolic tangent
 #' -- and every free value gives a positive definite matrix.
 #'
 #' Two quantities are closed form. The determinant of the correlation pattern
@@ -41,7 +41,7 @@ Ar1Param <- S7::new_class("Ar1Param", parent = matrix_parameter)
 #' \deqn{\log\lvert M \rvert = p\log\sigma^2 + (p-1)\log(1-\rho^2),}
 #' again a sum of a function of one free value and a function of the other,
 #' with every mixed derivative exactly zero. And the inverse is
-#' \strong{tridiagonal}, which is the property the family is used for: an
+#' **tridiagonal**, which is the property the family is used for: an
 #' AR(1) process is Markov, so its precision has no entries beyond the first
 #' off-diagonal, and the solve is returned from that form rather than from a
 #' factorization.
@@ -49,18 +49,18 @@ Ar1Param <- S7::new_class("Ar1Param", parent = matrix_parameter)
 #' The pattern is not linear in the correlation as compound symmetry's is: an
 #' entry is \eqn{\rho^{m}} for the lag \eqn{m}, so its derivatives in the free
 #' value are the composition of a power with the link, taken to fourth order
-#' by \code{\link{compose4}}. This is also why an AR(1) covariance and an
+#' by [compose4()]. This is also why an AR(1) covariance and an
 #' AR(1) precision are different models -- the inverse is tridiagonal but not
-#' AR(1) -- which is what the \code{role} label exists to record.
+#' AR(1) -- which is what the `role` label exists to record.
 #'
 #' @param dimension The side \eqn{p} of the matrix, at least 2.
 #' @param link_scale A \pkg{linkfunctions7} link onto the positive scale.
-#'   Defaults to \code{linkfunctions7::log_link()}.
-#' @param role A label; see \code{\link{log_cholesky}}.
+#'   Defaults to `linkfunctions7::log_link()`.
+#' @param role A label; see [log_cholesky()].
 #'
-#' @return An object of class \code{\link{Ar1Param}}.
+#' @return An object of class [Ar1Param()].
 #'
-#' @seealso \code{\link{compound_symmetry}}, \code{\link{correlation_matrix}}
+#' @seealso [compound_symmetry()], [correlation_matrix()]
 #'
 #' @examples
 #' s <- ar1(4)
@@ -115,8 +115,8 @@ ar1 <- function(dimension,
 #' Each distinct lag is composed once and written into every entry that
 #' carries it, the matrix having only \eqn{p} distinct values.
 #'
-#' @param s An \code{\link{Ar1Param}} object.
-#' @param sc The scalars of \code{\link{econ_scalars}}.
+#' @param s An [Ar1Param()] object.
+#' @param sc The scalars of [econ_scalars()].
 #'
 #' @return A list of five matrices.
 #'
@@ -138,7 +138,7 @@ ar1_pattern <- function(s, sc) {
 #' @title Value of an AR(1) Parameter
 #' @name param_value.Ar1Param
 #' @description \eqn{\sigma^2 \rho^{\lvert i-j \rvert}}.
-#' @param s An \code{\link{Ar1Param}} object.
+#' @param s An [Ar1Param()] object.
 #' @param eta A numeric vector of two free values.
 #' @param ... Unused.
 #' @return An AR(1) positive definite matrix.
@@ -156,7 +156,7 @@ S7::method(param_value, Ar1Param) <- function(s, eta, ...) {
 #' off-diagonal one divided by it, both exact; the rest of the matrix is then
 #' checked against the pattern those two imply, and a matrix that does not
 #' match is rejected rather than fitted.
-#' @param s An \code{\link{Ar1Param}} object.
+#' @param s An [Ar1Param()] object.
 #' @param m An AR(1) matrix.
 #' @param ... Unused.
 #' @return A named numeric vector of two free values.
@@ -197,9 +197,9 @@ S7::method(param_free, Ar1Param) <- function(s, m, ...) {
 #' \eqn{(1-\rho^2)^{-1}} times the matrix with \eqn{1} at the two corners of
 #' the diagonal, \eqn{1+\rho^2} elsewhere on it and \eqn{-\rho} on the first
 #' off-diagonals; no factorization is performed.
-#' @param s An \code{\link{Ar1Param}} object.
+#' @param s An [Ar1Param()] object.
 #' @param eta A numeric vector of two free values.
-#' @param b A numeric matrix with \code{s@dimension} rows.
+#' @param b A numeric matrix with `s@dimension` rows.
 #' @param ... Unused.
 #' @return A numeric matrix.
 #' @keywords internal
@@ -226,7 +226,7 @@ S7::method(param_solve, Ar1Param) <- function(s, eta, b = NULL, ...) {
 #' \eqn{b} correlation indices is the \eqn{a}-th derivative of the scale times
 #' the \eqn{b}-th derivative of the pattern, and the pattern's derivatives are
 #' powers composed with the link.
-#' @param s An \code{\link{Ar1Param}} object.
+#' @param s An [Ar1Param()] object.
 #' @param eta A numeric vector of two free values.
 #' @param ... Unused.
 #' @return A named list of symmetric matrices.
@@ -264,7 +264,7 @@ S7::method(param_d4, Ar1Param) <- function(s, eta, ...) {
 #' \eqn{(p-1)\{\log(1-\rho) + \log(1+\rho)\}} so that both pieces are
 #' logarithms of affine functions.
 #'
-#' @param s An \code{\link{Ar1Param}} object.
+#' @param s An [Ar1Param()] object.
 #'
 #' @return A list of numeric triples.
 #'
@@ -280,7 +280,7 @@ ar1_logdet_terms <- function(s) {
 #' @description
 #' Closed form: \eqn{p\log\sigma^2 + (p-1)\log(1-\rho^2)}, the determinant of
 #' the correlation pattern being \eqn{(1-\rho^2)^{p-1}}.
-#' @param s An \code{\link{Ar1Param}} object.
+#' @param s An [Ar1Param()] object.
 #' @param eta A numeric vector of two free values.
 #' @param ... Unused.
 #' @return A single number.
@@ -297,7 +297,7 @@ S7::method(param_logdet, Ar1Param) <- function(s, eta, ...) {
 #' Closed form at every order, with every mixed component exactly zero, the
 #' log-determinant being a sum of a function of the scale and a function of
 #' the correlation.
-#' @param s An \code{\link{Ar1Param}} object.
+#' @param s An [Ar1Param()] object.
 #' @param eta A numeric vector of two free values.
 #' @param ... Unused.
 #' @return A named numeric vector.

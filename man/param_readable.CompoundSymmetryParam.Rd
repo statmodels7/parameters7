@@ -4,14 +4,14 @@
 \alias{param_readable.CompoundSymmetryParam}
 \title{The Scale and the Common Correlation of a Compound Symmetry}
 \arguments{
-\item{s}{A \code{\link{CompoundSymmetryParam}} object.}
+\item{s}{A \code{\link[=CompoundSymmetryParam]{CompoundSymmetryParam()}} object.}
 
 \item{eta}{A numeric vector of two free values.}
 
 \item{...}{Ignored.}
 }
 \value{
-A list as described in \code{\link{param_readable}}.
+A list as described in \code{\link[=param_readable]{param_readable()}}.
 }
 \description{
 Declares the marginal variance and the correlation shared by every pair.

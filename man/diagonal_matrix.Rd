@@ -16,10 +16,10 @@ diagonal_matrix(
 \item{link}{A \pkg{linkfunctions7} link mapping the free scale to the
 positive entries. Defaults to \code{linkfunctions7::log_link()}.}
 
-\item{role}{A label; see \code{\link{log_cholesky}}.}
+\item{role}{A label; see \code{\link[=log_cholesky]{log_cholesky()}}.}
 }
 \value{
-An object of class \code{\link{DiagMatrixParam}}.
+An object of class \code{\link[=DiagMatrixParam]{DiagMatrixParam()}}.
 }
 \description{
 A diagonal matrix whose entries are positive, each carried through a scalar
@@ -32,7 +32,7 @@ with it. The Jacobian of a diagonal block is diagonal, which is exactly the
 contract a scalar link satisfies, so the link objects are reused as they
 are and their exact derivatives come with them.
 
-A single free value shared by every entry is \code{\link{scalar_matrix}}.
+A single free value shared by every entry is \code{\link[=scalar_matrix]{scalar_matrix()}}.
 }
 \examples{
 s <- diagonal_matrix(3)
@@ -44,5 +44,5 @@ round(param_value(diagonal_matrix(2, link = linkfunctions7::sqrt_link()),
 
 }
 \seealso{
-\code{\link{scalar_matrix}}, \code{\link{log_cholesky}}
+\code{\link[=scalar_matrix]{scalar_matrix()}}, \code{\link[=log_cholesky]{log_cholesky()}}
 }

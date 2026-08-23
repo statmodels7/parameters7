@@ -4,7 +4,7 @@
 \alias{param_d4logdet.MatrixLogParam}
 \title{Fourth Log-Determinant Derivatives of a Matrix Logarithm Parameter}
 \arguments{
-\item{s}{A \code{\link{MatrixLogParam}} object.}
+\item{s}{A \code{\link[=MatrixLogParam]{MatrixLogParam()}} object.}
 
 \item{eta}{A numeric vector of free values.}
 

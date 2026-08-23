@@ -4,7 +4,7 @@
 \alias{param_d4.ScaledMatrixParam}
 \title{Fourth Derivatives of a Scaled Parameter}
 \arguments{
-\item{s}{A \code{\link{ScaledMatrixParam}} object.}
+\item{s}{A \code{\link[=ScaledMatrixParam]{ScaledMatrixParam()}} object.}
 
 \item{eta}{A numeric vector with one free value.}
 

@@ -4,7 +4,7 @@
 \alias{param_free.LogCholeskyParam}
 \title{Free Vector of a Log-Cholesky Parameter}
 \arguments{
-\item{s}{A \code{\link{LogCholeskyParam}} object.}
+\item{s}{A \code{\link[=LogCholeskyParam]{LogCholeskyParam()}} object.}
 
 \item{m}{A symmetric positive definite matrix.}
 
@@ -15,7 +15,7 @@ A named numeric vector of free values.
 }
 \description{
 The Cholesky factor of the matrix, with its diagonal logged. Exact, and the
-inverse of \code{\link{param_value}} because the factor with a positive
+inverse of \code{\link[=param_value]{param_value()}} because the factor with a positive
 diagonal is unique.
 }
 \keyword{internal}

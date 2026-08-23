@@ -7,7 +7,7 @@
 mlog_contract(tb, dirs)
 }
 \arguments{
-\item{tb}{The tables of \code{\link{mlog_tables}}.}
+\item{tb}{The tables of \code{\link[=mlog_tables]{mlog_tables()}}.}
 
 \item{dirs}{The free-value indices of the tuple, possibly repeated.}
 }

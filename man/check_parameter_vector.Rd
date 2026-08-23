@@ -7,7 +7,7 @@
 check_parameter_vector(s, tol = 1e-06, verbose = TRUE)
 }
 \arguments{
-\item{s}{A \code{\link{parameter}} object.}
+\item{s}{A \code{\link[=parameter]{parameter()}} object.}
 
 \item{tol}{The relative tolerance.}
 
@@ -17,7 +17,7 @@ check_parameter_vector(s, tol = 1e-06, verbose = TRUE)
 A data frame with one row per check, invisibly when printed.
 }
 \description{
-What \code{\link{check_parameter}} runs for a family whose value is not a
+What \code{\link[=check_parameter]{check_parameter()}} runs for a family whose value is not a
 symmetric matrix: the inverse round trip, every derivative order against
 the single-stencil numerical construction, and the identities the value's
 own set supplies -- on the simplex the entries sum to one and every
