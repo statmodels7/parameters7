@@ -67,30 +67,29 @@ sweep_etas <- function(s, n = 4L) {
 #' formality.
 #'
 #' The checks are:
-#' \enumerate{
-#'   \item **membership**: the matrix is symmetric and positive
-#'     semidefinite, a full-rank family has a positive smallest eigenvalue, and
-#'     a rank-deficient one annihilates its declared null space. The last is
-#'     tested through the null basis rather than by counting eigenvalues,
-#'     because a count is not scale invariant.
-#'   \item **round trip**: `param_free()` recovers the free vector
-#'     from the matrix, where the family implements it.
-#'   \item **first derivatives** against one central difference of
-#'     [param_value()].
-#'   \item **second derivatives** against one central difference of the
-#'     analytic first derivatives.
-#'   \item **log-determinant** against the sum of the logs of the
-#'     eigenvalues the rank keeps.
-#'   \item **log-determinant gradient** against
-#'     \eqn{\mathrm{tr}(M^{+} \partial_k M)}, with the pseudo-inverse formed
-#'     from an eigendecomposition rather than from [param_solve()].
-#'   \item **log-determinant Hessian** against one central difference of
-#'     the analytic gradient.
-#'   \item **solve** against `base::solve`, where the family is of
-#'     full rank.
-#'   \item **shapes**: the declared dimension, length and names match what
-#'     the methods return.
-#' }
+#'
+#' 1. **membership**: the matrix is symmetric and positive
+#'    semidefinite, a full-rank family has a positive smallest eigenvalue, and
+#'    a rank-deficient one annihilates its declared null space. The last is
+#'    tested through the null basis rather than by counting eigenvalues,
+#'    because a count is not scale invariant.
+#' 2. **round trip**: `param_free()` recovers the free vector
+#'    from the matrix, where the family implements it.
+#' 3. **first derivatives** against one central difference of
+#'    [param_value()].
+#' 4. **second derivatives** against one central difference of the
+#'    analytic first derivatives.
+#' 5. **log-determinant** against the sum of the logs of the
+#'    eigenvalues the rank keeps.
+#' 6. **log-determinant gradient** against
+#'    \eqn{\mathrm{tr}(M^{+} \partial_k M)}, with the pseudo-inverse formed
+#'    from an eigendecomposition rather than from [param_solve()].
+#' 7. **log-determinant Hessian** against one central difference of
+#'    the analytic gradient.
+#' 8. **solve** against `base::solve`, where the family is of
+#'    full rank.
+#' 9. **shapes**: the declared dimension, length and names match what
+#'    the methods return.
 #'
 #' @param s An object inheriting from class [parameter()].
 #' @param tol The relative tolerance for the comparisons.

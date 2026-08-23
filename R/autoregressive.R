@@ -63,7 +63,7 @@ AutoregressiveParam <- S7::new_class("AutoregressiveParam",
 #'   + \sum_{k=1}^{q} (p - k)\log(1 - r_k^{2}),}
 #' one term per free value, so the log-determinant is separable and every
 #' mixed derivative of it is exactly zero. And the inverse is
-#' \strong{banded of bandwidth \eqn{q}}: an autoregression of order \eqn{q} is
+#' **banded of bandwidth \eqn{q}**: an autoregression of order \eqn{q} is
 #' Markov of that order, so its precision carries no entry beyond the
 #' \eqn{q}-th off-diagonal. It is assembled from the prediction form
 #' \eqn{M^{-1} = U^\top D^{-1} U}, with \eqn{U} unit lower triangular holding
