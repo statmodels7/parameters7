@@ -6,14 +6,29 @@
 \arguments{
 \item{s}{A \code{\link[=LogCholeskyParam]{LogCholeskyParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic. Its values do not enter the result.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named numeric vector of zeros.
+A numeric vector of \code{choose(s@n_free + 1, 2)} zeros, keyed as
+\code{param_tuple_names(s)}.
 }
 \description{
-Closed form: zero, the log-determinant being linear.
+Closed form, and identically zero: \eqn{\log|M| = 2\sum_i \eta_i} is linear in
+the free vector, so its second derivative vanishes at every \eqn{\eta}. The
+zeros are exact, so a consumer can drop the term entirely instead of
+carrying small numbers through a contraction.
+
+This is worth knowing when checking another family: a comparison of a
+log-determinant Hessian against a numerical reference can pass on
+\code{log_cholesky()} while a term is missing, both sides being zero. \code{\link[=ar1]{ar1()}} and
+\code{\link[=compound_symmetry]{compound_symmetry()}} are the families where this order has something to get
+wrong.
+}
+\seealso{
+\code{\link[=param_dlogdet.LogCholeskyParam]{param_dlogdet.LogCholeskyParam()}} for the order below, and
+\code{\link[=param_d3logdet.LogCholeskyParam]{param_d3logdet.LogCholeskyParam()}}, zero for the same reason.
 }
 \keyword{internal}

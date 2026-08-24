@@ -6,14 +6,27 @@
 \arguments{
 \item{s}{A \code{\link[=LogCholeskyParam]{LogCholeskyParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic. Its values do not enter the result.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named numeric vector of zeros.
+A numeric vector of \code{choose(s@n_free + 3, 4)} zeros, keyed as
+\code{param_tuple_names(s, 4)}.
 }
 \description{
-Closed form: zero, as at third order.
+Closed form, and identically zero, for the reason it is zero at second and
+third order: \eqn{\log|M| = 2\sum_i \eta_i} is linear in the free vector. The
+zeros are exact.
+
+This is the order at which a numerical fallback is least usable, so a family
+whose log-determinant is not linear gains most from a closed form here. See
+\code{\link[=param_d4logdet.matrix_parameter]{param_d4logdet.matrix_parameter()}} for the measured accuracy of the
+alternative.
+}
+\seealso{
+\code{\link[=param_d3logdet.LogCholeskyParam]{param_d3logdet.LogCholeskyParam()}} for the order below, and
+\code{\link[=param_d4logdet.matrix_parameter]{param_d4logdet.matrix_parameter()}} for the numerical route.
 }
 \keyword{internal}

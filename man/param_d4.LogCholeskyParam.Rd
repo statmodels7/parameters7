@@ -6,14 +6,34 @@
 \arguments{
 \item{s}{A \code{\link[=LogCholeskyParam]{LogCholeskyParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named list of symmetric matrices.
+A list of \code{choose(s@n_free + 3, 4)} symmetric matrices keyed as
+\code{param_tuple_names(s, 4)} and in that order. At \eqn{p = 3} that is 126
+components, at \eqn{p = 8} it is 82251.
 }
 \description{
-Closed form; see \code{\link[=param_d3.LogCholeskyParam]{param_d3.LogCholeskyParam()}}.
+Closed form, by the same Leibniz rule on \eqn{M = L L^\top} as at third order,
+with the four differentiations distributed over the two factors. The
+derivative of \eqn{L} in a multiset of indices is non-zero only for an empty
+multiset, a single index, or a repetition of one diagonal free value, so of
+the \eqn{2^4} ways to split a quadruple between the factors almost all
+contribute nothing.
+
+Exact at this order, which is where the contract stops: a fourth-order chain
+rule through a link needs this much. Nothing is differenced, so the accuracy
+is machine precision, against the \eqn{10^{-4}} a stencil would give.
+
+A component repeating a below-diagonal free value three or more times is
+exactly zero, \eqn{M} being quadratic in each of those.
+}
+\seealso{
+\code{\link[=chol_leibniz]{chol_leibniz()}}, which assembles it, \code{\link[=param_d3.LogCholeskyParam]{param_d3.LogCholeskyParam()}}
+for the order below, and \code{\link[=numerical_d4]{numerical_d4()}} for what a family without a closed
+form gets instead.
 }
 \keyword{internal}

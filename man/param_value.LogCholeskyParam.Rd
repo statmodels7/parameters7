@@ -6,14 +6,26 @@
 \arguments{
 \item{s}{A \code{\link[=LogCholeskyParam]{LogCholeskyParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A symmetric positive definite matrix.
+A symmetric positive definite \code{s@dimension} by \code{s@dimension} numeric
+matrix, with dimnames \code{v1}, \code{v2}, ...
 }
 \description{
-\eqn{M = L L^\top}, with \eqn{L} assembled from the free vector.
+Returns \eqn{M = L L^\top}, with \eqn{L} assembled from the free vector by
+\code{\link[=chol_assemble]{chol_assemble()}} and the product taken as \code{tcrossprod(l)}. Positive
+definiteness needs no checking: \eqn{L} is triangular with a diagonal that is
+an exponential, so it has full rank at every finite \eqn{\eta}, and
+\eqn{L L^\top} is therefore in the interior of the cone. The cost is one
+\eqn{O(p^3)} product and no factorization.
+}
+\seealso{
+\code{\link[=param_free.LogCholeskyParam]{param_free.LogCholeskyParam()}} for the inverse,
+\code{\link[=param_factor.LogCholeskyParam]{param_factor.LogCholeskyParam()}} for \eqn{L} itself, and \code{\link[=log_cholesky]{log_cholesky()}}
+for the ordering of \code{eta}.
 }
 \keyword{internal}

@@ -6,19 +6,36 @@
 \arguments{
 \item{s}{A \code{\link[=LogCholeskyParam]{LogCholeskyParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named list of symmetric matrices.
+A list of \code{choose(s@n_free + 1, 2)} symmetric matrices keyed as
+\code{param_tuple_names(s)} and in that order, each \code{s@dimension} by
+\code{s@dimension}.
 }
 \description{
 Closed form. Differentiating \eqn{\partial_k M = L_k L^\top + L L_k^\top}
-again gives
-\eqn{\partial_{kl} M = L_{kl} L^\top + L_k L_l^\top + L_l L_k^\top +
-L L_{kl}^\top}, and the factor's second derivative \eqn{L_{kl}} is
-non-zero only when \eqn{k = l} is a diagonal value, where it is
-\eqn{L_{ii} E_{ii}} again.
+once more,
+
+\deqn{\partial_{kl} M = L_{kl} L^\top + L_k L_l^\top + L_l L_k^\top
+                      + L L_{kl}^\top,}
+
+and the factor's second derivative \eqn{L_{kl}} is non-zero only where
+\eqn{k = l} names a diagonal free value, where it is \eqn{L_{ii} E_{ii}}
+again. A below-diagonal value enters \eqn{L} linearly, so any second
+derivative touching one of those drops the outer terms and leaves the two
+cross products.
+
+One consequence is worth knowing when reading a result: \eqn{M} is quadratic
+in each below-diagonal free value, so the component keyed by that value twice
+is a constant in \eqn{\eta}, and every third and fourth derivative repeating
+it is exactly zero.
+}
+\seealso{
+\code{\link[=chol_leibniz]{chol_leibniz()}}, which assembles it, and
+\code{\link[=param_d1.LogCholeskyParam]{param_d1.LogCholeskyParam()}} for the order below.
 }
 \keyword{internal}

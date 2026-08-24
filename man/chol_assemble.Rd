@@ -7,15 +7,30 @@
 chol_assemble(s, eta)
 }
 \arguments{
-\item{s}{A \code{\link[=LogCholeskyParam]{LogCholeskyParam()}} object.}
+\item{s}{A \code{\link[=LogCholeskyParam]{LogCholeskyParam()}} object, whose \code{dimension} and
+\code{param_params$positions} are read.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}.}
 }
 \value{
-A lower triangular numeric matrix.
+A \code{s@dimension} by \code{s@dimension} lower triangular numeric matrix with
+a strictly positive diagonal, and no dimnames.
 }
 \description{
 Assembles \eqn{L} from the free vector: the diagonal is the exponential of
-the first \code{dimension} values, the rest are placed below it.
+the first \code{dimension} values and the rest are placed below it, at the
+positions \code{\link[=chol_positions]{chol_positions()}} recorded. Both \code{\link[=param_value]{param_value()}} and
+\code{\link[=param_factor]{param_factor()}} start here, and \code{\link[=param_factor]{param_factor()}} returns it unchanged.
+}
+\details{
+The exponential is applied by subsetting on \code{on_diagonal}, never through
+\code{ifelse()}, which evaluates both branches over the whole vector. Here that
+would only exponentiate values it then discards; the same shape in
+\code{\link[=param_free]{param_free()}} would take a logarithm of below-diagonal entries that are free
+to be negative, and warn about the \code{NaN}s it throws away.
+}
+\seealso{
+\code{\link[=chol_positions]{chol_positions()}} for the layout, and
+\code{\link[=param_factor.LogCholeskyParam]{param_factor.LogCholeskyParam()}}, which returns this directly.
 }
 \keyword{internal}

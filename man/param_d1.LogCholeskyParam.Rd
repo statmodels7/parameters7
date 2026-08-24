@@ -6,18 +6,30 @@
 \arguments{
 \item{s}{A \code{\link[=LogCholeskyParam]{LogCholeskyParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named list of symmetric matrices.
+A list of \code{s@n_free} symmetric matrices named by \code{s@free_names}, each
+\code{s@dimension} by \code{s@dimension} with dimnames \code{v1}, \code{v2}, ...
 }
 \description{
-Closed form. Writing \eqn{L_k} for the derivative of the factor in the
-\eqn{k}-th free value,
-\eqn{\partial_k M = L_k L^\top + L L_k^\top}. The factor's derivative is
-\eqn{L_{ii} E_{ii}} for a diagonal value, because the parametrization is
-its logarithm, and \eqn{E_{ij}} for a value below the diagonal.
+Closed form, by the Leibniz rule on \eqn{M = L L^\top}. Writing \eqn{L_k} for
+the derivative of the factor in the \eqn{k}-th free value,
+
+\deqn{\partial_k M = L_k L^\top + L L_k^\top.}
+
+The factor's derivative is a single-entry matrix: \eqn{L_{ii} E_{ii}} for a
+diagonal free value, because the parametrization holds its logarithm and
+\eqn{\partial \exp(\eta_i)/\partial \eta_i = \exp(\eta_i) = L_{ii}}, and
+\eqn{E_{ij}} for a value below the diagonal, which enters \eqn{L} linearly.
+Each component therefore costs one row and one column of \eqn{L}, never a
+matrix product.
+}
+\seealso{
+\code{\link[=chol_leibniz]{chol_leibniz()}}, which assembles it, \code{\link[=chol_dfactor]{chol_dfactor()}} for
+\eqn{\partial^S L}, and \code{\link[=param_d2.LogCholeskyParam]{param_d2.LogCholeskyParam()}} for the order above.
 }
 \keyword{internal}

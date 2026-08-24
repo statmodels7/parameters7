@@ -6,15 +6,23 @@
 \arguments{
 \item{s}{A \code{\link[=LogCholeskyParam]{LogCholeskyParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic. Its values do not enter the result.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named numeric vector.
+A numeric vector of length \code{s@n_free}, named by \code{s@free_names},
+holding 2 and 0.
 }
 \description{
-Closed form: 2 in each diagonal direction and 0 elsewhere, since the
-log-determinant is linear in the free vector.
+Closed form and constant: 2 in each of the \eqn{p} diagonal directions and 0
+in the \eqn{p(p-1)/2} below-diagonal ones, since \eqn{\log|M|} is
+\eqn{2\sum_i \eta_i} and does not involve the rest of \eqn{\eta} at all. The
+value does not depend on \code{eta}, which is read only for its length.
+}
+\seealso{
+\code{\link[=param_logdet.LogCholeskyParam]{param_logdet.LogCholeskyParam()}} for the quantity differentiated,
+and \code{\link[=param_d2logdet.LogCholeskyParam]{param_d2logdet.LogCholeskyParam()}}, which is zero for the same reason.
 }
 \keyword{internal}

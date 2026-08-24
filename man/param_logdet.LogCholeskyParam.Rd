@@ -6,16 +6,29 @@
 \arguments{
 \item{s}{A \code{\link[=LogCholeskyParam]{LogCholeskyParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A single number.
+A single number, always finite: \code{eta} is finite by the generic's check
+and the sum of \eqn{p} finite numbers cannot overflow at any usable \eqn{p}.
 }
 \description{
-Closed form and linear in the free vector:
-\eqn{\log|M| = 2 \sum_i \log L_{ii}}, which is twice the sum of the free
-values on the diagonal. No factorization and no determinant is computed.
+Closed form, and linear in the free vector. Since \eqn{|M| = |L|^2} and
+\eqn{L} is triangular,
+
+\deqn{\log|M| = 2\sum_{i=1}^{p} \log L_{ii} = 2\sum_{i=1}^{p} \eta_i,}
+
+twice the sum of the free values on the diagonal. It is one \code{sum()} over
+\eqn{p} numbers: no factorization, no determinant, no eigendecomposition, and
+nothing that grows with \eqn{p} beyond the sum itself, against the base
+class's \eqn{O(p^3)}.
+}
+\seealso{
+\code{\link[=param_dlogdet.LogCholeskyParam]{param_dlogdet.LogCholeskyParam()}} for its gradient, and
+\code{\link[=param_logdet.matrix_parameter]{param_logdet.matrix_parameter()}} for the route a family without a closed
+form takes.
 }
 \keyword{internal}

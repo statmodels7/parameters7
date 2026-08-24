@@ -50,17 +50,36 @@ its blocks, or \code{"either"} when they disagree, and \code{\link[=kron_identit
 it.}
 }
 \value{
-An object of class \code{LogCholeskyParam}. Use
-\code{\link[=log_cholesky]{log_cholesky()}} rather than calling the class directly.
+An object of class \code{LogCholeskyParam}, a subclass of
+\code{\link[=matrix_parameter]{matrix_parameter()}} adding no properties of its own. It carries
+\code{dimension}, \code{rank} (always \eqn{p}), \code{null_basis} (\eqn{p} by 0), \code{role},
+\code{param_name} (\code{"log_cholesky"}), \code{n_free} (\eqn{p(p+1)/2}), \code{free_names} and
+\code{param_params}, whose only entry is \code{positions}.
 }
 \description{
 The S7 class of unstructured symmetric positive definite matrices in the
-log-Cholesky parametrization. Constructed by \code{\link[=log_cholesky]{log_cholesky()}}.
+log-Cholesky parametrization, \eqn{M = L L^\top} with \eqn{L} lower triangular
+and positive on the diagonal. It is the class the methods of that family
+dispatch on: given only \code{\link[=param_value]{param_value()}}, everything else here is closed form,
+including all four derivative orders and all four orders of the
+log-determinant.
+
+Call \code{\link[=log_cholesky]{log_cholesky()}} to build one. The class constructor takes the eight
+properties directly and does no work; using it means computing \code{free_names},
+\code{rank} and \code{param_params} by hand.
 }
 \examples{
-S7::S7_inherits(log_cholesky(2), LogCholeskyParam)
+# The class is what dispatch keys on.
+s <- log_cholesky(2)
+c(S7::S7_inherits(s, LogCholeskyParam),
+  S7::S7_inherits(s, matrix_parameter))
+
+# Belonging to it is what gives the family its closed forms: nothing here
+# is obtained by finite differences.
+any(param_is_numerical(s))
 
 }
 \seealso{
-\code{\link[=log_cholesky]{log_cholesky()}}
+\code{\link[=log_cholesky]{log_cholesky()}}, the constructor, and \code{\link[=matrix_parameter]{matrix_parameter()}} for the
+properties this inherits.
 }

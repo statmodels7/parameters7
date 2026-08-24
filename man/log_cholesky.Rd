@@ -7,62 +7,151 @@
 log_cholesky(dimension, role = c("either", "covariance", "precision"))
 }
 \arguments{
-\item{dimension}{The side \eqn{p} of the matrix.}
+\item{dimension}{The side \eqn{p} of the matrix. A single positive whole
+number, finite and at least 1. \code{0}, \code{2.5}, \code{c(1, 2)}, \code{"3"}, \code{Inf} and \code{NA}
+all throw \verb{'dimension' must be a single positive integer.}}
 
-\item{role}{A label, one of \code{"either"} (the default),
-\code{"covariance"} or \code{"precision"}. Nothing computed depends on it;
-it records which side of a model the matrix parametrizes, since the family
-name does not say.}
+\item{role}{A label recording which side of a model the matrix parametrizes:
+\code{"either"} (the default), \code{"covariance"} or \code{"precision"}. \strong{No numeric
+result depends on it.} It is carried because the family name does not
+record it, the same object serving either side, and a consumer that prefixes
+a free name with the matrix it describes needs to know which. Matched with
+\code{match.arg()}, so an abbreviation such as \code{"cov"} is accepted and anything
+else throws.}
 }
 \value{
-An object of class \code{\link[=LogCholeskyParam]{LogCholeskyParam()}}.
+An object of class \code{\link[=LogCholeskyParam]{LogCholeskyParam()}}, with properties
+\describe{
+\item{\code{dimension}}{integer, the side \eqn{p}.}
+\item{\code{n_free}}{integer, \eqn{p(p+1)/2}.}
+\item{\code{free_names}}{character, \code{log_L1} ... \code{log_Lp} then \code{L2.1}, \code{L3.1},
+\code{L3.2}, ... in the order above.}
+\item{\code{rank}}{integer, always \eqn{p}: the map is onto the full-rank
+cone.}
+\item{\code{null_basis}}{a \eqn{p} by 0 matrix; there are no null directions.}
+\item{\code{role}}{character, as supplied.}
+\item{\code{param_name}}{\code{"log_cholesky"}.}
+\item{\code{param_params}}{a list with one entry, \code{positions}, holding the row,
+column and diagonal flag of each free value.}
+}
 }
 \description{
-The log-Cholesky parametrization of a symmetric positive definite matrix:
-\eqn{M = L L^\top} with \eqn{L} lower triangular and positive on the
-diagonal, the free values being the logarithms of the diagonal entries of
-\eqn{L} and the entries below it.
+Estimating a covariance matrix directly is awkward. An optimizer moving
+freely through \eqn{p(p+1)/2} numbers will eventually propose a matrix that is
+not positive definite, and the likelihood is undefined there. This function
+removes the problem instead of policing it: it returns an object holding the
+log-Cholesky map, which sends an unconstrained vector to \eqn{M = L L^\top}
+with \eqn{L} lower triangular and positive on the diagonal. Every vector in
+\eqn{\mathbb{R}^{p(p+1)/2}} gives a valid matrix, so the optimizer never has
+to be told about the constraint.
+
+Reach for it when nothing is known about the matrix. It is the parametrization
+of Pinheiro and Bates (1996).
 }
-\details{
-The parametrization is that of Pinheiro and Bates (1996), and it is the one
-to reach for when nothing is known about the matrix. It is a bijection onto
-the positive definite cone, smooth in both directions, with no boundary to
-reach on the free scale, and unique because the Cholesky factor with a
-positive diagonal is.
+\section{Why the map is safe}{
+\deqn{M = L L^\top, \qquad L_{ii} = \exp(\eta_i) > 0}
 
-The free vector runs the logarithms of the diagonal first and then the
-below-diagonal entries column by column, so for \eqn{p = 3} it is
-\eqn{(\log L_{11}, \log L_{22}, \log L_{33}, L_{21}, L_{31}, L_{32})}. The
-ordering is fixed rather than incidental: \code{free_names} follows it and
-every consumer builds its parameter tables from those names.
+The exponential keeps the diagonal of \eqn{L} positive, and a triangular
+matrix with a positive diagonal has full rank, so \eqn{L L^\top} is positive
+definite at every finite \eqn{\eta}. The map is smooth in both directions and
+one to one, the Cholesky factor with a positive diagonal being unique, so
+there is no boundary on the free scale to run into.
 
-The log-determinant is linear in the free vector,
-\eqn{\log|M| = 2\sum_i \log L_{ii}}, so its gradient is the constant 2 in
-the diagonal directions and 0 elsewhere, and its Hessian vanishes. Both are
-supplied in closed form.
-
-The log on the diagonal is intrinsic to the parametrization and not a
-swappable link, which is why it appears in the free names.
+The logarithm on the diagonal belongs to the parametrization and is not a
+swappable link, which is why it appears in the free names. Use
+\code{\link[=diagonal_matrix]{diagonal_matrix()}} if a choice of link is wanted.
 }
+
+\section{Reading the free vector}{
+The \eqn{p} logarithms of the diagonal come first, then the strictly
+below-diagonal entries column by column. For \eqn{p = 3}:
+
+\deqn{\eta = (\log L_{11}, \log L_{22}, \log L_{33},
+             L_{21}, L_{31}, L_{32})}
+
+Its length is \eqn{p(p+1)/2}, which is 3, 6, 10 and 15 at \eqn{p} of 2 to 5.
+The ordering is part of the interface: \code{free_names} follows it and downstream
+parameter tables are built from those names. Treat it as fixed.
+}
+
+\section{The log-determinant comes free}{
+A likelihood involving \eqn{M} almost always needs \eqn{\log|M|}, and here it
+is twice the sum of the first \eqn{p} free values:
+
+\deqn{\log|M| = 2 \sum_{i=1}^{p} \log L_{ii} = 2 \sum_{i=1}^{p} \eta_i}
+
+Linear, so the gradient is the constant 2 in the diagonal directions and 0
+elsewhere, and the second, third and fourth derivatives are exactly zero. All
+four are returned without any factorization being taken.
+}
+
+\section{When to use something else}{
+This is the parametrization for an unstructured matrix, where
+\eqn{p(p+1)/2} free values is the price of assuming nothing. A structured
+family estimates fewer and imposes its structure exactly: \code{\link[=diagonal_matrix]{diagonal_matrix()}}
+for independence, \code{\link[=compound_symmetry]{compound_symmetry()}} for exchangeable equicorrelation,
+\code{\link[=ar1]{ar1()}} and \code{\link[=autoregressive]{autoregressive()}} for a time series, \code{\link[=correlation_matrix]{correlation_matrix()}} for a
+correlation with a separate scale, \code{\link[=matrix_log]{matrix_log()}} for the same cone through
+the matrix exponential.
+}
+
+\section{Notation}{
+
+\eqn{\eta} is the free vector, the point on the unconstrained scale that an
+optimizer moves, of length \eqn{d = p(p+1)/2}. \eqn{p} is the side of the
+matrix, \eqn{L} the lower triangular Cholesky factor and \eqn{M = L L^\top}
+the matrix itself. \eqn{E_{ij}} is the matrix with 1 in position \eqn{(i, j)}
+and 0 elsewhere.
+}
+
 \examples{
+# A 3 x 3 unstructured covariance: six free values, no constraints.
 s <- log_cholesky(3)
 s
+s@n_free
+s@free_names
 
+# Pick any six numbers at all; the result is positive definite.
 eta <- c(0.1, -0.2, 0.3, 0.5, -0.4, 0.2)
-round(param_value(s, eta), 4)
+M <- param_value(s, eta)
+round(M, 4)
+eigen(M, only.values = TRUE)$values
 
-# the round trip closes exactly
-max(abs(param_free(s, param_value(s, eta)) - eta))
+# Even absurd values stay in the cone, which is the point.
+eigen(param_value(s, c(-8, 9, -7, 100, -100, 50)),
+      only.values = TRUE)$values > 0
 
-# and the log-determinant is linear in the free vector
+# The inverse map recovers the free vector exactly.
+max(abs(param_free(s, M) - eta))
+
+# log|M| is linear in eta: twice the sum of the first p entries.
+all.equal(param_logdet(s, eta), 2 * sum(eta[1:3]))
+all.equal(param_logdet(s, eta),
+          sum(log(eigen(M, only.values = TRUE)$values)))
 param_dlogdet(s, eta)
+
+# So every higher derivative of the log-determinant vanishes.
+c(second = max(abs(param_d2logdet(s, eta))),
+  third = max(abs(param_d3logdet(s, eta))),
+  fourth = max(abs(param_d4logdet(s, eta))))
+
+# The factor is what the parametrization holds, so it costs nothing.
+L <- param_factor(s, eta)
+round(L, 4)
+all.equal(diag(L), exp(eta[1:3]))
 
 }
 \references{
 Pinheiro, J. C. and Bates, D. M. (1996). Unconstrained parametrizations for
-variance-covariance matrices. \emph{Statistics and Computing} 6, 289-296.
+variance-covariance matrices. \emph{Statistics and Computing} \strong{6}, 289-296.
 }
 \seealso{
-\code{\link[=diagonal_matrix]{diagonal_matrix()}}, \code{\link[=scaled_matrix]{scaled_matrix()}},
-\code{\link[=check_parameter]{check_parameter()}}
+\code{\link[=param_value]{param_value()}} and \code{\link[=param_free]{param_free()}} for the map and its inverse,
+\code{\link[=param_factor]{param_factor()}}, which returns \eqn{L} itself at no cost,
+\code{\link[=param_logdet]{param_logdet()}} and \code{\link[=param_dlogdet]{param_dlogdet()}} for the determinant, and
+\code{\link[=check_parameter]{check_parameter()}} to verify a parametrization.
+
+\code{\link[=diagonal_matrix]{diagonal_matrix()}}, \code{\link[=scaled_matrix]{scaled_matrix()}}, \code{\link[=correlation_matrix]{correlation_matrix()}},
+\code{\link[=compound_symmetry]{compound_symmetry()}}, \code{\link[=ar1]{ar1()}}, \code{\link[=autoregressive]{autoregressive()}} and \code{\link[=matrix_log]{matrix_log()}} for
+the alternatives.
 }

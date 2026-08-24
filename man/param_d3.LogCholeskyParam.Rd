@@ -6,17 +6,28 @@
 \arguments{
 \item{s}{A \code{\link[=LogCholeskyParam]{LogCholeskyParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named list of symmetric matrices.
+A list of \code{choose(s@n_free + 2, 3)} symmetric matrices keyed as
+\code{param_tuple_names(s, 3)} and in that order.
 }
 \description{
-Closed form by the Leibniz rule on \eqn{M = L L^\top}: each component
+Closed form, by the Leibniz rule on \eqn{M = L L^\top}. Each component
 distributes its three differentiations over the two factors, and a factor
-differentiated more than once survives only in a repeated diagonal
-direction, where every derivative of \eqn{e^{\eta_k}} is itself.
+differentiated more than once survives only where the repetitions name the
+same diagonal free value, every derivative of \eqn{e^{\eta_k}} being itself.
+
+Two consequences a reader will meet in the output. A component repeating a
+below-diagonal free value three times is exactly zero, \eqn{M} being quadratic
+in it. A component repeating a diagonal value three times is not, that value
+entering through an exponential.
+}
+\seealso{
+\code{\link[=chol_leibniz]{chol_leibniz()}}, which assembles it, and
+\code{\link[=param_d4.LogCholeskyParam]{param_d4.LogCholeskyParam()}} for the order above.
 }
 \keyword{internal}

@@ -6,14 +6,28 @@
 \arguments{
 \item{s}{A \code{\link[=LogCholeskyParam]{LogCholeskyParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A lower triangular numeric matrix.
+A \code{s@dimension} by \code{s@dimension} lower triangular numeric matrix with
+a positive diagonal, satisfying \code{L \%*\% t(L) == param_value(s, eta)} exactly,
+and carrying no dimnames.
 }
 \description{
-The factor is the parametrization, so it needs no computing.
+Returns \eqn{L} by assembling it from the free vector, which is all this
+family's parametrization is: no factorization is taken, because the factor is
+what \eqn{\eta} holds. It is the only family here whose factor is free, and it
+is \eqn{O(p^2)} against the base class's \eqn{O(p^3)} Cholesky.
+
+The diagonal is \code{exp(eta[1:p])} and the entries below it are the remaining
+free values, so a caller who wants a standard deviation off the factor can
+read it from \code{eta} directly.
+}
+\seealso{
+\code{\link[=chol_assemble]{chol_assemble()}}, which does the assembly, and
+\code{\link[=param_factor.matrix_parameter]{param_factor.matrix_parameter()}} for what every other family pays.
 }
 \keyword{internal}

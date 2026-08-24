@@ -7,20 +7,28 @@
 chol_positions(p)
 }
 \arguments{
-\item{p}{The side of the matrix.}
+\item{p}{The side of the matrix, a single positive integer. At \code{p = 1} there
+are no below-diagonal entries and all three vectors have length 1.}
 }
 \value{
-A list with the integer vectors \code{row}, \code{col} and the
-logical \code{on_diagonal}.
+A list with three vectors of length \eqn{p(p+1)/2}: the integer \code{row}
+and \code{col} of each free value, and the logical \code{on_diagonal}.
 }
 \description{
-The row and column of each free value of a log-Cholesky parameter, in the
-order the free vector uses: the diagonal first, then the below-diagonal
-entries column by column.
+Returns the row and column of each free value of a log-Cholesky parameter, in
+the order the free vector uses: the \eqn{p} diagonal entries first, then the
+strictly below-diagonal entries column by column. Everything in the family
+reads it, so the ordering is decided once here and nowhere else.
 }
 \details{
-The ordering is fixed and is part of the contract, because
-\code{free_names} depends on it and every consumer builds parameter tables
-from those names.
+The ordering is part of the interface, since \code{free_names} follows it and
+consumers build their parameter tables from those names. At \eqn{p = 3} the
+rows are \verb{1 2 3 2 3 3}, the columns \verb{1 2 3 1 1 2}, and \code{on_diagonal} is
+\verb{TRUE TRUE TRUE FALSE FALSE FALSE}, which labels the free values
+\verb{log_L1 log_L2 log_L3 L2.1 L3.1 L3.2}.
+}
+\seealso{
+\code{\link[=log_cholesky]{log_cholesky()}}, which turns this into \code{free_names}, and
+\code{\link[=chol_assemble]{chol_assemble()}}, which uses it to place the values in \eqn{L}.
 }
 \keyword{internal}

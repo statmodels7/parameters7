@@ -7,28 +7,40 @@
 chol_dfactor(s, l, ks)
 }
 \arguments{
-\item{s}{A \code{\link[=LogCholeskyParam]{LogCholeskyParam()}} object.}
+\item{s}{A \code{\link[=LogCholeskyParam]{LogCholeskyParam()}} object, whose \code{dimension} and
+\code{param_params$positions} are read.}
 
 \item{l}{The factor at the point, from \code{\link[=chol_assemble]{chol_assemble()}}.}
 
-\item{ks}{A multiset of free-value indices, possibly empty; the empty one
-gives \eqn{L} itself.}
+\item{ks}{A multiset of free-value indices, possibly empty. Positions in
+\code{1:s@n_free}; the empty multiset gives \eqn{L} itself.}
 }
 \value{
-A numeric matrix, or \code{NULL}.
+A \code{s@dimension} by \code{s@dimension} numeric matrix with at most one
+non-zero entry, or \code{l} unchanged for an empty \code{ks}, or \code{NULL} where the
+derivative is identically zero.
 }
 \description{
 Returns \eqn{\partial^S L} for a multiset \eqn{S} of free-value indices, or
-\code{NULL} when that derivative is identically zero.
+\code{NULL} where that derivative is identically zero. Almost all of them are, and
+that is what keeps the Leibniz sum of \code{\link[=chol_leibniz]{chol_leibniz()}} short.
 }
 \details{
-A free value below the diagonal enters \eqn{L} linearly, so its second
-derivative vanishes; a diagonal one enters through its exponential, so
-every repeated derivative in that same value regenerates
-\eqn{L_{ii} E_{ii}}. Everything else is zero, which is what makes the
-Leibniz sum of \code{\link[=chol_leibniz]{chol_leibniz()}} short.
+Three cases exhaust it. An empty \eqn{S} gives \eqn{L} itself. A single index
+gives a \strong{single-entry matrix}: \eqn{L_{ii} E_{ii}} for a diagonal free
+value, whose parametrization is a logarithm, and \eqn{E_{ij}} for one below
+the diagonal, which enters \eqn{L} linearly. A repeated index gives
+\eqn{L_{ii} E_{ii}} again where every repetition names the same diagonal
+value, every derivative of \eqn{\exp(\eta_i)} being itself, and \code{NULL}
+otherwise.
+
+So the only surviving higher derivatives are the pure diagonal ones, and the
+single-entry shape is what the compiled kernel exploits: each Leibniz term
+becomes one row, one column or one cell of a product, never a matrix
+multiplication.
 }
 \seealso{
-\code{\link[=chol_leibniz]{chol_leibniz()}}, \code{\link[=leibniz_gram]{leibniz_gram()}}
+\code{\link[=chol_leibniz]{chol_leibniz()}}, the caller, and \code{\link[=leibniz_gram]{leibniz_gram()}}, the generic
+Leibniz sum the R twin uses.
 }
 \keyword{internal}

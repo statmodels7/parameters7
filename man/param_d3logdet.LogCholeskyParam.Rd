@@ -2,19 +2,32 @@
 % Please edit documentation in R/log_cholesky.R
 \name{param_d3logdet.LogCholeskyParam}
 \alias{param_d3logdet.LogCholeskyParam}
-\title{Higher Log-Determinant Derivatives of a Log-Cholesky Parameter}
+\title{Third Log-Determinant Derivatives of a Log-Cholesky Parameter}
 \arguments{
 \item{s}{A \code{\link[=LogCholeskyParam]{LogCholeskyParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic. Its values do not enter the result.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named numeric vector of zeros.
+A numeric vector of \code{choose(s@n_free + 2, 3)} zeros, keyed as
+\code{param_tuple_names(s, 3)}.
 }
 \description{
-Closed form: zero, the log-determinant being linear in the
-free vector.
+Closed form, and identically zero. \eqn{\log|M| = 2\sum_i \eta_i} is linear in
+the free vector, so every derivative above the first vanishes at every
+\eqn{\eta}. The zeros are exact, so a consumer can drop the term instead of
+carrying small numbers through a contraction.
+
+It also means this family cannot exercise the order: a check of a
+log-determinant's third derivative against a numerical reference passes here
+whatever is missing, both sides being zero. \code{\link[=ar1]{ar1()}} and \code{\link[=compound_symmetry]{compound_symmetry()}}
+are where this order has content.
+}
+\seealso{
+\code{\link[=param_d2logdet.LogCholeskyParam]{param_d2logdet.LogCholeskyParam()}} for the order below, and
+\code{\link[=param_d4logdet.LogCholeskyParam]{param_d4logdet.LogCholeskyParam()}} for the one above.
 }
 \keyword{internal}
