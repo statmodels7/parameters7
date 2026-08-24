@@ -50,17 +50,37 @@ its blocks, or \code{"either"} when they disagree, and \code{\link[=kron_identit
 it.}
 }
 \value{
-An object of class \code{Ar1Param}.
+An object of class \code{Ar1Param}, a subclass of \code{\link[=matrix_parameter]{matrix_parameter()}}
+adding no properties of its own. \code{param_params} holds \code{link_scale} and
+\code{link_rho}, the second a \code{linkfunctions7::rhobit_link()} at every dimension.
+\code{n_free} is 2 and \code{rank} is \eqn{p}.
 }
 \description{
 The S7 class of first-order autoregressive covariance matrices: equal
-variances and a correlation falling geometrically with the lag.
-Constructed by \code{\link[=ar1]{ar1()}}.
+variances and a correlation falling geometrically with the lag,
+\eqn{M_{ij} = \sigma^2 \rho^{|i-j|}}. Two free values at every dimension, and
+the correlation is unrestricted in \eqn{(-1, 1)}, unlike
+\code{\link[=compound_symmetry]{compound_symmetry()}}'s.
+
+\code{\link[=ar1]{ar1()}} builds one. It shares its whole derivative skeleton with
+\code{\link[=compound_symmetry]{compound_symmetry()}} through \code{\link[=econ_scalars]{econ_scalars()}}, \code{\link[=econ_derivative]{econ_derivative()}} and
+\code{\link[=econ_logdet_derivative]{econ_logdet_derivative()}}; what differs is the pattern and the
+log-determinant terms.
 }
 \examples{
-S7::S7_inherits(ar1(3), Ar1Param)
+# Two free values whatever the dimension, and a rhobit correlation.
+s <- ar1(4)
+S7::S7_inherits(s, Ar1Param)
+c(p4 = ar1(4)@n_free, p20 = ar1(20)@n_free)
+s@free_names
+
+# Unlike compound symmetry, the bound does not move with the dimension.
+t(vapply(c(2, 4, 20), function(p) ar1(p)@param_params$link_rho@link_bounds,
+         numeric(2)))
 
 }
 \seealso{
-\code{\link[=ar1]{ar1()}}
+\code{\link[=ar1]{ar1()}}, the constructor, \code{\link[=compound_symmetry]{compound_symmetry()}} for the sibling
+family, \code{\link[=autoregressive]{autoregressive()}} for higher orders, and \code{\link[=matrix_parameter]{matrix_parameter()}} for
+the properties this inherits.
 }

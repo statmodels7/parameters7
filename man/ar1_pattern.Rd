@@ -7,19 +7,31 @@
 ar1_pattern(s, sc)
 }
 \arguments{
-\item{s}{An \code{\link[=Ar1Param]{Ar1Param()}} object.}
+\item{s}{An \code{\link[=Ar1Param]{Ar1Param()}} object, whose \code{dimension} supplies the lags.}
 
-\item{sc}{The scalars of \code{\link[=econ_scalars]{econ_scalars()}}.}
+\item{sc}{The scalars of \code{\link[=econ_scalars]{econ_scalars()}}, whose \code{rho} component supplies the
+correlation and its four derivatives in the free value.}
 }
 \value{
-A list of five matrices.
+A list of five \code{s@dimension} by \code{s@dimension} matrices: the pattern at
+index 1 and its four derivatives at indices 2 to 5, each derivative with a
+zero diagonal.
 }
 \description{
-\eqn{P(\rho)_{ij} = \rho^{\lvert i-j \rvert}} and its four derivatives in
-the free value, entry by entry: the composition of a power with the link.
+Returns \eqn{P(\rho)_{ij} = \rho^{|i-j|}}, the correlation pattern of an AR(1)
+matrix, together with its four derivatives in the second free value. Each
+entry is a \strong{power} of the correlation, so unlike \code{\link[=cs_pattern]{cs_pattern()}}'s the
+pattern is not linear and each order needs a genuine chain: \code{\link[=compose4]{compose4()}}
+composes \eqn{\rho \mapsto \rho^m} with the link's own four derivatives.
 }
 \details{
-Each distinct lag is composed once and written into every entry that
-carries it, the matrix having only \eqn{p} distinct values.
+Only \eqn{p} distinct lags occur, so each is composed once and the result
+written into every entry that carries it. The lag-0 entries are the constant 1,
+so the diagonal of every derivative is exactly zero.
+}
+\seealso{
+\code{\link[=cs_pattern]{cs_pattern()}}, the compound-symmetric counterpart, which is linear in
+the correlation, \code{\link[=compose4]{compose4()}} for the chain, and \code{\link[=econ_derivative]{econ_derivative()}}, the
+caller.
 }
 \keyword{internal}

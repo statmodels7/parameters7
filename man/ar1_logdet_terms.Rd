@@ -7,14 +7,23 @@
 ar1_logdet_terms(s)
 }
 \arguments{
-\item{s}{An \code{\link[=Ar1Param]{Ar1Param()}} object.}
+\item{s}{An \code{\link[=Ar1Param]{Ar1Param()}} object, whose \code{dimension} supplies \eqn{p}.}
 }
 \value{
-A list of numeric triples.
+A list of two numeric triples \code{c(coefficient, a, b)}, standing for
+\eqn{c\log(a + b\rho)}: \code{c(p-1, 1, -1)} and \code{c(p-1, 1, 1)}.
 }
 \description{
-The affine-logarithm terms of \eqn{q(\rho) = (p-1)\log(1-\rho^2)}, split as
-\eqn{(p-1)\{\log(1-\rho) + \log(1+\rho)\}} so that both pieces are
-logarithms of affine functions.
+Returns the affine-logarithm terms of \eqn{q(\rho) = (p-1)\log(1-\rho^2)}, the
+correlation's half of the log-determinant, in the form \code{\link[=log_affine_derivs]{log_affine_derivs()}}
+consumes. The quadratic is split as
+\eqn{(p-1)\{\log(1-\rho) + \log(1+\rho)\}} so that both pieces are logarithms
+of functions \strong{affine} in the correlation, which is the only shape
+\code{\link[=log_affine_derivs]{log_affine_derivs()}} differentiates.
+}
+\seealso{
+\code{\link[=log_affine_derivs]{log_affine_derivs()}}, which differentiates them,
+\code{\link[=cs_logdet_terms]{cs_logdet_terms()}} for the compound-symmetric pair, and
+\code{\link[=econ_logdet_derivative]{econ_logdet_derivative()}}, which places the result.
 }
 \keyword{internal}

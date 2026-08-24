@@ -11,57 +11,127 @@ ar1(
 )
 }
 \arguments{
-\item{dimension}{The side \eqn{p} of the matrix, at least 2.}
+\item{dimension}{The side \eqn{p} of the matrix, \strong{at least 2}. A one by one
+matrix has no correlation, so \code{ar1(1)} throws a message saying the family
+would carry a free value with no effect.}
 
-\item{link_scale}{A \pkg{linkfunctions7} link onto the positive scale.
-Defaults to \code{linkfunctions7::log_link()}.}
+\item{link_scale}{A \pkg{linkfunctions7} link carrying the first free value
+onto the positive variance, \code{linkfunctions7::log_link()} by default. Its
+declared lower bound must be non-negative.}
 
-\item{role}{A label; see \code{\link[=log_cholesky]{log_cholesky()}}.}
+\item{role}{A label recording which side of a model the matrix parametrizes:
+\code{"either"} (the default), \code{"covariance"} or \code{"precision"}. No numeric result
+depends on it, and here it matters more than usual: the two readings are
+genuinely different models, as \strong{Details} explains.}
 }
 \value{
-An object of class \code{\link[=Ar1Param]{Ar1Param()}}.
+An object of class \code{\link[=Ar1Param]{Ar1Param()}}, with \code{n_free} 2, \code{free_names}
+\code{log_scale} and \code{z_rho} under the defaults, \code{rank} equal to \code{dimension}, an
+empty \code{null_basis}, \code{param_name} \code{"ar1"}, and \code{param_params} holding
+\code{link_scale} and \code{link_rho}.
 }
 \description{
-The first-order autoregressive covariance
-\deqn{M(\eta)_{ij} = \sigma^2 \rho^{\lvert i - j \rvert},}
-with \eqn{\sigma^2} positive and \eqn{\rho \in (-1, 1)}, so two free values
-whatever the dimension.
-}
-\details{
-Unlike compound symmetry, the correlation is bounded only by
-\eqn{\lvert\rho\rvert < 1} at every dimension, so it is carried by
-\code{\link[linkfunctions7:rhobit_link]{linkfunctions7::rhobit_link()}} -- the inverse hyperbolic tangent
--- and every free value gives a positive definite matrix.
+Returns an object holding the first-order autoregressive covariance
 
-Two quantities are closed form. The determinant of the correlation pattern
-is \eqn{(1-\rho^2)^{p-1}}, so
-\deqn{\log\lvert M \rvert = p\log\sigma^2 + (p-1)\log(1-\rho^2),}
-again a sum of a function of one free value and a function of the other,
-with every mixed derivative exactly zero. And the inverse is
-\strong{tridiagonal}, which is the property the family is used for: an
-AR(1) process is Markov, so its precision has no entries beyond the first
-off-diagonal, and the solve is returned from that form rather than from a
-factorization.
+\deqn{M(\eta)_{ij} = \sigma^2 \rho^{|i - j|},}
 
-The pattern is not linear in the correlation as compound symmetry's is: an
-entry is \eqn{\rho^{m}} for the lag \eqn{m}, so its derivatives in the free
-value are the composition of a power with the link, taken to fourth order
-by \code{\link[=compose4]{compose4()}}. This is also why an AR(1) covariance and an
-AR(1) precision are different models -- the inverse is tridiagonal but not
-AR(1) -- which is what the \code{role} label exists to record.
+with \eqn{\sigma^2} positive and \eqn{\rho \in (-1, 1)}: two free values at
+every dimension. Use it when the measurements are ordered and the correlation
+should fall with the distance between them, which is a time series, a spatial
+transect, or repeated measures where an exchangeable correlation is too
+strong an assumption.
 }
+\section{The correlation is unrestricted}{
+Unlike \code{\link[=compound_symmetry]{compound_symmetry()}}, the bound is \eqn{|\rho| < 1} at every
+dimension, so the correlation rides \code{linkfunctions7::rhobit_link()}, the
+inverse hyperbolic tangent, and every free value gives a positive definite
+matrix. A free value of 0 is a correlation of 0 here, where in
+\code{\link[=compound_symmetry]{compound_symmetry()}} it is the midpoint of a dimension-dependent interval.
+}
+
+\section{The inverse is tridiagonal}{
+This is the property the family is used for. An AR(1) process is Markov, so
+its precision has no entries beyond the first off-diagonal:
+
+\deqn{M^{-1} = \frac{1}{\sigma^2(1-\rho^2)}
+  \begin{pmatrix}
+    1 & -\rho & & \\
+    -\rho & 1+\rho^2 & -\rho & \\
+     & \ddots & \ddots & \ddots \\
+     & & -\rho & 1
+  \end{pmatrix}.}
+
+\code{\link[=param_solve]{param_solve()}} returns it from that form, so no factorization is performed
+and the cost is \eqn{O(p)} entries against the base class's \eqn{O(p^3)}.
+
+Note what this does \strong{not} say: the precision is tridiagonal without being
+AR(1). Its own correlation at lag 1 is not constant along the diagonal
+(measured at \eqn{p = 4}, \eqn{\rho = 0.6}: \eqn{-0.514} at the ends and
+\eqn{-0.441} in the middle), and its lag-2 correlation is 0 where an AR(1)
+would have \eqn{\rho^2}. So an AR(1) covariance and an AR(1) precision are
+different models, and \code{role} is what records which one an object stands for.
+}
+
+\section{The log-determinant}{
+The determinant of the correlation pattern is \eqn{(1-\rho^2)^{p-1}}, so
+
+\deqn{\log|M| = p\log\sigma^2 + (p-1)\log(1-\rho^2),}
+
+a sum of a function of one free value and a function of the other. Every
+mixed derivative of it is exactly zero, and no determinant is computed.
+}
+
+\section{Why the derivatives are harder than compound symmetry's}{
+The pattern is \strong{not} linear in the correlation. An entry is \eqn{\rho^{m}}
+for the lag \eqn{m}, so its derivatives in the free value are a power composed
+with the link, taken to fourth order by \code{\link[=compose4]{compose4()}}. Each distinct lag is
+composed once and written into every entry that carries it, the matrix having
+only \eqn{p} distinct values.
+}
+
+\section{Notation}{
+
+\eqn{\eta = (\eta_1, \eta_2)} is the free vector, \eqn{\sigma^2} the common
+variance and \eqn{\rho} the lag-one correlation. \eqn{p} is the side of the
+matrix and \eqn{m = |i-j|} the lag of an entry.
+}
+
 \examples{
+# A 4 x 4 AR(1) covariance at a variance of 2 and a correlation of 0.6.
 s <- ar1(4)
 eta <- c(log(2), atanh(0.6))
-round(param_value(s, eta), 4)
+m <- param_value(s, eta)
+round(m, 4)
 
-# the inverse is tridiagonal: an AR(1) process is Markov
-round(param_solve(s, eta), 4)
+# The entries really are sigma^2 rho^|i-j|.
+all.equal(m[1, 4], 2 * 0.6^3, check.attributes = FALSE)
 
-# two free values whatever the dimension
-c(p4 = ar1(4)@n_free, p20 = ar1(20)@n_free)
+# A free value of 0 is a correlation of 0, the link being rhobit.
+param_value(s, c(0, 0))[1, 2]
+
+# The inverse is tridiagonal, and exact: an AR(1) process is Markov.
+om <- param_solve(s, eta)
+round(om, 4)
+max(abs(om[abs(row(om) - col(om)) > 1]))
+max(abs(om - solve(m)))
+
+# But it is not itself AR(1): its lag-1 correlation varies along the
+# diagonal, and its lag-2 correlation is 0 where rho^2 would be 0.36.
+d <- sqrt(diag(om))
+round(om / outer(d, d), 4)
+
+# The log-determinant is closed form and agrees with the eigenvalues.
+c(closed = param_logdet(s, eta),
+  from_eigen = sum(log(eigen(m, only.values = TRUE)$values)))
+
+# The round trip closes exactly, and every mixed second derivative of the
+# log-determinant is zero.
+max(abs(param_free(s, m) - eta))
+param_d2logdet(s, eta)
 
 }
 \seealso{
-\code{\link[=compound_symmetry]{compound_symmetry()}}, \code{\link[=correlation_matrix]{correlation_matrix()}}
+\code{\link[=compound_symmetry]{compound_symmetry()}} for an exchangeable correlation,
+\code{\link[=autoregressive]{autoregressive()}} for orders above one, \code{\link[=correlation_matrix]{correlation_matrix()}} for an
+unrestricted correlation, and \code{\link[=param_solve]{param_solve()}} for the tridiagonal inverse.
 }

@@ -9,16 +9,41 @@
 \arguments{
 \item{s}{An \code{\link[=Ar1Param]{Ar1Param()}} object.}
 
-\item{eta}{A numeric vector of two free values.}
+\item{eta}{A numeric vector of two free values, already checked by the
+generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named numeric vector.
+A named numeric vector of \code{order + 1} entries, keyed as
+\code{param_tuple_names(s, order)}, with every mixed entry exactly zero.
 }
 \description{
-Closed form at every order, with every mixed component exactly zero, the
-log-determinant being a sum of a function of the scale and a function of
-the correlation.
+Closed form at all four orders. One page covers \code{\link[=param_dlogdet]{param_dlogdet()}},
+\code{\link[=param_d2logdet]{param_d2logdet()}}, \code{\link[=param_d3logdet]{param_d3logdet()}} and \code{\link[=param_d4logdet]{param_d4logdet()}} because the four
+differ only in the order taken:
+\eqn{\log|M| = p\log\sigma^2 + (p-1)\log(1-\rho^2)} is a \strong{sum} of a function
+of one free value and a function of the other, so every mixed component is
+exactly zero and the pure ones are the two chains taken separately.
+}
+\details{
+The scale's chain is \eqn{p} times the derivatives of \eqn{\log h}, which under
+the default log link is \eqn{p} at first order and 0 above it. The
+correlation's is \code{\link[=log_affine_derivs]{log_affine_derivs()}} on the two terms of
+\code{ar1_logdet_terms()}, chained onto the rhobit link.
+
+The four methods return vectors of \code{order + 1} entries, keyed by the tuple
+names of their own order. At \eqn{p = 4} and \eqn{\rho = 0.6} the second order
+is \eqn{(0, -3.84, 0)} over \code{log_scale:log_scale}, \code{z_rho:z_rho} and
+\code{log_scale:z_rho}.
+
+Together with \code{\link[=compound_symmetry]{compound_symmetry()}}, this is one of the two families where the
+higher log-determinant orders are non-zero, so a check of them has content
+here where on \code{\link[=log_cholesky]{log_cholesky()}} it would compare two zeros.
+}
+\seealso{
+\code{\link[=param_logdet.Ar1Param]{param_logdet.Ar1Param()}} for the quantity differentiated,
+\code{\link[=econ_logdet_derivative]{econ_logdet_derivative()}}, which assembles all four, and
+\code{\link[=param_dlogdet.CompoundSymmetryParam]{param_dlogdet.CompoundSymmetryParam()}} for the sibling family.
 }
 \keyword{internal}

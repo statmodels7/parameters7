@@ -6,15 +6,27 @@
 \arguments{
 \item{s}{An \code{\link[=Ar1Param]{Ar1Param()}} object.}
 
-\item{eta}{A numeric vector of two free values.}
+\item{eta}{A numeric vector of two free values, already checked by the
+generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A single number.
+A single number, finite at every free vector, the rhobit link keeping
+\eqn{1-\rho^2} strictly positive.
 }
 \description{
-Closed form: \eqn{p\log\sigma^2 + (p-1)\log(1-\rho^2)}, the determinant of
-the correlation pattern being \eqn{(1-\rho^2)^{p-1}}.
+Closed form. The determinant of the correlation pattern is
+\eqn{(1-\rho^2)^{p-1}}, so
+
+\deqn{\log|M| = p\log\sigma^2 + (p-1)\log(1-\rho^2).}
+
+Two logarithms and no factorization, whatever \eqn{p} is, against the base
+class's \eqn{O(p^3)} eigendecomposition. Measured at \eqn{p = 4} against the
+eigenvalues of the assembled matrix, the two agree to the printed digit.
+}
+\seealso{
+\code{\link[=param_dlogdet.Ar1Param]{param_dlogdet.Ar1Param()}} for its four derivative orders, and
+\code{ar1_logdet_terms()} for the two terms.
 }
 \keyword{internal}

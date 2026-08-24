@@ -6,14 +6,24 @@
 \arguments{
 \item{s}{An \code{\link[=Ar1Param]{Ar1Param()}} object.}
 
-\item{eta}{A numeric vector of two free values.}
+\item{eta}{A numeric vector of two free values, already checked by the
+generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-An AR(1) positive definite matrix.
+A \code{s@dimension} by \code{s@dimension} symmetric positive definite Toeplitz
+matrix with dimnames \code{v1}, \code{v2}, ...
 }
 \description{
-\eqn{\sigma^2 \rho^{\lvert i-j \rvert}}.
+Returns \eqn{M_{ij} = \sigma^2 \rho^{|i-j|}}: the common variance on the
+diagonal and a covariance falling geometrically with the lag. Positive
+definiteness holds at every free vector, the rhobit link keeping
+\eqn{|\rho| < 1}, so nothing is tested here.
+}
+\seealso{
+\code{\link[=param_free.Ar1Param]{param_free.Ar1Param()}} for the inverse map,
+\code{\link[=param_solve.Ar1Param]{param_solve.Ar1Param()}} for the tridiagonal matrix inverse, and
+\code{ar1_pattern()} for the pattern.
 }
 \keyword{internal}

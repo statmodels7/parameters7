@@ -9,17 +9,44 @@
 \arguments{
 \item{s}{An \code{\link[=Ar1Param]{Ar1Param()}} object.}
 
-\item{eta}{A numeric vector of two free values.}
+\item{eta}{A numeric vector of two free values, already checked by the
+generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named list of symmetric matrices.
+A named list of \code{order + 1} symmetric \code{s@dimension} by \code{s@dimension}
+matrices; see \strong{Details} for the keying of each order.
 }
 \description{
-Closed form at every order: a component with \eqn{a} scale indices and
-\eqn{b} correlation indices is the \eqn{a}-th derivative of the scale times
-the \eqn{b}-th derivative of the pattern, and the pattern's derivatives are
-powers composed with the link.
+Closed form at all four orders. One page covers \code{\link[=param_d1]{param_d1()}}, \code{\link[=param_d2]{param_d2()}},
+\code{\link[=param_d3]{param_d3()}} and \code{\link[=param_d4]{param_d4()}} for this family because the four are the same
+product at different orders: \eqn{M = \sigma^2 P(\rho)}, so a component with
+\eqn{a} scale indices and \eqn{b} correlation indices is the \eqn{a}-th
+derivative of the scale times the \eqn{b}-th derivative of the pattern.
+
+The pattern's derivatives are the ones that need work here. An entry is
+\eqn{\rho^{|i-j|}}, a power where \code{\link[=compound_symmetry]{compound_symmetry()}}'s pattern is linear,
+so each is composed with the rhobit link to the order asked, through
+\code{\link[=compose4]{compose4()}}. Each distinct lag is composed once.
+}
+\details{
+The four methods return lists of \code{order + 1} matrices, keyed by the tuple names
+of their own order:
+\itemize{
+\item \code{\link[=param_d1]{param_d1()}}: 2 entries, keyed by \code{free_names}.
+\item \code{\link[=param_d2]{param_d2()}}: 3 entries, \code{param_tuple_names(s, 2)}.
+\item \code{\link[=param_d3]{param_d3()}}: 4 entries, \code{param_tuple_names(s, 3)}.
+\item \code{\link[=param_d4]{param_d4()}}: 5 entries, \code{param_tuple_names(s, 4)}.
+}
+
+Every component with at least one correlation index has a zero diagonal, the
+lag-0 entries of the pattern being the constant 1.
+}
+\seealso{
+\code{\link[=econ_derivative]{econ_derivative()}}, which assembles all four, \code{ar1_pattern()} for
+the pattern and its derivatives, and
+\code{\link[=param_d1.CompoundSymmetryParam]{param_d1.CompoundSymmetryParam()}} for the sibling family, whose pattern is
+linear.
 }
 \keyword{internal}
