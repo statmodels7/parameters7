@@ -7,41 +7,99 @@
 param_logdet(s, eta, ...)
 }
 \arguments{
-\item{s}{An object inheriting from class \code{\link[=parameter]{parameter()}}.}
+\item{s}{An object inheriting from class \code{\link[=matrix_parameter]{matrix_parameter()}}. A family whose
+value is not a symmetric matrix has no method, and the call fails at
+dispatch with \verb{Can't find method for param_logdet(<SimplexParam>)}.}
 
-\item{eta}{A numeric vector of length \code{s@n_free}.}
+\item{eta}{A numeric vector of length \code{s@n_free}, finite in every entry.}
 
-\item{...}{Passed to methods.}
+\item{...}{Passed to the method. No method in this package reads it.}
 }
 \value{
-A single number.
+A single number. \code{-Inf} is not returned: a full-rank family is
+positive definite at every finite \code{eta}, and a deficient one drops its
+null directions instead of taking \code{log(0)}.
 }
 \description{
-Returns \eqn{\log|M|} when the family is of full rank, and the log
-pseudo-determinant -- the sum of the logs of the non-zero eigenvalues --
-when it is not.
-}
-\details{
-One generic covers both because a consumer asks the same question of either:
-what normalizing constant does this matrix contribute. The object records
-which answer is the right one, through its declared rank.
+Returns \eqn{\log|M|} for a full-rank family, and the log
+pseudo-determinant, the sum of the logs of the non-zero eigenvalues, for a
+rank-deficient one. This is the quantity a Gaussian likelihood needs beside
+the quadratic form, and every matrix family answers it, in closed form where
+one exists.
 
-The sign in front of the result is the consumer's arithmetic. A gaussian
-log-density written in the covariance carries \eqn{-\frac{1}{2}\log|\Sigma|}
-and one written in the precision carries \eqn{+\frac{1}{2}\log|\Omega|};
-the parameter answers what the log-determinant is, and the likelihood
-decides where it goes.
+One generic covers both cases because a consumer asks the same question of
+either: what normalizing constant does this matrix contribute. Which answer
+is the right one follows from the object's declared \code{rank}, so the caller
+does not have to branch.
 }
+\section{The sign belongs to the caller}{
+A Gaussian log-density written in the covariance carries
+\eqn{-\tfrac{1}{2}\log|\Sigma|} and one written in the precision carries
+\eqn{+\tfrac{1}{2}\log|\Omega|}. The parameter reports what the
+log-determinant is; the likelihood decides where it goes and with what sign.
+The object's \code{role} records which side it was built for, and no method reads
+it.
+}
+
+\section{Computed from the parametrization, not from the matrix}{
+A closed form is usually far cheaper than a decomposition, and often simply
+linear. In the log-Cholesky parametrization
+\eqn{\log|M| = 2\sum_{i=1}^{p} \eta_i}, twice the sum of the first \eqn{p}
+free values, so no factorization happens at all. The \code{\link[=ar1]{ar1()}} family answers
+\eqn{p\,\eta_1 + (p-1)\log(1 - \rho^2)}, again in constant work whatever
+\eqn{p} is. The base method on \code{\link[=matrix_parameter]{matrix_parameter()}}, which a family written
+elsewhere inherits, takes an eigendecomposition and sums the logs of the
+eigenvalues above a relative tolerance, at \eqn{O(p^3)}.
+}
+
+\section{Rank deficiency}{
+A deficient family returns the log pseudo-determinant, and its \code{null_basis}
+says which directions were left out. That is the quantity an improper prior
+contributes to a marginal likelihood: the penalized normal equations invert
+\eqn{X^\top X + \lambda P}, which is non-singular even when \eqn{P} is not,
+so the deficiency never has to be inverted. \code{\link[=param_solve]{param_solve()}} and
+\code{\link[=param_factor]{param_factor()}} reject it for that reason.
+}
+
+\section{Notation}{
+
+\eqn{M} is the matrix \code{\link[=param_value]{param_value()}} returns, \eqn{\Sigma} read as a
+covariance and \eqn{\Omega} read as a precision. \eqn{\eta} is the free
+vector and \eqn{p} the side of the matrix.
+}
+
 \examples{
-param_logdet(log_cholesky(2), c(0, 0, 0))
+# It agrees with the eigenvalues, and is cheaper: no decomposition is taken.
+s <- log_cholesky(3)
+eta <- c(0.1, -0.2, 0.3, 0.5, -0.4, 0.2)
+M <- param_value(s, eta)
+c(param_logdet(s, eta), determinant(M, logarithm = TRUE)$modulus)
 
-# a rank-deficient precision: the pseudo-determinant, over the 4 non-zero
-# eigenvalues of a second-difference penalty on 6 coefficients
-p <- crossprod(diff(diag(6), differences = 2))
-s <- scaled_matrix(p)
-c(rank = s@rank, logdet = param_logdet(s, 0))
+# In this parametrization it is linear: twice the sum of the first p entries.
+all.equal(param_logdet(s, eta), 2 * sum(eta[1:3]))
+
+# An AR(1) covariance, where it is not linear.
+a <- ar1(4)
+a@free_names
+eta_a <- c(0.3, 0.8)
+rho <- tanh(eta_a[2])
+all.equal(param_logdet(a, eta_a), 4 * eta_a[1] + 3 * log(1 - rho^2))
+
+# A rank-deficient precision: the pseudo-determinant over the four non-zero
+# eigenvalues of a second-difference penalty on six coefficients.
+P <- crossprod(diff(diag(6), differences = 2))
+r <- scaled_matrix(P)
+ev <- eigen(P, symmetric = TRUE, only.values = TRUE)$values
+c(rank = r@rank, logdet = param_logdet(r, 0), from_ev = sum(log(ev[1:4])))
+
+# The scale enters it rank times over, so a step of 1 in the free value
+# moves the log pseudo-determinant by the rank.
+param_logdet(r, 1) - param_logdet(r, 0)
 
 }
 \seealso{
-\code{\link[=param_dlogdet]{param_dlogdet()}}, \code{\link[=param_solve]{param_solve()}}
+\code{\link[=param_dlogdet]{param_dlogdet()}}, \code{\link[=param_d2logdet]{param_d2logdet()}}, \code{\link[=param_d3logdet]{param_d3logdet()}} and
+\code{\link[=param_d4logdet]{param_d4logdet()}} for its derivatives, \code{\link[=param_solve]{param_solve()}} for the quadratic
+form that goes with it, and \code{\link[=param_null_basis]{param_null_basis()}} for the directions a
+deficient family omits.
 }

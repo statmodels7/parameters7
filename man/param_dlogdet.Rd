@@ -7,35 +7,69 @@
 param_dlogdet(s, eta, ...)
 }
 \arguments{
-\item{s}{An object inheriting from class \code{\link[=parameter]{parameter()}}.}
+\item{s}{An object inheriting from class \code{\link[=matrix_parameter]{matrix_parameter()}}.}
 
-\item{eta}{A numeric vector of length \code{s@n_free}.}
+\item{eta}{A numeric vector of length \code{s@n_free}, finite in every entry.}
 
-\item{...}{Passed to methods.}
+\item{...}{Passed to the method. No method in this package reads it.}
 }
 \value{
-A numeric vector of length \code{s@n_free}, named by
-\code{s@free_names}.
+A numeric vector of length \code{s@n_free}, named by \code{s@free_names}.
 }
 \description{
-Returns \eqn{\partial \log|M| / \partial \eta_k} for every free value, or
-the same derivative of the log pseudo-determinant when the family is rank
-deficient.
+Returns \eqn{\partial \log|M| / \partial \eta_k} for every free value, or the
+same derivative of the log pseudo-determinant for a rank-deficient family. A
+Gaussian score in the coordinates an optimizer moves is the derivative of the
+quadratic form plus this, so it is needed at every iteration of a fit.
 }
-\details{
-The identity behind it is
-\eqn{\partial_k \log|M| = \mathrm{tr}(M^{-1} \partial_k M)}, with the
-Moore-Penrose inverse in place of \eqn{M^{-1}} in the rank-deficient case.
-A closed form is therefore never an independent claim: it must agree with
-\code{\link[=param_d1]{param_d1()}} through that identity, and
-\code{\link[=check_parameter]{check_parameter()}} compares the two routes.
+\section{The identity it must satisfy}{
+\deqn{\partial_k \log|M| = \mathrm{tr}\!\left(M^{-1} \partial_k M\right),}
+
+with the Moore-Penrose inverse in place of \eqn{M^{-1}} when the family is
+rank deficient. A closed form here is therefore never an independent claim:
+it has to agree with \code{\link[=param_d1]{param_d1()}} through that trace, and
+\code{\link[=check_parameter]{check_parameter()}} runs both routes and compares them. The example below
+does the same in three lines.
 }
+
+\section{What the answer looks like}{
+It is often constant. In the log-Cholesky parametrization the
+log-determinant is \eqn{2\sum_{i\le p}\eta_i}, so the gradient is 2 in the
+\eqn{p} diagonal directions and 0 in the rest, at every \eqn{\eta}. For a
+\code{\link[=scaled_matrix]{scaled_matrix()}}, where the free value is the log of a multiplier on a fixed
+matrix, the gradient is the rank, again at every \eqn{\eta}: the scale enters
+the pseudo-determinant once per non-zero eigenvalue.
+}
+
+\section{Notation}{
+
+\eqn{M} is the matrix \code{\link[=param_value]{param_value()}} returns and \eqn{\eta} the free vector,
+of length \eqn{d = } \code{s@n_free}. \eqn{p} is the side of the matrix.
+}
+
 \examples{
-# for a scaled precision the derivative is the rank, whatever the scale
-s <- scaled_matrix(crossprod(diff(diag(6), differences = 2)))
-c(param_dlogdet(s, -3), param_dlogdet(s, 5), rank = s@rank)
+# The trace identity, checked against param_d1() directly.
+s <- log_cholesky(3)
+eta <- c(0.1, -0.2, 0.3, 0.5, -0.4, 0.2)
+Minv <- solve(param_value(s, eta))
+tr <- vapply(param_d1(s, eta), function(A) sum(diag(Minv \%*\% A)), numeric(1))
+max(abs(param_dlogdet(s, eta) - tr))
+
+# In this parametrization the answer is 2 on the diagonal directions and 0
+# elsewhere, whatever eta is.
+param_dlogdet(s, eta)
+
+# For a scaled precision it is the rank, whatever the scale.
+r <- scaled_matrix(crossprod(diff(diag(6), differences = 2)))
+c(at_minus_3 = param_dlogdet(r, -3), at_5 = param_dlogdet(r, 5),
+  rank = r@rank)
+
+# An AR(1) covariance, where the correlation direction is not constant.
+param_dlogdet(ar1(4), c(0.3, 0.8))
 
 }
 \seealso{
-\code{\link[=param_logdet]{param_logdet()}}, \code{\link[=param_d2logdet]{param_d2logdet()}}
+\code{\link[=param_logdet]{param_logdet()}} for the quantity differentiated here,
+\code{\link[=param_d2logdet]{param_d2logdet()}} for the next order, and \code{\link[=param_d1]{param_d1()}}, which this must
+agree with through the trace identity.
 }

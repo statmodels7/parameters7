@@ -49,13 +49,14 @@ reference:
 - title: What a likelihood asks of the matrix
   desc: >
     The log-determinant, or the log pseudo-determinant when the family is rank
-    deficient, and the solves -- computed through a factor rather than through
-    an explicit inverse.
+    deficient, and the solves, computed through a factor instead of through an
+    explicit inverse.
   contents:
   - param_logdet
   - param_dlogdet
   - param_d2logdet
   - param_d3logdet
+  - param_d4logdet
   - param_solve
   - param_factor
 

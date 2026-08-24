@@ -7,42 +7,77 @@
 param_tuple_names(s, order = 2L)
 }
 \arguments{
-\item{s}{An object inheriting from class \code{\link[=parameter]{parameter()}}.}
+\item{s}{An object inheriting from class \code{\link[=parameter]{parameter()}}, whose \code{free_names}
+supply the labels and whose \code{n_free} supplies \eqn{d}.}
 
-\item{order}{The derivative order: 2 (default), 3 or 4.}
+\item{order}{The derivative order. \code{2} by default, which is the order
+\code{\link[=param_d2]{param_d2()}} and \code{\link[=param_d2logdet]{param_d2logdet()}} use; \code{3} and \code{4} name the components of
+\code{\link[=param_d3]{param_d3()}} and \code{\link[=param_d4]{param_d4()}}. \code{1} is accepted and returns the free names
+themselves. Anything else throws \verb{'order' must be 1, 2, 3 or 4.}, the
+contract stopping at fourth order.}
 }
 \value{
-A character vector, one entry per distinct component.
+A character vector of \code{choose(s@n_free + order - 1, order)} names, in
+the same order as the list they key. At order 2 the \code{s@n_free} diagonal
+pairs come first.
 }
 \description{
-The keys of the derivative lists: one per unordered tuple of free values.
-At order 2, the keys of \code{\link[=param_d2]{param_d2()}} and
-\code{\link[=param_d2logdet]{param_d2logdet()}}, diagonal pairs first; at orders 3 and 4,
-the keys of \code{\link[=param_d3]{param_d3()}} and \code{\link[=param_d4]{param_d4()}},
-lexicographic combinations with repetition.
+Returns the keys of a derivative list: one per unordered tuple of free
+values, built by pasting the free names together with \code{":"}. At order 2 these
+are the keys of \code{\link[=param_d2]{param_d2()}} and \code{\link[=param_d2logdet]{param_d2logdet()}}, with the diagonal pairs
+first; at orders 3 and 4 the keys of \code{\link[=param_d3]{param_d3()}} and \code{\link[=param_d4]{param_d4()}}, in
+lexicographic order. Use it to look a component up by name, or to walk a
+derivative list beside the index tuples \code{\link[=param_tuple_indices]{param_tuple_indices()}} returns.
 }
-\details{
-A mixed partial derivative does not depend on the order in which the
-free values are differentiated, so the components at order \eqn{k} are
-the multisets of size \eqn{k} drawn from the \eqn{n} free values, of
-which there are
+\section{How many there are}{
+A mixed partial does not depend on the order of differentiation, so the
+components at order \eqn{k} are the multisets of size \eqn{k} drawn from the
+\eqn{d} free values, of which there are
 
-\deqn{\binom{n + k - 1}{k},}
+\deqn{\binom{d + k - 1}{k},}
 
-rather than the \eqn{n^k} ordered tuples. That is the length of the
-vector returned and of every derivative list of that order.
-
-This exists so that nothing has to recover a tuple by splitting a key
-apart. Generating the keys and the index tuples from one enumeration
-cannot be fooled by a free name that contains the separator, which
-splitting can. Use \code{\link[=param_tuple_indices]{param_tuple_indices()}} for the tuples
-themselves.
+against \eqn{d^k} ordered tuples. That is the length of the vector returned
+and of every derivative list of that order. For \eqn{d = 6}, which is a
+\eqn{3 \times 3} unstructured covariance, order 4 has 126 components against
+1296 ordered ones.
 }
+
+\section{Why the keys and the tuples come from one enumeration}{
+Nothing in the toolkit recovers an index by splitting a key apart. Taking
+\code{"log_L1:log_L2"} and splitting on \code{":"} works until a free name contains the
+separator itself, and then it yields the wrong number of pieces and the
+failure is silent. Generating the names and the indices from one enumeration
+cannot be fooled that way. \code{param_tuple_names()} calls
+\code{\link[=param_tuple_indices]{param_tuple_indices()}} and labels what it gets, so the two agree by
+construction.
+}
+
+\section{Notation}{
+
+\eqn{d} is the length of the free vector, \code{s@n_free}, and \eqn{k} the
+derivative order.
+}
+
 \examples{
-param_tuple_names(log_cholesky(2))
-param_tuple_names(scalar_matrix(2), 3)
+s <- log_cholesky(2)
+param_tuple_names(s)
+param_tuple_names(s, 3)
+
+# They really are the keys of the derivative list, in order.
+identical(param_tuple_names(s, 4), names(param_d4(s, c(0.2, -0.1, 0.4))))
+
+# The count is over unordered tuples.
+q <- log_cholesky(3)
+vapply(1:4, function(k) length(param_tuple_names(q, k)), integer(1))
+choose(6 + 1:4 - 1, 1:4)
+
+# Order 2 puts the diagonal pairs first, which is how a consumer filling a
+# Hessian wants them.
+param_tuple_names(s, 2)
 
 }
 \seealso{
-\code{\link[=param_tuple_indices]{param_tuple_indices()}}
+\code{\link[=param_tuple_indices]{param_tuple_indices()}} for the index tuples in the same order, and
+\code{\link[=param_d2]{param_d2()}}, \code{\link[=param_d3]{param_d3()}}, \code{\link[=param_d4]{param_d4()}}, \code{\link[=param_d2logdet]{param_d2logdet()}},
+\code{\link[=param_d3logdet]{param_d3logdet()}} and \code{\link[=param_d4logdet]{param_d4logdet()}} for the lists these key.
 }

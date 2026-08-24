@@ -7,26 +7,63 @@
 param_tuple_indices(s, order = 2L)
 }
 \arguments{
-\item{s}{An object inheriting from class \code{\link[=parameter]{parameter()}}.}
+\item{s}{An object inheriting from class \code{\link[=parameter]{parameter()}}, whose \code{n_free}
+supplies \eqn{d}.}
 
-\item{order}{The derivative order: 1 to 4.}
+\item{order}{The derivative order: \code{1}, \code{2} (the default), \code{3} or \code{4}.
+Anything else throws \verb{'order' must be 1, 2, 3 or 4.}}
 }
 \value{
-A list of integer vectors of length \code{order}.
+A list of \code{choose(s@n_free + order - 1, order)} integer vectors, each
+of length \code{order}, holding positions in \code{1:s@n_free} in non-decreasing
+order within a tuple.
 }
 \description{
-The unordered index tuples \code{\link[=param_tuple_names]{param_tuple_names()}} names, in
-exactly the same order. At order 2 the diagonal pairs come first and then
-the off-diagonal ones, because consumers index a Hessian that way; at
-orders 3 and 4 the tuples are the lexicographic combinations with
-repetition, matching the enumeration \pkg{distributions7} uses for its
-higher derivatives.
+Returns the unordered index tuples that \code{\link[=param_tuple_names]{param_tuple_names()}} labels, in
+exactly the same order, as integer positions into the free vector. A consumer
+that has to know \emph{which} free values a component differentiates in reads
+these; a consumer that only has to display a label reads the names. At order
+2 the diagonal pairs come first and the off-diagonal ones after, which is how
+a Hessian is filled; at orders 3 and 4 the tuples are the lexicographic
+combinations with repetition.
 }
+\details{
+The order at orders 3 and 4 matches the enumeration \pkg{distributions7} uses
+for its own higher derivatives, so a consumer contracting a parameter's
+derivative array against a distribution's can walk the two lists together
+without reindexing. Both come from \code{numericals7::tuple_indices()}, which is
+the single copy of the enumeration in the toolkit.
+}
+\section{Notation}{
+
+\eqn{d} is the length of the free vector, \code{s@n_free}, and \eqn{k} the
+derivative order.
+}
+
 \examples{
-param_tuple_indices(log_cholesky(2), 2)
-length(param_tuple_indices(log_cholesky(2), 3))
+s <- log_cholesky(2)
+
+# Order 2: the three diagonal pairs first, then the three off-diagonal ones.
+param_tuple_indices(s, 2)
+
+# The tuples and the names are the same enumeration, so they line up.
+idx <- param_tuple_indices(s, 3)
+nm <- param_tuple_names(s, 3)
+identical(nm, vapply(idx, function(t) paste(s@free_names[t], collapse = ":"),
+                     character(1)))
+
+# What they are for: reading a component's indices to contract with.
+d2 <- param_d2(s, c(0.2, -0.1, 0.4))
+d1 <- param_d1(s, c(0.2, -0.1, 0.4))
+i <- which(param_tuple_names(s, 2) == "log_L1:L2.1")
+param_tuple_indices(s, 2)[[i]]
+dim(d2[[i]])
+
+# Counts, over unordered tuples.
+vapply(1:4, function(k) length(param_tuple_indices(s, k)), integer(1))
 
 }
 \seealso{
-\code{\link[=param_tuple_names]{param_tuple_names()}}
+\code{\link[=param_tuple_names]{param_tuple_names()}} for the same tuples as labels, and
+\code{\link[=param_d2]{param_d2()}}, \code{\link[=param_d3]{param_d3()}} and \code{\link[=param_d4]{param_d4()}} for the lists they index.
 }

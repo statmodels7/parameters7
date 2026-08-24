@@ -7,19 +7,26 @@
 tuple_indices(d, order = 2L)
 }
 \arguments{
-\item{d}{The number of variables.}
+\item{d}{The number of variables, a single non-negative integer.}
 
-\item{order}{The derivative order, 1 to 4.}
+\item{order}{The derivative order: 1, 2, 3 or 4. Anything else throws
+\verb{'order' must be 1, 2, 3 or 4.}}
 }
 \value{
-A list of integer vectors of length \code{order}.
+A list of \code{choose(d + order - 1, order)} integer vectors, each of
+length \code{order}, holding positions in \code{1:d} in non-decreasing order within a
+tuple. At order 2 the diagonal pairs come first.
 }
 \description{
-The enumeration behind \code{\link[=param_tuple_indices]{param_tuple_indices()}}, taken over a
-number of variables rather than over a parameter, so that anything holding
-derivatives over \eqn{d} variables -- a jet, for instance -- can share it.
+The enumeration behind \code{\link[=param_tuple_indices]{param_tuple_indices()}}, taken over a plain count of
+variables instead of over a parameter object, so that anything holding
+derivatives over \eqn{d} variables can use it without constructing a
+\code{\link[=parameter]{parameter()}}. A one-line forward to \code{numericals7::tuple_indices()}, which is
+the toolkit's single copy of this enumeration. Delegating means this copy
+cannot come to disagree with the one a consumer is keyed by.
 }
 \seealso{
-\code{\link[=param_tuple_indices]{param_tuple_indices()}}
+\code{\link[=param_tuple_indices]{param_tuple_indices()}}, the parameter-facing wrapper, and
+\code{\link[numericals7:tuple_indices]{numericals7::tuple_indices()}}, the implementation.
 }
 \keyword{internal}

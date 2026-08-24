@@ -7,27 +7,67 @@
 param_factor(s, eta, ...)
 }
 \arguments{
-\item{s}{An object inheriting from class \code{\link[=parameter]{parameter()}}.}
+\item{s}{An object inheriting from class \code{\link[=matrix_parameter]{matrix_parameter()}}, of full rank.}
 
-\item{eta}{A numeric vector of length \code{s@n_free}.}
+\item{eta}{A numeric vector of length \code{s@n_free}, finite in every entry.}
 
-\item{...}{Passed to methods.}
+\item{...}{Passed to the method. No method in this package reads it.}
 }
 \value{
-A lower triangular numeric matrix with \code{s@dimension} rows and
-columns.
+A \code{s@dimension} by \code{s@dimension} lower triangular numeric matrix with
+a positive diagonal, satisfying \code{L \%*\% t(L) == param_value(s, eta)}.
 }
 \description{
-Returns a lower triangular \eqn{L} with \eqn{M = L L^\top}.
+Returns the lower triangular \eqn{L} with \eqn{M = L L^\top}, the Cholesky
+factor of the matrix the parametrization produces. Simulation is the usual
+reason to want it: \eqn{L z} with \eqn{z} standard normal has covariance
+\eqn{M}, so one factor draws as many vectors as needed. For
+\code{\link[=log_cholesky]{log_cholesky()}} the factor is what the parametrization holds anyway, so it
+is returned without any arithmetic.
 }
-\details{
-Rejected for a rank-deficient family, for the reason given in
-\code{\link[=param_solve]{param_solve()}}.
+\section{Rank deficiency is rejected}{
+A deficient matrix has no Cholesky factor: a triangular \eqn{L} with
+\eqn{L L^\top = M} would need a zero on the diagonal, and the factor is then
+not unique. The generic signals an error naming the family and its rank
+before dispatching. To simulate from a deficient covariance, take an
+eigendecomposition and use the eigenvectors of the non-zero eigenvalues;
+\code{\link[=param_null_basis]{param_null_basis()}} gives the directions that carry no variance.
 }
+
+\section{A non-matrix family has no method}{
+\code{\link[=simplex]{simplex()}} and \code{\link[=transition_matrix]{transition_matrix()}} are checked for and refused by name,
+their value not being a symmetric matrix.
+}
+
+\section{Notation}{
+
+\eqn{M} is the matrix \code{\link[=param_value]{param_value()}} returns, \eqn{p} its side, and
+\eqn{\eta} the free vector.
+}
+
 \examples{
-round(param_factor(log_cholesky(2), c(0.1, 0.2, -0.3)), 4)
+s <- log_cholesky(3)
+eta <- c(0.1, -0.2, 0.3, 0.5, -0.4, 0.2)
+L <- param_factor(s, eta)
+round(L, 4)
+
+# It is a factor, exactly.
+max(abs(L \%*\% t(L) - param_value(s, eta)))
+
+# In this parametrization the diagonal is exp() of the first p free values.
+all.equal(diag(L), exp(eta[1:3]))
+
+# What it is for: simulating with the right covariance.
+set.seed(1)
+y <- t(L \%*\% matrix(rnorm(3 * 20000), 3, 20000))
+round(cov(y) - param_value(s, eta), 2)
+
+# A rank-deficient family has no factor and says so.
+try(param_factor(scaled_matrix(crossprod(diff(diag(6), differences = 2))), 0))
 
 }
 \seealso{
-\code{\link[=param_solve]{param_solve()}}
+\code{\link[=param_solve]{param_solve()}} for a solve through the same factor,
+\code{\link[=param_value]{param_value()}} for the matrix it factors, and \code{\link[=log_cholesky]{log_cholesky()}}, whose
+free values are the logarithms of this factor's diagonal.
 }

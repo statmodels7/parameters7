@@ -7,35 +7,87 @@
 param_solve(s, eta, b = NULL, ...)
 }
 \arguments{
-\item{s}{An object inheriting from class \code{\link[=parameter]{parameter()}}.}
+\item{s}{An object inheriting from class \code{\link[=matrix_parameter]{matrix_parameter()}}, of full rank.}
 
-\item{eta}{A numeric vector of length \code{s@n_free}.}
+\item{eta}{A numeric vector of length \code{s@n_free}, finite in every entry.}
 
-\item{b}{A numeric matrix or vector with \code{s@dimension} rows. Defaults to the
-identity, which returns the inverse.}
+\item{b}{A numeric matrix or vector with \code{s@dimension} rows; a vector is
+treated as a one-column matrix. Defaults to \code{NULL}, which stands for the
+identity and returns the inverse. A wrong number of rows throws a message
+naming the number required.}
 
-\item{...}{Passed to methods.}
+\item{...}{Passed to the method. No method in this package reads it.}
 }
 \value{
-A numeric matrix with \code{s@dimension} rows.
+A numeric matrix with \code{s@dimension} rows and as many columns as \code{b},
+so \code{s@dimension} by \code{s@dimension} when \code{b} is left out. A vector \code{b}
+returns a one-column matrix, not a vector.
 }
 \description{
-Returns \eqn{M^{-1} B}, computed through a factor rather than through an
-explicit inverse.
+Returns \eqn{M^{-1} B} for a right-hand side \eqn{B}, computed through a
+factorization instead of by forming the inverse. This is what a Gaussian
+quadratic form needs: \code{crossprod(r, param_solve(s, eta, r))} is
+\eqn{r^\top M^{-1} r} at the cost of one triangular solve, where inverting
+and multiplying would cost more and be less accurate. Called with no \code{B} it
+does return the inverse, which is convenient for reading a covariance off a
+precision.
 }
-\details{
-A rank-deficient parameter rejects rather than returning a pseudo-inverse.
-What a consumer of an improper prior needs is the quadratic form and the
-log pseudo-determinant -- the penalized normal equations invert
-\eqn{X^\top X + \lambda P}, which is non-singular even when \eqn{P} is not,
-and is assembled by the consumer -- so a pseudo-inverse would be a plausible
-matrix answering a question nobody asked.
+\section{Rank deficiency is rejected}{
+A deficient family signals an error and names its rank, instead of returning
+a pseudo-inverse. What a consumer of an improper prior needs is the quadratic
+form and the log pseudo-determinant: penalized normal equations invert
+\eqn{X^\top X + \lambda P}, which is non-singular even where \eqn{P} is not,
+and the consumer assembles that matrix itself. A pseudo-inverse returned here
+would be a plausible matrix answering a question nobody asked, and the caller
+would have no way to tell.
 }
+
+\section{A non-matrix family has no method}{
+\code{\link[=simplex]{simplex()}} and \code{\link[=transition_matrix]{transition_matrix()}} inherit \code{\link[=parameter]{parameter()}} alone, not
+\code{\link[=matrix_parameter]{matrix_parameter()}}, and the generic checks for that before dispatching, so
+the message names the family and says its value is not a symmetric matrix.
+}
+
+\section{Cost}{
+The base method on \code{\link[=matrix_parameter]{matrix_parameter()}}, which most families take, works
+through a Cholesky factor: \eqn{O(p^3)} once plus \eqn{O(p^2)} per column of
+\eqn{B}. Seven families override it with a closed-form inverse. \code{\link[=ar1]{ar1()}}
+writes its tridiagonal precision out entry by entry, \code{\link[=compound_symmetry]{compound_symmetry()}}
+uses Sherman-Morrison, and \code{\link[=block_diag]{block_diag()}} and \code{\link[=kron_identity]{kron_identity()}} solve
+blockwise, so none of them decomposes anything of side \eqn{p}.
+}
+
+\section{Notation}{
+
+\eqn{M} is the matrix \code{\link[=param_value]{param_value()}} returns, \eqn{p} its side, and
+\eqn{\eta} the free vector.
+}
+
 \examples{
-s <- log_cholesky(2)
-round(param_solve(s, c(0, 0, 0.5)), 4)
+s <- log_cholesky(3)
+eta <- c(0.1, -0.2, 0.3, 0.5, -0.4, 0.2)
+
+# With no b it is the inverse, and agrees with solve().
+max(abs(param_solve(s, eta) - solve(param_value(s, eta))))
+
+# The quadratic form of a Gaussian log-density, in one solve.
+r <- c(0.4, -1.1, 0.7)
+q <- drop(crossprod(r, param_solve(s, eta, r)))
+c(q, drop(r \%*\% solve(param_value(s, eta)) \%*\% r))
+
+# A vector b comes back as a one-column matrix.
+dim(param_solve(s, eta, r))
+
+# A rank-deficient family refuses, and says what to do instead.
+r_def <- scaled_matrix(crossprod(diff(diag(6), differences = 2)))
+try(param_solve(r_def, 0))
+
+# So does a family whose value is not a symmetric matrix.
+try(param_solve(simplex(3), c(0, 0)))
 
 }
 \seealso{
-\code{\link[=param_factor]{param_factor()}}, \code{\link[=param_logdet]{param_logdet()}}
+\code{\link[=param_factor]{param_factor()}} for the factor itself, \code{\link[=param_logdet]{param_logdet()}} for the
+other half of a Gaussian log-density, and \code{\link[=param_null_basis]{param_null_basis()}} for what a
+deficient family offers in place of an inverse.
 }

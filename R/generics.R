@@ -332,37 +332,94 @@ param_d2 <- S7::new_generic("param_d2", "s", function(s, eta, ...) {
 #' Log-Determinant of a Parameter's Matrix
 #'
 #' @description
-#' Returns \eqn{\log|M|} when the family is of full rank, and the log
-#' pseudo-determinant -- the sum of the logs of the non-zero eigenvalues --
-#' when it is not.
+#' Returns \eqn{\log|M|} for a full-rank family, and the log
+#' pseudo-determinant, the sum of the logs of the non-zero eigenvalues, for a
+#' rank-deficient one. This is the quantity a Gaussian likelihood needs beside
+#' the quadratic form, and every matrix family answers it, in closed form where
+#' one exists.
+#'
+#' One generic covers both cases because a consumer asks the same question of
+#' either: what normalizing constant does this matrix contribute. Which answer
+#' is the right one follows from the object's declared `rank`, so the caller
+#' does not have to branch.
 #'
 #' @details
-#' One generic covers both because a consumer asks the same question of either:
-#' what normalizing constant does this matrix contribute. The object records
-#' which answer is the right one, through its declared rank.
+#' # The sign belongs to the caller
 #'
-#' The sign in front of the result is the consumer's arithmetic. A gaussian
-#' log-density written in the covariance carries \eqn{-\frac{1}{2}\log|\Sigma|}
-#' and one written in the precision carries \eqn{+\frac{1}{2}\log|\Omega|};
-#' the parameter answers what the log-determinant is, and the likelihood
-#' decides where it goes.
+#' A Gaussian log-density written in the covariance carries
+#' \eqn{-\tfrac{1}{2}\log|\Sigma|} and one written in the precision carries
+#' \eqn{+\tfrac{1}{2}\log|\Omega|}. The parameter reports what the
+#' log-determinant is; the likelihood decides where it goes and with what sign.
+#' The object's `role` records which side it was built for, and no method reads
+#' it.
 #'
-#' @param s An object inheriting from class [parameter()].
-#' @param eta A numeric vector of length `s@n_free`.
-#' @param ... Passed to methods.
+#' # Computed from the parametrization, not from the matrix
 #'
-#' @return A single number.
+#' A closed form is usually far cheaper than a decomposition, and often simply
+#' linear. In the log-Cholesky parametrization
+#' \eqn{\log|M| = 2\sum_{i=1}^{p} \eta_i}, twice the sum of the first \eqn{p}
+#' free values, so no factorization happens at all. The [ar1()] family answers
+#' \eqn{p\,\eta_1 + (p-1)\log(1 - \rho^2)}, again in constant work whatever
+#' \eqn{p} is. The base method on [matrix_parameter()], which a family written
+#' elsewhere inherits, takes an eigendecomposition and sums the logs of the
+#' eigenvalues above a relative tolerance, at \eqn{O(p^3)}.
 #'
-#' @seealso [param_dlogdet()], [param_solve()]
+#' # Rank deficiency
+#'
+#' A deficient family returns the log pseudo-determinant, and its `null_basis`
+#' says which directions were left out. That is the quantity an improper prior
+#' contributes to a marginal likelihood: the penalized normal equations invert
+#' \eqn{X^\top X + \lambda P}, which is non-singular even when \eqn{P} is not,
+#' so the deficiency never has to be inverted. [param_solve()] and
+#' [param_factor()] reject it for that reason.
+#'
+#' @section Notation:
+#' \eqn{M} is the matrix [param_value()] returns, \eqn{\Sigma} read as a
+#' covariance and \eqn{\Omega} read as a precision. \eqn{\eta} is the free
+#' vector and \eqn{p} the side of the matrix.
+#'
+#' @param s An object inheriting from class [matrix_parameter()]. A family whose
+#'   value is not a symmetric matrix has no method, and the call fails at
+#'   dispatch with `Can't find method for param_logdet(<SimplexParam>)`.
+#' @param eta A numeric vector of length `s@n_free`, finite in every entry.
+#' @param ... Passed to the method. No method in this package reads it.
+#'
+#' @return A single number. `-Inf` is not returned: a full-rank family is
+#'   positive definite at every finite `eta`, and a deficient one drops its
+#'   null directions instead of taking `log(0)`.
+#'
+#' @seealso [param_dlogdet()], [param_d2logdet()], [param_d3logdet()] and
+#'   [param_d4logdet()] for its derivatives, [param_solve()] for the quadratic
+#'   form that goes with it, and [param_null_basis()] for the directions a
+#'   deficient family omits.
 #'
 #' @examples
-#' param_logdet(log_cholesky(2), c(0, 0, 0))
+#' # It agrees with the eigenvalues, and is cheaper: no decomposition is taken.
+#' s <- log_cholesky(3)
+#' eta <- c(0.1, -0.2, 0.3, 0.5, -0.4, 0.2)
+#' M <- param_value(s, eta)
+#' c(param_logdet(s, eta), determinant(M, logarithm = TRUE)$modulus)
 #'
-#' # a rank-deficient precision: the pseudo-determinant, over the 4 non-zero
-#' # eigenvalues of a second-difference penalty on 6 coefficients
-#' p <- crossprod(diff(diag(6), differences = 2))
-#' s <- scaled_matrix(p)
-#' c(rank = s@rank, logdet = param_logdet(s, 0))
+#' # In this parametrization it is linear: twice the sum of the first p entries.
+#' all.equal(param_logdet(s, eta), 2 * sum(eta[1:3]))
+#'
+#' # An AR(1) covariance, where it is not linear.
+#' a <- ar1(4)
+#' a@free_names
+#' eta_a <- c(0.3, 0.8)
+#' rho <- tanh(eta_a[2])
+#' all.equal(param_logdet(a, eta_a), 4 * eta_a[1] + 3 * log(1 - rho^2))
+#'
+#' # A rank-deficient precision: the pseudo-determinant over the four non-zero
+#' # eigenvalues of a second-difference penalty on six coefficients.
+#' P <- crossprod(diff(diag(6), differences = 2))
+#' r <- scaled_matrix(P)
+#' ev <- eigen(P, symmetric = TRUE, only.values = TRUE)$values
+#' c(rank = r@rank, logdet = param_logdet(r, 0), from_ev = sum(log(ev[1:4])))
+#'
+#' # The scale enters it rank times over, so a step of 1 in the free value
+#' # moves the log pseudo-determinant by the rank.
+#' param_logdet(r, 1) - param_logdet(r, 0)
 #'
 #' @export
 param_logdet <- S7::new_generic("param_logdet", "s", function(s, eta, ...) {
@@ -374,31 +431,64 @@ param_logdet <- S7::new_generic("param_logdet", "s", function(s, eta, ...) {
 #' Gradient of the Log-Determinant
 #'
 #' @description
-#' Returns \eqn{\partial \log|M| / \partial \eta_k} for every free value, or
-#' the same derivative of the log pseudo-determinant when the family is rank
-#' deficient.
+#' Returns \eqn{\partial \log|M| / \partial \eta_k} for every free value, or the
+#' same derivative of the log pseudo-determinant for a rank-deficient family. A
+#' Gaussian score in the coordinates an optimizer moves is the derivative of the
+#' quadratic form plus this, so it is needed at every iteration of a fit.
 #'
 #' @details
-#' The identity behind it is
-#' \eqn{\partial_k \log|M| = \mathrm{tr}(M^{-1} \partial_k M)}, with the
-#' Moore-Penrose inverse in place of \eqn{M^{-1}} in the rank-deficient case.
-#' A closed form is therefore never an independent claim: it must agree with
-#' [param_d1()] through that identity, and
-#' [check_parameter()] compares the two routes.
+#' # The identity it must satisfy
 #'
-#' @param s An object inheriting from class [parameter()].
-#' @param eta A numeric vector of length `s@n_free`.
-#' @param ... Passed to methods.
+#' \deqn{\partial_k \log|M| = \mathrm{tr}\!\left(M^{-1} \partial_k M\right),}
 #'
-#' @return A numeric vector of length `s@n_free`, named by
-#'   `s@free_names`.
+#' with the Moore-Penrose inverse in place of \eqn{M^{-1}} when the family is
+#' rank deficient. A closed form here is therefore never an independent claim:
+#' it has to agree with [param_d1()] through that trace, and
+#' [check_parameter()] runs both routes and compares them. The example below
+#' does the same in three lines.
 #'
-#' @seealso [param_logdet()], [param_d2logdet()]
+#' # What the answer looks like
+#'
+#' It is often constant. In the log-Cholesky parametrization the
+#' log-determinant is \eqn{2\sum_{i\le p}\eta_i}, so the gradient is 2 in the
+#' \eqn{p} diagonal directions and 0 in the rest, at every \eqn{\eta}. For a
+#' [scaled_matrix()], where the free value is the log of a multiplier on a fixed
+#' matrix, the gradient is the rank, again at every \eqn{\eta}: the scale enters
+#' the pseudo-determinant once per non-zero eigenvalue.
+#'
+#' @section Notation:
+#' \eqn{M} is the matrix [param_value()] returns and \eqn{\eta} the free vector,
+#' of length \eqn{d = } `s@n_free`. \eqn{p} is the side of the matrix.
+#'
+#' @param s An object inheriting from class [matrix_parameter()].
+#' @param eta A numeric vector of length `s@n_free`, finite in every entry.
+#' @param ... Passed to the method. No method in this package reads it.
+#'
+#' @return A numeric vector of length `s@n_free`, named by `s@free_names`.
+#'
+#' @seealso [param_logdet()] for the quantity differentiated here,
+#'   [param_d2logdet()] for the next order, and [param_d1()], which this must
+#'   agree with through the trace identity.
 #'
 #' @examples
-#' # for a scaled precision the derivative is the rank, whatever the scale
-#' s <- scaled_matrix(crossprod(diff(diag(6), differences = 2)))
-#' c(param_dlogdet(s, -3), param_dlogdet(s, 5), rank = s@rank)
+#' # The trace identity, checked against param_d1() directly.
+#' s <- log_cholesky(3)
+#' eta <- c(0.1, -0.2, 0.3, 0.5, -0.4, 0.2)
+#' Minv <- solve(param_value(s, eta))
+#' tr <- vapply(param_d1(s, eta), function(A) sum(diag(Minv %*% A)), numeric(1))
+#' max(abs(param_dlogdet(s, eta) - tr))
+#'
+#' # In this parametrization the answer is 2 on the diagonal directions and 0
+#' # elsewhere, whatever eta is.
+#' param_dlogdet(s, eta)
+#'
+#' # For a scaled precision it is the rank, whatever the scale.
+#' r <- scaled_matrix(crossprod(diff(diag(6), differences = 2)))
+#' c(at_minus_3 = param_dlogdet(r, -3), at_5 = param_dlogdet(r, 5),
+#'   rank = r@rank)
+#'
+#' # An AR(1) covariance, where the correlation direction is not constant.
+#' param_dlogdet(ar1(4), c(0.3, 0.8))
 #'
 #' @export
 param_dlogdet <- S7::new_generic("param_dlogdet", "s", function(s, eta, ...) {
@@ -410,33 +500,70 @@ param_dlogdet <- S7::new_generic("param_dlogdet", "s", function(s, eta, ...) {
 #' Hessian of the Log-Determinant
 #'
 #' @description
-#' Returns the distinct second derivatives of the log-determinant, or of the
-#' log pseudo-determinant, keyed as [param_tuple_names()].
+#' Returns the distinct second derivatives of the log-determinant, or of the log
+#' pseudo-determinant, keyed as [param_tuple_names()]. A Newton step in the free
+#' vector of a Gaussian model needs them, and so does the observed information
+#' of a covariance parametrized this way.
 #'
 #' @details
+#' # The identity it must satisfy
+#'
 #' Differentiating \eqn{\partial_k \log|M| = \mathrm{tr}(M^{-1}\partial_k M)}
-#' once more, and using \eqn{\partial_l M^{-1} = -M^{-1}(\partial_l M)M^{-1}},
+#' once more, with \eqn{\partial_l M^{-1} = -M^{-1}(\partial_l M)M^{-1}},
 #'
 #' \deqn{\partial_{kl} \log|M| = \mathrm{tr}\!\left(M^{-1}\partial_{kl}M\right)
 #'   - \mathrm{tr}\!\left(M^{-1}(\partial_k M) M^{-1} (\partial_l M)\right),}
 #'
-#' with the Moore-Penrose inverse in place of \eqn{M^{-1}} when the family is
-#' rank deficient. The second term is what makes the Hessian of the
-#' log-determinant differ from the trace of the second derivative of the
-#' matrix, and it is where a closed form is usually got wrong;
-#' [check_parameter()] compares this route against
-#' [param_d2()].
+#' and with the Moore-Penrose inverse in place of \eqn{M^{-1}} when the family
+#' is rank deficient.
 #'
-#' @param s An object inheriting from class [parameter()].
-#' @param eta A numeric vector of length `s@n_free`.
-#' @param ... Passed to methods.
+#' The second trace is the term a hand-written closed form usually drops. Without
+#' it the answer would be the trace of the second derivative of the matrix, which
+#' is a different quantity, and dropping it is invisible on any family whose
+#' log-determinant happens to be linear. [check_parameter()] compares this route
+#' against [param_d2()] on every family it is given, and the example below runs
+#' the same comparison in five lines.
 #'
-#' @return A named numeric vector, keyed as `param_tuple_names(s)`.
+#' @section Notation:
+#' \eqn{M} is the matrix [param_value()] returns and \eqn{\eta} the free vector,
+#' of length \eqn{d = } `s@n_free`.
 #'
-#' @seealso [param_dlogdet()]
+#' @param s An object inheriting from class [matrix_parameter()].
+#' @param eta A numeric vector of length `s@n_free`, finite in every entry.
+#' @param ... Passed to the method. No method in this package reads it.
+#'
+#' @return A named numeric vector of `choose(s@n_free + 1, 2)` entries, keyed as
+#'   `param_tuple_names(s)` and in that order: the `s@n_free` diagonal pairs
+#'   first, then the off-diagonal ones. The \eqn{(l, k)} entry equals the
+#'   \eqn{(k, l)} one and is not repeated.
+#'
+#' @seealso [param_dlogdet()] for the order below, [param_d3logdet()] and
+#'   [param_d4logdet()] for the orders above, [param_tuple_names()] for the
+#'   keys, and [param_d2()], which this must agree with through the two traces.
 #'
 #' @examples
-#' param_d2logdet(log_cholesky(2), c(0.2, -0.1, 0.4))
+#' # The identity, checked against param_d1() and param_d2() directly.
+#' s <- ar1(4)
+#' eta <- c(0.3, 0.8)
+#' Minv <- solve(param_value(s, eta))
+#' d1 <- param_d1(s, eta)
+#' d2 <- param_d2(s, eta)
+#' idx <- param_tuple_indices(s, 2)
+#' pred <- vapply(seq_along(idx), function(i) {
+#'   k <- idx[[i]][1]; l <- idx[[i]][2]
+#'   sum(diag(Minv %*% d2[[i]])) -
+#'     sum(diag(Minv %*% d1[[k]] %*% Minv %*% d1[[l]]))
+#' }, numeric(1))
+#' max(abs(param_d2logdet(s, eta) - pred))
+#'
+#' # Dropping the second trace would give a different answer here, so the
+#' # comparison above has something to catch.
+#' vapply(seq_along(idx), function(i) sum(diag(Minv %*% d2[[i]])), numeric(1))
+#' param_d2logdet(s, eta)
+#'
+#' # For log_cholesky the log-determinant is linear in eta, so every second
+#' # derivative is exactly zero and the check above could not see a mistake.
+#' max(abs(param_d2logdet(log_cholesky(3), rep(0.2, 6))))
 #'
 #' @export
 param_d2logdet <- S7::new_generic("param_d2logdet", "s", function(s, eta, ...) {
@@ -448,30 +575,81 @@ param_d2logdet <- S7::new_generic("param_d2logdet", "s", function(s, eta, ...) {
 #' Solve Through a Parameter's Matrix
 #'
 #' @description
-#' Returns \eqn{M^{-1} B}, computed through a factor rather than through an
-#' explicit inverse.
+#' Returns \eqn{M^{-1} B} for a right-hand side \eqn{B}, computed through a
+#' factorization instead of by forming the inverse. This is what a Gaussian
+#' quadratic form needs: `crossprod(r, param_solve(s, eta, r))` is
+#' \eqn{r^\top M^{-1} r} at the cost of one triangular solve, where inverting
+#' and multiplying would cost more and be less accurate. Called with no `B` it
+#' does return the inverse, which is convenient for reading a covariance off a
+#' precision.
 #'
 #' @details
-#' A rank-deficient parameter rejects rather than returning a pseudo-inverse.
-#' What a consumer of an improper prior needs is the quadratic form and the
-#' log pseudo-determinant -- the penalized normal equations invert
-#' \eqn{X^\top X + \lambda P}, which is non-singular even when \eqn{P} is not,
-#' and is assembled by the consumer -- so a pseudo-inverse would be a plausible
-#' matrix answering a question nobody asked.
+#' # Rank deficiency is rejected
 #'
-#' @param s An object inheriting from class [parameter()].
-#' @param eta A numeric vector of length `s@n_free`.
-#' @param b A numeric matrix or vector with `s@dimension` rows. Defaults to the
-#'   identity, which returns the inverse.
-#' @param ... Passed to methods.
+#' A deficient family signals an error and names its rank, instead of returning
+#' a pseudo-inverse. What a consumer of an improper prior needs is the quadratic
+#' form and the log pseudo-determinant: penalized normal equations invert
+#' \eqn{X^\top X + \lambda P}, which is non-singular even where \eqn{P} is not,
+#' and the consumer assembles that matrix itself. A pseudo-inverse returned here
+#' would be a plausible matrix answering a question nobody asked, and the caller
+#' would have no way to tell.
 #'
-#' @return A numeric matrix with `s@dimension` rows.
+#' # A non-matrix family has no method
 #'
-#' @seealso [param_factor()], [param_logdet()]
+#' [simplex()] and [transition_matrix()] inherit [parameter()] alone, not
+#' [matrix_parameter()], and the generic checks for that before dispatching, so
+#' the message names the family and says its value is not a symmetric matrix.
+#'
+#' # Cost
+#'
+#' The base method on [matrix_parameter()], which most families take, works
+#' through a Cholesky factor: \eqn{O(p^3)} once plus \eqn{O(p^2)} per column of
+#' \eqn{B}. Seven families override it with a closed-form inverse. [ar1()]
+#' writes its tridiagonal precision out entry by entry, [compound_symmetry()]
+#' uses Sherman-Morrison, and [block_diag()] and [kron_identity()] solve
+#' blockwise, so none of them decomposes anything of side \eqn{p}.
+#'
+#' @section Notation:
+#' \eqn{M} is the matrix [param_value()] returns, \eqn{p} its side, and
+#' \eqn{\eta} the free vector.
+#'
+#' @param s An object inheriting from class [matrix_parameter()], of full rank.
+#' @param eta A numeric vector of length `s@n_free`, finite in every entry.
+#' @param b A numeric matrix or vector with `s@dimension` rows; a vector is
+#'   treated as a one-column matrix. Defaults to `NULL`, which stands for the
+#'   identity and returns the inverse. A wrong number of rows throws a message
+#'   naming the number required.
+#' @param ... Passed to the method. No method in this package reads it.
+#'
+#' @return A numeric matrix with `s@dimension` rows and as many columns as `b`,
+#'   so `s@dimension` by `s@dimension` when `b` is left out. A vector `b`
+#'   returns a one-column matrix, not a vector.
+#'
+#' @seealso [param_factor()] for the factor itself, [param_logdet()] for the
+#'   other half of a Gaussian log-density, and [param_null_basis()] for what a
+#'   deficient family offers in place of an inverse.
 #'
 #' @examples
-#' s <- log_cholesky(2)
-#' round(param_solve(s, c(0, 0, 0.5)), 4)
+#' s <- log_cholesky(3)
+#' eta <- c(0.1, -0.2, 0.3, 0.5, -0.4, 0.2)
+#'
+#' # With no b it is the inverse, and agrees with solve().
+#' max(abs(param_solve(s, eta) - solve(param_value(s, eta))))
+#'
+#' # The quadratic form of a Gaussian log-density, in one solve.
+#' r <- c(0.4, -1.1, 0.7)
+#' q <- drop(crossprod(r, param_solve(s, eta, r)))
+#' c(q, drop(r %*% solve(param_value(s, eta)) %*% r))
+#'
+#' # A vector b comes back as a one-column matrix.
+#' dim(param_solve(s, eta, r))
+#'
+#' # A rank-deficient family refuses, and says what to do instead.
+#' r_def <- scaled_matrix(crossprod(diff(diag(6), differences = 2)))
+#' try(param_solve(r_def, 0))
+#'
+#' # So does a family whose value is not a symmetric matrix.
+#' try(param_solve(simplex(3), c(0, 0)))
 #'
 #' @export
 param_solve <- S7::new_generic("param_solve", "s", function(s, eta, b = NULL, ...) {
@@ -502,23 +680,62 @@ param_solve <- S7::new_generic("param_solve", "s", function(s, eta, b = NULL, ..
 #' A Factor of a Parameter's Matrix
 #'
 #' @description
-#' Returns a lower triangular \eqn{L} with \eqn{M = L L^\top}.
+#' Returns the lower triangular \eqn{L} with \eqn{M = L L^\top}, the Cholesky
+#' factor of the matrix the parametrization produces. Simulation is the usual
+#' reason to want it: \eqn{L z} with \eqn{z} standard normal has covariance
+#' \eqn{M}, so one factor draws as many vectors as needed. For
+#' [log_cholesky()] the factor is what the parametrization holds anyway, so it
+#' is returned without any arithmetic.
 #'
 #' @details
-#' Rejected for a rank-deficient family, for the reason given in
-#' [param_solve()].
+#' # Rank deficiency is rejected
 #'
-#' @param s An object inheriting from class [parameter()].
-#' @param eta A numeric vector of length `s@n_free`.
-#' @param ... Passed to methods.
+#' A deficient matrix has no Cholesky factor: a triangular \eqn{L} with
+#' \eqn{L L^\top = M} would need a zero on the diagonal, and the factor is then
+#' not unique. The generic signals an error naming the family and its rank
+#' before dispatching. To simulate from a deficient covariance, take an
+#' eigendecomposition and use the eigenvectors of the non-zero eigenvalues;
+#' [param_null_basis()] gives the directions that carry no variance.
 #'
-#' @return A lower triangular numeric matrix with `s@dimension` rows and
-#'   columns.
+#' # A non-matrix family has no method
 #'
-#' @seealso [param_solve()]
+#' [simplex()] and [transition_matrix()] are checked for and refused by name,
+#' their value not being a symmetric matrix.
+#'
+#' @section Notation:
+#' \eqn{M} is the matrix [param_value()] returns, \eqn{p} its side, and
+#' \eqn{\eta} the free vector.
+#'
+#' @param s An object inheriting from class [matrix_parameter()], of full rank.
+#' @param eta A numeric vector of length `s@n_free`, finite in every entry.
+#' @param ... Passed to the method. No method in this package reads it.
+#'
+#' @return A `s@dimension` by `s@dimension` lower triangular numeric matrix with
+#'   a positive diagonal, satisfying `L %*% t(L) == param_value(s, eta)`.
+#'
+#' @seealso [param_solve()] for a solve through the same factor,
+#'   [param_value()] for the matrix it factors, and [log_cholesky()], whose
+#'   free values are the logarithms of this factor's diagonal.
 #'
 #' @examples
-#' round(param_factor(log_cholesky(2), c(0.1, 0.2, -0.3)), 4)
+#' s <- log_cholesky(3)
+#' eta <- c(0.1, -0.2, 0.3, 0.5, -0.4, 0.2)
+#' L <- param_factor(s, eta)
+#' round(L, 4)
+#'
+#' # It is a factor, exactly.
+#' max(abs(L %*% t(L) - param_value(s, eta)))
+#'
+#' # In this parametrization the diagonal is exp() of the first p free values.
+#' all.equal(diag(L), exp(eta[1:3]))
+#'
+#' # What it is for: simulating with the right covariance.
+#' set.seed(1)
+#' y <- t(L %*% matrix(rnorm(3 * 20000), 3, 20000))
+#' round(cov(y) - param_value(s, eta), 2)
+#'
+#' # A rank-deficient family has no factor and says so.
+#' try(param_factor(scaled_matrix(crossprod(diff(diag(6), differences = 2))), 0))
 #'
 #' @export
 param_factor <- S7::new_generic("param_factor", "s", function(s, eta, ...) {
@@ -679,37 +896,70 @@ param_d4 <- S7::new_generic("param_d4", "s", function(s, eta, ...) {
 })
 
 
-#' Third and Fourth Derivatives of the Log-Determinant
+#' Third Derivatives of the Log-Determinant
 #'
 #' @description
-#' The higher derivatives of the log-(pseudo-)determinant, keyed as
-#' [param_tuple_names()] of the matching order.
+#' Returns the distinct third derivatives of the log-determinant, or of the log
+#' pseudo-determinant, keyed as `param_tuple_names(s, 3)`. The exact gradient of
+#' a marginal criterion reaches this order: differentiating a Laplace
+#' approximation with respect to a hyperparameter moves the penalized mode, and
+#' the third derivative is what the movement contracts against.
 #'
 #' @details
-#' They follow from the second derivative of [param_d2logdet()]
-#' by the same two rules, applied again: the trace is linear, and
+#' # Where it comes from
+#'
+#' Two rules generate every order. The trace is linear, and
 #'
 #' \deqn{\partial_m M^{-1} = -M^{-1}(\partial_m M)M^{-1}.}
 #'
-#' Every term of the result is therefore a trace of an alternating product
-#' \eqn{M^{-1}(\partial_{I_1}M)M^{-1}(\partial_{I_2}M)\cdots}, one factor
-#' per block of a partition of the index set, with the sign and the
-#' multiplicity the two rules produce. The expansion is not transcribed:
-#' the package differentiates [param_d1()] through
-#' [param_d4()] directly, and [check_parameter()] holds
-#' the result against a numerical differentiation of the order below, which
-#' shares none of its arithmetic.
+#' Applying them to \eqn{\partial_{kl}\log|M|} gives a sum of traces of
+#' alternating products
+#' \eqn{M^{-1}(\partial_{I_1}M)M^{-1}(\partial_{I_2}M)\cdots}, one factor per
+#' block of a partition of the index set, with the sign and the multiplicity the
+#' two rules produce. The Moore-Penrose inverse replaces \eqn{M^{-1}} for a
+#' rank-deficient family.
+#'
+#' The expansion is not transcribed anywhere. The methods differentiate the
+#' derivative arrays [param_d1()] through [param_d4()] instead, and
+#' [check_parameter()] holds the result against a numerical differentiation of
+#' the order below, which shares none of its arithmetic. A twenty-term expansion
+#' written out by hand is exactly the kind of thing that is wrong and looks
+#' right.
+#'
+#' @section Notation:
+#' \eqn{M} is the matrix [param_value()] returns and \eqn{\eta} the free vector,
+#' of length \eqn{d = } `s@n_free`. \eqn{\partial_I M} is the derivative of
+#' \eqn{M} in the free values named by the index set \eqn{I}.
 #'
 #' @param s An object inheriting from class [matrix_parameter()].
-#' @param eta A numeric vector of length `s@n_free`.
-#' @param ... Passed to methods.
+#' @param eta A numeric vector of length `s@n_free`, finite in every entry.
+#' @param ... Passed to the method. No method in this package reads it.
 #'
-#' @return A named numeric vector.
+#' @return A named numeric vector of `choose(s@n_free + 2, 3)` entries, keyed as
+#'   `param_tuple_names(s, 3)` and in that order.
 #'
-#' @seealso [param_d2logdet()]
+#' @seealso [param_d2logdet()] for the order below, [param_d4logdet()] for the
+#'   order above, [param_tuple_names()] for the keys, and [param_d3()] for the
+#'   third derivative of the matrix itself.
 #'
 #' @examples
-#' param_d3logdet(log_cholesky(2), c(0.1, -0.2, 0.4))
+#' # An AR(1) covariance. The log-determinant is linear in the log of the
+#' # scale, so only the correlation direction survives to third order.
+#' s <- ar1(4)
+#' param_d3logdet(s, c(0.3, 0.8))
+#'
+#' # A central difference of the order below agrees, and shares no arithmetic
+#' # with the route the method takes.
+#' h <- 1e-4
+#' e <- c(0, h)
+#' fd <- (param_d2logdet(s, c(0.3, 0.8) + e) -
+#'          param_d2logdet(s, c(0.3, 0.8) - e)) / (2 * h)
+#' fd[["z_rho:z_rho"]]
+#' param_d3logdet(s, c(0.3, 0.8))[["z_rho:z_rho:z_rho"]]
+#'
+#' # For log_cholesky the log-determinant is linear in eta, so every order
+#' # above the first is exactly zero.
+#' max(abs(param_d3logdet(log_cholesky(3), rep(0.2, 6))))
 #'
 #' @export
 param_d3logdet <- S7::new_generic("param_d3logdet", "s", function(s, eta, ...) {
@@ -717,7 +967,70 @@ param_d3logdet <- S7::new_generic("param_d3logdet", "s", function(s, eta, ...) {
   S7::S7_dispatch()
 })
 
-#' @rdname param_d3logdet
+#' Fourth Derivatives of the Log-Determinant
+#'
+#' @description
+#' Returns the distinct fourth derivatives of the log-determinant, or of the log
+#' pseudo-determinant, keyed as `param_tuple_names(s, 4)`. This is the top of
+#' the contract: the exact Hessian of a marginal criterion reaches it, and
+#' nothing in the toolkit asks for a fifth.
+#'
+#' @details
+#' # Where it comes from
+#'
+#' The same two rules as at third order. The trace is linear, and
+#'
+#' \deqn{\partial_m M^{-1} = -M^{-1}(\partial_m M)M^{-1},}
+#'
+#' so every term is a trace of an alternating product
+#' \eqn{M^{-1}(\partial_{I_1}M)M^{-1}(\partial_{I_2}M)\cdots}, one factor per
+#' block of a partition of the four indices. The number of terms grows with the
+#' number of partitions, which is why the expansion is differentiated rather
+#' than written out: the methods differentiate [param_d1()] through
+#' [param_d4()], and [check_parameter()] compares the result with a numerical
+#' differentiation of [param_d3logdet()].
+#'
+#' # Accuracy of the check
+#'
+#' The reference is one stencil on the analytic third order, so the comparison
+#' is limited by that stencil rather than by the closed form. A family whose
+#' log-determinant is linear in \eqn{\eta}, which includes [log_cholesky()] and
+#' [matrix_log()], returns exact zeros here, and a check against them cannot
+#' catch a mistake; [ar1()] and [compound_symmetry()] are the families where
+#' this order has something to get wrong.
+#'
+#' @section Notation:
+#' \eqn{M} is the matrix [param_value()] returns and \eqn{\eta} the free vector,
+#' of length \eqn{d = } `s@n_free`. \eqn{\partial_I M} is the derivative of
+#' \eqn{M} in the free values named by the index set \eqn{I}.
+#'
+#' @param s An object inheriting from class [matrix_parameter()].
+#' @param eta A numeric vector of length `s@n_free`, finite in every entry.
+#' @param ... Passed to the method. No method in this package reads it.
+#'
+#' @return A named numeric vector of `choose(s@n_free + 3, 4)` entries, keyed as
+#'   `param_tuple_names(s, 4)` and in that order.
+#'
+#' @seealso [param_d3logdet()] for the order below, [param_tuple_names()] for
+#'   the keys, and [param_d4()] for the fourth derivative of the matrix itself.
+#'
+#' @examples
+#' # An AR(1) covariance: five components at d = 2, of which only the one
+#' # purely in the correlation is non-zero, the scale entering linearly.
+#' s <- ar1(4)
+#' eta <- c(0.3, 0.8)
+#' param_d4logdet(s, eta)
+#'
+#' # A central difference of the third order agrees.
+#' h <- 1e-4
+#' e <- c(0, h)
+#' fd <- (param_d3logdet(s, eta + e) - param_d3logdet(s, eta - e)) / (2 * h)
+#' c(analytic = param_d4logdet(s, eta)[["z_rho:z_rho:z_rho:z_rho"]],
+#'   difference = fd[["z_rho:z_rho:z_rho"]])
+#'
+#' # The count is over unordered quadruples.
+#' c(returned = length(param_d4logdet(s, eta)), choose(2 + 3, 4))
+#'
 #' @export
 param_d4logdet <- S7::new_generic("param_d4logdet", "s", function(s, eta, ...) {
   eta <- check_eta(s, eta)
@@ -728,39 +1041,73 @@ param_d4logdet <- S7::new_generic("param_d4logdet", "s", function(s, eta, ...) {
 #' Names of the Distinct Derivative Components
 #'
 #' @description
-#' The keys of the derivative lists: one per unordered tuple of free values.
-#' At order 2, the keys of [param_d2()] and
-#' [param_d2logdet()], diagonal pairs first; at orders 3 and 4,
-#' the keys of [param_d3()] and [param_d4()],
-#' lexicographic combinations with repetition.
+#' Returns the keys of a derivative list: one per unordered tuple of free
+#' values, built by pasting the free names together with `":"`. At order 2 these
+#' are the keys of [param_d2()] and [param_d2logdet()], with the diagonal pairs
+#' first; at orders 3 and 4 the keys of [param_d3()] and [param_d4()], in
+#' lexicographic order. Use it to look a component up by name, or to walk a
+#' derivative list beside the index tuples [param_tuple_indices()] returns.
 #'
 #' @details
-#' A mixed partial derivative does not depend on the order in which the
-#' free values are differentiated, so the components at order \eqn{k} are
-#' the multisets of size \eqn{k} drawn from the \eqn{n} free values, of
-#' which there are
+#' # How many there are
 #'
-#' \deqn{\binom{n + k - 1}{k},}
+#' A mixed partial does not depend on the order of differentiation, so the
+#' components at order \eqn{k} are the multisets of size \eqn{k} drawn from the
+#' \eqn{d} free values, of which there are
 #'
-#' rather than the \eqn{n^k} ordered tuples. That is the length of the
-#' vector returned and of every derivative list of that order.
+#' \deqn{\binom{d + k - 1}{k},}
 #'
-#' This exists so that nothing has to recover a tuple by splitting a key
-#' apart. Generating the keys and the index tuples from one enumeration
-#' cannot be fooled by a free name that contains the separator, which
-#' splitting can. Use [param_tuple_indices()] for the tuples
-#' themselves.
+#' against \eqn{d^k} ordered tuples. That is the length of the vector returned
+#' and of every derivative list of that order. For \eqn{d = 6}, which is a
+#' \eqn{3 \times 3} unstructured covariance, order 4 has 126 components against
+#' 1296 ordered ones.
 #'
-#' @param s An object inheriting from class [parameter()].
-#' @param order The derivative order: 2 (default), 3 or 4.
+#' # Why the keys and the tuples come from one enumeration
 #'
-#' @return A character vector, one entry per distinct component.
+#' Nothing in the toolkit recovers an index by splitting a key apart. Taking
+#' `"log_L1:log_L2"` and splitting on `":"` works until a free name contains the
+#' separator itself, and then it yields the wrong number of pieces and the
+#' failure is silent. Generating the names and the indices from one enumeration
+#' cannot be fooled that way. `param_tuple_names()` calls
+#' [param_tuple_indices()] and labels what it gets, so the two agree by
+#' construction.
 #'
-#' @seealso [param_tuple_indices()]
+#' @section Notation:
+#' \eqn{d} is the length of the free vector, `s@n_free`, and \eqn{k} the
+#' derivative order.
+#'
+#' @param s An object inheriting from class [parameter()], whose `free_names`
+#'   supply the labels and whose `n_free` supplies \eqn{d}.
+#' @param order The derivative order. `2` by default, which is the order
+#'   [param_d2()] and [param_d2logdet()] use; `3` and `4` name the components of
+#'   [param_d3()] and [param_d4()]. `1` is accepted and returns the free names
+#'   themselves. Anything else throws `'order' must be 1, 2, 3 or 4.`, the
+#'   contract stopping at fourth order.
+#'
+#' @return A character vector of `choose(s@n_free + order - 1, order)` names, in
+#'   the same order as the list they key. At order 2 the `s@n_free` diagonal
+#'   pairs come first.
+#'
+#' @seealso [param_tuple_indices()] for the index tuples in the same order, and
+#'   [param_d2()], [param_d3()], [param_d4()], [param_d2logdet()],
+#'   [param_d3logdet()] and [param_d4logdet()] for the lists these key.
 #'
 #' @examples
-#' param_tuple_names(log_cholesky(2))
-#' param_tuple_names(scalar_matrix(2), 3)
+#' s <- log_cholesky(2)
+#' param_tuple_names(s)
+#' param_tuple_names(s, 3)
+#'
+#' # They really are the keys of the derivative list, in order.
+#' identical(param_tuple_names(s, 4), names(param_d4(s, c(0.2, -0.1, 0.4))))
+#'
+#' # The count is over unordered tuples.
+#' q <- log_cholesky(3)
+#' vapply(1:4, function(k) length(param_tuple_names(q, k)), integer(1))
+#' choose(6 + 1:4 - 1, 1:4)
+#'
+#' # Order 2 puts the diagonal pairs first, which is how a consumer filling a
+#' # Hessian wants them.
+#' param_tuple_names(s, 2)
 #'
 #' @export
 param_tuple_names <- function(s, order = 2L) {
@@ -773,23 +1120,58 @@ param_tuple_names <- function(s, order = 2L) {
 #' Index Tuples Behind the Derivative Component Names
 #'
 #' @description
-#' The unordered index tuples [param_tuple_names()] names, in
-#' exactly the same order. At order 2 the diagonal pairs come first and then
-#' the off-diagonal ones, because consumers index a Hessian that way; at
-#' orders 3 and 4 the tuples are the lexicographic combinations with
-#' repetition, matching the enumeration \pkg{distributions7} uses for its
-#' higher derivatives.
+#' Returns the unordered index tuples that [param_tuple_names()] labels, in
+#' exactly the same order, as integer positions into the free vector. A consumer
+#' that has to know *which* free values a component differentiates in reads
+#' these; a consumer that only has to display a label reads the names. At order
+#' 2 the diagonal pairs come first and the off-diagonal ones after, which is how
+#' a Hessian is filled; at orders 3 and 4 the tuples are the lexicographic
+#' combinations with repetition.
 #'
-#' @param s An object inheriting from class [parameter()].
-#' @param order The derivative order: 1 to 4.
+#' @details
+#' The order at orders 3 and 4 matches the enumeration \pkg{distributions7} uses
+#' for its own higher derivatives, so a consumer contracting a parameter's
+#' derivative array against a distribution's can walk the two lists together
+#' without reindexing. Both come from `numericals7::tuple_indices()`, which is
+#' the single copy of the enumeration in the toolkit.
 #'
-#' @return A list of integer vectors of length `order`.
+#' @section Notation:
+#' \eqn{d} is the length of the free vector, `s@n_free`, and \eqn{k} the
+#' derivative order.
 #'
-#' @seealso [param_tuple_names()]
+#' @param s An object inheriting from class [parameter()], whose `n_free`
+#'   supplies \eqn{d}.
+#' @param order The derivative order: `1`, `2` (the default), `3` or `4`.
+#'   Anything else throws `'order' must be 1, 2, 3 or 4.`
+#'
+#' @return A list of `choose(s@n_free + order - 1, order)` integer vectors, each
+#'   of length `order`, holding positions in `1:s@n_free` in non-decreasing
+#'   order within a tuple.
+#'
+#' @seealso [param_tuple_names()] for the same tuples as labels, and
+#'   [param_d2()], [param_d3()] and [param_d4()] for the lists they index.
 #'
 #' @examples
-#' param_tuple_indices(log_cholesky(2), 2)
-#' length(param_tuple_indices(log_cholesky(2), 3))
+#' s <- log_cholesky(2)
+#'
+#' # Order 2: the three diagonal pairs first, then the three off-diagonal ones.
+#' param_tuple_indices(s, 2)
+#'
+#' # The tuples and the names are the same enumeration, so they line up.
+#' idx <- param_tuple_indices(s, 3)
+#' nm <- param_tuple_names(s, 3)
+#' identical(nm, vapply(idx, function(t) paste(s@free_names[t], collapse = ":"),
+#'                      character(1)))
+#'
+#' # What they are for: reading a component's indices to contract with.
+#' d2 <- param_d2(s, c(0.2, -0.1, 0.4))
+#' d1 <- param_d1(s, c(0.2, -0.1, 0.4))
+#' i <- which(param_tuple_names(s, 2) == "log_L1:L2.1")
+#' param_tuple_indices(s, 2)[[i]]
+#' dim(d2[[i]])
+#'
+#' # Counts, over unordered tuples.
+#' vapply(1:4, function(k) length(param_tuple_indices(s, k)), integer(1))
 #'
 #' @export
 param_tuple_indices <- function(s, order = 2L) {
@@ -800,16 +1182,23 @@ param_tuple_indices <- function(s, order = 2L) {
 #' The Index Tuples of a Given Width
 #'
 #' @description
-#' The enumeration behind [param_tuple_indices()], taken over a
-#' number of variables rather than over a parameter, so that anything holding
-#' derivatives over \eqn{d} variables -- a jet, for instance -- can share it.
+#' The enumeration behind [param_tuple_indices()], taken over a plain count of
+#' variables instead of over a parameter object, so that anything holding
+#' derivatives over \eqn{d} variables can use it without constructing a
+#' [parameter()]. A one-line forward to `numericals7::tuple_indices()`, which is
+#' the toolkit's single copy of this enumeration. Delegating means this copy
+#' cannot come to disagree with the one a consumer is keyed by.
 #'
-#' @param d The number of variables.
-#' @param order The derivative order, 1 to 4.
+#' @param d The number of variables, a single non-negative integer.
+#' @param order The derivative order: 1, 2, 3 or 4. Anything else throws
+#'   `'order' must be 1, 2, 3 or 4.`
 #'
-#' @return A list of integer vectors of length `order`.
+#' @return A list of `choose(d + order - 1, order)` integer vectors, each of
+#'   length `order`, holding positions in `1:d` in non-decreasing order within a
+#'   tuple. At order 2 the diagonal pairs come first.
 #'
-#' @seealso [param_tuple_indices()]
+#' @seealso [param_tuple_indices()], the parameter-facing wrapper, and
+#'   [numericals7::tuple_indices()], the implementation.
 #'
 #' @keywords internal
 tuple_indices <- function(d, order = 2L) {

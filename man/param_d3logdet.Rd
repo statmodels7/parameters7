@@ -2,46 +2,77 @@
 % Please edit documentation in R/generics.R
 \name{param_d3logdet}
 \alias{param_d3logdet}
-\alias{param_d4logdet}
-\title{Third and Fourth Derivatives of the Log-Determinant}
+\title{Third Derivatives of the Log-Determinant}
 \usage{
 param_d3logdet(s, eta, ...)
-
-param_d4logdet(s, eta, ...)
 }
 \arguments{
 \item{s}{An object inheriting from class \code{\link[=matrix_parameter]{matrix_parameter()}}.}
 
-\item{eta}{A numeric vector of length \code{s@n_free}.}
+\item{eta}{A numeric vector of length \code{s@n_free}, finite in every entry.}
 
-\item{...}{Passed to methods.}
+\item{...}{Passed to the method. No method in this package reads it.}
 }
 \value{
-A named numeric vector.
+A named numeric vector of \code{choose(s@n_free + 2, 3)} entries, keyed as
+\code{param_tuple_names(s, 3)} and in that order.
 }
 \description{
-The higher derivatives of the log-(pseudo-)determinant, keyed as
-\code{\link[=param_tuple_names]{param_tuple_names()}} of the matching order.
+Returns the distinct third derivatives of the log-determinant, or of the log
+pseudo-determinant, keyed as \code{param_tuple_names(s, 3)}. The exact gradient of
+a marginal criterion reaches this order: differentiating a Laplace
+approximation with respect to a hyperparameter moves the penalized mode, and
+the third derivative is what the movement contracts against.
 }
-\details{
-They follow from the second derivative of \code{\link[=param_d2logdet]{param_d2logdet()}}
-by the same two rules, applied again: the trace is linear, and
+\section{Where it comes from}{
+Two rules generate every order. The trace is linear, and
 
 \deqn{\partial_m M^{-1} = -M^{-1}(\partial_m M)M^{-1}.}
 
-Every term of the result is therefore a trace of an alternating product
-\eqn{M^{-1}(\partial_{I_1}M)M^{-1}(\partial_{I_2}M)\cdots}, one factor
-per block of a partition of the index set, with the sign and the
-multiplicity the two rules produce. The expansion is not transcribed:
-the package differentiates \code{\link[=param_d1]{param_d1()}} through
-\code{\link[=param_d4]{param_d4()}} directly, and \code{\link[=check_parameter]{check_parameter()}} holds
-the result against a numerical differentiation of the order below, which
-shares none of its arithmetic.
+Applying them to \eqn{\partial_{kl}\log|M|} gives a sum of traces of
+alternating products
+\eqn{M^{-1}(\partial_{I_1}M)M^{-1}(\partial_{I_2}M)\cdots}, one factor per
+block of a partition of the index set, with the sign and the multiplicity the
+two rules produce. The Moore-Penrose inverse replaces \eqn{M^{-1}} for a
+rank-deficient family.
+
+The expansion is not transcribed anywhere. The methods differentiate the
+derivative arrays \code{\link[=param_d1]{param_d1()}} through \code{\link[=param_d4]{param_d4()}} instead, and
+\code{\link[=check_parameter]{check_parameter()}} holds the result against a numerical differentiation of
+the order below, which shares none of its arithmetic. A twenty-term expansion
+written out by hand is exactly the kind of thing that is wrong and looks
+right.
 }
+
+\section{Notation}{
+
+\eqn{M} is the matrix \code{\link[=param_value]{param_value()}} returns and \eqn{\eta} the free vector,
+of length \eqn{d = } \code{s@n_free}. \eqn{\partial_I M} is the derivative of
+\eqn{M} in the free values named by the index set \eqn{I}.
+}
+
 \examples{
-param_d3logdet(log_cholesky(2), c(0.1, -0.2, 0.4))
+# An AR(1) covariance. The log-determinant is linear in the log of the
+# scale, so only the correlation direction survives to third order.
+s <- ar1(4)
+param_d3logdet(s, c(0.3, 0.8))
+
+# A central difference of the order below agrees, and shares no arithmetic
+# with the route the method takes.
+h <- 1e-4
+e <- c(0, h)
+fd <- (param_d2logdet(s, c(0.3, 0.8) + e) -
+         param_d2logdet(s, c(0.3, 0.8) - e)) / (2 * h)
+fd[["z_rho:z_rho"]]
+param_d3logdet(s, c(0.3, 0.8))[["z_rho:z_rho:z_rho"]]
+
+# For log_cholesky the log-determinant is linear in eta, so every order
+# above the first is exactly zero.
+max(abs(param_d3logdet(log_cholesky(3), rep(0.2, 6))))
 
 }
 \seealso{
-\code{\link[=param_d2logdet]{param_d2logdet()}}
+\code{\link[=param_d2logdet]{param_d2logdet()}} for the order below, \code{\link[=param_d4logdet]{param_d4logdet()}} for the
+order above, \code{\link[=param_tuple_names]{param_tuple_names()}} for the keys, and \code{\link[=param_d3]{param_d3()}} for the
+third derivative of the matrix itself.
 }

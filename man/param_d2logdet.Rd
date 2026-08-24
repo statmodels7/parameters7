@@ -7,37 +7,75 @@
 param_d2logdet(s, eta, ...)
 }
 \arguments{
-\item{s}{An object inheriting from class \code{\link[=parameter]{parameter()}}.}
+\item{s}{An object inheriting from class \code{\link[=matrix_parameter]{matrix_parameter()}}.}
 
-\item{eta}{A numeric vector of length \code{s@n_free}.}
+\item{eta}{A numeric vector of length \code{s@n_free}, finite in every entry.}
 
-\item{...}{Passed to methods.}
+\item{...}{Passed to the method. No method in this package reads it.}
 }
 \value{
-A named numeric vector, keyed as \code{param_tuple_names(s)}.
+A named numeric vector of \code{choose(s@n_free + 1, 2)} entries, keyed as
+\code{param_tuple_names(s)} and in that order: the \code{s@n_free} diagonal pairs
+first, then the off-diagonal ones. The \eqn{(l, k)} entry equals the
+\eqn{(k, l)} one and is not repeated.
 }
 \description{
-Returns the distinct second derivatives of the log-determinant, or of the
-log pseudo-determinant, keyed as \code{\link[=param_tuple_names]{param_tuple_names()}}.
+Returns the distinct second derivatives of the log-determinant, or of the log
+pseudo-determinant, keyed as \code{\link[=param_tuple_names]{param_tuple_names()}}. A Newton step in the free
+vector of a Gaussian model needs them, and so does the observed information
+of a covariance parametrized this way.
 }
-\details{
+\section{The identity it must satisfy}{
 Differentiating \eqn{\partial_k \log|M| = \mathrm{tr}(M^{-1}\partial_k M)}
-once more, and using \eqn{\partial_l M^{-1} = -M^{-1}(\partial_l M)M^{-1}},
+once more, with \eqn{\partial_l M^{-1} = -M^{-1}(\partial_l M)M^{-1}},
 
 \deqn{\partial_{kl} \log|M| = \mathrm{tr}\!\left(M^{-1}\partial_{kl}M\right)
   - \mathrm{tr}\!\left(M^{-1}(\partial_k M) M^{-1} (\partial_l M)\right),}
 
-with the Moore-Penrose inverse in place of \eqn{M^{-1}} when the family is
-rank deficient. The second term is what makes the Hessian of the
-log-determinant differ from the trace of the second derivative of the
-matrix, and it is where a closed form is usually got wrong;
-\code{\link[=check_parameter]{check_parameter()}} compares this route against
-\code{\link[=param_d2]{param_d2()}}.
+and with the Moore-Penrose inverse in place of \eqn{M^{-1}} when the family
+is rank deficient.
+
+The second trace is the term a hand-written closed form usually drops. Without
+it the answer would be the trace of the second derivative of the matrix, which
+is a different quantity, and dropping it is invisible on any family whose
+log-determinant happens to be linear. \code{\link[=check_parameter]{check_parameter()}} compares this route
+against \code{\link[=param_d2]{param_d2()}} on every family it is given, and the example below runs
+the same comparison in five lines.
 }
+
+\section{Notation}{
+
+\eqn{M} is the matrix \code{\link[=param_value]{param_value()}} returns and \eqn{\eta} the free vector,
+of length \eqn{d = } \code{s@n_free}.
+}
+
 \examples{
-param_d2logdet(log_cholesky(2), c(0.2, -0.1, 0.4))
+# The identity, checked against param_d1() and param_d2() directly.
+s <- ar1(4)
+eta <- c(0.3, 0.8)
+Minv <- solve(param_value(s, eta))
+d1 <- param_d1(s, eta)
+d2 <- param_d2(s, eta)
+idx <- param_tuple_indices(s, 2)
+pred <- vapply(seq_along(idx), function(i) {
+  k <- idx[[i]][1]; l <- idx[[i]][2]
+  sum(diag(Minv \%*\% d2[[i]])) -
+    sum(diag(Minv \%*\% d1[[k]] \%*\% Minv \%*\% d1[[l]]))
+}, numeric(1))
+max(abs(param_d2logdet(s, eta) - pred))
+
+# Dropping the second trace would give a different answer here, so the
+# comparison above has something to catch.
+vapply(seq_along(idx), function(i) sum(diag(Minv \%*\% d2[[i]])), numeric(1))
+param_d2logdet(s, eta)
+
+# For log_cholesky the log-determinant is linear in eta, so every second
+# derivative is exactly zero and the check above could not see a mistake.
+max(abs(param_d2logdet(log_cholesky(3), rep(0.2, 6))))
 
 }
 \seealso{
-\code{\link[=param_dlogdet]{param_dlogdet()}}
+\code{\link[=param_dlogdet]{param_dlogdet()}} for the order below, \code{\link[=param_d3logdet]{param_d3logdet()}} and
+\code{\link[=param_d4logdet]{param_d4logdet()}} for the orders above, \code{\link[=param_tuple_names]{param_tuple_names()}} for the
+keys, and \code{\link[=param_d2]{param_d2()}}, which this must agree with through the two traces.
 }
