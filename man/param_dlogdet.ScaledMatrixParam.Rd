@@ -6,15 +6,27 @@
 \arguments{
 \item{s}{A \code{\link[=ScaledMatrixParam]{ScaledMatrixParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named numeric vector.
+A numeric vector of length \code{s@n_free}, named by \code{s@free_names}, or
+empty for a fixed parameter.
 }
 \description{
 Closed form: \eqn{r\, h'(\eta)/h(\eta)}, which under the default log link is
-the rank itself, whatever the scale.
+the \strong{rank itself}, at every scale. That is the fact a penalty rests on: it
+is the term that makes the smoothing parameter estimable, the stationary point
+of \eqn{\tfrac{\lambda}{2}\beta^\top P\beta - \tfrac{r}{2}\log\lambda} being
+\eqn{\lambda = r/(\beta^\top P \beta)}.
+
+The constant \eqn{\log|P|_+} contributes nothing, so a deficient family
+answers with its rank, never with its dimension.
+}
+\seealso{
+\code{\link[=scaled_matrix]{scaled_matrix()}} for the estimability argument in full, and
+\code{\link[=param_d2logdet.ScaledMatrixParam]{param_d2logdet.ScaledMatrixParam()}} for the order above.
 }
 \keyword{internal}

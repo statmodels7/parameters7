@@ -2,21 +2,30 @@
 % Please edit documentation in R/scaled_matrix.R
 \name{param_d3logdet.ScaledMatrixParam}
 \alias{param_d3logdet.ScaledMatrixParam}
-\title{Higher Log-Determinant Derivatives of a Scaled Parameter}
+\title{Third Log-Determinant Derivatives of a Scaled Parameter}
 \arguments{
 \item{s}{A \code{\link[=ScaledMatrixParam]{ScaledMatrixParam()}} object.}
 
-\item{eta}{A numeric vector with one free value.}
+\item{eta}{A numeric vector with one free value, already checked by the
+generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named numeric vector with one entry.
+A numeric vector with one entry keyed as \code{param_tuple_names(s, 3)}, or
+empty for a fixed parameter.
 }
 \description{
-Closed form: the log-(pseudo-)determinant is
-\eqn{r \log h(\eta) + \log\mathrm{pdet}(M_0)} with \eqn{r} the rank, so
-every derivative is \eqn{r} times the matching derivative of
-\eqn{\log h}.
+Closed form. The log-(pseudo-)determinant is \eqn{r \log h(\eta) + \log|P|_+}
+with \eqn{r} the rank, so every derivative is \eqn{r} times the matching
+derivative of \eqn{\log h}, and the constant contributes nothing. With one
+free value there is one component.
+
+Under the default log link \eqn{\log h(\eta) = \eta}, so the answer is exactly
+zero and this family cannot exercise the order; a link with curvature can.
+}
+\seealso{
+\code{\link[=scaled_dlog]{scaled_dlog()}}, which supplies the derivative of \eqn{\log h}, and
+\code{\link[=param_d4logdet.ScaledMatrixParam]{param_d4logdet.ScaledMatrixParam()}} for the order above.
 }
 \keyword{internal}

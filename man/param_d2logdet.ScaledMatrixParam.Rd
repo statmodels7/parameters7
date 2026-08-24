@@ -6,15 +6,23 @@
 \arguments{
 \item{s}{A \code{\link[=ScaledMatrixParam]{ScaledMatrixParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named numeric vector.
+A numeric vector with one entry keyed as \code{param_tuple_names(s)}, or
+empty for a fixed parameter.
 }
 \description{
-Closed form: \eqn{r\{h''/h - (h'/h)^2\}}, which under the default log link
-is zero, the log pseudo-determinant being linear in the free value.
+Closed form: \eqn{r\{h''/h - (h'/h)^2\}}, the rank times the second derivative
+of \eqn{\log h}. Under the default log link it is exactly zero, the log
+pseudo-determinant being \eqn{r\eta + \log|P|_+} and so linear in the free
+value. Under a link with curvature it is not.
+}
+\seealso{
+\code{\link[=param_dlogdet.ScaledMatrixParam]{param_dlogdet.ScaledMatrixParam()}} for the order below, and
+\code{\link[=scaled_dlog]{scaled_dlog()}} for orders three and four.
 }
 \keyword{internal}

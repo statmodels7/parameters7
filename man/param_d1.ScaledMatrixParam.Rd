@@ -6,14 +6,25 @@
 \arguments{
 \item{s}{A \code{\link[=ScaledMatrixParam]{ScaledMatrixParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named list with one symmetric matrix.
+A list with one symmetric matrix named by \code{s@free_names}, or an empty
+list for a fixed parameter.
 }
 \description{
-Closed form: \eqn{h'(\eta) P}.
+Closed form: \eqn{\partial_\eta M = h'(\eta)\,P}, the fixed matrix times the
+link's own first derivative. Under the default log link \eqn{h' = h}, so the
+derivative \strong{is} the matrix, which the example on \code{\link[=param_d1]{param_d1()}} checks.
+
+A fixed parameter, built with \code{link = NULL}, has no free value, so the list is
+empty.
+}
+\seealso{
+\code{\link[=param_d2.ScaledMatrixParam]{param_d2.ScaledMatrixParam()}} for the order above, and
+\code{\link[=scaled_scale]{scaled_scale()}} for the link derivatives.
 }
 \keyword{internal}

@@ -7,15 +7,23 @@
 scaled_scale(s, eta)
 }
 \arguments{
-\item{s}{A \code{\link[=ScaledMatrixParam]{ScaledMatrixParam()}} object.}
+\item{s}{A \code{\link[=ScaledMatrixParam]{ScaledMatrixParam()}} object, whose \code{param_params$link} is read.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values: one value, or \code{numeric(0)} for a
+fixed parameter.}
 }
 \value{
-A list with \code{h}, \code{d1} and \code{d2}.
+A list with three single numbers, \code{h}, \code{d1} and \code{d2}.
 }
 \description{
-The value of the link and its first two derivatives at \eqn{\eta}, or the
-constant 1 when the parameter has no free value.
+Returns the inverse link's value and its first two derivatives at the single
+free value, so the family's \code{\link[=param_value]{param_value()}}, \code{\link[=param_d1]{param_d1()}} and \code{\link[=param_d2]{param_d2()}} all
+read one call. For a fixed parameter, built with \code{link = NULL}, it returns
+\eqn{h = 1} and both derivatives 0, which makes those three methods work
+unchanged: the matrix is \eqn{P} and its derivatives are empty lists.
+}
+\seealso{
+\code{\link[=scaled_dlog]{scaled_dlog()}} for the higher orders of \eqn{\log h}, and
+\code{\link[=param_value.ScaledMatrixParam]{param_value.ScaledMatrixParam()}}, the first caller.
 }
 \keyword{internal}

@@ -50,16 +50,38 @@ its blocks, or \code{"either"} when they disagree, and \code{\link[=kron_identit
 it.}
 }
 \value{
-An object of class \code{ScaledMatrixParam}.
+An object of class \code{ScaledMatrixParam}, a subclass of
+\code{\link[=matrix_parameter]{matrix_parameter()}} adding no properties of its own. \code{param_params} holds
+\code{p}, the fixed matrix; \code{link}, the link object or \code{NULL}; and \code{logdet_p},
+the log pseudo-determinant of \eqn{P} computed once at construction.
+\code{n_free} is 1, or 0 when \code{link} is \code{NULL}.
 }
 \description{
-The S7 class of a fixed symmetric positive semidefinite matrix carried by a
-single scale. Constructed by \code{\link[=scaled_matrix]{scaled_matrix()}}.
+The S7 class of a fixed symmetric positive semidefinite matrix \eqn{P} carried
+by a single positive scale, \eqn{M(\eta) = h(\eta) P}. It is the only family
+in the package that is routinely \strong{rank deficient}: \eqn{P} may be a
+difference penalty or a basis Gram matrix with a genuine null space, and the
+class records that rank and null basis at construction.
+
+\code{\link[=scaled_matrix]{scaled_matrix()}} builds one. With \code{link = NULL} the object holds \eqn{P}
+itself and has no free value at all, and \code{param_name} is then \code{"fixed"}
+instead of \code{"scaled"}.
 }
 \examples{
-S7::S7_inherits(scaled_matrix(diag(3)), ScaledMatrixParam)
+# A ridge is the identity, scaled: full rank, one free value.
+r <- scaled_matrix(diag(3))
+c(S7::S7_inherits(r, ScaledMatrixParam), rank = r@rank, n_free = r@n_free)
+
+# A second-difference penalty is deficient by two, and says so.
+q <- scaled_matrix(crossprod(diff(diag(6), differences = 2)))
+c(dimension = q@dimension, rank = q@rank, null = ncol(q@null_basis))
+
+# With no link there is nothing to estimate.
+f <- scaled_matrix(diag(3), link = NULL)
+c(n_free = f@n_free, name = f@param_name)
 
 }
 \seealso{
-\code{\link[=scaled_matrix]{scaled_matrix()}}
+\code{\link[=scaled_matrix]{scaled_matrix()}}, the constructor, and \code{\link[=matrix_parameter]{matrix_parameter()}} for the
+properties this inherits.
 }

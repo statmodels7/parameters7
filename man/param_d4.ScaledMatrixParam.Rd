@@ -6,14 +6,22 @@
 \arguments{
 \item{s}{A \code{\link[=ScaledMatrixParam]{ScaledMatrixParam()}} object.}
 
-\item{eta}{A numeric vector with one free value.}
+\item{eta}{A numeric vector with one free value, already checked by the
+generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named list with one matrix.
+A list with one matrix keyed as \code{param_tuple_names(s, 4)}, or an empty
+list for a fixed parameter.
 }
 \description{
-Closed form: \eqn{h''''(\eta)\, M_0}.
+Closed form: \eqn{\partial^4_\eta M = h''''(\eta)\,P}, from
+\code{linkfunctions7::d4linkinv()}. Exact, where a family without a closed form
+would get a product stencil good to about five digits at this order.
+}
+\seealso{
+\code{\link[=param_d3.ScaledMatrixParam]{param_d3.ScaledMatrixParam()}} for the order below, and
+\code{\link[=numerical_d4]{numerical_d4()}} for the alternative.
 }
 \keyword{internal}

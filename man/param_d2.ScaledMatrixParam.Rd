@@ -6,14 +6,22 @@
 \arguments{
 \item{s}{A \code{\link[=ScaledMatrixParam]{ScaledMatrixParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named list with one symmetric matrix.
+A list with one symmetric matrix keyed as \code{param_tuple_names(s)}, or
+an empty list for a fixed parameter.
 }
 \description{
-Closed form: \eqn{h''(\eta) P}.
+Closed form: \eqn{\partial^2_\eta M = h''(\eta)\,P}. With one free value there
+is one component, and under the default log link it is the matrix again,
+\eqn{h'' = h}. Empty for a fixed parameter.
+}
+\seealso{
+\code{\link[=param_d1.ScaledMatrixParam]{param_d1.ScaledMatrixParam()}} and \code{\link[=param_d3.ScaledMatrixParam]{param_d3.ScaledMatrixParam()}} for
+the neighbouring orders.
 }
 \keyword{internal}

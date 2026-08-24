@@ -7,27 +7,36 @@
 scaled_dlog(s, eta, order)
 }
 \arguments{
-\item{s}{A \code{\link[=ScaledMatrixParam]{ScaledMatrixParam()}} object.}
+\item{s}{A \code{\link[=ScaledMatrixParam]{ScaledMatrixParam()}} object, whose \code{param_params$link} is read.}
 
 \item{eta}{A numeric vector of one free value.}
 
-\item{order}{The derivative order, 2 to 4.}
+\item{order}{The derivative order: \strong{3 or 4 only}. There is no branch for any
+other value, so \code{order = 2} silently returns the fourth-order expression
+instead of the second. Use \code{\link[=diag_dlog]{diag_dlog()}} for order 1 or 2 on the same link.}
 }
 \value{
-A named numeric vector of length one, keyed by
-\code{\link[=param_tuple_names]{param_tuple_names(s, order)}}.
+A single number.
 }
 \description{
-The derivative components of orders two to four of
-\eqn{r\log\lambda(\eta) + \log\lvert P\rvert_+} in the single free value.
+Returns the third or fourth derivative of \eqn{\log h(\eta)} in the single
+free value, which the caller multiplies by the rank. The constant
+\eqn{\log|P|_+} contributes nothing beyond order zero, so every derivative of
+\eqn{r\log h(\eta) + \log|P|_+} is \eqn{r} times one of these.
 }
 \details{
-The constant contributes nothing beyond order zero, so every component is
-the rank times the corresponding derivative of \eqn{\log\lambda}, which is
-Faa di Bruno's chain for the logarithm as in \code{\link[=diag_dlog]{diag_dlog()}}. With
-one free value there is exactly one component per order.
+The two expressions are Faa di Bruno's chain for the logarithm, as in
+\code{\link[=diag_dlog]{diag_dlog()}}: with \eqn{u_m = h^{(m)}/h},
+
+\deqn{u_3 - 3u_1u_2 + 2u_1^3, \qquad
+  u_4 - 4u_1u_3 - 3u_2^2 + 12u_1^2u_2 - 6u_1^4.}
+
+All four link derivatives are evaluated whichever order is asked for, so the
+two calls the family makes cost the same.
 }
 \seealso{
-\code{\link[=scaled_matrix]{scaled_matrix()}}, \code{\link[=diag_dlog]{diag_dlog()}}
+\code{\link[=diag_dlog]{diag_dlog()}}, which covers orders 1 to 4 of the same quantity, and
+\code{\link[=param_d3logdet.ScaledMatrixParam]{param_d3logdet.ScaledMatrixParam()}} and
+\code{\link[=param_d4logdet.ScaledMatrixParam]{param_d4logdet.ScaledMatrixParam()}}, the two callers.
 }
 \keyword{internal}

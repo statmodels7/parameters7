@@ -6,16 +6,31 @@
 \arguments{
 \item{s}{A \code{\link[=ScaledMatrixParam]{ScaledMatrixParam()}} object.}
 
-\item{m}{A symmetric matrix.}
+\item{m}{A symmetric numeric matrix, a positive multiple of the object's
+fixed matrix, already checked for shape and symmetry by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named numeric vector of free values.
+A numeric vector of length \code{s@n_free} named by \code{s@free_names}, or
+\code{numeric(0)} for a fixed parameter.
 }
 \description{
-The scale read off the ratio to the fixed matrix, after checking that the
-matrix really is a multiple of it. The ratio is taken at the entry of
-\eqn{P} of largest magnitude, which is where it is best determined.
+Returns \eqn{g(h)} where \eqn{h} is the multiple of \eqn{P} that \code{m} is, read
+off the ratio at the entry of \eqn{P} of largest magnitude, which is where it
+is best determined. Exact, and a true inverse of
+\code{\link[=param_value.ScaledMatrixParam]{param_value.ScaledMatrixParam()}}.
+}
+\details{
+Three rejections. The ratio must be positive, or \code{m} is not a positive
+multiple. \code{m} must then agree with \code{h * p} to \eqn{10^{-8}} relative
+everywhere, or it is not a multiple of \eqn{P} at all: the ratio at one entry
+is not enough, since any matrix has \emph{some} ratio there. And for a fixed
+parameter, built with \code{link = NULL}, the multiple must be 1 to \eqn{10^{-8}},
+the object having no free value to absorb anything else; the result is then
+\code{numeric(0)}.
+}
+\seealso{
+\code{\link[=param_value.ScaledMatrixParam]{param_value.ScaledMatrixParam()}}, the map this inverts.
 }
 \keyword{internal}

@@ -12,74 +12,124 @@ scaled_matrix(
 )
 }
 \arguments{
-\item{p}{A symmetric positive semidefinite matrix.}
+\item{p}{A symmetric positive semidefinite numeric matrix. It must be square,
+free of \code{NA}, and symmetric to \eqn{10^{-8}} relative, and it is symmetrized
+before use. A matrix whose largest eigenvalue is not positive throws \verb{'p' must be positive semidefinite and not identically zero.}, and one whose
+smallest eigenvalue is below \code{-tol * max(ev)} throws a message quoting both
+eigenvalues.}
 
-\item{link}{A \pkg{linkfunctions7} link mapping the free scale to the
-positive scale, or \code{NULL} for a fully known matrix with no free
-value. Defaults to \code{linkfunctions7::log_link()}.}
+\item{link}{A \pkg{linkfunctions7} link carrying the free value onto the
+positive scale, \code{linkfunctions7::log_link()} by default. Its declared lower
+bound must be non-negative. \code{NULL} means the matrix is fully known: \code{n_free}
+is then 0, \code{free_names} is empty, and \code{param_name} is \code{"fixed"}.}
 
-\item{role}{A label; see \code{\link[=log_cholesky]{log_cholesky()}}. Defaults to
-\code{"precision"}, since the consumer of a scaled fixed matrix is a
-penalty.}
+\item{role}{A label recording which side of a model the matrix parametrizes,
+defaulting to \code{"precision"} here because the consumer of a scaled fixed
+matrix is a penalty. No numeric result depends on it.}
 
-\item{tol}{The relative tolerance below which a singular value of \code{p}
-counts as zero when its rank is determined.}
+\item{tol}{The relative tolerance below which a singular value of \code{p} counts
+as zero when its rank is determined, \code{1e-10} by default. It is passed to
+\code{\link[=param_null_basis]{param_null_basis()}} and also sets how negative an eigenvalue may be before
+\code{p} is rejected.}
 }
 \value{
-An object of class \code{\link[=ScaledMatrixParam]{ScaledMatrixParam()}}.
+An object of class \code{\link[=ScaledMatrixParam]{ScaledMatrixParam()}}, with \code{n_free} 1 or 0,
+\code{free_names} a single link-tagged label or empty, \code{rank} and \code{null_basis}
+from \code{\link[=param_null_basis]{param_null_basis()}}, and \code{param_params} holding \code{p}, \code{link} and
+\code{logdet_p}.
 }
 \description{
-\eqn{M(\eta) = h(\eta)\,P} for a fixed symmetric positive semidefinite
-\eqn{P} and a positive scale \eqn{h(\eta)}, or the fixed \eqn{P} itself when
-no link is given.
-}
-\details{
-This is the commonest penalty in semiparametric regression, and the reason
-the package admits rank-deficient matrices at all. \eqn{P} may be a Gram
-matrix of a basis derivative, a difference penalty
-\eqn{\Delta^\top \Delta}, a neighborhood matrix, or the identity, which
-makes the parameter a ridge.
+Returns an object holding the map \eqn{M(\eta) = h(\eta)\,P}: a fixed
+symmetric positive semidefinite matrix \eqn{P}, supplied by the caller, times
+one positive scale. With \code{link = NULL} it holds \eqn{P} alone and has no free
+value.
 
-Everything is a constant times a function of the scale, so nothing needs
-deriving. With the default log link, where \eqn{h(\eta) = e^{\eta}} and
-\eqn{\lambda = h(\eta)},
+This is the commonest penalty in semiparametric regression, and it is the
+reason the package admits rank-deficient matrices at all. \eqn{P} may be the
+Gram matrix of a basis derivative, a difference penalty
+\eqn{\Delta^\top \Delta}, a neighborhood matrix, or the identity, which makes
+the object a ridge.
+}
+\section{Everything is a constant times a function of the scale}{
+Nothing here needs deriving. With the default log link, where
+\eqn{h(\eta) = e^{\eta}} and \eqn{\lambda = h(\eta)},
+
 \deqn{\partial_\eta M = M, \qquad \partial^2_\eta M = M,}
 \deqn{\log|M|_+ = r\,\eta + \log|P|_+, \qquad
       \partial_\eta \log|M|_+ = r, \qquad
       \partial^2_\eta \log|M|_+ = 0,}
-with \eqn{r} the rank and \eqn{\log|P|_+} computed once at construction.
 
-The derivative of the log pseudo-determinant being the rank is what makes
-the scale estimable. Writing a penalty as a negative log prior,
-\eqn{\frac{\lambda}{2}\beta^\top P \beta - \frac{r}{2}\log\lambda}, the
-stationary point is \eqn{\lambda = r / (\beta^\top P \beta)}, whereas
-dropping the second term leaves a derivative of one sign and sends the scale
-to zero. That second term is exactly the normalizing constant of the prior,
-which is the reason this package keeps it.
-
-A rank-deficient \eqn{P} makes the corresponding gaussian improper, which is
-what makes it a legitimate penalty and not a legitimate density. Both
-readings of a multivariate gaussian require full rank: a singular covariance
-is degenerate on a subspace, and a singular precision does not normalize.
+with \eqn{r} the rank and \eqn{\log|P|_+} the log pseudo-determinant of
+\eqn{P}, computed once at construction and stored. Under another link the
+derivatives carry that link's own, through \code{\link[=scaled_dlog]{scaled_dlog()}}.
 }
-\examples{
-# a ridge: the identity, scaled
-r <- scaled_matrix(diag(4))
-c(rank = r@rank, logdet = param_logdet(r, 0))
 
-# a second-difference penalty: rank deficient, and its null space is the
-# constants and the straight lines, which the penalty leaves alone
+\section{Why the derivative of the log pseudo-determinant matters}{
+It equals the rank, and that is what leaves the scale estimable. Write a
+penalty as a negative log prior,
+
+\deqn{\tfrac{\lambda}{2}\beta^\top P \beta - \tfrac{r}{2}\log\lambda,}
+
+and the stationary point is \eqn{\lambda = r / (\beta^\top P \beta)}. Drop the
+second term and the derivative keeps one sign, sending the scale to zero. That
+second term is the normalizing constant of the prior, which is why this
+package keeps it.
+}
+
+\section{Rank deficiency is admitted, and what it means}{
+A deficient \eqn{P} makes the corresponding Gaussian improper, so it is a
+legitimate \strong{penalty} without being a legitimate density. Both readings of a
+multivariate Gaussian need full rank: a singular covariance is degenerate on a
+subspace, and a singular precision does not normalize. The object still
+answers \code{\link[=param_logdet]{param_logdet()}}, with the pseudo-determinant, and \code{\link[=param_solve]{param_solve()}} and
+\code{\link[=param_factor]{param_factor()}} reject it, a consumer of an improper prior needing the
+quadratic form and the pseudo-determinant instead of an inverse.
+}
+
+\section{Notation}{
+
+\eqn{P} is the fixed matrix, \eqn{r} its rank, \eqn{\eta} the single free
+value, \eqn{h = g^{-1}} the inverse link and \eqn{\lambda = h(\eta)} the
+scale. \eqn{\log|\cdot|_+} is the log pseudo-determinant, the sum of the
+logarithms of the \eqn{r} non-zero eigenvalues.
+}
+
+\examples{
+# A ridge: the identity, scaled. Full rank, and log|M| = p * eta.
+r <- scaled_matrix(diag(4))
+c(rank = r@rank, logdet_at_0 = param_logdet(r, 0))
+all.equal(param_logdet(r, 1.3), 4 * 1.3)
+
+# A second-difference penalty on six coefficients: deficient by two, its
+# null space being the constants and the straight lines.
 d <- diff(diag(6), differences = 2)
 s <- scaled_matrix(crossprod(d))
 c(dimension = s@dimension, rank = s@rank)
+max(abs(param_value(s, 0.4) \%*\% s@null_basis))
 
-# the derivative of the log pseudo-determinant is the rank, at any scale
-c(param_dlogdet(s, -4), param_dlogdet(s, 4))
+# The derivative of the log pseudo-determinant is the rank, at any scale.
+c(at_minus_4 = param_dlogdet(s, -4), at_4 = param_dlogdet(s, 4),
+  rank = s@rank)
 
-# and a fully known matrix has no free value at all
-scaled_matrix(diag(3), link = NULL)@n_free
+# Which leaves the scale estimable: the stationary point of
+# lambda/2 b'Pb - r/2 log(lambda) is r / (b'Pb).
+set.seed(2)
+b <- rnorm(6)
+bPb <- drop(crossprod(b, crossprod(d) \%*\% b))
+obj <- function(lam) lam / 2 * bPb - s@rank / 2 * log(lam)
+c(closed_form = s@rank / bPb, numeric = optimize(obj, c(1e-6, 100))$minimum)
+
+# A deficient family has no inverse and says so.
+try(param_solve(s, 0))
+
+# With no link the matrix is fully known and there is nothing to estimate.
+f <- scaled_matrix(diag(3), link = NULL)
+c(n_free = f@n_free, logdet = param_logdet(f, numeric(0)))
 
 }
 \seealso{
-\code{\link[=log_cholesky]{log_cholesky()}}, \code{\link[=param_null_basis]{param_null_basis()}}
+\code{\link[=scalar_matrix]{scalar_matrix()}}, which is this on the identity from the other
+direction, \code{\link[=sum_struct]{sum_struct()}} for a non-negative combination of several fixed
+matrices, \code{\link[=param_null_basis]{param_null_basis()}} for the rank, and \code{\link[=param_logdet]{param_logdet()}} for the
+pseudo-determinant.
 }

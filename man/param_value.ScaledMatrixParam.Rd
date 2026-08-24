@@ -6,14 +6,25 @@
 \arguments{
 \item{s}{A \code{\link[=ScaledMatrixParam]{ScaledMatrixParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A symmetric positive semidefinite matrix.
+A symmetric positive semidefinite \code{s@dimension} by \code{s@dimension}
+numeric matrix with dimnames \code{v1}, \code{v2}, ..., of rank \code{s@rank}. Positive
+definite only where \code{s@rank == s@dimension}.
 }
 \description{
-The fixed matrix times the scale.
+Returns \eqn{M = h(\eta)\,P}, the stored fixed matrix times the scale, which
+is \eqn{P} itself for a fixed parameter. One elementwise multiplication and no
+decomposition. The result inherits \eqn{P}'s rank exactly, a positive multiple
+leaving a null space alone, which is why the class can record that rank at
+construction.
+}
+\seealso{
+\code{\link[=param_free.ScaledMatrixParam]{param_free.ScaledMatrixParam()}} for the inverse, and
+\code{\link[=scaled_scale]{scaled_scale()}} for the scale.
 }
 \keyword{internal}

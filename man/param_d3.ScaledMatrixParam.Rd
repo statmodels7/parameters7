@@ -6,14 +6,22 @@
 \arguments{
 \item{s}{A \code{\link[=ScaledMatrixParam]{ScaledMatrixParam()}} object.}
 
-\item{eta}{A numeric vector with one free value.}
+\item{eta}{A numeric vector with one free value, already checked by the
+generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named list with one matrix.
+A list with one matrix keyed as \code{param_tuple_names(s, 3)}, or an empty
+list for a fixed parameter.
 }
 \description{
-Closed form: \eqn{h'''(\eta)\, M_0}.
+Closed form: \eqn{\partial^3_\eta M = h'''(\eta)\,P}, from
+\code{linkfunctions7::d3linkinv()}. Every order is the same fixed matrix times a
+link derivative, so this family costs nothing at any order and is exact at
+all of them. Under the default log link it is the matrix again.
+}
+\seealso{
+\code{\link[=param_d4.ScaledMatrixParam]{param_d4.ScaledMatrixParam()}} for the order above.
 }
 \keyword{internal}
