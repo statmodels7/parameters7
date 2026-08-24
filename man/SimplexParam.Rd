@@ -33,16 +33,36 @@ the row and column index of each free value here; \code{sum_struct()} stores
 its component matrices. Nothing outside the family looks inside it.}
 }
 \value{
-An object of class \code{SimplexParam}.
+An object of class \code{SimplexParam}, a subclass of \code{\link[=parameter]{parameter()}} adding
+no properties of its own: \code{param_name} is \code{"simplex"}, \code{n_free} is
+\eqn{K - 1}, \code{free_names} is \code{alr1} ... \code{alr(K-1)}, and \code{param_params} holds
+\code{n_cat}.
 }
 \description{
 The S7 class of probability vectors on the open simplex, in the additive
-log-ratio parametrization. Constructed by \code{\link[=simplex]{simplex()}}.
+log-ratio parametrization. It inherits \code{\link[=parameter]{parameter()}} \strong{directly}, never
+\code{\link[=matrix_parameter]{matrix_parameter()}}, its value being a vector: there is no \code{dimension}, no
+\code{rank}, no \code{null_basis} and no \code{role}, and \code{\link[=param_logdet]{param_logdet()}}, \code{\link[=param_solve]{param_solve()}}
+and \code{\link[=param_factor]{param_factor()}} have no method for it, so asking for the
+log-determinant of a probability vector fails at dispatch.
+
+\code{\link[=simplex]{simplex()}} builds one. The four derivative orders are all closed form.
 }
 \examples{
-S7::S7_inherits(simplex(3), SimplexParam)
+# A probability vector is not a matrix, so it inherits parameter() alone.
+s <- simplex(3)
+c(parameter = S7::S7_inherits(s, parameter),
+  matrix_parameter = S7::S7_inherits(s, matrix_parameter))
+
+# K - 1 free values for K categories.
+vapply(2:5, function(k) simplex(k)@n_free, integer(1))
+
+# And no log-determinant to ask for.
+try(param_logdet(s, c(0, 0)))
 
 }
 \seealso{
-\code{\link[=simplex]{simplex()}}
+\code{\link[=simplex]{simplex()}}, the constructor, \code{\link[=transition_matrix]{transition_matrix()}}, which is one of
+these per row, and \code{\link[=parameter]{parameter()}} for the properties this inherits and the
+four generics it does not get.
 }

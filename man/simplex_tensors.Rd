@@ -7,12 +7,15 @@
 simplex_tensors(pi_full, order = 4L)
 }
 \arguments{
-\item{pi_full}{The value, a vector of length \eqn{K}.}
+\item{pi_full}{The value, a vector of length \eqn{K} summing to 1, as
+\code{\link[=simplex_point]{simplex_point()}} returns it.}
 
-\item{order}{The highest order wanted, 1 to 4.}
+\item{order}{The highest order wanted: 1, 2, 3 or 4.}
 }
 \value{
-A list with elements \code{d1} to \code{d\{order\}}.
+A list with elements \code{d1} to \verb{d<order>}: \code{d1} is \code{K} by \code{K-1}, \code{d2} is
+\code{K} by \code{K-1} by \code{K-1}, and so on, the first index running over the
+categories of the value and the rest over the free values.
 }
 \description{
 The arrays \eqn{D_1[a, b]} to \eqn{D_4[a, b, c, d, e]} of derivatives of
@@ -20,5 +23,17 @@ The arrays \eqn{D_1[a, b]} to \eqn{D_4[a, b, c, d, e]} of derivatives of
 \eqn{\partial_b \pi_a = \pi_a(\delta_{ab} - \pi_b)} as many times as the
 order asks. The first index runs over the \eqn{K} categories of the value,
 the rest over the \eqn{K - 1} free values.
+}
+\details{
+Each array is one more application of the product rule to the one below, so the
+cost of the fourth is \eqn{K(K-1)^4} entries and the whole set is built in one
+pass. Nothing is differenced.
+
+Every slice sums to zero over its first index, \eqn{\sum_a \pi_a} being the
+constant 1, which is the identity \code{\link[=check_parameter]{check_parameter()}} tests.
+}
+\seealso{
+\code{\link[=simplex_components]{simplex_components()}}, which slices these into the named lists the
+generics return, and \code{\link[=simplex_point]{simplex_point()}} for the value they are built from.
 }
 \keyword{internal}

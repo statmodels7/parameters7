@@ -6,14 +6,28 @@
 \arguments{
 \item{s}{A \code{\link[=SimplexParam]{SimplexParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named list of vectors of length \eqn{K}.
+A list of \code{choose(s@n_free + 3, 4)} numeric vectors of length \eqn{K},
+keyed as \code{param_tuple_names(s, 4)} and in that order, each summing to 0.
 }
 \description{
-Closed form, the cumulant recursion at fourth order.
+Closed form, the cumulant recursion at fourth order, which is where the
+contract stops. Exact, and that matters most here: a product stencil at fourth
+order keeps about five digits, and this array is what a fourth-order chain rule
+through a link reads. Every component sums to zero over the category index,
+measured at \eqn{1.7 \times 10^{-17}}.
+
+The array holds \eqn{K(K-1)^4} entries, so it is the largest object the family
+builds; at \eqn{K = 4} that is 324.
+}
+\seealso{
+\code{\link[=simplex_tensors]{simplex_tensors()}}, which builds the array,
+\code{\link[=param_d3.SimplexParam]{param_d3.SimplexParam()}} for the order below, and \code{\link[=numerical_d4]{numerical_d4()}} for the
+alternative.
 }
 \keyword{internal}

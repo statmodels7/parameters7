@@ -6,15 +6,31 @@
 \arguments{
 \item{s}{A \code{\link[=SimplexParam]{SimplexParam()}} object.}
 
-\item{m}{A probability vector of length \eqn{K}.}
+\item{m}{A probability vector of length \eqn{K}: strictly positive and summing
+to 1.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named numeric vector of free values.
+A numeric vector of length \code{s@n_free}, named by \code{s@free_names}.
 }
 \description{
-The additive log-ratio, exact: \eqn{\eta_a = \log(\pi_a/\pi_K)}. Rejected
-outside the open simplex or when the vector does not sum to one.
+Returns the additive log-ratio, \eqn{\eta_a = \log(\pi_a/\pi_K)}, exact and a
+true inverse of \code{\link[=param_value.SimplexParam]{param_value.SimplexParam()}}: the round trip closes to
+\eqn{2 \times 10^{-16}}.
+}
+\details{
+Two rejections, both with their own message. A vector with a non-positive
+entry is outside the \strong{open} simplex, and \eqn{\log 0} is not finite; a
+vector that does not sum to 1 is not a probability vector, and it is \strong{not
+renormalized}, a silent repair being the kind of thing that hides a caller's
+defect for a long time.
+
+The first rejection is the one a fit runs into. \code{\link[=simplex_point]{simplex_point()}} saturates a
+large free value to an exact 0 in the reference category, so a value produced
+at the boundary cannot be inverted back.
+}
+\seealso{
+\code{\link[=param_value.SimplexParam]{param_value.SimplexParam()}}, the map this inverts.
 }
 \keyword{internal}

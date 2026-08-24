@@ -7,35 +7,98 @@
 transition_matrix(n_state)
 }
 \arguments{
-\item{n_state}{The number of states \eqn{K}, at least 2.}
+\item{n_state}{The number of states \eqn{K}, \strong{at least 2}. A single integer;
+\code{1}, a fraction, \code{NA} and a vector all throw \verb{'n_state' must be a single integer of at least 2.} A one-state chain has nothing to estimate.}
 }
 \value{
-An object of class \code{\link[=TransitionMatrixParam]{TransitionMatrixParam()}}.
+An object of class \code{\link[=TransitionMatrixParam]{TransitionMatrixParam()}}, with \code{n_free} equal to
+\eqn{K(K-1)}, \code{free_names} \code{alr1.1}, \code{alr1.2}, ..., \verb{alr\{K\}.\{K-1\}} row by
+row, \code{param_name} \code{"transition_matrix"}, and \code{param_params} holding
+\code{n_state}. No \code{dimension}, \code{rank}, \code{null_basis} or \code{role}.
 }
 \description{
-A \eqn{K \times K} row-stochastic matrix -- the transition matrix of a
-Markov chain on \eqn{K} states -- with each row an independent
-\code{\link[=simplex]{simplex()}} in the additive log-ratio chart, so
-\eqn{K(K-1)} free values in all.
+Returns an object holding a \eqn{K \times K} row-stochastic matrix, the
+transition matrix of a Markov chain on \eqn{K} states, with each row an
+independent \code{\link[=simplex]{simplex()}} in the additive log-ratio chart. \eqn{K(K-1)} free
+values in all, and every free vector gives positive entries with rows summing
+to exactly 1, so a chain can be estimated without a constraint.
 }
-\details{
-The rows are independent in the parametrization, so every derivative
-tensor is block diagonal by row: a component pairing free values of two
-different rows is exactly zero, and the implementation evaluates the
-simplex kernels row by row rather than storing those zeros.
+\section{Rows, not columns}{
+The rows live on the simplex, so row \eqn{i} holds the probabilities of moving
+\strong{from} state \eqn{i}. A transition matrix in this convention acts on row
+vectors of probabilities, \eqn{\pi_{t+1} = \pi_t P}; the column convention is
+its transpose.
+}
 
-The free vector runs row by row, and the names \code{alr\{i\}.\{j\}} say
-which row and which chart coordinate, the row.column convention the
-log-Cholesky names already use. Rows, not columns, live on the simplex: a
-transition matrix acts on row vectors of probabilities, and the column
-convention is its transpose.
+\section{The rows are independent}{
+Each row is parametrized by its own \eqn{K-1} free values and no others, so
+every derivative array is \strong{block diagonal by row}: a component pairing free
+values of two different rows is exactly the zero matrix, and a component
+inside row \eqn{i} is zero everywhere outside row \eqn{i}. The implementation
+evaluates the simplex kernels row by row and never stores those zeros.
+
+Measured at \eqn{K = 3}: the second-derivative component
+\code{alr1.1:alr2.1}, spanning two rows, is 0 exactly, while \code{alr1.1:alr1.1} is
+not.
 }
+
+\section{Reading the free vector}{
+It runs row by row, and the names \verb{alr\{i\}.\{j\}} say which row and which chart
+coordinate, the row.column convention \code{\link[=log_cholesky]{log_cholesky()}} uses. The \code{alr} records
+the chart, so a free value of 0.5 is not a probability of 0.5: it is a log
+ratio against the row's last state.
+}
+
+\section{What it has and has not got}{
+All four derivative orders are closed form, inherited from \code{\link[=simplex]{simplex()}}'s
+cumulant recursion. There is no log-determinant, no solve and no factor: the
+value is not symmetric, and the object is a \code{\link[=parameter]{parameter()}} and never a
+\code{\link[=matrix_parameter]{matrix_parameter()}}, so those generics have no method and fail at dispatch.
+\code{\link[=check_parameter]{check_parameter()}} runs its seven-check battery instead of the nine-check one,
+and the identity it tests here is that every derivative component sums to zero
+along each row.
+}
+
+\section{Notation}{
+
+\eqn{K} is the number of states, \eqn{\eta \in \mathbb{R}^{K(K-1)}} the free
+vector and \eqn{P} the transition matrix, with \eqn{P_{ij}} the probability of
+moving from state \eqn{i} to state \eqn{j}. The reference category of each row
+is its last state.
+}
+
 \examples{
+# Three states: six free values, two per row.
 s <- transition_matrix(3)
+c(n_free = s@n_free)
+s@free_names
+
+set.seed(4)
 eta <- rnorm(s@n_free)
-rowSums(param_value(s, eta))
+m <- param_value(s, eta)
+round(m, 4)
+
+# Every row is a probability distribution, exactly.
+rowSums(m)
+
+# The round trip closes exactly.
+max(abs(param_free(s, m) - eta))
+
+# The rows are independent, so a derivative in a row-1 free value is zero
+# everywhere outside row 1.
+round(param_d1(s, eta)[["alr1.1"]], 4)
+
+# And a second derivative spanning two rows is exactly the zero matrix.
+d2 <- param_d2(s, eta)
+c(across_rows = max(abs(d2[["alr1.1:alr2.1"]])),
+  within_row = max(abs(d2[["alr1.1:alr1.1"]])))
+
+# There is no log-determinant to ask for: the value is not symmetric.
+try(param_logdet(s, eta))
 
 }
 \seealso{
-\code{\link[=simplex]{simplex()}}
+\code{\link[=simplex]{simplex()}}, which is one row of this and carries the derivative
+recursion, \code{\link[=param_value]{param_value()}} and \code{\link[=param_free]{param_free()}} for the map and its inverse,
+and \code{\link[=check_parameter]{check_parameter()}} for the battery a non-matrix family gets.
 }

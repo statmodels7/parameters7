@@ -9,16 +9,30 @@ tm_derivative(s, eta, order)
 \arguments{
 \item{s}{A \code{\link[=TransitionMatrixParam]{TransitionMatrixParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}.}
 
-\item{order}{The derivative order, 1 to 4.}
+\item{order}{The derivative order: 1, 2, 3 or 4.}
 }
 \value{
-A named list of \eqn{K \times K} matrices.
+A list of \code{choose(s@n_free + order - 1, order)} \eqn{K \times K}
+matrices keyed as \code{param_tuple_names(s, order)} and in that order, most of
+them exactly zero. Each non-zero one is supported on a single row.
 }
 \description{
-Assembles a derivative order from the row-wise simplex tensors: a
-component whose free values span two rows is zero, and one inside a row
-embeds that row's simplex component.
+Assembles a whole derivative order from the row-wise simplex tensors. A
+component whose free values span two rows is the zero matrix; one whose free
+values all belong to row \eqn{i} is that row's \code{\link[=simplex]{simplex()}} component embedded
+in row \eqn{i} of a matrix of zeros. The four derivative methods of the family
+are one call each to this function.
+}
+\details{
+The rows are parametrized independently, so \code{\link[=simplex_tensors]{simplex_tensors()}} is evaluated
+once per row and \code{\link[=simplex_components]{simplex_components()}} slices it with a \code{wrap} that does the
+embedding. Nothing of size \eqn{K^2 (K(K-1))^{\text{order}}} is built: the
+cross-row components are never computed, only skipped.
+}
+\seealso{
+\code{\link[=simplex_tensors]{simplex_tensors()}} and \code{\link[=simplex_components]{simplex_components()}}, which do the per-row
+work, and \code{\link[=tm_positions]{tm_positions()}} for the row map.
 }
 \keyword{internal}

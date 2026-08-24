@@ -7,13 +7,31 @@
 simplex_point(eta)
 }
 \arguments{
-\item{eta}{A numeric vector of length \eqn{K - 1}.}
+\item{eta}{A numeric vector of length \eqn{K - 1}. Not checked; the callers
+have been through the generic.}
 }
 \value{
-A numeric vector of length \eqn{K}.
+A numeric vector of length \eqn{K} with non-negative entries summing to
+1, and no names. The names \code{p1} ... \code{pK} are applied by
+\code{\link[=param_value.SimplexParam]{param_value.SimplexParam()}}.
 }
 \description{
-The value \eqn{\pi}, computed through the log-sum-exp shift so that a large
-free value saturates gracefully instead of overflowing.
+Computes the value \eqn{\pi} from a free vector, appending the reference
+category's implicit 0 and taking the softmax through the \strong{log-sum-exp
+shift}: the largest entry is subtracted before exponentiating, so a large
+free value saturates instead of overflowing.
+}
+\details{
+The naive expression \eqn{e^{\eta_a}/(1 + \sum_b e^{\eta_b})} is \code{Inf/Inf} from
+about \eqn{\eta = 710}. With the shift, a free value of 800 returns
+\eqn{\pi_1 = 1} and \eqn{\pi_K = 0} with the vector summing to exactly 1, and
+at 500 it returns \eqn{\pi_K = 7 \times 10^{-218}}, still representable. The
+value is then on the boundary of the simplex, which \code{\link[=param_free]{param_free()}} cannot
+invert.
+}
+\seealso{
+\code{\link[=param_value.SimplexParam]{param_value.SimplexParam()}} and
+\code{\link[=param_value.TransitionMatrixParam]{param_value.TransitionMatrixParam()}}, the two callers, and
+\code{\link[=simplex_tensors]{simplex_tensors()}} for the derivatives of the same map.
 }
 \keyword{internal}

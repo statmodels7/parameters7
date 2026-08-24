@@ -6,14 +6,27 @@
 \arguments{
 \item{s}{A \code{\link[=TransitionMatrixParam]{TransitionMatrixParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named list of matrices.
+A list of \code{choose(s@n_free + 1, 2)} \eqn{K \times K} matrices keyed as
+\code{param_tuple_names(s)} and in that order, the cross-row ones exactly zero.
 }
 \description{
-Closed form, row by row.
+Closed form, and mostly zero. A component pairing free values from two
+\strong{different} rows is exactly the zero matrix, the rows being parametrized
+independently; one pairing two free values of the same row is that row's
+\code{\link[=simplex]{simplex()}} second derivative, embedded in that row.
+
+Measured at \eqn{K = 3}: \code{alr1.1:alr2.1} is 0 exactly and \code{alr1.1:alr1.1} is
+not. Of the 21 components at \eqn{K = 3}, only 9 can be non-zero.
+}
+\seealso{
+\code{\link[=tm_derivative]{tm_derivative()}}, which assembles it, and
+\code{\link[=param_d1.TransitionMatrixParam]{param_d1.TransitionMatrixParam()}} and \code{\link[=param_d3.TransitionMatrixParam]{param_d3.TransitionMatrixParam()}}
+for the neighbouring orders.
 }
 \keyword{internal}

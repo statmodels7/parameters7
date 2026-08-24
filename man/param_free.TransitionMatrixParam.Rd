@@ -6,15 +6,31 @@
 \arguments{
 \item{s}{A \code{\link[=TransitionMatrixParam]{TransitionMatrixParam()}} object.}
 
-\item{m}{A \eqn{K \times K} row-stochastic matrix.}
+\item{m}{A \eqn{K \times K} row-stochastic numeric matrix: strictly positive
+with every row summing to 1.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named numeric vector of free values.
+A numeric vector of length \code{s@n_free}, named by \code{s@free_names}.
 }
 \description{
-The additive log-ratio of each row, exact; rejected when any row is outside
-the open simplex or fails to sum to one.
+Returns the additive log-ratio of each row, \eqn{\log(P_{ij}/P_{iK})}, exact
+and a true inverse of \code{\link[=param_value.TransitionMatrixParam]{param_value.TransitionMatrixParam()}}: the round trip
+closes to \eqn{2 \times 10^{-16}}.
+}
+\details{
+A row is rejected when it has a non-positive entry, being then outside the
+\strong{open} simplex where \eqn{\log 0} is not finite, or when it does not sum to
+1, in which case it is not a probability distribution and is \strong{not}
+renormalized. The message names the row.
+
+The first rejection is the one a fit meets: \code{\link[=simplex_point]{simplex_point()}} saturates a large
+free value to an exact 0 in the reference state, so a matrix produced at the
+boundary cannot be inverted back.
+}
+\seealso{
+\code{\link[=param_value.TransitionMatrixParam]{param_value.TransitionMatrixParam()}}, the map this inverts, and
+\code{\link[=param_free.SimplexParam]{param_free.SimplexParam()}}, which does one row's worth.
 }
 \keyword{internal}

@@ -7,49 +7,115 @@
 simplex(n_cat)
 }
 \arguments{
-\item{n_cat}{The number of categories \eqn{K}, at least 2.}
+\item{n_cat}{The number of categories \eqn{K}, \strong{at least 2}. A single
+integer; \code{1}, a fraction, \code{NA} and a vector all throw \verb{'n_cat' must be a single integer of at least 2.} A one-category simplex is the constant 1 and
+has nothing to estimate.}
 }
 \value{
-An object of class \code{\link[=SimplexParam]{SimplexParam()}}.
+An object of class \code{\link[=SimplexParam]{SimplexParam()}}, with \code{n_free} equal to
+\code{n_cat - 1}, \code{free_names} \code{alr1} ... \code{alr(K-1)}, \code{param_name} \code{"simplex"},
+and \code{param_params} holding \code{n_cat}. It carries no \code{dimension}, \code{rank},
+\code{null_basis} or \code{role}, being a \code{\link[=parameter]{parameter()}} and never a
+\code{\link[=matrix_parameter]{matrix_parameter()}}.
 }
 \description{
-A probability vector of length \eqn{K} on the open simplex, carried by the
-additive log-ratio map with the last category as reference:
-\deqn{\pi_a = \dfrac{e^{\eta_a}}{1 + \sum_b e^{\eta_b}}, \qquad
-      \pi_K = \dfrac{1}{1 + \sum_b e^{\eta_b}},}
-with \eqn{\eta \in \mathbb{R}^{K-1}} unconstrained.
+Returns an object holding the additive log-ratio map onto the open simplex: a
+probability vector of length \eqn{K} from \eqn{K - 1} unconstrained free
+values, with the last category as reference,
+
+\deqn{\pi_a = \frac{e^{\eta_a}}{1 + \sum_b e^{\eta_b}}, \qquad
+      \pi_K = \frac{1}{1 + \sum_b e^{\eta_b}}.}
+
+Every free vector gives positive entries summing to exactly 1, so a mixture
+weight, a categorical probability or a latent-state distribution can be
+estimated without a constraint. This is the first family here whose value is
+\strong{not a matrix}; see \code{\link[=SimplexParam]{SimplexParam()}} for what that costs.
 }
-\details{
-The derivatives of the map close over the value itself. With
-\eqn{Z = 1 + \sum_b e^{\eta_b}}, each \eqn{\pi_a} with \eqn{a < K} is a
+\section{The derivatives close over the value}{
+With \eqn{Z = 1 + \sum_b e^{\eta_b}}, each \eqn{\pi_a} for \eqn{a < K} is a
 derivative of \eqn{\log Z}, so the derivative tensors of \eqn{\pi} are the
-cumulants of a categorical indicator and follow from the one rule
-\eqn{\partial_b \pi_a = \pi_a(\delta_{ab} - \pi_b)} applied repeatedly.
-All four orders are closed form.
+cumulants of a categorical indicator and every order follows from one rule
+applied repeatedly:
 
-The inverse is \eqn{\eta_a = \log(\pi_a / \pi_K)}, exact; a vector outside
-the open simplex, or one that does not sum to one, is rejected rather than
-repaired, because a silent renormalization would mask the caller's defect.
+\deqn{\partial_b \pi_a = \pi_a(\delta_{ab} - \pi_b).}
 
-Stick-breaking is the other common chart and was not chosen: its
-derivatives chain through \eqn{K - 1} nested logistic maps and are not
-symmetric in the categories, while the additive log-ratio's close over
-\eqn{\pi} in one rule.
+At first order that is the covariance matrix of a categorical indicator, which
+is why the tensors are the same objects a multinomial score already carries.
+All four orders are closed form and no stencil is used.
 }
-\examples{
-s <- simplex(3)
-round(param_value(s, c(0.5, -0.2)), 4)
 
-# the round trip closes exactly
-eta <- c(0.5, -0.2)
-max(abs(param_free(s, param_value(s, eta)) - eta))
+\section{An identity worth checking against}{
+\eqn{\sum_a \pi_a = 1} at every \eqn{\eta}, so differentiating it gives
+\eqn{\sum_a \partial \pi_a = 0}, and the same at every higher order. Every
+derivative component therefore sums to zero over the value index. Measured
+over all four orders the worst sum is \eqn{1.7 \times 10^{-17}}, and
+\code{\link[=check_parameter]{check_parameter()}} runs exactly this check: a derivative array that does not
+sum to zero is wrong whatever else it agrees with.
+}
+
+\section{Large free values saturate instead of overflowing}{
+\code{\link[=simplex_point]{simplex_point()}} applies the log-sum-exp shift, so a free value of 800 gives
+\eqn{\pi_1 = 1} and \eqn{\pi_K = 0} with the vector still summing to exactly 1,
+where the naive expression would divide \code{Inf} by \code{Inf}. Note that the value
+then sits on the \strong{boundary} of the simplex, so \code{\link[=param_free]{param_free()}} cannot invert
+it: \eqn{\log(0)} is not finite.
+}
+
+\section{Why not stick-breaking}{
+The other common chart chains through \eqn{K - 1} nested logistic maps, so its
+derivatives compose that many times and are not symmetric in the categories.
+The additive log-ratio's close over \eqn{\pi} in one rule, and every category
+but the reference enters the same way.
+}
+
+\section{Notation}{
+
+\eqn{K} is the number of categories, \eqn{\eta \in \mathbb{R}^{K-1}} the free
+vector, \eqn{\pi} the probability vector and \eqn{\delta_{ab}} the Kronecker
+delta. The reference category is the last, \eqn{K}.
+}
+
+\examples{
+# Four categories, three free values.
+s <- simplex(4)
+s@free_names
+eta <- c(0.5, -0.2, 1.1)
+pi <- param_value(s, eta)
+round(pi, 5)
+sum(pi)
+
+# It is the closed form, with the last category as reference.
+all.equal(unname(pi),
+          c(exp(eta), 1) / (1 + sum(exp(eta))))
+
+# The round trip closes exactly.
+max(abs(param_free(s, pi) - eta))
+
+# The first derivative is the covariance of a categorical indicator.
+d1 <- param_d1(s, eta)
+round(d1[["alr1"]], 6)
+round(pi * ((seq_along(pi) == 1) - pi[1]), 6)
+
+# Every derivative component sums to zero over the value index, at every
+# order, because sum(pi) is the constant 1.
+vapply(1:4, function(k) {
+  dk <- do.call(paste0("param_d", k), list(s, eta))
+  max(abs(vapply(dk, sum, numeric(1))))
+}, numeric(1))
+
+# A large free value saturates instead of overflowing, and the vector still
+# sums to exactly 1.
+v <- param_value(s, c(800, 0, 0))
+c(p1 = v[[1]], pK = v[[4]], total = sum(v))
 
 }
 \references{
-Aitchison, J. (1986). \emph{The Statistical Analysis of Compositional
-Data}. Chapman and Hall, London. The additive log-ratio chart is
-chapter 6.
+Aitchison, J. (1986). \emph{The Statistical Analysis of Compositional Data}.
+Chapman and Hall, London. The additive log-ratio chart is chapter 6.
 }
 \seealso{
-\code{\link[=transition_matrix]{transition_matrix()}}, \code{\link[=param_value]{param_value()}}
+\code{\link[=transition_matrix]{transition_matrix()}}, which is one of these per row,
+\code{\link[=param_value]{param_value()}} and \code{\link[=param_free]{param_free()}} for the map and its inverse, and
+\code{\link[=check_parameter]{check_parameter()}}, whose seven-check battery is what a non-matrix family
+gets.
 }

@@ -4,16 +4,26 @@
 \alias{param_value.SimplexParam}
 \title{Value of a Simplex Parameter}
 \arguments{
-\item{s}{A \code{\link[=SimplexParam]{SimplexParam()}} object.}
+\item{s}{A \code{\link[=SimplexParam]{SimplexParam()}} object, whose \code{param_params$n_cat} is read.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A numeric vector of length \eqn{K} summing to one.
+A numeric vector of length \eqn{K} named \code{p1} ... \code{pK}, with
+non-negative entries summing to 1.
 }
 \description{
-The softmax point, named \code{p1..pK}.
+Returns the probability vector \eqn{\pi}, the softmax of the free vector with
+the reference category's implicit 0 appended, named \code{p1} ... \code{pK}. The entries
+are positive and sum to exactly 1 at every free vector, so nothing is tested
+and nothing is renormalized. Computed through \code{\link[=simplex_point]{simplex_point()}}'s log-sum-exp
+shift, so a large free value saturates instead of overflowing.
+}
+\seealso{
+\code{\link[=param_free.SimplexParam]{param_free.SimplexParam()}} for the inverse, and \code{\link[=simplex_point]{simplex_point()}}
+for the arithmetic.
 }
 \keyword{internal}

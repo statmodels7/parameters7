@@ -6,15 +6,26 @@
 \arguments{
 \item{s}{A \code{\link[=SimplexParam]{SimplexParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named list of vectors of length \eqn{K}.
+A list of \code{s@n_free} numeric vectors of length \eqn{K}, named by
+\code{s@free_names}, each summing to 0.
 }
 \description{
-Closed form: \eqn{\partial_b \pi_a = \pi_a(\delta_{ab} - \pi_b)}, the
-covariance structure of a categorical indicator.
+Closed form:
+
+\deqn{\partial_b \pi_a = \pi_a(\delta_{ab} - \pi_b),}
+
+which is the covariance structure of a categorical indicator: the same array a
+multinomial score already carries. Every component sums to zero over the
+category index, \eqn{\sum_a \pi_a} being the constant 1.
+}
+\seealso{
+\code{\link[=simplex_tensors]{simplex_tensors()}}, which builds the array, and
+\code{\link[=param_d2.SimplexParam]{param_d2.SimplexParam()}} for the order above.
 }
 \keyword{internal}

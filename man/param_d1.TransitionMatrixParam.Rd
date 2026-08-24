@@ -6,14 +6,28 @@
 \arguments{
 \item{s}{A \code{\link[=TransitionMatrixParam]{TransitionMatrixParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named list of matrices.
+A list of \code{s@n_free} \eqn{K \times K} matrices named by
+\code{s@free_names}, each supported on one row.
 }
 \description{
-Closed form, row by row; see \code{\link[=tm_derivative]{tm_derivative()}}.
+Closed form. The free value \verb{alr\{i\}.\{j\}} belongs to row \eqn{i} alone, so
+\eqn{\partial P} is zero in every other row and, inside row \eqn{i}, is the
+\code{\link[=simplex]{simplex()}} first derivative
+\eqn{\partial_b \pi_a = \pi_a(\delta_{ab} - \pi_b)}: the covariance structure
+of a categorical indicator.
+
+Each component therefore sums to zero along its own row, the row sums of
+\eqn{P} being the constant 1.
+}
+\seealso{
+\code{\link[=tm_derivative]{tm_derivative()}}, which assembles it, \code{\link[=param_d1.SimplexParam]{param_d1.SimplexParam()}} for
+the per-row formula, and \code{\link[=param_d2.TransitionMatrixParam]{param_d2.TransitionMatrixParam()}} for the order
+above.
 }
 \keyword{internal}

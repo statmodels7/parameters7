@@ -7,13 +7,25 @@
 tm_positions(s)
 }
 \arguments{
-\item{s}{A \code{\link[=TransitionMatrixParam]{TransitionMatrixParam()}} object.}
+\item{s}{A \code{\link[=TransitionMatrixParam]{TransitionMatrixParam()}} object, whose \code{param_params$n_state} is
+read.}
 }
 \value{
-A list with integer vectors \code{row} and \code{coord}.
+A list with two integer vectors of length \code{s@n_free}: \code{row}, with
+values in \code{1:K}, and \code{coord}, with values in \code{1:(K-1)}.
 }
 \description{
-The row each free value belongs to and its position inside that row's
-chart, in the order the free vector uses.
+Returns, for each of the \eqn{K(K-1)} free values, the row it belongs to and
+its position inside that row's simplex chart, in the order the free vector
+uses. Every method of the family reads it to split the free vector into rows.
+}
+\details{
+The free vector runs row by row, so at \eqn{K = 3} the rows are
+\verb{1 1 2 2 3 3} and the coordinates \verb{1 2 1 2 1 2}, which labels the free values
+\verb{alr1.1 alr1.2 alr2.1 alr2.2 alr3.1 alr3.2}.
+}
+\seealso{
+\code{\link[=transition_matrix]{transition_matrix()}}, which turns this into \code{free_names}, and
+\code{\link[=tm_derivative]{tm_derivative()}}, which uses it to place a row's component.
 }
 \keyword{internal}

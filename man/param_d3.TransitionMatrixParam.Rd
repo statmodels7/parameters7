@@ -6,14 +6,23 @@
 \arguments{
 \item{s}{A \code{\link[=TransitionMatrixParam]{TransitionMatrixParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named list of matrices.
+A list of \code{choose(s@n_free + 2, 3)} \eqn{K \times K} matrices keyed as
+\code{param_tuple_names(s, 3)} and in that order.
 }
 \description{
-Closed form, row by row.
+Closed form, from \code{\link[=simplex]{simplex()}}'s cumulant recursion at third order, embedded row
+by row. A component whose three free values do not all belong to one row is
+exactly the zero matrix, so the great majority of the list is zero and is
+skipped instead of computed.
+}
+\seealso{
+\code{\link[=tm_derivative]{tm_derivative()}}, which assembles it, and
+\code{\link[=param_d4.TransitionMatrixParam]{param_d4.TransitionMatrixParam()}} for the order above.
 }
 \keyword{internal}

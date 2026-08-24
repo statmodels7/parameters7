@@ -6,14 +6,24 @@
 \arguments{
 \item{s}{A \code{\link[=TransitionMatrixParam]{TransitionMatrixParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A \eqn{K \times K} row-stochastic matrix.
+A \eqn{K \times K} numeric matrix with positive entries and rows
+summing to 1, with dimnames \code{s1}, \code{s2}, ... on both margins.
 }
 \description{
-Each row is the softmax of its own free values.
+Returns the transition matrix: each row is the softmax of that row's own
+\eqn{K-1} free values, through \code{\link[=simplex_point]{simplex_point()}}, so each row is positive and
+sums to exactly 1. Nothing is tested and nothing is renormalized; the row sums
+are a property of the map. Rows are the distributions, so \eqn{P_{ij}} is the
+probability of moving from state \eqn{i} to state \eqn{j}.
+}
+\seealso{
+\code{\link[=param_free.TransitionMatrixParam]{param_free.TransitionMatrixParam()}} for the inverse, and
+\code{\link[=simplex_point]{simplex_point()}} for the per-row arithmetic.
 }
 \keyword{internal}

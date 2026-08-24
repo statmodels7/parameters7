@@ -6,14 +6,29 @@
 \arguments{
 \item{s}{A \code{\link[=TransitionMatrixParam]{TransitionMatrixParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named list of matrices.
+A list of \code{choose(s@n_free + 3, 4)} \eqn{K \times K} matrices keyed as
+\code{param_tuple_names(s, 4)} and in that order. At \eqn{K = 3} that is 126
+components, of which 15 can be non-zero.
 }
 \description{
-Closed form, row by row.
+Closed form, from \code{\link[=simplex]{simplex()}}'s cumulant recursion at fourth order, embedded
+row by row, and the top of the contract. A component whose four free values do
+not all belong to one row is exactly the zero matrix.
+
+Exactness matters most here: a product stencil at fourth order keeps about five
+digits, and the list is large, so a numerical route would be both slow and
+poor. The row-wise structure is what keeps it affordable at all, the cross-row
+components never being evaluated.
+}
+\seealso{
+\code{\link[=tm_derivative]{tm_derivative()}}, which assembles it,
+\code{\link[=param_d3.TransitionMatrixParam]{param_d3.TransitionMatrixParam()}} for the order below, and \code{\link[=numerical_d4]{numerical_d4()}}
+for the alternative.
 }
 \keyword{internal}

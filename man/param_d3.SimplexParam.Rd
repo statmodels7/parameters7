@@ -6,14 +6,23 @@
 \arguments{
 \item{s}{A \code{\link[=SimplexParam]{SimplexParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named list of vectors of length \eqn{K}.
+A list of \code{choose(s@n_free + 2, 3)} numeric vectors of length \eqn{K},
+keyed as \code{param_tuple_names(s, 3)} and in that order, each summing to 0.
 }
 \description{
-Closed form, the cumulant recursion at third order.
+Closed form, the same product rule applied a third time, which is the cumulant
+recursion of a categorical indicator at third order. Exact, where a family
+without a closed form would get a product stencil good to about six digits.
+Every component sums to zero over the category index.
+}
+\seealso{
+\code{\link[=simplex_tensors]{simplex_tensors()}}, which builds the array, and
+\code{\link[=param_d4.SimplexParam]{param_d4.SimplexParam()}} for the order above.
 }
 \keyword{internal}
