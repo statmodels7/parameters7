@@ -2,18 +2,26 @@
 % Please edit documentation in R/matrix_log.R
 \name{param_d3logdet.MatrixLogParam}
 \alias{param_d3logdet.MatrixLogParam}
-\title{Higher Log-Determinant Derivatives of a Matrix Logarithm Parameter}
+\title{Third Log-Determinant Derivatives of a Matrix Logarithm Parameter}
 \arguments{
 \item{s}{A \code{\link[=MatrixLogParam]{MatrixLogParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic. Its values do not enter the result.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named numeric vector of zeros.
+A numeric vector of \code{choose(s@n_free + 2, 3)} zeros, keyed as
+\code{param_tuple_names(s, 3)}.
 }
 \description{
-Closed form: zero at both orders, the trace being linear.
+Closed form, and identically zero, the trace being linear in the free vector.
+The zeros are exact, so a consumer can drop the term instead of carrying small
+numbers through a contraction.
+}
+\seealso{
+\code{\link[=param_d2logdet.MatrixLogParam]{param_d2logdet.MatrixLogParam()}} for the order below, and
+\code{\link[=param_d4logdet.MatrixLogParam]{param_d4logdet.MatrixLogParam()}} for the one above.
 }
 \keyword{internal}

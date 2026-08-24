@@ -6,15 +6,30 @@
 \arguments{
 \item{s}{A \code{\link[=MatrixLogParam]{MatrixLogParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named list of symmetric matrices.
+A list of \code{choose(s@n_free + 3, 4)} symmetric matrices keyed as
+\code{param_tuple_names(s, 4)} and in that order.
 }
 \description{
-Chains of four directions against five-point divided
-differences, over the twenty-four orderings.
+Chains of four rotated directions contracted against five-point divided
+differences, summed over the twenty-four orderings. Exact, and the most
+expensive quantity the package computes: measured at \eqn{p = 4} one call
+costs \strong{3.4 s}, against 0.003 s for \code{\link[=log_cholesky]{log_cholesky()}}'s fourth derivatives on
+the same matrix size.
+
+That factor of a thousand is the trade this chart makes, and it is worth
+knowing before putting a \code{matrix_log()} inside a loop that takes fourth
+derivatives. It buys a linear log-determinant and an inverse that is a sign
+flip; if those are not what the model needs, \code{\link[=log_cholesky]{log_cholesky()}} parametrizes the
+same cone.
+}
+\seealso{
+\code{\link[=mlog_higher]{mlog_higher()}}, which assembles it, \code{\link[=param_d3.MatrixLogParam]{param_d3.MatrixLogParam()}} for
+the order below, and \code{\link[=log_cholesky]{log_cholesky()}} for the cheaper chart.
 }
 \keyword{internal}

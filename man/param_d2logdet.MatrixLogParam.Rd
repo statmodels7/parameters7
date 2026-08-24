@@ -6,14 +6,27 @@
 \arguments{
 \item{s}{A \code{\link[=MatrixLogParam]{MatrixLogParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic. Its values do not enter the result.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named numeric vector of zeros.
+A numeric vector of \code{choose(s@n_free + 1, 2)} zeros, keyed as
+\code{param_tuple_names(s)}.
 }
 \description{
-Closed form: zero, the trace being linear.
+Closed form, and identically zero: \eqn{\log|M| = \mathrm{tr}(S)} is linear in
+the free vector, so its second derivative vanishes at every \eqn{\eta}. The
+zeros are exact.
+
+As with \code{\link[=log_cholesky]{log_cholesky()}}, that means this family cannot exercise the order: a
+check of a log-determinant Hessian against a numerical reference passes here
+whatever is missing. \code{\link[=ar1]{ar1()}} and \code{\link[=compound_symmetry]{compound_symmetry()}} are where it has
+content.
+}
+\seealso{
+\code{\link[=param_dlogdet.MatrixLogParam]{param_dlogdet.MatrixLogParam()}} for the order below, and
+\code{\link[=param_d3logdet.MatrixLogParam]{param_d3logdet.MatrixLogParam()}}, zero for the same reason.
 }
 \keyword{internal}

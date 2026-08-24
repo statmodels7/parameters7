@@ -4,9 +4,10 @@
 \alias{param_readable.ScaledMatrixParam}
 \title{The Scale of a Fixed Matrix}
 \arguments{
-\item{s}{A \code{\link[=ScaledMatrixParam]{ScaledMatrixParam()}} object.}
+\item{s}{A \code{\link[=ScaledMatrixParam]{ScaledMatrixParam()}} object, whose \code{param_params$link} is read.}
 
-\item{eta}{A numeric vector of at most one free value.}
+\item{eta}{A numeric vector of at most one free value; \code{numeric(0)} for a
+fixed parameter.}
 
 \item{...}{Ignored.}
 }
@@ -15,6 +16,12 @@ A list as described in \code{\link[=param_readable]{param_readable()}}, or \code
 when the matrix is fixed and carries no free value.
 }
 \description{
-Declares the multiplier, when the family carries one.
+Declares the multiplier \eqn{h(\eta)}, the one quantity a
+\code{\link[=scaled_matrix]{scaled_matrix()}} is about, with its interval on the log scale. The fixed
+matrix itself is the caller's own and needs no reporting.
+
+A parameter built with \code{link = NULL} has no free value and nothing to declare,
+so this returns \code{NULL} there, which is the same answer the base class gives and
+means the same thing.
 }
 \keyword{internal}

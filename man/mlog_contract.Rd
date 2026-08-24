@@ -7,16 +7,33 @@
 mlog_contract(tb, dirs)
 }
 \arguments{
-\item{tb}{The tables of \code{\link[=mlog_tables]{mlog_tables()}}.}
+\item{tb}{The tables of \code{\link[=mlog_tables]{mlog_tables()}}, carrying at least
+\code{length(dirs) + 1} points.}
 
-\item{dirs}{The free-value indices of the tuple, possibly repeated.}
+\item{dirs}{The free-value indices of the tuple, possibly repeated. Its length
+is the derivative order.}
 }
 \value{
-A symmetric numeric matrix.
+A symmetric numeric matrix of the side \code{tb$q} has, with no dimnames.
 }
 \description{
 Contracts the rotated directions of one index tuple against the
-divided-difference table of the matching order, summing over the
-orderings of the directions, and rotates back.
+divided-difference table of the matching order, sums over \strong{every ordering}
+of the directions, and rotates the result back by \eqn{Q}.
+}
+\details{
+The sum runs over every ordering, never over the distinct ones, so a tuple
+with repeated indices is counted with its multiplicity and needs no correction
+afterwards. That is where a hand-written version of this goes wrong: summing
+the distinct orderings and forgetting the \eqn{\prod_j m_j!} factor gives a
+result that is too small by exactly that factor, which looks plausible.
+
+The cost is the reason this family's higher orders are expensive: at order 4
+there are 24 orderings per component, each an \eqn{O(p^4)} contraction. See
+\code{\link[=matrix_log]{matrix_log()}} for the measurement.
+}
+\seealso{
+\code{\link[=mlog_tables]{mlog_tables()}} for the input, \code{\link[=combinat_perms]{combinat_perms()}} for the orderings,
+and \code{\link[=matrix_log]{matrix_log()}} for the representation.
 }
 \keyword{internal}

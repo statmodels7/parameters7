@@ -6,15 +6,27 @@
 \arguments{
 \item{s}{A \code{\link[=MatrixLogParam]{MatrixLogParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named list of symmetric matrices.
+A list of \code{choose(s@n_free + 1, 2)} symmetric matrices keyed as
+\code{param_tuple_names(s)} and in that order.
 }
 \description{
-The second Frechet derivative: chains of two rotated directions against
-three-point divided differences, summed over the two orderings.
+The second Frechet derivative: chains of two rotated directions contracted
+against three-point divided differences \eqn{e[\lambda_i, \lambda_j,
+\lambda_k]}, summed over both orderings of the two directions.
+
+Summing over the orderings, never over the distinct ones, is what brings a
+repeated index out right: the component in one free value twice gets its
+factor of 2 from the sum instead of from a correction applied afterwards.
+}
+\seealso{
+\code{\link[=mlog_contract]{mlog_contract()}}, which does the contraction, and
+\code{\link[=param_d1.MatrixLogParam]{param_d1.MatrixLogParam()}} and \code{\link[=param_d3.MatrixLogParam]{param_d3.MatrixLogParam()}} for the
+neighbouring orders.
 }
 \keyword{internal}

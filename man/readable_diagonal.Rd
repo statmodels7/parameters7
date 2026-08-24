@@ -8,23 +8,36 @@ readable_diagonal(links, eta, nm, transform, label)
 }
 \arguments{
 \item{links}{A list of \pkg{linkfunctions7} links, one per quantity, in the
-order of the free values they read.}
+order of the free values they read. \code{links[[k]]} must be the link of
+\code{eta[k]}; the correspondence is positional and is not checked.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, at least as long as \code{links}.}
 
-\item{nm}{A character vector naming the quantities.}
+\item{nm}{A character vector naming the quantities, the same length as
+\code{links}.}
 
 \item{transform}{A character vector naming the scale each interval is built
-on.}
+on, the same length as \code{nm}.}
 
-\item{label}{A single string naming the group.}
+\item{label}{A single string naming the block.}
 }
 \value{
-A list as described in \code{\link[=param_readable]{param_readable()}}.
+A list with \code{value}, \code{jacobian}, \code{transform} and \code{label}, as
+\code{\link[=param_readable]{param_readable()}} describes. The Jacobian is \code{length(nm)} by \code{length(eta)}
+with \code{nm} as its row names, and is diagonal.
 }
 \description{
-Assembles the declaration of a family whose quantities are one scalar link
-each of one free value each, so that the Jacobian is the diagonal matrix of
-the inverse links' first derivatives.
+Assembles a \code{\link[=param_readable]{param_readable()}} declaration for a family whose quantities are
+one scalar link each of one free value each. The Jacobian is then \strong{diagonal},
+its \eqn{k}-th entry the inverse link's first derivative at \eqn{\eta_k}, and
+there is nothing else to compute.
+
+\code{\link[=ar1]{ar1()}}, \code{\link[=compound_symmetry]{compound_symmetry()}} and \code{\link[=scaled_matrix]{scaled_matrix()}} all declare through this,
+which is why their three methods are one call each.
+}
+\seealso{
+\code{\link[=param_readable]{param_readable()}} for the contract, and
+\code{\link[=param_readable.AutoregressiveParam]{param_readable.AutoregressiveParam()}} for the one family whose Jacobian is
+not diagonal.
 }
 \keyword{internal}

@@ -6,15 +6,26 @@
 \arguments{
 \item{s}{A \code{\link[=MatrixLogParam]{MatrixLogParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named list of symmetric matrices.
+A list of \code{choose(s@n_free + 2, 3)} symmetric matrices keyed as
+\code{param_tuple_names(s, 3)} and in that order.
 }
 \description{
-Chains of three directions against four-point divided
-differences, over the six orderings.
+Chains of three rotated directions contracted against four-point divided
+differences, summed over the six orderings. Exact, where a numerical route at
+this order keeps about six digits.
+
+The cost grows quickly: six orderings per component, each an \eqn{O(p^4)}
+contraction, and \eqn{\binom{d+2}{3}} components. See \code{\link[=matrix_log]{matrix_log()}} for the
+comparison with \code{\link[=log_cholesky]{log_cholesky()}}, whose derivatives are sparse products.
+}
+\seealso{
+\code{\link[=mlog_higher]{mlog_higher()}}, which assembles it, and
+\code{\link[=param_d4.MatrixLogParam]{param_d4.MatrixLogParam()}} for the order above.
 }
 \keyword{internal}

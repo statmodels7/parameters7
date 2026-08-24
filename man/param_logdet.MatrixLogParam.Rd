@@ -6,15 +6,28 @@
 \arguments{
 \item{s}{A \code{\link[=MatrixLogParam]{MatrixLogParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
 A single number.
 }
 \description{
-Closed form and linear: \eqn{\log|M| = \mathrm{tr}(S)}, the
-sum of the diagonal free values.
+Closed form and linear. The eigenvalues of \eqn{M = \exp(S)} are
+\eqn{e^{\lambda_i}}, so
+
+\deqn{\log|M| = \sum_i \lambda_i = \mathrm{tr}(S) = \sum_{i=1}^{p} \eta_i,}
+
+the sum of the diagonal free values. One \code{sum()} over \eqn{p} numbers: no
+eigendecomposition and no determinant, with nothing growing in \eqn{p} beyond
+the sum itself. It agrees with the eigenvalues of the assembled matrix to the
+printed digit.
+}
+\seealso{
+\code{\link[=param_dlogdet.MatrixLogParam]{param_dlogdet.MatrixLogParam()}} for its gradient, and
+\code{\link[=param_logdet.LogCholeskyParam]{param_logdet.LogCholeskyParam()}}, which is linear for the same kind of
+reason.
 }
 \keyword{internal}

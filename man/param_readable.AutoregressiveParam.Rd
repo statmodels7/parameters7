@@ -6,7 +6,7 @@
 \arguments{
 \item{s}{An \code{\link[=AutoregressiveParam]{AutoregressiveParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \eqn{q+1}.}
 
 \item{...}{Ignored.}
 }
@@ -14,18 +14,40 @@
 A list as described in \code{\link[=param_readable]{param_readable()}}.
 }
 \description{
-Declares the marginal variance, the partial autocorrelations that
-parametrize the family, and the autoregressive coefficients they produce.
+Declares three groups: the marginal variance, the \eqn{q} partial
+autocorrelations that parametrize the family, and the \eqn{q} autoregressive
+coefficients they produce. It is the only family in the package that declares
+more quantities than it has free values, and the reason is the third group.
 }
-\details{
-The coefficients are the quantity an autoregression is usually reported in
-and are not obtainable from the covariance the fit prints. They come out of
-the Levinson-Durbin recursion the family already propagates derivatives
-through, so their derivatives with respect to every free value are read
-off the first-order block of those arrays rather than computed again. The
-stationary region
-in the coefficients is not a box, so their intervals are built on the
-identity scale: no scalar transformation expresses the constraint they are
-under, and an interval that respected it would not be an interval.
+\section{Why the coefficients are declared}{
+\eqn{\phi_1, \dots, \phi_q} are what an autoregression is reported in, and they
+appear nowhere in the covariance the fit prints, nor among the free values,
+which are partial autocorrelations. Reporting a coordinate in their place gives
+a reader the wrong number under the right name: at \eqn{q = 2} with free values
+\eqn{(0, 0.9, -0.4)} the coefficients are \eqn{(0.988, -0.380)} while the
+partial autocorrelations are \eqn{(0.716, -0.380)}, so \eqn{\phi_1} and
+\eqn{\rho_1} differ in the first decimal. At \eqn{q = 1} they coincide exactly,
+the first partial autocorrelation being the AR(1) coefficient, which is why the
+distinction is invisible until \eqn{q} passes 1.
 }
+
+\section{The Jacobian is not diagonal}{
+A coefficient reads the \strong{whole} chart, so its row of the Jacobian is dense in
+the partial autocorrelation columns. Those derivatives come out of the
+Levinson-Durbin recursion the family already propagates derivative arrays
+through, so they are read off the first-order block instead of recomputed.
+The variance's row is a single entry, and each partial autocorrelation's is the
+link's own derivative.
+}
+
+\section{The coefficients' intervals are on the identity scale}{
+The stationary region in the coefficients is not a box: it is bounded by the
+roots of \eqn{1 - \phi_1 z - \cdots - \phi_q z^q} lying outside the unit
+circle, which no scalar transformation of a single coefficient expresses. An
+interval that respected the constraint would not be an interval, so the
+identity scale is the honest choice and a reported coefficient interval may
+extend outside the stationary region. The partial autocorrelations, whose chart
+\strong{is} a box, get \code{"atanh"} and stay inside it.
+}
+
 \keyword{internal}

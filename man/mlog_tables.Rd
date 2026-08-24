@@ -9,17 +9,29 @@ mlog_tables(s, eta, order)
 \arguments{
 \item{s}{A \code{\link[=MatrixLogParam]{MatrixLogParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}.}
 
-\item{order}{The highest derivative order wanted.}
+\item{order}{The highest derivative order wanted: 1, 2, 3 or 4.}
 }
 \value{
-A list with \code{q}, \code{lam}, \code{e} (rotated directions)
-and the tables \code{dd2} to \code{dd5} up to \code{order + 1} points.
+A list with \code{q} and \code{lam}, the eigenvectors and eigenvalues of
+\eqn{S}; \code{e}, a list of \code{s@n_free} rotated directions; and the
+divided-difference tables \code{dd2} up to \verb{dd<order+1>}.
 }
 \description{
 Everything the derivative contractions need: the eigendecomposition of
 \eqn{S}, the rotated basis directions, and the divided-difference tables
 of the orders asked for, computed once per free vector.
+}
+\details{
+Everything here depends on \eqn{\eta} alone, never on the index tuple, so it
+is computed once and every component of the order reads it. The rotated
+directions are \eqn{Q^\top E_k Q} for each basis direction \eqn{E_k}, and the
+tables hold one divided difference per combination of eigenvalues with
+repetition, up to \code{order + 1} points.
+}
+\seealso{
+\code{\link[=dd_exp]{dd_exp()}} for the entries of the tables, and \code{\link[=mlog_contract]{mlog_contract()}},
+which reads them.
 }
 \keyword{internal}

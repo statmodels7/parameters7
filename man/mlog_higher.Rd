@@ -9,13 +9,14 @@ mlog_higher(s, eta, order)
 \arguments{
 \item{s}{A \code{\link[=MatrixLogParam]{MatrixLogParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}.}
 
-\item{order}{The derivative order, 3 or 4.}
+\item{order}{The derivative order: 3 or 4.}
 }
 \value{
-A named list of matrices, keyed by
-\code{\link[=param_tuple_names]{param_tuple_names(s, order)}}.
+A list of \code{choose(s@n_free + order - 1, order)} symmetric matrices
+keyed as \code{param_tuple_names(s, order)} and in that order, each
+\code{s@dimension} by \code{s@dimension}.
 }
 \description{
 The derivative components of orders three and four of \eqn{M = e^{S}} with
@@ -24,14 +25,15 @@ respect to the free entries of the symmetric matrix \eqn{S}.
 \details{
 The Frechet derivatives of the exponential contract chains of directions
 against divided differences of \eqn{\exp} in the eigenvalues, and the sum
-runs over every ordering of the directions rather than over the distinct
-ones, so a tuple with repeated indices is counted with its multiplicity
-rather than corrected for it afterwards. The divided differences come from
+runs over every ordering of the directions, never over the distinct ones, so
+a tuple with repeated indices is counted with its multiplicity instead of
+being corrected for afterwards. The divided differences come from
 the Opitz representation, an exponential of a small bidiagonal matrix read
 off its corner, which stays exact where the quotient recursion cancels
 catastrophically under near-repeated eigenvalues.
 }
 \seealso{
-\code{\link[=matrix_log]{matrix_log()}}
+\code{\link[=mlog_contract]{mlog_contract()}}, which computes one component, \code{\link[=mlog_tables]{mlog_tables()}} for
+the shared tables, and \code{\link[=matrix_log]{matrix_log()}} for the cost this order carries.
 }
 \keyword{internal}

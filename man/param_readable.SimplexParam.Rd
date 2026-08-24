@@ -6,7 +6,7 @@
 \arguments{
 \item{s}{A \code{\link[=SimplexParam]{SimplexParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \eqn{K-1}.}
 
 \item{...}{Ignored.}
 }
@@ -14,8 +14,17 @@
 A list as described in \code{\link[=param_readable]{param_readable()}}.
 }
 \description{
-Declares the probability vector, whose Jacobian is the one of the softmax
-map: \eqn{\partial p_i/\partial\eta_j = p_i(\delta_{ij} - p_j)}, the last
-coordinate contributing \eqn{-p_k p_j}.
+Declares the probability vector itself, \code{p1} ... \code{pK}, which a reader of a
+mixture weight or a state distribution needs: the free values are log
+ratios against the last category and are not interpretable on their own.
+
+The Jacobian is the softmax map's,
+\eqn{\partial p_i/\partial\eta_j = p_i(\delta_{ij} - p_j)}, with the reference
+category's row contributing \eqn{-p_K p_j}. It is \eqn{K} by \eqn{K-1}: one
+more quantity than there are free values, since the reference probability is
+determined by the others. Its \strong{columns} sum to zero, \eqn{\sum_i p_i} being
+the constant 1, measured at \eqn{7 \times 10^{-18}}.
+
+Every interval is built on the logit scale, so it stays inside \eqn{(0, 1)}.
 }
 \keyword{internal}

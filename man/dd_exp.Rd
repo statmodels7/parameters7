@@ -7,15 +7,38 @@
 dd_exp(lams)
 }
 \arguments{
-\item{lams}{The arguments, in any order.}
+\item{lams}{The arguments, in any order and with repeats allowed. A divided
+difference is symmetric in its arguments, so the order does not matter. At
+most 5 of them, the number fourth-order derivatives need.}
 }
 \value{
 A single number.
 }
 \description{
-\eqn{e[\lambda_{i_1}, \ldots, \lambda_{i_m}]} by the Opitz theorem: the
-exponential of the upper bidiagonal matrix with the arguments on the
-diagonal and ones above it, read off the corner entry. Exact under
-repeated arguments, where the recursive quotient cancels.
+Returns \eqn{e[\lambda_1, \dots, \lambda_m]} by the \strong{Opitz theorem}: build
+the upper bidiagonal matrix with the arguments on the diagonal and ones above
+it, exponentiate it, and read the divided difference off the top-right corner.
+Exact under repeated arguments, where the recursive quotient
+\eqn{(f[\lambda_2..] - f[\lambda_1..])/(\lambda_m - \lambda_1)} divides by
+zero, and accurate under nearly repeated ones, where it cancels.
+}
+\details{
+Measured at \eqn{\lambda = (0.5,\, 0.5 + g)}, against the exact limit
+\eqn{e^{0.5} = 1.648721270700127} reached at \eqn{g = 0}:\tabular{lll}{
+   gap \eqn{g} \tab Opitz \tab quotient \cr
+   \eqn{10^{-3}} \tab 1.649545906191066 \tab 1.649545906190929 \cr
+   \eqn{10^{-6}} \tab 1.648722095061039 \tab 1.648722095023754 \cr
+   \eqn{10^{-9}} \tab 1.648721271524488 \tab 1.648721206226264 \cr
+}
+
+
+The quotient has lost eight digits at a gap of \eqn{10^{-9}} and the Opitz
+value one. Near-repeated eigenvalues are ordinary here: any \eqn{S} with a
+symmetry has them, and an exactly repeated pair is what a scalar multiple of
+the identity gives.
+}
+\seealso{
+\code{\link[=mlog_expm_small]{mlog_expm_small()}}, which does the exponential, and
+\code{\link[=mlog_tables]{mlog_tables()}}, which builds whole tables of these.
 }
 \keyword{internal}

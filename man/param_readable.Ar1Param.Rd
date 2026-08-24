@@ -4,7 +4,7 @@
 \alias{param_readable.Ar1Param}
 \title{The Scale and the Correlation of an AR(1)}
 \arguments{
-\item{s}{An \code{\link[=Ar1Param]{Ar1Param()}} object.}
+\item{s}{An \code{\link[=Ar1Param]{Ar1Param()}} object, whose two links are read.}
 
 \item{eta}{A numeric vector of two free values.}
 
@@ -14,6 +14,12 @@
 A list as described in \code{\link[=param_readable]{param_readable()}}.
 }
 \description{
-Declares the marginal variance and the correlation at lag one.
+Declares two quantities: the marginal variance and the correlation at lag one,
+the two things an AR(1) covariance is about. Their intervals are built on the
+log and the inverse hyperbolic tangent, so a variance stays positive and a
+correlation stays inside \eqn{(-1, 1)}.
+
+The Jacobian is diagonal, through \code{\link[=readable_diagonal]{readable_diagonal()}}: each quantity is one
+link of one free value.
 }
 \keyword{internal}

@@ -7,15 +7,28 @@
 mlog_basis(s, k)
 }
 \arguments{
-\item{s}{A \code{\link[=MatrixLogParam]{MatrixLogParam()}} object.}
+\item{s}{A \code{\link[=MatrixLogParam]{MatrixLogParam()}} object, whose \code{dimension} and
+\code{param_params$positions} are read.}
 
-\item{k}{The free-value index.}
+\item{k}{The free-value index, a position in \code{1:s@n_free}.}
 }
 \value{
-A symmetric numeric matrix.
+A symmetric \code{s@dimension} by \code{s@dimension} numeric matrix with one or
+two non-zero entries, all of them 1.
 }
 \description{
-The symmetric matrix \eqn{\partial S / \partial \eta_k}: a single diagonal
-entry, or a symmetric pair below and above the diagonal.
+Returns \eqn{\partial S / \partial \eta_k}, which is a constant matrix,
+\eqn{S} being linear in the free vector: a single 1 on the diagonal for a
+diagonal free value, and a symmetric pair of 1s below and above the diagonal
+for the rest. These are the directions the Frechet derivatives contract
+against.
+
+Because they do not depend on \eqn{\eta}, the whole nonlinearity of the family
+sits in the exponential, and all four derivative orders are contractions of
+the same fixed set of directions.
+}
+\seealso{
+\code{\link[=mlog_tables]{mlog_tables()}}, which rotates these by the eigenvectors of \eqn{S},
+and \code{\link[=mlog_contract]{mlog_contract()}}, which contracts them.
 }
 \keyword{internal}

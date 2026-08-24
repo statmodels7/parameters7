@@ -7,14 +7,23 @@
 mlog_s(s, eta)
 }
 \arguments{
-\item{s}{A \code{\link[=MatrixLogParam]{MatrixLogParam()}} object.}
+\item{s}{A \code{\link[=MatrixLogParam]{MatrixLogParam()}} object, whose \code{dimension} and
+\code{param_params$positions} are read.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}.}
 }
 \value{
-A symmetric numeric matrix.
+A symmetric \code{s@dimension} by \code{s@dimension} numeric matrix, with no
+dimnames and no constraint on its entries.
 }
 \description{
-Fills the lower triangle of \eqn{S} with the free values and mirrors it.
+Fills the lower triangle of \eqn{S} with the free values, in the order
+\code{param_params$positions} records, and mirrors it to the upper triangle. No
+transformation is applied: the free values \strong{are} the entries of \eqn{S},
+which is where this chart parts company with \code{\link[=log_cholesky]{log_cholesky()}}'s.
+}
+\seealso{
+\code{\link[=mlog_basis]{mlog_basis()}} for its derivative in one free value, and
+\code{\link[=param_value.MatrixLogParam]{param_value.MatrixLogParam()}}, which exponentiates it.
 }
 \keyword{internal}

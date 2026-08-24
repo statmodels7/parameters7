@@ -4,7 +4,7 @@
 \alias{param_readable.CompoundSymmetryParam}
 \title{The Scale and the Common Correlation of a Compound Symmetry}
 \arguments{
-\item{s}{A \code{\link[=CompoundSymmetryParam]{CompoundSymmetryParam()}} object.}
+\item{s}{A \code{\link[=CompoundSymmetryParam]{CompoundSymmetryParam()}} object, whose two links are read.}
 
 \item{eta}{A numeric vector of two free values.}
 
@@ -14,6 +14,14 @@
 A list as described in \code{\link[=param_readable]{param_readable()}}.
 }
 \description{
-Declares the marginal variance and the correlation shared by every pair.
+Declares two quantities: the marginal variance and the correlation every pair
+shares. The Jacobian is diagonal, through \code{\link[=readable_diagonal]{readable_diagonal()}}, each quantity
+being one link of one free value.
+
+The correlation's interval is built on the inverse hyperbolic tangent, which is
+worth knowing here: the family's own link is bounded at \eqn{-1/(p-1)} and
+never at \eqn{-1}, so an interval built this way can reach below the bound the
+parametrization enforces. It respects \eqn{(-1, 1)}, which is the interval a
+reader of a correlation expects.
 }
 \keyword{internal}

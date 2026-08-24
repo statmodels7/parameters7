@@ -7,61 +7,130 @@
 matrix_log(dimension, role = c("either", "covariance", "precision"))
 }
 \arguments{
-\item{dimension}{The side \eqn{p} of the matrix.}
+\item{dimension}{The side \eqn{p} of the matrix. A single positive whole
+number, finite and at least 1; anything else throws \verb{'dimension' must be a single positive integer.}}
 
-\item{role}{A label; see \code{\link[=log_cholesky]{log_cholesky()}}.}
+\item{role}{A label recording which side of a model the matrix parametrizes:
+\code{"either"} (the default), \code{"covariance"} or \code{"precision"}. No numeric result
+depends on it, and it matters less here than elsewhere: the inverse is the
+same family at \eqn{-\eta}.}
 }
 \value{
-An object of class \code{\link[=MatrixLogParam]{MatrixLogParam()}}.
+An object of class \code{\link[=MatrixLogParam]{MatrixLogParam()}}, with \code{n_free} equal to
+\eqn{p(p+1)/2}, \code{free_names} \code{S1} ... \code{Sp} then \code{S2.1}, \code{S3.1}, ..., \code{rank}
+equal to \code{dimension}, an empty \code{null_basis}, \code{param_name} \code{"matrix_log"},
+and \code{param_params} holding \code{positions}.
 }
 \description{
-The matrix logarithm parametrization of a symmetric positive definite
-matrix: \eqn{M = \exp(S)} with \eqn{S} symmetric and genuinely free -- no
-entry is transformed, the free values fill the lower triangle of \eqn{S}
-directly, diagonal first and then below the diagonal column by column.
-}
-\details{
-Two quantities are exact by construction and cost nothing. The
-log-determinant is \eqn{\log|M| = \mathrm{tr}(S)}, the sum of the diagonal
-free values, so it is linear and its higher derivatives vanish; and the
-inverse is \eqn{M^{-1} = \exp(-S)}, through the same eigendecomposition
-that evaluates the map, with no factorization.
+Returns an object holding the matrix logarithm parametrization of a symmetric
+positive definite matrix: \eqn{M = \exp(S)} with \eqn{S} symmetric and
+\strong{genuinely free}. No entry is transformed; the free values fill the lower
+triangle of \eqn{S} directly, the diagonal first and then below the diagonal
+column by column, and the exponential does the rest. Any vector in
+\eqn{\mathbb{R}^{p(p+1)/2}} gives a positive definite matrix, the exponential
+of a symmetric matrix having positive eigenvalues.
 
-The derivatives of the map are the Frechet derivatives of the matrix
-exponential, by the Daleckii-Krein representation: with
-\eqn{S = Q \Lambda Q^\top} and directions rotated by \eqn{Q}, the
-\eqn{k}-th derivative contracts the directions against divided differences
-of \eqn{e^x} of order \eqn{k+1} at the eigenvalues, summed over the
-orderings of the directions. The divided differences are computed by the
-Opitz theorem -- the exponential of a small upper bidiagonal matrix, read
-off its corner -- which stays exact under repeated and nearly repeated
-eigenvalues, where the quotient formula cancels catastrophically.
-
-Next to \code{\link[=log_cholesky]{log_cholesky()}}: the log-Cholesky derivatives are
-sparse products and cheaper, while here the log-determinant and the
-inverse are the free quantities. The matrix logarithm is the chart to
-reach for when both the covariance and the precision are wanted at once.
+It parametrizes the same cone as \code{\link[=log_cholesky]{log_cholesky()}} with the same number of free
+values. Which to reach for depends on which quantities you want free; see
+\strong{Details}.
 }
+\section{Two quantities cost nothing}{
+\deqn{\log|M| = \mathrm{tr}(S) = \sum_{i=1}^{p} \eta_i,}
+
+the sum of the diagonal free values, so the log-determinant is linear and its
+second, third and fourth derivatives are exactly zero. And the inverse is
+\eqn{M^{-1} = \exp(-S)}, evaluated through the same eigendecomposition, with
+no factorization: measured, \code{param_solve(s, eta)} and
+\code{param_value(s, -eta)} agree to \eqn{2 \times 10^{-15}}.
+}
+
+\section{The derivatives, and the reason for the Opitz route}{
+They are the Frechet derivatives of the matrix exponential, by the
+Daleckii-Krein representation. With \eqn{S = Q \Lambda Q^\top} and the
+directions rotated by \eqn{Q}, the \eqn{k}-th derivative contracts the
+directions against divided differences of \eqn{e^x} of order \eqn{k+1} at the
+eigenvalues, summed over the orderings of the directions.
+
+The divided differences come from the Opitz theorem, the exponential of a
+small upper bidiagonal matrix read off its corner, in place of the recursive
+quotient, which cancels catastrophically under near-repeated eigenvalues.
+Measured at eigenvalues \eqn{0.5} and \eqn{0.5 + g}, against the exact limit
+\eqn{1.648721270700127} at \eqn{g = 0}:\tabular{lll}{
+   gap \eqn{g} \tab Opitz \tab quotient \cr
+   \eqn{10^{-3}} \tab 1.649545906191066 \tab 1.649545906190929 \cr
+   \eqn{10^{-6}} \tab 1.648722095061039 \tab 1.648722095023754 \cr
+   \eqn{10^{-9}} \tab 1.648721271524488 \tab 1.648721206226264 \cr
+}
+
+
+At a gap of \eqn{10^{-9}} the quotient has lost eight digits and the Opitz
+value has lost one. Repeated eigenvalues are not a pathology here: a
+\code{\link[=scalar_matrix]{scalar_matrix()}}-like \eqn{S}, or any \eqn{S} with a symmetry, has them
+exactly.
+}
+
+\section{Choosing between the two unstructured charts}{
+\code{\link[=log_cholesky]{log_cholesky()}}'s derivatives are sparse products of single-entry matrices,
+and they are far cheaper: measured at \eqn{p = 4}, one fourth-order derivative
+array costs \strong{3.4 s} here against \strong{0.003 s} there, a factor of a thousand,
+the contraction summing over \eqn{4! = 24} orderings per component at
+\eqn{p^4} entries each.
+
+What this chart buys is the other end. Its log-determinant is linear and its
+inverse is a sign flip, where \code{\link[=log_cholesky]{log_cholesky()}}'s inverse is a triangular solve.
+Reach for it when the covariance and the precision are both wanted at once, or
+when the free values themselves should be an unconstrained symmetric matrix;
+reach for \code{\link[=log_cholesky]{log_cholesky()}} when derivatives are taken in a loop.
+}
+
+\section{Notation}{
+
+\eqn{\eta} is the free vector, of length \eqn{d = p(p+1)/2}, \eqn{S} the
+symmetric matrix it fills, and \eqn{M = \exp(S)} the value. \eqn{Q} and
+\eqn{\Lambda} are the eigenvectors and eigenvalues of \eqn{S}, and
+\eqn{e[\lambda_1, \dots, \lambda_m]} a divided difference of the exponential.
+}
+
 \examples{
-s <- matrix_log(2)
-eta <- c(0.2, -0.3, 0.4)
-round(param_value(s, eta), 4)
+# A 3 x 3 unstructured covariance. The free names carry no transformation:
+# the free values are the entries of S itself.
+s <- matrix_log(3)
+s@free_names
+eta <- c(0.2, -0.3, 0.4, 0.1, -0.2, 0.15)
+M <- param_value(s, eta)
+round(M, 4)
+eigen(M, only.values = TRUE)$values > 0
 
-# the log-determinant is the trace of S, linear in the free vector
-c(param_logdet(s, eta), 0.2 - 0.3)
+# The log-determinant is the trace of S, so it is the sum of the first p
+# free values, and it agrees with the eigenvalues.
+c(closed = param_logdet(s, eta), trace = sum(eta[1:3]),
+  from_eigen = sum(log(eigen(M, only.values = TRUE)$values)))
 
-# the round trip closes exactly
-max(abs(param_free(s, param_value(s, eta)) - eta))
+# Which makes its gradient a vector of ones and zeros, and every higher
+# order exactly zero.
+param_dlogdet(s, eta)
+c(second = max(abs(param_d2logdet(s, eta))),
+  third = max(abs(param_d3logdet(s, eta))),
+  fourth = max(abs(param_d4logdet(s, eta))))
+
+# The inverse is the map at -eta: a sign flip, not a factorization.
+max(abs(param_solve(s, eta) - param_value(s, -eta)))
+max(abs(param_solve(s, eta) - solve(M)))
+
+# The round trip closes.
+max(abs(param_free(s, M) - eta))
 
 }
 \references{
-Daleckii, J. L. and Krein, S. G. (1965). Integration and differentiation
-of functions of Hermitian operators. \emph{American Mathematical Society
-Translations} 47, 1-30.
+Daleckii, J. L. and Krein, S. G. (1965). Integration and differentiation of
+functions of Hermitian operators. \emph{American Mathematical Society
+Translations} \strong{47}, 1-30.
 
-Opitz, G. (1964). Steigungsmatrizen. \emph{Zeitschrift fur Angewandte
-Mathematik und Mechanik} 44, T52-T54.
+Opitz, G. (1964). Steigungsmatrizen. \emph{Zeitschrift fur Angewandte Mathematik
+und Mechanik} \strong{44}, T52-T54.
 }
 \seealso{
-\code{\link[=log_cholesky]{log_cholesky()}}, \code{\link[=param_value]{param_value()}}
+\code{\link[=log_cholesky]{log_cholesky()}} for the other unstructured chart onto the same cone,
+\code{\link[=dd_exp]{dd_exp()}} for the divided differences, and \code{\link[=param_solve]{param_solve()}}, which here is
+the map at \eqn{-\eta}.
 }

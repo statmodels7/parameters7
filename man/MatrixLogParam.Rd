@@ -50,16 +50,33 @@ its blocks, or \code{"either"} when they disagree, and \code{\link[=kron_identit
 it.}
 }
 \value{
-An object of class \code{MatrixLogParam}.
+An object of class \code{MatrixLogParam}, a subclass of
+\code{\link[=matrix_parameter]{matrix_parameter()}} adding no properties of its own. \code{param_params} holds
+\code{positions}, the row and column of each free value. \code{n_free} is
+\eqn{p(p+1)/2} and \code{rank} is \eqn{p}.
 }
 \description{
 The S7 class of unstructured symmetric positive definite matrices in the
-matrix logarithm parametrization. Constructed by \code{\link[=matrix_log]{matrix_log()}}.
+matrix logarithm parametrization, \eqn{M = \exp(S)} with \eqn{S} symmetric and
+its lower triangle read straight off the free vector. It is the other chart
+onto the same cone \code{\link[=log_cholesky]{log_cholesky()}} parametrizes, with a different set of
+quantities coming free.
+
+\code{\link[=matrix_log]{matrix_log()}} builds one. Every quantity is exact, and every derivative goes
+through the eigendecomposition of \eqn{S}, so the object holds no auxiliary
+data at all.
 }
 \examples{
-S7::S7_inherits(matrix_log(2), MatrixLogParam)
+# The same cone as log_cholesky(), the same number of free values.
+s <- matrix_log(3)
+c(matrix_log = s@n_free, log_cholesky = log_cholesky(3)@n_free)
+
+# But different free names: no entry is transformed here.
+rbind(matrix_log = s@free_names, log_cholesky = log_cholesky(3)@free_names)
 
 }
 \seealso{
-\code{\link[=matrix_log]{matrix_log()}}
+\code{\link[=matrix_log]{matrix_log()}}, the constructor, \code{\link[=log_cholesky]{log_cholesky()}} for the other
+unstructured chart, and \code{\link[=matrix_parameter]{matrix_parameter()}} for the properties this
+inherits.
 }

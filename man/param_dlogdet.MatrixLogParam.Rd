@@ -6,14 +6,27 @@
 \arguments{
 \item{s}{A \code{\link[=MatrixLogParam]{MatrixLogParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic. Its values do not enter the result.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named numeric vector.
+A numeric vector of length \code{s@n_free}, named by \code{s@free_names},
+holding 1 and 0.
 }
 \description{
-Closed form: 1 in each diagonal direction and 0 elsewhere.
+Closed form and constant: 1 in each of the \eqn{p} diagonal directions and 0
+in the \eqn{p(p-1)/2} below-diagonal ones, the log-determinant being
+\eqn{\sum_i \eta_i}. The value does not depend on \code{eta}, which is read only
+for its length.
+
+Note the 1 where \code{\link[=log_cholesky]{log_cholesky()}} answers 2: there the diagonal free value is
+\eqn{\log L_{ii}} and \eqn{|M| = |L|^2}, here it is an eigenvalue of the
+logarithm and enters once.
+}
+\seealso{
+\code{\link[=param_logdet.MatrixLogParam]{param_logdet.MatrixLogParam()}} for the quantity differentiated, and
+\code{\link[=param_dlogdet.LogCholeskyParam]{param_dlogdet.LogCholeskyParam()}}, which answers 2.
 }
 \keyword{internal}

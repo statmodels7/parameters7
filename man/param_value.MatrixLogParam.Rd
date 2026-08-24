@@ -6,14 +6,25 @@
 \arguments{
 \item{s}{A \code{\link[=MatrixLogParam]{MatrixLogParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A symmetric positive definite matrix.
+A symmetric positive definite \code{s@dimension} by \code{s@dimension} numeric
+matrix with dimnames \code{v1}, \code{v2}, ...
 }
 \description{
-\eqn{M = \exp(S)}, through the eigendecomposition of \eqn{S}.
+Returns \eqn{M = \exp(S)}, through the eigendecomposition of \eqn{S}:
+\eqn{Q \exp(\Lambda) Q^\top}, the exponential applied to the eigenvalues.
+Positive definiteness needs no checking, every \eqn{e^{\lambda}} being
+positive whatever \eqn{S} is. The cost is one \eqn{O(p^3)}
+eigendecomposition.
+}
+\seealso{
+\code{\link[=param_free.MatrixLogParam]{param_free.MatrixLogParam()}} for the inverse, \code{\link[=mlog_s]{mlog_s()}} for the
+assembly of \eqn{S}, and \code{\link[=param_solve.MatrixLogParam]{param_solve.MatrixLogParam()}}, which is this map
+at \eqn{-\eta}.
 }
 \keyword{internal}

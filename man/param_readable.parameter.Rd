@@ -4,9 +4,9 @@
 \alias{param_readable.parameter}
 \title{No Declared Quantities}
 \arguments{
-\item{s}{A \code{\link[=parameter]{parameter()}} object.}
+\item{s}{A \code{\link[=parameter]{parameter()}} object. Not read.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values. Not read.}
 
 \item{...}{Ignored.}
 }
@@ -14,6 +14,18 @@
 \code{NULL}.
 }
 \description{
-The base-class method, which declares nothing.
+The method every \code{\link[=parameter]{parameter()}} inherits when it declares no interpretable
+quantities of its own. It returns \code{NULL}, which is a positive statement and no
+kind of gap: for \code{\link[=log_cholesky]{log_cholesky()}}, \code{\link[=matrix_log]{matrix_log()}}, \code{\link[=correlation_matrix]{correlation_matrix()}} and the
+four compositions the matrix itself is what a reader reads, and a consumer that
+gets \code{NULL} reports the matrix as it already would.
+
+Returning \code{NULL} instead of throwing is what a consumer needs in order to loop
+over every parameter in a model and ask each one, without knowing which kinds
+declare something.
+}
+\seealso{
+\code{\link[=param_readable]{param_readable()}} for the contract and the list of families that do
+declare something.
 }
 \keyword{internal}

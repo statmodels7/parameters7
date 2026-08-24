@@ -7,14 +7,19 @@
 mlog_expm_small(a)
 }
 \arguments{
-\item{a}{A square numeric matrix.}
+\item{a}{A square numeric matrix, upper triangular in every call the package
+makes, and at most 5 by 5.}
 }
 \value{
-Its exponential.
+Its exponential, a numeric matrix of the same shape.
 }
 \description{
-Scaling and squaring with a Taylor series, for the tiny bidiagonal
-matrices the Opitz theorem builds. Deterministic and dependency free; the
-matrices are at most 5 by 5.
+Scaling and squaring with a Taylor series, written out here for the tiny
+bidiagonal matrices \code{\link[=dd_exp]{dd_exp()}} builds. Deterministic and dependency free: the
+matrices are at most 5 by 5, so a general-purpose matrix exponential would be
+a dependency bought for nothing.
+}
+\seealso{
+\code{\link[=dd_exp]{dd_exp()}}, the only caller.
 }
 \keyword{internal}
