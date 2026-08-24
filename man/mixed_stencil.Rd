@@ -7,30 +7,41 @@
 mixed_stencil(f, eta, tuple)
 }
 \arguments{
-\item{f}{A function of the free vector.}
+\item{f}{A function of the free vector, returning anything that supports \code{+}
+and scalar multiplication.}
 
-\item{eta}{The point.}
+\item{eta}{The point, a numeric vector.}
 
-\item{tuple}{An integer vector of component indices, possibly repeated.}
+\item{tuple}{An integer vector of component indices, possibly with
+repetitions, as \code{\link[=param_tuple_indices]{param_tuple_indices()}} returns. Its length is the
+derivative order.}
 }
 \value{
 The stencil's value, shaped like \code{f(eta)}.
 }
 \description{
-Differentiates \code{f} once in each component the index tuple names, a
-central factor per distinct component of the order its multiplicity asks.
-The result is a single product stencil, not a composition of lower-order
-numerical derivatives.
+Differentiates \code{f} once in each component an index tuple names, using a
+central factor per distinct component of the order that component's
+multiplicity asks for. The whole tensor product is summed in one pass, so the
+result is a single stencil, never a composition of lower-order numerical
+derivatives.
 }
 \details{
-Each factor's nodes and weights are \pkg{numericals7}'s, read from
-\code{\link[numericals7:fd_offsets]{numericals7::fd_offsets()}} and
-\code{\link[numericals7:fd_weights]{numericals7::fd_weights()}}. They were transcribed here once --
-two points at order one, three at two, the five-point forms at three and
-four -- and a table of stencil coefficients written out in a second place
-is a table that can disagree with the first.
+Each factor's nodes and weights come from \code{\link[numericals7:fd_offsets]{numericals7::fd_offsets()}} and
+\code{\link[numericals7:fd_weights]{numericals7::fd_weights()}} at accuracy 2: two points at order one, three at
+order two, five at orders three and four. They are read from there instead of
+being written out here, because a table of stencil coefficients kept in a
+second place is a table that can come to disagree with the first.
+
+The step for each factor is \code{\link[=fd_step]{fd_step()}} at that component's value and at the
+\strong{total} order of the tuple, so all factors of one component share a step and
+the division at the end is by \eqn{\prod_j h_j^{m_j}}. Nodes whose weight is
+zero are skipped, so a repeated-index factor costs one evaluation fewer than
+its node count suggests.
 }
 \seealso{
-\code{\link[numericals7:fd_weights]{numericals7::fd_weights()}}
+\code{\link[numericals7:fd_weights]{numericals7::fd_weights()}} for the weights, \code{\link[=fd_along]{fd_along()}} for the
+single-component case, and \code{\link[=numerical_d3]{numerical_d3()}} and \code{\link[=numerical_d4]{numerical_d4()}}, the two
+callers.
 }
 \keyword{internal}

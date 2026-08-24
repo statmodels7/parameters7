@@ -7,13 +7,22 @@
 spectrum_pinv(sp)
 }
 \arguments{
-\item{sp}{The result of \code{\link[=param_spectrum]{param_spectrum()}}.}
+\item{sp}{The result of \code{\link[=param_spectrum]{param_spectrum()}}: a list with \code{values}, \code{vectors}
+and \code{keep}.}
 }
 \value{
-A symmetric numeric matrix.
+A symmetric numeric matrix of the same side as \code{sp$vectors}. When
+\code{keep} is all \code{FALSE}, which happens only at rank 0, the zero matrix.
 }
 \description{
-The pseudo-inverse of \eqn{M(\eta)}, formed from the directions the declared
-rank keeps.
+Builds the pseudo-inverse of \eqn{M(\eta)} as
+\eqn{\sum_{j \in \mathrm{keep}} \lambda_j^{-1} v_j v_j^\top}, over the
+directions \code{\link[=param_spectrum]{param_spectrum()}}'s \code{keep} flag marks. It is what the
+rank-deficient branches of the base-class log-determinant derivatives use in
+place of \eqn{M^{-1}} in the trace identities.
+}
+\seealso{
+\code{\link[=param_spectrum]{param_spectrum()}} for the input, and \code{\link[=param_solve]{param_solve()}}, which rejects
+a deficient family rather than handing this back.
 }
 \keyword{internal}

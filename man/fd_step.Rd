@@ -7,28 +7,33 @@
 fd_step(eta_k, order = 1L)
 }
 \arguments{
-\item{eta_k}{The value of the component.}
+\item{eta_k}{The value of the component, a single number.}
 
-\item{order}{The derivative order the step is for.}
+\item{order}{The derivative order the step is for: 1, 2, 3 or 4.}
 }
 \value{
 A single positive number.
 }
 \description{
-The step for a central difference in one component of \eqn{\eta}, scaled by
-the size of that component.
+Returns the step a central difference should use in one component of
+\eqn{\eta}, scaled by the size of that component. A one-line forward to
+\code{\link[numericals7:fd_step]{numericals7::fd_step()}} at accuracy 2, so the step a fallback here takes and
+the step the stencil library documents cannot drift apart.
 }
 \details{
-The free scale is unbounded, so unlike the response and parameter steps of
-\pkg{distributions7} this one has no boundary to be clamped away from: the
-whole point of the unconstrained scale is that there is nowhere to fall off,
-and \code{bounds} is left at its default for that reason.
+The rule is \eqn{\varepsilon^{1/(k+2)} \max(1, |\eta_k|)} for a \eqn{k}-th
+derivative, which balances the truncation error against the rounding the
+division by \eqn{h^k} amplifies. In doubles that is \eqn{6.1 \times 10^{-6}}
+at first order and \eqn{1.2 \times 10^{-4}} at second, both scaling up once
+\eqn{|\eta_k|} passes 1.
 
-The rule is \pkg{numericals7}'s and is read from it rather than written out
-again, so the step a fallback takes and the step the stencil library
-documents cannot drift apart.
+No clamping happens, and there is nothing to clamp away from. The response
+and parameter steps in \pkg{distributions7} have to keep a node inside a
+bounded support; the unconstrained scale has no boundary anywhere, so
+\code{bounds} is left at its default.
 }
 \seealso{
-\code{\link[numericals7:fd_step]{numericals7::fd_step()}}
+\code{\link[numericals7:fd_step]{numericals7::fd_step()}} for the rule, and \code{\link[=fd_along]{fd_along()}}, which
+applies a stencil at this step.
 }
 \keyword{internal}

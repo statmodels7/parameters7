@@ -7,30 +7,60 @@
 numerical_d4(s, eta)
 }
 \arguments{
-\item{s}{A \code{\link[=parameter]{parameter()}} object.}
+\item{s}{A \code{\link[=parameter]{parameter()}} object, of any branch.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}.}
 }
 \value{
-A named list keyed as \code{\link[=param_tuple_names]{param_tuple_names(s, 4)}}.
+A list of \code{choose(s@n_free + 3, 4)} estimates keyed as
+\code{param_tuple_names(s, 4)} and in that order, each shaped like
+\code{\link[=param_value]{param_value()}}'s result and symmetrized for a matrix family.
 }
 \description{
-The order-four analogue of \code{\link[=numerical_d3]{numerical_d3()}}: one stencil per
-component, applied directly to the map. Rounding is amplified by the
-fourth power of the step, so this is accurate to roughly four significant
-digits -- a starting point, and the reason every shipped family carries
-closed forms instead.
+Estimates the distinct fourth derivatives, one product stencil per index
+tuple, applied directly to \code{\link[=param_value]{param_value()}}. It is the order-four analogue of
+\code{\link[=numerical_d3]{numerical_d3()}} and the method \code{\link[=param_d4]{param_d4()}} dispatches to when a family has
+not written its own. Treat it as a starting point: at this order a difference
+keeps about five digits, which is why every family this package ships carries
+a closed form instead.
 }
-\details{
-The tensor-product stencil is the one written out under
-\code{\link[=numerical_d3]{numerical_d3()}}, with the multiplicities summing to four.
-Truncation is of order \eqn{h^{2}} and rounding of order
-\eqn{\varepsilon / h^{4}}, so the attainable accuracy is roughly
-\eqn{\varepsilon^{1/3}}.
+\section{The stencil}{
+The tensor product is the one written out under \code{\link[=numerical_d3]{numerical_d3()}}, with the
+multiplicities summing to four. A tuple naming one component four times costs
+five evaluations of the map, one naming two components twice each nine, and
+one naming four distinct components sixteen.
 }
+
+\section{Accuracy}{
+Truncation is of order \eqn{h^2} and rounding of order
+\eqn{\varepsilon / h^4}, so balancing the two gives a step of
+\eqn{\varepsilon^{1/6}\max(1, |\eta_k|)}, about \eqn{2.5 \times 10^{-3}} near
+the origin, and an attainable accuracy of order \eqn{\varepsilon^{1/3}}.
+Measured against the closed form of a \eqn{2 \times 2} log-Cholesky
+covariance, the agreement is \eqn{1.2 \times 10^{-4}} absolute on entries of
+size 24, so five digits. That is enough to catch a transcription error in a
+closed form. It is not enough to fit with.
+}
+
 \examples{
-numerical_d4(scalar_matrix(2), 0.3)
+# A scalar matrix: every order is the matrix again, so the error shows.
+s <- scalar_matrix(2)
+max(abs(numerical_d4(s, 0.3)[[1]] - param_value(s, 0.3)))
+
+# Against a family that writes its own: five digits, as stated.
+q <- log_cholesky(2)
+eta <- c(0.2, -0.1, 0.4)
+ana <- param_d4(q, eta)
+c(gap = max(abs(unlist(numerical_d4(q, eta)) - unlist(ana))),
+  scale = max(abs(unlist(ana))))
+
+# Which is still ample to catch a wrong closed form: a 1 per cent error in
+# one component is four hundred times the noise.
+0.01 * max(abs(unlist(ana)))
+
 }
 \seealso{
-\code{\link[=param_d4]{param_d4()}}
+\code{\link[=param_d4]{param_d4()}}, the generic this serves, \code{\link[=numerical_d3]{numerical_d3()}} for the order
+below, and \code{\link[=check_parameter]{check_parameter()}}, which uses a stencil of this kind as the
+independent reference for a closed form.
 }

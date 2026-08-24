@@ -7,24 +7,44 @@
 param_spectrum(s, eta)
 }
 \arguments{
-\item{s}{A \code{\link[=parameter]{parameter()}} object.}
+\item{s}{A \code{\link[=matrix_parameter]{matrix_parameter()}} object, whose \code{rank} and \code{dimension} are read.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}.}
 }
 \value{
-A list with \code{values}, \code{vectors}, and \code{keep}, a
-logical vector marking the \code{s@rank} directions that carry the matrix.
+A list with four components
+\describe{
+\item{\code{values}}{numeric of length \code{s@dimension}, in decreasing order.}
+\item{\code{vectors}}{a \code{s@dimension} by \code{s@dimension} orthonormal matrix, one
+eigenvector per column, matching \code{values}.}
+\item{\code{keep}}{logical of length \code{s@dimension}, \code{TRUE} in the first
+\code{s@rank} positions.}
+\item{\code{matrix}}{the value itself, as \code{\link[=param_value]{param_value()}} returned it, so a
+caller needing both does not evaluate the map twice.}
+}
 }
 \description{
-The eigenvalues and eigenvectors of \eqn{M(\eta)}, with the eigenvalues the
-declared rank says are zero identified by position rather than by size.
+Returns the eigenvalues and eigenvectors of \eqn{M(\eta)}, together with a
+flag saying which directions carry the matrix. It is what the base-class
+log-determinant, the pseudo-inverse and the rank-deficient solve all read, so
+one decomposition serves them.
 }
 \details{
-The rank is taken from the object and never re-derived here. Counting
-eigenvalues above a relative tolerance is not scale invariant, so a
-parameter whose components differ by many orders of magnitude would be
-assigned a different rank at different \eqn{\eta} -- and a fitted model with
-smoothing parameters that far apart is ordinary. The object settled the
-question once, at construction, from the components.
+Which eigenvalues count as zero is settled \strong{by position}, never by size.
+\code{eigen()} returns them in decreasing order, so the first \code{s@rank} are kept and
+the rest dropped, whatever their numerical values are. The rank itself comes
+from the object and is never re-derived: counting eigenvalues above a relative
+tolerance is not scale invariant, so a family whose components differ by many
+orders of magnitude would be assigned a different rank at different \eqn{\eta},
+and a fitted model with smoothing parameters that far apart is ordinary. The
+object settled the question once, at construction, from the components. See
+\code{\link[=param_null_basis]{param_null_basis()}} for the measurement.
+
+The matrix is symmetrized as \code{(m + t(m)) / 2} before the decomposition, so an
+asymmetry of rounding size does not produce complex eigenvalues.
+}
+\seealso{
+\code{\link[=spectrum_pinv]{spectrum_pinv()}}, which builds the Moore-Penrose inverse from this,
+and \code{\link[=param_null_basis]{param_null_basis()}}, which fixes the rank at construction.
 }
 \keyword{internal}

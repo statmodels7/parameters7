@@ -10,38 +10,73 @@ param_is_numerical(s)
 \item{s}{An object inheriting from class \code{\link[=parameter]{parameter()}}.}
 }
 \value{
-A named logical vector over \code{param_d1},
-\code{param_d2}, \code{param_logdet}, \code{param_dlogdet} and
-\code{param_d2logdet}, \code{TRUE} where the base-class method is in
-force.
+A named logical vector, \code{TRUE} where the base-class method is in
+force. Its length depends on the branch: \strong{nine} entries for a
+\code{\link[=matrix_parameter]{matrix_parameter()}}, over \code{param_d1}, \code{param_d2}, \code{param_d3}, \code{param_d4},
+\code{param_logdet}, \code{param_dlogdet}, \code{param_d2logdet}, \code{param_d3logdet} and
+\code{param_d4logdet}; \strong{four} for a family that is not a matrix, over the
+derivative orders alone, the log-determinant not existing there.
 }
 \description{
-Reports, for each of the five derivative quantities, whether the parameter
-supplies its own method or falls back to the one registered on
-\code{\link[=parameter]{parameter()}}.
+Reports, one derivative quantity at a time, whether the parameter has a
+method of its own or takes the numerical one registered on \code{\link[=parameter]{parameter()}} and
+\code{\link[=matrix_parameter]{matrix_parameter()}}. Ask it before trusting a fourth-order derivative of a
+family you did not write: \code{FALSE} everywhere means every quantity is a closed
+form, and \code{TRUE} somewhere marks a component whose accuracy is a stencil's.
 }
-\details{
-The distinction that matters is whether an independent check exists. A
-derivative computed by finite differences cannot be checked against a finite
-difference, and a log-determinant read off an eigendecomposition cannot be
-checked against an eigendecomposition; the comparison is the same arithmetic
-twice, and it agrees however wrong the parameter is.
-\code{\link[=check_parameter]{check_parameter()}} uses this to report such a quantity as not
-checked rather than as passed.
+\section{Why the question is worth asking}{
+Whether an independent check exists depends on the answer. A derivative
+computed by finite differences cannot be checked against a finite difference,
+and a log-determinant read off an eigendecomposition cannot be checked against
+an eigendecomposition: the comparison is the same arithmetic twice, and it
+agrees however wrong the parametrization is. \code{\link[=check_parameter]{check_parameter()}} calls this
+and reports such a quantity as \strong{not checked} instead of as passed.
+}
 
-\code{param_solve()} and \code{param_factor()} are deliberately absent.
-Their base-class versions are a Cholesky factorization, which is exact
-whoever performs it, and the validator compares them with
-\code{base::solve} either way. Calling them numerical would suggest an
-approximation that is not there.
+\section{What is not in the list}{
+\code{\link[=param_solve]{param_solve()}} and \code{\link[=param_factor]{param_factor()}} are absent deliberately. Their
+base-class versions are a Cholesky factorization, which is exact whoever
+performs it, and \code{\link[=check_parameter]{check_parameter()}} compares them against \code{base::solve()}
+either way. Listing them as numerical would suggest an approximation that is
+not there. \code{\link[=param_value]{param_value()}} is absent because a family that does not implement
+it has nothing at all, and \code{\link[=param_free]{param_free()}} because its base method throws.
 }
+
+\section{Every shipped family answers FALSE}{
+Measured over all fifteen constructors in this package, at every component:
+none of them uses a numerical route. The fallbacks exist for a family written
+elsewhere, and the example below builds one to show what a \code{TRUE} looks like.
+}
+
 \examples{
-# everything closed form except the second-order log-determinant of a
-# parameter that does not supply one
+# Every family in the package is closed form throughout.
 param_is_numerical(log_cholesky(3))
-param_is_numerical(diagonal_matrix(3))
+any(param_is_numerical(diagonal_matrix(3)))
+
+# Nine components for a matrix family, four for one that is not.
+c(matrix = length(param_is_numerical(log_cholesky(3))),
+  not_matrix = length(param_is_numerical(simplex(3))))
+
+# A family written from scratch, with param_value() alone: every derivative
+# order is then numerical, and so is the whole log-determinant block.
+Toy <- S7::new_class("Toy", parent = matrix_parameter)
+S7::method(param_value, Toy) <- function(s, eta, ...) {
+  m <- diag(rep(exp(eta[1]), 2))
+  dimnames(m) <- list(c("v1", "v2"), c("v1", "v2"))
+  m
+}
+toy <- Toy(param_name = "toy", n_free = 1L, free_names = "log_s",
+           param_params = list(), dimension = 2L, rank = 2L,
+           null_basis = matrix(numeric(0), 2, 0), role = "either")
+param_is_numerical(toy)
+
+# The numerical route is usable, and here it can be checked by hand: the
+# matrix is exp(eta) times the identity, so every derivative is itself.
+c(numerical = param_d1(toy, 0.4)[[1]][1, 1], exact = exp(0.4))
 
 }
 \seealso{
-\code{\link[=param_value]{param_value()}}, \code{\link[=param_free]{param_free()}}
+\code{\link[=check_parameter]{check_parameter()}}, which reports a numerical component as not
+checked, and \code{\link[=numerical_d1]{numerical_d1()}} and its higher-order siblings, the routes a
+\code{TRUE} names.
 }

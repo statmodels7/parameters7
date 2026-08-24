@@ -7,49 +7,69 @@
 numerical_d2(s, eta)
 }
 \arguments{
-\item{s}{A \code{\link[=parameter]{parameter()}} object.}
+\item{s}{A \code{\link[=parameter]{parameter()}} object, of any branch.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}.}
 }
 \value{
-A named list of symmetric matrices, keyed as
-\code{param_tuple_names(s)}.
+A list of \code{choose(s@n_free + 1, 2)} estimates keyed as
+\code{param_tuple_names(s)} and in that order, each shaped like
+\code{\link[=param_value]{param_value()}}'s result and symmetrized for a matrix family.
 }
 \description{
-One central difference of the analytic first derivatives where a parameter
-supplies them, and a single mixed stencil on \code{\link[=param_value]{param_value()}}
-where it does not.
+Estimates the \eqn{d(d+1)/2} distinct second derivatives
+\eqn{\partial^2 V / \partial \eta_k \partial \eta_l}, taking exactly one
+difference for each. Which quantity is differenced depends on what the family
+already supplies: the analytic first derivative where there is one, and
+\code{\link[=param_value]{param_value()}} itself where there is not. This is the method \code{\link[=param_d2]{param_d2()}}
+dispatches to when a family has not written its own.
 }
-\details{
-Writing \eqn{M(\eta)} for \code{\link[=param_value]{param_value()}} and
-\eqn{\partial_k M} for its analytic first derivative, the entry
-\eqn{(k, l)} is
+\section{Three routes, one layer each}{
+Writing \eqn{V(\eta)} for \code{\link[=param_value]{param_value()}} and \eqn{\partial_k V} for an
+analytic first derivative, the component \eqn{(k, l)} is
 
-\deqn{\partial_{kl} M \approx
-  \frac{\partial_k M(\eta + h e_l) - \partial_k M(\eta - h e_l)}{2h},}
+\deqn{\partial_{kl} V \approx
+  \frac{\partial_k V(\eta + h e_l) - \partial_k V(\eta - h e_l)}{2h}}
 
-one central difference of an analytic quantity. Where the first
-derivatives are themselves numerical the four-point mixed stencil
+whenever \code{\link[=param_d1]{param_d1()}} is analytic. Where it is not, an off-diagonal pair takes
+the four-point mixed stencil
 
-\deqn{\partial_{kl} M \approx \frac{M(\eta + h e_k + h e_l)
-  - M(\eta + h e_k - h e_l) - M(\eta - h e_k + h e_l)
-  + M(\eta - h e_k - h e_l)}{4h^{2}}, \qquad k \ne l,}
+\deqn{\partial_{kl} V \approx \frac{V(\eta + h_k e_k + h_l e_l)
+  - V(\eta + h_k e_k - h_l e_l) - V(\eta - h_k e_k + h_l e_l)
+  + V(\eta - h_k e_k - h_l e_l)}{4 h_k h_l},}
 
-is used instead, with the three-point second difference on the diagonal.
-Both are a single layer, and both carry a truncation error of order
-\eqn{h^{2}}.
-
-Differentiating the analytic first derivative costs one finite-difference
-layer rather than two, which is the rule the whole toolkit follows: never
-compose differences in the same variable. When the first derivatives are
-themselves numerical the two differences act on different components for an
-off-diagonal pair, so they commute into a four-point mixed stencil rather
-than compounding; the diagonal pairs use the three-point second-difference
-stencil directly, which is again one layer and not two.
+and a diagonal pair the three-point second difference. All three carry a
+truncation error of order \eqn{h^2}.
 }
+
+\section{Why none of them nests}{
+The rule the toolkit follows is that differences are never composed \strong{in the
+same variable}: a difference of a difference multiplies the error of the
+first stage into the second, and a fourth derivative built that way is noise.
+Differencing an analytic first derivative is one layer, since only one stage
+is numerical. The four-point stencil differences two \emph{different} components,
+and two differences along different coordinates commute into a single product
+stencil, so it is one layer as well. The diagonal case uses the
+second-difference stencil directly and never sees a first difference at all.
+
+The steps are the order-2 ones, \eqn{\varepsilon^{1/4}\max(1, |\eta_k|)},
+about \eqn{1.2 \times 10^{-4}} near the origin, since it is a second
+derivative being estimated whichever route is taken.
+}
+
 \examples{
-numerical_d2(scalar_matrix(2), 0.3)
+# A scalar matrix: every order is the matrix again, so the error shows.
+s <- scalar_matrix(2)
+numerical_d2(s, 0.3)
+max(abs(numerical_d2(s, 0.3)[[1]] - param_value(s, 0.3)))
+
+# Against a family that writes its own second derivatives.
+q <- log_cholesky(2)
+eta <- c(0.2, -0.1, 0.4)
+max(abs(unlist(numerical_d2(q, eta)) - unlist(param_d2(q, eta))))
+
 }
 \seealso{
-\code{\link[=param_d2]{param_d2()}}
+\code{\link[=param_d2]{param_d2()}}, the generic this serves, \code{\link[=numerical_d1]{numerical_d1()}} for the
+order below, and \code{\link[=mixed_stencil]{mixed_stencil()}}, which the third and fourth orders use.
 }

@@ -7,20 +7,30 @@
 is_base_param_class(cls)
 }
 \arguments{
-\item{cls}{An S7 class.}
+\item{cls}{An S7 class object, as \code{S7::S7_class(x)} returns or as
+\code{attr(method, "signature")[[1]]} holds. Anything else returns \code{FALSE}
+rather than throwing, \code{attr()} on a non-class giving \code{NULL}.}
 }
 \value{
-\code{TRUE} or \code{FALSE}.
+\code{TRUE} when \code{cls} is \code{\link[=parameter]{parameter()}} or \code{\link[=matrix_parameter]{matrix_parameter()}}, \code{FALSE}
+for any subclass and for anything that is not an S7 class.
 }
 \description{
-Asks whether an S7 class is the abstract \code{\link[=parameter]{parameter()}} class,
-which is how a method registered on it is told apart from one a subclass
-supplied.
+Asks whether an S7 class is \code{\link[=parameter]{parameter()}} or \code{\link[=matrix_parameter]{matrix_parameter()}}, the two
+abstract classes this package registers its fallback methods on. That is how
+a method a subclass wrote is told apart from one it merely inherited, which is
+the question \code{\link[=param_is_numerical]{param_is_numerical()}} answers and \code{\link[=check_parameter]{check_parameter()}} acts on.
 }
 \details{
-Identity is tried first because it is the usual case and costs nothing, then
-the name and the package, because identity is not preserved when a package's
-code is re-evaluated rather than loaded. Coverage tools do exactly that, so
-an identity-only test passes every ordinary check and fails there.
+Two comparisons, in order. Identity is tried first, since it is the usual
+case and costs nothing. Then the class name together with the owning package,
+because identity does not survive a package's code being re-evaluated instead
+of loaded: a class rebuilt from the same definition is a different object.
+Coverage tools re-evaluate, so an identity-only test passes every ordinary
+check and fails under \code{covr} alone.
+}
+\seealso{
+\code{\link[=param_is_numerical]{param_is_numerical()}}, which calls this on the class a method was
+registered against.
 }
 \keyword{internal}

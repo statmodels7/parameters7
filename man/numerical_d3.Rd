@@ -7,40 +7,72 @@
 numerical_d3(s, eta)
 }
 \arguments{
-\item{s}{A \code{\link[=parameter]{parameter()}} object.}
+\item{s}{A \code{\link[=parameter]{parameter()}} object, of any branch.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}.}
 }
 \value{
-A named list keyed as \code{\link[=param_tuple_names]{param_tuple_names(s, 3)}}.
+A list of \code{choose(s@n_free + 2, 3)} estimates keyed as
+\code{param_tuple_names(s, 3)} and in that order, each shaped like
+\code{\link[=param_value]{param_value()}}'s result and symmetrized for a matrix family.
 }
 \description{
-One product stencil applied directly to \code{\link[=param_value]{param_value()}} for each
-distinct index tuple: a single stencil on the map itself, never a stencil
-on a lower-order numerical derivative, so the no-nesting rule holds
-whatever the family implements. A repeated component uses the matching
-higher-order one-dimensional factor; distinct components each contribute a
-central two-point factor, and the product is evaluated in one pass.
+Estimates the distinct third derivatives by applying one product stencil
+directly to \code{\link[=param_value]{param_value()}}, per index tuple. A component the tuple repeats
+contributes the one-dimensional stencil of the matching order, and a component
+appearing once contributes a two-point central factor; the product is
+evaluated in a single pass over the map. This is the method \code{\link[=param_d3]{param_d3()}}
+dispatches to when a family has not written its own.
 }
-\details{
+\section{The stencil}{
 Let the tuple's distinct components be \eqn{c_1, \dots, c_r} with
-multiplicities \eqn{m_1, \dots, m_r} summing to the order, and let
-\eqn{(o^{(m)}_i, w^{(m)}_i)} be the offsets and weights of the central
-stencil for an \eqn{m}-th derivative in one variable. The estimate is
-their tensor product,
+multiplicities \eqn{m_1, \dots, m_r} summing to three, and let
+\eqn{(o^{(m)}_i, w^{(m)}_i)} be the offsets and weights of the central stencil
+for an \eqn{m}-th derivative in one variable. The estimate is their tensor
+product,
 
-\deqn{\partial_{c_1}^{m_1} \cdots \partial_{c_r}^{m_r} M \approx
+\deqn{\partial_{c_1}^{m_1} \cdots \partial_{c_r}^{m_r} V \approx
   \frac{1}{\prod_{j} h_j^{m_j}}
   \sum_{i_1, \dots, i_r} \left(\prod_{j=1}^{r} w^{(m_j)}_{i_j}\right)
-  M\Bigl(\eta + \textstyle\sum_{j=1}^{r} o^{(m_j)}_{i_j} h_j e_{c_j}\Bigr),}
+  V\Bigl(\eta + \textstyle\sum_{j=1}^{r} o^{(m_j)}_{i_j} h_j e_{c_j}\Bigr),}
 
-evaluated at \eqn{\prod_j (m_j + 1)} points of the map itself. Applying
-one such stencil rather than differencing a lower-order numerical
-derivative keeps the rounding at a single layer.
+evaluated at one point per combination of nodes, with the zero-weight nodes
+skipped. A tuple naming one component three times costs four evaluations of
+the map, one naming a component twice and another once six, and one naming
+three distinct components eight.
 }
+
+\section{Why it goes straight to the map}{
+A lower-order numerical derivative is never differenced. The rounding of a
+difference is amplified by \eqn{h^{-k}}, so two stages multiply their errors
+and a third derivative built from a first and then a second is far worse than
+one stencil of the order wanted. Going to \code{\link[=param_value]{param_value()}} directly keeps the
+rounding at a single layer whatever the family implements, at the price of
+more evaluations of the map.
+}
+
+\section{Accuracy}{
+Truncation is of order \eqn{h^2} at a step of
+\eqn{\varepsilon^{1/5}\max(1, |\eta_k|)}. Measured against the closed form of
+a \eqn{2 \times 2} log-Cholesky covariance, the agreement is
+\eqn{7 \times 10^{-6}} absolute on entries of size 12, so about six digits.
+}
+
 \examples{
-numerical_d3(scalar_matrix(2), 0.3)
+# A scalar matrix: every order is the matrix again, so the error shows.
+s <- scalar_matrix(2)
+numerical_d3(s, 0.3)
+max(abs(numerical_d3(s, 0.3)[[1]] - param_value(s, 0.3)))
+
+# Against a family that writes its own third derivatives.
+q <- log_cholesky(2)
+eta <- c(0.2, -0.1, 0.4)
+ana <- param_d3(q, eta)
+c(gap = max(abs(unlist(numerical_d3(q, eta)) - unlist(ana))),
+  scale = max(abs(unlist(ana))))
+
 }
 \seealso{
-\code{\link[=param_d3]{param_d3()}}
+\code{\link[=param_d3]{param_d3()}}, the generic this serves, \code{\link[=mixed_stencil]{mixed_stencil()}}, which
+builds the product, and \code{\link[=numerical_d4]{numerical_d4()}} for the order above.
 }
