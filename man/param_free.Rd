@@ -9,34 +9,78 @@ param_free(s, m, ...)
 \arguments{
 \item{s}{An object inheriting from class \code{\link[=parameter]{parameter()}}.}
 
-\item{m}{A value of the family's shape: a symmetric matrix on the matrix
-branch, a probability vector or row-stochastic matrix otherwise.}
+\item{m}{A value of the family's shape: a symmetric \code{s@dimension} by
+\code{s@dimension} numeric matrix on the matrix branch, a probability vector for
+\code{\link[=simplex]{simplex()}}, a row-stochastic matrix for \code{\link[=transition_matrix]{transition_matrix()}}. It must
+satisfy the family's constraint; see \strong{Details} for what each family
+rejects.}
 
-\item{...}{Passed to methods.}
+\item{...}{Passed to the method. No method in this package reads it.}
 }
 \value{
-A numeric vector of length \code{s@n_free}, named by
-\code{s@free_names}.
+A numeric vector of length \code{s@n_free}, named by \code{s@free_names}, such
+that \code{param_value(s, param_free(s, m))} recovers \code{m}.
 }
 \description{
-The inverse map: given a value in the family's set, returns the free vector
-that produces it.
+Inverts the map: given a value in the family's set, returns the free vector
+\eqn{\eta} that \code{\link[=param_value]{param_value()}} would send there. The two are a bijection
+onto the set, so the round trip closes to machine precision, and every one of
+the fifteen families in this package inverts exactly, with a worst measured
+error of \eqn{5 \times 10^{-16}}.
+
+Use it to start an optimizer from a matrix rather than from a free vector:
+fit an unstructured covariance by moments, invert it, and hand the result in
+as a starting point.
 }
-\details{
-Implemented exactly or not at all, never by optimization. An
-optimization-based inverse would return a plausible \eqn{\eta} for a matrix
-outside the set, indistinguishable from a correct answer.
-A family whose map has no closed-form inverse signals an error, and the base
-class does so on behalf of any parameter that does not implement this. A
-value outside the set -- a matrix that is not positive definite, a vector
-off the simplex -- is rejected rather than repaired.
+\section{Exact or refused, never approximated}{
+A family either writes its inverse out or signals an error. The base method
+on \code{\link[=parameter]{parameter()}} does the second on behalf of a family that has not written
+the first, naming the family in the message. An inverse found by minimizing
+\eqn{\lVert V(\eta) - m \rVert} would return a plausible \eqn{\eta} for a
+matrix that is not in the set at all, and the caller could not tell that
+answer from a correct one.
 }
+
+\section{A value outside the set is rejected}{
+Every method checks \code{m} against the family's own constraint before
+inverting, and the message says what failed. \code{log_cholesky()} rejects a
+matrix that is not positive definite, with the verdict taken from the
+eigenvalues; \code{simplex()} rejects a vector that does not sum to one, and does
+not renormalize it, because a silent repair would hide the caller's mistake.
+The shared checks are the shape and the symmetry: a matrix of the wrong side
+is rejected with a message naming the side required, and an asymmetry above
+\eqn{10^{-8}} relative is rejected while one below it is averaged away.
+}
+
+\section{Notation}{
+
+\eqn{\eta} is the free vector, of length \eqn{d = } \code{s@n_free}, and \eqn{m}
+the value on the constrained scale.
+}
+
 \examples{
-s <- log_cholesky(2)
-eta <- c(0.3, -0.2, 0.5)
+# The round trip closes exactly, in both directions.
+s <- log_cholesky(3)
+eta <- c(0.3, -0.2, 0.5, 0.1, -0.4, 0.2)
 param_free(s, param_value(s, eta))
+max(abs(param_free(s, param_value(s, eta)) - eta))
+
+# Starting an optimizer from a matrix: invert the sample covariance.
+set.seed(1)
+y <- matrix(rnorm(300), 100, 3) \%*\% chol(matrix(c(1, .5, .2, .5, 1, .3,
+                                                  .2, .3, 1), 3, 3))
+start <- param_free(s, cov(y))
+round(start, 3)
+max(abs(param_value(s, start) - cov(y)))
+
+# A matrix outside the set is rejected, and the message says why.
+try(param_free(s, diag(c(1, 1, -1))))
+
+# So is a vector off the simplex; it is not renormalized.
+try(param_free(simplex(3), c(0.5, 0.6, 0.2)))
 
 }
 \seealso{
-\code{\link[=param_value]{param_value()}}
+\code{\link[=param_value]{param_value()}}, the map this inverts, and \code{\link[=check_parameter]{check_parameter()}},
+which closes the round trip as one of its checks.
 }

@@ -9,33 +9,69 @@ param_d4(s, eta, ...)
 \arguments{
 \item{s}{An object inheriting from class \code{\link[=parameter]{parameter()}}.}
 
-\item{eta}{A numeric vector of length \code{s@n_free}.}
+\item{eta}{A numeric vector of length \code{s@n_free}, finite in every entry.}
 
-\item{...}{Passed to methods.}
+\item{...}{Passed to the method. No method in this package reads it.}
 }
 \value{
-A named list, keyed as \code{param_tuple_names(s, 4)}.
+A named list of \code{choose(s@n_free + 3, 4)} entries, keyed as
+\code{param_tuple_names(s, 4)} and in that order. Each entry has the shape of
+the value.
 }
 \description{
-Returns the distinct fourth derivatives, keyed as
-\code{\link[=param_tuple_names]{param_tuple_names(s, 4)}}, each shaped like the value.
-}
-\details{
-The entry keyed \eqn{k:l:m:n} is
+Differentiates the map four times, returning the distinct components
 
-\deqn{\frac{\partial^{4} M(\eta)}
+\deqn{\frac{\partial^{4} V(\eta)}
   {\partial\eta_k\,\partial\eta_l\,\partial\eta_m\,\partial\eta_n},}
 
-a matrix of the same shape as \eqn{M(\eta)}. The derivative is symmetric
-in its indices, so only the distinct multi-indices are returned, which is
-what \code{\link[=param_tuple_names]{param_tuple_names()}} enumerates. Fourth order is where the
-contract stops: it is what a fourth-order chain rule through a link
-needs, and nothing in the toolkit asks for more.
+each shaped like the value. Fourth order is where the contract stops. A
+fourth-order chain rule through a link needs exactly this much, and nothing
+in the toolkit asks for a fifth.
 }
+\section{Keys}{
+The derivative is symmetric in its indices, so the \eqn{\binom{d+3}{4}}
+unordered quadruples are returned, keyed by \code{param_tuple_names(s, 4)} in
+lexicographic order, with \code{param_tuple_indices(s, 4)} giving the index
+quadruples in the same order. At \eqn{d = 3} there are fifteen, at
+\eqn{d = 6} a hundred and twenty-six, so the list grows quickly in the size
+of the matrix.
+}
+
+\section{Exact, or one stencil}{
+Every family here is closed form. The fallback on \code{\link[=parameter]{parameter()}} applies one
+product stencil per quadruple, with a factor per distinct index of the width
+its multiplicity calls for, evaluated in one pass over \code{\link[=param_value]{param_value()}}. At
+fourth order the rounding of a difference grows as \eqn{\varepsilon / h^4},
+so a numerical answer here is the least accurate of the four orders; a family
+fitted in earnest is better served by writing the closed form out.
+}
+
+\section{Notation}{
+
+\eqn{\eta} is the free vector, of length \eqn{d = } \code{s@n_free}, and \eqn{V}
+the value \code{\link[=param_value]{param_value()}} returns.
+}
+
 \examples{
-param_d4(scalar_matrix(2), 0.3)
+# For a scalar matrix, exp(eta) times the identity, every order is the
+# matrix again.
+s <- scalar_matrix(2)
+all.equal(param_d4(s, 0.3)[[1]], param_value(s, 0.3))
+
+# The list is over unordered quadruples, so it is shorter than d^4.
+q <- log_cholesky(3)
+c(returned = length(param_d4(q, rep(0.1, 6))),
+  unordered = choose(6 + 3, 4), ordered = 6^4)
+
+# log_cholesky is quadratic in a below-diagonal free value, so any quadruple
+# repeating one of those three or more times is exactly zero.
+d4 <- param_d4(log_cholesky(2), c(0.2, -0.1, 0.4))
+max(abs(d4[["L2.1:L2.1:L2.1:L2.1"]]))
+max(abs(d4[["log_L1:L2.1:L2.1:L2.1"]]))
 
 }
 \seealso{
-\code{\link[=param_d3]{param_d3()}}
+\code{\link[=param_d3]{param_d3()}} for the order below, \code{\link[=param_tuple_names]{param_tuple_names()}} for the
+keys, and \code{\link[=param_d4logdet]{param_d4logdet()}} for the fourth derivative of the
+log-determinant.
 }

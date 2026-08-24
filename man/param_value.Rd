@@ -7,40 +7,92 @@
 param_value(s, eta, ...)
 }
 \arguments{
-\item{s}{An object inheriting from class \code{\link[=parameter]{parameter()}}.}
+\item{s}{An object inheriting from class \code{\link[=parameter]{parameter()}}, from any of the
+constructors: \code{\link[=log_cholesky]{log_cholesky()}}, \code{\link[=ar1]{ar1()}}, \code{\link[=simplex]{simplex()}} and the rest.}
 
-\item{eta}{A numeric vector of length \code{s@n_free}.}
+\item{eta}{A numeric vector of length \code{s@n_free}, finite in every entry. The
+order of its entries is the order of \code{s@free_names}. Names are ignored and
+stripped, so a value that arrives labeled by a link does not leak that
+label into the result.}
 
-\item{...}{Passed to methods.}
+\item{...}{Passed to the method. No method in this package reads it; it is
+part of the signature so that a family written elsewhere can take further
+arguments of its own.}
 }
 \value{
-The constrained value, shaped as the family declares: a symmetric
-\code{s@dimension} by \code{s@dimension} matrix on the matrix branch, a
-vector or row-stochastic matrix otherwise.
+The constrained value, shaped as the family declares.
+\describe{
+\item{a matrix family}{a symmetric \code{s@dimension} by \code{s@dimension}
+numeric matrix, with \code{dimnames} \code{v1}, \code{v2}, ..., positive definite
+unless the family declares a deficient rank.}
+\item{\code{\link[=simplex]{simplex()}}}{a numeric vector of length \code{s@n_free + 1}, named \code{p1},
+\code{p2}, ..., with positive entries summing to 1.}
+\item{\code{\link[=transition_matrix]{transition_matrix()}}}{a square numeric matrix with positive
+entries and rows summing to 1, with \code{dimnames} \code{s1}, \code{s2}, ...}
+}
 }
 \description{
-Maps the free vector \eqn{\eta} to the constrained value it parametrizes:
-a symmetric matrix for the \code{\link[=matrix_parameter]{matrix_parameter()}} branch, a
-probability vector for \code{\link[=simplex]{simplex()}}, a row-stochastic matrix for
-\code{\link[=transition_matrix]{transition_matrix()}}.
-}
-\details{
-This is the only generic a parameter must implement. Everything else in the
-package has a numerical method registered on the \code{\link[=parameter]{parameter()}}
-class and is therefore available from this one alone.
+Evaluates the map a parametrization stands for: given a free vector
+\eqn{\eta} on the unconstrained scale, returns the constrained value it
+produces. The shape depends on the family. A \code{\link[=matrix_parameter]{matrix_parameter()}} returns a
+symmetric \eqn{p \times p} matrix, \code{\link[=simplex]{simplex()}} a probability vector, and
+\code{\link[=transition_matrix]{transition_matrix()}} a row-stochastic matrix. Whatever \eqn{\eta} is
+handed in, the value satisfies the family's constraint, so a caller never
+has to test the result.
 
-The generic validates the free vector before dispatching, so every method,
-including one written outside the package, rejects a vector of the wrong
-length or one containing a non-finite value. The free scale has no boundary
-to reach, so a non-finite entry is a defect in the caller rather than a
-point of the domain.
+This is the only method a new family must write. Every derivative order is
+then available numerically, and for a matrix family so are the
+log-determinant, the solve and the factor.
 }
+\section{Validation happens before dispatch}{
+The generic checks \code{eta} in its own body and passes the checked vector on,
+so every method inherits the check, including one written outside the
+package. Three things are rejected: a non-numeric \code{eta}, a length other than
+\code{s@n_free} (the message names both counts and lists the family's
+\code{free_names}), and any \code{NA}, \code{NaN} or infinite entry. The last is a caller
+error rather than a boundary of the domain, the unconstrained scale having no
+edge to reach.
+}
+
+\section{What is exact and what is not}{
+Every family in this package writes its own \code{\link[=param_value]{param_value()}} out in closed
+form. None of them falls back to anything, and \code{param_is_numerical()}
+returns \code{FALSE} for all nine components of all fifteen. The numerical
+methods on \code{\link[=parameter]{parameter()}} exist for a family written elsewhere.
+}
+
+\section{Notation}{
+
+\eqn{\eta} is the free vector, the point on the unconstrained scale, of
+length \eqn{d = } \code{s@n_free}. \eqn{p} is the side of the matrix a matrix
+family returns.
+}
+
 \examples{
-s <- log_cholesky(2)
-round(param_value(s, c(0, 0, 0.5)), 4)
+# An unstructured covariance. Any six numbers give a positive definite
+# matrix, which is the property the parametrization exists for.
+s <- log_cholesky(3)
+M <- param_value(s, c(0.1, -0.2, 0.3, 0.5, -0.4, 0.2))
+round(M, 4)
+eigen(M, only.values = TRUE)$values > 0
+
+# Even absurd free values stay inside the cone.
+eigen(param_value(s, c(-8, 9, -7, 100, -100, 50)),
+      only.values = TRUE)$values > 0
+
+# A probability vector, and a row-stochastic matrix.
+sum(param_value(simplex(4), c(1.2, -0.7, 0.3)))
+rowSums(param_value(transition_matrix(3), rep(0.4, 6)))
+
+# The three ways a free vector is rejected.
+try(param_value(s, c(1, 2)))
+try(param_value(s, c(0, 0, 0, 0, 0, Inf)))
+try(param_value(s, letters[1:6]))
 
 }
 \seealso{
-\code{\link[=param_free]{param_free()}}, \code{\link[=param_d1]{param_d1()}},
-\code{\link[=param_logdet]{param_logdet()}}
+\code{\link[=param_free]{param_free()}} for the inverse map, \code{\link[=param_d1]{param_d1()}} through
+\code{\link[=param_d4]{param_d4()}} for the derivatives of this one, \code{\link[=param_logdet]{param_logdet()}},
+\code{\link[=param_solve]{param_solve()}} and \code{\link[=param_factor]{param_factor()}} for what a matrix family adds, and
+\code{\link[=check_parameter]{check_parameter()}} to verify a family end to end.
 }

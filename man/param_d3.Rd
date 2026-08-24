@@ -9,23 +9,67 @@ param_d3(s, eta, ...)
 \arguments{
 \item{s}{An object inheriting from class \code{\link[=parameter]{parameter()}}.}
 
-\item{eta}{A numeric vector of length \code{s@n_free}.}
+\item{eta}{A numeric vector of length \code{s@n_free}, finite in every entry.}
 
-\item{...}{Passed to methods.}
+\item{...}{Passed to the method. No method in this package reads it.}
 }
 \value{
-A named list, keyed as \code{param_tuple_names(s, 3)}.
-}
-\description{
-Returns the distinct third derivatives
-\eqn{\partial^3 V / \partial \eta_k \partial \eta_l \partial \eta_m},
-keyed as \code{\link[=param_tuple_names]{param_tuple_names(s, 3)}}, each shaped like the
+A named list of \code{choose(s@n_free + 2, 3)} entries, keyed as
+\code{param_tuple_names(s, 3)} and in that order. Each entry has the shape of the
 value.
 }
+\description{
+Differentiates the map three times, returning the distinct components
+\eqn{\partial^3 V / \partial \eta_k \partial \eta_l \partial \eta_m}, each
+shaped like the value. The derivative is symmetric in its indices, so the
+\eqn{\binom{d+2}{3}} unordered triples are returned, not the \eqn{d^3}
+ordered ones. A third-order chain rule through a link needs them, and so does
+the exact gradient of a marginal criterion, which differentiates a penalized
+mode with respect to a hyperparameter.
+}
+\section{Keys}{
+The list is keyed by \code{param_tuple_names(s, 3)}, the lexicographic
+combinations with repetition, and \code{param_tuple_indices(s, 3)} gives the index
+triples in the same order. At \eqn{d = 3} there are ten of them, at
+\eqn{d = 6} fifty-six.
+}
+
+\section{Exact, or one stencil}{
+Every family here is closed form. The fallback on \code{\link[=parameter]{parameter()}} applies one
+product stencil per triple, of the width each repeated index calls for: an
+index appearing three times takes the four-point third-difference factor, one
+appearing twice the three-point second-difference factor, and a distinct
+index a two-point first-difference factor. The product is evaluated in one
+pass over \code{\link[=param_value]{param_value()}}, so no order is reached by differencing the order
+below.
+}
+
+\section{Notation}{
+
+\eqn{\eta} is the free vector, of length \eqn{d = } \code{s@n_free}, and \eqn{V}
+the value \code{\link[=param_value]{param_value()}} returns.
+}
+
 \examples{
-param_d3(scalar_matrix(2), 0.3)
+# A scalar matrix is exp(eta) times the identity, so every order in the one
+# free value is the matrix again.
+s <- scalar_matrix(2)
+param_d3(s, 0.3)
+all.equal(param_d3(s, 0.3)[[1]], param_value(s, 0.3))
+
+# log_cholesky is quadratic in each below-diagonal free value, so a triple
+# that repeats one of those three times vanishes exactly.
+q <- log_cholesky(2)
+d3 <- param_d3(q, c(0.2, -0.1, 0.4))
+length(d3)
+max(abs(d3[["L2.1:L2.1:L2.1"]]))
+
+# It does not vanish in a diagonal free value, which enters through a log.
+d3[["log_L1:log_L1:log_L1"]]
 
 }
 \seealso{
-\code{\link[=param_d2]{param_d2()}}, \code{\link[=param_d4]{param_d4()}}
+\code{\link[=param_d2]{param_d2()}} and \code{\link[=param_d4]{param_d4()}} for the neighbouring orders,
+\code{\link[=param_tuple_names]{param_tuple_names()}} for the keys, and \code{\link[=param_d3logdet]{param_d3logdet()}} for the third
+derivative of the log-determinant.
 }

@@ -9,28 +9,71 @@ param_d1(s, eta, ...)
 \arguments{
 \item{s}{An object inheriting from class \code{\link[=parameter]{parameter()}}.}
 
-\item{eta}{A numeric vector of length \code{s@n_free}.}
+\item{eta}{A numeric vector of length \code{s@n_free}, finite in every entry.
+Checked before dispatch; see \code{\link[=param_value]{param_value()}} for the three rejections.}
 
-\item{...}{Passed to methods.}
+\item{...}{Passed to the method. No method in this package reads it.}
 }
 \value{
-A list of \code{s@n_free} symmetric matrices, named by
-\code{s@free_names}.
+A list of \code{s@n_free} derivatives, named by \code{s@free_names}. Each entry
+has the shape of the value: a symmetric \code{s@dimension} by \code{s@dimension}
+matrix for a matrix family, a numeric vector of length \code{s@n_free + 1} for
+\code{\link[=simplex]{simplex()}}. The derivative of a symmetric matrix is symmetric, so each
+entry is too.
 }
 \description{
-Returns \eqn{\partial V / \partial \eta_k} for every free value, as a
-list of objects each shaped like the value.
+Differentiates the map once in each free value, returning
+\eqn{\partial V / \partial \eta_k} for \eqn{k = 1, \dots, d} as a list of
+\eqn{d} objects each shaped like the value itself. A likelihood needs these
+to turn a score in the matrix into a score in the coordinates an optimizer
+moves, by the chain rule
+\eqn{\partial \ell / \partial \eta_k = \sum_{ij} (\partial \ell / \partial
+M_{ij}) (\partial M_{ij} / \partial \eta_k)}.
 }
-\details{
-A parameter that registers no method for this generic gets the numerical one
-of the \code{\link[=parameter]{parameter()}} class, which applies a single central
-difference to \code{\link[=param_value]{param_value()}} in each component.
+\section{The list is keyed by the free names}{
+Entry \code{k} is the derivative in the free value \code{s@free_names[k]}, and the list
+carries those names, so a consumer assembling a gradient can match a
+coordinate to its label without tracking positions.
 }
+
+\section{Exact, or one stencil}{
+Every family here writes this out in closed form. A family that does not gets
+the method registered on \code{\link[=parameter]{parameter()}}, which applies \strong{one} three-point
+central difference to \code{\link[=param_value]{param_value()}} in each component, at the step
+\code{\link[numericals7:fd_step]{numericals7::fd_step()}} gives for a first derivative. It is never a
+difference of a lower-order difference, so the errors of two stages cannot
+compound. \code{param_is_numerical()} reports which route a given object takes, and
+returns \code{FALSE} throughout for every family this package ships.
+}
+
+\section{Notation}{
+
+\eqn{\eta} is the free vector, of length \eqn{d = } \code{s@n_free}, and \eqn{V}
+the value \code{\link[=param_value]{param_value()}} returns.
+}
+
 \examples{
-s <- scaled_matrix(diag(2))
-param_d1(s, 0)
+s <- log_cholesky(2)
+eta <- c(0.2, -0.1, 0.4)
+d1 <- param_d1(s, eta)
+names(d1)
+d1[["L2.1"]]
+
+# Each entry is a derivative, and a central difference of the map agrees.
+h <- 1e-5
+fd <- (param_value(s, eta + c(0, 0, h)) - param_value(s, eta - c(0, 0, h))) /
+  (2 * h)
+max(abs(d1[["L2.1"]] - fd))
+
+# For a scaled precision the derivative is the matrix itself, the free
+# value being the log of the scale.
+P <- crossprod(diff(diag(4)))
+r <- scaled_matrix(P)
+all.equal(param_d1(r, 1.3)[[1]], param_value(r, 1.3))
 
 }
 \seealso{
-\code{\link[=param_d2]{param_d2()}}, \code{\link[=param_is_numerical]{param_is_numerical()}}
+\code{\link[=param_d2]{param_d2()}}, \code{\link[=param_d3]{param_d3()}} and \code{\link[=param_d4]{param_d4()}} for the higher orders,
+\code{\link[=param_dlogdet]{param_dlogdet()}} for the derivative of the log-determinant, and
+\code{\link[=param_is_numerical]{param_is_numerical()}} to ask which route an object takes.
 }

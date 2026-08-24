@@ -9,31 +9,80 @@ param_d2(s, eta, ...)
 \arguments{
 \item{s}{An object inheriting from class \code{\link[=parameter]{parameter()}}.}
 
-\item{eta}{A numeric vector of length \code{s@n_free}.}
+\item{eta}{A numeric vector of length \code{s@n_free}, finite in every entry.}
 
-\item{...}{Passed to methods.}
+\item{...}{Passed to the method. No method in this package reads it.}
 }
 \value{
-A named list keyed as
-\code{param_tuple_names(s)}.
+A named list of \code{choose(s@n_free + 1, 2)} entries, keyed as
+\code{param_tuple_names(s)} and in that order. Each entry has the shape of the
+value, symmetric for a matrix family.
 }
 \description{
-Returns the \eqn{d(d+1)/2} distinct second derivatives
-\eqn{\partial^2 V / \partial \eta_k \partial \eta_l}, each shaped like
-the value.
+Differentiates the map twice, returning the \eqn{d(d+1)/2} distinct
+components \eqn{\partial^2 V / \partial \eta_k \partial \eta_l}, each shaped
+like the value. A mixed partial does not depend on the order of
+differentiation, so only the unordered pairs are returned; the caller reads
+the \eqn{(l, k)} entry off the \eqn{(k, l)} one. A Newton step in the free
+vector needs these, and so does the observed information of a model whose
+covariance is parametrized this way.
 }
-\details{
-The components are keyed by \code{\link[=param_tuple_names]{param_tuple_names()}}, generated from
-the same enumeration that produces the names rather than by taking a name
-apart. Recovering an index by splitting a name on its separator is the
-obvious route and it is wrong, because a free value whose own label contains
-the separator splits into the wrong number of pieces.
+\section{Keys and their order}{
+The list is keyed by \code{\link[=param_tuple_names]{param_tuple_names()}}, which puts the \eqn{d} diagonal
+pairs first and then the \eqn{d(d-1)/2} off-diagonal ones in lexicographic
+order. Diagonal first is what a consumer filling a Hessian wants, and the
+ordering is part of the interface: \code{\link[=param_tuple_indices]{param_tuple_indices()}} returns the index
+pairs in exactly the same order, so a caller can walk the two together.
+
+Both come from one enumeration, and neither is produced by taking a key
+apart. Splitting \code{"log_L1:log_L2"} on \code{":"} looks equivalent and is not: a
+free value whose own label contains the separator splits into the wrong
+number of pieces, and the failure is silent.
 }
+
+\section{Exact, or one stencil}{
+Every family here is closed form. The fallback on \code{\link[=parameter]{parameter()}} takes one
+difference and no more, and which quantity it differences depends on what the
+family already supplies. Where \code{\link[=param_d1]{param_d1()}} is analytic it differences that
+once, in the other index. Where \code{\link[=param_d1]{param_d1()}} is itself numerical it works on
+\code{\link[=param_value]{param_value()}} directly: a three-point second difference where the two
+indices coincide, and one difference in each of the two components where they
+differ. A mixed derivative in two different variables is one stencil however
+it is written; the nesting the toolkit forbids is two differences in the same
+variable.
+}
+
+\section{Notation}{
+
+\eqn{\eta} is the free vector, of length \eqn{d = } \code{s@n_free}, and \eqn{V}
+the value \code{\link[=param_value]{param_value()}} returns.
+}
+
 \examples{
-s <- scaled_matrix(diag(2))
-param_d2(s, 0)
+s <- log_cholesky(2)
+eta <- c(0.2, -0.1, 0.4)
+d2 <- param_d2(s, eta)
+names(d2)
+
+# The diagonal pairs come first, and the keys match the index tuples.
+param_tuple_indices(s, 2)[1:3]
+
+# A second difference of the map agrees with the L2.1 diagonal component.
+h <- 1e-4
+e <- c(0, 0, h)
+fd <- (param_value(s, eta + e) - 2 * param_value(s, eta) +
+         param_value(s, eta - e)) / h^2
+max(abs(d2[["L2.1:L2.1"]] - fd))
+
+# log_cholesky is quadratic in a below-diagonal free value, so the second
+# derivative there is constant and the third vanishes.
+d2[["L2.1:L2.1"]]
+max(abs(param_d3(s, eta)[["L2.1:L2.1:L2.1"]]))
 
 }
 \seealso{
-\code{\link[=param_d1]{param_d1()}}, \code{\link[=param_tuple_names]{param_tuple_names()}}
+\code{\link[=param_d1]{param_d1()}} for the first order, \code{\link[=param_d3]{param_d3()}} and \code{\link[=param_d4]{param_d4()}} for
+the higher ones, \code{\link[=param_tuple_names]{param_tuple_names()}} and \code{\link[=param_tuple_indices]{param_tuple_indices()}} for the
+keys, and \code{\link[=param_d2logdet]{param_d2logdet()}} for the second derivative of the
+log-determinant, which is not the trace of this.
 }
