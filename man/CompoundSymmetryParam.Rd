@@ -50,16 +50,36 @@ its blocks, or \code{"either"} when they disagree, and \code{\link[=kron_identit
 it.}
 }
 \value{
-An object of class \code{CompoundSymmetryParam}.
+An object of class \code{CompoundSymmetryParam}, a subclass of
+\code{\link[=matrix_parameter]{matrix_parameter()}} adding no properties of its own. \code{param_params} holds
+\code{link_scale} and \code{link_rho}. \code{n_free} is 2 at every \code{dimension}, and \code{rank}
+is \eqn{p}.
 }
 \description{
 The S7 class of compound-symmetric covariance matrices: equal variances and
-one common correlation. Constructed by \code{\link[=compound_symmetry]{compound_symmetry()}}.
+one common correlation, so \strong{two} free values at every dimension. It is the
+covariance of an exchangeable set of measurements, and the one a random
+intercept induces.
+
+\code{\link[=compound_symmetry]{compound_symmetry()}} builds one. \code{param_params} records the two links, and
+the correlation's is a \code{bounded_link(-1/(p-1), 1)} whose lower end depends on
+\code{dimension}: two objects of different sizes carry different links.
 }
 \examples{
-S7::S7_inherits(compound_symmetry(3), CompoundSymmetryParam)
+# Two free values whatever the dimension.
+s <- compound_symmetry(3)
+S7::S7_inherits(s, CompoundSymmetryParam)
+vapply(2:6, function(p) compound_symmetry(p)@n_free, integer(1))
+
+# The correlation's link depends on the dimension, its lower bound being
+# -1/(p-1): below that the matrix would not be positive definite.
+t(vapply(c(2, 4, 10),
+         function(p) compound_symmetry(p)@param_params$link_rho@link_bounds,
+         numeric(2)))
 
 }
 \seealso{
-\code{\link[=compound_symmetry]{compound_symmetry()}}
+\code{\link[=compound_symmetry]{compound_symmetry()}}, the constructor, \code{\link[=ar1]{ar1()}} for the other
+two-value family, and \code{\link[=matrix_parameter]{matrix_parameter()}} for the properties this
+inherits.
 }

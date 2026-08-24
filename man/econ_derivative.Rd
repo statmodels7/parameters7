@@ -7,27 +7,39 @@
 econ_derivative(s, eta, order, pattern)
 }
 \arguments{
-\item{s}{The parameter.}
+\item{s}{A \code{\link[=CompoundSymmetryParam]{CompoundSymmetryParam()}} or \code{\link[=Ar1Param]{Ar1Param()}} object.}
 
 \item{eta}{A numeric vector of two free values.}
 
-\item{order}{The derivative order, 1 to 4.}
+\item{order}{The derivative order: 1, 2, 3 or 4.}
 
-\item{pattern}{A function of the parameter and the scalars, returning the
-pattern and its four derivatives in the second free value.}
+\item{pattern}{A function of the parameter and the scalars of
+\code{\link[=econ_scalars]{econ_scalars()}}, returning a list of five matrices: the pattern
+\eqn{P(\rho)} and its four derivatives in the second free value. See
+\code{\link[=cs_pattern]{cs_pattern()}} and \code{ar1_pattern()}.}
 }
 \value{
-A named list of symmetric matrices.
+A list of \code{choose(order + 1, order)}, that is \code{order + 1}, symmetric
+matrices keyed as \code{param_tuple_names(s, order)} and in that order, each
+\code{s@dimension} by \code{s@dimension}.
 }
 \description{
-Assembles one derivative order of \eqn{M = \sigma^2 P(\rho)} from the
-scale's derivatives and the pattern's.
+Assembles one derivative order of \eqn{M = \sigma^2 P(\rho)} for a
+\code{\link[=compound_symmetry]{compound_symmetry()}} or \code{\link[=ar1]{ar1()}} parameter, from the scale's derivatives and
+the pattern's. The four derivative methods of both families are one call each
+to this function, differing only in the \code{pattern} passed.
 }
 \details{
-The value is a product of a function of the first free value and a function
-of the second, so a component with \eqn{a} scale indices and \eqn{b}
+The value is a \strong{product} of a function of the first free value and a
+function of the second, so a component with \eqn{a} scale indices and \eqn{b}
 correlation indices is the \eqn{a}-th derivative of the scale times the
-\eqn{b}-th derivative of the pattern. Nothing is approximated and no order
-is special.
+\eqn{b}-th derivative of the pattern. Nothing is approximated and no order is
+special: only the counts \eqn{a} and \eqn{b} matter, and a tuple is fully
+described by them.
+}
+\seealso{
+\code{\link[=econ_scalars]{econ_scalars()}} for the two chains, \code{\link[=cs_pattern]{cs_pattern()}} for one of the
+two patterns, and \code{\link[=econ_logdet_derivative]{econ_logdet_derivative()}}, its log-determinant
+counterpart.
 }
 \keyword{internal}

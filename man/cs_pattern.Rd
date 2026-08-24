@@ -7,16 +7,26 @@
 cs_pattern(s, sc)
 }
 \arguments{
-\item{s}{A \code{\link[=CompoundSymmetryParam]{CompoundSymmetryParam()}} object.}
+\item{s}{A \code{\link[=CompoundSymmetryParam]{CompoundSymmetryParam()}} object, whose \code{dimension} supplies
+\eqn{I} and \eqn{J}.}
 
-\item{sc}{The scalars of \code{\link[=econ_scalars]{econ_scalars()}}.}
+\item{sc}{The scalars of \code{\link[=econ_scalars]{econ_scalars()}}, whose \code{rho} component supplies the
+correlation and its four derivatives.}
 }
 \value{
-A list of five matrices.
+A list of five \code{s@dimension} by \code{s@dimension} matrices: the pattern at
+index 1 and its four derivatives at indices 2 to 5. Each derivative has a
+zero diagonal, the diagonal of the pattern being the constant 1.
 }
 \description{
-\eqn{P(\rho) = I + \rho(J - I)} and its four derivatives in the free value.
-The pattern is linear in the correlation, so every derivative is the
-matching derivative of the correlation times the constant \eqn{J - I}.
+Returns \eqn{P(\rho) = I + \rho(J - I)}, the correlation pattern of a
+compound-symmetric matrix, together with its four derivatives in the second
+free value. The pattern is \strong{linear} in the correlation, so every derivative
+is the matching derivative of \eqn{\rho} times the constant matrix
+\eqn{J - I}, and no order needs its own algebra.
+}
+\seealso{
+\code{\link[=econ_derivative]{econ_derivative()}}, the caller, and \code{ar1_pattern()}, the AR(1)
+counterpart, which is not linear in the correlation.
 }
 \keyword{internal}

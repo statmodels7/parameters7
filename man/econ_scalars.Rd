@@ -7,17 +7,24 @@
 econ_scalars(s, eta)
 }
 \arguments{
-\item{s}{A \code{\link[=CompoundSymmetryParam]{CompoundSymmetryParam()}} or \code{\link[=Ar1Param]{Ar1Param()}}
-object.}
+\item{s}{A \code{\link[=CompoundSymmetryParam]{CompoundSymmetryParam()}} or \code{\link[=Ar1Param]{Ar1Param()}} object, whose
+\code{param_params$link_scale} and \code{param_params$link_rho} are read.}
 
 \item{eta}{A numeric vector of two free values.}
 }
 \value{
-A list with \code{scale} and \code{rho}, each a list of five
-numbers: the value and four derivatives.
+A list with two components, \code{scale} and \code{rho}, each a numeric vector
+of length 5: the value at index 1 and the four derivatives in that free
+value at indices 2 to 5.
 }
 \description{
-The two scalars a compound-symmetric or AR(1) parameter is built from, with
-the first four derivatives of each in its own free value.
+Returns the two scalars a \code{\link[=compound_symmetry]{compound_symmetry()}} or \code{\link[=ar1]{ar1()}} parameter is built
+from, each with its value and its first four derivatives in its \strong{own} free
+value. Each scalar depends on one free value alone, so the two families are
+separable and their derivative assembly is a product of two chains.
+}
+\seealso{
+\code{\link[=econ_derivative]{econ_derivative()}} and \code{\link[=cs_pattern]{cs_pattern()}}, which consume it, and
+\code{\link[=param_value.CompoundSymmetryParam]{param_value.CompoundSymmetryParam()}}.
 }
 \keyword{internal}

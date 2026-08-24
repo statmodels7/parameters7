@@ -7,13 +7,22 @@
 cs_logdet_terms(s)
 }
 \arguments{
-\item{s}{A \code{\link[=CompoundSymmetryParam]{CompoundSymmetryParam()}} object.}
+\item{s}{A \code{\link[=CompoundSymmetryParam]{CompoundSymmetryParam()}} object, whose \code{dimension} supplies
+\eqn{p}.}
 }
 \value{
-A list of numeric triples.
+A list of two numeric triples \code{c(coefficient, a, b)}, standing for
+\eqn{c\log(a + b\rho)}: \code{c(1, 1, p-1)} and \code{c(p-1, 1, -1)}.
 }
 \description{
-The affine-logarithm terms of \eqn{q(\rho) = \log\{1 + (p-1)\rho\} +
-(p-1)\log(1-\rho)}, the correlation's half of the log-determinant.
+Returns the affine-logarithm terms of
+\eqn{q(\rho) = \log\{1 + (p-1)\rho\} + (p-1)\log(1-\rho)}, the correlation's
+half of the log-determinant, in the form \code{\link[=log_affine_derivs]{log_affine_derivs()}} consumes. The
+two terms are the two distinct eigenvalues of the correlation pattern, the
+first with multiplicity 1 and the second with multiplicity \eqn{p-1}.
+}
+\seealso{
+\code{\link[=log_affine_derivs]{log_affine_derivs()}}, which differentiates them, and
+\code{\link[=econ_logdet_derivative]{econ_logdet_derivative()}}, which places the result.
 }
 \keyword{internal}

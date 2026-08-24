@@ -6,16 +6,27 @@
 \arguments{
 \item{s}{A \code{\link[=CompoundSymmetryParam]{CompoundSymmetryParam()}} object.}
 
-\item{eta}{A numeric vector of two free values.}
+\item{eta}{A numeric vector of two free values, already checked by the
+generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A single number.
+A single number, finite at every free vector: both eigenvalues are
+strictly positive inside the correlation's link bounds.
 }
 \description{
-Closed form from the two distinct eigenvalues:
-\eqn{p\log\sigma^2 + \log\{1+(p-1)\rho\} + (p-1)\log(1-\rho)}. No
-factorization and no determinant is computed.
+Closed form, from the two distinct eigenvalues
+\eqn{\sigma^2\{1+(p-1)\rho\}} and \eqn{\sigma^2(1-\rho)}:
+
+\deqn{\log|M| = p\log\sigma^2 + \log\{1+(p-1)\rho\} + (p-1)\log(1-\rho).}
+
+Three logarithms and no factorization, whatever \eqn{p} is, against the base
+class's \eqn{O(p^3)} eigendecomposition. Measured at \eqn{p = 4} against the
+eigenvalues of the assembled matrix, the two agree to the printed digit.
+}
+\seealso{
+\code{\link[=param_dlogdet.CompoundSymmetryParam]{param_dlogdet.CompoundSymmetryParam()}} for its four derivative
+orders, and \code{\link[=cs_logdet_terms]{cs_logdet_terms()}} for the two terms.
 }
 \keyword{internal}

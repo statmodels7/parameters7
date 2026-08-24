@@ -7,25 +7,40 @@
 econ_logdet_derivative(s, eta, order, terms)
 }
 \arguments{
-\item{s}{The parameter.}
+\item{s}{A \code{\link[=CompoundSymmetryParam]{CompoundSymmetryParam()}} or \code{\link[=Ar1Param]{Ar1Param()}} object.}
 
 \item{eta}{A numeric vector of two free values.}
 
-\item{order}{The derivative order, 1 to 4.}
+\item{order}{The derivative order: 1, 2, 3 or 4.}
 
-\item{terms}{The affine-logarithm terms of \eqn{q}; see
+\item{terms}{The affine-logarithm terms of \eqn{q}, as
+\code{\link[=cs_logdet_terms]{cs_logdet_terms()}} or \code{ar1_logdet_terms()} returns them; see
 \code{\link[=log_affine_derivs]{log_affine_derivs()}}.}
 }
 \value{
-A named numeric vector.
+A numeric vector of \code{order + 1} entries, keyed as
+\code{param_tuple_names(s, order)} and in that order, with every mixed entry
+exactly zero.
 }
 \description{
 Assembles one derivative order of
-\eqn{\log\lvert M \rvert = p\log\sigma^2 + q(\rho)}.
+\eqn{\log|M| = p\log\sigma^2 + q(\rho)} for a \code{\link[=compound_symmetry]{compound_symmetry()}} or
+\code{\link[=ar1]{ar1()}} parameter. The four log-determinant derivative methods of both
+families are one call each to this function, differing only in the \code{terms}
+passed.
 }
 \details{
-The log-determinant is a sum of a function of one free value and a function
-of the other, so every mixed component is exactly zero and the pure ones are
-the two chains taken separately.
+The log-determinant is a \strong{sum} of a function of one free value and a
+function of the other, where the value is a product, so the structure is
+stronger: every mixed component is exactly zero, and the pure ones are the two
+chains taken separately. Under the default log link the scale's own
+contribution is \eqn{p\eta_1}, linear, so its second, third and fourth
+derivatives vanish too and only the correlation's chain survives above first
+order.
+}
+\seealso{
+\code{\link[=log_affine_derivs]{log_affine_derivs()}} for the correlation's chain, \code{\link[=econ_scalars]{econ_scalars()}}
+for the two links' derivatives, and \code{\link[=econ_derivative]{econ_derivative()}}, its counterpart for
+the matrix itself.
 }
 \keyword{internal}

@@ -6,14 +6,24 @@
 \arguments{
 \item{s}{A \code{\link[=CompoundSymmetryParam]{CompoundSymmetryParam()}} object.}
 
-\item{eta}{A numeric vector of two free values.}
+\item{eta}{A numeric vector of two free values, already checked by the
+generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A compound-symmetric positive definite matrix.
+A \code{s@dimension} by \code{s@dimension} symmetric positive definite numeric
+matrix with a constant diagonal and constant off-diagonal entries, with
+dimnames \code{v1}, \code{v2}, ...
 }
 \description{
-\eqn{\sigma^2\{(1-\rho)I + \rho J\}}.
+Returns \eqn{\sigma^2\{(1-\rho)I + \rho J\}}: the common variance on the
+diagonal and the common covariance \eqn{\sigma^2\rho} everywhere else.
+Positive definiteness follows from the correlation's link, which is bounded
+below at \eqn{-1/(p-1)}, so nothing is tested here.
+}
+\seealso{
+\code{\link[=param_free.CompoundSymmetryParam]{param_free.CompoundSymmetryParam()}} for the inverse map, and
+\code{\link[=param_solve.CompoundSymmetryParam]{param_solve.CompoundSymmetryParam()}} for the closed matrix inverse.
 }
 \keyword{internal}

@@ -9,16 +9,42 @@
 \arguments{
 \item{s}{A \code{\link[=CompoundSymmetryParam]{CompoundSymmetryParam()}} object.}
 
-\item{eta}{A numeric vector of two free values.}
+\item{eta}{A numeric vector of two free values, already checked by the
+generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named numeric vector.
+A named numeric vector of \code{order + 1} entries, keyed as
+\code{param_tuple_names(s, order)}, with every mixed entry exactly zero.
 }
 \description{
-Closed form at every order. The log-determinant is a sum of a function of
-the scale and a function of the correlation, so every mixed component is
-exactly zero.
+Closed form at all four orders. One page covers \code{\link[=param_dlogdet]{param_dlogdet()}},
+\code{\link[=param_d2logdet]{param_d2logdet()}}, \code{\link[=param_d3logdet]{param_d3logdet()}} and \code{\link[=param_d4logdet]{param_d4logdet()}} because the
+four differ only in the order taken:
+\eqn{\log|M| = p\log\sigma^2 + q(\rho)} is a \strong{sum} of a function of one free
+value and a function of the other, so every mixed component is exactly zero
+and the pure ones are the two chains taken separately.
+}
+\details{
+The scale's chain is \eqn{p} times the derivatives of \eqn{\log h}, which
+under the default log link is \eqn{p} at first order and 0 above it. The
+correlation's is \code{\link[=log_affine_derivs]{log_affine_derivs()}} on the two terms of
+\code{\link[=cs_logdet_terms]{cs_logdet_terms()}}, chained onto the bounded link.
+
+The four methods return vectors of \code{order + 1} entries, keyed by the tuple
+names of their own order. At \eqn{p = 4} and \eqn{\eta = (\log 2, 0.8)} the
+second order is \eqn{(0, -0.856, 0)} over \code{log_scale:log_scale},
+\code{logit_rho:logit_rho} and \code{log_scale:logit_rho}: the first zero from the log
+link and the last from the separability.
+
+Unlike \code{\link[=log_cholesky]{log_cholesky()}}, where the whole log-determinant is linear, the
+correlation's chain is non-zero at all four orders, so this family is one of
+the two where a check of the higher orders has content.
+}
+\seealso{
+\code{\link[=param_logdet.CompoundSymmetryParam]{param_logdet.CompoundSymmetryParam()}} for the quantity
+differentiated, \code{\link[=econ_logdet_derivative]{econ_logdet_derivative()}}, which assembles all four, and
+\code{\link[=param_dlogdet.Ar1Param]{param_dlogdet.Ar1Param()}} for the other two-value family.
 }
 \keyword{internal}

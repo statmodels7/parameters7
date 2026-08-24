@@ -9,16 +9,51 @@
 \arguments{
 \item{s}{A \code{\link[=CompoundSymmetryParam]{CompoundSymmetryParam()}} object.}
 
-\item{eta}{A numeric vector of two free values.}
+\item{eta}{A numeric vector of two free values, already checked by the
+generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named list of symmetric matrices.
+A named list of \code{order + 1} symmetric \code{s@dimension} by \code{s@dimension}
+matrices; see \strong{Details} for the keying of each order.
 }
 \description{
-Closed form at every order: the value is the scale times a pattern linear
-in the correlation, so a component with \eqn{a} scale indices and \eqn{b}
-correlation indices is one derivative of each.
+Closed form at all four orders. One page covers \code{\link[=param_d1]{param_d1()}}, \code{\link[=param_d2]{param_d2()}},
+\code{\link[=param_d3]{param_d3()}} and \code{\link[=param_d4]{param_d4()}} for this family because the four are the same
+product taken at different orders: the value is
+\eqn{M = \sigma^2 P(\rho)} with \eqn{P(\rho) = I + \rho(J - I)} linear in the
+correlation, so a component with \eqn{a} scale indices and \eqn{b} correlation
+indices is
+
+\deqn{\partial^{(a,b)} M
+  = \frac{\mathrm{d}^a \sigma^2}{\mathrm{d}\eta_1^a}
+    \cdot \frac{\mathrm{d}^b P}{\mathrm{d}\eta_2^b},}
+
+one derivative of each chain. Only the counts \eqn{a} and \eqn{b} matter, so a
+tuple is fully described by them and no order is a special case.
+}
+\details{
+The four methods return lists of \code{order + 1} matrices, keyed by the tuple names
+of their own order:
+\itemize{
+\item \code{\link[=param_d1]{param_d1()}}: 2 entries, keyed by \code{free_names}.
+\item \code{\link[=param_d2]{param_d2()}}: 3 entries, \code{param_tuple_names(s, 2)}.
+\item \code{\link[=param_d3]{param_d3()}}: 4 entries, \code{param_tuple_names(s, 3)}.
+\item \code{\link[=param_d4]{param_d4()}}: 5 entries, \code{param_tuple_names(s, 4)}.
+}
+
+The lists are this short because there are two free values: at \eqn{d = 2} the
+count \eqn{\binom{d+k-1}{k}} is \eqn{k+1}.
+
+Every component with at least one correlation index has a zero diagonal, the
+diagonal of \eqn{P} being the constant 1; and any component whose correlation
+indices number two or more carries only the link's own higher derivative,
+\eqn{P} being linear in \eqn{\rho}.
+}
+\seealso{
+\code{\link[=econ_derivative]{econ_derivative()}}, which assembles all four, \code{\link[=cs_pattern]{cs_pattern()}} for the
+pattern and its derivatives, and
+\code{\link[=param_dlogdet.CompoundSymmetryParam]{param_dlogdet.CompoundSymmetryParam()}} for the log-determinant's orders.
 }
 \keyword{internal}

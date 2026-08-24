@@ -11,59 +11,122 @@ compound_symmetry(
 )
 }
 \arguments{
-\item{dimension}{The side \eqn{p} of the matrix, at least 2.}
+\item{dimension}{The side \eqn{p} of the matrix, \strong{at least 2}. A one by one
+matrix has no correlation, so \code{compound_symmetry(1)} throws a message saying
+the family would carry a free value with no effect.}
 
-\item{link_scale}{A \pkg{linkfunctions7} link onto the positive scale.
-Defaults to \code{linkfunctions7::log_link()}.}
+\item{link_scale}{A \pkg{linkfunctions7} link carrying the first free value
+onto the positive variance, \code{linkfunctions7::log_link()} by default. Its
+declared lower bound must be non-negative.}
 
-\item{role}{A label; see \code{\link[=log_cholesky]{log_cholesky()}}.}
+\item{role}{A label recording which side of a model the matrix parametrizes:
+\code{"either"} (the default), \code{"covariance"} or \code{"precision"}. No numeric result
+depends on it, and this family gives the same shape either way.}
 }
 \value{
-An object of class \code{\link[=CompoundSymmetryParam]{CompoundSymmetryParam()}}.
+An object of class \code{\link[=CompoundSymmetryParam]{CompoundSymmetryParam()}}, with \code{n_free} 2,
+\code{free_names} \code{log_scale} and \code{logit_rho} under the defaults, \code{rank} equal to
+\code{dimension}, an empty \code{null_basis}, \code{param_name} \code{"compound_symmetry"}, and
+\code{param_params} holding \code{link_scale} and \code{link_rho}.
 }
 \description{
-The exchangeable covariance
+Returns an object holding the exchangeable covariance
+
 \deqn{M(\eta) = \sigma^2\{(1-\rho)I + \rho J\},}
-with \eqn{\sigma^2} positive and \eqn{\rho} the common correlation, so two
-free values whatever the dimension.
-}
-\details{
-Positive definiteness bounds the correlation below as well as above:
-the eigenvalues are \eqn{\sigma^2\{1 + (p-1)\rho\}} once and
-\eqn{\sigma^2(1-\rho)} with multiplicity \eqn{p-1}, so the matrix is
-definite exactly when \eqn{-1/(p-1) < \rho < 1}. The correlation is
-therefore carried by \code{\link[linkfunctions7:bounded_link]{linkfunctions7::bounded_link()}} onto that
-interval and not by \code{\link[linkfunctions7:rhobit_link]{linkfunctions7::rhobit_link()}}, which would
-let a caller build an indefinite matrix at a perfectly ordinary free value.
 
-Two quantities are closed form and cost nothing. The eigenvalues above give
-\deqn{\log\lvert M \rvert = p\log\sigma^2 + \log\{1 + (p-1)\rho\}
-  + (p-1)\log(1-\rho),}
+with \eqn{\sigma^2} positive and \eqn{\rho} the correlation every pair
+shares. Two free values at every dimension, against
+\code{\link[=log_cholesky]{log_cholesky()}}'s \eqn{p(p+1)/2}, so it is the parametrization to use when
+the measurements are exchangeable: repeated measures on a subject, items in a
+block, the covariance a random intercept induces.
+}
+\section{The correlation is bounded below as well as above}{
+The eigenvalues are \eqn{\sigma^2\{1 + (p-1)\rho\}} once and
+\eqn{\sigma^2(1-\rho)} with multiplicity \eqn{p-1}, so the matrix is positive
+definite exactly when
+
+\deqn{-\frac{1}{p-1} < \rho < 1.}
+
+The correlation therefore rides \code{linkfunctions7::bounded_link(-1/(p-1), 1)}.
+A \code{rhobit_link()} onto \eqn{(-1, 1)} would let a caller build an indefinite
+matrix at a perfectly ordinary free value: at \eqn{p = 4} a correlation of
+\eqn{-0.5} is inside \eqn{(-1, 1)} and outside the cone. The bound depends on
+the dimension, so two objects of different sizes carry different links.
+
+One consequence to expect: a free value of 0 is the \strong{midpoint} of that
+interval, so at \eqn{p = 4} it is a correlation of \eqn{1/3}, not of 0.
+}
+
+\section{Two quantities that cost nothing}{
+From the eigenvalues,
+
+\deqn{\log|M| = p\log\sigma^2 + \log\{1 + (p-1)\rho\} + (p-1)\log(1-\rho),}
+
 a sum of a function of one free value and a function of the other, so every
-mixed derivative of the log-determinant is exactly zero. And the inverse is
-compound symmetric again, by the Sherman-Morrison identity, so it is
-returned in closed form rather than factorized: the inverse of an
-exchangeable covariance is an exchangeable precision, which is what makes
-this family closed under the choice of side.
+mixed derivative of the log-determinant is exactly zero and no determinant is
+computed.
 
-The value is the scale times a pattern that is \emph{linear} in the
-correlation, \eqn{I + \rho(J - I)}, so all four derivative orders follow
-from the two links' own derivatives with no further algebra.
+The inverse is compound symmetric again, by Sherman-Morrison, so
+\code{\link[=param_solve]{param_solve()}} returns it in closed form and factorizes nothing. An
+exchangeable covariance has an exchangeable precision, which leaves the family
+closed under the choice of side.
 }
+
+\section{Why the derivatives are easy}{
+The value is the scale times a pattern \strong{linear} in the correlation,
+\eqn{I + \rho(J - I)}, so a component with \eqn{a} scale indices and \eqn{b}
+correlation indices is the \eqn{a}-th derivative of the scale times the
+\eqn{b}-th derivative of the pattern. All four orders follow from the two
+links' own derivatives with no further algebra, and any component with three
+or more correlation indices reduces to the third derivative of the link alone.
+}
+
+\section{Notation}{
+
+\eqn{\eta = (\eta_1, \eta_2)} is the free vector, \eqn{\sigma^2} the common
+variance and \eqn{\rho} the common correlation. \eqn{p} is the side of the
+matrix, \eqn{I} the identity and \eqn{J} the matrix of ones.
+}
+
 \examples{
+# Two free values at p = 4: a variance and one correlation.
 s <- compound_symmetry(4)
 c(n_free = s@n_free)
+s@free_names
 
 eta <- c(log(2), 0.8)
-round(param_value(s, eta), 4)
+m <- param_value(s, eta)
+round(m, 4)
 
-# the inverse is compound symmetric too, and is not factorized
+# The eigenvalues are the two the bound comes from.
+sig2 <- m[1, 1]
+rho <- m[1, 2] / sig2
+round(eigen(m, only.values = TRUE)$values, 6)
+round(c(sig2 * (1 + 3 * rho), rep(sig2 * (1 - rho), 3)), 6)
+
+# The log-determinant is closed form and agrees with them.
+c(closed = param_logdet(s, eta),
+  from_eigen = sum(log(eigen(m, only.values = TRUE)$values)))
+
+# The inverse is compound symmetric too, and is not factorized.
 round(param_solve(s, eta), 4)
+max(abs(param_solve(s, eta) - solve(m)))
 
-# the round trip closes exactly
-max(abs(param_free(s, param_value(s, eta)) - eta))
+# The round trip closes exactly.
+max(abs(param_free(s, m) - eta))
+
+# A free value of 0 is the midpoint of (-1/(p-1), 1), not a correlation of 0.
+param_value(s, c(0, 0))[1, 2]
+
+# The bound tightens with the dimension.
+t(vapply(c(2, 4, 10),
+         function(p) compound_symmetry(p)@param_params$link_rho@link_bounds,
+         numeric(2)))
 
 }
 \seealso{
-\code{\link[=ar1]{ar1()}}, \code{\link[=correlation_matrix]{correlation_matrix()}}
+\code{\link[=ar1]{ar1()}}, the other two-value family, where the correlation decays
+with distance instead of being shared; \code{\link[=correlation_matrix]{correlation_matrix()}} for an
+unrestricted correlation; \code{\link[=kron_identity]{kron_identity()}} to replicate this over
+independent groups; and \code{\link[=param_solve]{param_solve()}} for the closed inverse.
 }
