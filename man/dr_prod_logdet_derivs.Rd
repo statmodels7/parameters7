@@ -11,15 +11,28 @@ dr_prod_logdet_derivs(s, eta, order)
 
 \item{eta}{A numeric vector of length \code{s@n_free}.}
 
-\item{order}{The derivative order, 1 to 4.}
+\item{order}{The derivative order: 1, 2, 3 or 4.}
 }
 \value{
-A named numeric vector keyed as \code{param_tuple_names(s, order)}.
+A numeric vector of \code{choose(s@n_free + order - 1, order)} values keyed
+as \code{param_tuple_names(s, order)} and in that order.
 }
 \description{
-The log-determinant is \eqn{2\sum_j \log d_j + \log\lvert R\rvert}, so a
-component is the scale's own when every index names one scale coordinate,
-the correlation's own when every index is a correlation coordinate, and zero
+The log-determinant is \eqn{2\sum_j \log d_j + \log\lvert R\rvert}, a sum of
+one term per scale and one term for the correlation. A component is therefore
+the scale's own where every index names \strong{one} scale coordinate, the
+correlation's own where every index is a correlation coordinate, and 0
 otherwise.
+}
+\details{
+Two separabilities at once, and it is worth keeping them apart: the scales
+separate from each other, so a component naming two different scales is zero,
+and the correlation separates from the scales, so a mixed component is zero.
+What survives is \eqn{2\,\partial^m \log d_k} on the diagonal of the scale
+block, through \code{\link[=diag_dlog]{diag_dlog()}}, and whatever the correlation family answers.
+}
+\seealso{
+\code{\link[=diag_dlog]{diag_dlog()}} for the scale terms, and
+\code{\link[=param_dlogdet.DrProdParam]{param_dlogdet.DrProdParam()}}, which calls this.
 }
 \keyword{internal}

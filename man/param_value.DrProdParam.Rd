@@ -6,14 +6,26 @@
 \arguments{
 \item{s}{A \code{\link[=DrProdParam]{DrProdParam()}} object.}
 
-\item{eta}{A numeric vector of length \code{s@n_free}.}
+\item{eta}{A numeric vector of length \code{s@n_free}, already checked by the
+generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A symmetric matrix of side \code{s@dimension}.
+A symmetric positive definite \code{s@dimension} by \code{s@dimension} numeric
+matrix, without dimnames.
 }
 \description{
-Forms \eqn{D R D} from the scales and the correlation block.
+Forms \eqn{D R D} as \code{outer(d, d) * R}, the elementwise product being what two
+diagonal multiplications amount to. The correlation block is asked for its own
+value at its own stretch of the free vector, so the composite is exactly what
+that family returns, rescaled.
+
+The value carries \strong{no dimnames}, where the primitive families label their
+margins \code{v1}, \code{v2}, ...; the four compositions share that.
+}
+\seealso{
+\code{\link[=param_free.DrProdParam]{param_free.DrProdParam()}} for the inverse, and \code{\link[=dr_prod]{dr_prod()}} for the
+parametrization.
 }
 \keyword{internal}

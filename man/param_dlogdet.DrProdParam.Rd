@@ -9,15 +9,32 @@
 \arguments{
 \item{s}{A \code{\link[=DrProdParam]{DrProdParam()}} object.}
 
-\item{eta}{A numeric vector of length \code{s@n_free}.}
+\item{eta}{A numeric vector of length \code{s@n_free}, already checked by the
+generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named numeric vector.
+A numeric vector: at order 1, \code{s@n_free} values named by
+\code{s@free_names}; above it, \code{choose(s@n_free + k - 1, k)} values keyed as
+\code{param_tuple_names(s, k)} and in that order.
 }
 \description{
-Separable in the scales and separable from the correlation, so a component
-mixing two scales, or a scale with a correlation, is exactly zero.
+\code{param_dlogdet()}, \code{param_d2logdet()}, \code{param_d3logdet()} and
+\code{param_d4logdet()} for a \code{\link[=dr_prod]{dr_prod()}} parameter. The log-determinant is
+separable in the scales and separable from the correlation, so a component
+mixing two scales, or a scale with a correlation, is exactly zero: measured at
+\eqn{p = 3}, 12 of the 21 second-order components, 43 of 56 at third order and
+108 of 126 at fourth.
+}
+\details{
+The four share \code{\link[=dr_prod_logdet_derivs]{dr_prod_logdet_derivs()}} and differ only in the order they
+pass. At first order the scale entries are 2 whatever the point, the scales
+entering \eqn{\log\lvert\Sigma\rvert} through \eqn{2\log d_j} and the log link
+cancelling its own derivative.
+}
+\seealso{
+\code{\link[=dr_prod_logdet_derivs]{dr_prod_logdet_derivs()}}, which assembles them, and
+\code{\link[=param_logdet.DrProdParam]{param_logdet.DrProdParam()}} for the quantity differentiated.
 }
 \keyword{internal}

@@ -50,17 +50,30 @@ its blocks, or \code{"either"} when they disagree, and \code{\link[=kron_identit
 it.}
 }
 \value{
-An object of class \code{DrProdParam}.
+An object of class \code{DrProdParam}, a subclass of \code{\link[=matrix_parameter]{matrix_parameter()}}
+adding no properties of its own. \code{param_params} holds \code{cor} (the correlation
+parameter), \code{link} and \code{p}. \code{n_free} is \eqn{p} plus the correlation's, and
+\code{rank} is \eqn{p}, this family admitting no deficiency.
 }
 \description{
-The S7 class of a covariance written as \eqn{D R D} for a diagonal matrix
-of positive scales and a correlation matrix. Constructed by
-\code{\link[=dr_prod]{dr_prod()}}.
+The S7 class of a covariance written as \eqn{D R D}, for a diagonal matrix
+\eqn{D} of positive scales and a correlation matrix \eqn{R}. \code{\link[=dr_prod]{dr_prod()}}
+builds one.
+
+Its free values are the standard deviations and the correlation's own
+coordinates, so the quantities a reader takes off a fitted covariance are the
+coordinates themselves.
 }
 \examples{
-S7::S7_inherits(dr_prod(3), DrProdParam)
+# The scales come first and the correlation's coordinates follow.
+s <- dr_prod(3)
+s@free_names
+
+# p standard deviations plus the correlation's p(p-1)/2 angles.
+c(p = 4, n_free = dr_prod(4)@n_free)
 
 }
 \seealso{
-\code{\link[=dr_prod]{dr_prod()}}
+\code{\link[=dr_prod]{dr_prod()}}, the constructor, \code{\link[=correlation_matrix]{correlation_matrix()}} for the default
+block, and \code{\link[=matrix_parameter]{matrix_parameter()}} for the properties this inherits.
 }

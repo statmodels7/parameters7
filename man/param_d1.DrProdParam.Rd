@@ -9,15 +9,32 @@
 \arguments{
 \item{s}{A \code{\link[=DrProdParam]{DrProdParam()}} object.}
 
-\item{eta}{A numeric vector of length \code{s@n_free}.}
+\item{eta}{A numeric vector of length \code{s@n_free}, already checked by the
+generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named list of symmetric matrices.
+At order 1, a list of \code{s@n_free} symmetric matrices named by
+\code{s@free_names}; above it, \code{choose(s@n_free + k - 1, k)} of them keyed as
+\code{param_tuple_names(s, k)} and in that order. Each is \code{s@dimension} by
+\code{s@dimension} and carries no dimnames.
 }
 \description{
-Each component is the scale factor times the correlation's own component,
-elementwise, the two groups of free values being disjoint.
+\code{param_d1()}, \code{param_d2()}, \code{param_d3()} and \code{param_d4()} for a \code{\link[=dr_prod]{dr_prod()}}
+parameter. Each component is the scale factor times the correlation's own
+component, elementwise, the two groups of free values being disjoint, so
+nothing of the correlation family is rederived and nothing is differenced.
+}
+\details{
+The four share \code{\link[=dr_prod_derivs]{dr_prod_derivs()}} and differ only in the order they pass. Both
+factors are sparse, and where their supports miss each other the component is
+exactly zero: measured at \eqn{p = 3} that is 1 of the 21 second-order
+components, 10 of 56 at third order and 37 of 126 at fourth. See \code{\link[=dr_prod]{dr_prod()}}
+for the rule.
+}
+\seealso{
+\code{\link[=dr_prod_derivs]{dr_prod_derivs()}}, which assembles them, and
+\code{\link[=param_dlogdet.DrProdParam]{param_dlogdet.DrProdParam()}} for the log-determinant's own.
 }
 \keyword{internal}

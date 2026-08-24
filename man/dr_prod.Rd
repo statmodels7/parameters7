@@ -12,64 +12,122 @@ dr_prod(
 )
 }
 \arguments{
-\item{dimension}{The side \eqn{p} of the matrix, at least 2.}
+\item{dimension}{The side \eqn{p} of the matrix, at least 2: a 1 by 1
+correlation carries nothing, and the constructor says so.}
 
-\item{correlation}{A \code{\link[=matrix_parameter]{matrix_parameter()}} of side
-\code{dimension} producing correlation matrices. Defaults to
-\code{\link[=correlation_matrix]{correlation_matrix(dimension)}}.}
+\item{correlation}{A \code{\link[=matrix_parameter]{matrix_parameter()}} of side \code{dimension} \strong{producing
+correlation matrices}, that is with a unit diagonal at every free vector.
+Defaults to \code{\link[=correlation_matrix]{correlation_matrix(dimension)}}, which is
+the only shipped family with that property. The requirement is not checked;
+a block carrying a scale of its own, such as \code{\link[=ar1]{ar1()}}, makes the composite
+unidentified, the same matrix arising from a whole ray of free vectors, and
+\code{check_parameter()}'s round trip is what reports it.}
 
-\item{link}{The positive link carrying each standard deviation onto the
-free scale. Defaults to \code{\link[linkfunctions7:log_link]{linkfunctions7::log_link()}}.}
+\item{link}{The positive link carrying each standard deviation onto the free
+scale, \code{\link[linkfunctions7:log_link]{linkfunctions7::log_link()}} by default. It must map onto the
+positive half line and from the whole real line; see \code{\link[=diagonal_matrix]{diagonal_matrix()}} for
+the two conditions.}
 
-\item{role}{One of \code{"covariance"}, \code{"precision"} or
-\code{"either"}.}
+\item{role}{One of \code{"covariance"} (the default), \code{"precision"} or \code{"either"}.
+No numeric result depends on it.}
 }
 \value{
-An object of class \code{\link[=DrProdParam]{DrProdParam()}}.
+An object of class \code{\link[=DrProdParam]{DrProdParam()}}, with \code{n_free} equal to \eqn{p}
+plus the correlation's, \code{free_names} the tagged \code{log_sd1} ... \code{log_sdp}
+followed by the correlation's own, \code{rank} equal to \code{dimension}, and an empty
+\code{null_basis}.
 }
 \description{
-\eqn{\Sigma(\eta) = D(\eta_D)\, R(\eta_R)\, D(\eta_D)} with
+Returns an object holding
+\eqn{\Sigma(\eta) = D(\eta_D)\, R(\eta_R)\, D(\eta_D)}, with
 \eqn{D = \mathrm{diag}(d_1, \ldots, d_p)} carrying the standard deviations
-through a positive link, and \eqn{R} a correlation matrix parameter.
+through a positive link and \eqn{R} a correlation matrix parameter.
 }
-\details{
-The separation is what makes the parametrization worth having: the
-quantities a reader reads off a fitted covariance are the standard
-deviations and the correlations, and here they are the coordinates rather
-than a function of them. A log-Cholesky factor produces the same set of
-matrices with no coordinate meaning anything on its own.
+\section{What the separation buys}{
+The quantities a reader takes off a fitted covariance are the standard
+deviations and the correlations, and here they \strong{are} the coordinates. A
+\code{\link[=log_cholesky]{log_cholesky()}} factor produces the same set of matrices with no coordinate
+meaning anything on its own. Measured at
+\eqn{\eta = (0, \log 2, \log 0.5, 1, 1.2, 0.9)}: \code{sqrt(diag(M))} is
+\eqn{(1, 2, 0.5)}, which is \code{exp(eta[1:3])}, and dividing them out returns the
+correlation block's own value exactly.
+}
 
-Every derivative factorizes, because \eqn{\Sigma_{ij} = d_i d_j R_{ij}} and
-the two groups of free values are disjoint:
+\section{Every derivative factorizes}{
+Because \eqn{\Sigma_{ij} = d_i d_j R_{ij}} and the two groups of free values
+are disjoint,
+
 \deqn{\partial^{S}\Sigma_{ij} =
       \bigl[\partial^{S_D}(d_i d_j)\bigr]\,
       \bigl[\partial^{S_R} R_{ij}\bigr],}
-where \eqn{S_D} and \eqn{S_R} are the parts of the multiset \eqn{S} falling
-in each group. The scale factor is zero unless every index of \eqn{S_D}
-names \eqn{i} or \eqn{j}, so most components vanish; when \eqn{i = j} it is
-the Leibniz expansion of \eqn{\partial^m d_i^2}. Nothing of the correlation
-family is rederived.
 
-The log-determinant is \eqn{2\sum_j \log d_j + \log\lvert R\rvert}, which is
-separable in the scales and separable from the correlation, so a
-log-determinant component mixing two scales, or a scale with a correlation,
-is exactly zero.
+where \eqn{S_D} and \eqn{S_R} are the parts of the multiset \eqn{S} falling in
+each group. Nothing of the correlation family is rederived: its own components
+are fetched and multiplied entrywise.
 
-The correlation block must have full rank. A rank-deficient \eqn{R} would
-give \eqn{\Sigma} the null space \eqn{D^{-1}\ker R}, which moves with the
-free vector, and the class records the rank and the null space as
-properties of the family rather than of a point.
+Both factors are \strong{sparse}, and where their supports miss each other the
+component is exactly zero. The scale factor is supported on the rows and
+columns the indices of \eqn{S_D} name, and vanishes altogether once \eqn{S_D}
+names three distinct scales; a correlation derivative is supported on the two
+entries its angle governs. So \code{log_sd1:z3.2} is zero, the first factor living
+in row and column 1 and the second on entries \eqn{(3,2)} and \eqn{(2,3)}.
+Measured at \eqn{p = 3}, the disjoint-support rule predicts every exact zero:
+1 of the 21 second-order components, 10 of 56 at third order and 37 of 126 at
+fourth.
 }
+
+\section{The log-determinant}{
+\deqn{\log\lvert\Sigma\rvert = 2\sum_j \log d_j + \log\lvert R\rvert,}
+
+separable in the scales and separable from the correlation, so a component
+mixing two scales, or a scale with a correlation, is exactly zero: 12 of the 21
+second-order components, 43 of 56 and 108 of 126. The first derivative in a
+scale is 2 whatever the point, the scales entering on both sides.
+}
+
+\section{The correlation block must have full rank}{
+A rank-deficient \eqn{R} would give \eqn{\Sigma} the null space
+\eqn{D^{-1}\ker R}, which \strong{moves with the free vector}, while the class
+records the rank and the null space as properties of the family. The
+constructor rejects one instead of recording a rank that is not stable.
+}
+
+\section{Notation}{
+
+\eqn{p} is the dimension, \eqn{d_j} the \eqn{j}-th standard deviation,
+\eqn{D = \mathrm{diag}(d)}, \eqn{R} the correlation matrix, and \eqn{\eta_D}
+and \eqn{\eta_R} the two stretches of the free vector.
+}
+
 \examples{
 s <- dr_prod(3)
 s@free_names
-round(param_value(s, c(0, log(2), 0, 0.4, 0.4, 0.4)), 3)
 
-# p standard deviations and the p(p-1)/2 angles of the correlation
-c(p = 4, n_free = dr_prod(4)@n_free)
+eta <- c(log(1), log(2), log(0.5), 1.0, 1.2, 0.9)
+M <- param_value(s, eta)
+
+# The standard deviations are the coordinates, read back off the diagonal.
+rbind(from_matrix = sqrt(diag(M)), from_eta = exp(eta[1:3]))
+
+# And dividing them out leaves the correlation block's own value.
+R <- M / outer(sqrt(diag(M)), sqrt(diag(M)))
+max(abs(R - param_value(correlation_matrix(3), eta[4:6])))
+
+# A second derivative is exactly zero where the two factors' supports miss
+# each other: the scale factor lives in row and column 1, the correlation
+# derivative on the (3, 2) entry.
+max(abs(param_d2(s, eta)[["log_sd1:z3.2"]]))
+
+# The log-determinant separates, so the first derivative in a scale is 2.
+param_dlogdet(s, eta)[1:3]
+
+# The round trip closes.
+max(abs(param_free(s, M) - eta))
 
 }
 \seealso{
-\code{\link[=correlation_matrix]{correlation_matrix()}}, \code{\link[=log_cholesky]{log_cholesky()}},
-\code{\link[=block_diag]{block_diag()}}
+\code{\link[=correlation_matrix]{correlation_matrix()}} for the default block, \code{\link[=log_cholesky]{log_cholesky()}} for
+the same set of matrices in coordinates that mean nothing separately, and
+\code{\link[=block_diag]{block_diag()}}, \code{\link[=kron_identity]{kron_identity()}} and \code{\link[=sum_struct]{sum_struct()}} for the other
+compositions.
 }

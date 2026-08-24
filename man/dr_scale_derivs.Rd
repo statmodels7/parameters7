@@ -9,13 +9,29 @@ dr_scale_derivs(s, eta)
 \arguments{
 \item{s}{A \code{\link[=DrProdParam]{DrProdParam()}} object.}
 
-\item{eta}{A numeric vector of length \code{s@n_free}.}
+\item{eta}{A numeric vector of length \code{s@n_free}; only its first \eqn{p}
+entries are read.}
 }
 \value{
-A 5 by \code{p} numeric matrix, rows being orders 0 to 4.
+A 5 by \eqn{p} numeric matrix, row \eqn{k+1} holding the \eqn{k}-th
+derivative of the inverse link at each scale coordinate, so row 1 is the
+scales themselves.
 }
 \description{
 Returns \eqn{d_j} and its first four derivatives in the free value that
-carries it, as a matrix with one row per order.
+carries it, for every \eqn{j} at once, as a matrix with one row per order.
+}
+\details{
+Each scale depends on one free value only, so the table is complete: there are
+no cross-derivatives between scales to record. It is computed once per call to
+\code{\link[=dr_prod_derivs]{dr_prod_derivs()}} and read by \code{\link[=dr_scale_factor]{dr_scale_factor()}} for every component of the
+order.
+
+The correlation's part of \code{eta} is ignored, so one table serves every
+component whatever the correlation indices are.
+}
+\seealso{
+\code{\link[=dr_scale_factor]{dr_scale_factor()}}, which reads it, and \code{\link[=diag_dlog]{diag_dlog()}}, the
+log-determinant's own chain.
 }
 \keyword{internal}

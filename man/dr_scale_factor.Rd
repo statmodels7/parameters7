@@ -7,19 +7,43 @@
 dr_scale_factor(sd, tuple)
 }
 \arguments{
-\item{sd}{A 5 by \code{p} matrix of inverse-link derivatives, as returned by
+\item{sd}{A 5 by \eqn{p} matrix of inverse-link derivatives, as returned by
 \code{\link[=dr_scale_derivs]{dr_scale_derivs()}}.}
 
 \item{tuple}{An integer vector of scale indices, possibly empty and possibly
-with repeats.}
+with repeats. Its length is the number of scale indices in the component,
+which is at most the derivative order.}
 }
 \value{
-A \code{p} by \code{p} numeric matrix.
+A symmetric \eqn{p} by \eqn{p} numeric matrix.
 }
 \description{
-Evaluates \eqn{\partial^{S_D}(d_i d_j)} for every pair \eqn{(i, j)}, given
-the multiset \eqn{S_D} of scale indices. It is zero wherever \eqn{S_D}
-contains an index other than \eqn{i} or \eqn{j}, so the result is supported
-on the rows and columns those indices name.
+Evaluates \eqn{\partial^{S_D}(d_i d_j)} for every pair \eqn{(i, j)} at once,
+given the multiset \eqn{S_D} of scale indices. It is zero wherever \eqn{S_D}
+contains an index naming neither \eqn{i} nor \eqn{j}, so the result is
+\strong{supported on the rows and columns those indices name}, and that sparsity is
+half of why the composition costs so little.
+}
+\details{
+Three cases, and the arithmetic differs in each:
+\itemize{
+\item \strong{no indices.} The factor is \eqn{d_i d_j}, an outer product, and that is
+the case a component differentiating the correlation alone falls into.
+\item \strong{one distinct index \eqn{k}, with multiplicity \eqn{m}.} Off the diagonal
+the entry carries one factor of \eqn{d_k}, so it is
+\eqn{d_k^{(m)} d_j}; on the diagonal it carries two, so it is the Leibniz
+expansion \eqn{\sum_r \binom{m}{r} d_k^{(r)} d_k^{(m-r)}} of
+\eqn{\partial^m d_k^2}.
+\item \strong{two distinct indices \eqn{i} and \eqn{j}.} Only the entries \eqn{(i,j)}
+and \eqn{(j,i)} survive, each \eqn{d_i^{(m_i)} d_j^{(m_j)}}.
+}
+
+Three or more distinct indices give the zero matrix: an entry of
+\eqn{\Sigma} carries at most two scales, so a third differentiation in a new
+scale annihilates it.
+}
+\seealso{
+\code{\link[=dr_prod_derivs]{dr_prod_derivs()}}, the only caller, and \code{\link[=dr_prod]{dr_prod()}} for the
+factorization this is half of.
 }
 \keyword{internal}

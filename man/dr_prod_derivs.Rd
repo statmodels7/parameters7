@@ -11,13 +11,29 @@ dr_prod_derivs(s, eta, order)
 
 \item{eta}{A numeric vector of length \code{s@n_free}.}
 
-\item{order}{The derivative order, 1 to 4.}
+\item{order}{The derivative order: 1, 2, 3 or 4.}
 }
 \value{
-A named list of matrices keyed as \code{param_tuple_names(s, order)}.
+A list of \code{choose(s@n_free + order - 1, order)} symmetric matrices
+keyed as \code{param_tuple_names(s, order)} and in that order, each
+\code{s@dimension} by \code{s@dimension} and without dimnames.
 }
 \description{
-Multiplies the scale factor by the correlation's own component, elementwise,
-for every tuple of the composite's enumeration.
+Splits each tuple of the composite's enumeration into its scale indices and
+its correlation indices, and multiplies \code{\link[=dr_scale_factor]{dr_scale_factor()}} by the
+correlation's own component of the matching order, elementwise.
+}
+\details{
+The correlation's arrays are fetched at most once per order and re-keyed by
+the sorted local index tuple, the same device \code{\link[=block_derivs_by_tuple]{block_derivs_by_tuple()}} uses
+and for the same reason: the composite's names are not the block's, but the
+sorted index tuple is a key both sides can compute.
+
+A component whose correlation part is empty reads the correlation's \strong{value},
+which is why \code{param_value()} appears in a derivative routine.
+}
+\seealso{
+\code{\link[=dr_scale_factor]{dr_scale_factor()}} for one factor, and \code{\link[=param_d1.DrProdParam]{param_d1.DrProdParam()}},
+which calls this.
 }
 \keyword{internal}

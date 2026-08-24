@@ -6,15 +6,22 @@
 \arguments{
 \item{s}{A \code{\link[=DrProdParam]{DrProdParam()}} object.}
 
-\item{eta}{A numeric vector of length \code{s@n_free}.}
+\item{eta}{A numeric vector of length \code{s@n_free}, already checked by the
+generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
 A single number.
 }
 \description{
-\eqn{2\sum_j \log d_j + \log\lvert R \rvert}, the scales contributing twice
-because they multiply on both sides.
+Closed form, \eqn{2\sum_j \log d_j + \log\lvert R \rvert}, the scales
+contributing twice because they multiply on both sides. The correlation's term
+comes from that family by whatever route it has, so a closed form there stays a
+closed form here and no determinant of the assembled matrix is taken.
+}
+\seealso{
+\code{\link[=param_dlogdet.DrProdParam]{param_dlogdet.DrProdParam()}} for its derivatives, and
+\code{\link[=param_logdet.CorrelationParam]{param_logdet.CorrelationParam()}} for the term the default block supplies.
 }
 \keyword{internal}
