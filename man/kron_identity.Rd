@@ -7,42 +7,99 @@
 kron_identity(structure, m)
 }
 \arguments{
-\item{structure}{An object inheriting from
-\code{\link[=matrix_parameter]{matrix_parameter()}}: the per-block parameter.}
+\item{structure}{An object inheriting from \code{\link[=matrix_parameter]{matrix_parameter()}}, the per-block
+parameter. A family that is not a matrix, such as \code{\link[=simplex]{simplex()}}, throws
+\verb{'structure' must inherit from 'matrix_parameter'.} The inner parameter may
+itself be rank deficient.}
 
-\item{m}{The number of blocks, a single integer of at least 1.}
+\item{m}{The number of blocks, a single integer of at least 1. \code{0}, a
+fraction, \code{NA} and a vector all throw \verb{'m' must be a single integer of at least 1.} At \code{m = 1} the result equals the inner parameter's value exactly,
+which makes it safe to call in a loop over group counts.}
 }
 \value{
-An object of class \code{\link[=KronIdentityParam]{KronIdentityParam()}}.
+An object of class \code{\link[=KronIdentityParam]{KronIdentityParam()}}, with \code{dimension} equal to
+\code{m * structure@dimension}, \code{n_free} and \code{free_names} the inner parameter's
+unchanged, \code{rank} equal to \code{m * structure@rank}, \code{null_basis} the inner one
+replicated blockwise, \code{role} copied from the inner parameter, and
+\code{param_params} holding \code{inner} and \code{m}.
 }
 \description{
-\eqn{M(\eta) = I_m \otimes S(\eta)} for an inner matrix parameter
-\eqn{S} of dimension \eqn{d}: a block-diagonal matrix of dimension
-\eqn{md} whose \eqn{m} diagonal blocks are the same matrix, sharing one
+Returns an object holding \eqn{M(\eta) = I_m \otimes S(\eta)} for an inner
+matrix parameter \eqn{S} of side \eqn{d}: a block-diagonal matrix of side
+\eqn{md} whose \eqn{m} diagonal blocks are the \strong{same} matrix, sharing one
 free vector.
-}
-\details{
-This is the covariance (or precision) of \eqn{m} independent groups
-whose within-group structure is common -- the shape a grouped
-random-effect term needs, with \eqn{S} the per-group matrix over the
-coefficients of one group. Every quantity of the contract is a linear
-lift of the inner parameter's:
-\deqn{\partial_k M = I_m \otimes \partial_k S, \qquad
-      \log\lvert M \rvert_{+} = m \log\lvert S \rvert_{+}, \qquad
-      M^{-1} = I_m \otimes S^{-1},}
-so nothing is rederived, and the rank is \eqn{m} times the inner rank
-with the null basis replicated blockwise.
 
-The free names are the inner parameter's own: the blocks share their
-values by construction, which is what distinguishes this composition
-from a general block-diagonal of distinct structures.
+This is the covariance, or precision, of \eqn{m} independent groups whose
+within-group structure is common, which is the shape a grouped random-effect
+term needs: \eqn{S} is the per-group matrix over the coefficients of one group.
+Because the blocks share their free values, \code{n_free} is the inner
+parameter's however many groups there are, so a random slope over a thousand
+subjects still estimates three numbers.
 }
+\section{Every quantity is a linear lift}{
+\deqn{\partial_k M = I_m \otimes \partial_k S, \qquad
+      \log|M|_{+} = m \log|S|_{+}, \qquad
+      M^{-1} = I_m \otimes S^{-1}.}
+
+Nothing is rederived and nothing of side \eqn{md} is decomposed: the rank is
+\eqn{m} times the inner rank, the null basis is the inner one replicated
+blockwise, and \code{\link[=param_solve]{param_solve()}} loops over the blocks solving the inner
+parameter \eqn{m} times.
+
+The multiplier on the log-determinant is worth expecting. At \eqn{m = 3} over a
+2 x 2 log-Cholesky covariance, \code{param_dlogdet()} answers \code{c(6, 6, 0)} where
+the inner parameter answers \code{c(2, 2, 0)}: a step in a shared free value moves
+every block.
+}
+
+\section{A deficient inner parameter stays deficient}{
+The rank is exactly \eqn{m} times the inner rank, so replicating a
+\code{\link[=scaled_matrix]{scaled_matrix()}} on a difference penalty over 2 blocks gives an 8 x 8 matrix
+of rank 4, and \code{\link[=param_solve]{param_solve()}} rejects it as the inner one would. The
+replicated null basis is annihilated to \eqn{10^{-15}}.
+}
+
+\section{What it does not do}{
+The value carries \strong{no dimnames}, where every primitive family in the package
+labels its rows and columns \code{v1}, \code{v2}, ...: \code{kronecker()} drops them. The
+other three composition wrappers do the same. See \code{\link[=name_dims]{name_dims()}}.
+}
+
+\section{Notation}{
+
+\eqn{S} is the inner parameter, \eqn{d} its side, \eqn{m} the number of
+blocks, \eqn{I_m} the \eqn{m \times m} identity and \eqn{\otimes} the
+Kronecker product. \eqn{\eta} is the free vector, shared by every block.
+}
+
 \examples{
-s <- kron_identity(log_cholesky(2), 3)
+# Three groups sharing one 2 x 2 covariance: 6 x 6, three free values.
+inner <- log_cholesky(2)
+s <- kron_identity(inner, 3)
 c(dimension = s@dimension, n_free = s@n_free)
-param_logdet(s, c(0.1, 0, -0.2))
+eta <- c(0.1, 0, -0.2)
+round(param_value(s, eta), 3)
+
+# Every quantity is the inner one lifted, and the log-determinant is
+# multiplied by the number of blocks.
+c(outer = param_logdet(s, eta), m_times_inner = 3 * param_logdet(inner, eta))
+rbind(outer = param_dlogdet(s, eta), inner = param_dlogdet(inner, eta))
+
+# The solve is blockwise and exact.
+max(abs(param_solve(s, eta) - solve(param_value(s, eta))))
+
+# The round trip closes, and m = 1 is the inner parameter itself.
+max(abs(param_free(s, param_value(s, eta)) - eta))
+max(abs(param_value(kron_identity(inner, 1), eta) - param_value(inner, eta)))
+
+# A deficient inner parameter stays deficient, block by block.
+r <- kron_identity(scaled_matrix(crossprod(diff(diag(4), differences = 2))), 2)
+c(dimension = r@dimension, rank = r@rank, null = ncol(r@null_basis))
+max(abs(param_value(r, 0.3) \%*\% r@null_basis))
 
 }
 \seealso{
-\code{\link[=log_cholesky]{log_cholesky()}}, \code{\link[=diagonal_matrix]{diagonal_matrix()}}
+\code{\link[=block_diag]{block_diag()}} for blocks that differ and each carry their own free
+values, \code{\link[=dr_prod]{dr_prod()}} and \code{\link[=sum_struct]{sum_struct()}} for the other two compositions, and
+\code{\link[=log_cholesky]{log_cholesky()}} or \code{\link[=ar1]{ar1()}} for the usual inner parameters.
 }

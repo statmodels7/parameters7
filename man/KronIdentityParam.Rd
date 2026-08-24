@@ -50,17 +50,35 @@ its blocks, or \code{"either"} when they disagree, and \code{\link[=kron_identit
 it.}
 }
 \value{
-An object of class \code{KronIdentityParam}.
+An object of class \code{KronIdentityParam}, a subclass of
+\code{\link[=matrix_parameter]{matrix_parameter()}} adding no properties of its own. \code{param_params} holds
+\code{inner}, the per-block parameter, and \code{m}, the number of blocks.
+\code{param_name} is \verb{kron(Im, <inner>)}.
 }
 \description{
-The S7 class of a block-diagonal matrix built from \eqn{m} identical
-copies of an inner matrix parameter. Constructed by
-\code{\link[=kron_identity]{kron_identity()}}.
+The S7 class of a block-diagonal matrix built from \eqn{m} identical copies of
+an inner matrix parameter, \eqn{I_m \otimes S(\eta)}. The blocks \strong{share one
+free vector}, so \code{n_free} is the inner parameter's however large \eqn{m} is,
+and the free names are the inner ones unchanged.
+
+It is the first of the four composition wrappers, and the cheapest: every
+quantity of the contract is a linear lift of the inner parameter's, so nothing
+is rederived and nothing of size \eqn{(md)^2} is decomposed.
 }
 \examples{
-S7::S7_inherits(kron_identity(log_cholesky(2), 3), KronIdentityParam)
+# Three copies of a 2 x 2 covariance: a 6 x 6 matrix with three free values.
+s <- kron_identity(log_cholesky(2), 3)
+S7::S7_inherits(s, KronIdentityParam)
+c(dimension = s@dimension, n_free = s@n_free)
+s@free_names
+
+# The free vector does not grow with the number of blocks.
+vapply(c(1, 5, 100), function(m) kron_identity(log_cholesky(2), m)@n_free,
+       integer(1))
 
 }
 \seealso{
-\code{\link[=kron_identity]{kron_identity()}}
+\code{\link[=kron_identity]{kron_identity()}}, the constructor, \code{\link[=block_diag]{block_diag()}} for blocks that
+are \strong{not} identical and do not share a free vector, and
+\code{\link[=matrix_parameter]{matrix_parameter()}} for the properties this inherits.
 }
