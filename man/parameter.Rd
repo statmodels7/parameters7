@@ -2,7 +2,7 @@
 % Please edit documentation in R/parameter_class.R
 \name{parameter}
 \alias{parameter}
-\title{Constrained Matrix Parameter}
+\title{The Abstract Class of a Constrained Parameter}
 \usage{
 parameter(
   param_name = character(0),
@@ -12,64 +12,144 @@ parameter(
 )
 }
 \arguments{
-\item{param_name}{A single character string naming the family.}
+\item{param_name}{A single character string naming the family, used in the
+error messages the validators raise and in the object's \code{print} output.
+\code{"log_cholesky"}, \code{"ar1"} and so on.}
 
-\item{n_free}{The length \eqn{d} of the free vector.}
+\item{n_free}{The length \eqn{d} of the free vector: a single non-negative
+integer. Zero is legal and describes a family with nothing to estimate.
+The validator rejects a vector, a negative value, or a length that
+disagrees with \code{free_names}.}
 
-\item{free_names}{A character vector of length \code{n_free}, one label per
-free value. Fixed at construction: every consumer builds parameter tables
-from these. A label names the coordinate rather than the quantity the
-coordinate produces, and the families here follow one convention for it.
-Where a link carries a constrained quantity onto the free scale, the
-label records that link, so a variance appears as \code{"log_scale"} and
-a correlation as \code{"z_rho"}; where the coordinate is already
-unrestricted the label is the plain name of the quantity, as the
-below-diagonal entries \code{"L2.1"} of a Cholesky factor are. The
-distinction matters outside the family: a consumer flattens the free
-vector into scalar parameters carrying identity links, so a label
-promising a bounded quantity reports a number on a scale that number is
-not on.}
+\item{free_names}{A character vector of length \code{n_free}, one label per free
+value, in the order the free vector holds them. Fixed at construction and
+part of the interface: consumers build their parameter tables from these
+labels, so the ordering is not free to change. The validator rejects a
+duplicated label and a length other than \code{n_free}.}
 
-\item{param_params}{A list of whatever the family needs to evaluate itself.}
+\item{param_params}{A list of whatever the family needs in order to evaluate
+itself, read only by that family's own methods. \code{log_cholesky()} stores
+the row and column index of each free value here; \code{sum_struct()} stores
+its component matrices. Nothing outside the family looks inside it.}
 }
 \value{
-An object of class \code{parameter}. The class is abstract; use one
-of the constructors, such as \code{\link[=log_cholesky]{log_cholesky()}}.
+An object of class \code{parameter}, with properties
+\describe{
+\item{\code{param_name}}{character, the family name.}
+\item{\code{n_free}}{integer, the length \eqn{d} of the free vector.}
+\item{\code{free_names}}{character of length \code{n_free}.}
+\item{\code{param_params}}{list, the family's own data.}
+}
+The class is abstract, so a useful object comes from a constructor such as
+\code{\link[=log_cholesky]{log_cholesky()}} and carries that constructor's subclass. A matrix family
+returns a \code{\link[=matrix_parameter]{matrix_parameter()}}, which adds \code{dimension}, \code{rank},
+\code{null_basis} and \code{role}.
 }
 \description{
-The abstract S7 class of covariance parameters: a map from an unconstrained
-vector \eqn{\eta \in \mathbb{R}^{d}} to a symmetric matrix in some
-constrained set, together with its derivatives and the quantities a
-likelihood asks of the matrix.
-}
-\details{
-A parameter owns its dimension: \code{log_cholesky(dimension = 3)} and
-\code{log_cholesky(dimension = 4)} are different objects, with \eqn{d = 6} and
-\eqn{d = 10} free values respectively. The alternative, a dimensionless
-recipe applied to whatever arrives, would leave \code{n_free} and
-\code{free_names} unanswerable before any data exist, and both are needed
-then.
+A parameter is a map from an unconstrained vector
+\eqn{\eta \in \mathbb{R}^{d}} onto a quantity that lives in a constrained
+set: a symmetric positive definite matrix, a probability vector, a
+stochastic matrix. \code{parameter} is the abstract S7 class that map belongs
+to. It records how many free values the map consumes, what each of them is
+called, and whatever the family needs in order to evaluate itself. Because
+the domain is the whole of \eqn{\mathbb{R}^{d}}, an optimizer may move
+\eqn{\eta} anywhere and every point it visits still maps to a valid value,
+so no constraint has to be policed during a fit.
 
-The rank and the null space are properties of the family rather than of a
-point: scaling a matrix by a positive number and summing positive
-semidefinite matrices both leave the null space alone. They are computed
-once, at construction, from the components rather than from an assembled
-matrix, because the numerical determination of a rank from an assembled
-matrix is not scale invariant while the null space is. See
-\code{\link[=param_null_basis]{param_null_basis()}}.
-
-Only \code{\link[=param_value]{param_value()}} is compulsory. Every other generic has a
-numerical method registered on this class, so a new parameter is a subclass
-and one method, and a closed form supplied later replaces the corresponding
-numerical method through dispatch.
+The class is abstract and is not meant to be instantiated. Call a
+constructor: \code{\link[=log_cholesky]{log_cholesky()}} for an unstructured covariance, \code{\link[=ar1]{ar1()}} or
+\code{\link[=compound_symmetry]{compound_symmetry()}} for a structured one, \code{\link[=simplex]{simplex()}} for a probability
+vector, \code{\link[=transition_matrix]{transition_matrix()}} for a Markov chain.
 }
+\section{A parameter owns its dimension}{
+\code{log_cholesky(3)} and \code{log_cholesky(4)} are different objects, holding
+\eqn{d = 6} and \eqn{d = 10} free values. Fixing the size at construction
+means \code{n_free} and \code{free_names} can be answered before any data exist, and
+both are needed then: a model builds its parameter table from the names
+while it is still assembling the design.
+}
+
+\section{What a subclass must supply}{
+\code{\link[=param_value]{param_value()}} is the one compulsory method. Given it, a subclass inherits
+\code{\link[=param_d1]{param_d1()}}, \code{\link[=param_d2]{param_d2()}}, \code{\link[=param_d3]{param_d3()}} and \code{\link[=param_d4]{param_d4()}}, each a product
+stencil applied to the map itself. A closed form registered later replaces
+the inherited numerical method through dispatch, and no caller changes.
+
+Four generics are not inherited here:
+\itemize{
+\item \code{\link[=param_free]{param_free()}}, the inverse map, has a base method that throws and names
+the family. An inverse found by optimization would hand back a plausible
+\eqn{\eta} for a value that is outside the set the family parametrizes, so
+the inverse is either written out exactly or refused.
+\item \code{\link[=param_logdet]{param_logdet()}}, \code{\link[=param_solve]{param_solve()}} and \code{\link[=param_factor]{param_factor()}} are registered on
+\code{\link[=matrix_parameter]{matrix_parameter()}}, not on this class. A probability vector has no
+log-determinant, and asking for one fails at dispatch instead of returning
+a number.
+}
+}
+
+\section{Free names label the coordinate, not the quantity}{
+The families here follow one convention. Where a link carries a constrained
+quantity onto the free scale, the label records that link: a variance
+appears as \code{"log_scale"} and a correlation as \code{"z_rho"}. Where the
+coordinate is already unrestricted the label is the plain name of the
+quantity, as the below-diagonal entries \code{"L2.1"} of a Cholesky factor are.
+
+The distinction matters outside the family. A consumer flattens the free
+vector into scalar parameters carrying identity links, so a label promising
+a bounded quantity would report a number that is not on that scale: a free
+value of 1.4 called \code{rho} reads as a correlation of 1.4, while called
+\code{z_rho} it reads as the correlation \eqn{\tanh(1.4) = 0.885}.
+}
+
+\section{Notation}{
+
+\eqn{\eta} is the \strong{free vector}, the point on the unconstrained scale that
+an optimizer moves, and \eqn{d} its length, the object's \code{n_free}. Note that
+\eqn{\eta} means a linear predictor elsewhere in the toolkit; here it is
+always the free vector of a parametrization. \eqn{p} is the side of the
+matrix a matrix family produces.
+}
+
 \examples{
+# Every parametrization in the package is a `parameter`.
 s <- log_cholesky(3)
 S7::S7_inherits(s, parameter)
-c(dimension = s@dimension, n_free = s@n_free, rank = s@rank)
+
+# The four properties the class itself holds.
+s@param_name
+s@n_free
+s@free_names
+
+# The dimension is fixed at construction, so the length of the free vector
+# is known before any data arrive: p(p+1)/2 for an unstructured covariance.
+d <- vapply(2:5, function(p) log_cholesky(p)@n_free, integer(1))
+rbind(p = 2:5, n_free = d, `p(p+1)/2` = (2:5) * (3:6) / 2)
+
+# A family whose value is not a symmetric matrix inherits `parameter`
+# directly, so it has no log-determinant to be asked for.
+q <- simplex(3)
+c(parameter = S7::S7_inherits(q, parameter),
+  matrix_parameter = S7::S7_inherits(q, matrix_parameter))
+sum(param_value(q, c(0.7, -0.3)))          # a probability vector: sums to 1
+
+# The free names record the link, so a free value of 1.4 in a `z_rho`
+# coordinate is a correlation of tanh(1.4), not a correlation of 1.4.
+ar1(4)@free_names
+param_value(ar1(4), c(0, 1.4))[1, 2]
+tanh(1.4)
 
 }
 \seealso{
-\code{\link[=log_cholesky]{log_cholesky()}}, \code{\link[=scaled_matrix]{scaled_matrix()}},
-\code{\link[=param_value]{param_value()}}, \code{\link[=check_parameter]{check_parameter()}}
+\code{\link[=matrix_parameter]{matrix_parameter()}} for the symmetric matrix branch.
+\code{\link[=param_value]{param_value()}} and \code{\link[=param_free]{param_free()}} for the map and its inverse,
+\code{\link[=param_d1]{param_d1()}} for the derivative arrays, \code{\link[=param_readable]{param_readable()}} for the
+quantities a family reports, and \code{\link[=check_parameter]{check_parameter()}} to verify a
+parametrization written from scratch.
+
+The constructors: \code{\link[=log_cholesky]{log_cholesky()}}, \code{\link[=matrix_log]{matrix_log()}}, \code{\link[=diagonal_matrix]{diagonal_matrix()}},
+\code{\link[=scalar_matrix]{scalar_matrix()}}, \code{\link[=scaled_matrix]{scaled_matrix()}}, \code{\link[=correlation_matrix]{correlation_matrix()}},
+\code{\link[=compound_symmetry]{compound_symmetry()}}, \code{\link[=ar1]{ar1()}}, \code{\link[=autoregressive]{autoregressive()}}, \code{\link[=simplex]{simplex()}},
+\code{\link[=transition_matrix]{transition_matrix()}}, and the compositions \code{\link[=kron_identity]{kron_identity()}},
+\code{\link[=block_diag]{block_diag()}}, \code{\link[=dr_prod]{dr_prod()}} and \code{\link[=sum_struct]{sum_struct()}}.
 }

@@ -7,14 +7,19 @@
 name_dims(m, s)
 }
 \arguments{
-\item{m}{A numeric matrix.}
+\item{m}{A numeric matrix, \code{p} by \code{p}. Not checked; the callers are the
+package's own \code{\link[=param_value]{param_value()}} methods.}
 
-\item{s}{A \code{\link[=parameter]{parameter()}} object.}
+\item{s}{A \code{\link[=parameter]{parameter()}} object, whose \code{dimension} supplies \code{p}.}
 }
 \value{
-\code{m}, with dimnames.
+\code{m}, with \code{dimnames} set to \code{list(v1..vp, v1..vp)}. Any dimnames it
+arrived with are replaced.
 }
 \description{
-Applies the dimension labels every matrix a parameter produces carries.
+Applies the dimension labels every matrix a parameter produces carries:
+\code{"v1"}, \code{"v2"}, ..., \code{"vp"} on both margins, \code{p} being the parameter's
+\code{dimension}. One convention across the families, so a consumer can read a
+printed covariance without knowing which parametrization built it.
 }
 \keyword{internal}

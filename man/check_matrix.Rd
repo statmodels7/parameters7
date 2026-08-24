@@ -7,17 +7,30 @@
 check_matrix(s, m, tol = 1e-08)
 }
 \arguments{
-\item{s}{A \code{\link[=parameter]{parameter()}} object.}
+\item{s}{A \code{\link[=parameter]{parameter()}} object, whose \code{dimension} is read.}
 
-\item{m}{The matrix supplied by the caller.}
+\item{m}{The matrix supplied by the caller. A non-matrix or non-numeric \code{m}
+throws, as does a wrong shape (with a message naming the dimension
+required), an \code{NA} anywhere, and an asymmetry above \code{tol}.}
 
-\item{tol}{The relative tolerance for the symmetry check.}
+\item{tol}{The relative tolerance for the symmetry check, a single positive
+number. Defaults to \code{1e-8}, loose enough to accept a matrix assembled from
+a Cholesky factor or a Kronecker product and tight enough to reject one
+that is genuinely not symmetric.}
 }
 \value{
-\code{m}, symmetrized.
+\code{m}, symmetrized as \code{(m + t(m)) / 2}.
 }
 \description{
 Checks that \code{m} is a square symmetric numeric matrix of the parameter's
-dimension.
+dimension, and returns it symmetrized. Called by every \code{\link[=param_free]{param_free()}} method
+on the matrix the caller is asking to invert.
+}
+\details{
+The symmetry check is relative: \code{m} is rejected when
+\eqn{\max_{ij} |m_{ij} - m_{ji}|} exceeds \code{tol * max(1, max(abs(m)))}. At the
+default a discrepancy of \eqn{10^{-4}} throws and one of \eqn{10^{-12}}
+passes. The return value is \code{(m + t(m)) / 2}, so an asymmetry small enough to
+be rounding is averaged away instead of being carried into the inverse map.
 }
 \keyword{internal}

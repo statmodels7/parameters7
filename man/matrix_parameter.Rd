@@ -2,7 +2,7 @@
 % Please edit documentation in R/parameter_class.R
 \name{matrix_parameter}
 \alias{matrix_parameter}
-\title{Constrained Symmetric Matrix Parameter}
+\title{The Abstract Class of a Symmetric Matrix Parameter}
 \usage{
 matrix_parameter(
   param_name = character(0),
@@ -18,50 +18,120 @@ matrix_parameter(
 \arguments{
 \item{param_name}{A single character string naming the family.}
 
-\item{n_free}{The length \eqn{d} of the free vector.}
+\item{n_free}{The length \eqn{d} of the free vector: a single non-negative
+integer, agreeing with \code{length(free_names)}.}
 
-\item{free_names}{A character vector of length \code{n_free}.}
+\item{free_names}{A character vector of length \code{n_free}, one label per free
+value, in the order the free vector holds them. Must be unique.}
 
-\item{param_params}{A list of whatever the family needs to evaluate itself.}
+\item{param_params}{A list of whatever the family needs in order to evaluate
+itself, read only by that family's own methods.}
 
-\item{dimension}{The side \eqn{p} of the matrix.}
+\item{dimension}{The side \eqn{p} of the matrix: a single integer, no
+smaller than 1. The validator rejects a vector and a value below 1.}
 
-\item{rank}{The rank of the matrix the family produces.}
+\item{rank}{The rank of the matrix the family produces, a single integer in
+\code{0:dimension}. It is a property of the family, so a family whose value is
+positive definite at every \eqn{\eta} declares \eqn{p} here.}
 
-\item{null_basis}{A \code{dimension} by \code{dimension - rank} matrix
-whose columns are an orthonormal basis of the null space.}
+\item{null_basis}{A \code{dimension} by \code{dimension - rank} numeric matrix whose
+columns are an orthonormal basis of the common null space. Use
+\code{\link[=param_null_basis]{param_null_basis()}} to obtain one, or \code{matrix(numeric(0), dimension, 0)}
+for a full-rank family. The validator rejects any other shape, and
+reports both the rank and the shape when the two disagree.}
 
-\item{role}{One of \code{"covariance"}, \code{"precision"} or
-\code{"either"}. A label: no method reads it and no result depends on it.}
+\item{role}{A single string, one of \code{"covariance"}, \code{"precision"} or
+\code{"either"}, recording which side of a model the matrix parametrizes. \strong{No
+numeric result depends on it.} It is carried because the family name does
+not record it: the same \code{\link[=log_cholesky]{log_cholesky()}} serves either side, and a
+consumer that prefixes a free name with the matrix it describes needs to
+know which. \code{\link[=block_diag]{block_diag()}} reads it to give a composite the common role of
+its blocks, or \code{"either"} when they disagree, and \code{\link[=kron_identity]{kron_identity()}} copies
+it.}
 }
 \value{
-An object of class \code{matrix_parameter}. The class is abstract;
-use one of the constructors, such as \code{\link[=log_cholesky]{log_cholesky()}}.
+An object of class \code{matrix_parameter}, which is a \code{\link[=parameter]{parameter()}} with
+four further properties
+\describe{
+\item{\code{dimension}}{integer, the side \eqn{p}.}
+\item{\code{rank}}{integer in \code{0:dimension}.}
+\item{\code{null_basis}}{a \code{dimension} by \code{dimension - rank} matrix with
+orthonormal columns.}
+\item{\code{role}}{character, as supplied.}
+}
+plus the four it inherits, \code{param_name}, \code{n_free}, \code{free_names} and
+\code{param_params}. The class is abstract, so a useful object comes from a
+constructor such as \code{\link[=log_cholesky]{log_cholesky()}}.
 }
 \description{
-The abstract S7 class of the symmetric positive semidefinite branch: a
-\code{\link[=parameter]{parameter()}} whose value is a symmetric matrix, together with
-the quantities only a matrix can answer -- the rank, the null space, the
-log-(pseudo-)determinant, the solve and the factor.
-}
-\details{
-The rank and the null space are properties of the family rather than of a
-point: scaling a matrix by a positive number and summing positive
-semidefinite matrices both leave the null space alone. They are computed
-once, at construction, from the components rather than from an assembled
-matrix, because the numerical determination of a rank from an assembled
-matrix is not scale invariant while the null space is. See
-\code{\link[=param_null_basis]{param_null_basis()}}.
+Extends \code{\link[=parameter]{parameter()}} to the branch whose value is a symmetric positive
+semidefinite \eqn{p \times p} matrix. Beyond the map itself, such a family
+can answer the four things a Gaussian likelihood asks of a covariance or a
+precision: the log-determinant, a solve against a right-hand side, a factor,
+and the rank and null space when the matrix is singular. Those four generics
+are registered here, so a subclass supplying only \code{\link[=param_value]{param_value()}} inherits
+all of them.
 
-A parameter that is not a matrix -- \code{\link[=simplex]{simplex()}}, a
-\code{\link[=transition_matrix]{transition_matrix()}} -- inherits from \code{\link[=parameter]{parameter()}}
-directly, so \code{\link[=param_logdet]{param_logdet()}} and \code{\link[=param_solve]{param_solve()}} do
-not exist for it by construction rather than by a run-time rejection.
+The class is abstract. Every matrix family in the package returns a subclass
+of it: \code{\link[=log_cholesky]{log_cholesky()}}, \code{\link[=matrix_log]{matrix_log()}}, \code{\link[=diagonal_matrix]{diagonal_matrix()}},
+\code{\link[=correlation_matrix]{correlation_matrix()}}, \code{\link[=compound_symmetry]{compound_symmetry()}}, \code{\link[=ar1]{ar1()}}, \code{\link[=autoregressive]{autoregressive()}},
+\code{\link[=scaled_matrix]{scaled_matrix()}} and the four compositions.
 }
+\section{Rank and null space are fixed at construction}{
+They are properties of the family, the same at every point \eqn{\eta}.
+Scaling a matrix by a positive number leaves its null space alone, and the
+null space of a sum of positive semidefinite matrices is the intersection of
+theirs, so no free value moves it. Recording them once at construction is
+exact, and it is also the only stable way to obtain them: counting the small
+eigenvalues of an assembled matrix is not scale invariant, and reads a
+component whose weight is small as a null direction. \code{\link[=param_null_basis]{param_null_basis()}}
+computes them from the components and carries the measurement.
+
+Most families here are full rank, so \code{rank} is \eqn{p} and \code{null_basis} has
+zero columns. \code{\link[=scaled_matrix]{scaled_matrix()}} admits a deficient fixed matrix, and
+\code{\link[=sum_struct]{sum_struct()}} a deficient sum, and both then report the deficiency.
+}
+
+\section{What a non-matrix family does instead}{
+\code{\link[=simplex]{simplex()}} and \code{\link[=transition_matrix]{transition_matrix()}} inherit \code{\link[=parameter]{parameter()}} directly. They
+hold no \code{dimension}, \code{rank} or \code{null_basis}, and \code{\link[=param_logdet]{param_logdet()}} has no
+method for them, so asking for the log-determinant of a probability vector
+fails at dispatch. The absence is structural.
+}
+
+\section{Notation}{
+
+\eqn{\eta} is the free vector, the point on the unconstrained scale, and
+\eqn{d} its length. \eqn{p} is the side of the matrix. \eqn{M} is the matrix
+the map produces, \eqn{\Sigma} when it is read as a covariance and
+\eqn{\Omega} when it is read as a precision.
+}
+
 \examples{
-S7::S7_inherits(log_cholesky(3), matrix_parameter)
+# A matrix family is both a `parameter` and a `matrix_parameter`.
+s <- log_cholesky(3)
+c(parameter = S7::S7_inherits(s, parameter),
+  matrix_parameter = S7::S7_inherits(s, matrix_parameter))
+
+# The four properties this branch adds.
+c(dimension = s@dimension, rank = s@rank, null_columns = ncol(s@null_basis))
+s@role
+
+# Belonging to this branch is what gives the family a log-determinant, and
+# it agrees with the eigenvalues of the matrix itself.
+eta <- c(0.1, -0.2, 0.3, 0.5, -0.4, 0.2)
+all.equal(param_logdet(s, eta),
+          sum(log(eigen(param_value(s, eta), only.values = TRUE)$values)))
+
+# A rank-deficient family declares the deficiency at construction, and the
+# null basis really is annihilated by the matrix at any free value.
+r <- scaled_matrix(diag(c(1, 1, 0, 0)))
+c(rank = r@rank, null_columns = ncol(r@null_basis))
+max(abs(param_value(r, 0.6) \%*\% r@null_basis))
 
 }
 \seealso{
-\code{\link[=parameter]{parameter()}}, \code{\link[=log_cholesky]{log_cholesky()}}
+\code{\link[=parameter]{parameter()}} for the base class and the naming convention for free
+values. \code{\link[=param_logdet]{param_logdet()}}, \code{\link[=param_solve]{param_solve()}}, \code{\link[=param_factor]{param_factor()}} and
+\code{\link[=param_null_basis]{param_null_basis()}} for the four quantities this branch adds.
 }

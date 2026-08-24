@@ -2,19 +2,29 @@
 % Please edit documentation in R/parameter_class.R
 \name{check_param_args}
 \alias{check_param_args}
-\title{Validate the Arguments Shared by Every Constructor}
+\title{Validate the Arguments Shared by Every Matrix Constructor}
 \usage{
 check_param_args(dimension, role)
 }
 \arguments{
-\item{dimension}{The side of the matrix.}
+\item{dimension}{The side of the matrix. Must be a single finite number, at
+least 1, equal to its own \code{round()}. \code{0}, \code{2.5}, \code{c(1, 2)}, \code{"3"}, \code{Inf}
+and \code{NA} all throw \verb{'dimension' must be a single positive integer.}}
 
-\item{role}{The role label.}
+\item{role}{The role label. Must be a single string, one of
+\code{"covariance"}, \code{"precision"} or \code{"either"}; anything else throws. The
+shipped constructors run \code{match.arg()} first, so their callers see
+\code{match.arg()}'s message and never this one. The check is here for a
+constructor written outside the package.}
 }
 \value{
 \code{dimension}, as a single integer.
 }
 \description{
-Checks the matrix side and the role, and returns the side as an integer.
+Checks the two arguments every matrix family's constructor takes, and returns
+the matrix side coerced to integer so the caller can store it in the class's
+integer property. Called by \code{\link[=log_cholesky]{log_cholesky()}}, \code{\link[=matrix_log]{matrix_log()}},
+\code{\link[=diagonal_matrix]{diagonal_matrix()}}, \code{\link[=correlation_matrix]{correlation_matrix()}}, \code{\link[=compound_symmetry]{compound_symmetry()}}, \code{\link[=ar1]{ar1()}},
+\code{\link[=autoregressive]{autoregressive()}} and \code{\link[=dr_prod]{dr_prod()}}.
 }
 \keyword{internal}

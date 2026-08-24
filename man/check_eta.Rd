@@ -7,23 +7,31 @@
 check_eta(s, eta)
 }
 \arguments{
-\item{s}{A \code{\link[=parameter]{parameter()}} object.}
+\item{s}{A \code{\link[=parameter]{parameter()}} object, whose \code{n_free} and \code{free_names} are read.}
 
 \item{eta}{The free vector supplied by the caller.}
 }
 \value{
-\code{eta}, as an unnamed numeric vector.
+\code{eta}, as an unnamed numeric vector of length \code{s@n_free}.
 }
 \description{
-Checks that \code{eta} is a finite numeric vector of the length the
-parameter declares, and returns it unnamed.
+Checks that \code{eta} is a finite numeric vector of the length the parameter
+declares, and returns it with its names stripped. Called in the body of
+every generic before dispatch, so a parameter written outside the package
+inherits the check without doing anything.
 }
 \details{
-Called in the body of every generic before dispatch, so that a parameter
-written outside the package inherits the check without doing anything. The
-names are stripped for the reason \code{align_theta()} strips them in
-\pkg{distributions7}: a value that has been through a link comes back
-carrying its own name, which is meaningless on a number and would leak into
-the dimnames of the result.
+Three conditions are checked, each with its own message. A non-numeric \code{eta}
+throws \verb{'eta' must be numeric.}; a wrong length throws a message naming both
+counts and listing the family's \code{free_names}, so a caller who has mismatched
+two parametrizations can see which is which; and any \code{NA}, \code{NaN} or infinite
+entry throws \verb{'eta' must be finite: the free scale has no boundary to reach.} The last message states the reason a non-finite free value is a
+caller error: the unconstrained scale has no edge, so an infinity there is a
+runaway rather than a limit reached.
+
+Names are stripped for the reason \code{align_theta()} strips them in
+\pkg{distributions7}. A value that has been through a link comes back
+carrying its own name, which means nothing on a number and would otherwise
+appear in the dimnames of the matrix built from it.
 }
 \keyword{internal}

@@ -12,25 +12,25 @@ SimplexParam(
 )
 }
 \arguments{
-\item{param_name}{A single character string naming the family.}
+\item{param_name}{A single character string naming the family, used in the
+error messages the validators raise and in the object's \code{print} output.
+\code{"log_cholesky"}, \code{"ar1"} and so on.}
 
-\item{n_free}{The length \eqn{d} of the free vector.}
+\item{n_free}{The length \eqn{d} of the free vector: a single non-negative
+integer. Zero is legal and describes a family with nothing to estimate.
+The validator rejects a vector, a negative value, or a length that
+disagrees with \code{free_names}.}
 
-\item{free_names}{A character vector of length \code{n_free}, one label per
-free value. Fixed at construction: every consumer builds parameter tables
-from these. A label names the coordinate rather than the quantity the
-coordinate produces, and the families here follow one convention for it.
-Where a link carries a constrained quantity onto the free scale, the
-label records that link, so a variance appears as \code{"log_scale"} and
-a correlation as \code{"z_rho"}; where the coordinate is already
-unrestricted the label is the plain name of the quantity, as the
-below-diagonal entries \code{"L2.1"} of a Cholesky factor are. The
-distinction matters outside the family: a consumer flattens the free
-vector into scalar parameters carrying identity links, so a label
-promising a bounded quantity reports a number on a scale that number is
-not on.}
+\item{free_names}{A character vector of length \code{n_free}, one label per free
+value, in the order the free vector holds them. Fixed at construction and
+part of the interface: consumers build their parameter tables from these
+labels, so the ordering is not free to change. The validator rejects a
+duplicated label and a length other than \code{n_free}.}
 
-\item{param_params}{A list of whatever the family needs to evaluate itself.}
+\item{param_params}{A list of whatever the family needs in order to evaluate
+itself, read only by that family's own methods. \code{log_cholesky()} stores
+the row and column index of each free value here; \code{sum_struct()} stores
+its component matrices. Nothing outside the family looks inside it.}
 }
 \value{
 An object of class \code{SimplexParam}.

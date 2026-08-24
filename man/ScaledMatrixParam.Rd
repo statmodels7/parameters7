@@ -18,21 +18,36 @@ ScaledMatrixParam(
 \arguments{
 \item{param_name}{A single character string naming the family.}
 
-\item{n_free}{The length \eqn{d} of the free vector.}
+\item{n_free}{The length \eqn{d} of the free vector: a single non-negative
+integer, agreeing with \code{length(free_names)}.}
 
-\item{free_names}{A character vector of length \code{n_free}.}
+\item{free_names}{A character vector of length \code{n_free}, one label per free
+value, in the order the free vector holds them. Must be unique.}
 
-\item{param_params}{A list of whatever the family needs to evaluate itself.}
+\item{param_params}{A list of whatever the family needs in order to evaluate
+itself, read only by that family's own methods.}
 
-\item{dimension}{The side \eqn{p} of the matrix.}
+\item{dimension}{The side \eqn{p} of the matrix: a single integer, no
+smaller than 1. The validator rejects a vector and a value below 1.}
 
-\item{rank}{The rank of the matrix the family produces.}
+\item{rank}{The rank of the matrix the family produces, a single integer in
+\code{0:dimension}. It is a property of the family, so a family whose value is
+positive definite at every \eqn{\eta} declares \eqn{p} here.}
 
-\item{null_basis}{A \code{dimension} by \code{dimension - rank} matrix
-whose columns are an orthonormal basis of the null space.}
+\item{null_basis}{A \code{dimension} by \code{dimension - rank} numeric matrix whose
+columns are an orthonormal basis of the common null space. Use
+\code{\link[=param_null_basis]{param_null_basis()}} to obtain one, or \code{matrix(numeric(0), dimension, 0)}
+for a full-rank family. The validator rejects any other shape, and
+reports both the rank and the shape when the two disagree.}
 
-\item{role}{One of \code{"covariance"}, \code{"precision"} or
-\code{"either"}. A label: no method reads it and no result depends on it.}
+\item{role}{A single string, one of \code{"covariance"}, \code{"precision"} or
+\code{"either"}, recording which side of a model the matrix parametrizes. \strong{No
+numeric result depends on it.} It is carried because the family name does
+not record it: the same \code{\link[=log_cholesky]{log_cholesky()}} serves either side, and a
+consumer that prefixes a free name with the matrix it describes needs to
+know which. \code{\link[=block_diag]{block_diag()}} reads it to give a composite the common role of
+its blocks, or \code{"either"} when they disagree, and \code{\link[=kron_identity]{kron_identity()}} copies
+it.}
 }
 \value{
 An object of class \code{ScaledMatrixParam}.
