@@ -9,23 +9,36 @@ ar_taylor(s, eta)
 \arguments{
 \item{s}{An \code{\link[=AutoregressiveParam]{AutoregressiveParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}.}
 }
 \value{
-A list with \code{n}, the number of free values; \code{gamma}, a
-matrix with one row per lag; and \code{phi}, one row per coefficient.
-Each row packs the value, then the full derivative tensors of orders one
-to four, in row-major order.
+A list with \code{n}, the number of free values \eqn{q + 1}; \code{gamma}, a
+matrix with one row per lag \eqn{0, \dots, p-1}; and \code{phi}, one row per
+autoregressive coefficient. Each row packs the value first and then the full
+derivative tensors of orders one to four in row-major order, so it has
+\eqn{1 + n + n^2 + n^3 + n^4} columns.
 }
 \description{
-Runs the compiled recursion of \code{ar_taylor_cpp}: the scale and
-the partial autocorrelations enter as their link inverses with four
-derivatives each, and the autocorrelations, the coefficients and every
-partial derivative to fourth order come out as packed arrays.
+Runs the compiled recursion \code{ar_taylor_cpp}. The scale and the partial
+autocorrelations enter as their link inverses carrying four derivatives each,
+and the autocorrelations, the coefficients and every partial derivative to
+fourth order come back as packed arrays.
 }
 \details{
 The recursion is sums and products only, so the propagation rules are the
-product rule written out per order; every derivative is exact and nothing
-is differenced.
+product rule written out per order: every derivative is exact and nothing is
+differenced.
+
+It always fills \strong{all four orders}, whatever order the caller went on to
+want. Measured at \eqn{q = 2}, \code{gamma} comes back 6 by 121 for \eqn{p = 6},
+and \eqn{121 = 1 + 3 + 3^2 + 3^3 + 3^4}. That is why \code{param_d1()} costs nearly
+what \code{param_d4()} costs (0.00516 s against 0.01203 s at \eqn{q = 2},
+\eqn{p = 200}): the difference between them is the R-level assembly, not the
+recursion.
+}
+\seealso{
+\code{\link[=ar_pack_col]{ar_pack_col()}} for the column a component sits in, \code{\link[=ar_assemble]{ar_assemble()}}
+for the matrix built from one column, and \code{\link[=autoregressive]{autoregressive()}} for the
+recursion itself.
 }
 \keyword{internal}

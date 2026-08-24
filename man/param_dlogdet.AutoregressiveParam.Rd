@@ -9,15 +9,32 @@
 \arguments{
 \item{s}{An \code{\link[=AutoregressiveParam]{AutoregressiveParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named numeric vector.
+A numeric vector keyed as \code{param_tuple_names(s, order)} and in that
+order: \code{s@n_free} values at order 1, then
+\code{choose(s@n_free + k - 1, k)} at order \eqn{k}.
 }
 \description{
-Closed form at every order, with every mixed component exactly zero: the
-log-determinant is a sum with one term per free value.
+\code{param_dlogdet()}, \code{param_d2logdet()}, \code{param_d3logdet()} and
+\code{param_d4logdet()} for an \code{\link[=autoregressive]{autoregressive()}} parameter, closed form at every
+order and \strong{separable}: the log-determinant is a sum with one term per free
+value, so every mixed component is exactly zero. At \eqn{q = 2} that is 3 of
+the 6 components at order 2, 7 of 10 at order 3 and 12 of 15 at order 4, and
+the zeros are exact, not merely small.
+}
+\details{
+The four share \code{\link[=ar_logdet_derivative]{ar_logdet_derivative()}} and differ only in the order they
+pass. Compare \code{\link[=compound_symmetry]{compound_symmetry()}} and \code{\link[=ar1]{ar1()}}, whose log-determinants are
+separable for the same reason, against \code{\link[=correlation_matrix]{correlation_matrix()}}, where a mixed
+component has content.
+}
+\seealso{
+\code{\link[=ar_logdet_derivative]{ar_logdet_derivative()}}, which assembles them, and
+\code{\link[=param_logdet.AutoregressiveParam]{param_logdet.AutoregressiveParam()}} for the quantity differentiated.
 }
 \keyword{internal}

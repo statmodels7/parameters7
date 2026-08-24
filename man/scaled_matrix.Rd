@@ -19,9 +19,12 @@ smallest eigenvalue is below \code{-tol * max(ev)} throws a message quoting both
 eigenvalues.}
 
 \item{link}{A \pkg{linkfunctions7} link carrying the free value onto the
-positive scale, \code{linkfunctions7::log_link()} by default. Its declared lower
-bound must be non-negative. \code{NULL} means the matrix is fully known: \code{n_free}
-is then 0, \code{free_names} is empty, and \code{param_name} is \code{"fixed"}.}
+positive scale, \code{linkfunctions7::log_link()} by default. It must map onto
+the positive half line, so \code{identity_link()} is rejected, and from the whole
+real line, which rules out \code{sqrt_link()} and its relatives; see
+\code{\link[=diagonal_matrix]{diagonal_matrix()}} for the two conditions. \code{NULL} means the matrix is fully
+known: \code{n_free} is then 0, \code{free_names} is empty, and \code{param_name} is
+\code{"fixed"}.}
 
 \item{role}{A label recording which side of a model the matrix parametrizes,
 defaulting to \code{"precision"} here because the consumer of a scaled fixed

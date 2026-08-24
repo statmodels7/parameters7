@@ -9,17 +9,38 @@
 \arguments{
 \item{s}{An \code{\link[=AutoregressiveParam]{AutoregressiveParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named list of symmetric matrices.
+A list of symmetric \code{s@dimension} by \code{s@dimension} matrices with
+dimnames, keyed as \code{param_tuple_names(s, order)} and in that order:
+\code{s@n_free} of them at order 1, then \code{choose(s@n_free + k - 1, k)} at order
+\eqn{k}.
 }
 \description{
-Closed form at every order. The map from the partial autocorrelations to
-the matrix is polynomial, so the derivative arrays propagated through the
-Levinson-Durbin recursion give each derivative exactly; nothing is
-differenced.
+\code{param_d1()}, \code{param_d2()}, \code{param_d3()} and \code{param_d4()} for an
+\code{\link[=autoregressive]{autoregressive()}} parameter, closed form at every order. The map from the
+partial autocorrelations to the matrix is polynomial, so the derivative arrays
+propagated through the Levinson-Durbin recursion give each derivative exactly
+and nothing is differenced. Measured against one central difference of
+\code{\link[=param_value]{param_value()}}, the first derivatives agree to \eqn{5 \times 10^{-11}}, which
+is the difference's own accuracy.
+
+Every component is Toeplitz, the structure being a property of the family and
+fixed as the point moves.
+}
+\details{
+The four share \code{\link[=ar_derivative]{ar_derivative()}} and differ only in the order they pass.
+\code{\link[=ar_taylor]{ar_taylor()}} fills all four orders in one pass whatever is asked, so the
+first order costs nearly what the fourth costs; see \code{\link[=autoregressive]{autoregressive()}} for the
+table.
+}
+\seealso{
+\code{\link[=ar_derivative]{ar_derivative()}}, which assembles them, and
+\code{\link[=param_dlogdet.AutoregressiveParam]{param_dlogdet.AutoregressiveParam()}} for the log-determinant's own
+derivatives.
 }
 \keyword{internal}

@@ -90,12 +90,16 @@ DiagMatrixParam <- S7::new_class("DiagMatrixParam", parent = matrix_parameter)
 #'   number, finite and at least 1; anything else throws `'dimension' must be a
 #'   single positive integer.`
 #' @param link A \pkg{linkfunctions7} link carrying the free scale onto the
-#'   positive entries, `linkfunctions7::log_link()` by default. It must be a link
-#'   object and its declared lower bound must be non-negative, so
-#'   `sqrt_link()` and `softplus_link()` are accepted and `identity_link()` is
-#'   rejected with its bounds in the message. A bounded link such as
-#'   `logit_link()` is accepted, its range \eqn{(0, 1)} being positive; the
-#'   matrix is then positive definite with entries below 1.
+#'   positive entries, `linkfunctions7::log_link()` by default. It must map
+#'   **onto** the positive half line, which [check_positive_link()] enforces by
+#'   reading its lower bound, so `identity_link()` is rejected with its bounds in
+#'   the message; and it must map **from** the whole real line, since the free
+#'   vector is unconstrained by design. `softplus_link()` satisfies both, and so
+#'   does a bounded link such as `logit_link()`, whose range \eqn{(0, 1)} is
+#'   positive and which gives a positive definite matrix with entries below 1.
+#'   `sqrt_link()`, `inverse_link()` and `power_link()` satisfy only the first:
+#'   their predictor scale is \eqn{(0, \infty)}, so the map is even in \eqn{\eta}
+#'   and the round trip returns \eqn{\lvert \eta \rvert}.
 #' @param role A label recording which side of a model the matrix parametrizes:
 #'   `"either"` (the default), `"covariance"` or `"precision"`. No numeric result
 #'   depends on it; see [log_cholesky()] for what carries it.
@@ -194,8 +198,10 @@ diagonal_matrix <- function(dimension, link = linkfunctions7::log_link(),
 #' @param dimension The side \eqn{p} of the matrix. A single positive whole
 #'   number, finite and at least 1; anything else throws.
 #' @param link A \pkg{linkfunctions7} link carrying the free value onto the
-#'   positive scale, `linkfunctions7::log_link()` by default. Its declared lower
-#'   bound must be non-negative; `identity_link()` is rejected.
+#'   positive scale, `linkfunctions7::log_link()` by default. It must map onto
+#'   the positive half line, so `identity_link()` is rejected, and from the whole
+#'   real line, which rules out `sqrt_link()` and its relatives; see
+#'   [diagonal_matrix()] for the two conditions.
 #' @param role A label recording which side of a model the matrix parametrizes:
 #'   `"either"` (the default), `"covariance"` or `"precision"`. No numeric result
 #'   depends on it.
@@ -273,7 +279,7 @@ scalar_matrix <- function(dimension, link = linkfunctions7::log_link(),
 #'   lower bound is negative throws a message quoting both bounds.
 #'
 #' @seealso [diagonal_matrix()], [scalar_matrix()] and [scaled_matrix()], the
-#'   three callers, and `linkfunctions7::link_bounds` for the property read.
+#'   three callers. The property read is the link object's own `link_bounds`.
 #'
 #' @keywords internal
 check_positive_link <- function(link) {

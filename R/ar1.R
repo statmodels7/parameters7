@@ -113,8 +113,10 @@ Ar1Param <- S7::new_class("Ar1Param", parent = matrix_parameter)
 #'   matrix has no correlation, so `ar1(1)` throws a message saying the family
 #'   would carry a free value with no effect.
 #' @param link_scale A \pkg{linkfunctions7} link carrying the first free value
-#'   onto the positive variance, `linkfunctions7::log_link()` by default. Its
-#'   declared lower bound must be non-negative.
+#'   onto the positive variance, `linkfunctions7::log_link()` by default. It must
+#'   map onto the positive half line, so `identity_link()` is rejected, and from
+#'   the whole real line, which rules out `sqrt_link()` and its relatives; see
+#'   [diagonal_matrix()] for the two conditions.
 #' @param role A label recording which side of a model the matrix parametrizes:
 #'   `"either"` (the default), `"covariance"` or `"precision"`. No numeric result
 #'   depends on it, and here it matters more than usual: the two readings are

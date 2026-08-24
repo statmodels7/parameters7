@@ -34,6 +34,6 @@ legitimate thing to want.
 }
 \seealso{
 \code{\link[=diagonal_matrix]{diagonal_matrix()}}, \code{\link[=scalar_matrix]{scalar_matrix()}} and \code{\link[=scaled_matrix]{scaled_matrix()}}, the
-three callers, and \code{linkfunctions7::link_bounds} for the property read.
+three callers. The property read is the link object's own \code{link_bounds}.
 }
 \keyword{internal}

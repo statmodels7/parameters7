@@ -107,9 +107,12 @@ ScaledMatrixParam <- S7::new_class("ScaledMatrixParam", parent = matrix_paramete
 #'   smallest eigenvalue is below `-tol * max(ev)` throws a message quoting both
 #'   eigenvalues.
 #' @param link A \pkg{linkfunctions7} link carrying the free value onto the
-#'   positive scale, `linkfunctions7::log_link()` by default. Its declared lower
-#'   bound must be non-negative. `NULL` means the matrix is fully known: `n_free`
-#'   is then 0, `free_names` is empty, and `param_name` is `"fixed"`.
+#'   positive scale, `linkfunctions7::log_link()` by default. It must map onto
+#'   the positive half line, so `identity_link()` is rejected, and from the whole
+#'   real line, which rules out `sqrt_link()` and its relatives; see
+#'   [diagonal_matrix()] for the two conditions. `NULL` means the matrix is fully
+#'   known: `n_free` is then 0, `free_names` is empty, and `param_name` is
+#'   `"fixed"`.
 #' @param role A label recording which side of a model the matrix parametrizes,
 #'   defaulting to `"precision"` here because the consumer of a scaled fixed
 #'   matrix is a penalty. No numeric result depends on it.

@@ -7,20 +7,27 @@
 ar_assemble(s, tay, order = 0L, tuple = NULL)
 }
 \arguments{
-\item{s}{An \code{\link[=AutoregressiveParam]{AutoregressiveParam()}} object.}
+\item{s}{An \code{\link[=AutoregressiveParam]{AutoregressiveParam()}} object, whose \code{dimension} is read.}
 
 \item{tay}{The arrays of \code{\link[=ar_taylor]{ar_taylor()}}.}
 
-\item{order}{The derivative order, or 0 for the value.}
+\item{order}{The derivative order 1 to 4, or 0 for the value.}
 
 \item{tuple}{The index tuple of that order, ignored at order 0.}
 }
 \value{
-A symmetric numeric matrix.
+A symmetric \code{s@dimension} by \code{s@dimension} numeric matrix, with no
+dimnames.
 }
 \description{
-Fills the Toeplitz matrix of the scaled autocorrelations, taking either the
-value column or one derivative component out of the packed rows of
-\code{\link[=ar_taylor]{ar_taylor()}}.
+Fills the Toeplitz matrix \eqn{M_{ij} = \gamma_{\lvert i - j \rvert}} from one
+column of \code{\link[=ar_taylor]{ar_taylor()}}'s packed rows, taking either the value column or one
+derivative component. Every derivative of the matrix is Toeplitz too, the
+Toeplitz structure being a property of the family, fixed as the point moves,
+so one indexing operation serves all five cases.
+}
+\seealso{
+\code{\link[=ar_pack_col]{ar_pack_col()}}, which locates the column, and \code{\link[=ar_derivative]{ar_derivative()}},
+which loops this over the tuples of an order.
 }
 \keyword{internal}

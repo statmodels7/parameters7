@@ -15,8 +15,10 @@ scalar_matrix(
 number, finite and at least 1; anything else throws.}
 
 \item{link}{A \pkg{linkfunctions7} link carrying the free value onto the
-positive scale, \code{linkfunctions7::log_link()} by default. Its declared lower
-bound must be non-negative; \code{identity_link()} is rejected.}
+positive scale, \code{linkfunctions7::log_link()} by default. It must map onto
+the positive half line, so \code{identity_link()} is rejected, and from the whole
+real line, which rules out \code{sqrt_link()} and its relatives; see
+\code{\link[=diagonal_matrix]{diagonal_matrix()}} for the two conditions.}
 
 \item{role}{A label recording which side of a model the matrix parametrizes:
 \code{"either"} (the default), \code{"covariance"} or \code{"precision"}. No numeric result

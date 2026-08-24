@@ -50,16 +50,32 @@ its blocks, or \code{"either"} when they disagree, and \code{\link[=kron_identit
 it.}
 }
 \value{
-An object of class \code{AutoregressiveParam}.
+An object of class \code{AutoregressiveParam}, a subclass of
+\code{\link[=matrix_parameter]{matrix_parameter()}} adding no properties of its own. \code{param_params} holds
+\code{order}, \code{link_scale} and \code{link_pacf}. \code{n_free} is \eqn{q + 1} and \code{rank} is
+\code{dimension}.
 }
 \description{
-The S7 class of covariance matrices of a stationary autoregression of any
-order. Constructed by \code{\link[=autoregressive]{autoregressive()}}.
+The S7 class of covariance matrices of \eqn{p} consecutive observations of a
+stationary autoregression of order \eqn{q}, parametrized by the marginal
+variance and the \eqn{q} partial autocorrelations. \code{\link[=autoregressive]{autoregressive()}} builds
+one.
+
+It is the one family here whose free vector does not grow with the dimension:
+\code{n_free} is \eqn{q + 1} at \eqn{p = 6} and \eqn{q + 1} at \eqn{p = 200}. What
+grows with \eqn{p} is the matrix, not the parametrization.
 }
 \examples{
-S7::S7_inherits(autoregressive(5, order = 2), AutoregressiveParam)
+# The free vector does not grow with the dimension.
+vapply(c(6, 20, 200), function(p) autoregressive(p, order = 2)@n_free,
+       numeric(1))
+
+# One scale and q partial autocorrelations, each on its own chart.
+autoregressive(20, order = 3)@free_names
 
 }
 \seealso{
-\code{\link[=autoregressive]{autoregressive()}}
+\code{\link[=autoregressive]{autoregressive()}}, the constructor, \code{\link[=ar1]{ar1()}} for the case
+\eqn{q = 1} written out, and \code{\link[=matrix_parameter]{matrix_parameter()}} for the properties this
+inherits.
 }

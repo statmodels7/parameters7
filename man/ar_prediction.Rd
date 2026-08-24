@@ -9,21 +9,35 @@ ar_prediction(s, eta)
 \arguments{
 \item{s}{An \code{\link[=AutoregressiveParam]{AutoregressiveParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}.}
 }
 \value{
-A list with the matrix \code{u} and the vector \code{v}.
+A list with \code{u}, a unit lower triangular \code{s@dimension} by
+\code{s@dimension} numeric matrix of bandwidth \eqn{q}, and \code{v}, a positive
+numeric vector of length \code{s@dimension}.
 }
 \description{
-The unit lower triangular matrix of one-step predictor coefficients and the
-innovation variances, which factor the matrix as
-\eqn{M = U^{-1} D U^{-\top}}.
+Returns the unit lower triangular matrix \eqn{U} of one-step predictor
+coefficients and the vector \eqn{v} of innovation variances, which factor the
+matrix as \eqn{M = U^{-1} D U^{-\top}} with \eqn{D = \mathrm{diag}(v)}. It is
+where \code{\link[=param_solve.AutoregressiveParam]{param_solve.AutoregressiveParam()}}'s banded precision comes from.
 }
 \details{
-Row \eqn{t} holds the coefficients of the best linear predictor of
-\eqn{y_t} from its predecessors, which for \eqn{t} beyond the order are the
+Row \eqn{t} holds the coefficients of the best linear predictor of \eqn{y_t}
+from its predecessors, which for \eqn{t} beyond the order are the
 autoregression's own coefficients, so \eqn{U} has bandwidth \eqn{q}. The
 innovation variances fall by a factor \eqn{1 - r_k^2} at each of the first
-\eqn{q} steps and are constant thereafter.
+\eqn{q} steps and are constant thereafter. At \eqn{p = 6}, \eqn{q = 2},
+\eqn{\gamma_0 = 2} and partial autocorrelations \eqn{(0.7, -0.3)}, \eqn{v} is
+\eqn{(2, 1.02, 0.9282, 0.9282, 0.9282, 0.9282)} and every row of \eqn{U} from
+the third on repeats \eqn{(-0.91, 0.30)}, which are the coefficients
+\eqn{\phi = (0.91, -0.30)} with a sign.
+
+Both come from the same recursion the derivatives use, run here without
+derivatives, since a solve needs no arrays.
+}
+\seealso{
+\code{\link[=param_solve.AutoregressiveParam]{param_solve.AutoregressiveParam()}}, the only caller, and
+\code{\link[=autoregressive]{autoregressive()}} for the Levinson-Durbin recursion.
 }
 \keyword{internal}

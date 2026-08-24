@@ -13,98 +13,187 @@ autoregressive(
 }
 \arguments{
 \item{dimension}{The side \eqn{p} of the matrix: the number of consecutive
-observations. Must exceed the order, since a shorter stretch does not
-identify the last partial autocorrelation.}
+observations. Must exceed \code{order}, since a stretch of \eqn{q} observations
+does not identify \eqn{q} partial autocorrelations; \eqn{p = q + 1} is legal
+and is the smallest legal dimension.}
 
-\item{order}{The order \eqn{q} of the autoregression, at least 1.}
+\item{order}{The order \eqn{q} of the autoregression: a single positive whole
+number, no smaller than 1.}
 
-\item{link_scale}{A \pkg{linkfunctions7} link onto the positive scale,
-carrying the marginal variance. Defaults to
-\code{linkfunctions7::log_link()}.}
+\item{link_scale}{A \pkg{linkfunctions7} link carrying the marginal variance,
+\code{linkfunctions7::log_link()} by default. It must map onto the positive half
+line, so \code{identity_link()} is rejected, and from the whole real line, which
+rules out \code{sqrt_link()} and its relatives; see \code{\link[=diagonal_matrix]{diagonal_matrix()}} for the
+two conditions.}
 
-\item{role}{A label; see \code{\link[=log_cholesky]{log_cholesky()}}.}
+\item{role}{A label recording which side of a model the matrix parametrizes:
+\code{"either"} (the default), \code{"covariance"} or \code{"precision"}. No numeric result
+depends on it.}
 }
 \value{
-An object of class \code{\link[=AutoregressiveParam]{AutoregressiveParam()}}.
+An object of class \code{\link[=AutoregressiveParam]{AutoregressiveParam()}}, with \code{n_free} equal to
+\eqn{q + 1}, \code{free_names} the tagged \code{log_scale}, \code{z_pacf1}, ..., \code{z_pacfq},
+\code{rank} equal to \code{dimension}, an empty \code{null_basis}, and \code{param_name}
+\code{"ar(q)"}.
 }
 \description{
-The covariance of \eqn{p} consecutive observations of a stationary
-autoregression of order \eqn{q},
-\deqn{y_t = \phi_1 y_{t-1} + \cdots + \phi_q y_{t-q} + \varepsilon_t,}
-parametrized by its marginal variance and its \eqn{q} partial
-autocorrelations, so \eqn{q + 1} free values whatever the dimension.
-}
-\details{
-The parametrization is forced by the shape of the stationary region. The
-coefficients \eqn{\phi} are stationary exactly when the roots of
-\eqn{1 - \phi_1 z - \cdots - \phi_q z^{q}} lie outside the unit circle, and
-that set is not a box: already at \eqn{q = 2} it is a triangle, so no
-collection of scalar links onto intervals can cover it. The partial
-autocorrelations do not have this problem. Each lies in \eqn{(-1, 1)}
-independently of the others, and the Levinson-Durbin recursion carries them
-onto the stationary coefficients bijectively, which is the transformation
-of Barndorff-Nielsen and Schou (1973) and Monahan (1984). Each partial
-autocorrelation therefore takes an \code{\link[linkfunctions7:rhobit_link]{linkfunctions7::rhobit_link()}}
-and every free vector gives a stationary, positive definite matrix.
+Returns an object holding the covariance of \eqn{p} consecutive observations
+of a stationary autoregression of order \eqn{q},
 
+\deqn{y_t = \phi_1 y_{t-1} + \cdots + \phi_q y_{t-q} + \varepsilon_t,}
+
+parametrized by its marginal variance \eqn{\gamma_0} and its \eqn{q} partial
+autocorrelations \eqn{r_1, \dots, r_q}. That is \eqn{q + 1} free values
+\strong{whatever the dimension}: measured, \code{n_free} is 3 for an order-2 process
+observed 6 times and 3 for one observed 200 times.
+}
+\section{Why the partial autocorrelations carry the parametrization}{
+The coefficients \eqn{\phi} are stationary exactly when the roots of
+\eqn{1 - \phi_1 z - \cdots - \phi_q z^{q}} lie outside the unit circle, and
+that set is not a box. At \eqn{q = 2} it is the open triangle with vertices
+\eqn{(-2, -1)}, \eqn{(2, -1)} and \eqn{(0, 1)}, of area 4 inside a bounding
+box \eqn{(-2, 2) \times (-1, 1)} of area 8: \strong{exactly half the box is
+non-stationary}, and \eqn{\phi = (1.5, 0.6)}, which sits comfortably inside
+the box, has a root of modulus 0.547. So no collection of scalar links onto
+intervals can cover the region, whatever intervals are chosen.
+
+The partial autocorrelations do not have this problem. Each lies in
+\eqn{(-1, 1)} independently of the others, and the Levinson-Durbin recursion
+carries them onto the stationary coefficients bijectively, which is the
+transformation of Barndorff-Nielsen and Schou (1973) and Monahan (1984). Each
+takes a \code{\link[linkfunctions7:rhobit_link]{linkfunctions7::rhobit_link()}}, and every free vector then gives a
+stationary positive definite matrix.
+
+In double precision that last statement has a boundary, and it belongs to the
+chart, not to this family. At \eqn{\lvert \eta_k \rvert = 6} the matrix is
+strictly positive definite with an eigenvalue ratio of \eqn{5 \times
+10^{-12}}; by \eqn{\lvert \eta_k \rvert = 10} the partial autocorrelation is
+\eqn{1 - 4 \times 10^{-9}} and the smallest eigenvalue has crossed zero at the
+rounding floor, \eqn{-3 \times 10^{-17}} of the largest.
+}
+
+\section{The map is polynomial, so nothing is differenced}{
 The autocorrelations follow from the same recursion. Writing
 \eqn{\phi^{(k)}} for the coefficients of the order-\eqn{k} predictor,
+
 \deqn{\phi^{(k)}_k = r_k, \qquad
   \phi^{(k)}_j = \phi^{(k-1)}_j - r_k \phi^{(k-1)}_{k-j},}
+
 and the Yule-Walker equations at order \eqn{k} give
 \eqn{\rho_k = \sum_{j<k} \phi^{(k)}_j \rho_{k-j} + r_k}, after which
 \eqn{\rho_h = \sum_j \phi_j \rho_{h-j}} for every lag beyond the order. The
 whole map from the partial autocorrelations to the matrix is therefore
-\strong{polynomial}, built from sums and products alone, and its
-derivatives to fourth order are obtained by propagating the derivative
-arrays through the recursion in compiled code, the product rule written
-out per order, rather than by expanding it.
+\strong{polynomial}, built from sums and products alone, and its derivatives to
+fourth order come from propagating the derivative arrays through the recursion
+in compiled code, the product rule written out per order. Measured against one
+central difference of \code{\link[=param_value]{param_value()}}, the first derivatives agree to
+\eqn{5 \times 10^{-11}}, which is the difference's own accuracy.
+}
 
-Two quantities are closed form. The innovation variances of the
-Levinson-Durbin recursion give
+\section{Two quantities are closed form}{
+The innovation variances of the Levinson-Durbin recursion give
+
 \deqn{\log\lvert M \rvert = p\log\gamma_0
   + \sum_{k=1}^{q} (p - k)\log(1 - r_k^{2}),}
-one term per free value, so the log-determinant is separable and every
-mixed derivative of it is exactly zero. And the inverse is
-\strong{banded of bandwidth \eqn{q}}: an autoregression of order \eqn{q} is
-Markov of that order, so its precision carries no entry beyond the
-\eqn{q}-th off-diagonal. It is assembled from the prediction form
-\eqn{M^{-1} = U^\top D^{-1} U}, with \eqn{U} unit lower triangular holding
-the predictor coefficients and \eqn{D} the innovation variances, rather
-than by a factorization.
 
-\code{\link[=ar1]{ar1()}} is the case \eqn{q = 1} written out: there the
-autocorrelation is simply \eqn{\rho^{h}}, the determinant is
-\eqn{(1-\rho^2)^{p-1}} and the inverse is tridiagonal in three lines, so it
-keeps its own closed forms and does not go through the recursion.
+one term per free value, so the log-determinant is \strong{separable} and every
+mixed derivative of it is exactly zero: at order 4 and \eqn{q = 2}, 12 of the
+15 components are 0 by construction. It agrees with \code{determinant()} to
+\eqn{2 \times 10^{-15}} at \eqn{p = 5} and \eqn{4 \times 10^{-14}} at
+\eqn{p = 100}, and costs a sum of \eqn{q + 1} terms at either size.
 
-The name is \code{autoregressive()} rather than \code{ar()} because
-\code{\link[stats:ar]{stats::ar()}} is a function of \pkg{stats}, and a package meant
-to be attached alongside others should not mask one.
+The inverse is \strong{banded of bandwidth \eqn{q}}: an autoregression of order
+\eqn{q} is Markov of that order, so its precision carries no entry beyond the
+\eqn{q}-th off-diagonal. Measured at \eqn{q = 3} and \eqn{p = 9}, every one of
+the 30 entries outside the band is exactly 0, not merely small. It is
+assembled from the prediction form \eqn{M^{-1} = U^\top D^{-1} U}, with
+\eqn{U} unit lower triangular holding the predictor coefficients and \eqn{D}
+the innovation variances, so no factorization is taken.
 }
+
+\section{What a call costs}{
+\code{\link[=ar_taylor]{ar_taylor()}} runs the recursion once and packs \strong{every} order up to the
+fourth, so \code{param_d1()} pays most of what \code{param_d4()} pays and the difference
+between them is the R-level assembly. Seconds per call, over repetition loops
+sized by elapsed time:\tabular{lllll}{
+   \eqn{q} \tab \eqn{p} \tab \code{param_value} \tab \code{param_d1} \tab \code{param_d4} \cr
+   1 \tab 10 \tab 0.00018 \tab 0.00024 \tab 0.00033 \cr
+   1 \tab 200 \tab 0.00143 \tab 0.00191 \tab 0.00375 \cr
+   2 \tab 200 \tab 0.00398 \tab 0.00516 \tab 0.01203 \cr
+   4 \tab 200 \tab 0.03313 \tab 0.03563 \tab 0.08313 \cr
+}
+}
+
+\section{Against ar1()}{
+\code{\link[=ar1]{ar1()}} is the case \eqn{q = 1} written out: there the autocorrelation is
+\eqn{\rho^{h}}, the determinant is \eqn{(1-\rho^2)^{p-1}} and the inverse is
+tridiagonal in three lines, so it keeps its own closed forms and does not go
+through the recursion. The two agree: at \eqn{p = 8} and \eqn{\rho = 0.6} the
+values differ by \eqn{1.4 \times 10^{-17}}, the log-determinants by 0, the
+inverses by \eqn{2.2 \times 10^{-16}} and the four derivative orders by
+\eqn{1.1 \times 10^{-16}} to \eqn{1.1 \times 10^{-14}}. Cost is not the reason
+to prefer one: they measure 0.00033 s and 0.00050 s for one fourth-order
+array. \code{ar1()}'s free name is \code{z_rho} where this one's is \code{z_pacf1}, and at
+\eqn{q = 1} the two are the same number.
+}
+
+\section{The name}{
+The name is \code{autoregressive()} rather than \code{ar()} because \code{\link[stats:ar]{stats::ar()}} is a
+function of \pkg{stats}, and a package meant to be attached alongside others
+should not mask one.
+}
+
+\section{Notation}{
+
+\eqn{p} is the dimension, \eqn{q} the order, \eqn{\gamma_0} the marginal
+variance, \eqn{r_k} the \eqn{k}-th partial autocorrelation, \eqn{\phi_j} the
+autoregressive coefficients, \eqn{\rho_h} the autocorrelation at lag \eqn{h},
+and \eqn{\eta = (\log \gamma_0, \mathrm{atanh}\, r_1, \dots)} the free vector.
+}
+
 \examples{
 s <- autoregressive(6, order = 2)
 s@free_names
 
 eta <- c(log(2), atanh(0.7), atanh(-0.3))
-round(param_value(s, eta), 4)
+M <- param_value(s, eta)
+round(M, 4)
 
-# the precision is banded of bandwidth two, the process being Markov of
-# order two
-round(param_solve(s, eta), 4)
+# The first partial autocorrelation is the lag-one correlation.
+c(from_matrix = M[1, 2] / M[1, 1], from_eta = tanh(eta[2]))
 
-# the round trip closes exactly
-max(abs(param_free(s, param_value(s, eta)) - eta))
+# The precision is banded of bandwidth two, the process being Markov of
+# order two: everything beyond the second off-diagonal is exactly zero.
+lag <- abs(outer(1:6, 1:6, "-"))
+max(abs(param_solve(s, eta)[lag > 2]))
+
+# The log-determinant is a sum of three terms, whatever p is.
+c(closed = param_logdet(s, eta),
+  from_determinant = as.numeric(determinant(M, logarithm = TRUE)$modulus))
+
+# And it is separable, so every mixed derivative of it is exactly zero.
+tuples <- param_tuple_indices(s, 2L)
+mixed <- vapply(tuples, function(t) t[1] != t[2], logical(1))
+max(abs(param_d2logdet(s, eta)[mixed]))
+
+# The round trip closes.
+max(abs(param_free(s, M) - eta))
+
+# The coefficients are not free values, and param_readable() reports them
+# with the Jacobian a delta method needs.
+param_readable(s, eta)$value
 
 }
 \references{
 Barndorff-Nielsen, O. and Schou, G. (1973). On the parametrization of
-autoregressive models by partial autocorrelations. \emph{Journal of
-Multivariate Analysis} 3, 408-419.
+autoregressive models by partial autocorrelations. \emph{Journal of Multivariate
+Analysis} \strong{3}, 408-419.
 
 Monahan, J. F. (1984). A note on enforcing stationarity in autoregressive
-moving average models. \emph{Biometrika} 71, 403-404.
+moving average models. \emph{Biometrika} \strong{71}, 403-404.
 }
 \seealso{
-\code{\link[=ar1]{ar1()}}, \code{\link[=compound_symmetry]{compound_symmetry()}}
+\code{\link[=ar1]{ar1()}} for \eqn{q = 1} written out, \code{\link[=compound_symmetry]{compound_symmetry()}} for the
+other two-value family, and \code{\link[=param_readable]{param_readable()}}, which reports the
+autoregressive coefficients this parametrization does not carry.
 }

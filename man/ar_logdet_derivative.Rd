@@ -9,15 +9,29 @@ ar_logdet_derivative(s, eta, order)
 \arguments{
 \item{s}{An \code{\link[=AutoregressiveParam]{AutoregressiveParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}.}
 
-\item{order}{The derivative order, 1 to 4.}
+\item{order}{The derivative order: 1, 2, 3 or 4.}
 }
 \value{
-A named numeric vector.
+A numeric vector of \code{choose(s@n_free + order - 1, order)} values keyed
+as \code{param_tuple_names(s, order)} and in that order.
 }
 \description{
 Assembles one derivative order of the log-determinant. It is a sum with one
-term per free value, so every mixed component is exactly zero.
+term per free value, so a mixed component is exactly zero and is returned
+without arithmetic; only the \eqn{q + 1} pure components are computed.
+}
+\details{
+The scale term is \eqn{p \log \gamma_0}, whose derivatives in
+\eqn{\gamma_0} are \eqn{(-1)^{k-1}(k-1)!/\gamma_0^{k}}, and each partial
+autocorrelation contributes \eqn{(p-k)\log(1 - r_k^2)}, whose derivatives come
+from \code{\link[=log_affine_derivs]{log_affine_derivs()}} applied to the two factors \eqn{1 - r} and
+\eqn{1 + r}. Both are then carried onto the free scale by \code{\link[=compose4]{compose4()}}, the
+Faa di Bruno chain with a one-dimensional inner map.
+}
+\seealso{
+\code{\link[=compose4]{compose4()}} and \code{\link[=log_affine_derivs]{log_affine_derivs()}} for the two pieces, and
+\code{\link[=param_dlogdet.AutoregressiveParam]{param_dlogdet.AutoregressiveParam()}}, which calls this.
 }
 \keyword{internal}

@@ -9,15 +9,22 @@ ar_derivative(s, eta, order)
 \arguments{
 \item{s}{An \code{\link[=AutoregressiveParam]{AutoregressiveParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}.}
 
-\item{order}{The derivative order, 1 to 4.}
+\item{order}{The derivative order: 1, 2, 3 or 4.}
 }
 \value{
-A named list of symmetric matrices.
+A list of \code{choose(s@n_free + order - 1, order)} symmetric matrices
+keyed as \code{param_tuple_names(s, order)} and in that order, each
+\code{s@dimension} by \code{s@dimension} with dimnames.
 }
 \description{
-Assembles one derivative order by reading the matching component out of
-the packed arrays.
+Assembles one derivative order by running \code{\link[=ar_taylor]{ar_taylor()}} once and reading the
+matching column out of the packed arrays for each tuple of the order. The four
+methods differ only in the order they pass.
+}
+\seealso{
+\code{\link[=ar_taylor]{ar_taylor()}} for the recursion, \code{\link[=ar_assemble]{ar_assemble()}} for one component,
+and \code{\link[=param_d1.AutoregressiveParam]{param_d1.AutoregressiveParam()}}, which calls this.
 }
 \keyword{internal}
