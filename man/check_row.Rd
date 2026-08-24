@@ -7,16 +7,26 @@
 check_row(name, status, statistic = NA_real_)
 }
 \arguments{
-\item{name}{The name of the check.}
+\item{name}{The name of the check, as it appears in the printed table:
+\code{"membership"}, \code{"round trip"}, \code{"first derivatives"} and the rest.}
 
-\item{status}{\code{"OK"}, \code{"FAIL"} or \code{"NOT CHECKED"}.}
+\item{status}{One of \code{"OK"}, \code{"FAIL"} or \code{"NOT CHECKED"}. The third is used
+where the quantity comes from a numerical fallback and no independent route
+exists to compare against.}
 
-\item{statistic}{The number the verdict rests on, or \code{NA}.}
+\item{statistic}{The number the verdict rests on, a relative discrepancy, or
+\code{NA_real_} for a check that is structural and has no number, such as the
+shape and name check.}
 }
 \value{
-A one-row data frame.
+A one-row data frame with columns \code{check}, \code{status} and \code{statistic}.
 }
 \description{
-One Row of a Diagnostic Table
+Builds one row of the table \code{\link[=check_parameter]{check_parameter()}} accumulates and returns.
+Strings are kept as strings, so the assembled table's \code{check} and \code{status}
+columns come out character.
+}
+\seealso{
+\code{\link[=check_parameter]{check_parameter()}}, which assembles these rows.
 }
 \keyword{internal}

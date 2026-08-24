@@ -7,26 +7,41 @@
 sweep_etas(s, n = 4L)
 }
 \arguments{
-\item{s}{A \code{\link[=parameter]{parameter()}} object.}
+\item{s}{A \code{\link[=parameter]{parameter()}} object, whose \code{n_free} sets the length.}
 
-\item{n}{The number of random vectors.}
+\item{n}{The number of random vectors, defaulting to 4. The set returned has
+\code{n + 4} members, or one member, \code{numeric(0)}, for a family with nothing to
+estimate.}
 }
 \value{
-A list of numeric vectors.
+A list of numeric vectors, each of length \code{s@n_free}.
 }
 \description{
-A set of free vectors covering the ordinary range and a spread one.
+Builds the set of free vectors \code{\link[=check_parameter]{check_parameter()}} runs its battery at: the
+origin, two constant vectors at \eqn{\pm 0.5}, \code{n} drawn uniformly from
+\eqn{(-1.5, 1.5)}, and one evenly spread from \eqn{-2} to \eqn{2}. Every
+check reports the worst discrepancy over the whole set, so a family that is
+right at the origin and wrong away from it is caught.
 }
 \details{
 The spread of the last vector is deliberately moderate. The free scale is
-unbounded, so no value of \eqn{\eta} is inadmissible, but the matrix built
-from widely separated free values can be singular in double precision --
-spreading a log-Cholesky parameter over twenty-eight units of log gives a
-condition number around \eqn{10^{28}} -- and a comparison that fails there
-is a statement about the arithmetic rather than about the parameter. The
-scaling that a rank-deficient family must survive is a property of its
-components rather than of a point, so it is tested where it arises, against
-the declared null space, and not by driving every family off the edge of
+unbounded, so no \eqn{\eta} is inadmissible, but the matrix built from widely
+separated free values can be singular in double precision: spreading a
+log-Cholesky parameter over twenty-eight units of log gives a condition number
+around \eqn{10^{28}}, and a comparison that fails there says something about
+the arithmetic and nothing about the parametrization.
+
+The scaling a rank-deficient family has to survive is a property of its
+components, the same at every point, so it is tested where it arises, against
+the declared null space, instead of by driving every family off the edge of
 double precision.
+
+The \code{n} random vectors are drawn from the caller's own random stream, with no
+seed set here, so two calls report slightly different statistics and the
+caller's stream is advanced. Set a seed before calling \code{\link[=check_parameter]{check_parameter()}}
+when a report has to be reproducible.
+}
+\seealso{
+\code{\link[=check_parameter]{check_parameter()}}, the only caller.
 }
 \keyword{internal}

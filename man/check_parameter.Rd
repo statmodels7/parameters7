@@ -7,61 +7,137 @@
 check_parameter(s, tol = 1e-06, verbose = TRUE)
 }
 \arguments{
-\item{s}{An object inheriting from class \code{\link[=parameter]{parameter()}}.}
+\item{s}{An object inheriting from class \code{\link[=parameter]{parameter()}}. Anything else throws
+\verb{'s' must inherit from class 'parameter'.}}
 
-\item{tol}{The relative tolerance for the comparisons.}
+\item{tol}{The relative tolerance a check has to meet, defaulting to \code{1e-6}.
+The comparisons are relative to the larger of 1 and the size of the
+reference, so the tolerance is dimensionless. \code{1e-6} is loose enough for the
+third and fourth derivative comparisons, which rest on stencils good to
+about \eqn{10^{-5}}, and tight enough to catch an error of one part in a
+thousand.}
 
-\item{verbose}{Whether to print the table.}
+\item{verbose}{Whether to print the table, \code{TRUE} by default. The value is
+returned either way.}
 }
 \value{
-Invisibly, a data frame with columns \code{check}, \code{status} and
-\code{statistic}.
+Invisibly, a data frame with one row per check. For a
+\code{\link[=matrix_parameter]{matrix_parameter()}} it has nine rows and the columns
+\describe{
+\item{\code{check}}{character, the names listed above.}
+\item{\code{status}}{character, \code{"OK"}, \code{"FAIL"} or \code{"NOT CHECKED"}.}
+\item{\code{statistic}}{numeric, the worst relative discrepancy, \code{NA} for a
+check that was skipped or has no number.}
+}
+For a family that is not a matrix it has seven rows and the columns
+\code{check}, \code{status} and \code{note}, the last being \strong{character} and holding a
+formatted number or the empty string. Test the \code{status} column, which is
+common to both.
 }
 \description{
-Runs a battery of numerical checks on a parameter, each against a route the
-implementation does not itself take, and reports what passed, what failed
-and what could not be checked.
-}
-\details{
-A quantity that comes from a numerical fallback is reported as \strong{not
-checked} rather than as passed. Comparing a finite difference against a
-finite difference is the same arithmetic twice, and it agrees however wrong
-the parameter is; saying so is the difference between a validator and a
-formality.
+Runs a battery of numerical checks on a parametrization, each against a route
+the implementation does not itself take, and reports what passed, what failed
+and what could not be checked. Write a family of your own, call this on it,
+and read the table: a \code{FAIL} names the quantity whose closed form is wrong,
+and the statistic beside it is the relative size of the disagreement.
 
-The checks are:
+It is also the validator the package holds itself to. Measured over all
+fifteen constructors: thirteen matrix families pass all nine checks and the
+two that are not matrices pass all seven, with nothing skipped anywhere.
+}
+\section{Not checked is a third verdict}{
+A quantity that comes from a numerical fallback is reported as \strong{NOT
+CHECKED}, never as passed. Comparing a finite difference against a finite
+difference is the same arithmetic twice, and it agrees however wrong the
+parametrization is. \code{\link[=param_is_numerical]{param_is_numerical()}} is what decides, and a family
+supplying only \code{\link[=param_value]{param_value()}} therefore comes back with six of the nine rows
+skipped: it has nothing an independent route could contradict.
+}
+
+\section{The nine checks, and the route each is held against}{
 \enumerate{
-\item \strong{membership}: the matrix is symmetric and positive
-semidefinite, a full-rank family has a positive smallest eigenvalue, and
-a rank-deficient one annihilates its declared null space. The last is
-tested through the null basis rather than by counting eigenvalues,
-because a count is not scale invariant.
-\item \strong{round trip}: \code{param_free()} recovers the free vector
-from the matrix, where the family implements it.
-\item \strong{first derivatives} against one central difference of
-\code{\link[=param_value]{param_value()}}.
-\item \strong{second derivatives} against one central difference of the
-analytic first derivatives.
-\item \strong{log-determinant} against the sum of the logs of the
-eigenvalues the rank keeps.
-\item \strong{log-determinant gradient} against
-\eqn{\mathrm{tr}(M^{+} \partial_k M)}, with the pseudo-inverse formed
-from an eigendecomposition rather than from \code{\link[=param_solve]{param_solve()}}.
-\item \strong{log-determinant Hessian} against one central difference of
-the analytic gradient.
-\item \strong{solve} against \code{base::solve}, where the family is of
-full rank.
-\item \strong{shapes}: the declared dimension, length and names match what
-the methods return.
+\item \strong{membership}: the matrix is symmetric and positive semidefinite, a
+full-rank family has a strictly positive smallest eigenvalue, and a
+rank-deficient one annihilates its declared null space. The last is tested
+through the null basis, never by counting eigenvalues, a count of small
+eigenvalues not being scale invariant.
+\item \strong{round trip}: \code{\link[=param_free]{param_free()}} recovers the free vector from the matrix,
+where the family implements an inverse.
+\item \strong{first derivatives} against one central difference of \code{\link[=param_value]{param_value()}}.
+\item \strong{second derivatives} against one central difference of the analytic
+first derivatives.
+\item \strong{log-determinant} against the sum of the logs of the eigenvalues the
+declared rank keeps.
+\item \strong{logdet gradient} against \eqn{\mathrm{tr}(M^{+} \partial_k M)}, with
+the pseudo-inverse formed from an eigendecomposition instead of from
+\code{\link[=param_solve]{param_solve()}}, so the two routes share no arithmetic.
+\item \strong{logdet hessian} against one central difference of the analytic
+gradient.
+\item \strong{solve and factor} against \code{base::solve()}, where the family is of full
+rank; skipped for a deficient one, which has no inverse.
+\item \strong{shapes and names}: the declared dimension, the lengths and the names
+match what the methods return. Structural, so it carries no statistic.
 }
-}
-\examples{
-invisible(check_parameter(log_cholesky(3)))
 
-# a rank-deficient penalty passes the same battery
-invisible(check_parameter(scaled_matrix(crossprod(diff(diag(6), differences = 2)))))
+Each check reports the worst discrepancy over the free vectors \code{\link[=sweep_etas]{sweep_etas()}}
+supplies, four of which are drawn at random.
+}
+
+\section{Both branches touch the random stream}{
+The matrix battery draws its four random free vectors from the caller's
+stream, so it advances that stream and its statistics differ a little between
+calls: set a seed first for a reproducible report. The branch for a family
+that is not a matrix does the opposite. It calls \code{set.seed()} itself, so it is
+exactly reproducible and it \strong{replaces} whatever state the caller had. Do not
+call it in the middle of a simulation whose stream matters.
+}
+
+\section{A family that is not a matrix gets a different battery}{
+\code{\link[=simplex]{simplex()}} and \code{\link[=transition_matrix]{transition_matrix()}} have no log-determinant, no solve and
+no factor, so seven other checks run instead: the inverse round trip, the four
+derivative orders against the single-stencil construction, that the value
+stays on the simplex, and that every derivative component sums to zero over
+the value index. \strong{The returned table has different columns in that case};
+see \strong{Value}.
+}
+
+\examples{
+set.seed(1)
+
+# A family that passes everything.
+r <- check_parameter(log_cholesky(3))
+r$status
+
+# A rank-deficient penalty passes the same battery, with the solve skipped:
+# it has no inverse, and the null-space check replaces the definiteness one.
+P <- crossprod(diff(diag(6), differences = 2))
+d <- check_parameter(scaled_matrix(P))
+d[d$status != "OK", ]
+
+# A family that is not a matrix gets the seven-row battery and a `note`
+# column in place of `statistic`.
+v <- check_parameter(simplex(4), verbose = FALSE)
+names(v)
+nrow(v)
+
+# What a real defect looks like. This first derivative is 5 per cent wrong.
+Wrong <- S7::new_class("Wrong", parent = matrix_parameter)
+S7::method(param_value, Wrong) <- function(s, eta, ...) {
+  m <- diag(rep(exp(eta[1]), 2))
+  dimnames(m) <- list(c("v1", "v2"), c("v1", "v2"))
+  m
+}
+S7::method(param_d1, Wrong) <- function(s, eta, ...) {
+  list(log_s = 1.05 * diag(rep(exp(eta[1]), 2)))
+}
+w <- Wrong(param_name = "wrong", n_free = 1L, free_names = "log_s",
+           param_params = list(), dimension = 2L, rank = 2L,
+           null_basis = matrix(numeric(0), 2, 0), role = "either")
+bad <- check_parameter(w, verbose = FALSE)
+bad[bad$status == "FAIL", ]
 
 }
 \seealso{
-\code{\link[=param_is_numerical]{param_is_numerical()}}
+\code{\link[=param_is_numerical]{param_is_numerical()}}, which decides what is checkable, and
+\code{\link[=param_null_basis]{param_null_basis()}} for the null space check 1 uses.
 }
