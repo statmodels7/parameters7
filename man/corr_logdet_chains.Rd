@@ -9,15 +9,16 @@ corr_logdet_chains(s, eta)
 \arguments{
 \item{s}{A \code{\link[=CorrelationParam]{CorrelationParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}.}
 }
 \value{
-A list with one element per free value, each a list of four
-numbers.
+A list of \code{s@n_free} elements, each a list of four numbers: the first
+to fourth derivative of \eqn{2\log\sin\theta_k} in \eqn{\eta_k}.
 }
 \description{
-For each free value, the four derivatives of \eqn{2\log\sin\theta} in that
-free value: the log-determinant's contribution from one angle.
+Returns, for each free value, the four derivatives of \eqn{2\log\sin\theta} in
+that free value: the log-determinant's whole contribution from one angle. The
+family's four log-determinant derivative methods read nothing else.
 }
 \details{
 The factor is triangular, so \eqn{\lvert R \rvert = \prod_i L_{ii}^2} and
@@ -26,5 +27,14 @@ a sum with one term per free value. The log-determinant is therefore
 separable, every mixed derivative is exactly zero, and each pure one is the
 logarithm composed with the sine table \code{\link[=corr_tables]{corr_tables()}} already
 holds.
+
+The four coefficients \eqn{2(-1)^{j-1}(j-1)!/\sin^j\theta} are the
+derivatives of \eqn{2\log u} at \eqn{u = \sin\theta}, and \code{\link[=compose4]{compose4()}} chains
+them onto the sine's own derivatives in the free value, which
+\code{\link[=corr_tables]{corr_tables()}} has already computed.
+}
+\seealso{
+\code{\link[=corr_tables]{corr_tables()}} for the sine table, \code{\link[=compose4]{compose4()}} for the chain, and
+\code{\link[=corr_logdet_derivative]{corr_logdet_derivative()}}, the only caller.
 }
 \keyword{internal}

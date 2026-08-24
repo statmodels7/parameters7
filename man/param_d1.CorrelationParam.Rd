@@ -6,16 +6,32 @@
 \arguments{
 \item{s}{A \code{\link[=CorrelationParam]{CorrelationParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named list of symmetric matrices with a zero diagonal, the
-diagonal of the value being constant.
+A list of \code{s@n_free} symmetric matrices named by \code{s@free_names}, each
+\code{s@dimension} by \code{s@dimension} with a zero diagonal.
 }
 \description{
-Closed form by the Leibniz rule on \eqn{R = LL^\top}, the factor's
-derivatives coming from the trigonometric tables of the angles.
+Closed form, by the Leibniz rule on \eqn{R = LL^\top},
+
+\deqn{\partial_k R = L_k L^\top + L L_k^\top,}
+
+with the factor's derivative \eqn{L_k} built from the trigonometric tables of
+the angles: differentiating an entry of \eqn{L} replaces one sine or cosine
+factor by its own derivative in the free value.
+
+The diagonal of every component is \strong{exactly zero}, the diagonal of \eqn{R}
+being the constant 1. Angle \eqn{\theta_{ij}} belongs to row \eqn{i}, so
+\eqn{\partial_k L} is supported on that row alone, though
+\eqn{\partial_k R} is not.
+}
+\seealso{
+\code{\link[=corr_derivative]{corr_derivative()}}, which assembles it, \code{\link[=corr_tables]{corr_tables()}} for the
+trigonometric derivatives, and \code{\link[=param_d2.CorrelationParam]{param_d2.CorrelationParam()}} for the order
+above.
 }
 \keyword{internal}

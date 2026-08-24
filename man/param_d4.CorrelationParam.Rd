@@ -6,14 +6,30 @@
 \arguments{
 \item{s}{A \code{\link[=CorrelationParam]{CorrelationParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named list of symmetric matrices.
+A list of \code{choose(s@n_free + 3, 4)} symmetric matrices keyed as
+\code{param_tuple_names(s, 4)} and in that order, each with a zero diagonal.
 }
 \description{
-Closed form; see \code{\link[=param_d1.CorrelationParam]{param_d1.CorrelationParam()}}.
+Closed form, the Leibniz rule with four differentiations distributed over the
+two factors of \eqn{R = LL^\top}. This is the order at which a numerical route
+is least usable, keeping about five digits, and the spherical construction
+pays nothing for it: every factor derivative is a product of trigonometric
+tables that \code{\link[=corr_tables]{corr_tables()}} has already built.
+
+\code{\link[=corr_dfactor]{corr_dfactor()}}'s vanishing rules do most of the work. A quadruple spanning
+three rows of \eqn{L} contributes nothing at all, since a Leibniz term splits
+the four indices between two factors and each factor must stay within one row.
+The diagonal is exactly zero.
+}
+\seealso{
+\code{\link[=corr_derivative]{corr_derivative()}}, which assembles it,
+\code{\link[=param_d3.CorrelationParam]{param_d3.CorrelationParam()}} for the order below, and \code{\link[=numerical_d4]{numerical_d4()}} for
+the alternative.
 }
 \keyword{internal}

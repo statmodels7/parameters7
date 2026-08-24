@@ -9,16 +9,49 @@
 \arguments{
 \item{s}{A \code{\link[=CorrelationParam]{CorrelationParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named numeric vector.
+A named numeric vector, of the length and keying its own order calls
+for; see \strong{Details}.
 }
 \description{
-Closed form at every order. The log-determinant is a sum with one term per
-angle, so it is separable: every mixed component is exactly zero and each
-pure one is a logarithm composed with that angle's sine.
+Closed form at all four orders. One page covers
+\code{\link[=param_dlogdet]{param_dlogdet()}}, \code{\link[=param_d2logdet]{param_d2logdet()}}, \code{\link[=param_d3logdet]{param_d3logdet()}} and
+\code{\link[=param_d4logdet]{param_d4logdet()}} for this family because the four differ only in the order
+of one chain: \eqn{\log|R| = 2\sum_{i,k}\log\sin\theta_{ik}} is a sum with one
+term per free value, so it is \strong{separable}, every mixed component is exactly
+zero at every order, and each pure one is the matching derivative of
+\eqn{2\log\sin\theta_k} in \eqn{\eta_k}.
+
+\code{\link[=corr_logdet_chains]{corr_logdet_chains()}} computes those four derivatives per angle, and
+\code{\link[=corr_logdet_derivative]{corr_logdet_derivative()}} places them.
+}
+\details{
+The four methods return vectors of different lengths, keyed by the tuple names
+of their own order:
+\itemize{
+\item \code{\link[=param_dlogdet]{param_dlogdet()}}: \code{s@n_free} entries, keyed by \code{free_names}.
+\item \code{\link[=param_d2logdet]{param_d2logdet()}}: \code{choose(d + 1, 2)} entries, \code{param_tuple_names(s, 2)}.
+\item \code{\link[=param_d3logdet]{param_d3logdet()}}: \code{choose(d + 2, 3)} entries, \code{param_tuple_names(s, 3)}.
+\item \code{\link[=param_d4logdet]{param_d4logdet()}}: \code{choose(d + 3, 4)} entries, \code{param_tuple_names(s, 4)}.
+}
+
+In each, only the components whose indices are all equal can be non-zero. At
+\eqn{p = 3} and \eqn{\eta = (0.4, -0.2, 0.6)} the second order is
+\eqn{(-1.161, -1.215, -1.078)} on the three diagonal pairs and exactly 0 on
+the three off-diagonal ones.
+
+Unlike \code{\link[=log_cholesky]{log_cholesky()}}, where the log-determinant is linear and every order
+above the first vanishes, this family gives non-zero answers at all four, so
+it is one of the families where a check of those orders has content.
+}
+\seealso{
+\code{\link[=param_logdet.CorrelationParam]{param_logdet.CorrelationParam()}} for the quantity differentiated,
+\code{\link[=corr_logdet_chains]{corr_logdet_chains()}} for the per-angle chains, and
+\code{\link[=param_d3logdet.LogCholeskyParam]{param_d3logdet.LogCholeskyParam()}} for a family where these orders vanish.
 }
 \keyword{internal}

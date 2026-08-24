@@ -7,73 +7,147 @@
 correlation_matrix(dimension, role = c("either", "covariance", "precision"))
 }
 \arguments{
-\item{dimension}{The side \eqn{p} of the matrix.}
+\item{dimension}{The side \eqn{p} of the matrix. A single positive whole
+number, finite and at least 1, though see \strong{Details} on \eqn{p = 1};
+anything else throws \verb{'dimension' must be a single positive integer.}}
 
-\item{role}{A label; see \code{\link[=log_cholesky]{log_cholesky()}}.}
+\item{role}{A label recording which side of a model the matrix parametrizes:
+\code{"either"} (the default), \code{"covariance"} or \code{"precision"}. No numeric result
+depends on it.}
 }
 \value{
-An object of class \code{\link[=CorrelationParam]{CorrelationParam()}}.
+An object of class \code{\link[=CorrelationParam]{CorrelationParam()}}, with \code{n_free} equal to
+\eqn{p(p-1)/2}, \code{free_names} \code{z2.1}, \code{z3.1}, \code{z3.2}, ... row by row, \code{rank}
+equal to \code{dimension}, an empty \code{null_basis}, \code{param_name} \code{"correlation"},
+and \code{param_params} holding \code{row}, \code{col} and \code{link}.
 }
 \description{
-A correlation matrix -- symmetric positive definite with a unit diagonal --
-carried by the spherical parametrization: \eqn{R = LL^\top} with each row
-of \eqn{L} a point on the unit sphere written in angular coordinates, and
-each angle carried onto the real line by a bounded link.
+Returns an object holding the spherical parametrization of a correlation
+matrix: symmetric, positive definite, and with a unit diagonal that holds
+exactly, with no correction applied afterwards. Each row of the Cholesky
+factor is a point on the unit sphere written in angular coordinates, and each
+angle is carried onto the whole real line by a bounded link, so any free
+vector in \eqn{\mathbb{R}^{p(p-1)/2}} gives a valid correlation matrix.
+
+Use it when the correlations are what the model is about and a scale belongs
+elsewhere: a copula, an LKJ prior, or the correlation half of a covariance
+built with \code{\link[=dr_prod]{dr_prod()}}.
 }
-\details{
+\section{The construction}{
 Row \eqn{i} of \eqn{L} is built from \eqn{i-1} angles
-\eqn{\theta_{i1}, \ldots, \theta_{i,i-1}} in \eqn{(0, \pi)}:
+\eqn{\theta_{i1}, \dots, \theta_{i,i-1}} in \eqn{(0, \pi)}:
+
 \deqn{L_{ij} = \cos\theta_{ij} \prod_{k < j} \sin\theta_{ik} \quad (j < i),
   \qquad L_{ii} = \prod_{k < i} \sin\theta_{ik}.}
-The squared entries of the row then telescope to one, so \eqn{R = LL^\top}
-has a unit diagonal by construction rather than by a correction, and it is
-positive definite for every value of the angles because \eqn{L} is
-triangular with a positive diagonal. The construction is that of Rapisarda,
-Brigo and Mercurio (2007), and the free values are the angles carried onto
-\eqn{\mathbb{R}} by \code{\link[linkfunctions7:bounded_link]{linkfunctions7::bounded_link()}}, so
-there is nothing to constrain and no boundary to reach.
 
-Derivatives follow from the same Leibniz rule the log-Cholesky family uses,
-since \eqn{R} is again a Gram product; what changes is the factor, whose
-entries are products of sines and cosines of angles that each depend on one
-free value. The rows of \eqn{L} are independent, so a derivative of the
-\emph{factor} in free values from two different rows vanishes. The same is
-not true of \eqn{R}: its entry \eqn{(i, j)} is the inner product of rows
-\eqn{i} and \eqn{j} of \eqn{L}, so a second derivative across those two
-rows need not vanish. What holds instead is that such a component is
-supported on exactly the entries \eqn{(i, j)} and \eqn{(j, i)}, and even
-there it is zero whenever the two angles differentiated sit beyond the
-columns the two rows share.
-
-The free vector runs row by row, and the names \code{z\{i\}.\{j\}} say which
-row and which angle, the row.column convention \code{\link[=log_cholesky]{log_cholesky()}}
-already uses. The ordering is part of the contract: every consumer builds
-its parameter tables from these names.
-
-A correlation matrix on its own is what a copula or an LKJ prior is written
-against. A covariance is this matrix conjugated by a diagonal of standard
-deviations, which is a composition of two parameters rather than a family
-of its own.
+The squared entries of a row telescope to one, so every row of \eqn{L} is a
+unit vector and \eqn{R = LL^\top} has a unit diagonal by construction. It is
+positive definite at every value of the angles, \eqn{L} being triangular with
+a positive diagonal. The angles reach the free scale through
+\code{linkfunctions7::bounded_link(lwr = 0, upr = pi)}, so there is nothing to
+constrain and no boundary to run into.
 }
+
+\section{How the derivatives behave, and a claim that does not hold}{
+Derivatives come from the same Leibniz rule the log-Cholesky family uses,
+\eqn{R} being a Gram product again; what changes is the factor, whose entries
+are products of sines and cosines of angles that each depend on one free
+value.
+
+The rows of \eqn{L} are independent, so a derivative of the \strong{factor} in free
+values from two different rows is zero. That is \strong{not} true of \eqn{R}: its
+entry \eqn{(i, j)} is the inner product of rows \eqn{i} and \eqn{j} of
+\eqn{L}, so a second derivative across those two rows need not vanish. What
+does hold is that such a component is supported on exactly the entries
+\eqn{(i, j)} and \eqn{(j, i)}, and is zero even there when the two angles
+differentiated sit beyond the columns the two rows share. A structural claim
+about a product is not a claim about its factors.
+}
+
+\section{The log-determinant is separable}{
+The factor is triangular, so \eqn{|R| = \prod_i L_{ii}^2} and
+
+\deqn{\log|R| = 2 \sum_{i,k} \log \sin\theta_{ik},}
+
+one term per free value. Every mixed derivative of the log-determinant is
+therefore exactly zero at every order, and each pure one is a logarithm
+composed with that angle's sine. No factorization and no determinant is
+computed.
+}
+
+\section{Reading the free vector}{
+It runs row by row, and the names \verb{z\{i\}.\{j\}} say which row and which angle,
+the row.column convention \code{\link[=log_cholesky]{log_cholesky()}} uses. The \code{z} records the link, so
+a free value of 0.4 is not an angle of 0.4; the angle is
+\code{bounded_link(0, pi)}'s inverse of it. The ordering is part of the interface.
+}
+
+\section{Where double precision gives out}{
+Measured at \eqn{p = 3} with every free value equal: at 5 the smallest
+eigenvalue is \eqn{3 \times 10^{-8}} and at 10 it is \eqn{-2 \times 10^{-16}},
+the matrix having reached its boundary in double precision with a correlation
+of \eqn{-1} to every printed digit. The parametrization is exact; what gives
+out is the representation of a correlation one ulp from the edge. A fit that
+walks a free value past about \eqn{\pm 8} is reporting a boundary, and
+\code{\link[=check_parameter]{check_parameter()}} sweeps to \eqn{\pm 2} for that reason.
+}
+
+\section{p = 1 does not work}{
+A \eqn{1 \times 1} correlation matrix has no angles, so \code{n_free} should be 0.
+\code{correlation_matrix(1)} reports 1, with the free name \code{"z."}, because
+\code{paste0("z", integer(0), ".", integer(0))} recycles to one element instead of
+none. The resulting object evaluates \code{\link[=param_value]{param_value()}} but fails
+\code{\link[=param_d1]{param_d1()}}, \code{\link[=param_free]{param_free()}} and \code{\link[=check_parameter]{check_parameter()}} with \verb{missing value where TRUE/FALSE needed}. Use \eqn{p \ge 2}; a \eqn{1 \times 1} correlation matrix
+carries no information.
+}
+
+\section{Notation}{
+
+\eqn{\eta} is the free vector, of length \eqn{d = p(p-1)/2}, and \eqn{p} the
+side of the matrix. \eqn{\theta_{ij} \in (0, \pi)} is the \eqn{j}-th angle of
+row \eqn{i}, \eqn{L} the lower triangular factor and \eqn{R = LL^\top} the
+correlation matrix. Note that \eqn{\theta} is an angle here and a distribution
+parameter elsewhere in the toolkit.
+}
+
 \examples{
+# Three angles for a 3 x 3 correlation matrix, named by row and column.
 s <- correlation_matrix(3)
 s@free_names
 
-r <- param_value(s, c(0.4, -0.2, 0.6))
-round(r, 4)
-diag(r)
-
-# the round trip closes exactly
 eta <- c(0.4, -0.2, 0.6)
-max(abs(param_free(s, param_value(s, eta)) - eta))
+r <- param_value(s, eta)
+round(r, 4)
+
+# The unit diagonal is exact, and the matrix is positive definite.
+diag(r)
+eigen(r, only.values = TRUE)$values > 0
+
+# The round trip closes exactly.
+max(abs(param_free(s, r) - eta))
+
+# Absurd free values stay in the set, which is the point.
+m <- param_value(s, c(-30, 40, -20))
+c(min_diag = min(diag(m)), max_abs_corr = max(abs(m[upper.tri(m)])))
+
+# The log-determinant is twice the sum of the logs of the sines, so it needs
+# no factorization, and it agrees with the eigenvalues.
+theta <- linkfunctions7::linkinv(s@param_params$link, eta)
+c(closed_form = param_logdet(s, eta), from_sines = 2 * sum(log(sin(theta))),
+  from_eigen = sum(log(eigen(r, only.values = TRUE)$values)))
+
+# And it is separable, so every mixed second derivative is exactly zero.
+round(param_d2logdet(s, eta), 10)
 
 }
 \references{
 Rapisarda, F., Brigo, D. and Mercurio, F. (2007). Parameterizing
 correlations: a geometric interpretation. \emph{IMA Journal of Management
-Mathematics} 18, 55-73.
+Mathematics} \strong{18}, 55-73.
 }
 \seealso{
-\code{\link[=log_cholesky]{log_cholesky()}}, \code{\link[=compound_symmetry]{compound_symmetry()}},
-\code{\link[=ar1]{ar1()}}
+\code{\link[=dr_prod]{dr_prod()}} to combine this with a diagonal of standard deviations
+into a covariance, \code{\link[=log_cholesky]{log_cholesky()}} for an unstructured matrix,
+\code{\link[=compound_symmetry]{compound_symmetry()}} and \code{\link[=ar1]{ar1()}} for structured correlations with two free
+values, and \code{\link[=param_value]{param_value()}} for the map.
 }

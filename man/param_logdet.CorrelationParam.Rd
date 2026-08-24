@@ -6,16 +6,29 @@
 \arguments{
 \item{s}{A \code{\link[=CorrelationParam]{CorrelationParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A single number.
+A single number, \code{0} when \code{s@n_free} is 0.
 }
 \description{
-Closed form: twice the sum of the logarithms of the sines of the angles,
-the factor being triangular with those products on its diagonal. No
-factorization and no determinant is computed.
+Closed form. The factor is triangular with \eqn{L_{ii} = \prod_{k<i}
+\sin\theta_{ik}} on its diagonal, so \eqn{|R| = \prod_i L_{ii}^2} and
+
+\deqn{\log|R| = 2 \sum_{i,k} \log \sin\theta_{ik},}
+
+one term per free value. It is \code{2 * sum(log(sines))}: no factorization, no
+determinant, no eigendecomposition. Measured against the eigenvalues of the
+assembled matrix at \eqn{p = 3}, the two agree to the printed digit.
+
+It is always negative or zero, a correlation matrix having determinant at most
+1, with 0 reached only at the identity.
+}
+\seealso{
+\code{\link[=param_dlogdet.CorrelationParam]{param_dlogdet.CorrelationParam()}} for its four derivative orders,
+and \code{\link[=corr_logdet_chains]{corr_logdet_chains()}} for the per-angle chains they read.
 }
 \keyword{internal}

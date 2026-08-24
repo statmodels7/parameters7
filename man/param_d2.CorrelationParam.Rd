@@ -6,14 +6,33 @@
 \arguments{
 \item{s}{A \code{\link[=CorrelationParam]{CorrelationParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named list of symmetric matrices.
+A list of \code{choose(s@n_free + 1, 2)} symmetric matrices keyed as
+\code{param_tuple_names(s)} and in that order, each with a zero diagonal.
 }
 \description{
-Closed form; see \code{\link[=param_d1.CorrelationParam]{param_d1.CorrelationParam()}}.
+Closed form, by the Leibniz rule on \eqn{R = LL^\top} taken twice,
+
+\deqn{\partial_{kl} R = L_{kl} L^\top + L_k L_l^\top + L_l L_k^\top
+                      + L L_{kl}^\top,}
+
+with each \eqn{\partial^S L} from \code{\link[=corr_dfactor]{corr_dfactor()}} and zero wherever the
+multiset \eqn{S} spans two rows of \eqn{L}.
+
+What survives is worth knowing before reading a result. A component in two
+angles from \strong{different} rows \eqn{i} and \eqn{j} does not vanish: the two
+outer terms drop, but \eqn{L_k L_l^\top + L_l L_k^\top} is supported on
+exactly the entries \eqn{(i, j)} and \eqn{(j, i)}. It is zero even there when
+the two angles sit beyond the columns the two rows share. The diagonal is
+exactly zero at every order.
+}
+\seealso{
+\code{\link[=corr_derivative]{corr_derivative()}}, which assembles it, \code{\link[=corr_dfactor]{corr_dfactor()}} for the
+vanishing rules, and \code{\link[=param_d1.CorrelationParam]{param_d1.CorrelationParam()}} for the order below.
 }
 \keyword{internal}

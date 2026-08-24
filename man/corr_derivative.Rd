@@ -9,14 +9,30 @@ corr_derivative(s, eta, order)
 \arguments{
 \item{s}{A \code{\link[=CorrelationParam]{CorrelationParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}.}
 
-\item{order}{The derivative order, 1 to 4.}
+\item{order}{The derivative order: 1, 2, 3 or 4.}
 }
 \value{
-A named list of symmetric matrices.
+A list of \code{choose(s@n_free + order - 1, order)} symmetric matrices
+keyed as \code{param_tuple_names(s, order)} and in that order, each
+\code{s@dimension} by \code{s@dimension} with a zero diagonal.
 }
 \description{
-Assembles one derivative order by the Leibniz rule on \eqn{R = LL^\top}.
+Assembles a whole derivative order of \eqn{R = LL^\top} by the Leibniz rule,
+the factor's derivatives coming from \code{\link[=corr_dfactor]{corr_dfactor()}} and the trigonometric
+tables of \code{\link[=corr_tables]{corr_tables()}}. The four methods \code{\link[=param_d1]{param_d1()}} through
+\code{\link[=param_d4]{param_d4()}} of this family are one call each to this function.
+}
+\details{
+Every term of the Leibniz sum whose factor derivative is \code{NULL} is skipped, and
+most are: a multiset spanning two rows of \eqn{L} contributes nothing. The
+diagonal of the result is zero at every order above zero, the diagonal of
+\eqn{R} being the constant 1.
+}
+\seealso{
+\code{\link[=corr_dfactor]{corr_dfactor()}} for the factor's derivatives, \code{\link[=leibniz_gram]{leibniz_gram()}} for
+the sum, and \code{\link[=chol_leibniz]{chol_leibniz()}}, the same construction for the log-Cholesky
+family.
 }
 \keyword{internal}

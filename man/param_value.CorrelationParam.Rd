@@ -6,14 +6,24 @@
 \arguments{
 \item{s}{A \code{\link[=CorrelationParam]{CorrelationParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A correlation matrix.
+A \code{s@dimension} by \code{s@dimension} correlation matrix: symmetric,
+positive definite, unit diagonal, dimnames \code{v1}, \code{v2}, ...
 }
 \description{
-\eqn{R = LL^\top}, with \eqn{L} assembled from the angles.
+Returns \eqn{R = LL^\top}, with \eqn{L} assembled from the angles: row \eqn{i}
+is a unit vector in spherical coordinates, so the diagonal of \eqn{R} is
+exactly 1 and its off-diagonal entries are correlations. Nothing is tested and
+nothing is corrected; the unit diagonal and the positive definiteness are
+properties of the construction. The cost is one \eqn{O(p^3)} product.
+}
+\seealso{
+\code{\link[=param_free.CorrelationParam]{param_free.CorrelationParam()}} for the inverse, and
+\code{\link[=param_factor.CorrelationParam]{param_factor.CorrelationParam()}} for \eqn{L} itself.
 }
 \keyword{internal}

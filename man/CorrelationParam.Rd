@@ -50,16 +50,41 @@ its blocks, or \code{"either"} when they disagree, and \code{\link[=kron_identit
 it.}
 }
 \value{
-An object of class \code{CorrelationParam}.
+An object of class \code{CorrelationParam}, a subclass of
+\code{\link[=matrix_parameter]{matrix_parameter()}} adding no properties of its own. \code{param_params} holds
+\code{row} and \code{col}, the position each angle belongs to, and \code{link}, a
+\code{linkfunctions7::bounded_link(lwr = 0, upr = pi)}. \code{n_free} is
+\eqn{p(p-1)/2} and \code{rank} is \eqn{p}.
 }
 \description{
-The S7 class of correlation matrices in the spherical parametrization.
-Constructed by \code{\link[=correlation_matrix]{correlation_matrix()}}.
+The S7 class of correlation matrices, symmetric positive definite with a unit
+diagonal, in the spherical parametrization of Rapisarda, Brigo and Mercurio
+(2007). The unit diagonal holds by construction, never by a correction, so
+every free vector gives a genuine correlation matrix.
+
+\code{\link[=correlation_matrix]{correlation_matrix()}} builds one. The free values are angles carried onto the
+real line, and \code{param_params} records the row and column each belongs to
+together with the \code{bounded_link(0, pi)} that carries it.
 }
 \examples{
-S7::S7_inherits(correlation_matrix(3), CorrelationParam)
+s <- correlation_matrix(3)
+S7::S7_inherits(s, CorrelationParam)
+
+# The free values are angles: p(p-1)/2 of them, one per below-diagonal entry.
+c(n_free = s@n_free, p_choose_2 = 3 * 2 / 2)
+s@free_names
+
+# Every free vector gives a unit diagonal exactly, not approximately.
+diag(param_value(s, c(2.5, -3, 1.7)))
 
 }
+\references{
+Rapisarda, F., Brigo, D. and Mercurio, F. (2007). Parameterizing
+correlations: a geometric interpretation. \emph{IMA Journal of Management
+Mathematics} \strong{18}, 55-73.
+}
 \seealso{
-\code{\link[=correlation_matrix]{correlation_matrix()}}
+\code{\link[=correlation_matrix]{correlation_matrix()}}, the constructor, \code{\link[=dr_prod]{dr_prod()}} to give this a
+diagonal scale and make it a covariance, and \code{\link[=matrix_parameter]{matrix_parameter()}} for the
+properties this inherits.
 }

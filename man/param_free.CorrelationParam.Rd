@@ -6,17 +6,37 @@
 \arguments{
 \item{s}{A \code{\link[=CorrelationParam]{CorrelationParam()}} object.}
 
-\item{m}{A correlation matrix.}
+\item{m}{A correlation matrix of side \code{s@dimension}: symmetric with a unit
+diagonal and positive definite, already checked for shape and symmetry by
+the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named numeric vector of free values.
+A numeric vector of length \code{s@n_free}, named by \code{s@free_names}.
 }
 \description{
-The angles read off the Cholesky factor, exact: \eqn{\theta_{i1}} is the
-arc cosine of \eqn{L_{i1}}, and each subsequent angle divides out the sines
-already recovered. A matrix that is not a correlation matrix, or one whose
-factor reaches an angle of \eqn{0} or \eqn{\pi}, is rejected.
+Returns the angles behind a correlation matrix, read off its Cholesky factor
+and carried onto the free scale by the link. Exact:
+\eqn{\theta_{i1} = \arccos L_{i1}}, and each subsequent angle divides out the
+sines already recovered before taking an arc cosine. A true inverse of
+\code{\link[=param_value.CorrelationParam]{param_value.CorrelationParam()}}, the round trip closing to
+\eqn{2 \times 10^{-16}}.
+}
+\details{
+Three rejections. \code{m} must have a unit diagonal, or it is not a correlation
+matrix. It must be positive definite, tested spectrally through \code{\link[=chol_pd]{chol_pd()}}.
+And its factor must not reach an angle of exactly 0 or \eqn{\pi}, where the
+link has no finite value: that happens at a correlation of \eqn{\pm 1}, which
+is on the boundary of the set without being in it.
+
+The last case is worth knowing before it is met. The parametrization reaches a
+correlation of \eqn{-1} to every printed digit at a free value near 10, and
+the matrix is then singular in double precision, so a matrix produced by a fit
+that ran to its boundary cannot be inverted back.
+}
+\seealso{
+\code{\link[=param_value.CorrelationParam]{param_value.CorrelationParam()}}, the map this inverts, and
+\code{\link[=chol_pd]{chol_pd()}} for the definiteness test.
 }
 \keyword{internal}

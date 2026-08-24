@@ -9,15 +9,24 @@ corr_logdet_derivative(s, eta, order)
 \arguments{
 \item{s}{A \code{\link[=CorrelationParam]{CorrelationParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}.}
 
-\item{order}{The derivative order, 1 to 4.}
+\item{order}{The derivative order: 1, 2, 3 or 4.}
 }
 \value{
-A named numeric vector.
+A numeric vector of \code{choose(s@n_free + order - 1, order)} entries,
+keyed as \code{param_tuple_names(s, order)} and in that order, or an empty named
+vector when there are no free values.
 }
 \description{
 Assembles one derivative order of the log-determinant from the per-angle
-chains, every mixed component being exactly zero.
+chains of \code{\link[=corr_logdet_chains]{corr_logdet_chains()}}. Every mixed component is exactly zero, the
+log-determinant being a sum with one term per free value, and each pure one is
+that angle's chain at the matching order. The four log-determinant derivative
+methods of the family are one call each to this function.
+}
+\seealso{
+\code{\link[=corr_logdet_chains]{corr_logdet_chains()}} for the chains, and
+\code{\link[=param_dlogdet.CorrelationParam]{param_dlogdet.CorrelationParam()}}, which documents all four orders.
 }
 \keyword{internal}

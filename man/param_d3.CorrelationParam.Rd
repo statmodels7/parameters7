@@ -6,14 +6,28 @@
 \arguments{
 \item{s}{A \code{\link[=CorrelationParam]{CorrelationParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named list of symmetric matrices.
+A list of \code{choose(s@n_free + 2, 3)} symmetric matrices keyed as
+\code{param_tuple_names(s, 3)} and in that order, each with a zero diagonal.
 }
 \description{
-Closed form; see \code{\link[=param_d1.CorrelationParam]{param_d1.CorrelationParam()}}.
+Closed form, the same Leibniz rule on \eqn{R = LL^\top} with the three
+differentiations distributed over the two factors. Each \eqn{\partial^S L}
+comes from \code{\link[=corr_dfactor]{corr_dfactor()}}, which returns \code{NULL} whenever \eqn{S} spans two
+rows of \eqn{L} or reaches past the columns an entry involves, so most terms
+of the sum are skipped instead of computed and discarded.
+
+The angles reach the free scale through a bounded link, so the chain to third
+order is \code{\link[=compose4]{compose4()}}'s and the accuracy is the link's; nothing is differenced.
+The diagonal is exactly zero.
+}
+\seealso{
+\code{\link[=corr_derivative]{corr_derivative()}}, which assembles it, and
+\code{\link[=param_d4.CorrelationParam]{param_d4.CorrelationParam()}} for the order above.
 }
 \keyword{internal}
