@@ -10,16 +10,30 @@ check_positive_link(link)
 \item{link}{The object to check.}
 }
 \value{
-Invisibly \code{TRUE}; raises an error otherwise.
+Invisibly \code{TRUE}. An object that is not a \pkg{linkfunctions7} link
+throws \verb{'link' must be a linkfunctions7 link object.}, and a link whose
+lower bound is negative throws a message quoting both bounds.
 }
 \description{
-Checks that an object is a \pkg{linkfunctions7} link whose bounds are
-contained in \eqn{(0, \infty)}.
+Checks that an object is a \pkg{linkfunctions7} link whose declared range lies
+in the non-negative half line, and signals an error naming the bounds
+otherwise. Called by \code{\link[=diagonal_matrix]{diagonal_matrix()}}, \code{\link[=scalar_matrix]{scalar_matrix()}} and
+\code{\link[=scaled_matrix]{scaled_matrix()}} at construction.
 }
 \details{
-A diagonal entry of a positive definite matrix is positive, so a link onto
-the whole real line would let a caller build a matrix outside the set
-silently. Asking the link for its declared bounds catches it at
-construction, which is the only place it can be caught.
+A diagonal entry of a positive definite matrix is positive, so a link onto the
+whole real line would let a caller build a matrix outside the set without
+anything saying so. Reading the link's own \code{link_bounds} catches it at
+construction, which is the only place it can be caught: at evaluation time the
+free vector is unconstrained by design and no value of it is inadmissible.
+
+The test is on the \strong{lower} bound alone, \code{b[1] >= 0}, so a link with a
+bounded range is accepted: \code{logit_link()}, whose range is \eqn{(0, 1)},
+produces a positive definite matrix with entries below 1, which is a
+legitimate thing to want.
+}
+\seealso{
+\code{\link[=diagonal_matrix]{diagonal_matrix()}}, \code{\link[=scalar_matrix]{scalar_matrix()}} and \code{\link[=scaled_matrix]{scaled_matrix()}}, the
+three callers, and \code{linkfunctions7::link_bounds} for the property read.
 }
 \keyword{internal}

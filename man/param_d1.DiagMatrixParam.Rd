@@ -6,15 +6,30 @@
 \arguments{
 \item{s}{A \code{\link[=DiagMatrixParam]{DiagMatrixParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named list of diagonal matrices.
+A list of \code{s@n_free} diagonal matrices named by \code{s@free_names}, each
+\code{s@dimension} by \code{s@dimension} with dimnames \code{v1}, \code{v2}, ...
 }
 \description{
-Closed form from the link's own first derivative: the entries a free value
-owns carry \eqn{h'(\eta_k)} and everything else is zero.
+Closed form, and it is the link's own derivative placed on a diagonal:
+
+\deqn{\partial_k M = h'(\eta_k)\, \textstyle\sum_{i:\, o_i = k} E_{ii},}
+
+where \eqn{o_i} is the free value entry \eqn{i} belongs to. For a
+\code{\link[=diagonal_matrix]{diagonal_matrix()}} that is one entry, so \eqn{\partial_k M} is
+\eqn{h'(\eta_k) E_{kk}}; for a \code{\link[=scalar_matrix]{scalar_matrix()}} the one free value owns the
+whole diagonal and \eqn{\partial_1 M = h'(\eta_1) I}.
+
+\eqn{h'} comes from \code{linkfunctions7::dlinkinv()}, so its accuracy is the
+link's and nothing is differenced.
+}
+\seealso{
+\code{\link[=diag_owner]{diag_owner()}} for the ownership map, and
+\code{\link[=param_d2.DiagMatrixParam]{param_d2.DiagMatrixParam()}} for the order above.
 }
 \keyword{internal}

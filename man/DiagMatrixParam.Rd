@@ -50,16 +50,35 @@ its blocks, or \code{"either"} when they disagree, and \code{\link[=kron_identit
 it.}
 }
 \value{
-An object of class \code{DiagMatrixParam}.
+An object of class \code{DiagMatrixParam}, a subclass of
+\code{\link[=matrix_parameter]{matrix_parameter()}} adding no properties of its own. \code{param_params} holds
+two entries: \code{link}, the link object, and \code{shared}, \code{TRUE} for
+\code{\link[=scalar_matrix]{scalar_matrix()}} and \code{FALSE} for \code{\link[=diagonal_matrix]{diagonal_matrix()}}. \code{rank} is always
+\eqn{p}, every entry being positive.
 }
 \description{
-The S7 class of diagonal positive matrices, one free value per entry.
-Constructed by \code{\link[=diagonal_matrix]{diagonal_matrix()}} or \code{\link[=scalar_matrix]{scalar_matrix()}}.
+The S7 class of diagonal matrices with positive entries, each entry carried
+onto the free scale by a \pkg{linkfunctions7} link. Two constructors return
+it, and the difference is recorded in \code{param_params$shared}:
+\code{\link[=diagonal_matrix]{diagonal_matrix()}} gives one free value per entry, and \code{\link[=scalar_matrix]{scalar_matrix()}} one
+free value for the whole diagonal. Every method here reads that flag, so the
+two share one class and one set of formulas.
+
+It is the family in which \pkg{parameters7} and \pkg{linkfunctions7} meet: the
+Jacobian of a diagonal map is diagonal, which is exactly what a scalar link
+supplies, so the link's own exact derivatives to fourth order are used as they
+are.
 }
 \examples{
-S7::S7_inherits(diagonal_matrix(3), DiagMatrixParam)
+# One class, two constructors, told apart by `shared`.
+d <- diagonal_matrix(3)
+q <- scalar_matrix(3)
+c(S7::S7_inherits(d, DiagMatrixParam), S7::S7_inherits(q, DiagMatrixParam))
+c(diagonal = d@param_params$shared, scalar = q@param_params$shared)
+c(diagonal = d@n_free, scalar = q@n_free)
 
 }
 \seealso{
-\code{\link[=diagonal_matrix]{diagonal_matrix()}}, \code{\link[=scalar_matrix]{scalar_matrix()}}
+\code{\link[=diagonal_matrix]{diagonal_matrix()}} and \code{\link[=scalar_matrix]{scalar_matrix()}}, the two constructors, and
+\code{\link[=matrix_parameter]{matrix_parameter()}} for the properties this inherits.
 }

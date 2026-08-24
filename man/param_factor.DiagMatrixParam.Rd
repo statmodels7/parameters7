@@ -6,14 +6,25 @@
 \arguments{
 \item{s}{A \code{\link[=DiagMatrixParam]{DiagMatrixParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A diagonal numeric matrix.
+A \code{s@dimension} by \code{s@dimension} diagonal numeric matrix with a
+positive diagonal, satisfying \code{L \%*\% t(L) == param_value(s, eta)}, and
+carrying no dimnames.
 }
 \description{
-The square roots of the entries, on the diagonal.
+Returns \eqn{L = \mathrm{diag}(\sqrt{h(\eta_1)}, \dots, \sqrt{h(\eta_p)})}.
+The Cholesky factor of a diagonal matrix is the diagonal of its square roots,
+so this is \eqn{p} square roots and no factorization, against the base class's
+\eqn{O(p^3)}.
+}
+\seealso{
+\code{\link[=param_factor]{param_factor()}} for the generic and
+\code{\link[=param_factor.matrix_parameter]{param_factor.matrix_parameter()}} for what a family without a closed form
+pays.
 }
 \keyword{internal}

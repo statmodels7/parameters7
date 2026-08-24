@@ -6,15 +6,30 @@
 \arguments{
 \item{s}{A \code{\link[=DiagMatrixParam]{DiagMatrixParam()}} object.}
 
-\item{m}{A diagonal positive definite matrix.}
+\item{m}{A diagonal positive definite \code{s@dimension} by \code{s@dimension} numeric
+matrix, already checked for shape and symmetry by the generic. It must have
+a constant diagonal when \code{s} came from \code{\link[=scalar_matrix]{scalar_matrix()}}.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named numeric vector of free values.
+A numeric vector of length \code{s@n_free}, named by \code{s@free_names}.
 }
 \description{
-The link applied in the forward direction to the diagonal, after rejecting a
-matrix that is not diagonal or not positive.
+Returns \eqn{g} applied to the diagonal of \code{m}, the link in the forward
+direction, after checking that \code{m} really is in the family's set. Exact, and a
+true inverse of \code{\link[=param_value.DiagMatrixParam]{param_value.DiagMatrixParam()}}, the link being a bijection.
+}
+\details{
+Three rejections, each with its own message. \code{m} must be diagonal, tested as
+\code{max(abs(off)) > 1e-10 * max(1, max(abs(d)))} on the off-diagonal part, so an
+asymmetry of rounding size passes and a real off-diagonal entry does not. Its
+diagonal entries must all be positive. And for a \code{\link[=scalar_matrix]{scalar_matrix()}} they must
+all be \strong{equal}, tested by \code{diff(range(d)) > 1e-10 * max(abs(d))}, a diagonal
+that varies not being a scalar multiple of the identity; only the first entry
+is then read.
+}
+\seealso{
+\code{\link[=param_value.DiagMatrixParam]{param_value.DiagMatrixParam()}}, the map this inverts.
 }
 \keyword{internal}

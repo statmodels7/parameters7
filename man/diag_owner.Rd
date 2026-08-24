@@ -7,13 +7,21 @@
 diag_owner(s)
 }
 \arguments{
-\item{s}{A \code{\link[=DiagMatrixParam]{DiagMatrixParam()}} object.}
+\item{s}{A \code{\link[=DiagMatrixParam]{DiagMatrixParam()}} object, whose \code{param_params$shared} and
+\code{dimension} are read.}
 }
 \value{
-An integer vector of length \code{s@dimension}.
+An integer vector of length \code{s@dimension}, with values in
+\code{1:s@n_free}.
 }
 \description{
-The index into the free vector of the value controlling each entry: the
-identity for an unshared parameter, and all ones for a shared one.
+Returns, for each of the \eqn{p} diagonal entries, the index into the free
+vector of the value that controls it: \code{1:p} for a \code{\link[=diagonal_matrix]{diagonal_matrix()}}, and
+\code{rep(1, p)} for a \code{\link[=scalar_matrix]{scalar_matrix()}}, whose one value controls them all. The
+derivative methods use it to place a link derivative in the right entries.
+}
+\seealso{
+\code{\link[=diag_multiplicity]{diag_multiplicity()}}, the same information counted the other way,
+and \code{\link[=diag_entries]{diag_entries()}}.
 }
 \keyword{internal}

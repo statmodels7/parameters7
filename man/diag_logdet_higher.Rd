@@ -9,25 +9,26 @@ diag_logdet_higher(s, eta, order)
 \arguments{
 \item{s}{A \code{\link[=DiagMatrixParam]{DiagMatrixParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}.}
 
-\item{order}{The derivative order, 2 to 4.}
+\item{order}{The derivative order: 2, 3 or 4.}
 }
 \value{
-A named numeric vector, keyed by
-\code{\link[=param_tuple_names]{param_tuple_names(s, order)}}.
+A numeric vector of \code{choose(s@n_free + order - 1, order)} entries,
+keyed as \code{param_tuple_names(s, order)} and in that order. Under the log link
+it is all zeros at every order above 1, \eqn{\log h(\eta) = \eta} being
+linear.
 }
 \description{
-The derivative components of orders two to four of \eqn{\log\lvert M\rvert}
-for a diagonal family.
-}
-\details{
-The log-determinant is the sum of the logarithms of the diagonal entries,
-so it is a sum of functions of one free value each. Every mixed component
-therefore vanishes, and a pure one is the corresponding derivative of
-\code{\link[=diag_dlog]{diag_dlog()}} counted once per entry the free value owns.
+Assembles the derivative components of orders two to four of \eqn{\log|M|} for
+a diagonal family. The log-determinant is \eqn{\sum_i \log h(\eta_i)}, a sum
+of functions of one free value each, so every mixed component is exactly zero
+and a pure one is the matching derivative from \code{\link[=diag_dlog]{diag_dlog()}}, counted once per
+entry the free value owns.
 }
 \seealso{
-\code{\link[=diagonal_matrix]{diagonal_matrix()}}, \code{\link[=param_logdet]{param_logdet()}}
+\code{\link[=diag_dlog]{diag_dlog()}} for the derivatives of \eqn{\log h}, and
+\code{\link[=param_d3logdet.DiagMatrixParam]{param_d3logdet.DiagMatrixParam()}} and \code{\link[=param_d4logdet.DiagMatrixParam]{param_d4logdet.DiagMatrixParam()}},
+the two callers.
 }
 \keyword{internal}

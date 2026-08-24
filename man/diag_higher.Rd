@@ -9,25 +9,26 @@ diag_higher(s, eta, order)
 \arguments{
 \item{s}{A \code{\link[=DiagMatrixParam]{DiagMatrixParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}.}
 
-\item{order}{The derivative order, 3 or 4.}
+\item{order}{The derivative order: 3 or 4.}
 }
 \value{
-A named list of matrices, keyed by
-\code{\link[=param_tuple_names]{param_tuple_names(s, order)}}.
+A list of \code{choose(s@n_free + order - 1, order)} diagonal matrices
+keyed as \code{param_tuple_names(s, order)} and in that order, each
+\code{s@dimension} by \code{s@dimension} with dimnames \code{v1}, \code{v2}, ...
 }
 \description{
-The derivative components of orders three and four, each a diagonal matrix
-with a single non-zero entry.
-}
-\details{
-A diagonal family is separable, so a component is zero unless every index of
-the tuple names the same free value, and it then carries the corresponding
-derivative of the inverse link in the entry that value owns. A shared free
-value owns every entry, which is what \code{diag_owner()} answers.
+Assembles a whole derivative order of a diagonal family, orders three and
+four. A diagonal family is separable, so a component is the zero matrix unless
+every index of the tuple names the \strong{same} free value, and a surviving one
+carries \eqn{h'''(\eta_k)} or \eqn{h''''(\eta_k)} in the entries that value
+owns. Most of the list is therefore exactly zero: at \eqn{p = 3} only 3 of the
+10 third-order components are non-zero.
 }
 \seealso{
-\code{\link[=diagonal_matrix]{diagonal_matrix()}}
+\code{\link[=diag_owner]{diag_owner()}} for the ownership map, and
+\code{\link[=param_d3.DiagMatrixParam]{param_d3.DiagMatrixParam()}} and \code{\link[=param_d4.DiagMatrixParam]{param_d4.DiagMatrixParam()}}, the two
+callers.
 }
 \keyword{internal}

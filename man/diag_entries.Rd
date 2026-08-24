@@ -7,14 +7,24 @@
 diag_entries(s, eta)
 }
 \arguments{
-\item{s}{A \code{\link[=DiagMatrixParam]{DiagMatrixParam()}} object.}
+\item{s}{A \code{\link[=DiagMatrixParam]{DiagMatrixParam()}} object, whose \code{param_params$link},
+\code{param_params$shared} and \code{dimension} are read.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}: \eqn{p}
+values for \code{\link[=diagonal_matrix]{diagonal_matrix()}}, one for \code{\link[=scalar_matrix]{scalar_matrix()}}.}
 }
 \value{
-A numeric vector of length \code{s@dimension}.
+A numeric vector of length \code{s@dimension}, strictly positive under any
+link \code{\link[=check_positive_link]{check_positive_link()}} admits.
 }
 \description{
-Applies the parameter's link, recycling a shared value across the diagonal.
+Applies the parameter's inverse link to the free vector and returns the
+\eqn{p} diagonal entries, recycling the single value across the whole diagonal
+for a \code{\link[=scalar_matrix]{scalar_matrix()}}. Every method of the family that needs the entries
+starts here, so the shared and unshared cases branch in one place.
+}
+\seealso{
+\code{\link[=diag_owner]{diag_owner()}} for which free value each entry belongs to, and
+\code{\link[=diag_multiplicity]{diag_multiplicity()}} for how many entries each free value owns.
 }
 \keyword{internal}

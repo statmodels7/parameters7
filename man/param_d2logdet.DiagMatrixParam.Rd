@@ -6,16 +6,33 @@
 \arguments{
 \item{s}{A \code{\link[=DiagMatrixParam]{DiagMatrixParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named numeric vector.
+A numeric vector of \code{choose(s@n_free + 1, 2)} entries, keyed as
+\code{param_tuple_names(s)} and in that order, the mixed ones exactly zero.
 }
 \description{
-Closed form: \eqn{m_k\{h''/h - (h'/h)^2\}} on the diagonal and zero
-elsewhere, the entries being controlled independently unless the parameter
-shares one value, in which case there is only one free value.
+Closed form. The log-determinant is a sum of \eqn{\log h(\eta_k)} terms, one
+free value each, so every mixed component is exactly zero and a pure one is
+
+\deqn{\partial_{kk} \log|M| = m_k\left\{\frac{h''(\eta_k)}{h(\eta_k)}
+  - \left(\frac{h'(\eta_k)}{h(\eta_k)}\right)^{2}\right\},}
+
+the second derivative of \eqn{\log h} times the number of entries the value
+owns.
+
+Under the \strong{log} link this is identically zero, \eqn{\log h(\eta) = \eta}
+being linear, so a check of this quantity against a numerical reference on a
+default \code{diagonal_matrix()} compares two zeros and would pass whatever was
+missing. Under a square-root link at \eqn{\eta = (1, 2)} it is
+\eqn{(-2, -0.5)}, which is where the formula has content.
+}
+\seealso{
+\code{\link[=param_dlogdet.DiagMatrixParam]{param_dlogdet.DiagMatrixParam()}} for the order below, and
+\code{\link[=diag_logdet_higher]{diag_logdet_higher()}} for orders three and four.
 }
 \keyword{internal}

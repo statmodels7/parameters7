@@ -6,15 +6,27 @@
 \arguments{
 \item{s}{A \code{\link[=DiagMatrixParam]{DiagMatrixParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named list of diagonal matrices.
+A list of \code{choose(s@n_free + 1, 2)} diagonal matrices keyed as
+\code{param_tuple_names(s)} and in that order, the mixed ones exactly zero.
 }
 \description{
-Closed form from the link's second derivative. The entries are independent
-unless the parameter shares one value, so every cross pair vanishes.
+Closed form, from \code{linkfunctions7::d2linkinv()}. The family is \strong{separable}:
+each diagonal entry is a function of one free value alone, so a component
+\eqn{\partial_{kl} M} with \eqn{k \ne l} is exactly the zero matrix, and a
+pure one carries \eqn{h''(\eta_k)} in the entries that value owns. A
+\code{\link[=scalar_matrix]{scalar_matrix()}} has one free value and so one component.
+
+The same separability holds at third and fourth order, which is why those
+methods keep only the pure components too.
+}
+\seealso{
+\code{\link[=param_d1.DiagMatrixParam]{param_d1.DiagMatrixParam()}} and \code{\link[=param_d3.DiagMatrixParam]{param_d3.DiagMatrixParam()}} for the
+neighbouring orders.
 }
 \keyword{internal}

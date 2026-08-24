@@ -6,16 +6,28 @@
 \arguments{
 \item{s}{A \code{\link[=DiagMatrixParam]{DiagMatrixParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named numeric vector.
+A numeric vector of length \code{s@n_free}, named by \code{s@free_names}.
 }
 \description{
-Closed form: \eqn{m_k h'(\eta_k)/h(\eta_k)}, with \eqn{m_k} the number of
-diagonal entries the free value owns -- one, or the whole diagonal when the
-parameter shares a single value.
+Closed form,
+
+\deqn{\partial_k \log|M| = m_k \frac{h'(\eta_k)}{h(\eta_k)},}
+
+with \eqn{m_k} the number of diagonal entries the \eqn{k}-th free value owns:
+1 for a \code{\link[=diagonal_matrix]{diagonal_matrix()}}, and \eqn{p} for the single value of a
+\code{\link[=scalar_matrix]{scalar_matrix()}}, which enters the log-determinant once per entry.
+
+Under the log link \eqn{h'/h = 1}, so the answer is a vector of ones for a
+\code{\link[=diagonal_matrix]{diagonal_matrix()}} and the scalar \eqn{p} for a \code{\link[=scalar_matrix]{scalar_matrix()}}.
+}
+\seealso{
+\code{\link[=diag_multiplicity]{diag_multiplicity()}} for \eqn{m_k}, and
+\code{\link[=param_d2logdet.DiagMatrixParam]{param_d2logdet.DiagMatrixParam()}} for the order above.
 }
 \keyword{internal}

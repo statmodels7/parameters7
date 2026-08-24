@@ -6,16 +6,27 @@
 \arguments{
 \item{s}{A \code{\link[=DiagMatrixParam]{DiagMatrixParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named list of diagonal matrices.
+A list of \code{choose(s@n_free + 2, 3)} diagonal matrices keyed as
+\code{param_tuple_names(s, 3)} and in that order.
 }
 \description{
-Closed form: a diagonal entry depends on one free value through its link,
-so the only surviving components are the pure ones, carrying
-\eqn{h'''(\eta_k)} on the entries the value owns.
+Closed form. A diagonal entry depends on one free value through its link, so
+the only surviving components are the pure ones, and each carries
+\eqn{h'''(\eta_k)} on the entries that value owns. Every mixed component is
+the exact zero matrix.
+
+\eqn{h'''} comes from \code{linkfunctions7::d3linkinv()}, so the accuracy is the
+link's; a family without a closed form here would get a product stencil good
+to about six digits instead.
+}
+\seealso{
+\code{\link[=diag_higher]{diag_higher()}}, which assembles it, and
+\code{\link[=param_d4.DiagMatrixParam]{param_d4.DiagMatrixParam()}} for the order above.
 }
 \keyword{internal}

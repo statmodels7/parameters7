@@ -7,12 +7,21 @@
 diag_multiplicity(s)
 }
 \arguments{
-\item{s}{A \code{\link[=DiagMatrixParam]{DiagMatrixParam()}} object.}
+\item{s}{A \code{\link[=DiagMatrixParam]{DiagMatrixParam()}} object, whose \code{param_params$shared},
+\code{dimension} and \code{n_free} are read.}
 }
 \value{
-An integer vector of length \code{s@n_free}.
+An integer vector of length \code{s@n_free} summing to \code{s@dimension}.
 }
 \description{
-One for an unshared parameter, and the whole diagonal for a shared one.
+Returns \eqn{m_k}, the number of diagonal entries the \eqn{k}-th free value
+controls: 1 for every value of a \code{\link[=diagonal_matrix]{diagonal_matrix()}}, and \eqn{p} for the
+single value of a \code{\link[=scalar_matrix]{scalar_matrix()}}. It is the multiplicity that appears in
+the log-determinant's derivatives, \eqn{\log|M|} counting a shared value once
+per entry.
+}
+\seealso{
+\code{\link[=diag_owner]{diag_owner()}}, the same information per entry, and
+\code{\link[=param_dlogdet.DiagMatrixParam]{param_dlogdet.DiagMatrixParam()}}, which multiplies by it.
 }
 \keyword{internal}

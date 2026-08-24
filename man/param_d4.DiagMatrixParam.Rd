@@ -6,14 +6,27 @@
 \arguments{
 \item{s}{A \code{\link[=DiagMatrixParam]{DiagMatrixParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named list of diagonal matrices.
+A list of \code{choose(s@n_free + 3, 4)} diagonal matrices keyed as
+\code{param_tuple_names(s, 4)} and in that order.
 }
 \description{
-Closed form, with \eqn{h''''} in place of \eqn{h'''}.
+Closed form, the same separable structure as at third order with
+\eqn{h''''(\eta_k)} in place of \eqn{h'''(\eta_k)}. Only the pure components
+survive; every tuple naming two different free values is the exact zero
+matrix.
+
+\eqn{h''''} comes from \code{linkfunctions7::d4linkinv()}. This is the order at
+which a numerical route is least usable, keeping about five digits, so the
+closed form matters most here.
+}
+\seealso{
+\code{\link[=diag_higher]{diag_higher()}}, which assembles it, \code{\link[=param_d3.DiagMatrixParam]{param_d3.DiagMatrixParam()}} for
+the order below, and \code{\link[=numerical_d4]{numerical_d4()}} for the alternative.
 }
 \keyword{internal}

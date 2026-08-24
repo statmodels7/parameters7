@@ -11,38 +11,106 @@ diagonal_matrix(
 )
 }
 \arguments{
-\item{dimension}{The side \eqn{p} of the matrix.}
+\item{dimension}{The side \eqn{p} of the matrix. A single positive whole
+number, finite and at least 1; anything else throws \verb{'dimension' must be a single positive integer.}}
 
-\item{link}{A \pkg{linkfunctions7} link mapping the free scale to the
-positive entries. Defaults to \code{linkfunctions7::log_link()}.}
+\item{link}{A \pkg{linkfunctions7} link carrying the free scale onto the
+positive entries, \code{linkfunctions7::log_link()} by default. It must be a link
+object and its declared lower bound must be non-negative, so
+\code{sqrt_link()} and \code{softplus_link()} are accepted and \code{identity_link()} is
+rejected with its bounds in the message. A bounded link such as
+\code{logit_link()} is accepted, its range \eqn{(0, 1)} being positive; the
+matrix is then positive definite with entries below 1.}
 
-\item{role}{A label; see \code{\link[=log_cholesky]{log_cholesky()}}.}
+\item{role}{A label recording which side of a model the matrix parametrizes:
+\code{"either"} (the default), \code{"covariance"} or \code{"precision"}. No numeric result
+depends on it; see \code{\link[=log_cholesky]{log_cholesky()}} for what carries it.}
 }
 \value{
-An object of class \code{\link[=DiagMatrixParam]{DiagMatrixParam()}}.
+An object of class \code{\link[=DiagMatrixParam]{DiagMatrixParam()}}, with \code{n_free} equal to
+\code{dimension}, \code{free_names} tagged by the link, \code{rank} equal to \code{dimension},
+an empty \code{null_basis}, \code{param_name} \code{"diag"}, and \code{param_params} holding
+\code{link} and \code{shared = FALSE}.
 }
 \description{
-A diagonal matrix whose entries are positive, each carried through a scalar
-link from \pkg{linkfunctions7}.
-}
-\details{
-This is the case in which the two packages meet, and it is the reason
-\pkg{parameters7} composes with \pkg{linkfunctions7} rather than competing
-with it. The Jacobian of a diagonal block is diagonal, which is exactly the
-contract a scalar link satisfies, so the link objects are reused as they
-are and their exact derivatives come with them.
+Returns an object holding the map \eqn{M = \mathrm{diag}(h(\eta_1), \dots,
+h(\eta_p))}, a diagonal matrix whose \eqn{p} entries are positive, each
+carried from one free value by a scalar link. Use it for a covariance that
+assumes independence, which is \eqn{p} free values against
+\code{\link[=log_cholesky]{log_cholesky()}}'s \eqn{p(p+1)/2}, and for a set of independent variance
+components.
 
-A single free value shared by every entry is \code{\link[=scalar_matrix]{scalar_matrix()}}.
+The choice of link is yours, and it is a real choice: the derivatives the
+family reports are the link's own, so the curvature an optimizer sees on the
+free scale changes with it. \code{\link[=scalar_matrix]{scalar_matrix()}} is the same object with one free
+value shared by every entry.
 }
+\section{Where the two packages meet}{
+The Jacobian of a diagonal map is diagonal, which is exactly the contract a
+scalar link satisfies, so the \pkg{linkfunctions7} objects are reused as they
+are and their exact derivatives to fourth order come with them. Nothing here
+rederives a chain rule.
+}
+
+\section{The free names record the link}{
+\code{free_names} is \code{log_d1}, \code{log_d2}, ... under the default, and \code{sqrt_d1},
+\code{sqrt_d2}, ... under a square-root link. A label names the coordinate, never
+the quantity it produces, so a consumer that flattens the free vector into
+scalars with identity links reports a number on the scale it is really on.
+}
+
+\section{The log-determinant, and when it is linear}{
+\deqn{\log|M| = \sum_{i=1}^{p} \log h(\eta_i),}
+
+a sum of functions of one free value each, so every mixed derivative of it is
+exactly zero at every order. Under the \strong{log} link \eqn{\log h(\eta) = \eta},
+so the gradient is a vector of ones and the second, third and fourth
+derivatives all vanish. Under any other link they do not: a square-root link
+at \eqn{\eta = (1, 2)} gives a second derivative of \eqn{(-2, -0.5)} on the
+diagonal.
+}
+
+\section{Notation}{
+
+\eqn{\eta} is the free vector, of length \eqn{d = p}, and \eqn{p} the side of
+the matrix. \eqn{h = g^{-1}} is the inverse link, carrying a free value onto a
+positive diagonal entry, and \eqn{h'}, \eqn{h''} its derivatives in \eqn{\eta}.
+}
+
 \examples{
+# Three independent variances, on the log scale by default.
 s <- diagonal_matrix(3)
+s@free_names
 round(param_value(s, c(0, 0.5, -0.5)), 4)
 
-# any link whose range is positive works
-round(param_value(diagonal_matrix(2, link = linkfunctions7::sqrt_link()),
-                    c(1, 2)), 4)
+# The entries are exp() of the free values, and the round trip closes.
+all.equal(unname(diag(param_value(s, c(0, 0.5, -0.5)))),
+          exp(c(0, 0.5, -0.5)))
+max(abs(param_free(s, param_value(s, c(0.2, -0.3, 0.7))) -
+        c(0.2, -0.3, 0.7)))
+
+# Any link with a non-negative lower bound serves, and the free names say
+# which one was used.
+r <- diagonal_matrix(2, link = linkfunctions7::sqrt_link())
+r@free_names
+round(param_value(r, c(1, 2)), 4)
+
+# A link onto the whole line is refused, an entry having to be positive.
+try(diagonal_matrix(2, link = linkfunctions7::identity_link()))
+
+# The log-determinant is a sum over the entries, and under the log link it
+# is linear, so its higher derivatives vanish exactly.
+eta <- c(0, 0.5, -0.5)
+all.equal(param_logdet(s, eta), sum(eta))
+param_dlogdet(s, eta)
+max(abs(param_d2logdet(s, eta)))
+
+# Under another link they do not.
+param_d2logdet(r, c(1, 2))
 
 }
 \seealso{
-\code{\link[=scalar_matrix]{scalar_matrix()}}, \code{\link[=log_cholesky]{log_cholesky()}}
+\code{\link[=scalar_matrix]{scalar_matrix()}} for one shared value, \code{\link[=log_cholesky]{log_cholesky()}} for an
+unstructured matrix, \code{\link[=dr_prod]{dr_prod()}} to give a correlation its own diagonal
+scale, and \code{\link[=param_value]{param_value()}} for the map.
 }

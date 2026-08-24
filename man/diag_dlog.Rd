@@ -11,24 +11,35 @@ diag_dlog(link, eta, order)
 
 \item{eta}{A numeric vector of free values.}
 
-\item{order}{The derivative order, 1 to 4.}
+\item{order}{The derivative order: 1, 2, 3 or 4.}
 }
 \value{
 A numeric vector the length of \code{eta}.
 }
 \description{
-The derivatives of \eqn{\log h(\eta)} up to fourth order, from the inverse
-link's own derivatives.
+Returns \eqn{\mathrm{d}^m \log h(\eta) / \mathrm{d}\eta^m} for \eqn{m} up to
+four, assembled from the inverse link's own derivatives. Every
+log-determinant derivative of a diagonal or scaled family is one of these,
+multiplied by a count of entries.
 }
 \details{
-Faa di Bruno's formula for the logarithm, written out: with
-\eqn{u_m = h^{(m)}/h} the successive orders are \eqn{u_1},
-\eqn{u_2 - u_1^2}, \eqn{u_3 - 3u_1u_2 + 2u_1^3} and
-\eqn{u_4 - 4u_1u_3 - 3u_2^2 + 12u_1^2u_2 - 6u_1^4}. Dividing by \eqn{h}
-once at the start keeps every term of order one in the ratio rather than in
-the derivative, which matters at the ends of a link's range.
+Faa di Bruno's formula for the logarithm, written out. With
+\eqn{u_m = h^{(m)}/h} the four orders are
+
+\deqn{u_1, \quad u_2 - u_1^2, \quad u_3 - 3u_1u_2 + 2u_1^3, \quad
+  u_4 - 4u_1u_3 - 3u_2^2 + 12u_1^2u_2 - 6u_1^4.}
+
+The division by \eqn{h} happens once, at the start, so every term is a ratio
+of order one, never a derivative that can be large on its own. That matters
+at the ends of a link's range, where \eqn{h} and \eqn{h^{(m)}} can both be
+extreme while the ratio is ordinary.
+
+Under the log link \eqn{h = e^\eta} gives \eqn{u_m = 1} for every \eqn{m}, so
+the first order is 1 and the second, third and fourth are exactly 0, which is
+why a default \code{diagonal_matrix()} reports a linear log-determinant.
 }
 \seealso{
-\code{\link[=diagonal_matrix]{diagonal_matrix()}}, \code{\link[=scaled_dlog]{scaled_dlog()}}
+\code{\link[=diag_logdet_higher]{diag_logdet_higher()}} and \code{\link[=scaled_dlog]{scaled_dlog()}}, the two callers, and
+\code{linkfunctions7::dlinkinv()} for the link derivatives read.
 }
 \keyword{internal}

@@ -11,31 +11,73 @@ scalar_matrix(
 )
 }
 \arguments{
-\item{dimension}{The side \eqn{p} of the matrix.}
+\item{dimension}{The side \eqn{p} of the matrix. A single positive whole
+number, finite and at least 1; anything else throws.}
 
-\item{link}{A \pkg{linkfunctions7} link mapping the free scale to the
-positive scale. Defaults to \code{linkfunctions7::log_link()}.}
+\item{link}{A \pkg{linkfunctions7} link carrying the free value onto the
+positive scale, \code{linkfunctions7::log_link()} by default. Its declared lower
+bound must be non-negative; \code{identity_link()} is rejected.}
 
-\item{role}{A label; see \code{\link[=log_cholesky]{log_cholesky()}}.}
+\item{role}{A label recording which side of a model the matrix parametrizes:
+\code{"either"} (the default), \code{"covariance"} or \code{"precision"}. No numeric result
+depends on it.}
 }
 \value{
-An object of class \code{\link[=DiagMatrixParam]{DiagMatrixParam()}}.
+An object of class \code{\link[=DiagMatrixParam]{DiagMatrixParam()}}, with \code{n_free} 1,
+\code{free_names} a single link-tagged label, \code{rank} equal to \code{dimension}, an
+empty \code{null_basis}, \code{param_name} \code{"scalar"}, and \code{param_params} holding
+\code{link} and \code{shared = TRUE}.
 }
 \description{
-A diagonal matrix with one free value shared by every entry, so
-\eqn{M = \tau I} with \eqn{\tau} positive.
+Returns an object holding the map \eqn{M = \tau I} with \eqn{\tau = h(\eta_1)}
+positive: a diagonal matrix with \strong{one} free value shared by every entry,
+whatever \eqn{p} is. It is the simplest parametrization in the package, and it
+is what a random effect with a single variance component needs.
 }
-\details{
-The simplest parameter there is, and the one a random effect with a single
-variance component uses. With the default log link it is the same matrix as
-\code{scaled_matrix(diag(dimension))}, reached from the other direction.
+\section{One free value, whatever the dimension}{
+\code{n_free} is 1 at every \code{dimension}, and \code{free_names} is \code{log_scale} under the
+default link. The multiplicity shows up in the log-determinant, which is
+\eqn{p \log h(\eta_1)}, so the gradient carries a factor of \eqn{p} and a
+step of one in the free value moves the log-determinant by \eqn{p} under the
+log link.
 }
+
+\section{The same matrix from the other direction}{
+Under the default log link this is \code{scaled_matrix(diag(dimension))}, a
+positive multiple of a fixed matrix that happens to be the identity. The two
+give the same value at the same free value. Prefer this one when the matrix is
+the identity and \code{\link[=scaled_matrix]{scaled_matrix()}} when it is not, and note that
+\code{\link[=scaled_matrix]{scaled_matrix()}} admits a rank-deficient fixed matrix while this family is
+always of full rank.
+}
+
+\section{Notation}{
+
+\eqn{\eta_1} is the single free value, \eqn{\tau = h(\eta_1)} the shared
+positive entry, \eqn{p} the side of the matrix and \eqn{h = g^{-1}} the
+inverse link.
+}
+
 \examples{
+# One free value at any dimension.
 s <- scalar_matrix(3)
-c(n_free = s@n_free)
-round(param_value(s, log(2)), 4)
+c(n_free = s@n_free, dimension = s@dimension)
+s@free_names
+param_value(s, log(2))
+
+# It is scaled_matrix() on the identity, reached from the other side.
+all.equal(param_value(s, log(2)),
+          param_value(scaled_matrix(diag(3)), log(2)),
+          check.attributes = FALSE)
+
+# The shared value enters the log-determinant p times over, so the gradient
+# carries a factor of p.
+c(logdet = param_logdet(s, log(2)), p_log_2 = 3 * log(2))
+param_dlogdet(s, log(2))
 
 }
 \seealso{
-\code{\link[=diagonal_matrix]{diagonal_matrix()}}, \code{\link[=scaled_matrix]{scaled_matrix()}}
+\code{\link[=diagonal_matrix]{diagonal_matrix()}} for one free value per entry, \code{\link[=scaled_matrix]{scaled_matrix()}}
+for a multiple of an arbitrary fixed matrix, and \code{\link[=kron_identity]{kron_identity()}} to
+replicate any parametrization over independent groups.
 }

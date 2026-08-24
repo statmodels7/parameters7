@@ -6,14 +6,25 @@
 \arguments{
 \item{s}{A \code{\link[=DiagMatrixParam]{DiagMatrixParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A diagonal positive definite matrix.
+A diagonal positive definite \code{s@dimension} by \code{s@dimension} numeric
+matrix with dimnames \code{v1}, \code{v2}, ...
 }
 \description{
-The link applied entrywise, on the diagonal.
+Returns \eqn{M = \mathrm{diag}(h(\eta_1), \dots, h(\eta_p))}, the inverse link
+applied to each free value and placed on the diagonal. For a
+\code{\link[=scalar_matrix]{scalar_matrix()}} the one free value is recycled, giving \eqn{h(\eta_1) I}.
+Positive definiteness follows from the link, whose range
+\code{\link[=check_positive_link]{check_positive_link()}} restricted to the non-negative half line at
+construction, so nothing is tested here.
+}
+\seealso{
+\code{\link[=diag_entries]{diag_entries()}}, which applies the link, and
+\code{\link[=param_free.DiagMatrixParam]{param_free.DiagMatrixParam()}} for the inverse.
 }
 \keyword{internal}

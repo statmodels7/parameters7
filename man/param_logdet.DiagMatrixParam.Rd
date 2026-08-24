@@ -6,14 +6,25 @@
 \arguments{
 \item{s}{A \code{\link[=DiagMatrixParam]{DiagMatrixParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
 A single number.
 }
 \description{
-The sum of the logs of the entries.
+Returns \eqn{\log|M| = \sum_{i=1}^{p} \log h(\eta_i)}, the sum of the
+logarithms of the diagonal entries, which for a diagonal matrix is the
+log-determinant exactly. For a \code{\link[=scalar_matrix]{scalar_matrix()}} the one entry is counted
+\eqn{p} times, giving \eqn{p \log h(\eta_1)}.
+
+Under the \strong{log} link \eqn{\log h(\eta) = \eta}, so the result is \code{sum(eta)}
+and the quantity is linear in the free vector; under any other link it is not.
+}
+\seealso{
+\code{\link[=param_dlogdet.DiagMatrixParam]{param_dlogdet.DiagMatrixParam()}} for its gradient, and \code{\link[=diag_dlog]{diag_dlog()}}
+for the derivatives of \eqn{\log h}.
 }
 \keyword{internal}

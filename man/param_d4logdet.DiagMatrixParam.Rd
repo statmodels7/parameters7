@@ -6,14 +6,28 @@
 \arguments{
 \item{s}{A \code{\link[=DiagMatrixParam]{DiagMatrixParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named numeric vector.
+A numeric vector of \code{choose(s@n_free + 3, 4)} entries, keyed as
+\code{param_tuple_names(s, 4)}.
 }
 \description{
-Closed form; see \code{\link[=param_d3logdet.DiagMatrixParam]{param_d3logdet.DiagMatrixParam()}}.
+Closed form, by the same separability as at third order: each pure component
+is the fourth derivative of \eqn{\log h} at that free value, times the number
+of entries it owns, and every mixed component is exactly zero. The fourth
+derivative of \eqn{\log h} is
+\eqn{u_4 - 4u_1u_3 - 3u_2^2 + 12u_1^2u_2 - 6u_1^4} with
+\eqn{u_m = h^{(m)}/h}, written out in \code{\link[=diag_dlog]{diag_dlog()}}.
+
+Under the log link the whole vector is zero. This is the order where a
+numerical route is least usable, so the closed form is worth most here.
+}
+\seealso{
+\code{\link[=diag_logdet_higher]{diag_logdet_higher()}}, which assembles it, \code{\link[=diag_dlog]{diag_dlog()}} for the
+formula, and \code{\link[=param_d4logdet.matrix_parameter]{param_d4logdet.matrix_parameter()}} for the numerical route.
 }
 \keyword{internal}

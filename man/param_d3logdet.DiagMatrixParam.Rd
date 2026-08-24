@@ -2,20 +2,30 @@
 % Please edit documentation in R/diagonal_matrix.R
 \name{param_d3logdet.DiagMatrixParam}
 \alias{param_d3logdet.DiagMatrixParam}
-\title{Higher Log-Determinant Derivatives of a Diagonal Parameter}
+\title{Third Log-Determinant Derivatives of a Diagonal Parameter}
 \arguments{
 \item{s}{A \code{\link[=DiagMatrixParam]{DiagMatrixParam()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named numeric vector.
+A numeric vector of \code{choose(s@n_free + 2, 3)} entries, keyed as
+\code{param_tuple_names(s, 3)}.
 }
 \description{
-Closed form: the log-determinant is a sum of \eqn{\log h(\eta_k)} terms,
-so each pure component is the matching derivative of \eqn{\log h} times
-the number of entries the value owns, and every mixed component is zero.
+Closed form. The log-determinant is a sum of \eqn{\log h(\eta_k)} terms, so
+each pure component is the third derivative of \eqn{\log h} at that free
+value, times the number of entries the value owns, and every mixed component
+is exactly zero.
+
+Under the log link the whole vector is zero, \eqn{\log h(\eta) = \eta} being
+linear. A link with curvature is where this order has content.
+}
+\seealso{
+\code{\link[=diag_logdet_higher]{diag_logdet_higher()}}, which assembles it, and \code{\link[=diag_dlog]{diag_dlog()}} for the
+derivatives of \eqn{\log h}.
 }
 \keyword{internal}
