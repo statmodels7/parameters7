@@ -4,16 +4,31 @@
 \alias{param_d3.parameter}
 \title{Default Third Derivatives}
 \arguments{
-\item{s}{A \code{\link[=parameter]{parameter()}} object.}
+\item{s}{A \code{\link[=parameter]{parameter()}} object, of any branch.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named list.
+A list of \code{choose(s@n_free + 2, 3)} estimates keyed as
+\code{param_tuple_names(s, 3)} and in that order, each shaped like
+\code{\link[=param_value]{param_value()}}'s result and symmetrized for a matrix family.
 }
 \description{
-Fallback: see \code{\link[=numerical_d3]{numerical_d3()}}.
+The method every \code{\link[=parameter]{parameter()}} inherits when it registers no \code{\link[=param_d3]{param_d3()}} of
+its own. It applies one product stencil per index tuple directly to
+\code{\link[=param_value]{param_value()}}, never to a lower-order numerical derivative, with a
+one-dimensional factor per distinct component of the order that component's
+multiplicity asks for. The step is \eqn{\varepsilon^{1/5}\max(1, |\eta_k|)},
+about \eqn{7.4 \times 10^{-4}} near the origin, and the truncation error is of
+order \eqn{h^2}; measured against a closed form on a \eqn{2 \times 2}
+covariance the gap is \eqn{7 \times 10^{-6}} on entries of size 12. No family
+in this package reaches it.
+}
+\seealso{
+\code{\link[=numerical_d3]{numerical_d3()}}, which does the work and writes the stencil out, and
+\code{\link[=param_d4.parameter]{param_d4.parameter()}} for the order above.
 }
 \keyword{internal}

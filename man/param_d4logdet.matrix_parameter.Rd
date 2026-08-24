@@ -6,16 +6,47 @@
 \arguments{
 \item{s}{A \code{\link[=matrix_parameter]{matrix_parameter()}} object.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named numeric vector.
+A numeric vector of \code{choose(s@n_free + 3, 4)} entries, keyed as
+\code{param_tuple_names(s, 4)} and in that order.
 }
 \description{
-Fallback: one second-order stencil on \code{\link[=param_d2logdet]{param_d2logdet()}} in the
-last two components of the tuple -- one layer, mixed across components
-where they differ.
+The method every \code{\link[=matrix_parameter]{matrix_parameter()}} inherits when it registers no
+\code{\link[=param_d4logdet]{param_d4logdet()}} of its own. For the tuple \eqn{(k, l, m, n)} it takes the
+\eqn{(k, l)} component of \code{\link[=param_d2logdet]{param_d2logdet()}} and applies one second-order
+stencil in the remaining two components: the three-point second difference
+where \eqn{m = n}, and the four-point mixed stencil
+
+\deqn{\frac{g(\eta + h_m e_m + h_n e_n) - g(\eta + h_m e_m - h_n e_n)
+  - g(\eta - h_m e_m + h_n e_n) + g(\eta - h_m e_m - h_n e_n)}
+  {4 h_m h_n}}
+
+where they differ, both at the order-2 step
+\eqn{\varepsilon^{1/4}\max(1, |\eta_k|)}. It costs three or four evaluations
+of the whole second-order block per tuple.
+}
+\section{This is the least accurate quantity the package can produce}{
+With analytic \code{\link[=param_d1]{param_d1()}} and \code{\link[=param_d2]{param_d2()}} the differencing is a single layer
+on an exact identity, and on a \eqn{4 \times 4} AR(1) covariance the answer
+agrees with the closed form to \eqn{2 \times 10^{-6}} on entries of size 2.2.
+
+With only \code{\link[=param_value]{param_value()}} supplied, the numerical arrays feed a numerical
+second-order block which is then differenced twice more, and the layers
+compound: the same measurement gives an absolute error of \strong{9}, larger than
+the quantity itself. The number is not usable. A family that needs a fourth
+derivative of its log-determinant must supply at least \code{\link[=param_d1]{param_d1()}} and
+\code{\link[=param_d2]{param_d2()}} in closed form, and preferably \code{\link[=param_d2logdet]{param_d2logdet()}} as well.
+\code{\link[=param_is_numerical]{param_is_numerical()}} is how a consumer finds out which case it is in.
+}
+
+\seealso{
+\code{\link[=param_d4logdet]{param_d4logdet()}} for the generic,
+\code{\link[=param_d3logdet.matrix_parameter]{param_d3logdet.matrix_parameter()}} for the order below, and
+\code{\link[=param_is_numerical]{param_is_numerical()}} to ask which components are numerical.
 }
 \keyword{internal}

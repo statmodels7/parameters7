@@ -4,18 +4,29 @@
 \alias{param_free.parameter}
 \title{Rejection to Invert Without a Closed Form}
 \arguments{
-\item{s}{A \code{\link[=parameter]{parameter()}} object.}
+\item{s}{A \code{\link[=parameter]{parameter()}} object, whose \code{param_name} goes into the message.}
 
-\item{m}{A symmetric numeric matrix.}
+\item{m}{A value of the family's shape. Never read.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-Never returns; raises an error.
+Never returns; always signals an error.
 }
 \description{
-The base class rejects rather than inverting the map numerically: an
-optimization-based inverse would return a plausible \eqn{\eta} for a matrix
-outside the set the family parametrizes.
+The method every \code{\link[=parameter]{parameter()}} inherits when it registers no \code{\link[=param_free]{param_free()}} of
+its own. It always signals an error, naming the family, and it is the one
+generic whose base method refuses instead of computing. Nothing here is
+approximated, which is the point: an inverse obtained by minimizing
+\eqn{\lVert V(\eta) - m \rVert} would hand back a plausible \eqn{\eta} for a
+matrix that is nowhere in the family's set, and the caller could not tell that
+answer from a correct one. The inverse map is written out exactly or refused.
+
+All fifteen families in this package write theirs out, so this method is
+reached only by a family defined elsewhere.
+}
+\seealso{
+\code{\link[=param_free]{param_free()}} for the generic and for what each family's own method
+rejects, and \code{\link[=param_value]{param_value()}} for the forward map.
 }
 \keyword{internal}

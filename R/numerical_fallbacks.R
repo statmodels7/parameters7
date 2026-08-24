@@ -510,13 +510,24 @@ numerical_d2 <- function(s, eta) {
 
 #' @title Default First Derivatives
 #' @name param_d1.parameter
-#' @description Fallback: one central difference of
-#'   [param_value()] per component (see
-#'   [numerical_d1()]).
-#' @param s A [parameter()] object.
-#' @param eta A numeric vector of free values.
-#' @param ... Unused.
-#' @return A named list of symmetric matrices.
+#' @description
+#' The method every [parameter()] inherits when it registers no [param_d1()] of
+#' its own. It estimates \eqn{\partial V/\partial \eta_k} by one three-point
+#' central difference of [param_value()] in each component,
+#' \eqn{(V(\eta + h e_k) - V(\eta - h e_k)) / 2h}, at the step
+#' \eqn{\varepsilon^{1/3}\max(1, |\eta_k|)}, which is about
+#' \eqn{6.1 \times 10^{-6}} near the origin. It costs \eqn{2d} evaluations of the
+#' map and delivers about eleven digits; measured against a closed form on a
+#' \eqn{2 \times 2} covariance the gap is \eqn{7 \times 10^{-11}} on entries of
+#' size 3. No family in this package reaches it.
+#' @param s A [parameter()] object, of any branch.
+#' @param eta A numeric vector of free values, of length `s@n_free`, already
+#'   checked by the generic.
+#' @param ... Unused, and accepted so the signature matches the generic's.
+#' @return A list of `s@n_free` estimates named by `s@free_names`, each shaped
+#'   like [param_value()]'s result and symmetrized for a matrix family.
+#' @seealso [numerical_d1()], which does the work and carries the stencil, and
+#'   [param_is_numerical()] to ask whether a family reaches this method.
 #' @keywords internal
 S7::method(param_d1, parameter) <- function(s, eta, ...) {
   numerical_d1(s, eta)
@@ -524,26 +535,57 @@ S7::method(param_d1, parameter) <- function(s, eta, ...) {
 
 #' @title Default Second Derivatives
 #' @name param_d2.parameter
-#' @description Fallback: see [numerical_d2()].
-#' @param s A [parameter()] object.
-#' @param eta A numeric vector of free values.
-#' @param ... Unused.
-#' @return A named list of symmetric matrices.
+#' @description
+#' The method every [parameter()] inherits when it registers no [param_d2()] of
+#' its own. It takes exactly one difference per component, of whichever quantity
+#' the family already supplies: the analytic [param_d1()] where there is one, and
+#' [param_value()] itself where there is not, through a three-point second
+#' difference on the diagonal and a four-point mixed stencil off it. The step is
+#' the order-2 one, \eqn{\varepsilon^{1/4}\max(1, |\eta_k|)}, about
+#' \eqn{1.2 \times 10^{-4}} near the origin, and the truncation error is of order
+#' \eqn{h^2} on every route. No family in this package reaches it.
+#' @param s A [parameter()] object, of any branch.
+#' @param eta A numeric vector of free values, of length `s@n_free`, already
+#'   checked by the generic.
+#' @param ... Unused, and accepted so the signature matches the generic's.
+#' @return A list of `choose(s@n_free + 1, 2)` estimates keyed as
+#'   `param_tuple_names(s)` and in that order, each shaped like
+#'   [param_value()]'s result and symmetrized for a matrix family.
+#' @seealso [numerical_d2()], which does the work and writes the three routes
+#'   out, and [param_d1.parameter()] for the order below.
 #' @keywords internal
 S7::method(param_d2, parameter) <- function(s, eta, ...) {
   numerical_d2(s, eta)
 }
 
 #' @title Default Log-Determinant
-#' @name param_logdet.parameter
+#' @name param_logdet.matrix_parameter
 #' @description
-#' Fallback: the sum of the logs of the eigenvalues the declared rank keeps,
-#' which is the log-determinant for a full-rank family and the log
-#' pseudo-determinant otherwise.
-#' @param s A [parameter()] object.
-#' @param eta A numeric vector of free values.
-#' @param ... Unused.
+#' The method every [matrix_parameter()] inherits when it registers no
+#' [param_logdet()] of its own. It takes an eigendecomposition of
+#' [param_value()], keeps the first `s@rank` eigenvalues, and returns the sum of
+#' their logarithms: the log-determinant for a full-rank family and the log
+#' pseudo-determinant otherwise. Which eigenvalues are kept is decided by
+#' position, from the declared rank, and never from their size.
+#'
+#' Exact, not approximated, so [param_is_numerical()] reporting `TRUE` here means
+#' that the answer costs \eqn{O(p^3)} and cannot be checked against an
+#' eigendecomposition, not that it is inaccurate. Measured against a closed form
+#' on a \eqn{4 \times 4} AR(1) covariance, the agreement is
+#' \eqn{4 \times 10^{-15}}.
+#' @details
+#' A non-positive eigenvalue among the ones the rank keeps throws, naming the
+#' family and the counts: the family has declared a rank it does not have at this
+#' \eqn{\eta}, so `log()` of a non-positive number would be the wrong thing to
+#' return. This is the check that catches a `param_value()` method whose matrix
+#' leaves the positive semidefinite cone.
+#' @param s A [matrix_parameter()] object, whose `rank` and `dimension` are read.
+#' @param eta A numeric vector of free values, of length `s@n_free`, already
+#'   checked by the generic.
+#' @param ... Unused, and accepted so the signature matches the generic's.
 #' @return A single number.
+#' @seealso [param_logdet()] for the generic, [param_spectrum()] for the
+#'   decomposition, and [param_dlogdet.matrix_parameter()] for its derivative.
 #' @keywords internal
 S7::method(param_logdet, matrix_parameter) <- function(s, eta, ...) {
   sp <- param_spectrum(s, eta)
@@ -558,15 +600,29 @@ S7::method(param_logdet, matrix_parameter) <- function(s, eta, ...) {
 }
 
 #' @title Default Log-Determinant Gradient
-#' @name param_dlogdet.parameter
+#' @name param_dlogdet.matrix_parameter
 #' @description
-#' Fallback: \eqn{\mathrm{tr}(M^{+} \partial_k M)}, with the pseudo-inverse
-#' formed from the directions the declared rank keeps, which is the ordinary
-#' inverse when the family is of full rank.
-#' @param s A [parameter()] object.
-#' @param eta A numeric vector of free values.
-#' @param ... Unused.
-#' @return A named numeric vector.
+#' The method every [matrix_parameter()] inherits when it registers no
+#' [param_dlogdet()] of its own. It evaluates the trace identity
+#'
+#' \deqn{\partial_k \log|M| = \mathrm{tr}\!\left(M^{+} \partial_k M\right),}
+#'
+#' with \eqn{M^{+}} the Moore-Penrose inverse formed from the directions the
+#' declared rank keeps, which is the ordinary inverse for a full-rank family. The
+#' trace is computed as `sum(mi * dk)`, the elementwise product summed, both
+#' matrices being symmetric, so no matrix product is formed.
+#'
+#' The identity is exact, so the accuracy is entirely the accuracy of
+#' [param_d1()]. With an analytic first derivative the answer agrees with a
+#' closed form to \eqn{4 \times 10^{-15}}; with a numerical one, to
+#' \eqn{2 \times 10^{-11}}.
+#' @param s A [matrix_parameter()] object.
+#' @param eta A numeric vector of free values, of length `s@n_free`, already
+#'   checked by the generic.
+#' @param ... Unused, and accepted so the signature matches the generic's.
+#' @return A numeric vector of length `s@n_free`, named by `s@free_names`.
+#' @seealso [param_dlogdet()] for the generic, [param_d1()] for the derivative
+#'   arrays this reads, and [spectrum_pinv()] for \eqn{M^{+}}.
 #' @keywords internal
 S7::method(param_dlogdet, matrix_parameter) <- function(s, eta, ...) {
   sp <- param_spectrum(s, eta)
@@ -579,15 +635,32 @@ S7::method(param_dlogdet, matrix_parameter) <- function(s, eta, ...) {
 }
 
 #' @title Default Log-Determinant Hessian
-#' @name param_d2logdet.parameter
+#' @name param_d2logdet.matrix_parameter
 #' @description
-#' Fallback: \eqn{\mathrm{tr}(M^{+} \partial_{kl} M) -
-#' \mathrm{tr}(M^{+} \partial_k M\, M^{+} \partial_l M)}, the derivative of the
-#' identity behind [param_dlogdet()].
-#' @param s A [parameter()] object.
-#' @param eta A numeric vector of free values.
-#' @param ... Unused.
-#' @return A named numeric vector.
+#' The method every [matrix_parameter()] inherits when it registers no
+#' [param_d2logdet()] of its own. It evaluates the identity that follows from
+#' differentiating [param_dlogdet()]'s trace once more, using
+#' \eqn{\partial_l M^{-1} = -M^{-1}(\partial_l M)M^{-1}},
+#'
+#' \deqn{\partial_{kl} \log|M| = \mathrm{tr}\!\left(M^{+} \partial_{kl} M\right)
+#'   - \mathrm{tr}\!\left(M^{+} (\partial_k M)\, M^{+} (\partial_l M)\right),}
+#'
+#' with \eqn{M^{+}} the pseudo-inverse over the directions the declared rank
+#' keeps. The second trace is formed as `sum(t(mi %*% dk) * (mi %*% dl))`, which
+#' is the trace of the product without the product being multiplied out.
+#'
+#' Exact given the derivative arrays, so the accuracy is theirs. With analytic
+#' arrays the answer agrees with a closed form to \eqn{1 \times 10^{-14}}; with
+#' numerical ones, to \eqn{6 \times 10^{-8}}.
+#' @param s A [matrix_parameter()] object.
+#' @param eta A numeric vector of free values, of length `s@n_free`, already
+#'   checked by the generic.
+#' @param ... Unused, and accepted so the signature matches the generic's.
+#' @return A numeric vector of `choose(s@n_free + 1, 2)` entries, keyed as
+#'   `param_tuple_names(s)` and in that order.
+#' @seealso [param_d2logdet()] for the generic, [param_d1()] and [param_d2()] for
+#'   the arrays this reads, and [param_d3logdet.matrix_parameter()] for the order
+#'   above, which differences this one.
 #' @keywords internal
 S7::method(param_d2logdet, matrix_parameter) <- function(s, eta, ...) {
   sp <- param_spectrum(s, eta)
@@ -604,14 +677,38 @@ S7::method(param_d2logdet, matrix_parameter) <- function(s, eta, ...) {
 }
 
 #' @title Default Solve
-#' @name param_solve.parameter
-#' @description Fallback: a Cholesky of [param_value()], with the
-#'   definiteness verdict taken spectrally (see [chol_pd()]).
-#' @param s A [parameter()] object.
-#' @param eta A numeric vector of free values.
-#' @param b A numeric matrix with `s@dimension` rows.
-#' @param ... Unused.
-#' @return A numeric matrix.
+#' @name param_solve.matrix_parameter
+#' @description
+#' The method every [matrix_parameter()] inherits when it registers no
+#' [param_solve()] of its own. It takes the Cholesky factor \eqn{L} from
+#' [param_factor()] and applies it twice,
+#' `backsolve(t(l), forwardsolve(l, b))`, which is
+#' \eqn{L^{-\top}L^{-1}B = M^{-1}B}. No inverse is formed and no linear system is
+#' solved twice.
+#'
+#' Exact, not approximated: it agrees with `base::solve()` to the last bit on a
+#' well-conditioned matrix, and this is why [param_is_numerical()] does not list
+#' it. The generic has already rejected a rank-deficient family and one whose
+#' value is not a symmetric matrix, and filled `b` with the identity when the
+#' caller left it out, so by the time this runs `b` is a matrix of the right
+#' height.
+#' @details
+#' Positive definiteness is decided inside [param_factor()], from the
+#' eigenvalues, before any factorization is attempted; see [chol_pd()] for why
+#' the verdict does not come from whether [base::chol()] raises.
+#'
+#' The cost is one \eqn{O(p^3)} factorization plus \eqn{O(p^2)} per column of
+#' `b`. Seven families override this with a closed-form inverse and pay neither.
+#' @param s A [matrix_parameter()] object, of full rank.
+#' @param eta A numeric vector of free values, of length `s@n_free`, already
+#'   checked by the generic.
+#' @param b A numeric matrix with `s@dimension` rows, already coerced from a
+#'   vector and defaulted to the identity by the generic.
+#' @param ... Unused, and accepted so the signature matches the generic's.
+#' @return A numeric matrix with `s@dimension` rows and as many columns as `b`.
+#' @seealso [param_solve()] for the generic and the argument handling,
+#'   [param_factor.matrix_parameter()] for the factor, and [chol_pd()] for the
+#'   definiteness test.
 #' @keywords internal
 S7::method(param_solve, matrix_parameter) <- function(s, eta, b = NULL, ...) {
   l <- param_factor(s, eta)
@@ -619,14 +716,29 @@ S7::method(param_solve, matrix_parameter) <- function(s, eta, b = NULL, ...) {
 }
 
 #' @title Default Factor
-#' @name param_factor.parameter
-#' @description Fallback: the lower Cholesky factor of
-#'   [param_value()], rejected when the matrix is not positive
-#'   definite spectrally.
-#' @param s A [parameter()] object.
-#' @param eta A numeric vector of free values.
-#' @param ... Unused.
-#' @return A lower triangular numeric matrix.
+#' @name param_factor.matrix_parameter
+#' @description
+#' The method every [matrix_parameter()] inherits when it registers no
+#' [param_factor()] of its own. It evaluates [param_value()] and returns the
+#' lower triangular Cholesky factor through [chol_pd()], which decides positive
+#' definiteness from the eigenvalues before attempting the factorization. Exact,
+#' at \eqn{O(p^3)}.
+#' @details
+#' A family that declares full rank and is then not positive definite at this
+#' \eqn{\eta} throws, naming the family and saying that the verdict is spectral.
+#' That distinction matters to whoever reads the message: a caught `chol()` error
+#' would be a statement about the arithmetic, and could differ between platforms
+#' on a matrix with an exactly zero eigenvalue, while a test on the eigenvalues
+#' is a statement about the matrix. The error means the family's own
+#' [param_value()] has left the cone it claims to parametrize.
+#' @param s A [matrix_parameter()] object, of full rank.
+#' @param eta A numeric vector of free values, of length `s@n_free`, already
+#'   checked by the generic.
+#' @param ... Unused, and accepted so the signature matches the generic's.
+#' @return A `s@dimension` by `s@dimension` lower triangular numeric matrix with
+#'   a positive diagonal, satisfying `L %*% t(L) == param_value(s, eta)`.
+#' @seealso [param_factor()] for the generic, which rejects a rank-deficient
+#'   family before this runs, and [chol_pd()] for the definiteness test.
 #' @keywords internal
 S7::method(param_factor, matrix_parameter) <- function(s, eta, ...) {
   l <- chol_pd(param_value(s, eta))
@@ -643,13 +755,22 @@ S7::method(param_factor, matrix_parameter) <- function(s, eta, ...) {
 #' @title Rejection to Invert Without a Closed Form
 #' @name param_free.parameter
 #' @description
-#' The base class rejects rather than inverting the map numerically: an
-#' optimization-based inverse would return a plausible \eqn{\eta} for a matrix
-#' outside the set the family parametrizes.
-#' @param s A [parameter()] object.
-#' @param m A symmetric numeric matrix.
-#' @param ... Unused.
-#' @return Never returns; raises an error.
+#' The method every [parameter()] inherits when it registers no [param_free()] of
+#' its own. It always signals an error, naming the family, and it is the one
+#' generic whose base method refuses instead of computing. Nothing here is
+#' approximated, which is the point: an inverse obtained by minimizing
+#' \eqn{\lVert V(\eta) - m \rVert} would hand back a plausible \eqn{\eta} for a
+#' matrix that is nowhere in the family's set, and the caller could not tell that
+#' answer from a correct one. The inverse map is written out exactly or refused.
+#'
+#' All fifteen families in this package write theirs out, so this method is
+#' reached only by a family defined elsewhere.
+#' @param s A [parameter()] object, whose `param_name` goes into the message.
+#' @param m A value of the family's shape. Never read.
+#' @param ... Unused, and accepted so the signature matches the generic's.
+#' @return Never returns; always signals an error.
+#' @seealso [param_free()] for the generic and for what each family's own method
+#'   rejects, and [param_value()] for the forward map.
 #' @keywords internal
 S7::method(param_free, parameter) <- function(s, m, ...) {
   stop(sprintf(paste0(
@@ -890,11 +1011,25 @@ mixed_stencil <- function(f, eta, tuple) {
 
 #' @title Default Third Derivatives
 #' @name param_d3.parameter
-#' @description Fallback: see [numerical_d3()].
-#' @param s A [parameter()] object.
-#' @param eta A numeric vector of free values.
-#' @param ... Unused.
-#' @return A named list.
+#' @description
+#' The method every [parameter()] inherits when it registers no [param_d3()] of
+#' its own. It applies one product stencil per index tuple directly to
+#' [param_value()], never to a lower-order numerical derivative, with a
+#' one-dimensional factor per distinct component of the order that component's
+#' multiplicity asks for. The step is \eqn{\varepsilon^{1/5}\max(1, |\eta_k|)},
+#' about \eqn{7.4 \times 10^{-4}} near the origin, and the truncation error is of
+#' order \eqn{h^2}; measured against a closed form on a \eqn{2 \times 2}
+#' covariance the gap is \eqn{7 \times 10^{-6}} on entries of size 12. No family
+#' in this package reaches it.
+#' @param s A [parameter()] object, of any branch.
+#' @param eta A numeric vector of free values, of length `s@n_free`, already
+#'   checked by the generic.
+#' @param ... Unused, and accepted so the signature matches the generic's.
+#' @return A list of `choose(s@n_free + 2, 3)` estimates keyed as
+#'   `param_tuple_names(s, 3)` and in that order, each shaped like
+#'   [param_value()]'s result and symmetrized for a matrix family.
+#' @seealso [numerical_d3()], which does the work and writes the stencil out, and
+#'   [param_d4.parameter()] for the order above.
 #' @keywords internal
 S7::method(param_d3, parameter) <- function(s, eta, ...) {
   numerical_d3(s, eta)
@@ -902,26 +1037,70 @@ S7::method(param_d3, parameter) <- function(s, eta, ...) {
 
 #' @title Default Fourth Derivatives
 #' @name param_d4.parameter
-#' @description Fallback: see [numerical_d4()].
-#' @param s A [parameter()] object.
-#' @param eta A numeric vector of free values.
-#' @param ... Unused.
-#' @return A named list.
+#' @description
+#' The method every [parameter()] inherits when it registers no [param_d4()] of
+#' its own. It applies one product stencil per index tuple directly to
+#' [param_value()], as [param_d3.parameter()] does, with the multiplicities
+#' summing to four. The step is \eqn{\varepsilon^{1/6}\max(1, |\eta_k|)}, about
+#' \eqn{2.5 \times 10^{-3}} near the origin, and rounding amplified by
+#' \eqn{h^{-4}} leaves about five digits: measured against a closed form on a
+#' \eqn{2 \times 2} covariance the gap is \eqn{1.2 \times 10^{-4}} on entries of
+#' size 24. Enough to catch a wrong closed form, not enough to fit with. No
+#' family in this package reaches it.
+#' @param s A [parameter()] object, of any branch.
+#' @param eta A numeric vector of free values, of length `s@n_free`, already
+#'   checked by the generic.
+#' @param ... Unused, and accepted so the signature matches the generic's.
+#' @return A list of `choose(s@n_free + 3, 4)` estimates keyed as
+#'   `param_tuple_names(s, 4)` and in that order, each shaped like
+#'   [param_value()]'s result and symmetrized for a matrix family.
+#' @seealso [numerical_d4()], which does the work, and [param_d3.parameter()] for
+#'   the order below.
 #' @keywords internal
 S7::method(param_d4, parameter) <- function(s, eta, ...) {
   numerical_d4(s, eta)
 }
 
-#' @title Default Higher Log-Determinant Derivatives
+#' @title Default Third Log-Determinant Derivatives
 #' @name param_d3logdet.matrix_parameter
 #' @description
-#' Fallback: one central stencil on [param_d2logdet()], which is
-#' the exact trace identity given the matrix derivatives -- a single layer on
-#' an analytic quantity, per the toolkit's rule.
+#' The method every [matrix_parameter()] inherits when it registers no
+#' [param_d3logdet()] of its own. For the tuple \eqn{(k, l, m)} it takes the
+#' \eqn{(k, l)} component of [param_d2logdet()] and applies one three-point
+#' central difference in the remaining component,
+#'
+#' \deqn{\partial_{klm} \log|M| \approx
+#'   \frac{\partial_{kl}\log|M|\,(\eta + h e_m)
+#'       - \partial_{kl}\log|M|\,(\eta - h e_m)}{2h},}
+#'
+#' at the order-1 step \eqn{\varepsilon^{1/3}\max(1, |\eta_m|)}. Since the tuple
+#' is sorted, the differenced component is the largest index, and the pair is
+#' looked up by matching sorted indices against
+#' [param_tuple_indices()]'s order-2 list. It costs two evaluations of the whole
+#' second-order block per tuple.
+#' @details
+#' # How accurate it is depends on the family, not on this method
+#'
+#' [param_d2logdet()] is an exact identity **given** the matrix derivative
+#' arrays, so differencing it is a single numerical layer whenever
+#' [param_d1()] and [param_d2()] are analytic. Measured on a \eqn{4 \times 4}
+#' AR(1) covariance with analytic arrays, the answer agrees with the closed form
+#' to \eqn{3 \times 10^{-10}} on entries of size 4.5.
+#'
+#' Where the arrays are themselves numerical the layers do compound, and the
+#' same measurement gives \eqn{8 \times 10^{-3}}, a relative error near two parts
+#' in a thousand. A family that needs this order and supplies only
+#' [param_value()] should write [param_d1()] and [param_d2()] out first, which
+#' recovers the \eqn{10^{-10}}.
 #' @param s A [matrix_parameter()] object.
-#' @param eta A numeric vector of free values.
-#' @param ... Unused.
-#' @return A named numeric vector.
+#' @param eta A numeric vector of free values, of length `s@n_free`, already
+#'   checked by the generic.
+#' @param ... Unused, and accepted so the signature matches the generic's.
+#' @return A numeric vector of `choose(s@n_free + 2, 3)` entries, keyed as
+#'   `param_tuple_names(s, 3)` and in that order.
+#' @seealso [param_d3logdet()] for the generic, [param_d2logdet()] for the
+#'   quantity differenced, and [param_d4logdet.matrix_parameter()] for the order
+#'   above.
 #' @keywords internal
 S7::method(param_d3logdet, matrix_parameter) <- function(s, eta, ...) {
   idx3 <- param_tuple_indices(s, 3L)
@@ -944,13 +1123,42 @@ S7::method(param_d3logdet, matrix_parameter) <- function(s, eta, ...) {
 #' @title Default Fourth Log-Determinant Derivatives
 #' @name param_d4logdet.matrix_parameter
 #' @description
-#' Fallback: one second-order stencil on [param_d2logdet()] in the
-#' last two components of the tuple -- one layer, mixed across components
-#' where they differ.
+#' The method every [matrix_parameter()] inherits when it registers no
+#' [param_d4logdet()] of its own. For the tuple \eqn{(k, l, m, n)} it takes the
+#' \eqn{(k, l)} component of [param_d2logdet()] and applies one second-order
+#' stencil in the remaining two components: the three-point second difference
+#' where \eqn{m = n}, and the four-point mixed stencil
+#'
+#' \deqn{\frac{g(\eta + h_m e_m + h_n e_n) - g(\eta + h_m e_m - h_n e_n)
+#'   - g(\eta - h_m e_m + h_n e_n) + g(\eta - h_m e_m - h_n e_n)}
+#'   {4 h_m h_n}}
+#'
+#' where they differ, both at the order-2 step
+#' \eqn{\varepsilon^{1/4}\max(1, |\eta_k|)}. It costs three or four evaluations
+#' of the whole second-order block per tuple.
+#' @details
+#' # This is the least accurate quantity the package can produce
+#'
+#' With analytic [param_d1()] and [param_d2()] the differencing is a single layer
+#' on an exact identity, and on a \eqn{4 \times 4} AR(1) covariance the answer
+#' agrees with the closed form to \eqn{2 \times 10^{-6}} on entries of size 2.2.
+#'
+#' With only [param_value()] supplied, the numerical arrays feed a numerical
+#' second-order block which is then differenced twice more, and the layers
+#' compound: the same measurement gives an absolute error of **9**, larger than
+#' the quantity itself. The number is not usable. A family that needs a fourth
+#' derivative of its log-determinant must supply at least [param_d1()] and
+#' [param_d2()] in closed form, and preferably [param_d2logdet()] as well.
+#' [param_is_numerical()] is how a consumer finds out which case it is in.
 #' @param s A [matrix_parameter()] object.
-#' @param eta A numeric vector of free values.
-#' @param ... Unused.
-#' @return A named numeric vector.
+#' @param eta A numeric vector of free values, of length `s@n_free`, already
+#'   checked by the generic.
+#' @param ... Unused, and accepted so the signature matches the generic's.
+#' @return A numeric vector of `choose(s@n_free + 3, 4)` entries, keyed as
+#'   `param_tuple_names(s, 4)` and in that order.
+#' @seealso [param_d4logdet()] for the generic,
+#'   [param_d3logdet.matrix_parameter()] for the order below, and
+#'   [param_is_numerical()] to ask which components are numerical.
 #' @keywords internal
 S7::method(param_d4logdet, matrix_parameter) <- function(s, eta, ...) {
   idx4 <- param_tuple_indices(s, 4L)

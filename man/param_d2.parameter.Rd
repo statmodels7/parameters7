@@ -4,16 +4,30 @@
 \alias{param_d2.parameter}
 \title{Default Second Derivatives}
 \arguments{
-\item{s}{A \code{\link[=parameter]{parameter()}} object.}
+\item{s}{A \code{\link[=parameter]{parameter()}} object, of any branch.}
 
-\item{eta}{A numeric vector of free values.}
+\item{eta}{A numeric vector of free values, of length \code{s@n_free}, already
+checked by the generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named list of symmetric matrices.
+A list of \code{choose(s@n_free + 1, 2)} estimates keyed as
+\code{param_tuple_names(s)} and in that order, each shaped like
+\code{\link[=param_value]{param_value()}}'s result and symmetrized for a matrix family.
 }
 \description{
-Fallback: see \code{\link[=numerical_d2]{numerical_d2()}}.
+The method every \code{\link[=parameter]{parameter()}} inherits when it registers no \code{\link[=param_d2]{param_d2()}} of
+its own. It takes exactly one difference per component, of whichever quantity
+the family already supplies: the analytic \code{\link[=param_d1]{param_d1()}} where there is one, and
+\code{\link[=param_value]{param_value()}} itself where there is not, through a three-point second
+difference on the diagonal and a four-point mixed stencil off it. The step is
+the order-2 one, \eqn{\varepsilon^{1/4}\max(1, |\eta_k|)}, about
+\eqn{1.2 \times 10^{-4}} near the origin, and the truncation error is of order
+\eqn{h^2} on every route. No family in this package reaches it.
+}
+\seealso{
+\code{\link[=numerical_d2]{numerical_d2()}}, which does the work and writes the three routes
+out, and \code{\link[=param_d1.parameter]{param_d1.parameter()}} for the order below.
 }
 \keyword{internal}
