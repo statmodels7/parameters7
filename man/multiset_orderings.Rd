@@ -7,19 +7,28 @@
 multiset_orderings(v)
 }
 \arguments{
-\item{v}{An integer vector.}
+\item{v}{An integer vector, of length 0 to 3 in every call the package makes,
+the expansion at order \eqn{n} permuting the \eqn{n-1} indices after the
+first.}
 }
 \value{
-A list of integer vectors.
+A list of \code{factorial(length(v))} integer vectors.
 }
 \description{
-All \eqn{n!} orderings of a vector of indices, without deduplicating the
-ones that coincide because an index repeats.
+All \eqn{n!} orderings of a vector of indices, \strong{without} deduplicating the
+ones that coincide because an index repeats: \code{multiset_orderings(c(1, 1))}
+returns two elements.
 }
 \details{
-The distinction is load bearing. The cyclic sum behind the log-determinant
-expansion runs over \eqn{(n-1)!} orderings, and two that happen to be equal
-still count twice; deduplicating them makes the third derivative of a
-component in one weight too small by a factor of two and the fourth by six.
+The distinction is load bearing, and its cost is measured.
+The cyclic sum behind the log-determinant expansion runs over \eqn{(n-1)!}
+orderings, and two that happen to be equal still count twice; deduplicating
+them leaves a third derivative in one weight too small by exactly 2 and a
+fourth by exactly 6, which is \eqn{2!} and \eqn{3!}, the orderings of the tail.
+Both are numbers a reader would accept without noticing.
+}
+\seealso{
+\code{\link[=sum_struct_trace_term]{sum_struct_trace_term()}}, the only caller, and \code{\link[=combinat_perms]{combinat_perms()}},
+which does the same for the matrix logarithm's contraction.
 }
 \keyword{internal}

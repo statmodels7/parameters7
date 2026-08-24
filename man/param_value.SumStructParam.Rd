@@ -6,14 +6,27 @@
 \arguments{
 \item{s}{A \code{\link[=SumStructParam]{SumStructParam()}} object.}
 
-\item{eta}{A numeric vector of length \code{s@n_free}.}
+\item{eta}{A numeric vector of length \code{s@n_free}, already checked by the
+generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A symmetric matrix of side \code{s@dimension}.
+A symmetric positive semidefinite \code{s@dimension} by \code{s@dimension}
+numeric matrix, without dimnames.
 }
 \description{
-The weighted sum of the components.
+The weighted sum \eqn{\sum_k c_k(\eta_k) P_k}, accumulated in place over the
+components. Positive semidefinite at every free vector, a non-negative
+combination of positive semidefinite matrices being one; positive \strong{definite}
+only where the components' null spaces meet at the origin, which is the
+condition \code{rank} records.
+
+The value carries \strong{no dimnames}, where the primitive families label their
+margins \code{v1}, \code{v2}, ...; the four compositions share that.
+}
+\seealso{
+\code{\link[=param_free.SumStructParam]{param_free.SumStructParam()}} for the inverse, and \code{\link[=sum_struct]{sum_struct()}} for
+the parametrization.
 }
 \keyword{internal}

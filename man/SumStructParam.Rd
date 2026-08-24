@@ -50,17 +50,29 @@ its blocks, or \code{"either"} when they disagree, and \code{\link[=kron_identit
 it.}
 }
 \value{
-An object of class \code{SumStructParam}.
+An object of class \code{SumStructParam}, a subclass of
+\code{\link[=matrix_parameter]{matrix_parameter()}} adding no properties of its own. \code{param_params} holds
+\code{components}, \code{link} and \code{labels}. \code{n_free} is the number of components and
+\code{rank} is fixed at construction from their shared null space.
 }
 \description{
-The S7 class of a matrix parameter that is a sum of fixed symmetric positive
-semidefinite matrices, each carried by one positive free value. Constructed
-by \code{\link[=sum_struct]{sum_struct()}}.
+The S7 class of a matrix parameter that is a sum of \strong{fixed} symmetric
+positive semidefinite matrices, each carried by one positive free value.
+\code{\link[=sum_struct]{sum_struct()}} builds one.
+
+It is the variance-components covariance, and the one family here whose free
+values are weights rather than entries: \code{n_free} is the number of components,
+whatever the dimension.
 }
 \examples{
-S7::S7_inherits(sum_struct(list(diag(3), matrix(1, 3, 3))), SumStructParam)
+# One free value per component, whatever the side of the matrices.
+s <- sum_struct(list(between = matrix(1, 3, 3), within = diag(3)))
+c(dimension = s@dimension, n_free = s@n_free)
+s@free_names
 
 }
 \seealso{
-\code{\link[=sum_struct]{sum_struct()}}
+\code{\link[=sum_struct]{sum_struct()}}, the constructor, \code{\link[=scaled_matrix]{scaled_matrix()}} for the
+one-component case with the matrix fixed, and \code{\link[=matrix_parameter]{matrix_parameter()}} for the
+properties this inherits.
 }

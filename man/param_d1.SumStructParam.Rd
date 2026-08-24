@@ -9,16 +9,32 @@
 \arguments{
 \item{s}{A \code{\link[=SumStructParam]{SumStructParam()}} object.}
 
-\item{eta}{A numeric vector of length \code{s@n_free}.}
+\item{eta}{A numeric vector of length \code{s@n_free}, already checked by the
+generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named list of symmetric matrices.
+At order 1, a list of \code{s@n_free} symmetric matrices named by
+\code{s@free_names}; above it, \code{choose(s@n_free + k - 1, k)} of them keyed as
+\code{param_tuple_names(s, k)} and in that order. Each is \code{s@dimension} by
+\code{s@dimension} and carries no dimnames.
 }
 \description{
-The value being linear in the weights, a component is zero unless every
-index names the same free value, and is then that weight's derivative times
-its component.
+\code{param_d1()}, \code{param_d2()}, \code{param_d3()} and \code{param_d4()} for a
+\code{\link[=sum_struct]{sum_struct()}} parameter. The value being linear in the weights, a component
+is \strong{exactly zero} unless every index names the same free value, and is then
+that weight's \eqn{m}-th derivative times its own fixed matrix. Nothing is
+differenced and no matrix arithmetic is done.
+}
+\details{
+The four share \code{\link[=sum_struct_derivs]{sum_struct_derivs()}} and differ only in the order they pass.
+At \eqn{K = 2} the zeros are 1 of the 3 second-order components, 2 of 4 at
+third order and 3 of 5 at fourth. Compare
+\code{\link[=param_dlogdet.SumStructParam]{param_dlogdet.SumStructParam()}}, where nothing vanishes: the value is linear
+in the weights and its log-determinant is not.
+}
+\seealso{
+\code{\link[=sum_struct_derivs]{sum_struct_derivs()}}, which assembles them.
 }
 \keyword{internal}

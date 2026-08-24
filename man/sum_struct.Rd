@@ -11,62 +11,139 @@ sum_struct(
 )
 }
 \arguments{
-\item{components}{A list of symmetric matrices of the same side, each
-positive semidefinite. Named entries supply the free-value labels.}
+\item{components}{A non-empty list of symmetric positive semidefinite numeric
+matrices of the same side. Each is checked for all three properties, the
+semidefiniteness spectrally at a relative tolerance of \eqn{10^{-8}}. Named
+entries supply the free-value labels, which must be unique; unnamed ones are
+\code{w1}, \code{w2}, ...}
 
-\item{link}{The positive link carrying each weight onto the free scale.
-Defaults to \code{\link[linkfunctions7:log_link]{linkfunctions7::log_link()}}.}
+\item{link}{The positive link carrying each weight onto the free scale,
+\code{\link[linkfunctions7:log_link]{linkfunctions7::log_link()}} by default. It must map onto the positive half
+line and from the whole real line; see \code{\link[=diagonal_matrix]{diagonal_matrix()}} for the two
+conditions.}
 
-\item{role}{One of \code{"covariance"}, \code{"precision"} or
-\code{"either"}.}
+\item{role}{One of \code{"either"} (the default), \code{"covariance"} or \code{"precision"}.
+No numeric result depends on it.}
 }
 \value{
-An object of class \code{\link[=SumStructParam]{SumStructParam()}}.
+An object of class \code{\link[=SumStructParam]{SumStructParam()}}, with \code{n_free} equal to the
+number of components, \code{free_names} the tagged labels, \code{null_basis} an
+orthonormal basis of the components' shared null space, and \code{rank} the side
+less its width.
 }
 \description{
-\eqn{M(\eta) = \sum_k c_k(\eta_k) P_k} for fixed symmetric positive
-semidefinite \eqn{P_1, \ldots, P_K} and positive weights carried through a
-link.
+Returns an object holding \eqn{M(\eta) = \sum_k c_k(\eta_k) P_k}, for fixed
+symmetric positive semidefinite \eqn{P_1, \ldots, P_K} and positive weights
+carried through a link. The matrices are given once and never move; what the
+free vector carries is the \eqn{K} weights.
 }
-\details{
-This is the variance-components covariance, \eqn{\sum_k \sigma_k^2 Z_kZ_k'},
-and it is also the matrix a penalty with one smoothing parameter per
-component assembles. \pkg{penalties7}'s \code{additive_penalty()} builds the
-same sum for its own purposes; the difference is that a penalty is a
-function of the coefficients while this is a matrix map, so a distribution
-can take it as a covariance.
+\section{What it is for}{
+This is the variance-components covariance \eqn{\sum_k \sigma_k^2 Z_kZ_k^\top},
+and it is also the matrix a penalty with one smoothing parameter per component
+assembles. \pkg{penalties7}'s \code{additive_penalty()} builds the same sum for its
+own purposes; the difference is that a penalty is a function of the
+coefficients while this is a matrix map, so a distribution can take it as a
+covariance.
+}
 
-The value is linear in the weights, so a derivative component is zero unless
-every index of the tuple names the same free value, and it then carries the
-corresponding derivative of the inverse link times that component:
-\deqn{\partial^{m}_{\eta_k} M = c_k^{(m)}(\eta_k)\, P_k.}
-The log-determinant is not separable, and its derivatives in the weights
-come from the expansion
+\section{The value is linear, so most derivative components vanish}{
+\deqn{\partial^{m}_{\eta_k} M = c_k^{(m)}(\eta_k)\, P_k,}
+
+and a component whose indices name two different weights is \strong{exactly zero}:
+at \eqn{K = 2} that is 1 of the 3 second-order components, 2 of 4 at third
+order and 3 of 5 at fourth. What survives is one number times a fixed matrix.
+}
+
+\section{The log-determinant is not separable}{
+Its derivatives in the weights come from the cyclic trace expansion
+
 \deqn{\frac{\partial^{n}\log\lvert M\rvert}
            {\partial c_{k_1}\cdots\partial c_{k_n}}
       = (-1)^{n-1}\sum_{\sigma}
         \operatorname{tr}\bigl(M^{-1}P_{\sigma(1)}\cdots
                                M^{-1}P_{\sigma(n)}\bigr),}
-the sum running over the \eqn{(n-1)!} cyclic orderings counted with
-multiplicity, and are then carried onto the free scale by a chain rule whose
-Jacobian is diagonal.
 
-\strong{Rank.} The null space of a sum of positive semidefinite matrices is
-the intersection of theirs, so it does not move with the weights and the
-rank is fixed at construction. It is read from the components stacked and
-individually normalized, never from an assembled matrix: a count of small
-eigenvalues of \eqn{M(\eta)} falls as the weights spread apart, which is an
-ordinary fitted model and not a pathology.
+the sum running over the \eqn{(n-1)!} cyclic orderings \strong{counted with
+multiplicity}, and are then carried onto the free scale by a chain rule whose
+Jacobian is diagonal. Counting with multiplicity is load bearing and the cost
+of getting it wrong is measured: deduplicating the orderings that coincide
+when an index repeats leaves a third-order component too small by exactly 2
+and a fourth-order one by exactly 6.
+
+Against one stencil on the analytic order below, the four orders agree to
+\eqn{7 \times 10^{-11}}, \eqn{1 \times 10^{-11}}, \eqn{3 \times 10^{-12}} and
+\eqn{3 \times 10^{-13}}.
 }
+
+\section{The rank is fixed at construction}{
+The null space of a sum of positive semidefinite matrices is the
+\strong{intersection} of theirs, so it does not move with the weights, and it is
+read from the components stacked and individually normalized, never from an
+assembled matrix. The distinction is measurable, not merely conceptual. Take
+\eqn{P_1 = \mathbf{1}\mathbf{1}^\top} of side 4, of rank 1, and \eqn{P_2} the
+first-difference penalty, of rank 3: their null spaces meet only at the
+origin, so the family has rank 4, and counting eigenvalues of
+\eqn{M(\eta)} above \eqn{10^{-10}} of the largest gives\tabular{llllll}{
+   weight ratio \tab \eqn{10^{0}} \tab \eqn{10^{3.5}} \tab \eqn{10^{6.9}} \tab \eqn{10^{10.4}} \tab \eqn{10^{13.9}} \cr
+   eigenvalue count \tab 4 \tab 4 \tab 4 \tab 1 \tab 1 \cr
+}
+
+
+while the family reports 4 throughout. Weights ten orders of magnitude apart
+are an ordinary fitted model. Where there \strong{is} a shared null space it is
+held exactly: on the first- and second-difference penalties over five points,
+whose null spaces meet in the constants, the residual
+\eqn{\lVert M N\rVert / \lVert M\rVert} stays at \eqn{3 \times 10^{-16}} over
+fourteen decades of weight ratio.
+}
+
+\section{What a call costs}{
+The log-determinant's fourth derivatives are the expensive quantity, the
+expansion evaluating \eqn{(n-1)!} matrix chains per component and one set
+partition per repeated index. Seconds per call at side 6, over repetition
+loops sized by elapsed time:\tabular{lllll}{
+   \eqn{K} \tab \code{param_value} \tab \code{param_d4} \tab \code{param_dlogdet} \tab \code{param_d4logdet} \cr
+   2 \tab 0.00003 \tab 0.00017 \tab 0.00029 \tab 0.00172 \cr
+   3 \tab 0.00002 \tab 0.00022 \tab 0.00037 \tab 0.00344 \cr
+   5 \tab 0.00003 \tab 0.00068 \tab 0.00039 \tab 0.01328 \cr
+}
+}
+
+\section{Notation}{
+
+\eqn{K} is the number of components, \eqn{P_k} the \eqn{k}-th fixed matrix,
+\eqn{c_k = h(\eta_k)} its weight, \eqn{p} the side, and \eqn{N} a basis of the
+shared null space.
+}
+
 \examples{
-# two variance components on three coefficients
+# Two variance components on three coefficients.
 s <- sum_struct(list(between = matrix(1, 3, 3), within = diag(3)))
 s@free_names
-param_value(s, c(log(0.5), log(2)))
-param_logdet(s, c(log(0.5), log(2)))
+eta <- c(log(0.5), log(2))
+param_value(s, eta)
+
+# The value is linear in the weights, so a component naming two of them is
+# exactly zero, and a pure one is the weight's derivative times its matrix.
+c(mixed = max(abs(param_d2(s, eta)[["log_between:log_within"]])),
+  pure = max(abs(param_d1(s, eta)[[1]] - 0.5 * matrix(1, 3, 3))))
+
+# The log-determinant is not separable: the mixed second derivative is as
+# large as the pure ones.
+param_d2logdet(s, eta)
+
+# A single component of rank 1 gives a deficient family, and the
+# log-determinant is then the log pseudo-determinant.
+d <- sum_struct(list(matrix(1, 3, 3)))
+c(rank = d@rank, logdet = param_logdet(d, log(2)), check = log(3 * 2))
+
+# The round trip closes.
+max(abs(param_free(s, param_value(s, eta)) - eta))
 
 }
 \seealso{
-\code{\link[=scaled_matrix]{scaled_matrix()}}, \code{\link[=block_diag]{block_diag()}},
-\code{\link[penalties7:additive_penalty]{penalties7::additive_penalty()}}
+\code{\link[=scaled_matrix]{scaled_matrix()}} for one fixed matrix and one weight,
+\code{\link[=block_diag]{block_diag()}}, \code{\link[=kron_identity]{kron_identity()}} and \code{\link[=dr_prod]{dr_prod()}} for the other
+compositions, and \code{penalties7::additive_penalty()}, which assembles the same
+sum as a penalty.
 }

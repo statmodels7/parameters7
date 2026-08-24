@@ -12,10 +12,22 @@ sum_struct_weight_derivs(s, eta)
 \item{eta}{A numeric vector of length \code{s@n_free}.}
 }
 \value{
-A 5 by \code{K} numeric matrix, rows being orders 0 to 4.
+A 5 by \eqn{K} numeric matrix, row \eqn{m+1} holding the \eqn{m}-th
+derivative of the inverse link at each free value, so row 1 is the weights
+themselves.
 }
 \description{
 Returns each weight and its first four derivatives in the free value that
-carries it, as a matrix with one row per order.
+carries it, for every component at once, as a matrix with one row per order.
+}
+\details{
+Each weight depends on one free value only, so the table is complete: there
+are no cross-derivatives between weights to record, and that is the whole
+reason a derivative of the value naming two weights is zero. It is computed
+once per call and read for every component of the order.
+}
+\seealso{
+\code{\link[=sum_struct_derivs]{sum_struct_derivs()}} and \code{\link[=sum_struct_logdet_derivs]{sum_struct_logdet_derivs()}}, the two
+callers.
 }
 \keyword{internal}

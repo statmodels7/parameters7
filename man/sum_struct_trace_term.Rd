@@ -7,16 +7,33 @@
 sum_struct_trace_term(minv, comp, t)
 }
 \arguments{
-\item{minv}{The inverse of the assembled matrix.}
+\item{minv}{The inverse of the assembled matrix, computed once by the caller
+and reused for every component of the order.}
 
-\item{comp}{The list of components.}
+\item{comp}{The list of fixed components.}
 
-\item{t}{An integer vector of weight indices, with repeats.}
+\item{t}{An integer vector of weight indices, with repeats, of length 1 to 4.}
 }
 \value{
 A single number.
 }
 \description{
-Evaluates the cyclic trace expansion for one tuple of weight indices.
+Evaluates the cyclic trace expansion
+\eqn{(-1)^{n-1}\sum_{\sigma} \operatorname{tr}(M^{-1}P_{\sigma(1)}\cdots
+M^{-1}P_{\sigma(n)})} for one tuple of weight indices, the sum running over
+the \eqn{(n-1)!} orderings of the tail with the first index held.
+}
+\details{
+Holding the first index is what leaves the orderings cyclic: a cyclic
+permutation leaves the trace unchanged, so fixing one position counts each
+distinct cycle once. The orderings come from \code{\link[=multiset_orderings]{multiset_orderings()}} and are
+counted with multiplicity, which see.
+
+This is a derivative in the \strong{weights}, not in the free values;
+\code{\link[=sum_struct_logdet_derivs]{sum_struct_logdet_derivs()}} carries it onto the free scale.
+}
+\seealso{
+\code{\link[=sum_struct_logdet_derivs]{sum_struct_logdet_derivs()}}, the only caller, and \code{\link[=sum_struct]{sum_struct()}} for
+the expansion.
 }
 \keyword{internal}

@@ -11,13 +11,26 @@ sum_struct_derivs(s, eta, order)
 
 \item{eta}{A numeric vector of length \code{s@n_free}.}
 
-\item{order}{The derivative order, 1 to 4.}
+\item{order}{The derivative order: 1, 2, 3 or 4.}
 }
 \value{
-A named list of matrices keyed as \code{param_tuple_names(s, order)}.
+A list of \code{choose(s@n_free + order - 1, order)} symmetric matrices
+keyed as \code{param_tuple_names(s, order)} and in that order, each
+\code{s@dimension} by \code{s@dimension} and without dimnames.
 }
 \description{
-The value is linear in the weights, so a component is zero unless every
-index of the tuple names the same free value.
+The value is linear in the weights, so a component is zero unless every index
+of the tuple names the same free value, and it is then that weight's
+\eqn{m}-th derivative times its own fixed matrix.
+}
+\details{
+No arithmetic is done on the matrices at all: a surviving component is one
+scalar times a component the object has held since construction, and the rest
+share a single zero matrix. At \eqn{K = 2} that is 1 of the 3 second-order
+components, 2 of 4 at third order and 3 of 5 at fourth.
+}
+\seealso{
+\code{\link[=sum_struct_weight_derivs]{sum_struct_weight_derivs()}} for the scalars, and
+\code{\link[=param_d1.SumStructParam]{param_d1.SumStructParam()}}, which calls this.
 }
 \keyword{internal}

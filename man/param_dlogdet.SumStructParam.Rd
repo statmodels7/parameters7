@@ -9,15 +9,35 @@
 \arguments{
 \item{s}{A \code{\link[=SumStructParam]{SumStructParam()}} object.}
 
-\item{eta}{A numeric vector of length \code{s@n_free}.}
+\item{eta}{A numeric vector of length \code{s@n_free}, already checked by the
+generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named numeric vector.
+A numeric vector: at order 1, \code{s@n_free} values named by
+\code{s@free_names}; above it, \code{choose(s@n_free + k - 1, k)} values keyed as
+\code{param_tuple_names(s, k)} and in that order.
 }
 \description{
-The cyclic trace expansion in the weights, carried onto the free scale by a
-chain rule with a diagonal Jacobian.
+\code{param_dlogdet()}, \code{param_d2logdet()}, \code{param_d3logdet()} and
+\code{param_d4logdet()} for a \code{\link[=sum_struct]{sum_struct()}} parameter: the cyclic trace expansion
+in the weights, carried onto the free scale by a chain rule with a diagonal
+Jacobian.
+}
+\details{
+The four share \code{\link[=sum_struct_logdet_derivs]{sum_struct_logdet_derivs()}} and differ only in the order they
+pass. \strong{Nothing vanishes here}, unlike the value's own derivatives: at two
+variance components the mixed second derivative is \eqn{-0.245} against
+\eqn{0.245} for each pure one, the same size. The log-determinant of a sum is
+not a sum, which is why this family needs an expansion where \code{\link[=block_diag]{block_diag()}}
+and \code{\link[=dr_prod]{dr_prod()}} need none.
+
+It is the dearest quantity the family computes; \code{\link[=sum_struct]{sum_struct()}} carries the
+timings and the accuracy against a stencil.
+}
+\seealso{
+\code{\link[=sum_struct_logdet_derivs]{sum_struct_logdet_derivs()}}, which assembles them, and
+\code{\link[=param_logdet.SumStructParam]{param_logdet.SumStructParam()}} for the quantity differentiated.
 }
 \keyword{internal}

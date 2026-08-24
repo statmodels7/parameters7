@@ -7,18 +7,35 @@
 \arguments{
 \item{s}{A \code{\link[=SumStructParam]{SumStructParam()}} object.}
 
-\item{eta}{A numeric vector of length \code{s@n_free}.}
+\item{eta}{A numeric vector of length \code{s@n_free}, already checked by the
+generic.}
 
-\item{b}{A matrix with \code{s@dimension} rows, or \code{NULL}.}
+\item{b}{A numeric matrix with \code{s@dimension} rows, defaulted to the identity
+by the generic. \code{param_factor()} takes no \code{b}.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A matrix.
+\code{param_solve()} returns a numeric matrix with \code{s@dimension} rows and
+as many columns as \code{b}; \code{param_factor()} a lower triangular \code{s@dimension} by
+\code{s@dimension} matrix.
 }
 \description{
-Both come from the assembled matrix: a sum of fixed matrices has no
-structure a solve could exploit, unlike the families whose factor is written
-out.
+\code{param_solve()} and \code{param_factor()} for a \code{\link[=sum_struct]{sum_struct()}} parameter. Both come
+from the assembled matrix, by \code{solve()} and by a transposed \code{chol()}: a sum of
+fixed matrices has no structure a solve could exploit, where \code{\link[=ar1]{ar1()}} has a
+tridiagonal inverse and \code{\link[=log_cholesky]{log_cholesky()}} holds its factor already.
+}
+\details{
+\code{param_solve()} therefore agrees with \code{solve()} on the assembled matrix
+exactly, being the same call; the factor is \code{t(chol(M))}, lower triangular
+with \eqn{M = L L^\top} as \code{\link[=param_factor]{param_factor()}} requires, and reproduces the matrix
+to \eqn{4 \times 10^{-16}}.
+
+Both are refused by the generic where the family is rank deficient, a singular
+matrix having neither an inverse nor a Cholesky factor.
+}
+\seealso{
+\code{\link[=param_solve]{param_solve()}} and \code{\link[=param_factor]{param_factor()}} for the two contracts.
 }
 \keyword{internal}
