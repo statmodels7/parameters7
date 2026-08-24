@@ -277,7 +277,7 @@ S7::method(param_d1, KronIdentityParam) <- function(s, eta, ...) {
 #' @return A list of `choose(s@n_free + 1, 2)` symmetric matrices keyed as
 #'   `param_tuple_names(s)` and in that order, each block diagonal with no
 #'   dimnames.
-#' @seealso [param_d1.KronIdentityParam()] and [param_d3.KronIdentityParam()] for the neighbouring orders.
+#' @seealso [param_d1.KronIdentityParam()] and [param_d3.KronIdentityParam()] for the neighboring orders.
 #' @keywords internal
 S7::method(param_d2, KronIdentityParam) <- function(s, eta, ...) {
   lapply(param_d2(.kron_inner(s), eta), .kron_lift, m = .kron_m(s))

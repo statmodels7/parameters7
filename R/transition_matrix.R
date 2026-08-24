@@ -365,7 +365,7 @@ S7::method(param_d1, TransitionMatrixParam) <- function(s, eta, ...) {
 #'   `param_tuple_names(s)` and in that order, the cross-row ones exactly zero.
 #' @seealso [tm_derivative()], which assembles it, and
 #'   [param_d1.TransitionMatrixParam()] and [param_d3.TransitionMatrixParam()]
-#'   for the neighbouring orders.
+#'   for the neighboring orders.
 #' @keywords internal
 S7::method(param_d2, TransitionMatrixParam) <- function(s, eta, ...) {
   tm_derivative(s, eta, 2L)

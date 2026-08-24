@@ -648,7 +648,7 @@ S7::method(param_d1, MatrixLogParam) <- function(s, eta, ...) {
 #'   `param_tuple_names(s)` and in that order.
 #' @seealso [mlog_contract()], which does the contraction, and
 #'   [param_d1.MatrixLogParam()] and [param_d3.MatrixLogParam()] for the
-#'   neighbouring orders.
+#'   neighboring orders.
 #' @keywords internal
 S7::method(param_d2, MatrixLogParam) <- function(s, eta, ...) {
   mlog_higher(s, eta, 2L)

@@ -27,6 +27,6 @@ methods keep only the pure components too.
 }
 \seealso{
 \code{\link[=param_d1.DiagMatrixParam]{param_d1.DiagMatrixParam()}} and \code{\link[=param_d3.DiagMatrixParam]{param_d3.DiagMatrixParam()}} for the
-neighbouring orders.
+neighboring orders.
 }
 \keyword{internal}

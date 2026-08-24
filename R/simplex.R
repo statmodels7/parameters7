@@ -464,7 +464,7 @@ S7::method(param_d1, SimplexParam) <- function(s, eta, ...) {
 #' @return A list of `choose(s@n_free + 1, 2)` numeric vectors of length \eqn{K},
 #'   keyed as `param_tuple_names(s)` and in that order, each summing to 0.
 #' @seealso [param_d1.SimplexParam()] and [param_d3.SimplexParam()] for the
-#'   neighbouring orders.
+#'   neighboring orders.
 #' @keywords internal
 S7::method(param_d2, SimplexParam) <- function(s, eta, ...) {
   tens <- simplex_tensors(simplex_point(eta), 2L)

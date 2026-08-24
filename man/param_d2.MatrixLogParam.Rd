@@ -27,6 +27,6 @@ factor of 2 from the sum instead of from a correction applied afterwards.
 \seealso{
 \code{\link[=mlog_contract]{mlog_contract()}}, which does the contraction, and
 \code{\link[=param_d1.MatrixLogParam]{param_d1.MatrixLogParam()}} and \code{\link[=param_d3.MatrixLogParam]{param_d3.MatrixLogParam()}} for the
-neighbouring orders.
+neighboring orders.
 }
 \keyword{internal}

@@ -22,6 +22,6 @@ share their free values, so there is no cross-block component to compute and
 the list is exactly the inner parameter's, lifted.
 }
 \seealso{
-\code{\link[=param_d1.KronIdentityParam]{param_d1.KronIdentityParam()}} and \code{\link[=param_d3.KronIdentityParam]{param_d3.KronIdentityParam()}} for the neighbouring orders.
+\code{\link[=param_d1.KronIdentityParam]{param_d1.KronIdentityParam()}} and \code{\link[=param_d3.KronIdentityParam]{param_d3.KronIdentityParam()}} for the neighboring orders.
 }
 \keyword{internal}

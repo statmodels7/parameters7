@@ -27,6 +27,6 @@ different free values is generally non-zero.
 }
 \seealso{
 \code{\link[=param_d1.SimplexParam]{param_d1.SimplexParam()}} and \code{\link[=param_d3.SimplexParam]{param_d3.SimplexParam()}} for the
-neighbouring orders.
+neighboring orders.
 }
 \keyword{internal}

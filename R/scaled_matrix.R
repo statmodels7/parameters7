@@ -305,7 +305,7 @@ S7::method(param_d1, ScaledMatrixParam) <- function(s, eta, ...) {
 #' @return A list with one symmetric matrix keyed as `param_tuple_names(s)`, or
 #'   an empty list for a fixed parameter.
 #' @seealso [param_d1.ScaledMatrixParam()] and [param_d3.ScaledMatrixParam()] for
-#'   the neighbouring orders.
+#'   the neighboring orders.
 #' @keywords internal
 S7::method(param_d2, ScaledMatrixParam) <- function(s, eta, ...) {
   if (!s@n_free) return(stats::setNames(list(), character(0)))

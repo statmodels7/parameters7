@@ -30,7 +30,7 @@ of the two.
 This is where a \code{correlation} block that carries a scale of its own shows: the
 division always leaves a unit diagonal, so such a block is handed a matrix its
 own scale cannot be recovered from, and the round trip fails without any
-error being signalled. See \code{\link[=dr_prod]{dr_prod()}} on that requirement.
+error being signaled. See \code{\link[=dr_prod]{dr_prod()}} on that requirement.
 }
 \seealso{
 \code{\link[=param_value.DrProdParam]{param_value.DrProdParam()}}, the map this inverts.

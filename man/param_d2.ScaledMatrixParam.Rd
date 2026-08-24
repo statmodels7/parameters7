@@ -22,6 +22,6 @@ is one component, and under the default log link it is the matrix again,
 }
 \seealso{
 \code{\link[=param_d1.ScaledMatrixParam]{param_d1.ScaledMatrixParam()}} and \code{\link[=param_d3.ScaledMatrixParam]{param_d3.ScaledMatrixParam()}} for
-the neighbouring orders.
+the neighboring orders.
 }
 \keyword{internal}

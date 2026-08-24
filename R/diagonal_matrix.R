@@ -472,7 +472,7 @@ S7::method(param_d1, DiagMatrixParam) <- function(s, eta, ...) {
 #' @return A list of `choose(s@n_free + 1, 2)` diagonal matrices keyed as
 #'   `param_tuple_names(s)` and in that order, the mixed ones exactly zero.
 #' @seealso [param_d1.DiagMatrixParam()] and [param_d3.DiagMatrixParam()] for the
-#'   neighbouring orders.
+#'   neighboring orders.
 #' @keywords internal
 S7::method(param_d2, DiagMatrixParam) <- function(s, eta, ...) {
   owner <- diag_owner(s)

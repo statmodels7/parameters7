@@ -797,7 +797,7 @@ param_factor <- S7::new_generic("param_factor", "s", function(s, eta, ...) {
 #'   `param_tuple_names(s, 3)` and in that order. Each entry has the shape of the
 #'   value.
 #'
-#' @seealso [param_d2()] and [param_d4()] for the neighbouring orders,
+#' @seealso [param_d2()] and [param_d4()] for the neighboring orders,
 #'   [param_tuple_names()] for the keys, and [param_d3logdet()] for the third
 #'   derivative of the log-determinant.
 #'

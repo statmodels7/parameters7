@@ -447,7 +447,7 @@ S7::method(param_value, DrProdParam) <- function(s, eta, ...) {
 #' This is where a `correlation` block that carries a scale of its own shows: the
 #' division always leaves a unit diagonal, so such a block is handed a matrix its
 #' own scale cannot be recovered from, and the round trip fails without any
-#' error being signalled. See [dr_prod()] on that requirement.
+#' error being signaled. See [dr_prod()] on that requirement.
 #' @param s A [DrProdParam()] object.
 #' @param m A symmetric positive definite `s@dimension` by `s@dimension` matrix,
 #'   already checked for shape and symmetry by the generic.

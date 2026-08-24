@@ -69,7 +69,7 @@ d3[["log_L1:log_L1:log_L1"]]
 
 }
 \seealso{
-\code{\link[=param_d2]{param_d2()}} and \code{\link[=param_d4]{param_d4()}} for the neighbouring orders,
+\code{\link[=param_d2]{param_d2()}} and \code{\link[=param_d4]{param_d4()}} for the neighboring orders,
 \code{\link[=param_tuple_names]{param_tuple_names()}} for the keys, and \code{\link[=param_d3logdet]{param_d3logdet()}} for the third
 derivative of the log-determinant.
 }

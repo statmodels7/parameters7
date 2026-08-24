@@ -27,6 +27,6 @@ not. Of the 21 components at \eqn{K = 3}, only 9 can be non-zero.
 \seealso{
 \code{\link[=tm_derivative]{tm_derivative()}}, which assembles it, and
 \code{\link[=param_d1.TransitionMatrixParam]{param_d1.TransitionMatrixParam()}} and \code{\link[=param_d3.TransitionMatrixParam]{param_d3.TransitionMatrixParam()}}
-for the neighbouring orders.
+for the neighboring orders.
 }
 \keyword{internal}
