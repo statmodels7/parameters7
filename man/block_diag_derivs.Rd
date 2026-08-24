@@ -11,14 +11,28 @@ block_diag_derivs(s, eta, order)
 
 \item{eta}{A numeric vector of length \code{s@n_free}.}
 
-\item{order}{The derivative order, 1 to 4.}
+\item{order}{The derivative order: 1, 2, 3 or 4.}
 }
 \value{
-A named list of matrices keyed as \code{param_tuple_names(s, order)}.
+A list of \code{choose(s@n_free + order - 1, order)} symmetric matrices
+keyed as \code{param_tuple_names(s, order)} and in that order, each
+\code{s@dimension} by \code{s@dimension} and without dimnames.
 }
 \description{
-Places each block's own component in the rows and columns that block
-occupies, and returns a zero matrix for any tuple whose indices are not all
-owned by one block.
+Places each block's own component in the rows and columns that block occupies,
+and returns a zero matrix for a tuple whose indices are not all owned by one
+block.
+}
+\details{
+Each block's derivatives of the order are fetched at most once and held in a
+list for the rest of the call, since the composite's enumeration visits a
+block's tuples several times and a block's fourth-order array is the expensive
+thing here. The zero matrix is one object shared by every cross-block
+component: at order 4 with two blocks of 3 and 2 free values that is 50 of the
+70 components.
+}
+\seealso{
+\code{\link[=block_derivs_by_tuple]{block_derivs_by_tuple()}} for one block's components, and
+\code{\link[=param_d1.BlockDiagParam]{param_d1.BlockDiagParam()}}, which calls this.
 }
 \keyword{internal}

@@ -7,53 +7,113 @@
 block_diag(..., role = NULL)
 }
 \arguments{
-\item{...}{Two or more objects inheriting from
-\code{\link[=matrix_parameter]{matrix_parameter()}}, or a single list of them. Named arguments
-supply the block labels.}
+\item{...}{One or more objects inheriting from \code{\link[=matrix_parameter]{matrix_parameter()}}, or a
+single list of them. Named arguments supply the block labels, which must be
+unique. A block that is not a \code{matrix_parameter} is rejected by position, so
+\code{block_diag(ar1(3), simplex(3))} reports that block 2 does not inherit from
+it.}
 
-\item{role}{One of \code{"covariance"}, \code{"precision"} or
-\code{"either"}. Defaults to the blocks' common role, and to
-\code{"either"} when they disagree.}
+\item{role}{One of \code{"covariance"}, \code{"precision"} or \code{"either"}. Defaults to
+the blocks' common role, and to \code{"either"} where they disagree. No numeric
+result depends on it.}
 }
 \value{
-An object of class \code{\link[=BlockDiagParam]{BlockDiagParam()}}.
+An object of class \code{\link[=BlockDiagParam]{BlockDiagParam()}}, with \code{dimension}, \code{n_free} and
+\code{rank} the sums of the blocks', \code{free_names} the blocks' own prefixed by the
+labels, and \code{null_basis} the block diagonal of the blocks'.
 }
 \description{
+Returns an object holding
 \eqn{M(\eta) = \mathrm{diag}(S_1(\eta_1), \ldots, S_B(\eta_B))} for matrix
 parameters \eqn{S_1, \ldots, S_B}: a block-diagonal matrix whose blocks are
-distinct families, each governed by its own stretch of the free vector.
-}
-\details{
-This is the covariance (or precision) of several independent groups of
-coefficients whose structures differ, which is what a model carrying more
-than one random-effect term needs. It differs from
-\code{\link[=kron_identity]{kron_identity()}}, where the blocks are identical and share one
-free vector; here the free vectors are concatenated, so the composite has
-\eqn{\sum_b d_b} free values.
+\strong{distinct families}, each governed by its own stretch of the free vector.
 
-Every quantity of the contract follows from the blocks without rederivation,
-and the reason is that the free values of one block do not enter another:
+It is the covariance (or precision) of several independent groups of
+coefficients whose structures differ, as a model carrying more than one
+random-effect term has.
+}
+\section{Nothing is rederived, and the reason}{
+The free values of one block do not enter another, so
+
 \deqn{\partial_k M = \mathrm{diag}(0, \ldots, \partial_k S_b, \ldots, 0),
       \qquad \log\lvert M \rvert_{+} = \sum_b \log\lvert S_b \rvert_{+},
-      \qquad M^{-1} = \mathrm{diag}(S_1^{-1}, \ldots, S_B^{-1}).}
-A derivative whose indices do not all belong to one block is therefore
-identically zero, at every order and for the log-determinant as well as for
-the value. The rank is the sum of the blocks' ranks and the null basis is
-their block diagonal, both read from the components rather than from an
-assembled matrix.
+      \qquad M^{-1} = \mathrm{diag}(S_1^{-1}, \ldots, S_B^{-1}),}
 
-The free names are prefixed by the block's label, since two blocks of the
-same family would otherwise report the same names and the class requires
-them to be unique. Labels come from the names of the arguments where they
-are given, and are \code{b1}, \code{b2}, ... otherwise.
+and a derivative whose indices do not all belong to one block is
+\strong{identically zero}, at every order and for the log-determinant as well as
+for the value. Measured on \code{block_diag(log_cholesky(2), ar1(3))}, whose five
+free values split 3 and 2: 6 of the 15 second-order components are
+cross-block, 21 of 35 at third order and 50 of 70 at fourth, and every one of
+them is exactly 0. What is left is fetched from the block and placed in the
+rows and columns that block occupies.
+
+The rank is the sum of the blocks' ranks and the null basis is their block
+diagonal, both read from the components and never from an assembled matrix,
+which is the rule this package follows everywhere: a rank is a property of the
+family, and counting eigenvalues of the assembled matrix would make it a
+property of the arithmetic. A deficient block is therefore admitted, and the
+composite reports the deficiency: with a rank-one \eqn{P} of side 2,
+\code{block_diag(scaled_matrix(P), ar1(3))} has rank 4 of 5 and a null basis of one
+column, \code{param_logdet()} returns the log pseudo-determinant, and
+\code{param_solve()} is refused by the generic.
 }
+
+\section{Against kron_identity()}{
+\code{\link[=kron_identity]{kron_identity()}} repeats \strong{one} block \eqn{m} times and they share a single
+free vector, so its \code{n_free} does not grow with \eqn{m}. Here the blocks are
+different objects and their free vectors are concatenated, so the composite has
+\eqn{\sum_b d_b} free values. Use this one where the groups have different
+structures, and that one where they have the same structure and the same
+parameters.
+}
+
+\section{Labels}{
+The free names are prefixed by the block's label, since two blocks of the same
+family would otherwise report the same names and the class requires them to be
+unique. Labels come from the names of the arguments where they are given, and
+are \code{b1}, \code{b2}, ... otherwise. \code{param_name} records the blocks' own names, as
+in \code{"blockdiag(log_cholesky, ar1)"}.
+}
+
+\section{Notation}{
+
+\eqn{B} is the number of blocks, \eqn{S_b} the \eqn{b}-th block's map,
+\eqn{d_b} its number of free values, and \eqn{\eta_b} the stretch of the free
+vector it owns.
+}
+
 \examples{
 s <- block_diag(subject = log_cholesky(2), time = ar1(3))
 c(dimension = s@dimension, n_free = s@n_free)
 s@free_names
-param_logdet(s, c(0, 0, 0, 0, 0))
+
+eta <- c(0.1, -0.2, 0.3, log(2), atanh(0.5))
+M <- param_value(s, eta)
+
+# Each block is its own family's value, and the off-diagonal is exactly zero.
+c(subject = max(abs(M[1:2, 1:2] - param_value(log_cholesky(2), eta[1:3]))),
+  time = max(abs(M[3:5, 3:5] - param_value(ar1(3), eta[4:5]))),
+  off = max(abs(M[1:2, 3:5])))
+
+# The log-determinant is the sum of the blocks'.
+c(composite = param_logdet(s, eta),
+  sum_of_blocks = param_logdet(log_cholesky(2), eta[1:3]) +
+                  param_logdet(ar1(3), eta[4:5]))
+
+# And 50 of the 70 fourth-order components are exactly zero, their indices
+# not all belonging to one block.
+owner <- s@param_params$owner
+cross <- vapply(param_tuple_indices(s, 4L),
+                function(t) length(unique(owner[t])) > 1L, logical(1))
+c(cross_block = sum(cross), of = length(cross),
+  largest = max(abs(unlist(param_d4(s, eta)[cross]))))
+
+# The round trip closes.
+max(abs(param_free(s, M) - eta))
 
 }
 \seealso{
-\code{\link[=kron_identity]{kron_identity()}}, \code{\link[=log_cholesky]{log_cholesky()}}
+\code{\link[=kron_identity]{kron_identity()}} for identical blocks, \code{\link[=dr_prod]{dr_prod()}} and
+\code{\link[=sum_struct]{sum_struct()}} for the other two compositions, and \code{\link[=matrix_parameter]{matrix_parameter()}} for
+the contract every block meets.
 }

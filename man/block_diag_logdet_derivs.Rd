@@ -11,14 +11,26 @@ block_diag_logdet_derivs(s, eta, order)
 
 \item{eta}{A numeric vector of length \code{s@n_free}.}
 
-\item{order}{The derivative order, 1 to 4.}
+\item{order}{The derivative order: 1, 2, 3 or 4.}
 }
 \value{
-A named numeric vector keyed as \code{param_tuple_names(s, order)}.
+A numeric vector of \code{choose(s@n_free + order - 1, order)} values keyed
+as \code{param_tuple_names(s, order)} and in that order.
 }
 \description{
-The log-determinant is the sum of the blocks', hence separable across
-blocks, so a component is the owning block's own and zero for any tuple
-spanning two blocks.
+The log-determinant is the sum of the blocks', so it is separable across
+blocks: a component is the owning block's own, and 0 for a tuple spanning two
+blocks.
+}
+\details{
+The structure is \code{\link[=block_diag_derivs]{block_diag_derivs()}}'s with numbers in place of matrices,
+including the per-block cache and the sorted-tuple key. It is a different
+separability from the one \code{\link[=ar1]{ar1()}} or \code{\link[=compound_symmetry]{compound_symmetry()}} have: there the
+log-determinant separates over the free values themselves, here it separates
+over the blocks and a block's own mixed components survive.
+}
+\seealso{
+\code{\link[=param_dlogdet.BlockDiagParam]{param_dlogdet.BlockDiagParam()}}, which calls this, and
+\code{\link[=block_diag_derivs]{block_diag_derivs()}}, its twin for the value.
 }
 \keyword{internal}

@@ -9,16 +9,33 @@
 \arguments{
 \item{s}{A \code{\link[=BlockDiagParam]{BlockDiagParam()}} object.}
 
-\item{eta}{A numeric vector of length \code{s@n_free}.}
+\item{eta}{A numeric vector of length \code{s@n_free}, already checked by the
+generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named numeric vector.
+A numeric vector: at order 1, \code{s@n_free} values named by
+\code{s@free_names}; above it, \code{choose(s@n_free + k - 1, k)} values keyed as
+\code{param_tuple_names(s, k)} and in that order.
 }
 \description{
-The blocks' own, concatenated at the first order and placed by owner above
-it, every cross-block component being zero because the log-determinant is a
-sum over the blocks.
+\code{param_dlogdet()}, \code{param_d2logdet()}, \code{param_d3logdet()} and
+\code{param_d4logdet()} for a \code{\link[=block_diag]{block_diag()}} parameter: the blocks' own, placed by
+owner, with every cross-block component exactly zero because the
+log-determinant is a sum over the blocks.
+}
+\details{
+The four share \code{\link[=block_diag_logdet_derivs]{block_diag_logdet_derivs()}} and differ only in the order they
+pass. The first order names its result by \code{s@free_names}, one value per free
+value; the orders above it are keyed by tuple, as the contract requires.
+
+A block's \strong{own} mixed components are not zero, this separability being over
+blocks, never over free values. Compare \code{\link[=ar1]{ar1()}}, where it is over free values
+and every mixed component vanishes.
+}
+\seealso{
+\code{\link[=block_diag_logdet_derivs]{block_diag_logdet_derivs()}}, which assembles them, and
+\code{\link[=param_logdet.BlockDiagParam]{param_logdet.BlockDiagParam()}} for the quantity differentiated.
 }
 \keyword{internal}

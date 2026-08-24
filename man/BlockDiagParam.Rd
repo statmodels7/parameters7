@@ -50,17 +50,32 @@ its blocks, or \code{"either"} when they disagree, and \code{\link[=kron_identit
 it.}
 }
 \value{
-An object of class \code{BlockDiagParam}.
+An object of class \code{BlockDiagParam}, a subclass of
+\code{\link[=matrix_parameter]{matrix_parameter()}} adding no properties of its own. \code{param_params} holds
+\code{blocks}, \code{labels}, \code{rows} and \code{free} (the ranges each block occupies in the
+matrix and in the free vector) and \code{owner} (the block each free value
+belongs to). \code{dimension}, \code{n_free} and \code{rank} are the sums of the blocks'.
 }
 \description{
-The S7 class of a block-diagonal matrix built from several matrix
-parameters, each carrying its own free values. Constructed by
-\code{\link[=block_diag]{block_diag()}}.
+The S7 class of a block-diagonal matrix built from several matrix parameters,
+each block a family of its own and each carrying its own stretch of the free
+vector. \code{\link[=block_diag]{block_diag()}} builds one.
+
+It is the composition for independent groups of coefficients whose structures
+differ, where \code{\link[=kron_identity]{kron_identity()}} is the one for identical blocks sharing a
+single free vector.
 }
 \examples{
-S7::S7_inherits(block_diag(log_cholesky(2), ar1(3)), BlockDiagParam)
+# Everything the composite is, is the sum of what the blocks are.
+s <- block_diag(subject = log_cholesky(2), time = ar1(3))
+c(dimension = s@dimension, n_free = s@n_free, rank = s@rank)
+
+# And the free names carry the block's label, so two blocks of the same
+# family stay distinguishable.
+block_diag(a = ar1(3), b = ar1(4))@free_names
 
 }
 \seealso{
-\code{\link[=block_diag]{block_diag()}}, \code{\link[=kron_identity]{kron_identity()}}
+\code{\link[=block_diag]{block_diag()}}, the constructor, \code{\link[=kron_identity]{kron_identity()}} for identical
+blocks, and \code{\link[=matrix_parameter]{matrix_parameter()}} for the properties this inherits.
 }

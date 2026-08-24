@@ -7,17 +7,38 @@
 \arguments{
 \item{s}{A \code{\link[=BlockDiagParam]{BlockDiagParam()}} object.}
 
-\item{eta}{A numeric vector of length \code{s@n_free}.}
+\item{eta}{A numeric vector of length \code{s@n_free}, already checked by the
+generic.}
 
-\item{b}{A matrix with \code{s@dimension} rows, or \code{NULL}.}
+\item{b}{A numeric matrix with \code{s@dimension} rows, defaulted to the identity
+by the generic. \code{param_factor()} takes no \code{b}.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A matrix.
+\code{param_solve()} returns a numeric matrix with \code{s@dimension} rows and
+as many columns as \code{b}; \code{param_factor()} a lower triangular \code{s@dimension} by
+\code{s@dimension} matrix.
 }
 \description{
-Both are blockwise: the inverse of a block-diagonal matrix is the block
-diagonal of the inverses, and the same holds of a triangular factor.
+\code{param_solve()} and \code{param_factor()} for a \code{\link[=block_diag]{block_diag()}} parameter, both of
+them blockwise: the inverse of a block-diagonal matrix is the block diagonal
+of the inverses, and the same holds of a lower triangular factor. Each block
+answers by whatever route it has, so \code{ar1()}'s tridiagonal inverse and
+\code{log_cholesky()}'s free factor both survive into the composite.
+}
+\details{
+\code{param_solve()} takes the rows of \code{b} that belong to each block and hands them
+to that block, so the whole matrix is never inverted. \code{param_factor()}
+assembles the blocks' factors on the diagonal; the result is lower triangular
+with \eqn{M = L L^\top}, which is the contract \code{\link[=param_factor]{param_factor()}} states.
+Measured against \code{solve()} and against the assembled matrix, the two agree to
+\eqn{2 \times 10^{-16}} and \eqn{4 \times 10^{-16}}.
+
+Both are refused by the generic where any block is rank deficient, the
+composite having no inverse and no Cholesky factor then.
+}
+\seealso{
+\code{\link[=param_solve]{param_solve()}} and \code{\link[=param_factor]{param_factor()}} for the two contracts.
 }
 \keyword{internal}

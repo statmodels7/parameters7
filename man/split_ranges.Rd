@@ -7,15 +7,24 @@
 split_ranges(widths)
 }
 \arguments{
-\item{widths}{An integer vector of widths.}
+\item{widths}{An integer vector of non-negative widths.}
 }
 \value{
-A list of integer vectors, one per width.
+A list of integer vectors, one per width, in order.
 }
 \description{
-Turns the widths \eqn{n_1, \ldots, n_B} into the ranges they occupy when
-laid end to end, as a list of integer vectors. A width of zero gives an
-empty range rather than being dropped, so that the list stays aligned with
-the blocks.
+Turns the widths \eqn{n_1, \ldots, n_B} into the ranges they occupy when laid
+end to end. It is called twice at construction, once for the blocks' rows in
+the matrix and once for their stretches of the free vector.
+}
+\details{
+A width of zero gives an \strong{empty range}, \code{integer(0)}, instead of being
+dropped, so the list stays aligned with the blocks and the \eqn{b}-th element
+is always the \eqn{b}-th block's. That case is reachable: a fully known
+\code{\link[=scaled_matrix]{scaled_matrix()}} has no free values at all, so
+\code{split_ranges(c(2, 0, 3))} returns \code{1:2}, \code{integer(0)} and \code{3:5}.
+}
+\seealso{
+\code{\link[=block_diag]{block_diag()}}, the only caller.
 }
 \keyword{internal}

@@ -7,19 +7,31 @@
 block_derivs_by_tuple(block, eta, order)
 }
 \arguments{
-\item{block}{A \code{\link[=matrix_parameter]{matrix_parameter()}}.}
+\item{block}{A \code{\link[=matrix_parameter]{matrix_parameter()}}, one block of the composite.}
 
-\item{eta}{The block's own stretch of the free vector.}
+\item{eta}{The block's own stretch of the free vector, of length
+\code{block@n_free}.}
 
-\item{order}{The derivative order, 1 to 4.}
+\item{order}{The derivative order: 1, 2, 3 or 4.}
 }
 \value{
-A named list of matrices, keyed as \code{"1"}, \code{"1,2"} and so
-on over the block's own free indices.
+A list of the block's own derivative matrices of that order, named by
+the sorted local index tuples.
 }
 \description{
 Fetches one block's derivatives of a given order and re-keys them by the
-sorted local index tuple, so that a lookup from the composite's enumeration
-needs no assumption about how the two orderings correspond.
+\strong{sorted local index tuple}, as \code{"1"}, \code{"1,2"}, \code{"2,2"} and so on.
+}
+\details{
+The re-keying lets a lookup from the composite's enumeration succeed without
+assuming the two enumerations correspond. A block's own
+\code{param_tuple_names()} are built from its own \code{free_names}, which the composite
+has prefixed with a label, so the two name sets differ; the sorted index tuple
+is the one key both sides can compute. Sorting matters because a derivative is
+symmetric in its indices and the two enumerations need not order a tuple the
+same way.
+}
+\seealso{
+\code{\link[=block_diag_derivs]{block_diag_derivs()}}, the only caller.
 }
 \keyword{internal}

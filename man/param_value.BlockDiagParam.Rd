@@ -6,14 +6,26 @@
 \arguments{
 \item{s}{A \code{\link[=BlockDiagParam]{BlockDiagParam()}} object.}
 
-\item{eta}{A numeric vector of length \code{s@n_free}.}
+\item{eta}{A numeric vector of length \code{s@n_free}, already checked by the
+generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A symmetric matrix of side \code{s@dimension}.
+A symmetric \code{s@dimension} by \code{s@dimension} numeric matrix, block
+diagonal and without dimnames.
 }
 \description{
-Assembles the blocks along the diagonal.
+Evaluates each block at its own stretch of the free vector and writes it into
+the rows and columns that block occupies, leaving the off-diagonal blocks at
+the zeros the matrix was created with. Each block is exactly what its own
+family returns, to the bit.
+
+The value carries \strong{no dimnames}, where the primitive families label their
+margins \code{v1}, \code{v2}, ...; the four compositions share that.
+}
+\seealso{
+\code{\link[=param_free.BlockDiagParam]{param_free.BlockDiagParam()}} for the inverse, and \code{\link[=block_diag]{block_diag()}} for
+the composition.
 }
 \keyword{internal}

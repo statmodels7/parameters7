@@ -9,16 +9,32 @@
 \arguments{
 \item{s}{A \code{\link[=BlockDiagParam]{BlockDiagParam()}} object.}
 
-\item{eta}{A numeric vector of length \code{s@n_free}.}
+\item{eta}{A numeric vector of length \code{s@n_free}, already checked by the
+generic.}
 
-\item{...}{Unused.}
+\item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named list of symmetric matrices.
+At order 1, a list of \code{s@n_free} symmetric matrices named by
+\code{s@free_names}; above it, \code{choose(s@n_free + k - 1, k)} of them keyed as
+\code{param_tuple_names(s, k)} and in that order. Each is \code{s@dimension} by
+\code{s@dimension} and carries no dimnames.
 }
 \description{
-Each block's own derivatives, placed in the rows and columns that block
-occupies. A component whose indices span two blocks is exactly zero, the
-free values of one block not entering another.
+\code{param_d1()}, \code{param_d2()}, \code{param_d3()} and \code{param_d4()} for a
+\code{\link[=block_diag]{block_diag()}} parameter: each block's own derivatives, placed in the rows and
+columns that block occupies, and \strong{exactly zero} for a tuple spanning two
+blocks. Nothing is rederived and nothing is differenced, so the composite is
+as exact as its blocks are.
+}
+\details{
+The four share \code{\link[=block_diag_derivs]{block_diag_derivs()}} and differ only in the order they pass.
+The zeros are structural: they follow from the free values of one block not
+entering another, and at order 4 with blocks of 3 and 2 free values they are
+50 of the 70 components. See \code{\link[=block_diag]{block_diag()}} for the argument.
+}
+\seealso{
+\code{\link[=block_diag_derivs]{block_diag_derivs()}}, which assembles them, and
+\code{\link[=param_dlogdet.BlockDiagParam]{param_dlogdet.BlockDiagParam()}} for the log-determinant's own.
 }
 \keyword{internal}
