@@ -18,21 +18,29 @@ NULL
 #' coordinate, given the link that produced it.
 #'
 #' @details
-#' The tag comes from the link's class rather than from its
-#' `link_name`, because a parametric link names itself with its
-#' parameters -- `"bounded(lwr=-0.25, upr=1)"` -- and that cannot appear
-#' inside an identifier. The identity link has no tag, so a coordinate that
+#' The tag comes from the link's class, never from its `link_name`, because a
+#' parametric link names itself with its parameters, as in
+#' `"bounded(lwr=-0.25, upr=1)"`, and that cannot appear inside an identifier.
+#' The identity link has no tag, so a coordinate that
 #' is already free keeps the plain name of the quantity. A bounded link is
 #' tagged by the transformation it performs: a doubly bounded one is a scaled
 #' logit, and a singly bounded one a shifted logarithm. A link written
 #' outside \pkg{linkfunctions7} falls back on its own name reduced to
 #' lowercase letters, digits and underscores.
 #'
-#' @param link A \pkg{linkfunctions7} link.
+#' @param link A \pkg{linkfunctions7} link, or any object with a `link_name`
+#'   property.
 #'
-#' @return A single character string, empty for the identity link.
+#' @return A single character string, empty for the identity link. The tags in
+#'   use are `"log"` (log and either singly bounded link), `"logit"` (logit and
+#'   the doubly bounded link), `"z"` (rhobit), and `"probit"`, `"cloglog"`,
+#'   `"loglog"`, `"cauchit"`, `"sqrt"`, `"inv"`, `"invsq"`, `"power"` and
+#'   `"softplus"` for the rest. A link from outside \pkg{linkfunctions7} gets its
+#'   own `link_name` reduced to lowercase letters, digits and underscores, or
+#'   `"f"` if nothing survives that.
 #'
-#' @seealso [tagged_name()]
+#' @seealso [tagged_name()], which prefixes a quantity with the tag, and
+#'   [parameter()] for the naming convention this serves.
 #'
 #' @keywords internal
 link_tag <- function(link) {
@@ -67,16 +75,23 @@ link_tag <- function(link) {
 #' Name a Coordinate After Its Link
 #'
 #' @description
-#' Prefixes the name of a quantity with the tag of the link that carries it
-#' onto the free scale, leaving the name alone when the link is the identity
-#' and the coordinate therefore is the quantity.
+#' Prefixes the name of a quantity with the tag of the link that carries it onto
+#' the free scale, so `tagged_name(log_link(), "d1")` is `"log_d1"` and
+#' `tagged_name(rhobit_link(), "rho")` is `"z_rho"`. Under the identity link the
+#' name is left alone, the coordinate then **being** the quantity.
+#'
+#' Every constructor in the package that takes a link builds its `free_names`
+#' through this, which is how the convention stays uniform across the families.
 #'
 #' @param link A \pkg{linkfunctions7} link.
-#' @param quantity A character vector of quantity names.
+#' @param quantity A character vector of quantity names, of any length.
 #'
-#' @return A character vector the same length as `quantity`.
+#' @return A character vector the same length as `quantity`: `paste0(tag, "_",
+#'   quantity)` where the link has a tag, and `quantity` unchanged where it does
+#'   not.
 #'
-#' @seealso [link_tag()]
+#' @seealso [link_tag()] for the tags, and [parameter()], whose `free_names`
+#'   documentation states the convention and why it matters outside the family.
 #'
 #' @keywords internal
 tagged_name <- function(link, quantity) {

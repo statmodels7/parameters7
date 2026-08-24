@@ -7,15 +7,23 @@
 power_derivs(r, m)
 }
 \arguments{
-\item{r}{The point.}
+\item{r}{The point, a single number or a vector.}
 
-\item{m}{The exponent, a non-negative integer.}
+\item{m}{The exponent, a non-negative integer. At \code{m = 0} all four are 0, the
+power being the constant 1; at \code{m = 2} they are \verb{c(2r, 2, 0, 0)}.}
 }
 \value{
-A list of four numbers.
+A list of four elements, the first to fourth derivative, each the
+shape of \code{r}.
 }
 \description{
-The four derivatives of \eqn{r \mapsto r^{m}} at \eqn{r}, which vanish
-beyond order \eqn{m} because the power is a polynomial.
+Returns the four derivatives of \eqn{r \mapsto r^{m}} at \eqn{r}, ready to be
+the outer map of a \code{\link[=compose4]{compose4()}} call. They are
+\eqn{m(m-1)\cdots(m-k+1)\,r^{m-k}} and vanish beyond order \eqn{m}, the power
+being a polynomial. \code{ar1_pattern()} calls it once per distinct lag.
+}
+\seealso{
+\code{\link[=compose4]{compose4()}}, which chains these onto a link's derivatives, and
+\code{ar1_pattern()}, the caller.
 }
 \keyword{internal}

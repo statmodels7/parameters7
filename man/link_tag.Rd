@@ -7,20 +7,27 @@
 link_tag(link)
 }
 \arguments{
-\item{link}{A \pkg{linkfunctions7} link.}
+\item{link}{A \pkg{linkfunctions7} link, or any object with a \code{link_name}
+property.}
 }
 \value{
-A single character string, empty for the identity link.
+A single character string, empty for the identity link. The tags in
+use are \code{"log"} (log and either singly bounded link), \code{"logit"} (logit and
+the doubly bounded link), \code{"z"} (rhobit), and \code{"probit"}, \code{"cloglog"},
+\code{"loglog"}, \code{"cauchit"}, \code{"sqrt"}, \code{"inv"}, \code{"invsq"}, \code{"power"} and
+\code{"softplus"} for the rest. A link from outside \pkg{linkfunctions7} gets its
+own \code{link_name} reduced to lowercase letters, digits and underscores, or
+\code{"f"} if nothing survives that.
 }
 \description{
 The word a free name uses to say which transformation produced a
 coordinate, given the link that produced it.
 }
 \details{
-The tag comes from the link's class rather than from its
-\code{link_name}, because a parametric link names itself with its
-parameters -- \code{"bounded(lwr=-0.25, upr=1)"} -- and that cannot appear
-inside an identifier. The identity link has no tag, so a coordinate that
+The tag comes from the link's class, never from its \code{link_name}, because a
+parametric link names itself with its parameters, as in
+\code{"bounded(lwr=-0.25, upr=1)"}, and that cannot appear inside an identifier.
+The identity link has no tag, so a coordinate that
 is already free keeps the plain name of the quantity. A bounded link is
 tagged by the transformation it performs: a doubly bounded one is a scaled
 logit, and a singly bounded one a shifted logarithm. A link written
@@ -28,6 +35,7 @@ outside \pkg{linkfunctions7} falls back on its own name reduced to
 lowercase letters, digits and underscores.
 }
 \seealso{
-\code{\link[=tagged_name]{tagged_name()}}
+\code{\link[=tagged_name]{tagged_name()}}, which prefixes a quantity with the tag, and
+\code{\link[=parameter]{parameter()}} for the naming convention this serves.
 }
 \keyword{internal}

@@ -9,17 +9,23 @@ tagged_name(link, quantity)
 \arguments{
 \item{link}{A \pkg{linkfunctions7} link.}
 
-\item{quantity}{A character vector of quantity names.}
+\item{quantity}{A character vector of quantity names, of any length.}
 }
 \value{
-A character vector the same length as \code{quantity}.
+A character vector the same length as \code{quantity}: \code{paste0(tag, "_", quantity)} where the link has a tag, and \code{quantity} unchanged where it does
+not.
 }
 \description{
-Prefixes the name of a quantity with the tag of the link that carries it
-onto the free scale, leaving the name alone when the link is the identity
-and the coordinate therefore is the quantity.
+Prefixes the name of a quantity with the tag of the link that carries it onto
+the free scale, so \code{tagged_name(log_link(), "d1")} is \code{"log_d1"} and
+\code{tagged_name(rhobit_link(), "rho")} is \code{"z_rho"}. Under the identity link the
+name is left alone, the coordinate then \strong{being} the quantity.
+
+Every constructor in the package that takes a link builds its \code{free_names}
+through this, which is how the convention stays uniform across the families.
 }
 \seealso{
-\code{\link[=link_tag]{link_tag()}}
+\code{\link[=link_tag]{link_tag()}} for the tags, and \code{\link[=parameter]{parameter()}}, whose \code{free_names}
+documentation states the convention and why it matters outside the family.
 }
 \keyword{internal}
