@@ -34,6 +34,7 @@ Suggests:
     testthat (>= 3.0.0),
     knitr,
     rmarkdown
+VignetteBuilder: knitr
 Remotes:
     statmodels7/linkfunctions7,
     statmodels7/numericals7
