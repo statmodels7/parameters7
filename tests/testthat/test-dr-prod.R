@@ -35,9 +35,12 @@ test_that("the coordinates are the standard deviations and the correlations", {
   s <- dr_prod(3)
   eta <- c(0, log(2), log(0.5), 0.6, 0.9, 1.2)
   v <- param_value(s, eta)
-  expect_equal(sqrt(diag(v)), c(1, 2, 0.5), tolerance = 1e-14)
+  # the diagonal of a labeled matrix carries the labels along
+  expect_equal(sqrt(diag(v)), c(1, 2, 0.5), tolerance = 1e-14,
+               ignore_attr = TRUE)
   r <- v / outer(sqrt(diag(v)), sqrt(diag(v)))
-  expect_equal(diag(r), rep(1, 3), tolerance = 1e-14)
+  expect_equal(diag(r), rep(1, 3), tolerance = 1e-14,
+               ignore_attr = TRUE)
   expect_equal(unname(r), unname(param_value(correlation_matrix(3), eta[4:6])),
                tolerance = 1e-14)
   expect_equal(param_free(s, v), eta, tolerance = 1e-12, ignore_attr = TRUE)

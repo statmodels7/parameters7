@@ -78,11 +78,12 @@ KronIdentityParam <- S7::new_class("KronIdentityParam", parent = matrix_paramete
 #' of rank 4, and [param_solve()] rejects it as the inner one would. The
 #' replicated null basis is annihilated to \eqn{10^{-15}}.
 #'
-#' # What it does not do
+#' # The dimension labels
 #'
-#' The value carries **no dimnames**, where every primitive family in the package
-#' labels its rows and columns `v1`, `v2`, ...: `kronecker()` drops them. The
-#' other three composition wrappers do the same. See [name_dims()].
+#' `kronecker()` drops the inner parameter's labels, so the value and the four
+#' derivative orders are relabeled `v1`, `v2`, ..., `v(md)` over the composite
+#' side. The factor [param_factor.KronIdentityParam()] returns is left bare,
+#' as several of the primitive families' are. See [name_dims()].
 #'
 #' @section Notation:
 #' \eqn{S} is the inner parameter, \eqn{d} its side, \eqn{m} the number of
@@ -196,19 +197,19 @@ NULL
 #' \eqn{m} identical diagonal blocks. One `kronecker()` call and no arithmetic of
 #' its own: the value is the inner value lifted.
 #'
-#' The result carries **no dimnames**, `kronecker()` dropping the inner
-#' parameter's `v1`, `v2`, ...
+#' `kronecker()` drops the inner parameter's labels, so the result is relabeled
+#' over the composite side, `v1`, `v2`, ..., `v(md)`.
 #' @param s A [KronIdentityParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`,
 #'   already checked by the generic.
 #' @param ... Unused, and accepted so the signature matches the generic's.
 #' @return A `s@dimension` by `s@dimension` symmetric numeric matrix, block
-#'   diagonal with `m` identical blocks, and with no dimnames. Positive definite
-#'   exactly when the inner parameter is.
+#'   diagonal with `m` identical blocks, and labeled `v1`, `v2`, ..., `vp` on both margins.
+#'   Positive definite exactly when the inner parameter is.
 #' @seealso [param_free.KronIdentityParam()] for the inverse and [kron_identity()] for the construction.
 #' @keywords internal
 S7::method(param_value, KronIdentityParam) <- function(s, eta, ...) {
-  .kron_lift(.kron_m(s), param_value(.kron_inner(s), eta))
+  name_dims(.kron_lift(.kron_m(s), param_value(.kron_inner(s), eta)), s)
 }
 
 #' @title Free Vector of a Block Replication
@@ -257,11 +258,12 @@ S7::method(param_free, KronIdentityParam) <- function(s, m, ...) {
 #'   already checked by the generic.
 #' @param ... Unused, and accepted so the signature matches the generic's.
 #' @return A list of `s@n_free` symmetric matrices named by `s@free_names`, each
-#'   `s@dimension` by `s@dimension` and block diagonal, with no dimnames.
+#'   `s@dimension` by `s@dimension`, block diagonal and labeled `v1`, `v2`, ..., `vp` on both margins.
 #' @seealso [param_d2.KronIdentityParam()] for the order above.
 #' @keywords internal
 S7::method(param_d1, KronIdentityParam) <- function(s, eta, ...) {
-  lapply(param_d1(.kron_inner(s), eta), .kron_lift, m = .kron_m(s))
+  lapply(param_d1(.kron_inner(s), eta),
+         function(a) name_dims(.kron_lift(.kron_m(s), a), s))
 }
 
 #' @title Second Derivatives of a Block Replication
@@ -280,7 +282,8 @@ S7::method(param_d1, KronIdentityParam) <- function(s, eta, ...) {
 #' @seealso [param_d1.KronIdentityParam()] and [param_d3.KronIdentityParam()] for the neighboring orders.
 #' @keywords internal
 S7::method(param_d2, KronIdentityParam) <- function(s, eta, ...) {
-  lapply(param_d2(.kron_inner(s), eta), .kron_lift, m = .kron_m(s))
+  lapply(param_d2(.kron_inner(s), eta),
+         function(a) name_dims(.kron_lift(.kron_m(s), a), s))
 }
 
 #' @title Third Derivatives of a Block Replication
@@ -298,7 +301,8 @@ S7::method(param_d2, KronIdentityParam) <- function(s, eta, ...) {
 #' @seealso [param_d4.KronIdentityParam()] for the order above.
 #' @keywords internal
 S7::method(param_d3, KronIdentityParam) <- function(s, eta, ...) {
-  lapply(param_d3(.kron_inner(s), eta), .kron_lift, m = .kron_m(s))
+  lapply(param_d3(.kron_inner(s), eta),
+         function(a) name_dims(.kron_lift(.kron_m(s), a), s))
 }
 
 #' @title Fourth Derivatives of a Block Replication
@@ -317,7 +321,8 @@ S7::method(param_d3, KronIdentityParam) <- function(s, eta, ...) {
 #' @seealso [param_d3.KronIdentityParam()] for the order below.
 #' @keywords internal
 S7::method(param_d4, KronIdentityParam) <- function(s, eta, ...) {
-  lapply(param_d4(.kron_inner(s), eta), .kron_lift, m = .kron_m(s))
+  lapply(param_d4(.kron_inner(s), eta),
+         function(a) name_dims(.kron_lift(.kron_m(s), a), s))
 }
 
 #' @title Log-Determinant of a Block Replication

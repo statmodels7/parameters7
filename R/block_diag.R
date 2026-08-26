@@ -304,7 +304,7 @@ block_derivs_by_tuple <- function(block, eta, order) {
 #'
 #' @return A list of `choose(s@n_free + order - 1, order)` symmetric matrices
 #'   keyed as `param_tuple_names(s, order)` and in that order, each
-#'   `s@dimension` by `s@dimension` and without dimnames.
+#'   `s@dimension` by `s@dimension` and labeled `v1`, `v2`, ..., `vp` on both margins.
 #'
 #' @seealso [block_derivs_by_tuple()] for one block's components, and
 #'   [param_d1.BlockDiagParam()], which calls this.
@@ -329,7 +329,10 @@ block_diag_derivs <- function(s, eta, order) {
     v[b$rows[[j]], b$rows[[j]]] <- cache[[j]][[paste(sort(local), collapse = ",")]]
     v
   })
-  stats::setNames(out, param_tuple_names(s, order))
+  # the dimnames convention every family's matrices carry; one point
+  # here covers all four derivative orders, which route through this
+  stats::setNames(lapply(out, name_dims, s = s),
+                  param_tuple_names(s, order))
 }
 
 
@@ -394,14 +397,14 @@ block_diag_logdet_derivs <- function(s, eta, order) {
 #' the zeros the matrix was created with. Each block is exactly what its own
 #' family returns, to the bit.
 #'
-#' The value carries **no dimnames**, where the primitive families label their
-#' margins `v1`, `v2`, ...; the four compositions share that.
+#' The value is labeled `v1`, `v2`, ..., `vp` on both margins, the convention [name_dims()]
+#' states and every family in the package follows.
 #' @param s A [BlockDiagParam()] object.
 #' @param eta A numeric vector of length `s@n_free`, already checked by the
 #'   generic.
 #' @param ... Unused, and accepted so the signature matches the generic's.
 #' @return A symmetric `s@dimension` by `s@dimension` numeric matrix, block
-#'   diagonal and without dimnames.
+#'   diagonal and labeled `v1`, `v2`, ..., `vp` on both margins.
 #' @seealso [param_free.BlockDiagParam()] for the inverse, and [block_diag()] for
 #'   the composition.
 #' @keywords internal
@@ -411,7 +414,7 @@ S7::method(param_value, BlockDiagParam) <- function(s, eta, ...) {
   for (j in seq_along(b$blocks)) {
     out[b$rows[[j]], b$rows[[j]]] <- param_value(b$blocks[[j]], eta[b$free[[j]]])
   }
-  out
+  name_dims(out, s)
 }
 
 #' @title Free Vector of a Block-Diagonal Parameter
@@ -472,7 +475,7 @@ S7::method(param_free, BlockDiagParam) <- function(s, m, ...) {
 #' @return At order 1, a list of `s@n_free` symmetric matrices named by
 #'   `s@free_names`; above it, `choose(s@n_free + k - 1, k)` of them keyed as
 #'   `param_tuple_names(s, k)` and in that order. Each is `s@dimension` by
-#'   `s@dimension` and carries no dimnames.
+#'   `s@dimension` and labeled `v1`, `v2`, ..., `vp` on both margins.
 #' @seealso [block_diag_derivs()], which assembles them, and
 #'   [param_dlogdet.BlockDiagParam()] for the log-determinant's own.
 #' @details

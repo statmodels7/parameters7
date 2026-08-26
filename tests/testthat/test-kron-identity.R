@@ -11,19 +11,27 @@ test_that("the lift agrees with the assembled Kronecker product", {
   expect_identical(s@free_names, inner@free_names)
 
   V <- param_value(s, eta)
-  expect_equal(V, kronecker(diag(3), param_value(inner, eta)))
+  # ignore_attr, because kronecker() drops the inner parameter's labels
+  # and the lift relabels over the composite side: what is asserted here
+  # is the entries, and the labels are asserted in test-naming.R
+  expect_equal(V, kronecker(diag(3), param_value(inner, eta)),
+               ignore_attr = TRUE)
 
   # logdet, its derivatives, and the inverse against the assembled matrix
   expect_equal(param_logdet(s, eta), determinant(V)$modulus[[1]],
                tolerance = 1e-12)
-  expect_equal(param_solve(s, eta), solve(V), tolerance = 1e-10)
+  # the solve and the factor are bare where the value is labeled, the
+  # convention covering the value and the derivative orders
+  expect_equal(param_solve(s, eta), solve(V), tolerance = 1e-10,
+               ignore_attr = TRUE)
   F <- param_factor(s, eta)
-  expect_equal(F %*% t(F), V, tolerance = 1e-12)
+  expect_equal(F %*% t(F), V, tolerance = 1e-12, ignore_attr = TRUE)
 
   d1 <- param_d1(s, eta)
   d1_inner <- param_d1(inner, eta)
   for (k in names(d1_inner)) {
-    expect_equal(d1[[k]], kronecker(diag(3), d1_inner[[k]]))
+    expect_equal(d1[[k]], kronecker(diag(3), d1_inner[[k]]),
+                 ignore_attr = TRUE)
   }
 })
 

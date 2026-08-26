@@ -13,7 +13,7 @@ generic.}
 }
 \value{
 A symmetric positive semidefinite \code{s@dimension} by \code{s@dimension}
-numeric matrix, without dimnames.
+numeric matrix, labeled \code{v1}, \code{v2}, ..., \code{vp} on both margins.
 }
 \description{
 The weighted sum \eqn{\sum_k c_k(\eta_k) P_k}, accumulated in place over the
@@ -22,8 +22,8 @@ combination of positive semidefinite matrices being one; positive \strong{defini
 only where the components' null spaces meet at the origin, which is the
 condition \code{rank} records.
 
-The value carries \strong{no dimnames}, where the primitive families label their
-margins \code{v1}, \code{v2}, ...; the four compositions share that.
+The value is labeled \code{v1}, \code{v2}, ..., \code{vp} on both margins, the convention \code{\link[=name_dims]{name_dims()}}
+states and every family in the package follows.
 }
 \seealso{
 \code{\link[=param_free.SumStructParam]{param_free.SumStructParam()}} for the inverse, and \code{\link[=sum_struct]{sum_struct()}} for

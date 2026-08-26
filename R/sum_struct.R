@@ -321,7 +321,7 @@ sum_struct_weight_derivs <- function(s, eta) {
 #'
 #' @return A list of `choose(s@n_free + order - 1, order)` symmetric matrices
 #'   keyed as `param_tuple_names(s, order)` and in that order, each
-#'   `s@dimension` by `s@dimension` and without dimnames.
+#'   `s@dimension` by `s@dimension` and labeled `v1`, `v2`, ..., `vp` on both margins.
 #'
 #' @seealso [sum_struct_weight_derivs()] for the scalars, and
 #'   [param_d1.SumStructParam()], which calls this.
@@ -337,7 +337,10 @@ sum_struct_derivs <- function(s, eta, order) {
     if (length(k) > 1L) return(zero)
     cd[order + 1L, k] * comp[[k]]
   })
-  stats::setNames(out, param_tuple_names(s, order))
+  # the dimnames convention every family's matrices carry; one point
+  # here covers all four derivative orders, which route through this
+  stats::setNames(lapply(out, name_dims, s = s),
+                  param_tuple_names(s, order))
 }
 
 #' Orderings of a Multiset, Counted With Multiplicity
@@ -488,14 +491,14 @@ sum_struct_logdet_derivs <- function(s, eta, order) {
 #' only where the components' null spaces meet at the origin, which is the
 #' condition `rank` records.
 #'
-#' The value carries **no dimnames**, where the primitive families label their
-#' margins `v1`, `v2`, ...; the four compositions share that.
+#' The value is labeled `v1`, `v2`, ..., `vp` on both margins, the convention [name_dims()]
+#' states and every family in the package follows.
 #' @param s A [SumStructParam()] object.
 #' @param eta A numeric vector of length `s@n_free`, already checked by the
 #'   generic.
 #' @param ... Unused, and accepted so the signature matches the generic's.
 #' @return A symmetric positive semidefinite `s@dimension` by `s@dimension`
-#'   numeric matrix, without dimnames.
+#'   numeric matrix, labeled `v1`, `v2`, ..., `vp` on both margins.
 #' @seealso [param_free.SumStructParam()] for the inverse, and [sum_struct()] for
 #'   the parametrization.
 #' @keywords internal
@@ -504,7 +507,7 @@ S7::method(param_value, SumStructParam) <- function(s, eta, ...) {
   comp <- .ss(s)$components
   out <- w[[1L]] * comp[[1L]]
   for (k in seq_along(comp)[-1L]) out <- out + w[[k]] * comp[[k]]
-  out
+  name_dims(out, s)
 }
 
 #' @title Free Vector of a Sum of Fixed Matrices
@@ -573,7 +576,7 @@ S7::method(param_free, SumStructParam) <- function(s, m, ...) {
 #' @return At order 1, a list of `s@n_free` symmetric matrices named by
 #'   `s@free_names`; above it, `choose(s@n_free + k - 1, k)` of them keyed as
 #'   `param_tuple_names(s, k)` and in that order. Each is `s@dimension` by
-#'   `s@dimension` and carries no dimnames.
+#'   `s@dimension` and labeled `v1`, `v2`, ..., `vp` on both margins.
 #' @seealso [sum_struct_derivs()], which assembles them.
 #' @keywords internal
 S7::method(param_d1, SumStructParam) <- function(s, eta, ...) {
@@ -711,16 +714,25 @@ S7::method(param_d4logdet, SumStructParam) <- function(s, eta, ...) {
 #' @param ... Unused, and accepted so the signature matches the generic's.
 #' @return `param_solve()` returns a numeric matrix with `s@dimension` rows and
 #'   as many columns as `b`; `param_factor()` a lower triangular `s@dimension` by
-#'   `s@dimension` matrix.
+#'   `s@dimension` matrix. Both are bare, where the value and the derivative
+#'   arrays carry `v1`, `v2`, ...: this is the one family whose two answers are
+#'   built from its own value rather than from its structure, so they are
+#'   unnamed explicitly to match the twelve families that never label them.
 #' @seealso [param_solve()] and [param_factor()] for the two contracts.
 #' @keywords internal
 S7::method(param_solve, SumStructParam) <- function(s, eta, b = NULL, ...) {
-  solve(param_value(s, eta), b)
+  # unname because this is the one family whose solve delegates to the value:
+  # every other computes it from its own structure, so all of them return a
+  # bare matrix, and the dimnames convention covers the value and the four
+  # derivative orders rather than everything derived from them.
+  solve(unname(param_value(s, eta)), b)
 }
 
 #' @rdname param_solve.SumStructParam
 #' @name param_factor.SumStructParam
 #' @keywords internal
 S7::method(param_factor, SumStructParam) <- function(s, eta, ...) {
-  t(chol(param_value(s, eta)))
+  # unname for the reason the solve does: the primitives disagree about whether
+  # a factor carries the labels, and this commit leaves that where it found it.
+  t(chol(unname(param_value(s, eta))))
 }

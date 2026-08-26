@@ -435,11 +435,23 @@ check_parameter <- function(s, tol = 1e-6, verbose = TRUE) {
 
   # --- 9. shapes ------------------------------------------------------------
   eta <- etas[[1L]]
+  # The dimnames the value and the derivative arrays carry are read off the
+  # margins rather than off the declared names, which is what the rest of this
+  # check tests. Without the value's own margins the check passed for the four
+  # composition wrappers while they returned matrices carrying no labels at all.
+  # A family with no free values has no array to read, `correlation_matrix(1)`
+  # being the one that ships, so those two are asked only when there is one.
+  want_dn <- rep(list(paste0("v", seq_len(s@dimension))), 2L)
+  d1 <- param_d1(s, eta)
+  d2 <- param_d2(s, eta)
   shape_ok <- length(s@free_names) == s@n_free &&
-    identical(names(param_d1(s, eta)), s@free_names) &&
-    identical(names(param_d2(s, eta)), param_tuple_names(s)) &&
+    identical(names(d1), s@free_names) &&
+    identical(names(d2), param_tuple_names(s)) &&
     length(param_tuple_names(s)) == s@n_free * (s@n_free + 1L) / 2L &&
-    identical(dim(s@null_basis), c(s@dimension, s@dimension - s@rank))
+    identical(dim(s@null_basis), c(s@dimension, s@dimension - s@rank)) &&
+    identical(dimnames(param_value(s, eta)), want_dn) &&
+    (!length(d1) || identical(dimnames(d1[[1L]]), want_dn)) &&
+    (!length(d2) || identical(dimnames(d2[[1L]]), want_dn))
   out[[length(out) + 1L]] <- check_row(
     "shapes and names", if (shape_ok) "OK" else "FAIL"
   )

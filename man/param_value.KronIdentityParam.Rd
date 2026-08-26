@@ -13,16 +13,16 @@ already checked by the generic.}
 }
 \value{
 A \code{s@dimension} by \code{s@dimension} symmetric numeric matrix, block
-diagonal with \code{m} identical blocks, and with no dimnames. Positive definite
-exactly when the inner parameter is.
+diagonal with \code{m} identical blocks, and labeled \code{v1}, \code{v2}, ..., \code{vp} on both margins.
+Positive definite exactly when the inner parameter is.
 }
 \description{
 #' Returns \eqn{I_m \otimes S(\eta)}, the inner parameter's matrix placed into
 \eqn{m} identical diagonal blocks. One \code{kronecker()} call and no arithmetic of
 its own: the value is the inner value lifted.
 
-The result carries \strong{no dimnames}, \code{kronecker()} dropping the inner
-parameter's \code{v1}, \code{v2}, ...
+\code{kronecker()} drops the inner parameter's labels, so the result is relabeled
+over the composite side, \code{v1}, \code{v2}, ..., \code{v(md)}.
 }
 \seealso{
 \code{\link[=param_free.KronIdentityParam]{param_free.KronIdentityParam()}} for the inverse and \code{\link[=kron_identity]{kron_identity()}} for the construction.

@@ -13,7 +13,7 @@ generic.}
 }
 \value{
 A symmetric \code{s@dimension} by \code{s@dimension} numeric matrix, block
-diagonal and without dimnames.
+diagonal and labeled \code{v1}, \code{v2}, ..., \code{vp} on both margins.
 }
 \description{
 Evaluates each block at its own stretch of the free vector and writes it into
@@ -21,8 +21,8 @@ the rows and columns that block occupies, leaving the off-diagonal blocks at
 the zeros the matrix was created with. Each block is exactly what its own
 family returns, to the bit.
 
-The value carries \strong{no dimnames}, where the primitive families label their
-margins \code{v1}, \code{v2}, ...; the four compositions share that.
+The value is labeled \code{v1}, \code{v2}, ..., \code{vp} on both margins, the convention \code{\link[=name_dims]{name_dims()}}
+states and every family in the package follows.
 }
 \seealso{
 \code{\link[=param_free.BlockDiagParam]{param_free.BlockDiagParam()}} for the inverse, and \code{\link[=block_diag]{block_diag()}} for

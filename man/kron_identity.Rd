@@ -59,10 +59,11 @@ of rank 4, and \code{\link[=param_solve]{param_solve()}} rejects it as the inner
 replicated null basis is annihilated to \eqn{10^{-15}}.
 }
 
-\section{What it does not do}{
-The value carries \strong{no dimnames}, where every primitive family in the package
-labels its rows and columns \code{v1}, \code{v2}, ...: \code{kronecker()} drops them. The
-other three composition wrappers do the same. See \code{\link[=name_dims]{name_dims()}}.
+\section{The dimension labels}{
+\code{kronecker()} drops the inner parameter's labels, so the value and the four
+derivative orders are relabeled \code{v1}, \code{v2}, ..., \code{v(md)} over the composite
+side. The factor \code{\link[=param_factor.KronIdentityParam]{param_factor.KronIdentityParam()}} returns is left bare,
+as several of the primitive families' are. See \code{\link[=name_dims]{name_dims()}}.
 }
 
 \section{Notation}{

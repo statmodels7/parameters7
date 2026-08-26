@@ -16,7 +16,7 @@ block_diag_derivs(s, eta, order)
 \value{
 A list of \code{choose(s@n_free + order - 1, order)} symmetric matrices
 keyed as \code{param_tuple_names(s, order)} and in that order, each
-\code{s@dimension} by \code{s@dimension} and without dimnames.
+\code{s@dimension} by \code{s@dimension} and labeled \code{v1}, \code{v2}, ..., \code{vp} on both margins.
 }
 \description{
 Places each block's own component in the rows and columns that block occupies,

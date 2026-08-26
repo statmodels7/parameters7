@@ -438,8 +438,16 @@ check_matrix <- function(s, m, tol = 1e-8) {
 #' `dimension`. One convention across the families, so a consumer can read a
 #' printed covariance without knowing which parametrization built it.
 #'
+#' It covers the value and the four derivative orders. A factor and a solve are
+#' left as each family produces them, the families disagreeing there, and
+#' [transition_matrix()] labels its own margins `"s1"`, `"s2"`, ..., its rows
+#' being states rather than variables. [check_parameter()]'s shapes-and-names
+#' check reads the margins of `param_value()`, `param_d1()` and `param_d2()`,
+#' so the convention is tested rather than only stated.
+#'
 #' @param m A numeric matrix, `p` by `p`. Not checked; the callers are the
-#'   package's own [param_value()] methods.
+#'   package's own [param_value()] methods and the helpers assembling the
+#'   derivative arrays.
 #' @param s A [parameter()] object, whose `dimension` supplies `p`.
 #'
 #' @return `m`, with `dimnames` set to `list(v1..vp, v1..vp)`. Any dimnames it

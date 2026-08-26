@@ -316,7 +316,7 @@ dr_scale_factor <- function(sd, tuple) {
 #'
 #' @return A list of `choose(s@n_free + order - 1, order)` symmetric matrices
 #'   keyed as `param_tuple_names(s, order)` and in that order, each
-#'   `s@dimension` by `s@dimension` and without dimnames.
+#'   `s@dimension` by `s@dimension` and labeled `v1`, `v2`, ..., `vp` on both margins.
 #'
 #' @seealso [dr_scale_factor()] for one factor, and [param_d1.DrProdParam()],
 #'   which calls this.
@@ -349,7 +349,10 @@ dr_prod_derivs <- function(s, eta, order) {
     cri <- t[t > p] - p
     unname(dr_scale_factor(sd, sdi) * cor_component(cri))
   })
-  stats::setNames(out, param_tuple_names(s, order))
+  # the dimnames convention every family's matrices carry; one point
+  # here covers all four derivative orders, which route through this
+  stats::setNames(lapply(out, name_dims, s = s),
+                  param_tuple_names(s, order))
 }
 
 #' Assemble a Scales-Times-Correlation Log-Determinant Derivative
@@ -415,20 +418,20 @@ dr_prod_logdet_derivs <- function(s, eta, order) {
 #' value at its own stretch of the free vector, so the composite is exactly what
 #' that family returns, rescaled.
 #'
-#' The value carries **no dimnames**, where the primitive families label their
-#' margins `v1`, `v2`, ...; the four compositions share that.
+#' The value is labeled `v1`, `v2`, ..., `vp` on both margins, the convention [name_dims()]
+#' states and every family in the package follows.
 #' @param s A [DrProdParam()] object.
 #' @param eta A numeric vector of length `s@n_free`, already checked by the
 #'   generic.
 #' @param ... Unused, and accepted so the signature matches the generic's.
 #' @return A symmetric positive definite `s@dimension` by `s@dimension` numeric
-#'   matrix, without dimnames.
+#'   matrix, labeled `v1`, `v2`, ..., `vp` on both margins.
 #' @seealso [param_free.DrProdParam()] for the inverse, and [dr_prod()] for the
 #'   parametrization.
 #' @keywords internal
 S7::method(param_value, DrProdParam) <- function(s, eta, ...) {
   d <- .dr_scales(s, eta)
-  unname(outer(d, d) * param_value(.dr(s)$cor, .dr_eta_cor(s, eta)))
+  name_dims(outer(d, d) * param_value(.dr(s)$cor, .dr_eta_cor(s, eta)), s)
 }
 
 #' @title Free Vector of a Scales-Times-Correlation Parameter
@@ -487,7 +490,7 @@ S7::method(param_free, DrProdParam) <- function(s, m, ...) {
 #' @return At order 1, a list of `s@n_free` symmetric matrices named by
 #'   `s@free_names`; above it, `choose(s@n_free + k - 1, k)` of them keyed as
 #'   `param_tuple_names(s, k)` and in that order. Each is `s@dimension` by
-#'   `s@dimension` and carries no dimnames.
+#'   `s@dimension` and labeled `v1`, `v2`, ..., `vp` on both margins.
 #' @seealso [dr_prod_derivs()], which assembles them, and
 #'   [param_dlogdet.DrProdParam()] for the log-determinant's own.
 #' @keywords internal

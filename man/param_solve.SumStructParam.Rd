@@ -18,7 +18,10 @@ by the generic. \code{param_factor()} takes no \code{b}.}
 \value{
 \code{param_solve()} returns a numeric matrix with \code{s@dimension} rows and
 as many columns as \code{b}; \code{param_factor()} a lower triangular \code{s@dimension} by
-\code{s@dimension} matrix.
+\code{s@dimension} matrix. Both are bare, where the value and the derivative
+arrays carry \code{v1}, \code{v2}, ...: this is the one family whose two answers are
+built from its own value rather than from its structure, so they are
+unnamed explicitly to match the twelve families that never label them.
 }
 \description{
 \code{param_solve()} and \code{param_factor()} for a \code{\link[=sum_struct]{sum_struct()}} parameter. Both come

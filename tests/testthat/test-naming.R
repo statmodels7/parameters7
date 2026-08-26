@@ -83,3 +83,52 @@ test_that("what a free name promises is what the coordinate does", {
     }
   }
 })
+test_that("every family labels its matrices the same way", {
+  # The convention name_dims() states, tested on the margins the families
+  # return rather than on the names they declare. It covers the value and the
+  # four derivative orders. Before it was pinned, the four composition wrappers
+  # returned matrices carrying no labels at all while check_parameter()'s
+  # shapes-and-names row passed, that row reading only the declared names.
+  fam <- list(
+    log_cholesky       = log_cholesky(3),
+    matrix_log         = matrix_log(3),
+    diagonal_matrix    = diagonal_matrix(3),
+    scalar_matrix      = scalar_matrix(3),
+    correlation_matrix = correlation_matrix(3),
+    compound_symmetry  = compound_symmetry(3),
+    ar1                = ar1(3),
+    autoregressive     = autoregressive(4, order = 2),
+    scaled_matrix      = scaled_matrix(diag(3)),
+    kron_identity      = kron_identity(log_cholesky(2), 2),
+    block_diag         = block_diag(list(log_cholesky(2), ar1(2))),
+    dr_prod            = dr_prod(3, correlation = correlation_matrix(3)),
+    sum_struct         = sum_struct(list(diag(3), crossprod(diff(diag(3)))))
+  )
+
+  for (nm in names(fam)) {
+    s <- fam[[nm]]
+    eta <- seq(0.15, by = 0.05, length.out = s@n_free)
+    want <- rep(list(paste0("v", seq_len(s@dimension))), 2L)
+
+    expect_identical(dimnames(param_value(s, eta)), want, info = nm)
+    for (k in 1:4) {
+      d <- switch(k, param_d1(s, eta), param_d2(s, eta),
+                  param_d3(s, eta), param_d4(s, eta))
+      expect_identical(dimnames(d[[1L]]), want,
+                       info = paste(nm, "order", k))
+    }
+  }
+
+  # A family whose rows are states rather than variables keeps its own prefix.
+  t3 <- transition_matrix(3)
+  expect_identical(dimnames(param_value(t3, rep(0.1, t3@n_free)))[[1L]],
+                   c("s1", "s2", "s3"))
+
+  # A factor and a solve are left as each family builds them. sum_struct is the
+  # one whose two answers come from its own value, so it unnames them to match
+  # the families that never label them.
+  ss <- fam$sum_struct
+  eta <- c(0.15, 0.2)
+  expect_null(dimnames(param_factor(ss, eta)))
+  expect_null(dimnames(param_solve(ss, eta, diag(3))))
+})

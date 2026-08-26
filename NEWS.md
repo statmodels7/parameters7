@@ -1,3 +1,29 @@
+# parameters7 0.14.0
+
+* The four composition wrappers label the rows and columns of every matrix
+  they return, which is the convention `name_dims()` states and the other
+  ten families follow. `kron_identity()`, `block_diag()`, `dr_prod()` and
+  `sum_struct()` returned bare matrices from `param_value()` and from all
+  four derivative orders, so a printed composite covariance showed
+  `[,1] [,2]` where a printed primitive one is labeled, and a consumer
+  indexing by name worked on ten families and failed on four.
+
+* `check_parameter()`'s shapes-and-names check reads the margins of
+  `param_value()`, `param_d1()` and `param_d2()` as well as the declared
+  names. That check passed for all four wrappers while they carried no
+  labels at all, reading only what the family declares; the convention is
+  tested now rather than only stated. A family with no free values has no
+  derivative array to read, so those two questions are asked only where
+  there is one.
+
+* `param_solve()` and `param_factor()` on a `sum_struct()` are unchanged
+  and bare. That family is the one whose two answers are built from its own
+  value rather than from its structure, so labeling the value would have
+  carried labels into a solve that is bare in every other family. What the
+  convention covers is the value and the four derivative orders; the
+  primitives disagree about a factor and this release leaves that where it
+  found it.
+
 # parameters7 0.13.0
 
 * `check_parameter()` leaves the caller's random stream as it found it. Its two

@@ -8,7 +8,8 @@ name_dims(m, s)
 }
 \arguments{
 \item{m}{A numeric matrix, \code{p} by \code{p}. Not checked; the callers are the
-package's own \code{\link[=param_value]{param_value()}} methods.}
+package's own \code{\link[=param_value]{param_value()}} methods and the helpers assembling the
+derivative arrays.}
 
 \item{s}{A \code{\link[=parameter]{parameter()}} object, whose \code{dimension} supplies \code{p}.}
 }
@@ -21,5 +22,12 @@ Applies the dimension labels every matrix a parameter produces carries:
 \code{"v1"}, \code{"v2"}, ..., \code{"vp"} on both margins, \code{p} being the parameter's
 \code{dimension}. One convention across the families, so a consumer can read a
 printed covariance without knowing which parametrization built it.
+
+It covers the value and the four derivative orders. A factor and a solve are
+left as each family produces them, the families disagreeing there, and
+\code{\link[=transition_matrix]{transition_matrix()}} labels its own margins \code{"s1"}, \code{"s2"}, ..., its rows
+being states rather than variables. \code{\link[=check_parameter]{check_parameter()}}'s shapes-and-names
+check reads the margins of \code{param_value()}, \code{param_d1()} and \code{param_d2()},
+so the convention is tested rather than only stated.
 }
 \keyword{internal}

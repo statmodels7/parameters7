@@ -18,7 +18,7 @@ generic.}
 At order 1, a list of \code{s@n_free} symmetric matrices named by
 \code{s@free_names}; above it, \code{choose(s@n_free + k - 1, k)} of them keyed as
 \code{param_tuple_names(s, k)} and in that order. Each is \code{s@dimension} by
-\code{s@dimension} and carries no dimnames.
+\code{s@dimension} and labeled \code{v1}, \code{v2}, ..., \code{vp} on both margins.
 }
 \description{
 \code{param_d1()}, \code{param_d2()}, \code{param_d3()} and \code{param_d4()} for a

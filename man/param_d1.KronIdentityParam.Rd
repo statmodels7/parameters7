@@ -13,7 +13,7 @@ already checked by the generic.}
 }
 \value{
 A list of \code{s@n_free} symmetric matrices named by \code{s@free_names}, each
-\code{s@dimension} by \code{s@dimension} and block diagonal, with no dimnames.
+\code{s@dimension} by \code{s@dimension}, block diagonal and labeled \code{v1}, \code{v2}, ..., \code{vp} on both margins.
 }
 \description{
 Closed form: \eqn{\partial_k M = I_m \otimes \partial_k S}, the inner
