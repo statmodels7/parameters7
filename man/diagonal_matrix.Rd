@@ -16,15 +16,17 @@ number, finite and at least 1; anything else throws \verb{'dimension' must be a 
 
 \item{link}{A \pkg{linkfunctions7} link carrying the free scale onto the
 positive entries, \code{linkfunctions7::log_link()} by default. It must map
-\strong{onto} the positive half line, which \code{\link[=check_positive_link]{check_positive_link()}} enforces by
-reading its lower bound, so \code{identity_link()} is rejected with its bounds in
-the message; and it must map \strong{from} the whole real line, since the free
-vector is unconstrained by design. \code{softplus_link()} satisfies both, and so
-does a bounded link such as \code{logit_link()}, whose range \eqn{(0, 1)} is
-positive and which gives a positive definite matrix with entries below 1.
-\code{sqrt_link()}, \code{inverse_link()} and \code{power_link()} satisfy only the first:
-their predictor scale is \eqn{(0, \infty)}, so the map is even in \eqn{\eta}
-and the round trip returns \eqn{\lvert \eta \rvert}.}
+\strong{onto} the positive half line, so \code{identity_link()} is rejected with its
+bounds in the message, and \strong{from} the whole real line, since the free
+vector is unconstrained by design. \code{\link[=check_positive_link]{check_positive_link()}} enforces both at
+construction, reading the link's own lower bound for the first and
+\code{\link[linkfunctions7:eta_bounds]{linkfunctions7::eta_bounds()}} for the second. \code{softplus_link()} satisfies
+both, and so does a bounded link such as \code{logit_link()}, whose range
+\eqn{(0, 1)} is positive and which gives a positive definite matrix with
+entries below 1. \code{sqrt_link()}, \code{inverse_link()}, \code{inverse_sq_link()} and
+\code{power_link()} at a positive exponent satisfy only the first and are
+rejected: their predictor scale is \eqn{(0, \infty)}, so the map is even in
+\eqn{\eta} and the round trip returns \eqn{\lvert \eta \rvert}.}
 
 \item{role}{A label recording which side of a model the matrix parametrizes:
 \code{"either"} (the default), \code{"covariance"} or \code{"precision"}. No numeric result
@@ -57,8 +59,8 @@ rederives a chain rule.
 }
 
 \section{The free names record the link}{
-\code{free_names} is \code{log_d1}, \code{log_d2}, ... under the default, and \code{sqrt_d1},
-\code{sqrt_d2}, ... under a square-root link. A label names the coordinate, never
+\code{free_names} is \code{log_d1}, \code{log_d2}, ... under the default, and \code{softplus_d1},
+\code{softplus_d2}, ... under a softplus link. A label names the coordinate, never
 the quantity it produces, so a consumer that flattens the free vector into
 scalars with identity links reports a number on the scale it is really on.
 }
@@ -93,14 +95,16 @@ all.equal(unname(diag(param_value(s, c(0, 0.5, -0.5)))),
 max(abs(param_free(s, param_value(s, c(0.2, -0.3, 0.7))) -
         c(0.2, -0.3, 0.7)))
 
-# Any link with a non-negative lower bound serves, and the free names say
-# which one was used.
-r <- diagonal_matrix(2, link = linkfunctions7::sqrt_link())
+# Any link carrying the whole free line onto positive entries serves, and
+# the free names say which one was used.
+r <- diagonal_matrix(2, link = linkfunctions7::softplus_link())
 r@free_names
 round(param_value(r, c(1, 2)), 4)
 
-# A link onto the whole line is refused, an entry having to be positive.
+# A link onto the whole line is refused, an entry having to be positive,
+# and so is one defined on part of the line, the map being even there.
 try(diagonal_matrix(2, link = linkfunctions7::identity_link()))
+try(diagonal_matrix(2, link = linkfunctions7::sqrt_link()))
 
 # The log-determinant is a sum over the entries, and under the log link it
 # is linear, so its higher derivatives vanish exactly.

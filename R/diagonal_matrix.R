@@ -65,8 +65,8 @@ DiagMatrixParam <- S7::new_class("DiagMatrixParam", parent = matrix_parameter)
 #'
 #' # The free names record the link
 #'
-#' `free_names` is `log_d1`, `log_d2`, ... under the default, and `sqrt_d1`,
-#' `sqrt_d2`, ... under a square-root link. A label names the coordinate, never
+#' `free_names` is `log_d1`, `log_d2`, ... under the default, and `softplus_d1`,
+#' `softplus_d2`, ... under a softplus link. A label names the coordinate, never
 #' the quantity it produces, so a consumer that flattens the free vector into
 #' scalars with identity links reports a number on the scale it is really on.
 #'
@@ -91,15 +91,17 @@ DiagMatrixParam <- S7::new_class("DiagMatrixParam", parent = matrix_parameter)
 #'   single positive integer.`
 #' @param link A \pkg{linkfunctions7} link carrying the free scale onto the
 #'   positive entries, `linkfunctions7::log_link()` by default. It must map
-#'   **onto** the positive half line, which [check_positive_link()] enforces by
-#'   reading its lower bound, so `identity_link()` is rejected with its bounds in
-#'   the message; and it must map **from** the whole real line, since the free
-#'   vector is unconstrained by design. `softplus_link()` satisfies both, and so
-#'   does a bounded link such as `logit_link()`, whose range \eqn{(0, 1)} is
-#'   positive and which gives a positive definite matrix with entries below 1.
-#'   `sqrt_link()`, `inverse_link()` and `power_link()` satisfy only the first:
-#'   their predictor scale is \eqn{(0, \infty)}, so the map is even in \eqn{\eta}
-#'   and the round trip returns \eqn{\lvert \eta \rvert}.
+#'   **onto** the positive half line, so `identity_link()` is rejected with its
+#'   bounds in the message, and **from** the whole real line, since the free
+#'   vector is unconstrained by design. [check_positive_link()] enforces both at
+#'   construction, reading the link's own lower bound for the first and
+#'   [linkfunctions7::eta_bounds()] for the second. `softplus_link()` satisfies
+#'   both, and so does a bounded link such as `logit_link()`, whose range
+#'   \eqn{(0, 1)} is positive and which gives a positive definite matrix with
+#'   entries below 1. `sqrt_link()`, `inverse_link()`, `inverse_sq_link()` and
+#'   `power_link()` at a positive exponent satisfy only the first and are
+#'   rejected: their predictor scale is \eqn{(0, \infty)}, so the map is even in
+#'   \eqn{\eta} and the round trip returns \eqn{\lvert \eta \rvert}.
 #' @param role A label recording which side of a model the matrix parametrizes:
 #'   `"either"` (the default), `"covariance"` or `"precision"`. No numeric result
 #'   depends on it; see [log_cholesky()] for what carries it.
@@ -125,14 +127,16 @@ DiagMatrixParam <- S7::new_class("DiagMatrixParam", parent = matrix_parameter)
 #' max(abs(param_free(s, param_value(s, c(0.2, -0.3, 0.7))) -
 #'         c(0.2, -0.3, 0.7)))
 #'
-#' # Any link with a non-negative lower bound serves, and the free names say
-#' # which one was used.
-#' r <- diagonal_matrix(2, link = linkfunctions7::sqrt_link())
+#' # Any link carrying the whole free line onto positive entries serves, and
+#' # the free names say which one was used.
+#' r <- diagonal_matrix(2, link = linkfunctions7::softplus_link())
 #' r@free_names
 #' round(param_value(r, c(1, 2)), 4)
 #'
-#' # A link onto the whole line is refused, an entry having to be positive.
+#' # A link onto the whole line is refused, an entry having to be positive,
+#' # and so is one defined on part of the line, the map being even there.
 #' try(diagonal_matrix(2, link = linkfunctions7::identity_link()))
+#' try(diagonal_matrix(2, link = linkfunctions7::sqrt_link()))
 #'
 #' # The log-determinant is a sum over the entries, and under the log link it
 #' # is linear, so its higher derivatives vanish exactly.
@@ -252,34 +256,53 @@ scalar_matrix <- function(dimension, link = linkfunctions7::log_link(),
 }
 
 
-#' Reject a Link That Does Not Reach the Positive Half Line
+#' Reject a Link That Does Not Carry the Whole Free Line to Positive Entries
 #'
 #' @description
-#' Checks that an object is a \pkg{linkfunctions7} link whose declared range lies
-#' in the non-negative half line, and signals an error naming the bounds
-#' otherwise. Called by [diagonal_matrix()], [scalar_matrix()] and
-#' [scaled_matrix()] at construction.
+#' Checks the two properties every family taking a link argument needs, and
+#' signals an error naming the bounds otherwise: that the link's declared range
+#' lies in the non-negative half line, and that it is defined on the whole real
+#' line. Called at construction by [diagonal_matrix()], [scalar_matrix()],
+#' [scaled_matrix()], [compound_symmetry()], [ar1()], [autoregressive()],
+#' [dr_prod()] and [sum_struct()].
 #'
 #' @details
-#' A diagonal entry of a positive definite matrix is positive, so a link onto the
-#' whole real line would let a caller build a matrix outside the set without
-#' anything saying so. Reading the link's own `link_bounds` catches it at
-#' construction, which is the only place it can be caught: at evaluation time the
-#' free vector is unconstrained by design and no value of it is inadmissible.
+#' # Onto the positive half line
 #'
-#' The test is on the **lower** bound alone, `b[1] >= 0`, so a link with a
-#' bounded range is accepted: `logit_link()`, whose range is \eqn{(0, 1)},
-#' produces a positive definite matrix with entries below 1, which is a
-#' legitimate thing to want.
+#' A diagonal entry of a positive definite matrix is positive, so a link onto
+#' the whole real line would let a caller build a matrix outside the set without
+#' anything saying so. The test is on the **lower** bound alone, `b[1] >= 0`, so
+#' a link with a bounded range is accepted: `logit_link()`, whose range is
+#' \eqn{(0, 1)}, produces a positive definite matrix with entries below 1,
+#' which is a legitimate thing to want.
+#'
+#' # And from the whole of it
+#'
+#' The free vector is unconstrained by design, and every family's page states
+#' that any vector in \eqn{\mathbb{R}^d} gives a valid matrix. A link defined
+#' on part of the line breaks that: `sqrt_link()`, `inverse_link()`,
+#' `inverse_sq_link()` and `power_link()` at a positive exponent all reach the
+#' positive entries from the positive predictors alone, and
+#' [linkfunctions7::linkinv()] of them is even, so `-2` and `2` give the same
+#' entry and the round trip returns \eqn{\lvert \eta \rvert}.
+#'
+#' Measured before the second test existed, with the default free-value draws:
+#' `autoregressive(5, 1)`, `ar1(5)` and `compound_symmetry(4)` under a square
+#' root link died inside [check_parameter()] with `missing value where
+#' TRUE/FALSE needed`, and `diagonal_matrix(3)` and `scalar_matrix(3)` with
+#' `system is computationally singular`, neither message naming the link. Both
+#' properties are read at construction, which is the only place they can be:
+#' at evaluation time no free value is inadmissible.
 #'
 #' @param link The object to check.
 #'
 #' @return Invisibly `TRUE`. An object that is not a \pkg{linkfunctions7} link
-#'   throws `'link' must be a linkfunctions7 link object.`, and a link whose
-#'   lower bound is negative throws a message quoting both bounds.
+#'   throws `'link' must be a linkfunctions7 link object.`; a link whose lower
+#'   bound is negative, or which is defined on part of the line, throws a
+#'   message quoting the offending bounds.
 #'
-#' @seealso [diagonal_matrix()], [scalar_matrix()] and [scaled_matrix()], the
-#'   three callers. The property read is the link object's own `link_bounds`.
+#' @seealso [diagonal_matrix()] for the fullest statement of the two conditions,
+#'   and [linkfunctions7::eta_bounds()], which answers the second.
 #'
 #' @keywords internal
 check_positive_link <- function(link) {
@@ -292,6 +315,17 @@ check_positive_link <- function(link) {
       "'link' maps onto (%s, %s), which is not inside the positive half\n",
       "  line. A diagonal entry of a positive definite matrix is positive."
     ), format(b[1]), format(b[2])), call. = FALSE)
+  }
+  e <- linkfunctions7::eta_bounds(link)
+  if (!all(is.infinite(e))) {
+    stop(sprintf(paste0(
+      "'link' is defined on the predictors (%s, %s) and not on the whole\n",
+      "  real line. The free vector is unconstrained by design, so a map\n",
+      "  reaching only part of the line gives the same matrix at two free\n",
+      "  vectors and the round trip returns |eta|.\n",
+      "  log_link() and softplus_link() are the shipped links onto the\n",
+      "  positive half line from the whole of it."
+    ), format(e[1]), format(e[2])), call. = FALSE)
   }
   invisible(TRUE)
 }

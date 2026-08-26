@@ -40,8 +40,8 @@ test_that("every family names its coordinates and not its quantities", {
 })
 
 test_that("a swapped link is a different coordinate and says so", {
-  expect_identical(ar1(5, link_scale = linkfunctions7::sqrt_link())@free_names,
-                   c("sqrt_scale", "z_rho"))
+  expect_identical(ar1(5, link_scale = linkfunctions7::logit_link())@free_names,
+                   c("logit_scale", "z_rho"))
   expect_identical(
     diagonal_matrix(2, link = linkfunctions7::softplus_link(2))@free_names,
     c("softplus_d1", "softplus_d2"))

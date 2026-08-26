@@ -2,7 +2,7 @@
 % Please edit documentation in R/diagonal_matrix.R
 \name{check_positive_link}
 \alias{check_positive_link}
-\title{Reject a Link That Does Not Reach the Positive Half Line}
+\title{Reject a Link That Does Not Carry the Whole Free Line to Positive Entries}
 \usage{
 check_positive_link(link)
 }
@@ -11,29 +11,46 @@ check_positive_link(link)
 }
 \value{
 Invisibly \code{TRUE}. An object that is not a \pkg{linkfunctions7} link
-throws \verb{'link' must be a linkfunctions7 link object.}, and a link whose
-lower bound is negative throws a message quoting both bounds.
+throws \verb{'link' must be a linkfunctions7 link object.}; a link whose lower
+bound is negative, or which is defined on part of the line, throws a
+message quoting the offending bounds.
 }
 \description{
-Checks that an object is a \pkg{linkfunctions7} link whose declared range lies
-in the non-negative half line, and signals an error naming the bounds
-otherwise. Called by \code{\link[=diagonal_matrix]{diagonal_matrix()}}, \code{\link[=scalar_matrix]{scalar_matrix()}} and
-\code{\link[=scaled_matrix]{scaled_matrix()}} at construction.
+Checks the two properties every family taking a link argument needs, and
+signals an error naming the bounds otherwise: that the link's declared range
+lies in the non-negative half line, and that it is defined on the whole real
+line. Called at construction by \code{\link[=diagonal_matrix]{diagonal_matrix()}}, \code{\link[=scalar_matrix]{scalar_matrix()}},
+\code{\link[=scaled_matrix]{scaled_matrix()}}, \code{\link[=compound_symmetry]{compound_symmetry()}}, \code{\link[=ar1]{ar1()}}, \code{\link[=autoregressive]{autoregressive()}},
+\code{\link[=dr_prod]{dr_prod()}} and \code{\link[=sum_struct]{sum_struct()}}.
 }
-\details{
-A diagonal entry of a positive definite matrix is positive, so a link onto the
-whole real line would let a caller build a matrix outside the set without
-anything saying so. Reading the link's own \code{link_bounds} catches it at
-construction, which is the only place it can be caught: at evaluation time the
-free vector is unconstrained by design and no value of it is inadmissible.
+\section{Onto the positive half line}{
+A diagonal entry of a positive definite matrix is positive, so a link onto
+the whole real line would let a caller build a matrix outside the set without
+anything saying so. The test is on the \strong{lower} bound alone, \code{b[1] >= 0}, so
+a link with a bounded range is accepted: \code{logit_link()}, whose range is
+\eqn{(0, 1)}, produces a positive definite matrix with entries below 1,
+which is a legitimate thing to want.
+}
 
-The test is on the \strong{lower} bound alone, \code{b[1] >= 0}, so a link with a
-bounded range is accepted: \code{logit_link()}, whose range is \eqn{(0, 1)},
-produces a positive definite matrix with entries below 1, which is a
-legitimate thing to want.
+\section{And from the whole of it}{
+The free vector is unconstrained by design, and every family's page states
+that any vector in \eqn{\mathbb{R}^d} gives a valid matrix. A link defined
+on part of the line breaks that: \code{sqrt_link()}, \code{inverse_link()},
+\code{inverse_sq_link()} and \code{power_link()} at a positive exponent all reach the
+positive entries from the positive predictors alone, and
+\code{\link[linkfunctions7:linkinv]{linkfunctions7::linkinv()}} of them is even, so \code{-2} and \code{2} give the same
+entry and the round trip returns \eqn{\lvert \eta \rvert}.
+
+Measured before the second test existed, with the default free-value draws:
+\code{autoregressive(5, 1)}, \code{ar1(5)} and \code{compound_symmetry(4)} under a square
+root link died inside \code{\link[=check_parameter]{check_parameter()}} with \verb{missing value where TRUE/FALSE needed}, and \code{diagonal_matrix(3)} and \code{scalar_matrix(3)} with
+\verb{system is computationally singular}, neither message naming the link. Both
+properties are read at construction, which is the only place they can be:
+at evaluation time no free value is inadmissible.
 }
+
 \seealso{
-\code{\link[=diagonal_matrix]{diagonal_matrix()}}, \code{\link[=scalar_matrix]{scalar_matrix()}} and \code{\link[=scaled_matrix]{scaled_matrix()}}, the
-three callers. The property read is the link object's own \code{link_bounds}.
+\code{\link[=diagonal_matrix]{diagonal_matrix()}} for the fullest statement of the two conditions,
+and \code{\link[linkfunctions7:eta_bounds]{linkfunctions7::eta_bounds()}}, which answers the second.
 }
 \keyword{internal}

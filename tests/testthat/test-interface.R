@@ -80,18 +80,26 @@ test_that("the diagonal families behave", {
   expect_error(param_free(d, diag(c(1, -1, 1))), "non-positive")
   expect_error(param_free(sc, diag(c(1, 2, 3, 4))), "constant diagonal")
 
-  # Any link whose range lies inside the positive half line works, and the
-  # rule is about the range rather than about the family: a logit reaches only
-  # (0, 1), which is a restriction on the entries and not a violation, so it is
-  # accepted. What is refused is a range that includes a non-positive value,
-  # because a diagonal entry of a positive definite matrix is positive.
-  sq <- diagonal_matrix(2, link = linkfunctions7::sqrt_link())
-  expect_equal(param_value(sq, c(2, 3)), diag(c(4, 9)), ignore_attr = TRUE)
+  # A link is admissible when it carries the WHOLE free line onto positive
+  # entries, which is two conditions and not one. The range condition is about
+  # the range rather than about the family: a logit reaches only (0, 1), which
+  # is a restriction on the entries and not a violation, so it is accepted,
+  # while a range including a non-positive value is refused because a diagonal
+  # entry of a positive definite matrix is positive.
+  sp <- diagonal_matrix(2, link = linkfunctions7::softplus_link())
+  expect_true(all(diag(param_value(sp, c(2, 3))) > 0))
 
   lg <- diagonal_matrix(2, link = linkfunctions7::logit_link())
   expect_true(all(diag(param_value(lg, c(0, 1))) > 0))
 
   expect_error(diagonal_matrix(2, link = linkfunctions7::identity_link()), "positive half")
+
+  # and the second condition refuses a link defined on part of the line: the
+  # square root's inverse is even, so the free vector would not name one matrix
+  expect_error(diagonal_matrix(2, link = linkfunctions7::sqrt_link()),
+               "defined on the predictors")
+  expect_error(diagonal_matrix(2, link = linkfunctions7::inverse_link()),
+               "defined on the predictors")
   expect_error(diagonal_matrix(2, link = "log"), "link object")
 })
 

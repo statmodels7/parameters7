@@ -1,3 +1,30 @@
+# parameters7 0.18.0
+
+* `check_positive_link()` tests both ends of the link, and every family
+  taking one rejects a link defined on part of the real line. The check read
+  the link's `link_bounds` -- the theta end -- and required a non-negative
+  lower bound, so `identity_link()` was rejected; nothing read the eta end,
+  and `sqrt_link()`, `inverse_link()`, `inverse_sq_link()` and `power_link()`
+  at a positive exponent were accepted although they reach the positive
+  entries from the positive predictors alone.
+
+  Such a link breaks the contract every family's page states, that any vector
+  in R^d gives a valid matrix. Its inverse is even, so the map is not
+  injective and the round trip returns the absolute value: the first
+  coordinate of `param_free(autoregressive(5, 1, link_scale = sqrt_link()),
+  M)` came back with its sign flipped. Measured with the default free-value
+  draws, `check_parameter()` then died rather than reporting a FAIL row --
+  `missing value where TRUE/FALSE needed` on the three correlation families
+  and `system is computationally singular` on the two diagonal ones -- with
+  neither message naming the link.
+
+  The second condition is read through `linkfunctions7::eta_bounds()`, which
+  that package exports as of 0.3.0. All eight constructors taking a link are
+  covered: `diagonal_matrix()`, `scalar_matrix()`, `scaled_matrix()`,
+  `compound_symmetry()`, `ar1()`, `autoregressive()`, `dr_prod()` and
+  `sum_struct()`. `log_link()`, `softplus_link()`, `logit_link()` and
+  `bounded_link(lwr = 0)` all still build and report nine OK rows.
+
 # parameters7 0.17.0
 
 * `dr_prod()` checks the property its construction rests on. The

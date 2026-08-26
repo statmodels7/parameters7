@@ -92,7 +92,7 @@ matrix is a scalar map, and those are `{linkfunctions7}` links reused as they
 are.
 
 ```{r}
-param_value(diagonal_matrix(3, link = linkfunctions7::sqrt_link()), c(1, 2, 3))
+param_value(diagonal_matrix(3, link = linkfunctions7::softplus_link()), c(1, 2, 3))
 ```
 
 ## Beyond covariance matrices
