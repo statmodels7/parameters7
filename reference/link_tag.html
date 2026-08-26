@@ -9,7 +9,7 @@ coordinate, given the link that produced it."><meta property="og:image" content=
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,6 +18,10 @@ coordinate, given the link that produced it."><meta property="og:image" content=
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/defining-a-parameter.html">Defining a parameter</a></li>
+  </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -49,19 +53,26 @@ coordinate, given the link that produced it.</p>
 
 
 <dl><dt id="arg-link">link<a class="anchor" aria-label="anchor" href="#arg-link"></a></dt>
-<dd><p>A <span class="pkg">linkfunctions7</span> link.</p></dd>
+<dd><p>A <span class="pkg">linkfunctions7</span> link, or any object with a <code>link_name</code>
+property.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A single character string, empty for the identity link.</p>
+    <p>A single character string, empty for the identity link. The tags in
+use are <code>"log"</code> (log and either singly bounded link), <code>"logit"</code> (logit and
+the doubly bounded link), <code>"z"</code> (rhobit), and <code>"probit"</code>, <code>"cloglog"</code>,
+<code>"loglog"</code>, <code>"cauchit"</code>, <code>"sqrt"</code>, <code>"inv"</code>, <code>"invsq"</code>, <code>"power"</code> and
+<code>"softplus"</code> for the rest. A link from outside <span class="pkg">linkfunctions7</span> gets its
+own <code>link_name</code> reduced to lowercase letters, digits and underscores, or
+<code>"f"</code> if nothing survives that.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The tag comes from the link's class rather than from its
-<code>link_name</code>, because a parametric link names itself with its
-parameters – <code>"bounded(lwr=-0.25, upr=1)"</code> – and that cannot appear
-inside an identifier. The identity link has no tag, so a coordinate that
+    <p>The tag comes from the link's class, never from its <code>link_name</code>, because a
+parametric link names itself with its parameters, as in
+<code>"bounded(lwr=-0.25, upr=1)"</code>, and that cannot appear inside an identifier.
+The identity link has no tag, so a coordinate that
 is already free keeps the plain name of the quantity. A bounded link is
 tagged by the transformation it performs: a doubly bounded one is a scaled
 logit, and a singly bounded one a shifted logarithm. A link written
@@ -70,7 +81,8 @@ lowercase letters, digits and underscores.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="tagged_name.html">tagged_name</a></code></p></div>
+    <div class="dont-index"><p><code><a href="tagged_name.html">tagged_name()</a></code>, which prefixes a quantity with the tag, and
+<code><a href="parameter.html">parameter()</a></code> for the naming convention this serves.</p></div>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

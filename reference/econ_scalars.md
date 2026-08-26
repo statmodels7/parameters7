@@ -1,7 +1,12 @@
 # The Scale and the Correlation of an Economical Parameter
 
-The two scalars a compound-symmetric or AR(1) parameter is built from,
-with the first four derivatives of each in its own free value.
+Returns the two scalars a
+[`compound_symmetry()`](https://statmodels7.github.io/parameters7/reference/compound_symmetry.md)
+or [`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md)
+parameter is built from, each with its value and its first four
+derivatives in its **own** free value. Each scalar depends on one free
+value alone, so the two families are separable and their derivative
+assembly is a product of two chains.
 
 ## Usage
 
@@ -14,10 +19,11 @@ econ_scalars(s, eta)
 - s:
 
   A
-  [`CompoundSymmetryParam`](https://statmodels7.github.io/parameters7/reference/CompoundSymmetryParam.md)
+  [`CompoundSymmetryParam()`](https://statmodels7.github.io/parameters7/reference/CompoundSymmetryParam.md)
   or
-  [`Ar1Param`](https://statmodels7.github.io/parameters7/reference/Ar1Param.md)
-  object.
+  [`Ar1Param()`](https://statmodels7.github.io/parameters7/reference/Ar1Param.md)
+  object, whose `param_params$link_scale` and `param_params$link_rho`
+  are read.
 
 - eta:
 
@@ -25,5 +31,14 @@ econ_scalars(s, eta)
 
 ## Value
 
-A list with `scale` and `rho`, each a list of five numbers: the value
-and four derivatives.
+A list with two components, `scale` and `rho`, each a numeric vector of
+length 5: the value at index 1 and the four derivatives in that free
+value at indices 2 to 5.
+
+## See also
+
+[`econ_derivative()`](https://statmodels7.github.io/parameters7/reference/econ_derivative.md)
+and
+[`cs_pattern()`](https://statmodels7.github.io/parameters7/reference/cs_pattern.md),
+which consume it, and
+[`param_value.CompoundSymmetryParam()`](https://statmodels7.github.io/parameters7/reference/param_value.CompoundSymmetryParam.md).

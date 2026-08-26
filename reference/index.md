@@ -73,7 +73,7 @@ consumes.
 ## What a likelihood asks of the matrix
 
 The log-determinant, or the log pseudo-determinant when the family is
-rank deficient, and the solves – computed through a factor rather than
+rank deficient, and the solves, computed through a factor instead of
 through an explicit inverse.
 
 - [`param_logdet()`](https://statmodels7.github.io/parameters7/reference/param_logdet.md)
@@ -83,8 +83,9 @@ through an explicit inverse.
 - [`param_d2logdet()`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.md)
   : Hessian of the Log-Determinant
 - [`param_d3logdet()`](https://statmodels7.github.io/parameters7/reference/param_d3logdet.md)
-  [`param_d4logdet()`](https://statmodels7.github.io/parameters7/reference/param_d3logdet.md)
-  : Third and Fourth Derivatives of the Log-Determinant
+  : Third Derivatives of the Log-Determinant
+- [`param_d4logdet()`](https://statmodels7.github.io/parameters7/reference/param_d4logdet.md)
+  : Fourth Derivatives of the Log-Determinant
 - [`param_solve()`](https://statmodels7.github.io/parameters7/reference/param_solve.md)
   : Solve Through a Parameter's Matrix
 - [`param_factor()`](https://statmodels7.github.io/parameters7/reference/param_factor.md)
@@ -128,9 +129,9 @@ null space it implies.
 The S7 classes; each page lists the methods that dispatch on it.
 
 - [`parameter()`](https://statmodels7.github.io/parameters7/reference/parameter.md)
-  : Constrained Matrix Parameter
+  : The Abstract Class of a Constrained Parameter
 - [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
-  : Constrained Symmetric Matrix Parameter
+  : The Abstract Class of a Symmetric Matrix Parameter
 - [`LogCholeskyParam()`](https://statmodels7.github.io/parameters7/reference/LogCholeskyParam.md)
   : Unstructured Positive Definite Parameter
 - [`MatrixLogParam()`](https://statmodels7.github.io/parameters7/reference/MatrixLogParam.md)
@@ -160,7 +161,7 @@ inherits unless it registers something more specific.
 - [`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)
   : Validate a Covariance Parameter
 - [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
-  : Constrained Symmetric Matrix Parameter
+  : The Abstract Class of a Symmetric Matrix Parameter
 
 ## Internals
 
@@ -190,18 +191,26 @@ that the derivations can be followed from the code that implements them.
   : Assemble a Block Diagonal's Derivatives of a Given Order
 - [`block_diag_logdet_derivs()`](https://statmodels7.github.io/parameters7/reference/block_diag_logdet_derivs.md)
   : Assemble a Block Diagonal's Log-Determinant Derivatives
+- [`capture_seed()`](https://statmodels7.github.io/parameters7/reference/capture_seed.md)
+  [`restore_seed()`](https://statmodels7.github.io/parameters7/reference/capture_seed.md)
+  : Capture and Restore the Caller's Random Stream
+- [`check_analytic_arrays()`](https://statmodels7.github.io/parameters7/reference/check_analytic_arrays.md)
+  : Refuse an Order That Would Difference a Difference
 - [`check_eta()`](https://statmodels7.github.io/parameters7/reference/check_eta.md)
   : Validate a Free Vector Against a Parameter
 - [`check_matrix()`](https://statmodels7.github.io/parameters7/reference/check_matrix.md)
   : Validate a Matrix Handed Back to a Parameter
 - [`check_param_args()`](https://statmodels7.github.io/parameters7/reference/check_param_args.md)
-  : Validate the Arguments Shared by Every Constructor
+  : Validate the Arguments Shared by Every Matrix Constructor
 - [`check_parameter_vector()`](https://statmodels7.github.io/parameters7/reference/check_parameter_vector.md)
   : The Reduced Battery for a Parameter That Is Not a Matrix
 - [`check_positive_link()`](https://statmodels7.github.io/parameters7/reference/check_positive_link.md)
-  : Reject a Link That Does Not Reach the Positive Half Line
+  : Reject a Link That Does Not Carry the Whole Free Line to Positive
+  Entries
 - [`check_row()`](https://statmodels7.github.io/parameters7/reference/check_row.md)
   : One Row of a Diagnostic Table
+- [`check_unit_diagonal()`](https://statmodels7.github.io/parameters7/reference/check_unit_diagonal.md)
+  : Refuse a Correlation Block That Carries a Scale
 - [`chol_assemble()`](https://statmodels7.github.io/parameters7/reference/chol_assemble.md)
   : The Cholesky Factor Behind a Free Vector
 - [`chol_dfactor()`](https://statmodels7.github.io/parameters7/reference/chol_dfactor.md)
@@ -268,6 +277,8 @@ that the derivations can be followed from the code that implements them.
   : Finite-Difference Step for a Free Value
 - [`is_base_param_class()`](https://statmodels7.github.io/parameters7/reference/is_base_param_class.md)
   : Is This the Package's Own Base Class?
+- [`kron_accessors`](https://statmodels7.github.io/parameters7/reference/kron_accessors.md)
+  : The Inner Parameter, the Block Count, and the Lift
 - [`leibniz_gram()`](https://statmodels7.github.io/parameters7/reference/leibniz_gram.md)
   : A Gram Product's Derivatives From Its Factor's
 - [`link_tag()`](https://statmodels7.github.io/parameters7/reference/link_tag.md)
@@ -321,6 +332,8 @@ that the derivations can be followed from the code that implements them.
   [`param_d3.DrProdParam`](https://statmodels7.github.io/parameters7/reference/param_d1.DrProdParam.md)
   [`param_d4.DrProdParam`](https://statmodels7.github.io/parameters7/reference/param_d1.DrProdParam.md)
   : Derivatives of a Scales-Times-Correlation Parameter
+- [`param_d1.KronIdentityParam`](https://statmodels7.github.io/parameters7/reference/param_d1.KronIdentityParam.md)
+  : First Derivatives of a Block Replication
 - [`param_d1.LogCholeskyParam`](https://statmodels7.github.io/parameters7/reference/param_d1.LogCholeskyParam.md)
   : First Derivatives of a Log-Cholesky Parameter
 - [`param_d1.MatrixLogParam`](https://statmodels7.github.io/parameters7/reference/param_d1.MatrixLogParam.md)
@@ -342,6 +355,8 @@ that the derivations can be followed from the code that implements them.
   : Second Derivatives of a Correlation Parameter
 - [`param_d2.DiagMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_d2.DiagMatrixParam.md)
   : Second Derivatives of a Diagonal Parameter
+- [`param_d2.KronIdentityParam`](https://statmodels7.github.io/parameters7/reference/param_d2.KronIdentityParam.md)
+  : Second Derivatives of a Block Replication
 - [`param_d2.LogCholeskyParam`](https://statmodels7.github.io/parameters7/reference/param_d2.LogCholeskyParam.md)
   : Second Derivatives of a Log-Cholesky Parameter
 - [`param_d2.MatrixLogParam`](https://statmodels7.github.io/parameters7/reference/param_d2.MatrixLogParam.md)
@@ -356,18 +371,22 @@ that the derivations can be followed from the code that implements them.
   : Default Second Derivatives
 - [`param_d2logdet.DiagMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.DiagMatrixParam.md)
   : Log-Determinant Hessian of a Diagonal Parameter
+- [`param_d2logdet.KronIdentityParam`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.KronIdentityParam.md)
+  : Log-Determinant Hessian of a Block Replication
 - [`param_d2logdet.LogCholeskyParam`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.LogCholeskyParam.md)
   : Log-Determinant Hessian of a Log-Cholesky Parameter
 - [`param_d2logdet.MatrixLogParam`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.MatrixLogParam.md)
   : Log-Determinant Hessian of a Matrix Logarithm Parameter
 - [`param_d2logdet.ScaledMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.ScaledMatrixParam.md)
   : Log-Determinant Hessian of a Scaled Parameter
-- [`param_d2logdet.parameter`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.parameter.md)
+- [`param_d2logdet.matrix_parameter`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.matrix_parameter.md)
   : Default Log-Determinant Hessian
 - [`param_d3.CorrelationParam`](https://statmodels7.github.io/parameters7/reference/param_d3.CorrelationParam.md)
   : Third Derivatives of a Correlation Parameter
 - [`param_d3.DiagMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_d3.DiagMatrixParam.md)
   : Third Derivatives of a Diagonal Parameter
+- [`param_d3.KronIdentityParam`](https://statmodels7.github.io/parameters7/reference/param_d3.KronIdentityParam.md)
+  : Third Derivatives of a Block Replication
 - [`param_d3.LogCholeskyParam`](https://statmodels7.github.io/parameters7/reference/param_d3.LogCholeskyParam.md)
   : Third Derivatives of a Log-Cholesky Parameter
 - [`param_d3.MatrixLogParam`](https://statmodels7.github.io/parameters7/reference/param_d3.MatrixLogParam.md)
@@ -381,19 +400,23 @@ that the derivations can be followed from the code that implements them.
 - [`param_d3.parameter`](https://statmodels7.github.io/parameters7/reference/param_d3.parameter.md)
   : Default Third Derivatives
 - [`param_d3logdet.DiagMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_d3logdet.DiagMatrixParam.md)
-  : Higher Log-Determinant Derivatives of a Diagonal Parameter
+  : Third Log-Determinant Derivatives of a Diagonal Parameter
+- [`param_d3logdet.KronIdentityParam`](https://statmodels7.github.io/parameters7/reference/param_d3logdet.KronIdentityParam.md)
+  : Third Log-Determinant Derivatives of a Block Replication
 - [`param_d3logdet.LogCholeskyParam`](https://statmodels7.github.io/parameters7/reference/param_d3logdet.LogCholeskyParam.md)
-  : Higher Log-Determinant Derivatives of a Log-Cholesky Parameter
+  : Third Log-Determinant Derivatives of a Log-Cholesky Parameter
 - [`param_d3logdet.MatrixLogParam`](https://statmodels7.github.io/parameters7/reference/param_d3logdet.MatrixLogParam.md)
-  : Higher Log-Determinant Derivatives of a Matrix Logarithm Parameter
+  : Third Log-Determinant Derivatives of a Matrix Logarithm Parameter
 - [`param_d3logdet.ScaledMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_d3logdet.ScaledMatrixParam.md)
-  : Higher Log-Determinant Derivatives of a Scaled Parameter
+  : Third Log-Determinant Derivatives of a Scaled Parameter
 - [`param_d3logdet.matrix_parameter`](https://statmodels7.github.io/parameters7/reference/param_d3logdet.matrix_parameter.md)
-  : Default Higher Log-Determinant Derivatives
+  : Default Third Log-Determinant Derivatives
 - [`param_d4.CorrelationParam`](https://statmodels7.github.io/parameters7/reference/param_d4.CorrelationParam.md)
   : Fourth Derivatives of a Correlation Parameter
 - [`param_d4.DiagMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_d4.DiagMatrixParam.md)
   : Fourth Derivatives of a Diagonal Parameter
+- [`param_d4.KronIdentityParam`](https://statmodels7.github.io/parameters7/reference/param_d4.KronIdentityParam.md)
+  : Fourth Derivatives of a Block Replication
 - [`param_d4.LogCholeskyParam`](https://statmodels7.github.io/parameters7/reference/param_d4.LogCholeskyParam.md)
   : Fourth Derivatives of a Log-Cholesky Parameter
 - [`param_d4.MatrixLogParam`](https://statmodels7.github.io/parameters7/reference/param_d4.MatrixLogParam.md)
@@ -408,6 +431,8 @@ that the derivations can be followed from the code that implements them.
   : Default Fourth Derivatives
 - [`param_d4logdet.DiagMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_d4logdet.DiagMatrixParam.md)
   : Fourth Log-Determinant Derivatives of a Diagonal Parameter
+- [`param_d4logdet.KronIdentityParam`](https://statmodels7.github.io/parameters7/reference/param_d4logdet.KronIdentityParam.md)
+  : Fourth Log-Determinant Derivatives of a Block Replication
 - [`param_d4logdet.LogCholeskyParam`](https://statmodels7.github.io/parameters7/reference/param_d4logdet.LogCholeskyParam.md)
   : Fourth Log-Determinant Derivatives of a Log-Cholesky Parameter
 - [`param_d4logdet.MatrixLogParam`](https://statmodels7.github.io/parameters7/reference/param_d4logdet.MatrixLogParam.md)
@@ -448,6 +473,8 @@ that the derivations can be followed from the code that implements them.
   [`param_d3logdet.DrProdParam`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.DrProdParam.md)
   [`param_d4logdet.DrProdParam`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.DrProdParam.md)
   : Log-Determinant Derivatives of a Scales-Times-Correlation Parameter
+- [`param_dlogdet.KronIdentityParam`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.KronIdentityParam.md)
+  : Log-Determinant Gradient of a Block Replication
 - [`param_dlogdet.LogCholeskyParam`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.LogCholeskyParam.md)
   : Log-Determinant Gradient of a Log-Cholesky Parameter
 - [`param_dlogdet.MatrixLogParam`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.MatrixLogParam.md)
@@ -459,15 +486,17 @@ that the derivations can be followed from the code that implements them.
   [`param_d3logdet.SumStructParam`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.SumStructParam.md)
   [`param_d4logdet.SumStructParam`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.SumStructParam.md)
   : Log-Determinant Derivatives of a Sum of Fixed Matrices
-- [`param_dlogdet.parameter`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.parameter.md)
+- [`param_dlogdet.matrix_parameter`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.matrix_parameter.md)
   : Default Log-Determinant Gradient
 - [`param_factor.CorrelationParam`](https://statmodels7.github.io/parameters7/reference/param_factor.CorrelationParam.md)
   : Factor of a Correlation Parameter
 - [`param_factor.DiagMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_factor.DiagMatrixParam.md)
   : Factor of a Diagonal Parameter
+- [`param_factor.KronIdentityParam`](https://statmodels7.github.io/parameters7/reference/param_factor.KronIdentityParam.md)
+  : Factor of a Block Replication
 - [`param_factor.LogCholeskyParam`](https://statmodels7.github.io/parameters7/reference/param_factor.LogCholeskyParam.md)
   : Factor of a Log-Cholesky Parameter
-- [`param_factor.parameter`](https://statmodels7.github.io/parameters7/reference/param_factor.parameter.md)
+- [`param_factor.matrix_parameter`](https://statmodels7.github.io/parameters7/reference/param_factor.matrix_parameter.md)
   : Default Factor
 - [`param_free.Ar1Param`](https://statmodels7.github.io/parameters7/reference/param_free.Ar1Param.md)
   : Free Vector of an AR(1) Parameter
@@ -483,6 +512,8 @@ that the derivations can be followed from the code that implements them.
   : Free Vector of a Diagonal Parameter
 - [`param_free.DrProdParam`](https://statmodels7.github.io/parameters7/reference/param_free.DrProdParam.md)
   : Free Vector of a Scales-Times-Correlation Parameter
+- [`param_free.KronIdentityParam`](https://statmodels7.github.io/parameters7/reference/param_free.KronIdentityParam.md)
+  : Free Vector of a Block Replication
 - [`param_free.LogCholeskyParam`](https://statmodels7.github.io/parameters7/reference/param_free.LogCholeskyParam.md)
   : Free Vector of a Log-Cholesky Parameter
 - [`param_free.MatrixLogParam`](https://statmodels7.github.io/parameters7/reference/param_free.MatrixLogParam.md)
@@ -511,6 +542,8 @@ that the derivations can be followed from the code that implements them.
   : Log-Determinant of a Diagonal Parameter
 - [`param_logdet.DrProdParam`](https://statmodels7.github.io/parameters7/reference/param_logdet.DrProdParam.md)
   : Log-Determinant of a Scales-Times-Correlation Parameter
+- [`param_logdet.KronIdentityParam`](https://statmodels7.github.io/parameters7/reference/param_logdet.KronIdentityParam.md)
+  : Log-Determinant of a Block Replication
 - [`param_logdet.LogCholeskyParam`](https://statmodels7.github.io/parameters7/reference/param_logdet.LogCholeskyParam.md)
   : Log-Determinant of a Log-Cholesky Parameter
 - [`param_logdet.MatrixLogParam`](https://statmodels7.github.io/parameters7/reference/param_logdet.MatrixLogParam.md)
@@ -519,7 +552,7 @@ that the derivations can be followed from the code that implements them.
   : Log-Determinant of a Scaled Parameter
 - [`param_logdet.SumStructParam`](https://statmodels7.github.io/parameters7/reference/param_logdet.SumStructParam.md)
   : Log-Determinant of a Sum of Fixed Matrices
-- [`param_logdet.parameter`](https://statmodels7.github.io/parameters7/reference/param_logdet.parameter.md)
+- [`param_logdet.matrix_parameter`](https://statmodels7.github.io/parameters7/reference/param_logdet.matrix_parameter.md)
   : Default Log-Determinant
 - [`param_readable.Ar1Param`](https://statmodels7.github.io/parameters7/reference/param_readable.Ar1Param.md)
   : The Scale and the Correlation of an AR(1)
@@ -545,12 +578,14 @@ that the derivations can be followed from the code that implements them.
 - [`param_solve.DrProdParam`](https://statmodels7.github.io/parameters7/reference/param_solve.DrProdParam.md)
   [`param_factor.DrProdParam`](https://statmodels7.github.io/parameters7/reference/param_solve.DrProdParam.md)
   : Solve and Factor of a Scales-Times-Correlation Parameter
+- [`param_solve.KronIdentityParam`](https://statmodels7.github.io/parameters7/reference/param_solve.KronIdentityParam.md)
+  : Solve of a Block Replication
 - [`param_solve.MatrixLogParam`](https://statmodels7.github.io/parameters7/reference/param_solve.MatrixLogParam.md)
   : Solve of a Matrix Logarithm Parameter
 - [`param_solve.SumStructParam`](https://statmodels7.github.io/parameters7/reference/param_solve.SumStructParam.md)
   [`param_factor.SumStructParam`](https://statmodels7.github.io/parameters7/reference/param_solve.SumStructParam.md)
   : Solve and Factor of a Sum of Fixed Matrices
-- [`param_solve.parameter`](https://statmodels7.github.io/parameters7/reference/param_solve.parameter.md)
+- [`param_solve.matrix_parameter`](https://statmodels7.github.io/parameters7/reference/param_solve.matrix_parameter.md)
   : Default Solve
 - [`param_spectrum()`](https://statmodels7.github.io/parameters7/reference/param_spectrum.md)
   : The Spectral Decomposition a Parameter's Quantities Are Read From
@@ -568,6 +603,8 @@ that the derivations can be followed from the code that implements them.
   : Matrix of a Diagonal Parameter
 - [`param_value.DrProdParam`](https://statmodels7.github.io/parameters7/reference/param_value.DrProdParam.md)
   : Value of a Scales-Times-Correlation Parameter
+- [`param_value.KronIdentityParam`](https://statmodels7.github.io/parameters7/reference/param_value.KronIdentityParam.md)
+  : Value of a Block Replication
 - [`param_value.LogCholeskyParam`](https://statmodels7.github.io/parameters7/reference/param_value.LogCholeskyParam.md)
   : Matrix of a Log-Cholesky Parameter
 - [`param_value.MatrixLogParam`](https://statmodels7.github.io/parameters7/reference/param_value.MatrixLogParam.md)
@@ -589,8 +626,6 @@ that the derivations can be followed from the code that implements them.
   : Print a Constrained Parameter
 - [`readable_diagonal()`](https://statmodels7.github.io/parameters7/reference/readable_diagonal.md)
   : Quantities That Are Separate Links of Separate Free Values
-- [`scaled_dlog()`](https://statmodels7.github.io/parameters7/reference/scaled_dlog.md)
-  : Higher Derivatives of a Scaled Log-Pseudo-Determinant
 - [`scaled_scale()`](https://statmodels7.github.io/parameters7/reference/scaled_scale.md)
   : The Scale Behind a Free Vector, and Its Derivatives
 - [`simplex_components()`](https://statmodels7.github.io/parameters7/reference/simplex_components.md)

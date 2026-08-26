@@ -8,7 +8,7 @@ value, applied to `b`.
 - s:
 
   A
-  [`MatrixLogParam`](https://statmodels7.github.io/parameters7/reference/MatrixLogParam.md)
+  [`MatrixLogParam()`](https://statmodels7.github.io/parameters7/reference/MatrixLogParam.md)
   object.
 
 - eta:

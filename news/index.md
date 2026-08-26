@@ -1,5 +1,230 @@
 # Changelog
 
+## parameters7 0.18.0
+
+- [`check_positive_link()`](https://statmodels7.github.io/parameters7/reference/check_positive_link.md)
+  tests both ends of the link, and every family taking one rejects a
+  link defined on part of the real line. The check read the link’s
+  `link_bounds` – the theta end – and required a non-negative lower
+  bound, so `identity_link()` was rejected; nothing read the eta end,
+  and `sqrt_link()`, `inverse_link()`, `inverse_sq_link()` and
+  `power_link()` at a positive exponent were accepted although they
+  reach the positive entries from the positive predictors alone.
+
+  Such a link breaks the contract every family’s page states, that any
+  vector in R^d gives a valid matrix. Its inverse is even, so the map is
+  not injective and the round trip returns the absolute value: the first
+  coordinate of
+  `param_free(autoregressive(5, 1, link_scale = sqrt_link()), M)` came
+  back with its sign flipped. Measured with the default free-value
+  draws,
+  [`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)
+  then died rather than reporting a FAIL row –
+  `missing value where TRUE/FALSE needed` on the three correlation
+  families and `system is computationally singular` on the two diagonal
+  ones – with neither message naming the link.
+
+  The second condition is read through
+  [`linkfunctions7::eta_bounds()`](https://statmodels7.github.io/linkfunctions7/reference/eta_bounds.html),
+  which that package exports as of 0.3.0. All eight constructors taking
+  a link are covered:
+  [`diagonal_matrix()`](https://statmodels7.github.io/parameters7/reference/diagonal_matrix.md),
+  [`scalar_matrix()`](https://statmodels7.github.io/parameters7/reference/scalar_matrix.md),
+  [`scaled_matrix()`](https://statmodels7.github.io/parameters7/reference/scaled_matrix.md),
+  [`compound_symmetry()`](https://statmodels7.github.io/parameters7/reference/compound_symmetry.md),
+  [`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md),
+  [`autoregressive()`](https://statmodels7.github.io/parameters7/reference/autoregressive.md),
+  [`dr_prod()`](https://statmodels7.github.io/parameters7/reference/dr_prod.md)
+  and
+  [`sum_struct()`](https://statmodels7.github.io/parameters7/reference/sum_struct.md).
+  `log_link()`, `softplus_link()`, `logit_link()` and
+  `bounded_link(lwr = 0)` all still build and report nine OK rows.
+
+## parameters7 0.17.0
+
+- [`dr_prod()`](https://statmodels7.github.io/parameters7/reference/dr_prod.md)
+  checks the property its construction rests on. The `correlation`
+  argument is documented as taking a family with a unit diagonal at
+  every free vector, and the constructor tested the class, the side and
+  the rank but not that. A block carrying a scale of its own was
+  therefore accepted, and the composite then had one free value too
+  many: the scale moves between D and R without changing the matrix, so
+  [`param_free()`](https://statmodels7.github.io/parameters7/reference/param_free.md)
+  returned a different point from the one
+  [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
+  was given and only
+  [`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)’s
+  round-trip row reported it.
+
+  The diagonal is read at two probe free vectors, `0.3, 0.4, ...` and a
+  constant `-0.4`, fixed rather than drawn so a rejection is
+  reproducible. The probes are deliberately not the zero vector: a
+  scale-carrying family is written on a log link, so at zero its scale
+  is exactly 1 and its diagonal is the one the check looks for. Measured
+  over the six shipped families of side four, a zero probe passes all
+  five that should be rejected while either non-zero probe catches every
+  one, the worst diagonal entry departing from 1 by between 0.35 and
+  8.27.
+
+  Two probes cannot prove a property quantified over the whole free
+  space and the page says so. What they catch is a family that carries a
+  scale, which is how the requirement is broken in practice.
+  [`correlation_matrix()`](https://statmodels7.github.io/parameters7/reference/correlation_matrix.md)
+  is unaffected, and so is every call that leaves the argument at its
+  default.
+
+## parameters7 0.16.0
+
+- [`param_d3logdet()`](https://statmodels7.github.io/parameters7/reference/param_d3logdet.md)
+  and
+  [`param_d4logdet()`](https://statmodels7.github.io/parameters7/reference/param_d4logdet.md)
+  refuse, rather than answer, where the family supplies no analytic
+  [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md)
+  or
+  [`param_d2()`](https://statmodels7.github.io/parameters7/reference/param_d2.md).
+  Both fallbacks difference
+  [`param_d2logdet()`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.md),
+  which is an exact identity given those two arrays, so the differencing
+  is one numerical layer where they are written out and two where they
+  are not – the nesting the toolkit forbids everywhere else. The second
+  regime does not merely lose accuracy: measured on a 4 by 4 AR(1)
+  covariance whose family supplies
+  [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
+  and nothing else, order three came back 7.5e-03 against a quantity of
+  size 4.45 and order four came back 9.07 against a quantity of size
+  2.17, four times the size of what it estimates, and
+  [`param_is_numerical()`](https://statmodels7.github.io/parameters7/reference/param_is_numerical.md)
+  reported `TRUE` for the order in both regimes, so nothing downstream
+  could tell the two apart.
+
+  No shipped family is affected: all thirteen matrix families write
+  every log-determinant order out, so none reaches either fallback.
+  Orders one and two are untouched, being a single layer, and
+  [`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)
+  is untouched, its battery stopping at the second. The message names
+  the missing method and the remedy.
+
+## parameters7 0.15.0
+
+- `scaled_dlog()` is removed, and the two log-determinant methods that
+  called it read
+  [`diag_dlog()`](https://statmodels7.github.io/parameters7/reference/diag_dlog.md)
+  instead, which computes the same quantity for the same link at every
+  order from one to four. The removed function had no branch for order 2
+  and answered that order with the fourth-order expression: on a
+  square-root link at a free value of 1.5 it returned -2.37037 where the
+  second derivative of the log inverse link is -0.888889. No reported
+  number changes, the two callers being
+  [`param_d3logdet.ScaledMatrixParam()`](https://statmodels7.github.io/parameters7/reference/param_d3logdet.ScaledMatrixParam.md)
+  and
+  [`param_d4logdet.ScaledMatrixParam()`](https://statmodels7.github.io/parameters7/reference/param_d4logdet.ScaledMatrixParam.md),
+  which pass a literal 3 or 4; measured over four links and five free
+  values, the two functions agree to exactly 0 at both orders. What is
+  removed is a duplicate rather than a defect repaired.
+
+## parameters7 0.14.0
+
+- The four composition wrappers label the rows and columns of every
+  matrix they return, which is the convention
+  [`name_dims()`](https://statmodels7.github.io/parameters7/reference/name_dims.md)
+  states and the other ten families follow.
+  [`kron_identity()`](https://statmodels7.github.io/parameters7/reference/kron_identity.md),
+  [`block_diag()`](https://statmodels7.github.io/parameters7/reference/block_diag.md),
+  [`dr_prod()`](https://statmodels7.github.io/parameters7/reference/dr_prod.md)
+  and
+  [`sum_struct()`](https://statmodels7.github.io/parameters7/reference/sum_struct.md)
+  returned bare matrices from
+  [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
+  and from all four derivative orders, so a printed composite covariance
+  showed `[,1] [,2]` where a printed primitive one is labeled, and a
+  consumer indexing by name worked on ten families and failed on four.
+
+- [`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)’s
+  shapes-and-names check reads the margins of
+  [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md),
+  [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md)
+  and
+  [`param_d2()`](https://statmodels7.github.io/parameters7/reference/param_d2.md)
+  as well as the declared names. That check passed for all four wrappers
+  while they carried no labels at all, reading only what the family
+  declares; the convention is tested now rather than only stated. A
+  family with no free values has no derivative array to read, so those
+  two questions are asked only where there is one.
+
+- [`param_solve()`](https://statmodels7.github.io/parameters7/reference/param_solve.md)
+  and
+  [`param_factor()`](https://statmodels7.github.io/parameters7/reference/param_factor.md)
+  on a
+  [`sum_struct()`](https://statmodels7.github.io/parameters7/reference/sum_struct.md)
+  are unchanged and bare. That family is the one whose two answers are
+  built from its own value rather than from its structure, so labeling
+  the value would have carried labels into a solve that is bare in every
+  other family. What the convention covers is the value and the four
+  derivative orders; the primitives disagree about a factor and this
+  release leaves that where it found it.
+
+## parameters7 0.13.0
+
+- [`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)
+  leaves the caller’s random stream as it found it. Its two branches
+  used to treat that stream differently and neither said so on the page:
+  the matrix battery drew its four random free vectors from the caller’s
+  own stream, advancing it and reporting a slightly different worst
+  error on every call, while the branch for a family that is not a
+  matrix called `set.seed(100 + i)` and **replaced** whatever state the
+  caller had. Measured, `set.seed(42); rnorm(1)` gave 1.370958 and the
+  same after `check_parameter(simplex(3))` gave -1.172560.
+
+  Both branches now draw from a fixed seed, so a report is reproducible,
+  and both restore the `.Random.seed` they found on entry through
+  [`on.exit()`](https://rdrr.io/r/base/on.exit.html), so it happens even
+  when a check signals. A caller who had no seed at all is left with
+  none, rather than with the one the validator set.
+
+  [`capture_seed()`](https://statmodels7.github.io/parameters7/reference/capture_seed.md)
+  and
+  [`restore_seed()`](https://statmodels7.github.io/parameters7/reference/capture_seed.md)
+  are the two internal helpers, documented together. No reported
+  statistic changes by more than the draw itself: the suite passes
+  unchanged at 10,821 assertions.
+
+## parameters7 0.12.0
+
+- `correlation_matrix(1)` builds a constant instead of an unusable
+  object. A one by one correlation matrix has no angles, so `n_free` is
+  0; the constructor reported 1, with the free name `"z."`, because
+  `paste0("z", integer(0), ".", integer(0))` recycles the zero-length
+  index against the length-one literals and gives one element instead of
+  none. The object could not be used:
+  [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md),
+  [`param_free()`](https://statmodels7.github.io/parameters7/reference/param_free.md)
+  and
+  [`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)
+  all stopped with `missing value where TRUE/FALSE needed`, and
+  [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
+  returned 1 while ignoring the free value it was given.
+
+  The family now degenerates to a constant rather than refusing, which
+  is what keeps it composable inside
+  [`block_diag()`](https://statmodels7.github.io/parameters7/reference/block_diag.md).
+  [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
+  returns the identity at `numeric(0)`, the derivative lists are empty,
+  the log-determinant is 0, and
+  [`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)
+  passes with its two log-determinant derivative rows reported as
+  `NOT CHECKED`, there being no free value to differentiate in.
+
+  Every other dimension is untouched, and so is every other family:
+  swept over all eleven constructors at their smallest legal input, this
+  was the only one that neither worked nor refused.
+  [`compound_symmetry()`](https://statmodels7.github.io/parameters7/reference/compound_symmetry.md),
+  [`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md),
+  [`autoregressive()`](https://statmodels7.github.io/parameters7/reference/autoregressive.md),
+  [`transition_matrix()`](https://statmodels7.github.io/parameters7/reference/transition_matrix.md)
+  and
+  [`simplex()`](https://statmodels7.github.io/parameters7/reference/simplex.md)
+  reject a dimension of one at construction and keep doing so.
+
 ## parameters7 0.11.0
 
 - The numerical fallbacks take their stencils from numericals7. The
@@ -232,7 +457,7 @@
 - Derivatives to FOURTH order.
   [`param_d3()`](https://statmodels7.github.io/parameters7/reference/param_d3.md)/[`param_d4()`](https://statmodels7.github.io/parameters7/reference/param_d4.md)
   and
-  [`param_d3logdet()`](https://statmodels7.github.io/parameters7/reference/param_d3logdet.md)/[`param_d4logdet()`](https://statmodels7.github.io/parameters7/reference/param_d3logdet.md),
+  [`param_d3logdet()`](https://statmodels7.github.io/parameters7/reference/param_d3logdet.md)/[`param_d4logdet()`](https://statmodels7.github.io/parameters7/reference/param_d4logdet.md),
   closed form for every shipped family and served by single-stencil
   numerical fallbacks otherwise.
 

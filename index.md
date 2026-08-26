@@ -93,11 +93,11 @@ reused as they are.
 
 ``` r
 
-param_value(diagonal_matrix(3, link = linkfunctions7::sqrt_link()), c(1, 2, 3))
-#>    v1 v2 v3
-#> v1  1  0  0
-#> v2  0  4  0
-#> v3  0  0  9
+param_value(diagonal_matrix(3, link = linkfunctions7::softplus_link()), c(1, 2, 3))
+#>          v1       v2       v3
+#> v1 1.313262 0.000000 0.000000
+#> v2 0.000000 2.126928 0.000000
+#> v3 0.000000 0.000000 3.048587
 ```
 
 ## Beyond covariance matrices
@@ -421,10 +421,10 @@ invisible(check_parameter(log_cholesky(3)))
 #>   [OK         ] round trip           7.77e-16
 #>   [OK         ] first derivatives    2.90e-11
 #>   [OK         ] second derivatives   3.67e-11
-#>   [OK         ] log-determinant      2.47e-15
-#>   [OK         ] logdet gradient      3.38e-14
+#>   [OK         ] log-determinant      6.13e-15
+#>   [OK         ] logdet gradient      1.62e-13
 #>   [OK         ] logdet hessian       0.00e+00
-#>   [OK         ] solve and factor     3.90e-15
+#>   [OK         ] solve and factor     5.80e-15
 #>   [OK         ] shapes and names  
 #>   9 passed, 0 failed, 0 not checked
 invisible(check_parameter(decay))
@@ -437,8 +437,8 @@ invisible(check_parameter(decay))
 #>   [NOT CHECKED] logdet gradient   
 #>   [NOT CHECKED] logdet hessian    
 #>   [OK         ] solve and factor     6.41e-16
-#>   [OK         ] shapes and names  
-#>   3 passed, 0 failed, 6 not checked
+#>   [FAIL       ] shapes and names  
+#>   2 passed, 1 failed, 6 not checked
 ```
 
 ## What is in the box
@@ -451,7 +451,7 @@ invisible(check_parameter(decay))
 | not matrices | [`simplex()`](https://statmodels7.github.io/parameters7/reference/simplex.md), [`transition_matrix()`](https://statmodels7.github.io/parameters7/reference/transition_matrix.md) |
 | maps | [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md), [`param_free()`](https://statmodels7.github.io/parameters7/reference/param_free.md) |
 | derivatives | [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md) … [`param_d4()`](https://statmodels7.github.io/parameters7/reference/param_d4.md), exact to fourth order |
-| likelihood pieces | [`param_logdet()`](https://statmodels7.github.io/parameters7/reference/param_logdet.md), [`param_dlogdet()`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.md) … [`param_d4logdet()`](https://statmodels7.github.io/parameters7/reference/param_d3logdet.md), [`param_solve()`](https://statmodels7.github.io/parameters7/reference/param_solve.md), [`param_factor()`](https://statmodels7.github.io/parameters7/reference/param_factor.md) |
+| likelihood pieces | [`param_logdet()`](https://statmodels7.github.io/parameters7/reference/param_logdet.md), [`param_dlogdet()`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.md) … [`param_d4logdet()`](https://statmodels7.github.io/parameters7/reference/param_d4logdet.md), [`param_solve()`](https://statmodels7.github.io/parameters7/reference/param_solve.md), [`param_factor()`](https://statmodels7.github.io/parameters7/reference/param_factor.md) |
 | what a reader reads | [`param_readable()`](https://statmodels7.github.io/parameters7/reference/param_readable.md) |
 | tools | [`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md), [`param_is_numerical()`](https://statmodels7.github.io/parameters7/reference/param_is_numerical.md), [`param_null_basis()`](https://statmodels7.github.io/parameters7/reference/param_null_basis.md), [`print()`](https://rdrr.io/r/base/print.html) |
 

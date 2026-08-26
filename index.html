@@ -16,8 +16,8 @@
 <script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="An S7 Framework for Constrained Parameters">
-<meta name="description" content="Parametrizations of constrained parameter spaces as objects. A parameter maps an unconstrained vector onto the set where it lives -- a symmetric positive semidefinite matrix, a probability vector on the simplex, a row-stochastic transition matrix -- and answers with exact derivatives to fourth order, the inverse map, and, on the matrix branch, the log-determinant or its pseudo-determinant counterpart and the solves a likelihood needs. Numerical fallbacks make a user-defined parameter work from its map alone, and a diagnostic verifies every component against an independent route.">
-<meta property="og:description" content="Parametrizations of constrained parameter spaces as objects. A parameter maps an unconstrained vector onto the set where it lives -- a symmetric positive semidefinite matrix, a probability vector on the simplex, a row-stochastic transition matrix -- and answers with exact derivatives to fourth order, the inverse map, and, on the matrix branch, the log-determinant or its pseudo-determinant counterpart and the solves a likelihood needs. Numerical fallbacks make a user-defined parameter work from its map alone, and a diagnostic verifies every component against an independent route.">
+<meta name="description" content="Parametrizations of constrained parameter spaces as objects. A parameter maps an unconstrained vector onto the set where it lives: a symmetric positive semidefinite matrix, a probability vector on the simplex, a row-stochastic transition matrix. It answers with exact derivatives to fourth order, the inverse map, and, on the matrix branch, the log-determinant or its pseudo-determinant counterpart and the solves a likelihood needs. Numerical fallbacks make a user-defined parameter work from its map alone, and a diagnostic verifies every component against an independent route.">
+<meta property="og:description" content="Parametrizations of constrained parameter spaces as objects. A parameter maps an unconstrained vector onto the set where it lives: a symmetric positive semidefinite matrix, a probability vector on the simplex, a row-stochastic transition matrix. It answers with exact derivatives to fourth order, the inverse map, and, on the matrix branch, the log-determinant or its pseudo-determinant counterpart and the solves a likelihood needs. Numerical fallbacks make a user-defined parameter work from its map alone, and a diagnostic verifies every component against an independent route.">
 <meta property="og:image" content="https://statmodels7.github.io/parameters7/logo.png">
 </head>
 <body>
@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,6 +38,12 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+<li><a class="dropdown-item" href="articles/defining-a-parameter.html">Defining a parameter</a></li>
+  </ul>
+</li>
 <li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
@@ -104,11 +110,11 @@
 </h2>
 <p>A link in <a href="https://statmodels7.github.io/linkfunctions7/" class="external-link">linkfunctions7</a> is a <strong>scalar</strong> bijection with a diagonal Jacobian, and everything built on it depends on that diagonality. A map from <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>ℝ</mi><mi>d</mi></msup><annotation encoding="application/x-tex">\mathbb{R}^d</annotation></semantics></math> to a matrix has a full Jacobian, so it is a different contract and a different class. The two <strong>compose</strong>: the diagonal block of a structured matrix is a scalar map, and those are <a href="https://statmodels7.github.io/linkfunctions7/" class="external-link">linkfunctions7</a> links reused as they are.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/param_value.html">param_value</a></span><span class="op">(</span><span class="fu"><a href="reference/diagonal_matrix.html">diagonal_matrix</a></span><span class="op">(</span><span class="fl">3</span>, link <span class="op">=</span> <span class="fu">linkfunctions7</span><span class="fu">::</span><span class="fu"><a href="https://statmodels7.github.io/linkfunctions7/reference/sqrt_link.html" class="external-link">sqrt_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    v1 v2 v3</span></span>
-<span><span class="co">#&gt; v1  1  0  0</span></span>
-<span><span class="co">#&gt; v2  0  4  0</span></span>
-<span><span class="co">#&gt; v3  0  0  9</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/param_value.html">param_value</a></span><span class="op">(</span><span class="fu"><a href="reference/diagonal_matrix.html">diagonal_matrix</a></span><span class="op">(</span><span class="fl">3</span>, link <span class="op">=</span> <span class="fu">linkfunctions7</span><span class="fu">::</span><span class="fu"><a href="https://statmodels7.github.io/linkfunctions7/reference/softplus_link.html" class="external-link">softplus_link</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;          v1       v2       v3</span></span>
+<span><span class="co">#&gt; v1 1.313262 0.000000 0.000000</span></span>
+<span><span class="co">#&gt; v2 0.000000 2.126928 0.000000</span></span>
+<span><span class="co">#&gt; v3 0.000000 0.000000 3.048587</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="beyond-covariance-matrices">Beyond covariance matrices<a class="anchor" aria-label="anchor" href="#beyond-covariance-matrices"></a>
@@ -318,10 +324,10 @@
 <span><span class="co">#&gt;   [OK         ] round trip           7.77e-16</span></span>
 <span><span class="co">#&gt;   [OK         ] first derivatives    2.90e-11</span></span>
 <span><span class="co">#&gt;   [OK         ] second derivatives   3.67e-11</span></span>
-<span><span class="co">#&gt;   [OK         ] log-determinant      2.47e-15</span></span>
-<span><span class="co">#&gt;   [OK         ] logdet gradient      3.38e-14</span></span>
+<span><span class="co">#&gt;   [OK         ] log-determinant      6.13e-15</span></span>
+<span><span class="co">#&gt;   [OK         ] logdet gradient      1.62e-13</span></span>
 <span><span class="co">#&gt;   [OK         ] logdet hessian       0.00e+00</span></span>
-<span><span class="co">#&gt;   [OK         ] solve and factor     3.90e-15</span></span>
+<span><span class="co">#&gt;   [OK         ] solve and factor     5.80e-15</span></span>
 <span><span class="co">#&gt;   [OK         ] shapes and names  </span></span>
 <span><span class="co">#&gt;   9 passed, 0 failed, 0 not checked</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/invisible.html" class="external-link">invisible</a></span><span class="op">(</span><span class="fu"><a href="reference/check_parameter.html">check_parameter</a></span><span class="op">(</span><span class="va">decay</span><span class="op">)</span><span class="op">)</span></span>
@@ -334,8 +340,8 @@
 <span><span class="co">#&gt;   [NOT CHECKED] logdet gradient   </span></span>
 <span><span class="co">#&gt;   [NOT CHECKED] logdet hessian    </span></span>
 <span><span class="co">#&gt;   [OK         ] solve and factor     6.41e-16</span></span>
-<span><span class="co">#&gt;   [OK         ] shapes and names  </span></span>
-<span><span class="co">#&gt;   3 passed, 0 failed, 6 not checked</span></span></code></pre></div>
+<span><span class="co">#&gt;   [FAIL       ] shapes and names  </span></span>
+<span><span class="co">#&gt;   2 passed, 1 failed, 6 not checked</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="what-is-in-the-box">What is in the box<a class="anchor" aria-label="anchor" href="#what-is-in-the-box"></a>
@@ -384,7 +390,7 @@
 <tr>
 <td>likelihood pieces</td>
 <td>
-<code><a href="reference/param_logdet.html">param_logdet()</a></code>, <code><a href="reference/param_dlogdet.html">param_dlogdet()</a></code> … <code><a href="reference/param_d3logdet.html">param_d4logdet()</a></code>, <code><a href="reference/param_solve.html">param_solve()</a></code>, <code><a href="reference/param_factor.html">param_factor()</a></code>
+<code><a href="reference/param_logdet.html">param_logdet()</a></code>, <code><a href="reference/param_dlogdet.html">param_dlogdet()</a></code> … <code><a href="reference/param_d4logdet.html">param_d4logdet()</a></code>, <code><a href="reference/param_solve.html">param_solve()</a></code>, <code><a href="reference/param_factor.html">param_factor()</a></code>
 </td>
 </tr>
 <tr>

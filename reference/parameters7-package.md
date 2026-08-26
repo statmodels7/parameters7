@@ -1,9 +1,9 @@
 # parameters7: An S7 Framework for Constrained Parameters
 
 Parametrizations of constrained parameter spaces as objects. A parameter
-maps an unconstrained vector onto the set where it lives – a symmetric
+maps an unconstrained vector onto the set where it lives: a symmetric
 positive semidefinite matrix, a probability vector on the simplex, a
-row-stochastic transition matrix – and answers with exact derivatives to
+row-stochastic transition matrix. It answers with exact derivatives to
 fourth order, the inverse map, and, on the matrix branch, the
 log-determinant or its pseudo-determinant counterpart and the solves a
 likelihood needs. Numerical fallbacks make a user-defined parameter work

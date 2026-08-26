@@ -1,7 +1,9 @@
 # Derivatives of the Logarithm of a Link
 
-The derivatives of \\\log h(\eta)\\ up to fourth order, from the inverse
-link's own derivatives.
+Returns \\\mathrm{d}^m \log h(\eta) / \mathrm{d}\eta^m\\ for \\m\\ up to
+four, assembled from the inverse link's own derivatives. Every
+log-determinant derivative of a diagonal or scaled family is one of
+these, multiplied by a count of entries.
 
 ## Usage
 
@@ -21,7 +23,7 @@ diag_dlog(link, eta, order)
 
 - order:
 
-  The derivative order, 1 to 4.
+  The derivative order: 1, 2, 3 or 4.
 
 ## Value
 
@@ -29,14 +31,29 @@ A numeric vector the length of `eta`.
 
 ## Details
 
-Faa di Bruno's formula for the logarithm, written out: with \\u_m =
-h^{(m)}/h\\ the successive orders are \\u_1\\, \\u_2 - u_1^2\\, \\u_3 -
-3u_1u_2 + 2u_1^3\\ and \\u_4 - 4u_1u_3 - 3u_2^2 + 12u_1^2u_2 - 6u_1^4\\.
-Dividing by \\h\\ once at the start keeps every term of order one in the
-ratio rather than in the derivative, which matters at the ends of a
-link's range.
+Faa di Bruno's formula for the logarithm, written out. With \\u_m =
+h^{(m)}/h\\ the four orders are
+
+\$\$u_1, \quad u_2 - u_1^2, \quad u_3 - 3u_1u_2 + 2u_1^3, \quad u_4 -
+4u_1u_3 - 3u_2^2 + 12u_1^2u_2 - 6u_1^4.\$\$
+
+The division by \\h\\ happens once, at the start, so every term is a
+ratio of order one, never a derivative that can be large on its own.
+That matters at the ends of a link's range, where \\h\\ and \\h^{(m)}\\
+can both be extreme while the ratio is ordinary.
+
+Under the log link \\h = e^\eta\\ gives \\u_m = 1\\ for every \\m\\, so
+the first order is 1 and the second, third and fourth are exactly 0,
+which is why a default
+[`diagonal_matrix()`](https://statmodels7.github.io/parameters7/reference/diagonal_matrix.md)
+reports a linear log-determinant.
 
 ## See also
 
-[`diagonal_matrix`](https://statmodels7.github.io/parameters7/reference/diagonal_matrix.md),
-[`scaled_dlog`](https://statmodels7.github.io/parameters7/reference/scaled_dlog.md)
+[`diag_logdet_higher()`](https://statmodels7.github.io/parameters7/reference/diag_logdet_higher.md),
+[`param_d3logdet.ScaledMatrixParam()`](https://statmodels7.github.io/parameters7/reference/param_d3logdet.ScaledMatrixParam.md)
+and
+[`param_d4logdet.ScaledMatrixParam()`](https://statmodels7.github.io/parameters7/reference/param_d4logdet.ScaledMatrixParam.md),
+the callers, and
+[`linkfunctions7::dlinkinv()`](https://statmodels7.github.io/linkfunctions7/reference/dlinkinv.html)
+for the link derivatives read.

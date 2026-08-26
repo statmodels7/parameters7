@@ -1,8 +1,12 @@
 # The Matrix and Its Derivatives, From the Packed Arrays
 
-Fills the Toeplitz matrix of the scaled autocorrelations, taking either
-the value column or one derivative component out of the packed rows of
-[`ar_taylor`](https://statmodels7.github.io/parameters7/reference/ar_taylor.md).
+Fills the Toeplitz matrix \\M\_{ij} = \gamma\_{\lvert i - j \rvert}\\
+from one column of
+[`ar_taylor()`](https://statmodels7.github.io/parameters7/reference/ar_taylor.md)'s
+packed rows, taking either the value column or one derivative component.
+Every derivative of the matrix is Toeplitz too, the Toeplitz structure
+being a property of the family, fixed as the point moves, so one
+indexing operation serves all five cases.
 
 ## Usage
 
@@ -15,17 +19,17 @@ ar_assemble(s, tay, order = 0L, tuple = NULL)
 - s:
 
   An
-  [`AutoregressiveParam`](https://statmodels7.github.io/parameters7/reference/AutoregressiveParam.md)
-  object.
+  [`AutoregressiveParam()`](https://statmodels7.github.io/parameters7/reference/AutoregressiveParam.md)
+  object, whose `dimension` is read.
 
 - tay:
 
   The arrays of
-  [`ar_taylor`](https://statmodels7.github.io/parameters7/reference/ar_taylor.md).
+  [`ar_taylor()`](https://statmodels7.github.io/parameters7/reference/ar_taylor.md).
 
 - order:
 
-  The derivative order, or 0 for the value.
+  The derivative order 1 to 4, or 0 for the value.
 
 - tuple:
 
@@ -33,4 +37,12 @@ ar_assemble(s, tay, order = 0L, tuple = NULL)
 
 ## Value
 
-A symmetric numeric matrix.
+A symmetric `s@dimension` by `s@dimension` numeric matrix, with no
+dimnames.
+
+## See also
+
+[`ar_pack_col()`](https://statmodels7.github.io/parameters7/reference/ar_pack_col.md),
+which locates the column, and
+[`ar_derivative()`](https://statmodels7.github.io/parameters7/reference/ar_derivative.md),
+which loops this over the tuples of an order.
