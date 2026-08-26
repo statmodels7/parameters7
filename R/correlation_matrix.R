@@ -120,15 +120,16 @@ CorrelationParam <- S7::new_class("CorrelationParam", parent = matrix_parameter)
 #' walks a free value past about \eqn{\pm 8} is reporting a boundary, and
 #' [check_parameter()] sweeps to \eqn{\pm 2} for that reason.
 #'
-#' # p = 1 does not work
+#' # p = 1 is a constant
 #'
-#' A \eqn{1 \times 1} correlation matrix has no angles, so `n_free` should be 0.
-#' `correlation_matrix(1)` reports 1, with the free name `"z."`, because
-#' `paste0("z", integer(0), ".", integer(0))` recycles to one element instead of
-#' none. The resulting object evaluates [param_value()] but fails
-#' [param_d1()], [param_free()] and [check_parameter()] with `missing value where
-#' TRUE/FALSE needed`. Use \eqn{p \ge 2}; a \eqn{1 \times 1} correlation matrix
-#' carries no information.
+#' A \eqn{1 \times 1} correlation matrix has no angles, so `n_free` is 0 and
+#' `free_names` is empty. [param_value()] returns the \eqn{1 \times 1} identity
+#' at the only free vector there is, `numeric(0)`, [param_d1()] and [param_d2()]
+#' return empty lists, and [param_logdet()] is 0. [check_parameter()] passes,
+#' reporting its two log-determinant derivative rows as `NOT CHECKED`, there
+#' being no free value to differentiate in. The family therefore degenerates to
+#' a constant rather than refusing, which is what keeps it composable inside
+#' [block_diag()]; it carries no information of its own.
 #'
 #' @section Notation:
 #' \eqn{\eta} is the free vector, of length \eqn{d = p(p-1)/2}, and \eqn{p} the
@@ -138,8 +139,9 @@ CorrelationParam <- S7::new_class("CorrelationParam", parent = matrix_parameter)
 #' parameter elsewhere in the toolkit.
 #'
 #' @param dimension The side \eqn{p} of the matrix. A single positive whole
-#'   number, finite and at least 1, though see **Details** on \eqn{p = 1};
-#'   anything else throws `'dimension' must be a single positive integer.`
+#'   number, finite and at least 1; \eqn{p = 1} gives a constant with no free
+#'   values, as **Details** describes. Anything else throws `'dimension' must be
+#'   a single positive integer.`
 #' @param role A label recording which side of a model the matrix parametrizes:
 #'   `"either"` (the default), `"covariance"` or `"precision"`. No numeric result
 #'   depends on it.
@@ -201,7 +203,10 @@ correlation_matrix <- function(dimension, role = c("either", "covariance", "prec
       cols <- c(cols, seq_len(i - 1L))
     }
   }
-  nm <- paste0("z", rows, ".", cols)
+  # paste0 recycles a zero-length argument against the length-one literals, so
+  # at p = 1, where there are no angles, the unguarded call gives "z." instead
+  # of nothing. A one by one correlation matrix is the constant 1.
+  nm <- if (length(rows)) paste0("z", rows, ".", cols) else character(0)
 
   CorrelationParam(
     param_name = "correlation",

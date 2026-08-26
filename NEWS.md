@@ -1,3 +1,28 @@
+# parameters7 0.12.0
+
+* `correlation_matrix(1)` builds a constant instead of an unusable object. A
+  one by one correlation matrix has no angles, so `n_free` is 0; the
+  constructor reported 1, with the free name `"z."`, because
+  `paste0("z", integer(0), ".", integer(0))` recycles the zero-length index
+  against the length-one literals and gives one element instead of none. The
+  object could not be used: `param_d1()`, `param_free()` and
+  `check_parameter()` all stopped with `missing value where TRUE/FALSE
+  needed`, and `param_value()` returned 1 while ignoring the free value it was
+  given.
+
+  The family now degenerates to a constant rather than refusing, which is what
+  keeps it composable inside `block_diag()`. `param_value()` returns the
+  identity at `numeric(0)`, the derivative lists are empty, the
+  log-determinant is 0, and `check_parameter()` passes with its two
+  log-determinant derivative rows reported as `NOT CHECKED`, there being no
+  free value to differentiate in.
+
+  Every other dimension is untouched, and so is every other family: swept over
+  all eleven constructors at their smallest legal input, this was the only one
+  that neither worked nor refused. `compound_symmetry()`, `ar1()`,
+  `autoregressive()`, `transition_matrix()` and `simplex()` reject a dimension
+  of one at construction and keep doing so.
+
 # parameters7 0.11.0
 
 * The numerical fallbacks take their stencils from numericals7. The package
