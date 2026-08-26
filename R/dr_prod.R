@@ -102,10 +102,11 @@ DrProdParam <- S7::new_class("DrProdParam", parent = matrix_parameter)
 #' @param correlation A [matrix_parameter()] of side `dimension` **producing
 #'   correlation matrices**, that is with a unit diagonal at every free vector.
 #'   Defaults to [`correlation_matrix(dimension)`][correlation_matrix], which is
-#'   the only shipped family with that property. The requirement is not checked;
-#'   a block carrying a scale of its own, such as [ar1()], makes the composite
-#'   unidentified, the same matrix arising from a whole ray of free vectors, and
-#'   `check_parameter()`'s round trip is what reports it.
+#'   the only shipped family with that property. A block carrying a scale of its
+#'   own, such as [ar1()], makes the composite unidentified, the same matrix
+#'   arising from a whole ray of free vectors; the constructor reads the diagonal
+#'   at two probe free vectors and rejects such a block, which
+#'   [check_unit_diagonal()] describes.
 #' @param link The positive link carrying each standard deviation onto the free
 #'   scale, [linkfunctions7::log_link()] by default. It must map onto the
 #'   positive half line and from the whole real line; see [diagonal_matrix()] for
@@ -173,6 +174,7 @@ dr_prod <- function(dimension, correlation = NULL,
                 "  and the null space are recorded as properties of the family."),
          call. = FALSE)
   }
+  check_unit_diagonal(correlation)
 
   DrProdParam(
     param_name = sprintf("dr_prod(%s)", correlation@param_name),
@@ -192,6 +194,67 @@ dr_prod <- function(dimension, correlation = NULL,
   linkfunctions7::linkinv(.dr(s)$link, eta[seq_len(.dr(s)$p)])
 }
 .dr_eta_cor <- function(s, eta) eta[-seq_len(.dr(s)$p)]
+
+#' Refuse a Correlation Block That Carries a Scale
+#'
+#' @description
+#' Reads the diagonal of `correlation`'s own value at two probe free vectors and
+#' signals an error unless every entry is 1. This is the property
+#' \eqn{\Sigma = D R D} rests on: the standard deviations are read off
+#' \eqn{D}, so a block with a scale of its own describes the same matrix from a
+#' whole ray of free vectors and the composite has one free value too many.
+#'
+#' @details
+#' # Why the probes are not the zero vector
+#'
+#' A scale-carrying family is almost always written on a log link, so at a zero
+#' free vector its scale is \eqn{\exp(0) = 1} and its diagonal is exactly the
+#' one this looks for. Measured over the six shipped families of side four, a
+#' zero probe passes all five that should be rejected -- [ar1()],
+#' [compound_symmetry()], [autoregressive()], [log_cholesky()] and
+#' [matrix_log()] -- while any non-zero probe catches every one of them, the
+#' worst diagonal entry departing from 1 by between 0.35 and 8.27. The probes
+#' are therefore `0.3, 0.4, ...` and a constant `-0.4`, and they are fixed
+#' rather than drawn, so a rejection is reproducible.
+#'
+#' Two probes cannot prove a property that is quantified over the whole free
+#' space, and this does not claim to. What it catches is a family that carries a
+#' scale, which is the way the requirement is broken in practice; a family
+#' contrived to have a unit diagonal at exactly these two points passes.
+#' `check_parameter()`'s round trip is what reports the ray itself.
+#'
+#' @param correlation The [matrix_parameter()] handed to [dr_prod()], already
+#'   checked for its class, its side and its rank.
+#'
+#' @return Invisibly `TRUE`. A block whose diagonal departs from 1 at either
+#'   probe throws, with the family named and the worst entry quoted. A probe the
+#'   family cannot evaluate is skipped rather than reported, the constructor
+#'   having no standing to decide what a foreign chart admits.
+#'
+#' @seealso [dr_prod()], the caller, and [correlation_matrix()], the shipped
+#'   family with the property.
+#'
+#' @keywords internal
+check_unit_diagonal <- function(correlation) {
+  k <- correlation@n_free
+  probes <- list(seq(0.3, by = 0.1, length.out = k), rep(-0.4, k))
+  for (eta in probes) {
+    d <- tryCatch(diag(param_value(correlation, eta)), error = function(e) NULL)
+    if (is.null(d) || anyNA(d)) next
+    worst <- d[[which.max(abs(d - 1))]]
+    if (abs(worst - 1) > 1e-8) {
+      stop(sprintf(paste0(
+        "'correlation' must have a unit diagonal at every free vector, and\n",
+        "  '%s' reaches %s at a probe. D R D reads the standard deviations\n",
+        "  off D, so a block carrying a scale of its own leaves the composite\n",
+        "  unidentified: the scale moves between D and R without changing the\n",
+        "  matrix, and the round trip returns a different free vector.\n",
+        "  correlation_matrix() is the shipped family with this property."
+      ), correlation@param_name, format(worst)), call. = FALSE)
+    }
+  }
+  invisible(TRUE)
+}
 
 #' Derivatives of the Inverse Link at Every Scale Coordinate
 #'

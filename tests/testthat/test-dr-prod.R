@@ -198,3 +198,30 @@ test_that("the constructor states what it rejects", {
   p <- crossprod(diff(diag(3), differences = 2))
   expect_error(dr_prod(3, correlation = scaled_matrix(p)), "full rank")
 })
+
+test_that("a block carrying a scale of its own is rejected", {
+  # D R D reads the standard deviations off D, so a block with a scale
+  # describes the same matrix from a whole ray of free vectors and the
+  # composite has one free value too many.
+  for (b in list(ar1(4), compound_symmetry(4), autoregressive(4, order = 2),
+                 log_cholesky(4), matrix_log(4))) {
+    expect_error(dr_prod(4, correlation = b), "unit diagonal")
+  }
+
+  # the family the argument exists for is untouched, whether it is passed or
+  # taken as the default
+  expect_s3_class(dr_prod(4), "parameters7::DrProdParam")
+  expect_s3_class(dr_prod(4, correlation = correlation_matrix(4)),
+                  "parameters7::DrProdParam")
+
+  # the probes are not the zero vector: a scale on a log link is exactly 1
+  # there, so every one of the five above has a unit diagonal at zero and
+  # would pass
+  for (b in list(ar1(4), log_cholesky(4), matrix_log(4))) {
+    expect_equal(diag(param_value(b, rep(0, b@n_free))), rep(1, 4),
+                 tolerance = 1e-12, ignore_attr = TRUE)
+  }
+
+  # and the earlier checks keep their order
+  expect_error(dr_prod(3, correlation = simplex(3)), "matrix_parameter")
+})

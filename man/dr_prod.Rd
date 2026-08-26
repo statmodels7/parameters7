@@ -18,10 +18,11 @@ correlation carries nothing, and the constructor says so.}
 \item{correlation}{A \code{\link[=matrix_parameter]{matrix_parameter()}} of side \code{dimension} \strong{producing
 correlation matrices}, that is with a unit diagonal at every free vector.
 Defaults to \code{\link[=correlation_matrix]{correlation_matrix(dimension)}}, which is
-the only shipped family with that property. The requirement is not checked;
-a block carrying a scale of its own, such as \code{\link[=ar1]{ar1()}}, makes the composite
-unidentified, the same matrix arising from a whole ray of free vectors, and
-\code{check_parameter()}'s round trip is what reports it.}
+the only shipped family with that property. A block carrying a scale of its
+own, such as \code{\link[=ar1]{ar1()}}, makes the composite unidentified, the same matrix
+arising from a whole ray of free vectors; the constructor reads the diagonal
+at two probe free vectors and rejects such a block, which
+\code{\link[=check_unit_diagonal]{check_unit_diagonal()}} describes.}
 
 \item{link}{The positive link carrying each standard deviation onto the free
 scale, \code{\link[linkfunctions7:log_link]{linkfunctions7::log_link()}} by default. It must map onto the

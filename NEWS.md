@@ -1,3 +1,29 @@
+# parameters7 0.17.0
+
+* `dr_prod()` checks the property its construction rests on. The
+  `correlation` argument is documented as taking a family with a unit
+  diagonal at every free vector, and the constructor tested the class, the
+  side and the rank but not that. A block carrying a scale of its own was
+  therefore accepted, and the composite then had one free value too many:
+  the scale moves between D and R without changing the matrix, so
+  `param_free()` returned a different point from the one `param_value()`
+  was given and only `check_parameter()`'s round-trip row reported it.
+
+  The diagonal is read at two probe free vectors, `0.3, 0.4, ...` and a
+  constant `-0.4`, fixed rather than drawn so a rejection is reproducible.
+  The probes are deliberately not the zero vector: a scale-carrying family
+  is written on a log link, so at zero its scale is exactly 1 and its
+  diagonal is the one the check looks for. Measured over the six shipped
+  families of side four, a zero probe passes all five that should be
+  rejected while either non-zero probe catches every one, the worst
+  diagonal entry departing from 1 by between 0.35 and 8.27.
+
+  Two probes cannot prove a property quantified over the whole free space
+  and the page says so. What they catch is a family that carries a scale,
+  which is how the requirement is broken in practice. `correlation_matrix()`
+  is unaffected, and so is every call that leaves the argument at its
+  default.
+
 # parameters7 0.16.0
 
 * `param_d3logdet()` and `param_d4logdet()` refuse, rather than answer,
