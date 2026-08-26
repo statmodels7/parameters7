@@ -1,3 +1,24 @@
+# parameters7 0.16.0
+
+* `param_d3logdet()` and `param_d4logdet()` refuse, rather than answer,
+  where the family supplies no analytic `param_d1()` or `param_d2()`. Both
+  fallbacks difference `param_d2logdet()`, which is an exact identity given
+  those two arrays, so the differencing is one numerical layer where they
+  are written out and two where they are not -- the nesting the toolkit
+  forbids everywhere else. The second regime does not merely lose accuracy:
+  measured on a 4 by 4 AR(1) covariance whose family supplies
+  `param_value()` and nothing else, order three came back 7.5e-03 against a
+  quantity of size 4.45 and order four came back 9.07 against a quantity of
+  size 2.17, four times the size of what it estimates, and
+  `param_is_numerical()` reported `TRUE` for the order in both regimes, so
+  nothing downstream could tell the two apart.
+
+  No shipped family is affected: all thirteen matrix families write every
+  log-determinant order out, so none reaches either fallback. Orders one and
+  two are untouched, being a single layer, and `check_parameter()` is
+  untouched, its battery stopping at the second. The message names the
+  missing method and the remedy.
+
 # parameters7 0.15.0
 
 * `scaled_dlog()` is removed, and the two log-determinant methods that

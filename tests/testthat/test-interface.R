@@ -139,6 +139,74 @@ test_that("a parameter defined by its map alone is complete", {
   expect_equal(param_d1(b, eta)[[2L]], d_rho, tolerance = 1e-6)
 })
 
+test_that("the bargain stops at order two for a log-determinant", {
+  # param_d2logdet() is exact GIVEN the arrays, so differencing it is one
+  # numerical layer where they are analytic and two where they are not. The
+  # two-layer answer is not merely inaccurate: measured on a 4 by 4 AR(1)
+  # covariance it came back 9.07 against a quantity of size 2.17.
+  Layers <- S7::new_class("Layers", parent = matrix_parameter, package = NULL)
+  gen <- param_value
+  S7::method(gen, Layers) <- function(s, eta, ...) {
+    p <- s@dimension
+    exp(eta[1L]) * tanh(eta[2L])^abs(outer(seq_len(p), seq_len(p), "-"))
+  }
+  b <- Layers(
+    param_name = "ar1_by_hand", dimension = 4L, n_free = 2L,
+    free_names = c("scale", "rho"), rank = 4L,
+    null_basis = matrix(numeric(0), 4, 0), role = "covariance",
+    param_params = list()
+  )
+  eta <- c(0.2, 0.6)
+
+  expect_error(param_d3logdet(b, eta), "would difference a quantity")
+  expect_error(param_d4logdet(b, eta), "param_d1\\(\\) and param_d2\\(\\)")
+
+  # one layer is still answered, which is what makes the refusal a rule about
+  # nesting rather than about numerical routes
+  expect_true(is.finite(param_logdet(b, eta)))
+  expect_length(param_dlogdet(b, eta), 2L)
+  expect_length(param_d2logdet(b, eta), 3L)
+
+  # and the validator still reports rows rather than signalling
+  expect_s3_class(check_parameter(b, verbose = FALSE), "data.frame")
+})
+
+test_that("analytic arrays reach the higher log-determinant orders", {
+  # The negative control: the guard reads the ARRAYS, not whether the order
+  # itself is numerical, so a family supplying param_d1() and param_d2() is
+  # answered at three and four however it was written.
+  Diag <- S7::new_class("Diag", parent = matrix_parameter, package = NULL)
+  gen <- param_value
+  S7::method(gen, Diag) <- function(s, eta, ...) diag(exp(eta), 3L)
+  g1 <- param_d1
+  S7::method(g1, Diag) <- function(s, eta, ...) {
+    lapply(seq_len(3L), function(k) {
+      m <- matrix(0, 3L, 3L)
+      m[k, k] <- exp(eta[k])
+      m
+    })
+  }
+  g2 <- param_d2
+  S7::method(g2, Diag) <- function(s, eta, ...) {
+    lapply(param_tuple_indices(s), function(t) {
+      m <- matrix(0, 3L, 3L)
+      if (t[1L] == t[2L]) m[t[1L], t[1L]] <- exp(eta[t[1L]])
+      m
+    })
+  }
+  d <- Diag(
+    param_name = "diag_by_hand", dimension = 3L, n_free = 3L,
+    free_names = c("a", "b", "c"), rank = 3L,
+    null_basis = matrix(numeric(0), 3, 0), role = "covariance",
+    param_params = list()
+  )
+  eta <- c(0.1, -0.2, 0.3)
+
+  # the log-determinant is sum(eta), so every order above the first is zero
+  expect_equal(max(abs(param_d3logdet(d, eta))), 0, tolerance = 1e-8)
+  expect_equal(max(abs(param_d4logdet(d, eta))), 0, tolerance = 1e-6)
+})
+
 test_that("the print method states what the object is", {
   expect_output(print(log_cholesky(3)), "Parameter: log_cholesky")
   expect_output(print(log_cholesky(3)), "Rank:      3 of 3")

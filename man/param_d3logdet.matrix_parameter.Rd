@@ -38,11 +38,13 @@ arrays, so differencing it is a single numerical layer whenever
 AR(1) covariance with analytic arrays, the answer agrees with the closed form
 to \eqn{3 \times 10^{-10}} on entries of size 4.5.
 
-Where the arrays are themselves numerical the layers do compound, and the
-same measurement gives \eqn{8 \times 10^{-3}}, a relative error near two parts
-in a thousand. A family that needs this order and supplies only
-\code{\link[=param_value]{param_value()}} should write \code{\link[=param_d1]{param_d1()}} and \code{\link[=param_d2]{param_d2()}} out first, which
-recovers the \eqn{10^{-10}}.
+Where the arrays are themselves numerical the layers would compound, and
+the method refuses instead of answering: the same measurement gives
+\eqn{8 \times 10^{-3}}, a relative error near two parts in a thousand, and
+nothing downstream could tell that number from the accurate one.
+\code{\link[=check_analytic_arrays]{check_analytic_arrays()}} is the guard, and a family that needs this order
+should write \code{\link[=param_d1]{param_d1()}} and \code{\link[=param_d2]{param_d2()}} out, which recovers the
+\eqn{10^{-10}}.
 }
 
 \seealso{

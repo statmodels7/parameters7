@@ -676,6 +676,58 @@ S7::method(param_d2logdet, matrix_parameter) <- function(s, eta, ...) {
   stats::setNames(out, param_tuple_names(s))
 }
 
+#' Refuse an Order That Would Difference a Difference
+#'
+#' @description
+#' Signals an error when the caller asks
+#' [param_d3logdet.matrix_parameter()] or
+#' [param_d4logdet.matrix_parameter()] of a family whose derivative arrays are
+#' themselves numerical. Both fallbacks difference [param_d2logdet()], which is
+#' an exact identity **given** [param_d1()] and [param_d2()]; where those are
+#' supplied the differencing is one layer, and where they are not it is two,
+#' which is the nesting the toolkit forbids everywhere.
+#'
+#' @details
+#' The refusal is not a matter of accuracy alone. Measured on a
+#' \eqn{4 \times 4} AR(1) covariance whose family supplies [param_value()] and
+#' nothing else, order three came back \eqn{7.5 \times 10^{-3}} against a
+#' quantity of size 4.45 and order four came back **9.07** against a quantity
+#' of size 2.17, which is four times the size of what it estimates. Nothing
+#' downstream could tell such a number from a usable one:
+#' [param_is_numerical()] reports `TRUE` for the order in both regimes.
+#'
+#' Only the two arrays are read, and not [param_d2logdet()] itself. A family
+#' that writes its own second-order log-determinant out is asked for nothing
+#' further, that method being reached before this guard is.
+#'
+#' @param s A [matrix_parameter()] object.
+#' @param order The order being asked for, 3 or 4, which the message names.
+#'
+#' @return Invisibly `TRUE`. A family whose [param_d1()] or [param_d2()] comes
+#'   from the base class throws instead, with both the missing method and the
+#'   remedy named.
+#'
+#' @seealso [param_is_numerical()], which answers the question this asks, and
+#'   [param_d3logdet.matrix_parameter()] and [param_d4logdet.matrix_parameter()],
+#'   the two callers.
+#'
+#' @keywords internal
+check_analytic_arrays <- function(s, order) {
+  num <- param_is_numerical(s)
+  miss <- c("param_d1()", "param_d2()")[c(num[["param_d1"]], num[["param_d2"]])]
+  if (!length(miss)) return(invisible(TRUE))
+  seen <- if (order == 3L) "7.5e-03 against a quantity of size 4.45"
+          else "9.07 against a quantity of size 2.17"
+  stop(sprintf(paste0(
+    "param_d%dlogdet() would difference a quantity that is itself\n",
+    "  numerical. This family supplies no analytic %s, so\n",
+    "  param_d2logdet(), which this order differences, is already one\n",
+    "  difference deep and the two layers compound: measured on a 4 by 4\n",
+    "  AR(1) covariance the answer came back %s.\n",
+    "  Write param_d1() and param_d2() out, or register param_d%dlogdet()."
+  ), order, paste(miss, collapse = " and "), seen, order), call. = FALSE)
+}
+
 #' @title Default Solve
 #' @name param_solve.matrix_parameter
 #' @description
@@ -1087,11 +1139,13 @@ S7::method(param_d4, parameter) <- function(s, eta, ...) {
 #' AR(1) covariance with analytic arrays, the answer agrees with the closed form
 #' to \eqn{3 \times 10^{-10}} on entries of size 4.5.
 #'
-#' Where the arrays are themselves numerical the layers do compound, and the
-#' same measurement gives \eqn{8 \times 10^{-3}}, a relative error near two parts
-#' in a thousand. A family that needs this order and supplies only
-#' [param_value()] should write [param_d1()] and [param_d2()] out first, which
-#' recovers the \eqn{10^{-10}}.
+#' Where the arrays are themselves numerical the layers would compound, and
+#' the method refuses instead of answering: the same measurement gives
+#' \eqn{8 \times 10^{-3}}, a relative error near two parts in a thousand, and
+#' nothing downstream could tell that number from the accurate one.
+#' [check_analytic_arrays()] is the guard, and a family that needs this order
+#' should write [param_d1()] and [param_d2()] out, which recovers the
+#' \eqn{10^{-10}}.
 #' @param s A [matrix_parameter()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic.
@@ -1103,6 +1157,7 @@ S7::method(param_d4, parameter) <- function(s, eta, ...) {
 #'   above.
 #' @keywords internal
 S7::method(param_d3logdet, matrix_parameter) <- function(s, eta, ...) {
+  check_analytic_arrays(s, 3L)
   idx3 <- param_tuple_indices(s, 3L)
   idx2 <- param_tuple_indices(s, 2L)
   key2 <- vapply(idx2, function(t) paste(sort(t), collapse = ","), character(1))
@@ -1143,13 +1198,15 @@ S7::method(param_d3logdet, matrix_parameter) <- function(s, eta, ...) {
 #' on an exact identity, and on a \eqn{4 \times 4} AR(1) covariance the answer
 #' agrees with the closed form to \eqn{2 \times 10^{-6}} on entries of size 2.2.
 #'
-#' With only [param_value()] supplied, the numerical arrays feed a numerical
-#' second-order block which is then differenced twice more, and the layers
-#' compound: the same measurement gives an absolute error of **9**, larger than
-#' the quantity itself. The number is not usable. A family that needs a fourth
-#' derivative of its log-determinant must supply at least [param_d1()] and
-#' [param_d2()] in closed form, and preferably [param_d2logdet()] as well.
-#' [param_is_numerical()] is how a consumer finds out which case it is in.
+#' With only [param_value()] supplied, the numerical arrays would feed a
+#' numerical second-order block which is then differenced twice more, and the
+#' layers compound: the same measurement gives an absolute error of **9**,
+#' larger than the quantity itself. That number is not usable and the method
+#' refuses to return it, through [check_analytic_arrays()]. A family that needs
+#' a fourth derivative of its log-determinant must supply at least
+#' [param_d1()] and [param_d2()] in closed form, and preferably
+#' [param_d2logdet()] as well. [param_is_numerical()] is how a consumer finds
+#' out which case it is in.
 #' @param s A [matrix_parameter()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic.
@@ -1161,6 +1218,7 @@ S7::method(param_d3logdet, matrix_parameter) <- function(s, eta, ...) {
 #'   [param_is_numerical()] to ask which components are numerical.
 #' @keywords internal
 S7::method(param_d4logdet, matrix_parameter) <- function(s, eta, ...) {
+  check_analytic_arrays(s, 4L)
   idx4 <- param_tuple_indices(s, 4L)
   idx2 <- param_tuple_indices(s, 2L)
   key2 <- vapply(idx2, function(t) paste(sort(t), collapse = ","), character(1))

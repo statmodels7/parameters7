@@ -35,13 +35,15 @@ With analytic \code{\link[=param_d1]{param_d1()}} and \code{\link[=param_d2]{par
 on an exact identity, and on a \eqn{4 \times 4} AR(1) covariance the answer
 agrees with the closed form to \eqn{2 \times 10^{-6}} on entries of size 2.2.
 
-With only \code{\link[=param_value]{param_value()}} supplied, the numerical arrays feed a numerical
-second-order block which is then differenced twice more, and the layers
-compound: the same measurement gives an absolute error of \strong{9}, larger than
-the quantity itself. The number is not usable. A family that needs a fourth
-derivative of its log-determinant must supply at least \code{\link[=param_d1]{param_d1()}} and
-\code{\link[=param_d2]{param_d2()}} in closed form, and preferably \code{\link[=param_d2logdet]{param_d2logdet()}} as well.
-\code{\link[=param_is_numerical]{param_is_numerical()}} is how a consumer finds out which case it is in.
+With only \code{\link[=param_value]{param_value()}} supplied, the numerical arrays would feed a
+numerical second-order block which is then differenced twice more, and the
+layers compound: the same measurement gives an absolute error of \strong{9},
+larger than the quantity itself. That number is not usable and the method
+refuses to return it, through \code{\link[=check_analytic_arrays]{check_analytic_arrays()}}. A family that needs
+a fourth derivative of its log-determinant must supply at least
+\code{\link[=param_d1]{param_d1()}} and \code{\link[=param_d2]{param_d2()}} in closed form, and preferably
+\code{\link[=param_d2logdet]{param_d2logdet()}} as well. \code{\link[=param_is_numerical]{param_is_numerical()}} is how a consumer finds
+out which case it is in.
 }
 
 \seealso{
