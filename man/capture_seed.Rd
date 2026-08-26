@@ -36,11 +36,13 @@ when the caller had never drawn a random number: leaving the seed the
 validator set behind would be the leak this exists to prevent.
 }
 \examples{
+# the property the pair exists for, through the public interface: a
+# validator call leaves the caller's stream exactly as it found it
 set.seed(42)
-before <- capture_seed()
-invisible(runif(5))          # the stream has moved
-restore_seed(before)
-identical(runif(1), { set.seed(42); runif(1) })
+want <- rnorm(1)
+set.seed(42)
+invisible(check_parameter(log_cholesky(2), verbose = FALSE))
+identical(rnorm(1), want)
 
 }
 \keyword{internal}

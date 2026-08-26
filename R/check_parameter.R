@@ -58,11 +58,13 @@ check_row <- function(name, status, statistic = NA_real_) {
 #'   effect on the global environment.
 #'
 #' @examples
+#' # the property the pair exists for, through the public interface: a
+#' # validator call leaves the caller's stream exactly as it found it
 #' set.seed(42)
-#' before <- capture_seed()
-#' invisible(runif(5))          # the stream has moved
-#' restore_seed(before)
-#' identical(runif(1), { set.seed(42); runif(1) })
+#' want <- rnorm(1)
+#' set.seed(42)
+#' invisible(check_parameter(log_cholesky(2), verbose = FALSE))
+#' identical(rnorm(1), want)
 #'
 #' @keywords internal
 capture_seed <- function() {
