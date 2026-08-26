@@ -31,6 +31,62 @@ check_row <- function(name, status, statistic = NA_real_) {
 }
 
 
+#' Capture and Restore the Caller's Random Stream
+#'
+#' @description
+#' `capture_seed()` reads `.Random.seed` from the global environment, returning
+#' `NULL` when there is none, and `restore_seed()` puts back what it was given.
+#' Together they let a function draw from a fixed seed, so that its report is
+#' the same on two runs, without leaving the caller's stream changed.
+#'
+#' @details
+#' A validator wants both properties and they pull against each other. Drawing
+#' from the caller's stream makes the worst error reported move between runs;
+#' calling `set.seed()` fixes that and replaces whatever state the caller had,
+#' so a call inside a simulation silently changes the simulation. Saving the
+#' state on entry and restoring it with [base::on.exit()] gives the fixed draw
+#' and leaves the caller alone.
+#'
+#' `restore_seed(NULL)` removes `.Random.seed` again, which is the right answer
+#' when the caller had never drawn a random number: leaving the seed the
+#' validator set behind would be the leak this exists to prevent.
+#'
+#' @param old The value [capture_seed()] returned, or `NULL`.
+#'
+#' @return `capture_seed()` returns the saved `.Random.seed`, an integer vector,
+#'   or `NULL`. `restore_seed()` returns `NULL` invisibly and is called for its
+#'   effect on the global environment.
+#'
+#' @examples
+#' set.seed(42)
+#' before <- capture_seed()
+#' invisible(runif(5))          # the stream has moved
+#' restore_seed(before)
+#' identical(runif(1), { set.seed(42); runif(1) })
+#'
+#' @keywords internal
+capture_seed <- function() {
+  if (exists(".Random.seed", envir = globalenv(), inherits = FALSE)) {
+    get(".Random.seed", envir = globalenv(), inherits = FALSE)
+  } else {
+    NULL
+  }
+}
+
+#' @rdname capture_seed
+#' @keywords internal
+restore_seed <- function(old) {
+  if (is.null(old)) {
+    if (exists(".Random.seed", envir = globalenv(), inherits = FALSE)) {
+      rm(".Random.seed", envir = globalenv())
+    }
+  } else {
+    assign(".Random.seed", old, envir = globalenv())
+  }
+  invisible(NULL)
+}
+
+
 #' Free Vectors to Sweep a Parameter Over
 #'
 #' @description
@@ -53,10 +109,10 @@ check_row <- function(name, status, statistic = NA_real_) {
 #' the declared null space, instead of by driving every family off the edge of
 #' double precision.
 #'
-#' The `n` random vectors are drawn from the caller's own random stream, with no
-#' seed set here, so two calls report slightly different statistics and the
-#' caller's stream is advanced. Set a seed before calling [check_parameter()]
-#' when a report has to be reproducible.
+#' The `n` random vectors are drawn from whatever random stream is current. No
+#' seed is set here: [check_parameter()], the only caller, fixes one before
+#' calling and restores the caller's own on exit, so the report is reproducible
+#' and the caller's stream is left as it was found.
 #'
 #' @param s A [parameter()] object, whose `n_free` sets the length.
 #' @param n The number of random vectors, defaulting to 4. The set returned has
@@ -128,14 +184,15 @@ sweep_etas <- function(s, n = 4L) {
 #' Each check reports the worst discrepancy over the free vectors [sweep_etas()]
 #' supplies, four of which are drawn at random.
 #'
-#' # Both branches touch the random stream
+#' # Neither branch touches the caller's random stream
 #'
-#' The matrix battery draws its four random free vectors from the caller's
-#' stream, so it advances that stream and its statistics differ a little between
-#' calls: set a seed first for a reproducible report. The branch for a family
-#' that is not a matrix does the opposite. It calls `set.seed()` itself, so it is
-#' exactly reproducible and it **replaces** whatever state the caller had. Do not
-#' call it in the middle of a simulation whose stream matters.
+#' Both batteries draw from a fixed seed, so two calls on the same family report
+#' the same statistics, and both put back the `.Random.seed` they found on
+#' entry, so a call in the middle of a simulation leaves that simulation
+#' unchanged. The matrix branch seeds once before [sweep_etas()]; the branch for
+#' a family that is not a matrix seeds each of its three draws. Restoring is
+#' [capture_seed()] and [restore_seed()], through [base::on.exit()], so it
+#' happens even when a check signals.
 #'
 #' # A family that is not a matrix gets a different battery
 #'
@@ -213,10 +270,15 @@ check_parameter <- function(s, tol = 1e-6, verbose = TRUE) {
   if (!S7::S7_inherits(s, parameter)) {
     stop("'s' must inherit from class 'parameter'.", call. = FALSE)
   }
+  # a fixed seed so the report is the same on two runs, and the caller's own
+  # stream put back so a call inside a simulation does not change it
+  old_seed <- capture_seed()
+  on.exit(restore_seed(old_seed), add = TRUE)
   if (!S7::S7_inherits(s, matrix_parameter)) {
     return(check_parameter_vector(s, tol = tol, verbose = verbose))
   }
   num <- param_is_numerical(s)
+  set.seed(101)
   etas <- sweep_etas(s)
   rel <- function(a, b) max(abs(a - b)) / max(1, max(abs(b)))
   out <- list()
@@ -427,9 +489,11 @@ check_parameter <- function(s, tol = 1e-6, verbose = TRUE) {
 #' [transition_matrix()] satisfies it row by row, its rows being simplexes.
 #'
 #' Three free vectors are used, drawn from `rnorm(s@n_free, sd = 0.8)` after
-#' `set.seed(101)`, `set.seed(102)` and `set.seed(103)`. The results are therefore
-#' exactly reproducible, and the caller's random state is **replaced**, which a
-#' caller in the middle of a simulation needs to know. The derivative comparisons
+#' `set.seed(101)`, `set.seed(102)` and `set.seed(103)`, so the results are
+#' exactly reproducible. The caller's own `.Random.seed` is saved on entry and
+#' restored on exit through [capture_seed()] and [restore_seed()], so a call in
+#' the middle of a simulation leaves that simulation unchanged. The derivative
+#' comparisons
 #' are against
 #' [numerical_d1()] through [numerical_d4()], which at third and fourth order are
 #' themselves good to about \eqn{10^{-5}}: measured on [simplex()] and
@@ -451,6 +515,10 @@ check_parameter <- function(s, tol = 1e-6, verbose = TRUE) {
 #'
 #' @keywords internal
 check_parameter_vector <- function(s, tol = 1e-6, verbose = TRUE) {
+  # registered again here, so a direct call is as safe as one through
+  # check_parameter(); restoring twice puts back the same state
+  old_seed <- capture_seed()
+  on.exit(restore_seed(old_seed), add = TRUE)
   etas <- lapply(1:3, function(i) {
     set.seed(100 + i)
     stats::rnorm(s@n_free, sd = 0.8)

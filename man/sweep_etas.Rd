@@ -36,10 +36,10 @@ components, the same at every point, so it is tested where it arises, against
 the declared null space, instead of by driving every family off the edge of
 double precision.
 
-The \code{n} random vectors are drawn from the caller's own random stream, with no
-seed set here, so two calls report slightly different statistics and the
-caller's stream is advanced. Set a seed before calling \code{\link[=check_parameter]{check_parameter()}}
-when a report has to be reproducible.
+The \code{n} random vectors are drawn from whatever random stream is current. No
+seed is set here: \code{\link[=check_parameter]{check_parameter()}}, the only caller, fixes one before
+calling and restores the caller's own on exit, so the report is reproducible
+and the caller's stream is left as it was found.
 }
 \seealso{
 \code{\link[=check_parameter]{check_parameter()}}, the only caller.

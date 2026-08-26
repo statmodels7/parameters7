@@ -83,13 +83,14 @@ Each check reports the worst discrepancy over the free vectors \code{\link[=swee
 supplies, four of which are drawn at random.
 }
 
-\section{Both branches touch the random stream}{
-The matrix battery draws its four random free vectors from the caller's
-stream, so it advances that stream and its statistics differ a little between
-calls: set a seed first for a reproducible report. The branch for a family
-that is not a matrix does the opposite. It calls \code{set.seed()} itself, so it is
-exactly reproducible and it \strong{replaces} whatever state the caller had. Do not
-call it in the middle of a simulation whose stream matters.
+\section{Neither branch touches the caller's random stream}{
+Both batteries draw from a fixed seed, so two calls on the same family report
+the same statistics, and both put back the \code{.Random.seed} they found on
+entry, so a call in the middle of a simulation leaves that simulation
+unchanged. The matrix branch seeds once before \code{\link[=sweep_etas]{sweep_etas()}}; the branch for
+a family that is not a matrix seeds each of its three draws. Restoring is
+\code{\link[=capture_seed]{capture_seed()}} and \code{\link[=restore_seed]{restore_seed()}}, through \code{\link[base:on.exit]{base::on.exit()}}, so it
+happens even when a check signals.
 }
 
 \section{A family that is not a matrix gets a different battery}{

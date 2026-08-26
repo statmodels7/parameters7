@@ -34,9 +34,11 @@ array that does not sum to zero is wrong whatever else it agrees with. A
 \code{\link[=transition_matrix]{transition_matrix()}} satisfies it row by row, its rows being simplexes.
 
 Three free vectors are used, drawn from \code{rnorm(s@n_free, sd = 0.8)} after
-\code{set.seed(101)}, \code{set.seed(102)} and \code{set.seed(103)}. The results are therefore
-exactly reproducible, and the caller's random state is \strong{replaced}, which a
-caller in the middle of a simulation needs to know. The derivative comparisons
+\code{set.seed(101)}, \code{set.seed(102)} and \code{set.seed(103)}, so the results are
+exactly reproducible. The caller's own \code{.Random.seed} is saved on entry and
+restored on exit through \code{\link[=capture_seed]{capture_seed()}} and \code{\link[=restore_seed]{restore_seed()}}, so a call in
+the middle of a simulation leaves that simulation unchanged. The derivative
+comparisons
 are against
 \code{\link[=numerical_d1]{numerical_d1()}} through \code{\link[=numerical_d4]{numerical_d4()}}, which at third and fourth order are
 themselves good to about \eqn{10^{-5}}: measured on \code{\link[=simplex]{simplex()}} and

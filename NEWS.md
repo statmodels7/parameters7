@@ -1,3 +1,23 @@
+# parameters7 0.13.0
+
+* `check_parameter()` leaves the caller's random stream as it found it. Its two
+  branches used to treat that stream differently and neither said so on the
+  page: the matrix battery drew its four random free vectors from the caller's
+  own stream, advancing it and reporting a slightly different worst error on
+  every call, while the branch for a family that is not a matrix called
+  `set.seed(100 + i)` and **replaced** whatever state the caller had. Measured,
+  `set.seed(42); rnorm(1)` gave 1.370958 and the same after
+  `check_parameter(simplex(3))` gave -1.172560.
+
+  Both branches now draw from a fixed seed, so a report is reproducible, and
+  both restore the `.Random.seed` they found on entry through `on.exit()`, so it
+  happens even when a check signals. A caller who had no seed at all is left
+  with none, rather than with the one the validator set.
+
+  `capture_seed()` and `restore_seed()` are the two internal helpers, documented
+  together. No reported statistic changes by more than the draw itself: the
+  suite passes unchanged at 10,821 assertions.
+
 # parameters7 0.12.0
 
 * `correlation_matrix(1)` builds a constant instead of an unusable object. A
