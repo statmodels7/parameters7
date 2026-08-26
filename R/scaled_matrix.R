@@ -70,7 +70,7 @@ ScaledMatrixParam <- S7::new_class("ScaledMatrixParam", parent = matrix_paramete
 #'
 #' with \eqn{r} the rank and \eqn{\log|P|_+} the log pseudo-determinant of
 #' \eqn{P}, computed once at construction and stored. Under another link the
-#' derivatives carry that link's own, through [scaled_dlog()].
+#' derivatives carry that link's own, through [diag_dlog()].
 #'
 #' # Why the derivative of the log pseudo-determinant matters
 #'
@@ -227,7 +227,7 @@ scaled_matrix <- function(p, link = linkfunctions7::log_link(),
 #'
 #' @return A list with three single numbers, `h`, `d1` and `d2`.
 #'
-#' @seealso [scaled_dlog()] for the higher orders of \eqn{\log h}, and
+#' @seealso [diag_dlog()] for the higher orders of \eqn{\log h}, and
 #'   [param_value.ScaledMatrixParam()], the first caller.
 #'
 #' @keywords internal
@@ -384,7 +384,7 @@ S7::method(param_dlogdet, ScaledMatrixParam) <- function(s, eta, ...) {
 #' @return A numeric vector with one entry keyed as `param_tuple_names(s)`, or
 #'   empty for a fixed parameter.
 #' @seealso [param_dlogdet.ScaledMatrixParam()] for the order below, and
-#'   [scaled_dlog()] for orders three and four.
+#'   [diag_dlog()] for orders three and four.
 #' @keywords internal
 S7::method(param_d2logdet, ScaledMatrixParam) <- function(s, eta, ...) {
   if (!s@n_free) return(stats::setNames(numeric(0), character(0)))
@@ -492,48 +492,6 @@ S7::method(param_d4, ScaledMatrixParam) <- function(s, eta, ...) {
   )
 }
 
-#' Higher Derivatives of a Scaled Log-Pseudo-Determinant
-#'
-#' @description
-#' Returns the third or fourth derivative of \eqn{\log h(\eta)} in the single
-#' free value, which the caller multiplies by the rank. The constant
-#' \eqn{\log|P|_+} contributes nothing beyond order zero, so every derivative of
-#' \eqn{r\log h(\eta) + \log|P|_+} is \eqn{r} times one of these.
-#'
-#' @details
-#' The two expressions are Faa di Bruno's chain for the logarithm, as in
-#' [diag_dlog()]: with \eqn{u_m = h^{(m)}/h},
-#'
-#' \deqn{u_3 - 3u_1u_2 + 2u_1^3, \qquad
-#'   u_4 - 4u_1u_3 - 3u_2^2 + 12u_1^2u_2 - 6u_1^4.}
-#'
-#' All four link derivatives are evaluated whichever order is asked for, so the
-#' two calls the family makes cost the same.
-#'
-#' @param s A [ScaledMatrixParam()] object, whose `param_params$link` is read.
-#' @param eta A numeric vector of one free value.
-#' @param order The derivative order: **3 or 4 only**. There is no branch for any
-#'   other value, so `order = 2` silently returns the fourth-order expression
-#'   instead of the second. Use [diag_dlog()] for order 1 or 2 on the same link.
-#'
-#' @return A single number.
-#'
-#' @seealso [diag_dlog()], which covers orders 1 to 4 of the same quantity, and
-#'   [param_d3logdet.ScaledMatrixParam()] and
-#'   [param_d4logdet.ScaledMatrixParam()], the two callers.
-#'
-#' @keywords internal
-scaled_dlog <- function(s, eta, order) {
-  link <- s@param_params$link
-  h <- linkfunctions7::linkinv(link, eta)
-  u1 <- linkfunctions7::dlinkinv(link, eta) / h
-  u2 <- linkfunctions7::d2linkinv(link, eta) / h
-  u3 <- linkfunctions7::d3linkinv(link, eta) / h
-  u4 <- linkfunctions7::d4linkinv(link, eta) / h
-  if (order == 3L) return(u3 - 3 * u1 * u2 + 2 * u1^3)
-  u4 - 4 * u1 * u3 - 3 * u2^2 + 12 * u1^2 * u2 - 6 * u1^4
-}
-
 #' @title Third Log-Determinant Derivatives of a Scaled Parameter
 #' @name param_d3logdet.ScaledMatrixParam
 #' @description
@@ -550,18 +508,21 @@ scaled_dlog <- function(s, eta, order) {
 #' @param ... Unused, and accepted so the signature matches the generic's.
 #' @return A numeric vector with one entry keyed as `param_tuple_names(s, 3)`, or
 #'   empty for a fixed parameter.
-#' @seealso [scaled_dlog()], which supplies the derivative of \eqn{\log h}, and
+#' @seealso [diag_dlog()], which supplies the derivative of \eqn{\log h}, and
 #'   [param_d4logdet.ScaledMatrixParam()] for the order above.
 #' @keywords internal
 S7::method(param_d3logdet, ScaledMatrixParam) <- function(s, eta, ...) {
-  stats::setNames(s@rank * scaled_dlog(s, eta, 3L), param_tuple_names(s, 3L))
+  stats::setNames(
+    s@rank * diag_dlog(s@param_params$link, eta, 3L),
+    param_tuple_names(s, 3L)
+  )
 }
 
 #' @title Fourth Log-Determinant Derivatives of a Scaled Parameter
 #' @name param_d4logdet.ScaledMatrixParam
 #' @description
 #' Closed form: \eqn{r} times the fourth derivative of \eqn{\log h}, which
-#' [scaled_dlog()] writes out as
+#' [diag_dlog()] writes out as
 #' \eqn{u_4 - 4u_1u_3 - 3u_2^2 + 12u_1^2u_2 - 6u_1^4} with
 #' \eqn{u_m = h^{(m)}/h}. The constant \eqn{\log|P|_+} contributes nothing.
 #'
@@ -574,9 +535,12 @@ S7::method(param_d3logdet, ScaledMatrixParam) <- function(s, eta, ...) {
 #' @param ... Unused, and accepted so the signature matches the generic's.
 #' @return A numeric vector with one entry keyed as `param_tuple_names(s, 4)`, or
 #'   empty for a fixed parameter.
-#' @seealso [scaled_dlog()] for the expression, and
+#' @seealso [diag_dlog()] for the expression, and
 #'   [param_d4logdet.matrix_parameter()] for the numerical route.
 #' @keywords internal
 S7::method(param_d4logdet, ScaledMatrixParam) <- function(s, eta, ...) {
-  stats::setNames(s@rank * scaled_dlog(s, eta, 4L), param_tuple_names(s, 4L))
+  stats::setNames(
+    s@rank * diag_dlog(s@param_params$link, eta, 4L),
+    param_tuple_names(s, 4L)
+  )
 }

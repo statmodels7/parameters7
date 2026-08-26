@@ -1,3 +1,18 @@
+# parameters7 0.15.0
+
+* `scaled_dlog()` is removed, and the two log-determinant methods that
+  called it read `diag_dlog()` instead, which computes the same quantity
+  for the same link at every order from one to four. The removed function
+  had no branch for order 2 and answered that order with the fourth-order
+  expression: on a square-root link at a free value of 1.5 it returned
+  -2.37037 where the second derivative of the log inverse link is
+  -0.888889. No reported number changes, the two callers being
+  `param_d3logdet.ScaledMatrixParam()` and
+  `param_d4logdet.ScaledMatrixParam()`, which pass a literal 3 or 4;
+  measured over four links and five free values, the two functions agree
+  to exactly 0 at both orders. What is removed is a duplicate rather than
+  a defect repaired.
+
 # parameters7 0.14.0
 
 * The four composition wrappers label the rows and columns of every matrix

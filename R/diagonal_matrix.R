@@ -663,7 +663,8 @@ S7::method(param_d2logdet, DiagMatrixParam) <- function(s, eta, ...) {
 #'
 #' @return A numeric vector the length of `eta`.
 #'
-#' @seealso [diag_logdet_higher()] and [scaled_dlog()], the two callers, and
+#' @seealso [diag_logdet_higher()], [param_d3logdet.ScaledMatrixParam()] and
+#'   [param_d4logdet.ScaledMatrixParam()], the callers, and
 #'   `linkfunctions7::dlinkinv()` for the link derivatives read.
 #'
 #' @keywords internal

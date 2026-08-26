@@ -17,7 +17,7 @@ empty for a fixed parameter.
 }
 \description{
 Closed form: \eqn{r} times the fourth derivative of \eqn{\log h}, which
-\code{\link[=scaled_dlog]{scaled_dlog()}} writes out as
+\code{\link[=diag_dlog]{diag_dlog()}} writes out as
 \eqn{u_4 - 4u_1u_3 - 3u_2^2 + 12u_1^2u_2 - 6u_1^4} with
 \eqn{u_m = h^{(m)}/h}. The constant \eqn{\log|P|_+} contributes nothing.
 
@@ -26,7 +26,7 @@ value. This is the order at which a numerical route is least usable, so a
 family with a curved link gains most from the closed form here.
 }
 \seealso{
-\code{\link[=scaled_dlog]{scaled_dlog()}} for the expression, and
+\code{\link[=diag_dlog]{diag_dlog()}} for the expression, and
 \code{\link[=param_d4logdet.matrix_parameter]{param_d4logdet.matrix_parameter()}} for the numerical route.
 }
 \keyword{internal}

@@ -39,7 +39,8 @@ the first order is 1 and the second, third and fourth are exactly 0, which is
 why a default \code{diagonal_matrix()} reports a linear log-determinant.
 }
 \seealso{
-\code{\link[=diag_logdet_higher]{diag_logdet_higher()}} and \code{\link[=scaled_dlog]{scaled_dlog()}}, the two callers, and
+\code{\link[=diag_logdet_higher]{diag_logdet_higher()}}, \code{\link[=param_d3logdet.ScaledMatrixParam]{param_d3logdet.ScaledMatrixParam()}} and
+\code{\link[=param_d4logdet.ScaledMatrixParam]{param_d4logdet.ScaledMatrixParam()}}, the callers, and
 \code{linkfunctions7::dlinkinv()} for the link derivatives read.
 }
 \keyword{internal}

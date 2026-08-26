@@ -64,7 +64,7 @@ Nothing here needs deriving. With the default log link, where
 
 with \eqn{r} the rank and \eqn{\log|P|_+} the log pseudo-determinant of
 \eqn{P}, computed once at construction and stored. Under another link the
-derivatives carry that link's own, through \code{\link[=scaled_dlog]{scaled_dlog()}}.
+derivatives carry that link's own, through \code{\link[=diag_dlog]{diag_dlog()}}.
 }
 
 \section{Why the derivative of the log pseudo-determinant matters}{

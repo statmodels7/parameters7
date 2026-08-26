@@ -23,7 +23,7 @@ read one call. For a fixed parameter, built with \code{link = NULL}, it returns
 unchanged: the matrix is \eqn{P} and its derivatives are empty lists.
 }
 \seealso{
-\code{\link[=scaled_dlog]{scaled_dlog()}} for the higher orders of \eqn{\log h}, and
+\code{\link[=diag_dlog]{diag_dlog()}} for the higher orders of \eqn{\log h}, and
 \code{\link[=param_value.ScaledMatrixParam]{param_value.ScaledMatrixParam()}}, the first caller.
 }
 \keyword{internal}

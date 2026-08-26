@@ -25,7 +25,7 @@ Under the default log link \eqn{\log h(\eta) = \eta}, so the answer is exactly
 zero and this family cannot exercise the order; a link with curvature can.
 }
 \seealso{
-\code{\link[=scaled_dlog]{scaled_dlog()}}, which supplies the derivative of \eqn{\log h}, and
+\code{\link[=diag_dlog]{diag_dlog()}}, which supplies the derivative of \eqn{\log h}, and
 \code{\link[=param_d4logdet.ScaledMatrixParam]{param_d4logdet.ScaledMatrixParam()}} for the order above.
 }
 \keyword{internal}

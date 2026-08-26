@@ -23,6 +23,6 @@ value. Under a link with curvature it is not.
 }
 \seealso{
 \code{\link[=param_dlogdet.ScaledMatrixParam]{param_dlogdet.ScaledMatrixParam()}} for the order below, and
-\code{\link[=scaled_dlog]{scaled_dlog()}} for orders three and four.
+\code{\link[=diag_dlog]{diag_dlog()}} for orders three and four.
 }
 \keyword{internal}
