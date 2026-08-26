@@ -549,7 +549,7 @@ S7::method(param_logdet, DrProdParam) <- function(s, eta, ...) {
 #' The four share [dr_prod_logdet_derivs()] and differ only in the order they
 #' pass. At first order the scale entries are 2 whatever the point, the scales
 #' entering \eqn{\log\lvert\Sigma\rvert} through \eqn{2\log d_j} and the log link
-#' cancelling its own derivative.
+#' canceling its own derivative.
 #' @param s A [DrProdParam()] object.
 #' @param eta A numeric vector of length `s@n_free`, already checked by the
 #'   generic.

@@ -31,7 +31,7 @@ mixing two scales, or a scale with a correlation, is exactly zero: measured at
 The four share \code{\link[=dr_prod_logdet_derivs]{dr_prod_logdet_derivs()}} and differ only in the order they
 pass. At first order the scale entries are 2 whatever the point, the scales
 entering \eqn{\log\lvert\Sigma\rvert} through \eqn{2\log d_j} and the log link
-cancelling its own derivative.
+canceling its own derivative.
 }
 \seealso{
 \code{\link[=dr_prod_logdet_derivs]{dr_prod_logdet_derivs()}}, which assembles them, and
