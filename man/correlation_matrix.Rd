@@ -99,7 +99,7 @@ at the only free vector there is, \code{numeric(0)}, \code{\link[=param_d1]{para
 return empty lists, and \code{\link[=param_logdet]{param_logdet()}} is 0. \code{\link[=check_parameter]{check_parameter()}} passes,
 reporting its two log-determinant derivative rows as \verb{NOT CHECKED}, there
 being no free value to differentiate in. The family therefore degenerates to
-a constant rather than refusing, which is what keeps it composable inside
+a constant rather than refusing, so it stays composable inside
 \code{\link[=block_diag]{block_diag()}}; it carries no information of its own.
 }
 

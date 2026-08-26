@@ -128,7 +128,7 @@ CorrelationParam <- S7::new_class("CorrelationParam", parent = matrix_parameter)
 #' return empty lists, and [param_logdet()] is 0. [check_parameter()] passes,
 #' reporting its two log-determinant derivative rows as `NOT CHECKED`, there
 #' being no free value to differentiate in. The family therefore degenerates to
-#' a constant rather than refusing, which is what keeps it composable inside
+#' a constant rather than refusing, so it stays composable inside
 #' [block_diag()]; it carries no information of its own.
 #'
 #' @section Notation:
