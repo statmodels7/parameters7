@@ -102,8 +102,7 @@ KronIdentityParam <- S7::new_class("KronIdentityParam", parent = matrix_paramete
 #' @return An object of class [KronIdentityParam()], with `dimension` equal to
 #'   `m * structure@dimension`, `n_free` and `free_names` the inner parameter's
 #'   unchanged, `rank` equal to `m * structure@rank`, `null_basis` the inner one
-#'   replicated blockwise, `role` copied from the inner parameter, and
-#'   `param_params` holding `inner` and `m`.
+#'   replicated blockwise, and `param_params` holding `inner` and `m`.
 #'
 #' @seealso [block_diag()] for blocks that differ and each carry their own free
 #'   values, [dr_prod()] and [sum_struct()] for the other two compositions, and
@@ -150,7 +149,6 @@ kron_identity <- function(structure, m) {
     free_names = structure@free_names,
     rank = m * structure@rank,
     null_basis = kronecker(diag(m), structure@null_basis),
-    role = structure@role,
     param_params = list(inner = structure, m = m)
   )
 }

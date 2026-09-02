@@ -4,20 +4,12 @@
 \alias{log_cholesky}
 \title{Construct an Unstructured Positive Definite Parameter}
 \usage{
-log_cholesky(dimension, role = c("either", "covariance", "precision"))
+log_cholesky(dimension)
 }
 \arguments{
 \item{dimension}{The side \eqn{p} of the matrix. A single positive whole
 number, finite and at least 1. \code{0}, \code{2.5}, \code{c(1, 2)}, \code{"3"}, \code{Inf} and \code{NA}
 all throw \verb{'dimension' must be a single positive integer.}}
-
-\item{role}{A label recording which side of a model the matrix parametrizes:
-\code{"either"} (the default), \code{"covariance"} or \code{"precision"}. \strong{No numeric
-result depends on it.} It is carried because the family name does not
-record it, the same object serving either side, and a consumer that prefixes
-a free name with the matrix it describes needs to know which. Matched with
-\code{match.arg()}, so an abbreviation such as \code{"cov"} is accepted and anything
-else throws.}
 }
 \value{
 An object of class \code{\link[=LogCholeskyParam]{LogCholeskyParam()}}, with properties
@@ -29,7 +21,6 @@ An object of class \code{\link[=LogCholeskyParam]{LogCholeskyParam()}}, with pro
 \item{\code{rank}}{integer, always \eqn{p}: the map is onto the full-rank
 cone.}
 \item{\code{null_basis}}{a \eqn{p} by 0 matrix; there are no null directions.}
-\item{\code{role}}{character, as supplied.}
 \item{\code{param_name}}{\code{"log_cholesky"}.}
 \item{\code{param_params}}{a list with one entry, \code{positions}, holding the row,
 column and diagonal flag of each free value.}

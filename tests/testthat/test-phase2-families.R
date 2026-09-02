@@ -161,7 +161,7 @@ test_that("a corrupted closed form is caught", {
   b <- Bent(
     param_name = "ar1", dimension = 4L, n_free = 2L,
     free_names = c("scale", "rho"), rank = 4L,
-    null_basis = matrix(numeric(0), 4, 0), role = "either",
+    null_basis = matrix(numeric(0), 4, 0),
     param_params = ar1(4)@param_params
   )
   S7::method(param_d2, Bent) <- function(s, eta, ...) {

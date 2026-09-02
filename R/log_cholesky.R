@@ -20,7 +20,7 @@ NULL
 #'
 #' @return An object of class `LogCholeskyParam`, a subclass of
 #'   [matrix_parameter()] adding no properties of its own. It carries
-#'   `dimension`, `rank` (always \eqn{p}), `null_basis` (\eqn{p} by 0), `role`,
+#'   `dimension`, `rank` (always \eqn{p}), `null_basis` (\eqn{p} by 0),
 #'   `param_name` (`"log_cholesky"`), `n_free` (\eqn{p(p+1)/2}), `free_names` and
 #'   `param_params`, whose only entry is `positions`.
 #'
@@ -156,13 +156,6 @@ chol_positions <- function(p) {
 #' @param dimension The side \eqn{p} of the matrix. A single positive whole
 #'   number, finite and at least 1. `0`, `2.5`, `c(1, 2)`, `"3"`, `Inf` and `NA`
 #'   all throw `'dimension' must be a single positive integer.`
-#' @param role A label recording which side of a model the matrix parametrizes:
-#'   `"either"` (the default), `"covariance"` or `"precision"`. **No numeric
-#'   result depends on it.** It is carried because the family name does not
-#'   record it, the same object serving either side, and a consumer that prefixes
-#'   a free name with the matrix it describes needs to know which. Matched with
-#'   `match.arg()`, so an abbreviation such as `"cov"` is accepted and anything
-#'   else throws.
 #'
 #' @return An object of class [LogCholeskyParam()], with properties
 #'   \describe{
@@ -173,7 +166,6 @@ chol_positions <- function(p) {
 #'     \item{`rank`}{integer, always \eqn{p}: the map is onto the full-rank
 #'       cone.}
 #'     \item{`null_basis`}{a \eqn{p} by 0 matrix; there are no null directions.}
-#'     \item{`role`}{character, as supplied.}
 #'     \item{`param_name`}{`"log_cholesky"`.}
 #'     \item{`param_params`}{a list with one entry, `positions`, holding the row,
 #'       column and diagonal flag of each free value.}
@@ -229,9 +221,8 @@ chol_positions <- function(p) {
 #' all.equal(diag(L), exp(eta[1:3]))
 #'
 #' @export
-log_cholesky <- function(dimension, role = c("either", "covariance", "precision")) {
-  role <- match.arg(role)
-  p <- check_param_args(dimension, role)
+log_cholesky <- function(dimension) {
+  p <- check_param_args(dimension)
 
   pos <- chol_positions(p)
   nm <- paste0("L", pos$row, ".", pos$col)
@@ -244,7 +235,6 @@ log_cholesky <- function(dimension, role = c("either", "covariance", "precision"
     free_names = nm,
     rank = p,
     null_basis = empty_null_basis(p),
-    role = role,
     param_params = list(positions = pos)
   )
 }

@@ -13,7 +13,7 @@ Invisibly \code{x}, so a print inside a pipe does not break it.
 }
 \description{
 Prints a one-screen summary of a parametrization: the family name, the shape
-and rank of the matrix, the role label, how many free values there are and
+and rank of the matrix, how many free values there are and
 what they are called, and which of the nine derived quantities come from the
 base class instead of a closed form.
 }

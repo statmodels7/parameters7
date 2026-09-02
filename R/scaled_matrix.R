@@ -113,9 +113,6 @@ ScaledMatrixParam <- S7::new_class("ScaledMatrixParam", parent = matrix_paramete
 #'   [diagonal_matrix()] for the two conditions. `NULL` means the matrix is fully
 #'   known: `n_free` is then 0, `free_names` is empty, and `param_name` is
 #'   `"fixed"`.
-#' @param role A label recording which side of a model the matrix parametrizes,
-#'   defaulting to `"precision"` here because the consumer of a scaled fixed
-#'   matrix is a penalty. No numeric result depends on it.
 #' @param tol The relative tolerance below which a singular value of `p` counts
 #'   as zero when its rank is determined, `1e-10` by default. It is passed to
 #'   [param_null_basis()] and also sets how negative an eigenvalue may be before
@@ -165,9 +162,7 @@ ScaledMatrixParam <- S7::new_class("ScaledMatrixParam", parent = matrix_paramete
 #'
 #' @export
 scaled_matrix <- function(p, link = linkfunctions7::log_link(),
-                          role = c("precision", "covariance", "either"),
                           tol = 1e-10) {
-  role <- match.arg(role)
 
   if (!is.matrix(p) || !is.numeric(p)) {
     stop("'p' must be a numeric matrix.", call. = FALSE)
@@ -206,7 +201,6 @@ scaled_matrix <- function(p, link = linkfunctions7::log_link(),
     free_names = if (is.null(link)) character(0) else tagged_name(link, "scale"),
     rank = ns$rank,
     null_basis = ns$null_basis,
-    role = role,
     param_params = list(p = p, link = link, logdet_p = logdet_p)
   )
 }

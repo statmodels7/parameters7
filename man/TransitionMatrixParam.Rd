@@ -42,7 +42,7 @@ An object of class \code{TransitionMatrixParam}, a subclass of
 The S7 class of row-stochastic matrices, each row on the open simplex in the
 additive log-ratio parametrization. Its value is a matrix but \strong{not a
 symmetric} one, so it inherits \code{\link[=parameter]{parameter()}} directly, never
-\code{\link[=matrix_parameter]{matrix_parameter()}}: there is no \code{rank}, no \code{null_basis} and no \code{role}, and a
+\code{\link[=matrix_parameter]{matrix_parameter()}}: there is no \code{rank} and no \code{null_basis}, and a
 transition matrix has no log-determinant, solve or factor to be asked for.
 
 \code{\link[=transition_matrix]{transition_matrix()}} builds one. The rows are independent in the

@@ -4,11 +4,7 @@
 \alias{scalar_matrix}
 \title{Construct a Scalar Multiple of the Identity}
 \usage{
-scalar_matrix(
-  dimension,
-  link = linkfunctions7::log_link(),
-  role = c("either", "covariance", "precision")
-)
+scalar_matrix(dimension, link = linkfunctions7::log_link())
 }
 \arguments{
 \item{dimension}{The side \eqn{p} of the matrix. A single positive whole
@@ -19,10 +15,6 @@ positive scale, \code{linkfunctions7::log_link()} by default. It must map onto
 the positive half line, so \code{identity_link()} is rejected, and from the whole
 real line, which rules out \code{sqrt_link()} and its relatives; see
 \code{\link[=diagonal_matrix]{diagonal_matrix()}} for the two conditions.}
-
-\item{role}{A label recording which side of a model the matrix parametrizes:
-\code{"either"} (the default), \code{"covariance"} or \code{"precision"}. No numeric result
-depends on it.}
 }
 \value{
 An object of class \code{\link[=DiagMatrixParam]{DiagMatrixParam()}}, with \code{n_free} 1,

@@ -4,7 +4,7 @@
 \alias{block_diag}
 \title{Construct a Block Diagonal of Matrix Parameters}
 \usage{
-block_diag(..., role = NULL)
+block_diag(...)
 }
 \arguments{
 \item{...}{One or more objects inheriting from \code{\link[=matrix_parameter]{matrix_parameter()}}, or a
@@ -12,10 +12,6 @@ single list of them. Named arguments supply the block labels, which must be
 unique. A block that is not a \code{matrix_parameter} is rejected by position, so
 \code{block_diag(ar1(3), simplex(3))} reports that block 2 does not inherit from
 it.}
-
-\item{role}{One of \code{"covariance"}, \code{"precision"} or \code{"either"}. Defaults to
-the blocks' common role, and to \code{"either"} where they disagree. No numeric
-result depends on it.}
 }
 \value{
 An object of class \code{\link[=BlockDiagParam]{BlockDiagParam()}}, with \code{dimension}, \code{n_free} and

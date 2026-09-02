@@ -142,9 +142,6 @@ CorrelationParam <- S7::new_class("CorrelationParam", parent = matrix_parameter)
 #'   number, finite and at least 1; \eqn{p = 1} gives a constant with no free
 #'   values, as **Details** describes. Anything else throws `'dimension' must be
 #'   a single positive integer.`
-#' @param role A label recording which side of a model the matrix parametrizes:
-#'   `"either"` (the default), `"covariance"` or `"precision"`. No numeric result
-#'   depends on it.
 #'
 #' @return An object of class [CorrelationParam()], with `n_free` equal to
 #'   \eqn{p(p-1)/2}, `free_names` `z2.1`, `z3.1`, `z3.2`, ... row by row, `rank`
@@ -191,9 +188,8 @@ CorrelationParam <- S7::new_class("CorrelationParam", parent = matrix_parameter)
 #' round(param_d2logdet(s, eta), 10)
 #'
 #' @export
-correlation_matrix <- function(dimension, role = c("either", "covariance", "precision")) {
-  role <- match.arg(role)
-  p <- check_param_args(dimension, role)
+correlation_matrix <- function(dimension) {
+  p <- check_param_args(dimension)
 
   rows <- integer(0)
   cols <- integer(0)
@@ -215,7 +211,6 @@ correlation_matrix <- function(dimension, role = c("either", "covariance", "prec
     free_names = nm,
     rank = p,
     null_basis = empty_null_basis(p),
-    role = role,
     param_params = list(
       row = rows, col = cols,
       link = linkfunctions7::bounded_link(lwr = 0, upr = pi)

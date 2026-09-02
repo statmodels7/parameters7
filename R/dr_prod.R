@@ -111,8 +111,6 @@ DrProdParam <- S7::new_class("DrProdParam", parent = matrix_parameter)
 #'   scale, [linkfunctions7::log_link()] by default. It must map onto the
 #'   positive half line and from the whole real line; see [diagonal_matrix()] for
 #'   the two conditions.
-#' @param role One of `"covariance"` (the default), `"precision"` or `"either"`.
-#'   No numeric result depends on it.
 #'
 #' @return An object of class [DrProdParam()], with `n_free` equal to \eqn{p}
 #'   plus the correlation's, `free_names` the tagged `log_sd1` ... `log_sdp`
@@ -151,10 +149,8 @@ DrProdParam <- S7::new_class("DrProdParam", parent = matrix_parameter)
 #'
 #' @export
 dr_prod <- function(dimension, correlation = NULL,
-                    link = linkfunctions7::log_link(),
-                    role = c("covariance", "precision", "either")) {
-  role <- match.arg(role)
-  p <- check_param_args(dimension, role)
+                    link = linkfunctions7::log_link()) {
+  p <- check_param_args(dimension)
   if (p < 2L) {
     stop("'dimension' must be at least 2: a 1 by 1 correlation carries nothing.",
          call. = FALSE)
@@ -184,7 +180,6 @@ dr_prod <- function(dimension, correlation = NULL,
                    correlation@free_names),
     rank = p,
     null_basis = matrix(0, p, 0),
-    role = role,
     param_params = list(cor = correlation, link = link, p = p)
   )
 }

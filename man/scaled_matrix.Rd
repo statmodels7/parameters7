@@ -4,12 +4,7 @@
 \alias{scaled_matrix}
 \title{Construct a Scaled Fixed Matrix}
 \usage{
-scaled_matrix(
-  p,
-  link = linkfunctions7::log_link(),
-  role = c("precision", "covariance", "either"),
-  tol = 1e-10
-)
+scaled_matrix(p, link = linkfunctions7::log_link(), tol = 1e-10)
 }
 \arguments{
 \item{p}{A symmetric positive semidefinite numeric matrix. It must be square,
@@ -25,10 +20,6 @@ real line, which rules out \code{sqrt_link()} and its relatives; see
 \code{\link[=diagonal_matrix]{diagonal_matrix()}} for the two conditions. \code{NULL} means the matrix is fully
 known: \code{n_free} is then 0, \code{free_names} is empty, and \code{param_name} is
 \code{"fixed"}.}
-
-\item{role}{A label recording which side of a model the matrix parametrizes,
-defaulting to \code{"precision"} here because the consumer of a scaled fixed
-matrix is a penalty. No numeric result depends on it.}
 
 \item{tol}{The relative tolerance below which a singular value of \code{p} counts
 as zero when its rank is determined, \code{1e-10} by default. It is passed to

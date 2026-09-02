@@ -121,9 +121,6 @@ CompoundSymmetryParam <- S7::new_class("CompoundSymmetryParam",
 #'   map onto the positive half line, so `identity_link()` is rejected, and from
 #'   the whole real line, which rules out `sqrt_link()` and its relatives; see
 #'   [diagonal_matrix()] for the two conditions.
-#' @param role A label recording which side of a model the matrix parametrizes:
-#'   `"either"` (the default), `"covariance"` or `"precision"`. No numeric result
-#'   depends on it, and this family gives the same shape either way.
 #'
 #' @return An object of class [CompoundSymmetryParam()], with `n_free` 2,
 #'   `free_names` `log_scale` and `logit_rho` under the defaults, `rank` equal to
@@ -172,10 +169,8 @@ CompoundSymmetryParam <- S7::new_class("CompoundSymmetryParam",
 #'
 #' @export
 compound_symmetry <- function(dimension,
-                              link_scale = linkfunctions7::log_link(),
-                              role = c("either", "covariance", "precision")) {
-  role <- match.arg(role)
-  p <- check_param_args(dimension, role)
+                              link_scale = linkfunctions7::log_link()) {
+  p <- check_param_args(dimension)
   if (p < 2L) {
     stop(paste0(
       "'dimension' must be at least 2: a one by one matrix has no\n",
@@ -193,7 +188,6 @@ compound_symmetry <- function(dimension,
                    tagged_name(link_rho, "rho")),
     rank = p,
     null_basis = empty_null_basis(p),
-    role = role,
     param_params = list(
       link_scale = link_scale,
       link_rho = link_rho

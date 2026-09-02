@@ -20,8 +20,7 @@ which makes it safe to call in a loop over group counts.}
 An object of class \code{\link[=KronIdentityParam]{KronIdentityParam()}}, with \code{dimension} equal to
 \code{m * structure@dimension}, \code{n_free} and \code{free_names} the inner parameter's
 unchanged, \code{rank} equal to \code{m * structure@rank}, \code{null_basis} the inner one
-replicated blockwise, \code{role} copied from the inner parameter, and
-\code{param_params} holding \code{inner} and \code{m}.
+replicated blockwise, and \code{param_params} holding \code{inner} and \code{m}.
 }
 \description{
 Returns an object holding \eqn{M(\eta) = I_m \otimes S(\eta)} for an inner

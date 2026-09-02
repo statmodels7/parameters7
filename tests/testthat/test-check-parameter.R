@@ -41,7 +41,7 @@ test_that("a wrong first derivative is caught", {
   bad <- Wrong(
     param_name = "wrong", dimension = good@dimension, n_free = good@n_free,
     free_names = good@free_names, rank = good@rank,
-    null_basis = good@null_basis, role = good@role,
+    null_basis = good@null_basis,
     param_params = good@param_params
   )
 
@@ -67,7 +67,7 @@ test_that("a wrong log-determinant gradient is caught", {
   bad <- Wrong(
     param_name = "wrong", dimension = good@dimension, n_free = good@n_free,
     free_names = good@free_names, rank = good@rank,
-    null_basis = good@null_basis, role = good@role,
+    null_basis = good@null_basis,
     param_params = good@param_params
   )
 
@@ -91,7 +91,7 @@ test_that("a declared rank that does not match the matrix is caught", {
     free_names = s@free_names,
     rank = 3L,
     null_basis = cbind(s@null_basis, diag(6)[, 1]),
-    role = s@role, param_params = s@param_params
+param_params = s@param_params
   )
 
   set.seed(15)
@@ -119,7 +119,7 @@ test_that("a quantity with no independent reference is reported unchecked", {
   b <- Bare(
     param_name = "bare", dimension = 3L, n_free = 3L,
     free_names = c("a", "b", "c"), rank = 3L,
-    null_basis = matrix(numeric(0), 3, 0), role = "either",
+    null_basis = matrix(numeric(0), 3, 0),
     param_params = list()
   )
 

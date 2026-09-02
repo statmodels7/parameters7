@@ -1,3 +1,92 @@
+# parameters7 0.20.0
+
+* `autoregressive_inv()` writes its derivative arrays out instead of taking
+  them from `inverse_of()`'s ordered-block-partition sum. 0.19.0 shipped it
+  composing, and said so; this closes it.
+
+  Nothing new is derived. The value already came from the prediction form
+  `Omega = U' diag(tau) U`, and two facts make every order exact from the same
+  factors. The lower-order rows of U are the coefficients of the SAME family
+  at that order -- measured, `ar_prediction()`'s row k+1 and
+  `autoregressive(p, order = k)`'s `phi` agree to **0** -- so their derivative
+  arrays come from the compiled Levinson-Durbin recursion run once per order,
+  and a component differentiating in a partial autocorrelation an order does
+  not reach is exactly zero. And `tau` is a product of one univariate factor
+  per free value, so a mixed derivative of it is a product of univariate
+  derivatives. What is left is the Leibniz rule over three factors, taken
+  twice so a component costs 2^m matrix products rather than 3^m.
+
+  Measured at order four against the composition, which shares no arithmetic:
+  **11.2x** at p = 6, q = 2, 11.4x at p = 20, q = 3 and **22.8x** at p = 100,
+  with the two agreeing to 7e-11 over six shapes and two free vectors each.
+  That agreement is what licenses the written-out route.
+
+* ⚠️ Most of the first version's cost was bookkeeping and not arithmetic, which
+  is what a profile said rather than a guess: `sort()` and `paste()` inside a
+  string key were **65 per cent** of a fourth-order component. Sub-multisets
+  are held as count vectors and indexed by an integer code; the subset
+  structure of an order, which depends on the order and the free-value count
+  alone, is memoized on the object; and the lower-order families are built
+  once by the constructor rather than at every call. Together: 19.21 ms to
+  **3.74 ms** at p = 6, q = 2, with every number unchanged.
+
+* `w_derivs()` is shared by `ar1_inv()` and `autoregressive_inv()`: the
+  derivatives of `1/(1 - rho^2)`, exact at every order by partial fractions.
+
+# parameters7 0.19.0
+
+* The `role` property and its argument are removed. A parametrization no
+  longer records which side of a model it is used on: that is the consumer's
+  to say, and `distributions7`'s `mvgaussian1_distrib()` and
+  `mvgaussian2_distrib()` say it by which family they are.
+
+  The label carried no numeric result -- every page said so -- and it was a
+  second declaration in a place that cannot know. Measured before removing
+  it: `distributions7` never read it, `modelterms7::random()` reads the side
+  from the distribution's `params_interpretation`, and eight of the eleven
+  shipped families declared `"either"`, so the label was written by hand only
+  to satisfy a guard in `penalties7::structured_penalty()`.
+
+  What that guard expressed is now written with `inverse_of()`, so nothing
+  becomes inexpressible.
+
+* `inverse_of()` is the fifth composition wrapper: the family whose value is
+  another family's inverse, carrying the inner family's free vector
+  unchanged. Its derivatives are the sum over the **ordered** set partitions
+  of the differentiated positions,
+
+  d^I N = sum over (B_1, ..., B_q) of (-1)^q N (d^{B_1} S) N ... (d^{B_q} S) N,
+
+  the blocks ordered because matrices do not commute; the number of terms is
+  the Fubini number of the order, 1, 3, 13 and 75. Every factor is the inner
+  family's own closed form, so nothing is differenced. The log-determinant is
+  the inner one negated, and `param_solve()` is the inner family's value.
+
+  It passes `check_parameter()` on all eight families it was tried on,
+  including the three that are not closed under inversion. A rank-deficient
+  family is rejected: a singular matrix has no inverse, so there is no family
+  to build.
+
+* `ar1_inv()` and `autoregressive_inv()` are the two families whose inverse
+  has a structure of its own: the tridiagonal precision of a first-order
+  autoregression and the precision of an order-q one, banded of bandwidth q.
+  Both carry the free vector of the family they invert.
+
+  `ar1_inv()` writes its derivative arrays out rather than composing them.
+  The value is a product of a function of the scale and a matrix function of
+  the correlation, so a component with a scale indices and b correlation
+  indices is one elementwise product; the three distinct entries are written
+  in w = 1/(1 - rho^2) alone, whose derivatives are exact by partial
+  fractions. Measured at p = 20 and order 4: 0.44 ms against the composition
+  wrapper's 28.66 ms, 63.5x, with the two agreeing to 8e-14 -- two
+  independent implementations of one object, which is what licenses the
+  written-out route.
+
+  `autoregressive_inv()` takes the closed value, log-determinant and solve of
+  the family it inverts and its derivative arrays from the composition. That
+  is exact algebra on closed arrays and not a simplified expression, and the
+  page says so.
+
 # parameters7 0.18.0
 
 * `check_positive_link()` tests both ends of the link, and every family

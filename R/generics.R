@@ -350,8 +350,8 @@ param_d2 <- S7::new_generic("param_d2", "s", function(s, eta, ...) {
 #' \eqn{-\tfrac{1}{2}\log|\Sigma|} and one written in the precision carries
 #' \eqn{+\tfrac{1}{2}\log|\Omega|}. The parameter reports what the
 #' log-determinant is; the likelihood decides where it goes and with what sign.
-#' The object's `role` records which side it was built for, and no method reads
-#' it.
+#' A parameter does not record which side it was built for: the consumer
+#' declares that, as [inverse_of()] does when the side is fixed.
 #'
 #' # Computed from the parametrization, not from the matrix
 #'

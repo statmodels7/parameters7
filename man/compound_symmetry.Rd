@@ -4,11 +4,7 @@
 \alias{compound_symmetry}
 \title{Construct a Compound Symmetry Parameter}
 \usage{
-compound_symmetry(
-  dimension,
-  link_scale = linkfunctions7::log_link(),
-  role = c("either", "covariance", "precision")
-)
+compound_symmetry(dimension, link_scale = linkfunctions7::log_link())
 }
 \arguments{
 \item{dimension}{The side \eqn{p} of the matrix, \strong{at least 2}. A one by one
@@ -20,10 +16,6 @@ onto the positive variance, \code{linkfunctions7::log_link()} by default. It mus
 map onto the positive half line, so \code{identity_link()} is rejected, and from
 the whole real line, which rules out \code{sqrt_link()} and its relatives; see
 \code{\link[=diagonal_matrix]{diagonal_matrix()}} for the two conditions.}
-
-\item{role}{A label recording which side of a model the matrix parametrizes:
-\code{"either"} (the default), \code{"covariance"} or \code{"precision"}. No numeric result
-depends on it, and this family gives the same shape either way.}
 }
 \value{
 An object of class \code{\link[=CompoundSymmetryParam]{CompoundSymmetryParam()}}, with \code{n_free} 2,

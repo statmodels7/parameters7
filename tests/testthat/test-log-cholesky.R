@@ -7,7 +7,6 @@ test_that("the constructor validates its arguments", {
   expect_error(log_cholesky(0), "positive integer")
   expect_error(log_cholesky(2.5), "positive integer")
   expect_error(log_cholesky(c(2, 3)), "positive integer")
-  expect_error(log_cholesky(3, role = "nonsense"))
 })
 
 test_that("the shape and the names follow the frozen ordering", {
@@ -21,7 +20,6 @@ test_that("the shape and the names follow the frozen ordering", {
     c("log_L1", "log_L2", "log_L3", "L2.1", "L3.1", "L3.2")
   )
   expect_identical(dim(s@null_basis), c(3L, 0L))
-  expect_identical(s@role, "either")
 
   # p = 1 is the degenerate case and must still work
   expect_identical(log_cholesky(1)@free_names, "log_L1")

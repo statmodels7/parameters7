@@ -4,16 +4,11 @@
 \alias{matrix_log}
 \title{Construct a Matrix Logarithm Parameter}
 \usage{
-matrix_log(dimension, role = c("either", "covariance", "precision"))
+matrix_log(dimension)
 }
 \arguments{
 \item{dimension}{The side \eqn{p} of the matrix. A single positive whole
 number, finite and at least 1; anything else throws \verb{'dimension' must be a single positive integer.}}
-
-\item{role}{A label recording which side of a model the matrix parametrizes:
-\code{"either"} (the default), \code{"covariance"} or \code{"precision"}. No numeric result
-depends on it, and it matters less here than elsewhere: the inverse is the
-same family at \eqn{-\eta}.}
 }
 \value{
 An object of class \code{\link[=MatrixLogParam]{MatrixLogParam()}}, with \code{n_free} equal to

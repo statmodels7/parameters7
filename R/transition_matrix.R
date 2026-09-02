@@ -8,7 +8,7 @@ NULL
 #' The S7 class of row-stochastic matrices, each row on the open simplex in the
 #' additive log-ratio parametrization. Its value is a matrix but **not a
 #' symmetric** one, so it inherits [parameter()] directly, never
-#' [matrix_parameter()]: there is no `rank`, no `null_basis` and no `role`, and a
+#' [matrix_parameter()]: there is no `rank` and no `null_basis`, and a
 #' transition matrix has no log-determinant, solve or factor to be asked for.
 #'
 #' [transition_matrix()] builds one. The rows are independent in the
@@ -99,7 +99,7 @@ TransitionMatrixParam <- S7::new_class("TransitionMatrixParam", parent = paramet
 #' @return An object of class [TransitionMatrixParam()], with `n_free` equal to
 #'   \eqn{K(K-1)}, `free_names` `alr1.1`, `alr1.2`, ..., `alr{K}.{K-1}` row by
 #'   row, `param_name` `"transition_matrix"`, and `param_params` holding
-#'   `n_state`. No `dimension`, `rank`, `null_basis` or `role`.
+#'   `n_state`. No `dimension`, `rank` or `null_basis`.
 #'
 #' @seealso [simplex()], which is one row of this and carries the derivative
 #'   recursion, [param_value()] and [param_free()] for the map and its inverse,

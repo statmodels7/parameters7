@@ -166,9 +166,6 @@ AutoregressiveParam <- S7::new_class("AutoregressiveParam",
 #'   line, so `identity_link()` is rejected, and from the whole real line, which
 #'   rules out `sqrt_link()` and its relatives; see [diagonal_matrix()] for the
 #'   two conditions.
-#' @param role A label recording which side of a model the matrix parametrizes:
-#'   `"either"` (the default), `"covariance"` or `"precision"`. No numeric result
-#'   depends on it.
 #'
 #' @return An object of class [AutoregressiveParam()], with `n_free` equal to
 #'   \eqn{q + 1}, `free_names` the tagged `log_scale`, `z_pacf1`, ..., `z_pacfq`,
@@ -221,10 +218,8 @@ AutoregressiveParam <- S7::new_class("AutoregressiveParam",
 #'
 #' @export
 autoregressive <- function(dimension, order,
-                           link_scale = linkfunctions7::log_link(),
-                           role = c("either", "covariance", "precision")) {
-  role <- match.arg(role)
-  p <- check_param_args(dimension, role)
+                           link_scale = linkfunctions7::log_link()) {
+  p <- check_param_args(dimension)
   if (!is.numeric(order) || length(order) != 1L || !is.finite(order) ||
     order < 1 || order != round(order)) {
     stop("'order' must be a single positive integer.", call. = FALSE)
@@ -248,7 +243,6 @@ autoregressive <- function(dimension, order,
                    tagged_name(link_pacf, paste0("pacf", seq_len(q)))),
     rank = p,
     null_basis = empty_null_basis(p),
-    role = role,
     param_params = list(
       order = q,
       link_scale = link_scale,

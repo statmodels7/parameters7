@@ -102,9 +102,6 @@ DiagMatrixParam <- S7::new_class("DiagMatrixParam", parent = matrix_parameter)
 #'   `power_link()` at a positive exponent satisfy only the first and are
 #'   rejected: their predictor scale is \eqn{(0, \infty)}, so the map is even in
 #'   \eqn{\eta} and the round trip returns \eqn{\lvert \eta \rvert}.
-#' @param role A label recording which side of a model the matrix parametrizes:
-#'   `"either"` (the default), `"covariance"` or `"precision"`. No numeric result
-#'   depends on it; see [log_cholesky()] for what carries it.
 #'
 #' @return An object of class [DiagMatrixParam()], with `n_free` equal to
 #'   `dimension`, `free_names` tagged by the link, `rank` equal to `dimension`,
@@ -149,10 +146,8 @@ DiagMatrixParam <- S7::new_class("DiagMatrixParam", parent = matrix_parameter)
 #' param_d2logdet(r, c(1, 2))
 #'
 #' @export
-diagonal_matrix <- function(dimension, link = linkfunctions7::log_link(),
-                        role = c("either", "covariance", "precision")) {
-  role <- match.arg(role)
-  p <- check_param_args(dimension, role)
+diagonal_matrix <- function(dimension, link = linkfunctions7::log_link()) {
+  p <- check_param_args(dimension)
   check_positive_link(link)
 
   DiagMatrixParam(
@@ -162,7 +157,6 @@ diagonal_matrix <- function(dimension, link = linkfunctions7::log_link(),
     free_names = tagged_name(link, paste0("d", seq_len(p))),
     rank = p,
     null_basis = empty_null_basis(p),
-    role = role,
     param_params = list(link = link, shared = FALSE)
   )
 }
@@ -206,9 +200,6 @@ diagonal_matrix <- function(dimension, link = linkfunctions7::log_link(),
 #'   the positive half line, so `identity_link()` is rejected, and from the whole
 #'   real line, which rules out `sqrt_link()` and its relatives; see
 #'   [diagonal_matrix()] for the two conditions.
-#' @param role A label recording which side of a model the matrix parametrizes:
-#'   `"either"` (the default), `"covariance"` or `"precision"`. No numeric result
-#'   depends on it.
 #'
 #' @return An object of class [DiagMatrixParam()], with `n_free` 1,
 #'   `free_names` a single link-tagged label, `rank` equal to `dimension`, an
@@ -237,10 +228,8 @@ diagonal_matrix <- function(dimension, link = linkfunctions7::log_link(),
 #' param_dlogdet(s, log(2))
 #'
 #' @export
-scalar_matrix <- function(dimension, link = linkfunctions7::log_link(),
-                          role = c("either", "covariance", "precision")) {
-  role <- match.arg(role)
-  p <- check_param_args(dimension, role)
+scalar_matrix <- function(dimension, link = linkfunctions7::log_link()) {
+  p <- check_param_args(dimension)
   check_positive_link(link)
 
   DiagMatrixParam(
@@ -250,7 +239,6 @@ scalar_matrix <- function(dimension, link = linkfunctions7::log_link(),
     free_names = tagged_name(link, "scale"),
     rank = p,
     null_basis = empty_null_basis(p),
-    role = role,
     param_params = list(link = link, shared = TRUE)
   )
 }

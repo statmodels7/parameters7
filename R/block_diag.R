@@ -102,9 +102,6 @@ BlockDiagParam <- S7::new_class("BlockDiagParam", parent = matrix_parameter)
 #'   unique. A block that is not a `matrix_parameter` is rejected by position, so
 #'   `block_diag(ar1(3), simplex(3))` reports that block 2 does not inherit from
 #'   it.
-#' @param role One of `"covariance"`, `"precision"` or `"either"`. Defaults to
-#'   the blocks' common role, and to `"either"` where they disagree. No numeric
-#'   result depends on it.
 #'
 #' @return An object of class [BlockDiagParam()], with `dimension`, `n_free` and
 #'   `rank` the sums of the blocks', `free_names` the blocks' own prefixed by the
@@ -144,7 +141,7 @@ BlockDiagParam <- S7::new_class("BlockDiagParam", parent = matrix_parameter)
 #' max(abs(param_free(s, M) - eta))
 #'
 #' @export
-block_diag <- function(..., role = NULL) {
+block_diag <- function(...) {
   blocks <- list(...)
   if (length(blocks) == 1L && is.list(blocks[[1L]]) &&
     !S7::S7_inherits(blocks[[1L]], parameter)) {
@@ -171,11 +168,6 @@ block_diag <- function(..., role = NULL) {
   nfr <- vapply(blocks, function(b) b@n_free, integer(1))
   ranks <- vapply(blocks, function(b) b@rank, integer(1))
   p <- sum(dims)
-
-  if (is.null(role)) {
-    roles <- unique(vapply(blocks, function(b) b@role, character(1)))
-    role <- if (length(roles) == 1L) roles else "either"
-  }
 
   free_names <- unlist(Map(function(b, lab) paste0(lab, "_", b@free_names),
                            blocks, labels), use.names = FALSE)
@@ -205,7 +197,6 @@ block_diag <- function(..., role = NULL) {
     free_names = free_names,
     rank = as.integer(sum(ranks)),
     null_basis = null_basis,
-    role = role,
     param_params = list(blocks = blocks, labels = labels, rows = rows,
                         free = free, owner = owner)
   )

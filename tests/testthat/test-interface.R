@@ -121,7 +121,7 @@ test_that("a parameter defined by its map alone is complete", {
   b <- Bumps(
     param_name = "ar1_by_hand", dimension = 4L, n_free = 2L,
     free_names = c("scale", "rho"), rank = 4L,
-    null_basis = matrix(numeric(0), 4, 0), role = "covariance",
+    null_basis = matrix(numeric(0), 4, 0),
     param_params = list()
   )
 
@@ -161,7 +161,7 @@ test_that("the bargain stops at order two for a log-determinant", {
   b <- Layers(
     param_name = "ar1_by_hand", dimension = 4L, n_free = 2L,
     free_names = c("scale", "rho"), rank = 4L,
-    null_basis = matrix(numeric(0), 4, 0), role = "covariance",
+    null_basis = matrix(numeric(0), 4, 0),
     param_params = list()
   )
   eta <- c(0.2, 0.6)
@@ -205,7 +205,7 @@ test_that("analytic arrays reach the higher log-determinant orders", {
   d <- Diag(
     param_name = "diag_by_hand", dimension = 3L, n_free = 3L,
     free_names = c("a", "b", "c"), rank = 3L,
-    null_basis = matrix(numeric(0), 3, 0), role = "covariance",
+    null_basis = matrix(numeric(0), 3, 0),
     param_params = list()
   )
   eta <- c(0.1, -0.2, 0.3)
@@ -223,7 +223,6 @@ test_that("the print method states what the object is", {
 
   p <- crossprod(diff(diag(6), differences = 2))
   expect_output(print(scaled_matrix(p)), "null space of dimension 2")
-  expect_output(print(scaled_matrix(p)), "Role:      precision")
 
   # a long free vector is truncated rather than filling the screen
   expect_output(print(log_cholesky(8)), "more")
@@ -233,7 +232,7 @@ test_that("the class validator refuses an inconsistent object", {
   expect_error(
     matrix_parameter(
       param_name = "x", dimension = 3L, n_free = 2L, free_names = "a",
-      rank = 3L, null_basis = matrix(numeric(0), 3, 0), role = "either",
+      rank = 3L, null_basis = matrix(numeric(0), 3, 0),
       param_params = list()
     ),
     "one entry per free value"
@@ -241,7 +240,7 @@ test_that("the class validator refuses an inconsistent object", {
   expect_error(
     matrix_parameter(
       param_name = "x", dimension = 3L, n_free = 2L, free_names = c("a", "a"),
-      rank = 3L, null_basis = matrix(numeric(0), 3, 0), role = "either",
+      rank = 3L, null_basis = matrix(numeric(0), 3, 0),
       param_params = list()
     ),
     "unique"
@@ -249,17 +248,9 @@ test_that("the class validator refuses an inconsistent object", {
   expect_error(
     matrix_parameter(
       param_name = "x", dimension = 3L, n_free = 1L, free_names = "a",
-      rank = 2L, null_basis = matrix(numeric(0), 3, 0), role = "either",
+      rank = 2L, null_basis = matrix(numeric(0), 3, 0),
       param_params = list()
     ),
     "dimension by"
-  )
-  expect_error(
-    matrix_parameter(
-      param_name = "x", dimension = 3L, n_free = 1L, free_names = "a",
-      rank = 3L, null_basis = matrix(numeric(0), 3, 0), role = "sideways",
-      param_params = list()
-    ),
-    "role"
   )
 })

@@ -4,16 +4,12 @@
 \alias{correlation_matrix}
 \title{Construct a Correlation Matrix Parameter}
 \usage{
-correlation_matrix(dimension, role = c("either", "covariance", "precision"))
+correlation_matrix(dimension)
 }
 \arguments{
 \item{dimension}{The side \eqn{p} of the matrix. A single positive whole
 number, finite and at least 1; \eqn{p = 1} gives a constant with no free
 values, as \strong{Details} describes. Anything else throws \verb{'dimension' must be a single positive integer.}}
-
-\item{role}{A label recording which side of a model the matrix parametrizes:
-\code{"either"} (the default), \code{"covariance"} or \code{"precision"}. No numeric result
-depends on it.}
 }
 \value{
 An object of class \code{\link[=CorrelationParam]{CorrelationParam()}}, with \code{n_free} equal to

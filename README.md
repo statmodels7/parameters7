@@ -66,7 +66,6 @@ s
 #> Parameter: log_cholesky
 #> Matrix:    3 x 3, symmetric
 #> Rank:      3 of 3
-#> Role:      either
 #> 
 #> Free values: 6
 #>   log_L1, log_L2, log_L3, L2.1, L3.1, L3.2
@@ -226,7 +225,6 @@ s
 #> Parameter: scaled
 #> Matrix:    6 x 6, symmetric
 #> Rank:      4 of 6 (null space of dimension 2)
-#> Role:      precision
 #> 
 #> Free values: 1
 #>   log_scale
@@ -318,7 +316,7 @@ validator, the fitting routine — applies with no special case.
 ``` r
 # in distributions7; not run here, since this package does not depend on its
 # own consumer
-d <- mvgaussian_distrib(2, sigma = parameters7::log_cholesky(2))
+d <- mvgaussian1_distrib(2, parameters7::log_cholesky(2))
 d@params
 #> [1] "mu1" "mu2" "sigma_log_L1" "sigma_log_L2" "sigma_L2.1"
 
@@ -364,7 +362,7 @@ S7::method(param_value, ExpDecay) <- function(s, eta, ...) {
 decay <- ExpDecay(
   param_name = "exp_decay", dimension = 4L, n_free = 2L,
   free_names = c("log_scale", "log_range"), rank = 4L,
-  null_basis = matrix(numeric(0), 4, 0), role = "covariance",
+  null_basis = matrix(numeric(0), 4, 0),
   param_params = list(times = c(0, 0.5, 1.7, 3))
 )
 

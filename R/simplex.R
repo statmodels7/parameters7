@@ -8,7 +8,7 @@ NULL
 #' The S7 class of probability vectors on the open simplex, in the additive
 #' log-ratio parametrization. It inherits [parameter()] **directly**, never
 #' [matrix_parameter()], its value being a vector: there is no `dimension`, no
-#' `rank`, no `null_basis` and no `role`, and [param_logdet()], [param_solve()]
+#' `rank` and no `null_basis`, and [param_logdet()], [param_solve()]
 #' and [param_factor()] have no method for it, so asking for the
 #' log-determinant of a probability vector fails at dispatch.
 #'
@@ -107,7 +107,7 @@ SimplexParam <- S7::new_class("SimplexParam", parent = parameter)
 #' @return An object of class [SimplexParam()], with `n_free` equal to
 #'   `n_cat - 1`, `free_names` `alr1` ... `alr(K-1)`, `param_name` `"simplex"`,
 #'   and `param_params` holding `n_cat`. It carries no `dimension`, `rank`,
-#'   `null_basis` or `role`, being a [parameter()] and never a
+#'   or `null_basis`, being a [parameter()] and never a
 #'   [matrix_parameter()].
 #'
 #' @references

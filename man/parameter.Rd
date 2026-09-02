@@ -42,8 +42,8 @@ An object of class \code{parameter}, with properties
 }
 The class is abstract, so a useful object comes from a constructor such as
 \code{\link[=log_cholesky]{log_cholesky()}} and carries that constructor's subclass. A matrix family
-returns a \code{\link[=matrix_parameter]{matrix_parameter()}}, which adds \code{dimension}, \code{rank},
-\code{null_basis} and \code{role}.
+returns a \code{\link[=matrix_parameter]{matrix_parameter()}}, which adds \code{dimension}, \code{rank} and
+\code{null_basis}.
 }
 \description{
 A parameter is a map from an unconstrained vector

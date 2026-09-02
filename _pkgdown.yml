@@ -7,7 +7,8 @@ reference:
 - title: Families
   desc: >
     The parametrizations. Each maps an unconstrained vector to a matrix in its
-    own constrained set, and each owns the side of that matrix.
+    own constrained set. Which side of a model a matrix parametrizes is the
+    consumer's to say, not the parametrization's.
   contents:
   - log_cholesky
   - matrix_log
@@ -15,6 +16,10 @@ reference:
   - compound_symmetry
   - ar1
   - autoregressive
+  - ar1_inv
+  - Ar1InvParam
+  - autoregressive_inv
+  - AutoregressiveInvParam
   - diagonal_matrix
   - scalar_matrix
   - scaled_matrix
@@ -28,6 +33,8 @@ reference:
   - DrProdParam
   - sum_struct
   - SumStructParam
+  - inverse_of
+  - InverseParam
 
 - title: The map and its inverse
   contents:

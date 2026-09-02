@@ -42,7 +42,7 @@ no properties of its own: \code{param_name} is \code{"simplex"}, \code{n_free} i
 The S7 class of probability vectors on the open simplex, in the additive
 log-ratio parametrization. It inherits \code{\link[=parameter]{parameter()}} \strong{directly}, never
 \code{\link[=matrix_parameter]{matrix_parameter()}}, its value being a vector: there is no \code{dimension}, no
-\code{rank}, no \code{null_basis} and no \code{role}, and \code{\link[=param_logdet]{param_logdet()}}, \code{\link[=param_solve]{param_solve()}}
+\code{rank} and no \code{null_basis}, and \code{\link[=param_logdet]{param_logdet()}}, \code{\link[=param_solve]{param_solve()}}
 and \code{\link[=param_factor]{param_factor()}} have no method for it, so asking for the
 log-determinant of a probability vector fails at dispatch.
 

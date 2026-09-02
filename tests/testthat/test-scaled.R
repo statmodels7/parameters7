@@ -27,7 +27,6 @@ test_that("the rank and the null space are those of the fixed matrix", {
   expect_identical(s@dimension, 6L)
   expect_identical(s@rank, 4L)
   expect_identical(dim(s@null_basis), c(6L, 2L))
-  expect_identical(s@role, "precision")
 
   # the null space of a second-difference penalty is the constants and the
   # straight lines, which is what it means for the penalty to leave them alone

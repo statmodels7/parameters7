@@ -111,7 +111,7 @@ is_base_param_class <- function(cls) {
 #' }
 #' toy <- Toy(param_name = "toy", n_free = 1L, free_names = "log_s",
 #'            param_params = list(), dimension = 2L, rank = 2L,
-#'            null_basis = matrix(numeric(0), 2, 0), role = "either")
+#'            null_basis = matrix(numeric(0), 2, 0))
 #' param_is_numerical(toy)
 #'
 #' # The numerical route is usable, and here it can be checked by hand: the

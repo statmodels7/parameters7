@@ -15,7 +15,7 @@ has nothing to estimate.}
 An object of class \code{\link[=SimplexParam]{SimplexParam()}}, with \code{n_free} equal to
 \code{n_cat - 1}, \code{free_names} \code{alr1} ... \code{alr(K-1)}, \code{param_name} \code{"simplex"},
 and \code{param_params} holding \code{n_cat}. It carries no \code{dimension}, \code{rank},
-\code{null_basis} or \code{role}, being a \code{\link[=parameter]{parameter()}} and never a
+or \code{null_basis}, being a \code{\link[=parameter]{parameter()}} and never a
 \code{\link[=matrix_parameter]{matrix_parameter()}}.
 }
 \description{

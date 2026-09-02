@@ -85,7 +85,9 @@ Ar1Param <- S7::new_class("Ar1Param", parent = matrix_parameter)
 #' (measured at \eqn{p = 4}, \eqn{\rho = 0.6}: \eqn{-0.514} at the ends and
 #' \eqn{-0.441} in the middle), and its lag-2 correlation is 0 where an AR(1)
 #' would have \eqn{\rho^2}. So an AR(1) covariance and an AR(1) precision are
-#' different models, and `role` is what records which one an object stands for.
+#' different models. This family is the AR(1) pattern itself, whichever side a
+#' consumer puts it on; [ar1_inv()] is the family whose value is the matrix
+#' above, so that the AR(1) process is the one written on the other side.
 #'
 #' # The log-determinant
 #'
@@ -117,10 +119,6 @@ Ar1Param <- S7::new_class("Ar1Param", parent = matrix_parameter)
 #'   map onto the positive half line, so `identity_link()` is rejected, and from
 #'   the whole real line, which rules out `sqrt_link()` and its relatives; see
 #'   [diagonal_matrix()] for the two conditions.
-#' @param role A label recording which side of a model the matrix parametrizes:
-#'   `"either"` (the default), `"covariance"` or `"precision"`. No numeric result
-#'   depends on it, and here it matters more than usual: the two readings are
-#'   genuinely different models, as **Details** explains.
 #'
 #' @return An object of class [Ar1Param()], with `n_free` 2, `free_names`
 #'   `log_scale` and `z_rho` under the defaults, `rank` equal to `dimension`, an
@@ -166,10 +164,8 @@ Ar1Param <- S7::new_class("Ar1Param", parent = matrix_parameter)
 #'
 #' @export
 ar1 <- function(dimension,
-                link_scale = linkfunctions7::log_link(),
-                role = c("either", "covariance", "precision")) {
-  role <- match.arg(role)
-  p <- check_param_args(dimension, role)
+                link_scale = linkfunctions7::log_link()) {
+  p <- check_param_args(dimension)
   if (p < 2L) {
     stop(paste0(
       "'dimension' must be at least 2: a one by one matrix has no\n",
@@ -187,7 +183,6 @@ ar1 <- function(dimension,
                    tagged_name(link_rho, "rho")),
     rank = p,
     null_basis = empty_null_basis(p),
-    role = role,
     param_params = list(
       link_scale = link_scale,
       link_rho = link_rho

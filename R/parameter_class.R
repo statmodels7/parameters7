@@ -90,8 +90,8 @@
 #'   }
 #'   The class is abstract, so a useful object comes from a constructor such as
 #'   [log_cholesky()] and carries that constructor's subclass. A matrix family
-#'   returns a [matrix_parameter()], which adds `dimension`, `rank`,
-#'   `null_basis` and `role`.
+#'   returns a [matrix_parameter()], which adds `dimension`, `rank` and
+#'   `null_basis`.
 #'
 #' @seealso [matrix_parameter()] for the symmetric matrix branch.
 #'   [param_value()] and [param_free()] for the map and its inverse,
@@ -220,23 +220,13 @@ parameter <- S7::new_class(
 #'   [param_null_basis()] to obtain one, or `matrix(numeric(0), dimension, 0)`
 #'   for a full-rank family. The validator rejects any other shape, and
 #'   reports both the rank and the shape when the two disagree.
-#' @param role A single string, one of `"covariance"`, `"precision"` or
-#'   `"either"`, recording which side of a model the matrix parametrizes. **No
-#'   numeric result depends on it.** It is carried because the family name does
-#'   not record it: the same [log_cholesky()] serves either side, and a
-#'   consumer that prefixes a free name with the matrix it describes needs to
-#'   know which. [block_diag()] reads it to give a composite the common role of
-#'   its blocks, or `"either"` when they disagree, and [kron_identity()] copies
-#'   it.
-#'
 #' @return An object of class `matrix_parameter`, which is a [parameter()] with
-#'   four further properties
+#'   three further properties
 #'   \describe{
 #'     \item{`dimension`}{integer, the side \eqn{p}.}
 #'     \item{`rank`}{integer in `0:dimension`.}
 #'     \item{`null_basis`}{a `dimension` by `dimension - rank` matrix with
 #'       orthonormal columns.}
-#'     \item{`role`}{character, as supplied.}
 #'   }
 #'   plus the four it inherits, `param_name`, `n_free`, `free_names` and
 #'   `param_params`. The class is abstract, so a useful object comes from a
@@ -252,9 +242,8 @@ parameter <- S7::new_class(
 #' c(parameter = S7::S7_inherits(s, parameter),
 #'   matrix_parameter = S7::S7_inherits(s, matrix_parameter))
 #'
-#' # The four properties this branch adds.
+#' # The three properties this branch adds.
 #' c(dimension = s@dimension, rank = s@rank, null_columns = ncol(s@null_basis))
-#' s@role
 #'
 #' # Belonging to this branch is what gives the family a log-determinant, and
 #' # it agrees with the eigenvalues of the matrix itself.
@@ -275,8 +264,7 @@ matrix_parameter <- S7::new_class(
   properties = list(
     dimension = S7::class_integer,
     rank = S7::class_integer,
-    null_basis = S7::class_numeric,
-    role = S7::class_character
+    null_basis = S7::class_numeric
   ),
   validator = function(self) {
     errors <- character()
@@ -291,47 +279,31 @@ matrix_parameter <- S7::new_class(
     } else if (!identical(dim(self@null_basis), c(self@dimension, self@dimension - self@rank))) {
       errors <- c(errors, "@null_basis must be dimension by (dimension - rank)")
     }
-    if (!length(self@role) == 1L ||
-      !self@role %in% c("covariance", "precision", "either")) {
-      errors <- c(errors, "@role must be 'covariance', 'precision' or 'either'")
-    }
     if (length(errors)) errors else NULL
   }
 )
 
 
-#' Validate the Arguments Shared by Every Matrix Constructor
+#' Validate the Argument Shared by Every Matrix Constructor
 #'
 #' @description
-#' Checks the two arguments every matrix family's constructor takes, and returns
-#' the matrix side coerced to integer so the caller can store it in the class's
-#' integer property. Called by [log_cholesky()], [matrix_log()],
-#' [diagonal_matrix()], [correlation_matrix()], [compound_symmetry()], [ar1()],
-#' [autoregressive()] and [dr_prod()].
+#' Checks the matrix side every matrix family's constructor takes, and returns
+#' it coerced to integer so the caller can store it in the class's integer
+#' property. Called by [log_cholesky()], [matrix_log()], [diagonal_matrix()],
+#' [correlation_matrix()], [compound_symmetry()], [ar1()], [autoregressive()]
+#' and [dr_prod()].
 #'
 #' @param dimension The side of the matrix. Must be a single finite number, at
 #'   least 1, equal to its own `round()`. `0`, `2.5`, `c(1, 2)`, `"3"`, `Inf`
 #'   and `NA` all throw `'dimension' must be a single positive integer.`
-#' @param role The role label. Must be a single string, one of
-#'   `"covariance"`, `"precision"` or `"either"`; anything else throws. The
-#'   shipped constructors run `match.arg()` first, so their callers see
-#'   `match.arg()`'s message and never this one. The check is here for a
-#'   constructor written outside the package.
 #'
 #' @return `dimension`, as a single integer.
 #'
 #' @keywords internal
-check_param_args <- function(dimension, role) {
+check_param_args <- function(dimension) {
   if (!is.numeric(dimension) || length(dimension) != 1L || !is.finite(dimension) ||
     dimension < 1 || dimension != round(dimension)) {
     stop("'dimension' must be a single positive integer.", call. = FALSE)
-  }
-  if (!is.character(role) || length(role) != 1L ||
-    !role %in% c("covariance", "precision", "either")) {
-    stop(
-      "'role' must be one of \"covariance\", \"precision\" or \"either\".",
-      call. = FALSE
-    )
   }
   as.integer(dimension)
 }

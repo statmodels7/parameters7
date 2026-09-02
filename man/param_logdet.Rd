@@ -37,8 +37,8 @@ A Gaussian log-density written in the covariance carries
 \eqn{-\tfrac{1}{2}\log|\Sigma|} and one written in the precision carries
 \eqn{+\tfrac{1}{2}\log|\Omega|}. The parameter reports what the
 log-determinant is; the likelihood decides where it goes and with what sign.
-The object's \code{role} records which side it was built for, and no method reads
-it.
+A parameter does not record which side it was built for: the consumer
+declares that, as \code{\link[=inverse_of]{inverse_of()}} does when the side is fixed.
 }
 
 \section{Computed from the parametrization, not from the matrix}{

@@ -129,8 +129,6 @@ SumStructParam <- S7::new_class("SumStructParam", parent = matrix_parameter)
 #'   [linkfunctions7::log_link()] by default. It must map onto the positive half
 #'   line and from the whole real line; see [diagonal_matrix()] for the two
 #'   conditions.
-#' @param role One of `"either"` (the default), `"covariance"` or `"precision"`.
-#'   No numeric result depends on it.
 #'
 #' @return An object of class [SumStructParam()], with `n_free` equal to the
 #'   number of components, `free_names` the tagged labels, `null_basis` an
@@ -167,9 +165,7 @@ SumStructParam <- S7::new_class("SumStructParam", parent = matrix_parameter)
 #' max(abs(param_free(s, param_value(s, eta)) - eta))
 #'
 #' @export
-sum_struct <- function(components, link = linkfunctions7::log_link(),
-                       role = c("either", "covariance", "precision")) {
-  role <- match.arg(role)
+sum_struct <- function(components, link = linkfunctions7::log_link()) {
   if (!is.list(components) || !length(components)) {
     stop("'components' must be a non-empty list of matrices.", call. = FALSE)
   }
@@ -212,7 +208,6 @@ sum_struct <- function(components, link = linkfunctions7::log_link(),
     free_names = tagged_name(link, labels),
     rank = as.integer(p - ncol(nb)),
     null_basis = nb,
-    role = role,
     param_params = list(components = components, link = link, labels = labels)
   )
 }

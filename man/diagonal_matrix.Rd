@@ -4,11 +4,7 @@
 \alias{diagonal_matrix}
 \title{Construct a Diagonal Parameter}
 \usage{
-diagonal_matrix(
-  dimension,
-  link = linkfunctions7::log_link(),
-  role = c("either", "covariance", "precision")
-)
+diagonal_matrix(dimension, link = linkfunctions7::log_link())
 }
 \arguments{
 \item{dimension}{The side \eqn{p} of the matrix. A single positive whole
@@ -27,10 +23,6 @@ entries below 1. \code{sqrt_link()}, \code{inverse_link()}, \code{inverse_sq_lin
 \code{power_link()} at a positive exponent satisfy only the first and are
 rejected: their predictor scale is \eqn{(0, \infty)}, so the map is even in
 \eqn{\eta} and the round trip returns \eqn{\lvert \eta \rvert}.}
-
-\item{role}{A label recording which side of a model the matrix parametrizes:
-\code{"either"} (the default), \code{"covariance"} or \code{"precision"}. No numeric result
-depends on it; see \code{\link[=log_cholesky]{log_cholesky()}} for what carries it.}
 }
 \value{
 An object of class \code{\link[=DiagMatrixParam]{DiagMatrixParam()}}, with \code{n_free} equal to

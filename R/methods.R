@@ -7,7 +7,7 @@ NULL
 #'
 #' @description
 #' Prints a one-screen summary of a parametrization: the family name, the shape
-#' and rank of the matrix, the role label, how many free values there are and
+#' and rank of the matrix, how many free values there are and
 #' what they are called, and which of the nine derived quantities come from the
 #' base class instead of a closed form.
 #'
@@ -57,7 +57,6 @@ S7::method(print, parameter) <- function(x, ...) {
         ""
       }
     ))
-    cat(sprintf("Role:      %s\n", x@role))
   }
 
   cat(sprintf("\nFree values: %d\n", x@n_free))

@@ -4,12 +4,7 @@
 \alias{autoregressive}
 \title{Construct an Autoregressive Parameter}
 \usage{
-autoregressive(
-  dimension,
-  order,
-  link_scale = linkfunctions7::log_link(),
-  role = c("either", "covariance", "precision")
-)
+autoregressive(dimension, order, link_scale = linkfunctions7::log_link())
 }
 \arguments{
 \item{dimension}{The side \eqn{p} of the matrix: the number of consecutive
@@ -25,10 +20,6 @@ number, no smaller than 1.}
 line, so \code{identity_link()} is rejected, and from the whole real line, which
 rules out \code{sqrt_link()} and its relatives; see \code{\link[=diagonal_matrix]{diagonal_matrix()}} for the
 two conditions.}
-
-\item{role}{A label recording which side of a model the matrix parametrizes:
-\code{"either"} (the default), \code{"covariance"} or \code{"precision"}. No numeric result
-depends on it.}
 }
 \value{
 An object of class \code{\link[=AutoregressiveParam]{AutoregressiveParam()}}, with \code{n_free} equal to

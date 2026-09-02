@@ -112,10 +112,6 @@ MatrixLogParam <- S7::new_class("MatrixLogParam", parent = matrix_parameter)
 #' @param dimension The side \eqn{p} of the matrix. A single positive whole
 #'   number, finite and at least 1; anything else throws `'dimension' must be a
 #'   single positive integer.`
-#' @param role A label recording which side of a model the matrix parametrizes:
-#'   `"either"` (the default), `"covariance"` or `"precision"`. No numeric result
-#'   depends on it, and it matters less here than elsewhere: the inverse is the
-#'   same family at \eqn{-\eta}.
 #'
 #' @return An object of class [MatrixLogParam()], with `n_free` equal to
 #'   \eqn{p(p+1)/2}, `free_names` `S1` ... `Sp` then `S2.1`, `S3.1`, ..., `rank`
@@ -164,9 +160,8 @@ MatrixLogParam <- S7::new_class("MatrixLogParam", parent = matrix_parameter)
 #' max(abs(param_free(s, M) - eta))
 #'
 #' @export
-matrix_log <- function(dimension, role = c("either", "covariance", "precision")) {
-  role <- match.arg(role)
-  p <- check_param_args(dimension, role)
+matrix_log <- function(dimension) {
+  p <- check_param_args(dimension)
   pos <- chol_positions(p)
   nm <- paste0("S", pos$row, ".", pos$col)
   nm[pos$on_diagonal] <- paste0("S", pos$row[pos$on_diagonal])
@@ -178,7 +173,6 @@ matrix_log <- function(dimension, role = c("either", "covariance", "precision"))
     free_names = nm,
     rank = p,
     null_basis = empty_null_basis(p),
-    role = role,
     param_params = list(positions = pos)
   )
 }

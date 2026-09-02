@@ -4,11 +4,7 @@
 \alias{ar1}
 \title{Construct an AR(1) Parameter}
 \usage{
-ar1(
-  dimension,
-  link_scale = linkfunctions7::log_link(),
-  role = c("either", "covariance", "precision")
-)
+ar1(dimension, link_scale = linkfunctions7::log_link())
 }
 \arguments{
 \item{dimension}{The side \eqn{p} of the matrix, \strong{at least 2}. A one by one
@@ -20,11 +16,6 @@ onto the positive variance, \code{linkfunctions7::log_link()} by default. It mus
 map onto the positive half line, so \code{identity_link()} is rejected, and from
 the whole real line, which rules out \code{sqrt_link()} and its relatives; see
 \code{\link[=diagonal_matrix]{diagonal_matrix()}} for the two conditions.}
-
-\item{role}{A label recording which side of a model the matrix parametrizes:
-\code{"either"} (the default), \code{"covariance"} or \code{"precision"}. No numeric result
-depends on it, and here it matters more than usual: the two readings are
-genuinely different models, as \strong{Details} explains.}
 }
 \value{
 An object of class \code{\link[=Ar1Param]{Ar1Param()}}, with \code{n_free} 2, \code{free_names}
@@ -71,7 +62,9 @@ AR(1). Its own correlation at lag 1 is not constant along the diagonal
 (measured at \eqn{p = 4}, \eqn{\rho = 0.6}: \eqn{-0.514} at the ends and
 \eqn{-0.441} in the middle), and its lag-2 correlation is 0 where an AR(1)
 would have \eqn{\rho^2}. So an AR(1) covariance and an AR(1) precision are
-different models, and \code{role} is what records which one an object stands for.
+different models. This family is the AR(1) pattern itself, whichever side a
+consumer puts it on; \code{\link[=ar1_inv]{ar1_inv()}} is the family whose value is the matrix
+above, so that the AR(1) process is the one written on the other side.
 }
 
 \section{The log-determinant}{

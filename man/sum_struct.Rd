@@ -4,11 +4,7 @@
 \alias{sum_struct}
 \title{Construct a Sum of Fixed Matrices}
 \usage{
-sum_struct(
-  components,
-  link = linkfunctions7::log_link(),
-  role = c("either", "covariance", "precision")
-)
+sum_struct(components, link = linkfunctions7::log_link())
 }
 \arguments{
 \item{components}{A non-empty list of symmetric positive semidefinite numeric
@@ -21,9 +17,6 @@ entries supply the free-value labels, which must be unique; unnamed ones are
 \code{\link[linkfunctions7:log_link]{linkfunctions7::log_link()}} by default. It must map onto the positive half
 line and from the whole real line; see \code{\link[=diagonal_matrix]{diagonal_matrix()}} for the two
 conditions.}
-
-\item{role}{One of \code{"either"} (the default), \code{"covariance"} or \code{"precision"}.
-No numeric result depends on it.}
 }
 \value{
 An object of class \code{\link[=SumStructParam]{SumStructParam()}}, with \code{n_free} equal to the

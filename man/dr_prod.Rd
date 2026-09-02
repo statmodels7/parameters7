@@ -4,12 +4,7 @@
 \alias{dr_prod}
 \title{Construct a Covariance as Scales Times a Correlation}
 \usage{
-dr_prod(
-  dimension,
-  correlation = NULL,
-  link = linkfunctions7::log_link(),
-  role = c("covariance", "precision", "either")
-)
+dr_prod(dimension, correlation = NULL, link = linkfunctions7::log_link())
 }
 \arguments{
 \item{dimension}{The side \eqn{p} of the matrix, at least 2: a 1 by 1
@@ -28,9 +23,6 @@ at two probe free vectors and rejects such a block, which
 scale, \code{\link[linkfunctions7:log_link]{linkfunctions7::log_link()}} by default. It must map onto the
 positive half line and from the whole real line; see \code{\link[=diagonal_matrix]{diagonal_matrix()}} for
 the two conditions.}
-
-\item{role}{One of \code{"covariance"} (the default), \code{"precision"} or \code{"either"}.
-No numeric result depends on it.}
 }
 \value{
 An object of class \code{\link[=DrProdParam]{DrProdParam()}}, with \code{n_free} equal to \eqn{p}

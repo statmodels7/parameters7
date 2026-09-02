@@ -14,7 +14,7 @@ transition_matrix(n_state)
 An object of class \code{\link[=TransitionMatrixParam]{TransitionMatrixParam()}}, with \code{n_free} equal to
 \eqn{K(K-1)}, \code{free_names} \code{alr1.1}, \code{alr1.2}, ..., \verb{alr\{K\}.\{K-1\}} row by
 row, \code{param_name} \code{"transition_matrix"}, and \code{param_params} holding
-\code{n_state}. No \code{dimension}, \code{rank}, \code{null_basis} or \code{role}.
+\code{n_state}. No \code{dimension}, \code{rank} or \code{null_basis}.
 }
 \description{
 Returns an object holding a \eqn{K \times K} row-stochastic matrix, the
