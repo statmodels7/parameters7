@@ -16,7 +16,7 @@ covariance built with
 ## Usage
 
 ``` r
-correlation_matrix(dimension, role = c("either", "covariance", "precision"))
+correlation_matrix(dimension)
 ```
 
 ## Arguments
@@ -27,12 +27,6 @@ correlation_matrix(dimension, role = c("either", "covariance", "precision"))
   and at least 1; \\p = 1\\ gives a constant with no free values, as
   **Details** describes. Anything else throws
   `'dimension' must be a single positive integer.`
-
-- role:
-
-  A label recording which side of a model the matrix parametrizes:
-  `"either"` (the default), `"covariance"` or `"precision"`. No numeric
-  result depends on it.
 
 ## Value
 

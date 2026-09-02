@@ -8,12 +8,7 @@ matrix parameter.
 ## Usage
 
 ``` r
-dr_prod(
-  dimension,
-  correlation = NULL,
-  link = linkfunctions7::log_link(),
-  role = c("covariance", "precision", "either")
-)
+dr_prod(dimension, correlation = NULL, link = linkfunctions7::log_link())
 ```
 
 ## Arguments
@@ -48,11 +43,6 @@ dr_prod(
   real line; see
   [`diagonal_matrix()`](https://statmodels7.github.io/parameters7/reference/diagonal_matrix.md)
   for the two conditions.
-
-- role:
-
-  One of `"covariance"` (the default), `"precision"` or `"either"`. No
-  numeric result depends on it.
 
 ## Value
 

@@ -9,11 +9,7 @@ component needs.
 ## Usage
 
 ``` r
-scalar_matrix(
-  dimension,
-  link = linkfunctions7::log_link(),
-  role = c("either", "covariance", "precision")
-)
+scalar_matrix(dimension, link = linkfunctions7::log_link())
 ```
 
 ## Arguments
@@ -32,12 +28,6 @@ scalar_matrix(
   rules out `sqrt_link()` and its relatives; see
   [`diagonal_matrix()`](https://statmodels7.github.io/parameters7/reference/diagonal_matrix.md)
   for the two conditions.
-
-- role:
-
-  A label recording which side of a model the matrix parametrizes:
-  `"either"` (the default), `"covariance"` or `"precision"`. No numeric
-  result depends on it.
 
 ## Value
 

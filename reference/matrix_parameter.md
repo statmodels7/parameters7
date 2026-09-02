@@ -33,8 +33,7 @@ matrix_parameter(
   param_params = list(),
   dimension = integer(0),
   rank = integer(0),
-  null_basis = integer(0),
-  role = character(0)
+  null_basis = integer(0)
 )
 ```
 
@@ -79,26 +78,11 @@ matrix_parameter(
   family. The validator rejects any other shape, and reports both the
   rank and the shape when the two disagree.
 
-- role:
-
-  A single string, one of `"covariance"`, `"precision"` or `"either"`,
-  recording which side of a model the matrix parametrizes. **No numeric
-  result depends on it.** It is carried because the family name does not
-  record it: the same
-  [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
-  serves either side, and a consumer that prefixes a free name with the
-  matrix it describes needs to know which.
-  [`block_diag()`](https://statmodels7.github.io/parameters7/reference/block_diag.md)
-  reads it to give a composite the common role of its blocks, or
-  `"either"` when they disagree, and
-  [`kron_identity()`](https://statmodels7.github.io/parameters7/reference/kron_identity.md)
-  copies it.
-
 ## Value
 
 An object of class `matrix_parameter`, which is a
 [`parameter()`](https://statmodels7.github.io/parameters7/reference/parameter.md)
-with four further properties
+with three further properties
 
 - `dimension`:
 
@@ -111,10 +95,6 @@ with four further properties
 - `null_basis`:
 
   a `dimension` by `dimension - rank` matrix with orthonormal columns.
-
-- `role`:
-
-  character, as supplied.
 
 plus the four it inherits, `param_name`, `n_free`, `free_names` and
 `param_params`. The class is abstract, so a useful object comes from a
@@ -181,12 +161,10 @@ c(parameter = S7::S7_inherits(s, parameter),
 #>        parameter matrix_parameter 
 #>             TRUE             TRUE 
 
-# The four properties this branch adds.
+# The three properties this branch adds.
 c(dimension = s@dimension, rank = s@rank, null_columns = ncol(s@null_basis))
 #>    dimension         rank null_columns 
 #>            3            3            0 
-s@role
-#> [1] "either"
 
 # Belonging to this branch is what gives the family a log-determinant, and
 # it agrees with the eigenvalues of the matrix itself.

@@ -16,11 +16,7 @@ is the same object with one free value shared by every entry.
 ## Usage
 
 ``` r
-diagonal_matrix(
-  dimension,
-  link = linkfunctions7::log_link(),
-  role = c("either", "covariance", "precision")
-)
+diagonal_matrix(dimension, link = linkfunctions7::log_link())
 ```
 
 ## Arguments
@@ -51,14 +47,6 @@ diagonal_matrix(
   `power_link()` at a positive exponent satisfy only the first and are
   rejected: their predictor scale is \\(0, \infty)\\, so the map is even
   in \\\eta\\ and the round trip returns \\\lvert \eta \rvert\\.
-
-- role:
-
-  A label recording which side of a model the matrix parametrizes:
-  `"either"` (the default), `"covariance"` or `"precision"`. No numeric
-  result depends on it; see
-  [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
-  for what carries it.
 
 ## Value
 

@@ -29,8 +29,8 @@ An object of class
 [`TransitionMatrixParam()`](https://statmodels7.github.io/parameters7/reference/TransitionMatrixParam.md),
 with `n_free` equal to \\K(K-1)\\, `free_names` `alr1.1`, `alr1.2`, ...,
 `alr{K}.{K-1}` row by row, `param_name` `"transition_matrix"`, and
-`param_params` holding `n_state`. No `dimension`, `rank`, `null_basis`
-or `role`.
+`param_params` holding `n_state`. No `dimension`, `rank` or
+`null_basis`.
 
 ## Rows, not columns
 

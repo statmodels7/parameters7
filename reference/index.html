@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,7 +37,7 @@
     <div class="section level2">
       <h2 id="families">Families<a class="anchor" aria-label="anchor" href="#families"></a></h2>
 
-      <div class="section-desc"><p>The parametrizations. Each maps an unconstrained vector to a matrix in its own constrained set, and each owns the side of that matrix.</p></div>
+      <div class="section-desc"><p>The parametrizations. Each maps an unconstrained vector to a matrix in its own constrained set. Which side of a model a matrix parametrizes is the consumer’s to say, not the parametrization’s.</p></div>
 
       <dl></dl></div><div class="section level2">
 
@@ -85,6 +85,34 @@
 
         </dt>
         <dd>Construct an Autoregressive Parameter</dd>
+
+        <dt>
+
+          <code><a href="ar1_inv.html">ar1_inv()</a></code>
+
+        </dt>
+        <dd>Construct the Precision of an AR(1) Process</dd>
+
+        <dt>
+
+          <code><a href="Ar1InvParam.html">Ar1InvParam()</a></code>
+
+        </dt>
+        <dd>The Precision of an AR(1) Process</dd>
+
+        <dt>
+
+          <code><a href="autoregressive_inv.html">autoregressive_inv()</a></code>
+
+        </dt>
+        <dd>Construct the Precision of an Autoregression of Order q</dd>
+
+        <dt>
+
+          <code><a href="AutoregressiveInvParam.html">AutoregressiveInvParam()</a></code>
+
+        </dt>
+        <dd>The Precision of an Autoregression of Order q</dd>
 
         <dt>
 
@@ -176,6 +204,20 @@
 
         </dt>
         <dd>A Non-Negative Combination of Fixed Matrices</dd>
+
+        <dt>
+
+          <code><a href="inverse_of.html">inverse_of()</a></code>
+
+        </dt>
+        <dd>Construct the Inverse of a Matrix Parameter</dd>
+
+        <dt>
+
+          <code><a href="InverseParam.html">InverseParam()</a></code>
+
+        </dt>
+        <dd>The Inverse of a Matrix Parameter</dd>
       </dl></div><div class="section level2">
       <h2 id="the-map-and-its-inverse">The map and its inverse<a class="anchor" aria-label="anchor" href="#the-map-and-its-inverse"></a></h2>
 
@@ -519,6 +561,20 @@
 
       <dl><dt>
 
+          <code><a href="ar1_inv_derivative.html">ar1_inv_derivative()</a></code>
+
+        </dt>
+        <dd>Derivative Arrays of an Inverse AR(1) Parameter</dd>
+
+        <dt>
+
+          <code><a href="ar1_inv_pattern.html">ar1_inv_pattern()</a></code>
+
+        </dt>
+        <dd>The Pattern of an Inverse AR(1) Parameter</dd>
+
+        <dt>
+
           <code><a href="ar1_logdet_terms.html">ar1_logdet_terms()</a></code>
 
         </dt>
@@ -544,6 +600,34 @@
 
         </dt>
         <dd>Derivative Components of an Autoregressive Parameter</dd>
+
+        <dt>
+
+          <code><a href="ar_inv_codes.html">ar_inv_codes()</a></code>
+
+        </dt>
+        <dd>The Sub-Multiset Codes of a Derivative Order</dd>
+
+        <dt>
+
+          <code><a href="ar_inv_derivative.html">ar_inv_derivative()</a></code>
+
+        </dt>
+        <dd>Derivative Arrays of an Inverse Autoregressive Parameter</dd>
+
+        <dt>
+
+          <code><a href="ar_inv_factors.html">ar_inv_factors()</a></code>
+
+        </dt>
+        <dd>The Prediction Factors of an Inverse Autoregression, With Derivatives</dd>
+
+        <dt>
+
+          <code><a href="ar_inv_structure.html">ar_inv_structure()</a></code>
+
+        </dt>
+        <dd>The Subset Structure of One Derivative Order, Memoized</dd>
 
         <dt>
 
@@ -627,7 +711,7 @@
           <code><a href="check_param_args.html">check_param_args()</a></code>
 
         </dt>
-        <dd>Validate the Arguments Shared by Every Matrix Constructor</dd>
+        <dd>Validate the Argument Shared by Every Matrix Constructor</dd>
 
         <dt>
 
@@ -813,6 +897,13 @@
 
         <dt>
 
+          <code><a href="dot-inv_inner.html">.inv_inner()</a></code>
+
+        </dt>
+        <dd>The Inner Family of an Inverse Parameter</dd>
+
+        <dt>
+
           <code><a href="dr_prod_derivs.html">dr_prod_derivs()</a></code>
 
         </dt>
@@ -883,6 +974,13 @@
 
         <dt>
 
+          <code><a href="inverse_derivs.html">inverse_derivs()</a></code>
+
+        </dt>
+        <dd>Derivatives of an Inverse Parameter of a Given Order</dd>
+
+        <dt>
+
           <code><a href="is_base_param_class.html">is_base_param_class()</a></code>
 
         </dt>
@@ -901,6 +999,13 @@
 
         </dt>
         <dd>A Gram Product's Derivatives From Its Factor's</dd>
+
+        <dt>
+
+          <code><a href="link_derivs.html">link_derivs()</a></code>
+
+        </dt>
+        <dd>A Link's Inverse and Its Four Derivatives</dd>
 
         <dt>
 
@@ -981,10 +1086,38 @@
 
         <dt>
 
+          <code><a href="neg_like.html">neg_like()</a></code>
+
+        </dt>
+        <dd>Negate Without Changing the Container</dd>
+
+        <dt>
+
+          <code><a href="ordered_set_partitions.html">ordered_set_partitions()</a></code>
+
+        </dt>
+        <dd>Ordered Set Partitions of the First k Positions</dd>
+
+        <dt>
+
+          <code><a href="param_d1.Ar1InvParam.html">param_d1.Ar1InvParam</a></code> <code><a href="param_d1.Ar1InvParam.html">param_d2.Ar1InvParam</a></code> <code><a href="param_d1.Ar1InvParam.html">param_d3.Ar1InvParam</a></code> <code><a href="param_d1.Ar1InvParam.html">param_d4.Ar1InvParam</a></code>
+
+        </dt>
+        <dd>Derivative Arrays of an Inverse AR(1) Parameter</dd>
+
+        <dt>
+
           <code><a href="param_d1.Ar1Param.html">param_d1.Ar1Param</a></code> <code><a href="param_d1.Ar1Param.html">param_d2.Ar1Param</a></code> <code><a href="param_d1.Ar1Param.html">param_d3.Ar1Param</a></code> <code><a href="param_d1.Ar1Param.html">param_d4.Ar1Param</a></code>
 
         </dt>
         <dd>Derivatives of an AR(1) Parameter</dd>
+
+        <dt>
+
+          <code><a href="param_d1.AutoregressiveInvParam.html">param_d1.AutoregressiveInvParam</a></code> <code><a href="param_d1.AutoregressiveInvParam.html">param_d2.AutoregressiveInvParam</a></code> <code><a href="param_d1.AutoregressiveInvParam.html">param_d3.AutoregressiveInvParam</a></code> <code><a href="param_d1.AutoregressiveInvParam.html">param_d4.AutoregressiveInvParam</a></code>
+
+        </dt>
+        <dd>Derivative Arrays of an Inverse Autoregressive Parameter</dd>
 
         <dt>
 
@@ -1027,6 +1160,13 @@
 
         </dt>
         <dd>Derivatives of a Scales-Times-Correlation Parameter</dd>
+
+        <dt>
+
+          <code><a href="param_d1.InverseParam.html">param_d1.InverseParam</a></code> <code><a href="param_d1.InverseParam.html">param_d2.InverseParam</a></code> <code><a href="param_d1.InverseParam.html">param_d3.InverseParam</a></code> <code><a href="param_d1.InverseParam.html">param_d4.InverseParam</a></code>
+
+        </dt>
+        <dd>Derivative Arrays of an Inverse Parameter</dd>
 
         <dt>
 
@@ -1681,6 +1821,13 @@
 
         <dt>
 
+          <code><a href="param_logdet.InverseParam.html">param_logdet.InverseParam</a></code> <code><a href="param_logdet.InverseParam.html">param_dlogdet.InverseParam</a></code> <code><a href="param_logdet.InverseParam.html">param_d2logdet.InverseParam</a></code> <code><a href="param_logdet.InverseParam.html">param_d3logdet.InverseParam</a></code> <code><a href="param_logdet.InverseParam.html">param_d4logdet.InverseParam</a></code>
+
+        </dt>
+        <dd>Log-Determinant of an Inverse Parameter</dd>
+
+        <dt>
+
           <code><a href="param_logdet.KronIdentityParam.html">param_logdet.KronIdentityParam</a></code>
 
         </dt>
@@ -1800,6 +1947,13 @@
 
         <dt>
 
+          <code><a href="param_solve.InverseParam.html">param_solve.InverseParam</a></code> <code><a href="param_solve.InverseParam.html">param_factor.InverseParam</a></code>
+
+        </dt>
+        <dd>Solve and Factor of an Inverse Parameter</dd>
+
+        <dt>
+
           <code><a href="param_solve.KronIdentityParam.html">param_solve.KronIdentityParam</a></code>
 
         </dt>
@@ -1884,6 +2038,13 @@
 
         <dt>
 
+          <code><a href="param_value.InverseParam.html">param_value.InverseParam</a></code> <code><a href="param_value.InverseParam.html">param_free.InverseParam</a></code>
+
+        </dt>
+        <dd>Value and Inverse Map of an Inverse Parameter</dd>
+
+        <dt>
+
           <code><a href="param_value.KronIdentityParam.html">param_value.KronIdentityParam</a></code>
 
         </dt>
@@ -1958,6 +2119,13 @@
 
         </dt>
         <dd>Quantities That Are Separate Links of Separate Free Values</dd>
+
+        <dt>
+
+          <code><a href="recip_derivs.html">recip_derivs()</a></code>
+
+        </dt>
+        <dd>Derivatives of a Reciprocal, for Composition</dd>
 
         <dt>
 
@@ -2070,6 +2238,13 @@
 
         </dt>
         <dd>The Index Tuples of a Given Width</dd>
+
+        <dt>
+
+          <code><a href="w_derivs.html">w_derivs()</a></code>
+
+        </dt>
+        <dd>Derivatives of the Reciprocal of One Minus a Squared Correlation</dd>
       </dl></div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>

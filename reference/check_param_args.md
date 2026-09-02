@@ -1,8 +1,8 @@
-# Validate the Arguments Shared by Every Matrix Constructor
+# Validate the Argument Shared by Every Matrix Constructor
 
-Checks the two arguments every matrix family's constructor takes, and
-returns the matrix side coerced to integer so the caller can store it in
-the class's integer property. Called by
+Checks the matrix side every matrix family's constructor takes, and
+returns it coerced to integer so the caller can store it in the class's
+integer property. Called by
 [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md),
 [`matrix_log()`](https://statmodels7.github.io/parameters7/reference/matrix_log.md),
 [`diagonal_matrix()`](https://statmodels7.github.io/parameters7/reference/diagonal_matrix.md),
@@ -16,7 +16,7 @@ and
 ## Usage
 
 ``` r
-check_param_args(dimension, role)
+check_param_args(dimension)
 ```
 
 ## Arguments
@@ -27,16 +27,6 @@ check_param_args(dimension, role)
   equal to its own [`round()`](https://rdrr.io/r/base/Round.html). `0`,
   `2.5`, `c(1, 2)`, `"3"`, `Inf` and `NA` all throw
   `'dimension' must be a single positive integer.`
-
-- role:
-
-  The role label. Must be a single string, one of `"covariance"`,
-  `"precision"` or `"either"`; anything else throws. The shipped
-  constructors run
-  [`match.arg()`](https://rdrr.io/r/base/match.arg.html) first, so their
-  callers see [`match.arg()`](https://rdrr.io/r/base/match.arg.html)'s
-  message and never this one. The check is here for a constructor
-  written outside the package.
 
 ## Value
 

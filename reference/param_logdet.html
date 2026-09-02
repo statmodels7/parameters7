@@ -23,7 +23,7 @@ does not have to branch."><meta property="og:image" content="https://statmodels7
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -99,8 +99,8 @@ null directions instead of taking <code>log(0)</code>.</p>
 \(-\tfrac{1}{2}\log|\Sigma|\) and one written in the precision carries
 \(+\tfrac{1}{2}\log|\Omega|\). The parameter reports what the
 log-determinant is; the likelihood decides where it goes and with what sign.
-The object's <code>role</code> records which side it was built for, and no method reads
-it.</p>
+A parameter does not record which side it was built for: the consumer
+declares that, as <code><a href="inverse_of.html">inverse_of()</a></code> does when the side is fixed.</p>
     </div>
     <div class="section level2">
     <h2 id="computed-from-the-parametrization-not-from-the-matrix">Computed from the parametrization, not from the matrix<a class="anchor" aria-label="anchor" href="#computed-from-the-parametrization-not-from-the-matrix"></a></h2>

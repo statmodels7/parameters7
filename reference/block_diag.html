@@ -19,7 +19,7 @@ random-effect term has."><meta property="og:image" content="https://statmodels7.
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,7 +60,7 @@ random-effect term has.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">block_diag</span><span class="op">(</span><span class="va">...</span>, role <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">block_diag</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -73,12 +73,6 @@ single list of them. Named arguments supply the block labels, which must be
 unique. A block that is not a <code>matrix_parameter</code> is rejected by position, so
 <code>block_diag(ar1(3), simplex(3))</code> reports that block 2 does not inherit from
 it.</p></dd>
-
-
-<dt id="arg-role">role<a class="anchor" aria-label="anchor" href="#arg-role"></a></dt>
-<dd><p>One of <code>"covariance"</code>, <code>"precision"</code> or <code>"either"</code>. Defaults to
-the blocks' common role, and to <code>"either"</code> where they disagree. No numeric
-result depends on it.</p></dd>
 
 </dl></div>
     <div class="section level2">

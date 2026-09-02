@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,6 +35,35 @@
       <small>Source: <a href="https://github.com/statmodels7/parameters7/blob/master/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.20.0" id="parameters7-0200">parameters7 0.20.0<a class="anchor" aria-label="anchor" href="#parameters7-0200"></a></h2>
+<ul><li>
+<p><code><a href="../reference/autoregressive_inv.html">autoregressive_inv()</a></code> writes its derivative arrays out instead of taking them from <code><a href="../reference/inverse_of.html">inverse_of()</a></code>’s ordered-block-partition sum. 0.19.0 shipped it composing, and said so; this closes it.</p>
+<p>Nothing new is derived. The value already came from the prediction form <code>Omega = U' diag(tau) U</code>, and two facts make every order exact from the same factors. The lower-order rows of U are the coefficients of the SAME family at that order – measured, <code><a href="../reference/ar_prediction.html">ar_prediction()</a></code>’s row k+1 and <code>autoregressive(p, order = k)</code>’s <code>phi</code> agree to <strong>0</strong> – so their derivative arrays come from the compiled Levinson-Durbin recursion run once per order, and a component differentiating in a partial autocorrelation an order does not reach is exactly zero. And <code>tau</code> is a product of one univariate factor per free value, so a mixed derivative of it is a product of univariate derivatives. What is left is the Leibniz rule over three factors, taken twice so a component costs 2^m matrix products rather than 3^m.</p>
+<p>Measured at order four against the composition, which shares no arithmetic: <strong>11.2x</strong> at p = 6, q = 2, 11.4x at p = 20, q = 3 and <strong>22.8x</strong> at p = 100, with the two agreeing to 7e-11 over six shapes and two free vectors each. That agreement is what licenses the written-out route.</p>
+</li>
+<li><p>⚠️ Most of the first version’s cost was bookkeeping and not arithmetic, which is what a profile said rather than a guess: <code><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort()</a></code> and <code><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste()</a></code> inside a string key were <strong>65 per cent</strong> of a fourth-order component. Sub-multisets are held as count vectors and indexed by an integer code; the subset structure of an order, which depends on the order and the free-value count alone, is memoized on the object; and the lower-order families are built once by the constructor rather than at every call. Together: 19.21 ms to <strong>3.74 ms</strong> at p = 6, q = 2, with every number unchanged.</p></li>
+<li><p><code><a href="../reference/w_derivs.html">w_derivs()</a></code> is shared by <code><a href="../reference/ar1_inv.html">ar1_inv()</a></code> and <code><a href="../reference/autoregressive_inv.html">autoregressive_inv()</a></code>: the derivatives of <code>1/(1 - rho^2)</code>, exact at every order by partial fractions.</p></li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.19.0" id="parameters7-0190">parameters7 0.19.0<a class="anchor" aria-label="anchor" href="#parameters7-0190"></a></h2>
+<ul><li>
+<p>The <code>role</code> property and its argument are removed. A parametrization no longer records which side of a model it is used on: that is the consumer’s to say, and <code>distributions7</code>’s <code>mvgaussian1_distrib()</code> and <code>mvgaussian2_distrib()</code> say it by which family they are.</p>
+<p>The label carried no numeric result – every page said so – and it was a second declaration in a place that cannot know. Measured before removing it: <code>distributions7</code> never read it, <code>modelterms7::random()</code> reads the side from the distribution’s <code>params_interpretation</code>, and eight of the eleven shipped families declared <code>"either"</code>, so the label was written by hand only to satisfy a guard in <code>penalties7::structured_penalty()</code>.</p>
+<p>What that guard expressed is now written with <code><a href="../reference/inverse_of.html">inverse_of()</a></code>, so nothing becomes inexpressible.</p>
+</li>
+<li>
+<p><code><a href="../reference/inverse_of.html">inverse_of()</a></code> is the fifth composition wrapper: the family whose value is another family’s inverse, carrying the inner family’s free vector unchanged. Its derivatives are the sum over the <strong>ordered</strong> set partitions of the differentiated positions,</p>
+<p>d^I N = sum over (B_1, …, B_q) of (-1)^q N (d^{B_1} S) N … (d^{B_q} S) N,</p>
+<p>the blocks ordered because matrices do not commute; the number of terms is the Fubini number of the order, 1, 3, 13 and 75. Every factor is the inner family’s own closed form, so nothing is differenced. The log-determinant is the inner one negated, and <code><a href="../reference/param_solve.html">param_solve()</a></code> is the inner family’s value.</p>
+<p>It passes <code><a href="../reference/check_parameter.html">check_parameter()</a></code> on all eight families it was tried on, including the three that are not closed under inversion. A rank-deficient family is rejected: a singular matrix has no inverse, so there is no family to build.</p>
+</li>
+<li>
+<p><code><a href="../reference/ar1_inv.html">ar1_inv()</a></code> and <code><a href="../reference/autoregressive_inv.html">autoregressive_inv()</a></code> are the two families whose inverse has a structure of its own: the tridiagonal precision of a first-order autoregression and the precision of an order-q one, banded of bandwidth q. Both carry the free vector of the family they invert.</p>
+<p><code><a href="../reference/ar1_inv.html">ar1_inv()</a></code> writes its derivative arrays out rather than composing them. The value is a product of a function of the scale and a matrix function of the correlation, so a component with a scale indices and b correlation indices is one elementwise product; the three distinct entries are written in w = 1/(1 - rho^2) alone, whose derivatives are exact by partial fractions. Measured at p = 20 and order 4: 0.44 ms against the composition wrapper’s 28.66 ms, 63.5x, with the two agreeing to 8e-14 – two independent implementations of one object, which is what licenses the written-out route.</p>
+<p><code><a href="../reference/autoregressive_inv.html">autoregressive_inv()</a></code> takes the closed value, log-determinant and solve of the family it inverts and its derivative arrays from the composition. That is exact algebra on closed arrays and not a simplified expression, and the page says so.</p>
+</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.18.0" id="parameters7-0180">parameters7 0.18.0<a class="anchor" aria-label="anchor" href="#parameters7-0180"></a></h2>
 <ul><li>

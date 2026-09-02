@@ -14,11 +14,7 @@ covariance a random intercept induces.
 ## Usage
 
 ``` r
-compound_symmetry(
-  dimension,
-  link_scale = linkfunctions7::log_link(),
-  role = c("either", "covariance", "precision")
-)
+compound_symmetry(dimension, link_scale = linkfunctions7::log_link())
 ```
 
 ## Arguments
@@ -39,12 +35,6 @@ compound_symmetry(
   rules out `sqrt_link()` and its relatives; see
   [`diagonal_matrix()`](https://statmodels7.github.io/parameters7/reference/diagonal_matrix.md)
   for the two conditions.
-
-- role:
-
-  A label recording which side of a model the matrix parametrizes:
-  `"either"` (the default), `"covariance"` or `"precision"`. No numeric
-  result depends on it, and this family gives the same shape either way.
 
 ## Value
 

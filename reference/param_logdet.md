@@ -47,8 +47,10 @@ A Gaussian log-density written in the covariance carries
 \\-\tfrac{1}{2}\log\|\Sigma\|\\ and one written in the precision carries
 \\+\tfrac{1}{2}\log\|\Omega\|\\. The parameter reports what the
 log-determinant is; the likelihood decides where it goes and with what
-sign. The object's `role` records which side it was built for, and no
-method reads it.
+sign. A parameter does not record which side it was built for: the
+consumer declares that, as
+[`inverse_of()`](https://statmodels7.github.io/parameters7/reference/inverse_of.md)
+does when the side is fixed.
 
 ## Computed from the parametrization, not from the matrix
 

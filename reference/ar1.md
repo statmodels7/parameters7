@@ -13,11 +13,7 @@ correlation is too strong an assumption.
 ## Usage
 
 ``` r
-ar1(
-  dimension,
-  link_scale = linkfunctions7::log_link(),
-  role = c("either", "covariance", "precision")
-)
+ar1(dimension, link_scale = linkfunctions7::log_link())
 ```
 
 ## Arguments
@@ -38,13 +34,6 @@ ar1(
   rules out `sqrt_link()` and its relatives; see
   [`diagonal_matrix()`](https://statmodels7.github.io/parameters7/reference/diagonal_matrix.md)
   for the two conditions.
-
-- role:
-
-  A label recording which side of a model the matrix parametrizes:
-  `"either"` (the default), `"covariance"` or `"precision"`. No numeric
-  result depends on it, and here it matters more than usual: the two
-  readings are genuinely different models, as **Details** explains.
 
 ## Value
 
@@ -85,8 +74,11 @@ being AR(1). Its own correlation at lag 1 is not constant along the
 diagonal (measured at \\p = 4\\, \\\rho = 0.6\\: \\-0.514\\ at the ends
 and \\-0.441\\ in the middle), and its lag-2 correlation is 0 where an
 AR(1) would have \\\rho^2\\. So an AR(1) covariance and an AR(1)
-precision are different models, and `role` is what records which one an
-object stands for.
+precision are different models. This family is the AR(1) pattern itself,
+whichever side a consumer puts it on;
+[`ar1_inv()`](https://statmodels7.github.io/parameters7/reference/ar1_inv.md)
+is the family whose value is the matrix above, so that the AR(1) process
+is the one written on the other side.
 
 ## The log-determinant
 

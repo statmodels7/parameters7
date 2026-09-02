@@ -25,7 +25,7 @@ Details."><meta property="og:image" content="https://statmodels7.github.io/param
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,7 +69,7 @@ values. Which to reach for depends on which quantities you want free; see
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">matrix_log</span><span class="op">(</span><span class="va">dimension</span>, role <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"either"</span>, <span class="st">"covariance"</span>, <span class="st">"precision"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">matrix_log</span><span class="op">(</span><span class="va">dimension</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -79,13 +79,6 @@ values. Which to reach for depends on which quantities you want free; see
 <dl><dt id="arg-dimension">dimension<a class="anchor" aria-label="anchor" href="#arg-dimension"></a></dt>
 <dd><p>The side \(p\) of the matrix. A single positive whole
 number, finite and at least 1; anything else throws <code>'dimension' must be a single positive integer.</code></p></dd>
-
-
-<dt id="arg-role">role<a class="anchor" aria-label="anchor" href="#arg-role"></a></dt>
-<dd><p>A label recording which side of a model the matrix parametrizes:
-<code>"either"</code> (the default), <code>"covariance"</code> or <code>"precision"</code>. No numeric result
-depends on it, and it matters less here than elsewhere: the inverse is the
-same family at \(-\eta\).</p></dd>
 
 </dl></div>
     <div class="section level2">

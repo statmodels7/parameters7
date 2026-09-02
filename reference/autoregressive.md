@@ -14,12 +14,7 @@ process observed 6 times and 3 for one observed 200 times.
 ## Usage
 
 ``` r
-autoregressive(
-  dimension,
-  order,
-  link_scale = linkfunctions7::log_link(),
-  role = c("either", "covariance", "precision")
-)
+autoregressive(dimension, order, link_scale = linkfunctions7::log_link())
 ```
 
 ## Arguments
@@ -45,12 +40,6 @@ autoregressive(
   rules out `sqrt_link()` and its relatives; see
   [`diagonal_matrix()`](https://statmodels7.github.io/parameters7/reference/diagonal_matrix.md)
   for the two conditions.
-
-- role:
-
-  A label recording which side of a model the matrix parametrizes:
-  `"either"` (the default), `"covariance"` or `"precision"`. No numeric
-  result depends on it.
 
 ## Value
 

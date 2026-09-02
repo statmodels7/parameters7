@@ -35,7 +35,7 @@ An object of class
 [`SimplexParam()`](https://statmodels7.github.io/parameters7/reference/SimplexParam.md),
 with `n_free` equal to `n_cat - 1`, `free_names` `alr1` ... `alr(K-1)`,
 `param_name` `"simplex"`, and `param_params` holding `n_cat`. It carries
-no `dimension`, `rank`, `null_basis` or `role`, being a
+no `dimension`, `rank`, or `null_basis`, being a
 [`parameter()`](https://statmodels7.github.io/parameters7/reference/parameter.md)
 and never a
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md).

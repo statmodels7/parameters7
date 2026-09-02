@@ -24,8 +24,7 @@ LogCholeskyParam(
   param_params = list(),
   dimension = integer(0),
   rank = integer(0),
-  null_basis = integer(0),
-  role = character(0)
+  null_basis = integer(0)
 )
 ```
 
@@ -70,29 +69,14 @@ LogCholeskyParam(
   family. The validator rejects any other shape, and reports both the
   rank and the shape when the two disagree.
 
-- role:
-
-  A single string, one of `"covariance"`, `"precision"` or `"either"`,
-  recording which side of a model the matrix parametrizes. **No numeric
-  result depends on it.** It is carried because the family name does not
-  record it: the same
-  [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
-  serves either side, and a consumer that prefixes a free name with the
-  matrix it describes needs to know which.
-  [`block_diag()`](https://statmodels7.github.io/parameters7/reference/block_diag.md)
-  reads it to give a composite the common role of its blocks, or
-  `"either"` when they disagree, and
-  [`kron_identity()`](https://statmodels7.github.io/parameters7/reference/kron_identity.md)
-  copies it.
-
 ## Value
 
 An object of class `LogCholeskyParam`, a subclass of
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
 adding no properties of its own. It carries `dimension`, `rank` (always
-\\p\\), `null_basis` (\\p\\ by 0), `role`, `param_name`
-(`"log_cholesky"`), `n_free` (\\p(p+1)/2\\), `free_names` and
-`param_params`, whose only entry is `positions`.
+\\p\\), `null_basis` (\\p\\ by 0), `param_name` (`"log_cholesky"`),
+`n_free` (\\p(p+1)/2\\), `free_names` and `param_params`, whose only
+entry is `positions`.
 
 ## See also
 

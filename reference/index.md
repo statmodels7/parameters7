@@ -3,7 +3,8 @@
 ## Families
 
 The parametrizations. Each maps an unconstrained vector to a matrix in
-its own constrained set, and each owns the side of that matrix.
+its own constrained set. Which side of a model a matrix parametrizes is
+the consumer’s to say, not the parametrization’s.
 
 - [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
   : Construct an Unstructured Positive Definite Parameter
@@ -17,6 +18,14 @@ its own constrained set, and each owns the side of that matrix.
   : Construct an AR(1) Parameter
 - [`autoregressive()`](https://statmodels7.github.io/parameters7/reference/autoregressive.md)
   : Construct an Autoregressive Parameter
+- [`ar1_inv()`](https://statmodels7.github.io/parameters7/reference/ar1_inv.md)
+  : Construct the Precision of an AR(1) Process
+- [`Ar1InvParam()`](https://statmodels7.github.io/parameters7/reference/Ar1InvParam.md)
+  : The Precision of an AR(1) Process
+- [`autoregressive_inv()`](https://statmodels7.github.io/parameters7/reference/autoregressive_inv.md)
+  : Construct the Precision of an Autoregression of Order q
+- [`AutoregressiveInvParam()`](https://statmodels7.github.io/parameters7/reference/AutoregressiveInvParam.md)
+  : The Precision of an Autoregression of Order q
 - [`diagonal_matrix()`](https://statmodels7.github.io/parameters7/reference/diagonal_matrix.md)
   : Construct a Diagonal Parameter
 - [`scalar_matrix()`](https://statmodels7.github.io/parameters7/reference/scalar_matrix.md)
@@ -43,6 +52,10 @@ its own constrained set, and each owns the side of that matrix.
   : Construct a Sum of Fixed Matrices
 - [`SumStructParam()`](https://statmodels7.github.io/parameters7/reference/SumStructParam.md)
   : A Non-Negative Combination of Fixed Matrices
+- [`inverse_of()`](https://statmodels7.github.io/parameters7/reference/inverse_of.md)
+  : Construct the Inverse of a Matrix Parameter
+- [`InverseParam()`](https://statmodels7.github.io/parameters7/reference/InverseParam.md)
+  : The Inverse of a Matrix Parameter
 
 ## The map and its inverse
 
@@ -169,6 +182,10 @@ The machinery the exported functions are built from. None of it is
 exported, and none is needed to use the package; it is documented so
 that the derivations can be followed from the code that implements them.
 
+- [`ar1_inv_derivative()`](https://statmodels7.github.io/parameters7/reference/ar1_inv_derivative.md)
+  : Derivative Arrays of an Inverse AR(1) Parameter
+- [`ar1_inv_pattern()`](https://statmodels7.github.io/parameters7/reference/ar1_inv_pattern.md)
+  : The Pattern of an Inverse AR(1) Parameter
 - [`ar1_logdet_terms()`](https://statmodels7.github.io/parameters7/reference/ar1_logdet_terms.md)
   : The Log-Determinant Terms of an AR(1) Parameter
 - [`ar1_pattern()`](https://statmodels7.github.io/parameters7/reference/ar1_pattern.md)
@@ -177,6 +194,15 @@ that the derivations can be followed from the code that implements them.
   : The Matrix and Its Derivatives, From the Packed Arrays
 - [`ar_derivative()`](https://statmodels7.github.io/parameters7/reference/ar_derivative.md)
   : Derivative Components of an Autoregressive Parameter
+- [`ar_inv_codes()`](https://statmodels7.github.io/parameters7/reference/ar_inv_codes.md)
+  : The Sub-Multiset Codes of a Derivative Order
+- [`ar_inv_derivative()`](https://statmodels7.github.io/parameters7/reference/ar_inv_derivative.md)
+  : Derivative Arrays of an Inverse Autoregressive Parameter
+- [`ar_inv_factors()`](https://statmodels7.github.io/parameters7/reference/ar_inv_factors.md)
+  : The Prediction Factors of an Inverse Autoregression, With
+  Derivatives
+- [`ar_inv_structure()`](https://statmodels7.github.io/parameters7/reference/ar_inv_structure.md)
+  : The Subset Structure of One Derivative Order, Memoized
 - [`ar_logdet_derivative()`](https://statmodels7.github.io/parameters7/reference/ar_logdet_derivative.md)
   : Log-Determinant Components of an Autoregressive Parameter
 - [`ar_pack_col()`](https://statmodels7.github.io/parameters7/reference/ar_pack_col.md)
@@ -201,7 +227,7 @@ that the derivations can be followed from the code that implements them.
 - [`check_matrix()`](https://statmodels7.github.io/parameters7/reference/check_matrix.md)
   : Validate a Matrix Handed Back to a Parameter
 - [`check_param_args()`](https://statmodels7.github.io/parameters7/reference/check_param_args.md)
-  : Validate the Arguments Shared by Every Matrix Constructor
+  : Validate the Argument Shared by Every Matrix Constructor
 - [`check_parameter_vector()`](https://statmodels7.github.io/parameters7/reference/check_parameter_vector.md)
   : The Reduced Battery for a Parameter That Is Not a Matrix
 - [`check_positive_link()`](https://statmodels7.github.io/parameters7/reference/check_positive_link.md)
@@ -255,6 +281,8 @@ that the derivations can be followed from the code that implements them.
   : The Free Value Each Diagonal Entry Belongs To
 - [`.chol_leibniz_r()`](https://statmodels7.github.io/parameters7/reference/dot-chol_leibniz_r.md)
   : The R Twin of the Compiled Leibniz Assembly
+- [`.inv_inner()`](https://statmodels7.github.io/parameters7/reference/dot-inv_inner.md)
+  : The Inner Family of an Inverse Parameter
 - [`dr_prod_derivs()`](https://statmodels7.github.io/parameters7/reference/dr_prod_derivs.md)
   : Assemble a Scales-Times-Correlation Derivative of a Given Order
 - [`dr_prod_logdet_derivs()`](https://statmodels7.github.io/parameters7/reference/dr_prod_logdet_derivs.md)
@@ -275,12 +303,16 @@ that the derivations can be followed from the code that implements them.
   : One Stencil Along One Free Value
 - [`fd_step()`](https://statmodels7.github.io/parameters7/reference/fd_step.md)
   : Finite-Difference Step for a Free Value
+- [`inverse_derivs()`](https://statmodels7.github.io/parameters7/reference/inverse_derivs.md)
+  : Derivatives of an Inverse Parameter of a Given Order
 - [`is_base_param_class()`](https://statmodels7.github.io/parameters7/reference/is_base_param_class.md)
   : Is This the Package's Own Base Class?
 - [`kron_accessors`](https://statmodels7.github.io/parameters7/reference/kron_accessors.md)
   : The Inner Parameter, the Block Count, and the Lift
 - [`leibniz_gram()`](https://statmodels7.github.io/parameters7/reference/leibniz_gram.md)
   : A Gram Product's Derivatives From Its Factor's
+- [`link_derivs()`](https://statmodels7.github.io/parameters7/reference/link_derivs.md)
+  : A Link's Inverse and Its Four Derivatives
 - [`link_tag()`](https://statmodels7.github.io/parameters7/reference/link_tag.md)
   : A Short Name for a Link
 - [`log_affine_derivs()`](https://statmodels7.github.io/parameters7/reference/log_affine_derivs.md)
@@ -303,11 +335,25 @@ that the derivations can be followed from the code that implements them.
   : Orderings of a Multiset, Counted With Multiplicity
 - [`name_dims()`](https://statmodels7.github.io/parameters7/reference/name_dims.md)
   : Name the Rows and Columns of a Parameter's Matrix
+- [`neg_like()`](https://statmodels7.github.io/parameters7/reference/neg_like.md)
+  : Negate Without Changing the Container
+- [`ordered_set_partitions()`](https://statmodels7.github.io/parameters7/reference/ordered_set_partitions.md)
+  : Ordered Set Partitions of the First k Positions
+- [`param_d1.Ar1InvParam`](https://statmodels7.github.io/parameters7/reference/param_d1.Ar1InvParam.md)
+  [`param_d2.Ar1InvParam`](https://statmodels7.github.io/parameters7/reference/param_d1.Ar1InvParam.md)
+  [`param_d3.Ar1InvParam`](https://statmodels7.github.io/parameters7/reference/param_d1.Ar1InvParam.md)
+  [`param_d4.Ar1InvParam`](https://statmodels7.github.io/parameters7/reference/param_d1.Ar1InvParam.md)
+  : Derivative Arrays of an Inverse AR(1) Parameter
 - [`param_d1.Ar1Param`](https://statmodels7.github.io/parameters7/reference/param_d1.Ar1Param.md)
   [`param_d2.Ar1Param`](https://statmodels7.github.io/parameters7/reference/param_d1.Ar1Param.md)
   [`param_d3.Ar1Param`](https://statmodels7.github.io/parameters7/reference/param_d1.Ar1Param.md)
   [`param_d4.Ar1Param`](https://statmodels7.github.io/parameters7/reference/param_d1.Ar1Param.md)
   : Derivatives of an AR(1) Parameter
+- [`param_d1.AutoregressiveInvParam`](https://statmodels7.github.io/parameters7/reference/param_d1.AutoregressiveInvParam.md)
+  [`param_d2.AutoregressiveInvParam`](https://statmodels7.github.io/parameters7/reference/param_d1.AutoregressiveInvParam.md)
+  [`param_d3.AutoregressiveInvParam`](https://statmodels7.github.io/parameters7/reference/param_d1.AutoregressiveInvParam.md)
+  [`param_d4.AutoregressiveInvParam`](https://statmodels7.github.io/parameters7/reference/param_d1.AutoregressiveInvParam.md)
+  : Derivative Arrays of an Inverse Autoregressive Parameter
 - [`param_d1.AutoregressiveParam`](https://statmodels7.github.io/parameters7/reference/param_d1.AutoregressiveParam.md)
   [`param_d2.AutoregressiveParam`](https://statmodels7.github.io/parameters7/reference/param_d1.AutoregressiveParam.md)
   [`param_d3.AutoregressiveParam`](https://statmodels7.github.io/parameters7/reference/param_d1.AutoregressiveParam.md)
@@ -332,6 +378,11 @@ that the derivations can be followed from the code that implements them.
   [`param_d3.DrProdParam`](https://statmodels7.github.io/parameters7/reference/param_d1.DrProdParam.md)
   [`param_d4.DrProdParam`](https://statmodels7.github.io/parameters7/reference/param_d1.DrProdParam.md)
   : Derivatives of a Scales-Times-Correlation Parameter
+- [`param_d1.InverseParam`](https://statmodels7.github.io/parameters7/reference/param_d1.InverseParam.md)
+  [`param_d2.InverseParam`](https://statmodels7.github.io/parameters7/reference/param_d1.InverseParam.md)
+  [`param_d3.InverseParam`](https://statmodels7.github.io/parameters7/reference/param_d1.InverseParam.md)
+  [`param_d4.InverseParam`](https://statmodels7.github.io/parameters7/reference/param_d1.InverseParam.md)
+  : Derivative Arrays of an Inverse Parameter
 - [`param_d1.KronIdentityParam`](https://statmodels7.github.io/parameters7/reference/param_d1.KronIdentityParam.md)
   : First Derivatives of a Block Replication
 - [`param_d1.LogCholeskyParam`](https://statmodels7.github.io/parameters7/reference/param_d1.LogCholeskyParam.md)
@@ -542,6 +593,12 @@ that the derivations can be followed from the code that implements them.
   : Log-Determinant of a Diagonal Parameter
 - [`param_logdet.DrProdParam`](https://statmodels7.github.io/parameters7/reference/param_logdet.DrProdParam.md)
   : Log-Determinant of a Scales-Times-Correlation Parameter
+- [`param_logdet.InverseParam`](https://statmodels7.github.io/parameters7/reference/param_logdet.InverseParam.md)
+  [`param_dlogdet.InverseParam`](https://statmodels7.github.io/parameters7/reference/param_logdet.InverseParam.md)
+  [`param_d2logdet.InverseParam`](https://statmodels7.github.io/parameters7/reference/param_logdet.InverseParam.md)
+  [`param_d3logdet.InverseParam`](https://statmodels7.github.io/parameters7/reference/param_logdet.InverseParam.md)
+  [`param_d4logdet.InverseParam`](https://statmodels7.github.io/parameters7/reference/param_logdet.InverseParam.md)
+  : Log-Determinant of an Inverse Parameter
 - [`param_logdet.KronIdentityParam`](https://statmodels7.github.io/parameters7/reference/param_logdet.KronIdentityParam.md)
   : Log-Determinant of a Block Replication
 - [`param_logdet.LogCholeskyParam`](https://statmodels7.github.io/parameters7/reference/param_logdet.LogCholeskyParam.md)
@@ -578,6 +635,9 @@ that the derivations can be followed from the code that implements them.
 - [`param_solve.DrProdParam`](https://statmodels7.github.io/parameters7/reference/param_solve.DrProdParam.md)
   [`param_factor.DrProdParam`](https://statmodels7.github.io/parameters7/reference/param_solve.DrProdParam.md)
   : Solve and Factor of a Scales-Times-Correlation Parameter
+- [`param_solve.InverseParam`](https://statmodels7.github.io/parameters7/reference/param_solve.InverseParam.md)
+  [`param_factor.InverseParam`](https://statmodels7.github.io/parameters7/reference/param_solve.InverseParam.md)
+  : Solve and Factor of an Inverse Parameter
 - [`param_solve.KronIdentityParam`](https://statmodels7.github.io/parameters7/reference/param_solve.KronIdentityParam.md)
   : Solve of a Block Replication
 - [`param_solve.MatrixLogParam`](https://statmodels7.github.io/parameters7/reference/param_solve.MatrixLogParam.md)
@@ -603,6 +663,9 @@ that the derivations can be followed from the code that implements them.
   : Matrix of a Diagonal Parameter
 - [`param_value.DrProdParam`](https://statmodels7.github.io/parameters7/reference/param_value.DrProdParam.md)
   : Value of a Scales-Times-Correlation Parameter
+- [`param_value.InverseParam`](https://statmodels7.github.io/parameters7/reference/param_value.InverseParam.md)
+  [`param_free.InverseParam`](https://statmodels7.github.io/parameters7/reference/param_value.InverseParam.md)
+  : Value and Inverse Map of an Inverse Parameter
 - [`param_value.KronIdentityParam`](https://statmodels7.github.io/parameters7/reference/param_value.KronIdentityParam.md)
   : Value of a Block Replication
 - [`param_value.LogCholeskyParam`](https://statmodels7.github.io/parameters7/reference/param_value.LogCholeskyParam.md)
@@ -626,6 +689,8 @@ that the derivations can be followed from the code that implements them.
   : Print a Constrained Parameter
 - [`readable_diagonal()`](https://statmodels7.github.io/parameters7/reference/readable_diagonal.md)
   : Quantities That Are Separate Links of Separate Free Values
+- [`recip_derivs()`](https://statmodels7.github.io/parameters7/reference/recip_derivs.md)
+  : Derivatives of a Reciprocal, for Composition
 - [`scaled_scale()`](https://statmodels7.github.io/parameters7/reference/scaled_scale.md)
   : The Scale Behind a Free Vector, and Its Derivatives
 - [`simplex_components()`](https://statmodels7.github.io/parameters7/reference/simplex_components.md)
@@ -658,3 +723,5 @@ that the derivations can be followed from the code that implements them.
   : Row and Chart Coordinate of Each Free Value
 - [`tuple_indices()`](https://statmodels7.github.io/parameters7/reference/tuple_indices.md)
   : The Index Tuples of a Given Width
+- [`w_derivs()`](https://statmodels7.github.io/parameters7/reference/w_derivs.md)
+  : Derivatives of the Reciprocal of One Minus a Squared Correlation

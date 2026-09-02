@@ -102,7 +102,7 @@ S7::method(param_value, Toy) <- function(s, eta, ...) {
 }
 toy <- Toy(param_name = "toy", n_free = 1L, free_names = "log_s",
            param_params = list(), dimension = 2L, rank = 2L,
-           null_basis = matrix(numeric(0), 2, 0), role = "either")
+           null_basis = matrix(numeric(0), 2, 0))
 param_is_numerical(toy)
 #>       param_d1       param_d2       param_d3       param_d4   param_logdet 
 #>           TRUE           TRUE           TRUE           TRUE           TRUE 

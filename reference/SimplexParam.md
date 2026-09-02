@@ -5,8 +5,8 @@ log-ratio parametrization. It inherits
 [`parameter()`](https://statmodels7.github.io/parameters7/reference/parameter.md)
 **directly**, never
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md),
-its value being a vector: there is no `dimension`, no `rank`, no
-`null_basis` and no `role`, and
+its value being a vector: there is no `dimension`, no `rank` and no
+`null_basis`, and
 [`param_logdet()`](https://statmodels7.github.io/parameters7/reference/param_logdet.md),
 [`param_solve()`](https://statmodels7.github.io/parameters7/reference/param_solve.md)
 and

@@ -1,9 +1,9 @@
 # Print a Constrained Parameter
 
 Prints a one-screen summary of a parametrization: the family name, the
-shape and rank of the matrix, the role label, how many free values there
-are and what they are called, and which of the nine derived quantities
-come from the base class instead of a closed form.
+shape and rank of the matrix, how many free values there are and what
+they are called, and which of the nine derived quantities come from the
+base class instead of a closed form.
 
 ## Arguments
 
@@ -53,7 +53,6 @@ log_cholesky(3)
 #> Parameter: log_cholesky
 #> Matrix:    3 x 3, symmetric
 #> Rank:      3 of 3
-#> Role:      either
 #> 
 #> Free values: 6
 #>   log_L1, log_L2, log_L3, L2.1, L3.1, L3.2
@@ -65,7 +64,6 @@ scaled_matrix(crossprod(diff(diag(6), differences = 2)))
 #> Parameter: scaled
 #> Matrix:    6 x 6, symmetric
 #> Rank:      4 of 6 (null space of dimension 2)
-#> Role:      precision
 #> 
 #> Free values: 1
 #>   log_scale
@@ -86,7 +84,6 @@ log_cholesky(6)
 #> Parameter: log_cholesky
 #> Matrix:    6 x 6, symmetric
 #> Rank:      6 of 6
-#> Role:      either
 #> 
 #> Free values: 21
 #>   log_L1, log_L2, log_L3, log_L4, log_L5, log_L6, L2.1, L3.1, L4.1, L5.1, L6.1, L3.2, ... (9 more)

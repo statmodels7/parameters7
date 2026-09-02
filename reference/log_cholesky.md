@@ -15,7 +15,7 @@ parametrization of Pinheiro and Bates (1996).
 ## Usage
 
 ``` r
-log_cholesky(dimension, role = c("either", "covariance", "precision"))
+log_cholesky(dimension)
 ```
 
 ## Arguments
@@ -25,17 +25,6 @@ log_cholesky(dimension, role = c("either", "covariance", "precision"))
   The side \\p\\ of the matrix. A single positive whole number, finite
   and at least 1. `0`, `2.5`, `c(1, 2)`, `"3"`, `Inf` and `NA` all throw
   `'dimension' must be a single positive integer.`
-
-- role:
-
-  A label recording which side of a model the matrix parametrizes:
-  `"either"` (the default), `"covariance"` or `"precision"`. **No
-  numeric result depends on it.** It is carried because the family name
-  does not record it, the same object serving either side, and a
-  consumer that prefixes a free name with the matrix it describes needs
-  to know which. Matched with
-  [`match.arg()`](https://rdrr.io/r/base/match.arg.html), so an
-  abbreviation such as `"cov"` is accepted and anything else throws.
 
 ## Value
 
@@ -63,10 +52,6 @@ with properties
 - `null_basis`:
 
   a \\p\\ by 0 matrix; there are no null directions.
-
-- `role`:
-
-  character, as supplied.
 
 - `param_name`:
 
@@ -183,7 +168,6 @@ s
 #> Parameter: log_cholesky
 #> Matrix:    3 x 3, symmetric
 #> Rank:      3 of 3
-#> Role:      either
 #> 
 #> Free values: 6
 #>   log_L1, log_L2, log_L3, L2.1, L3.1, L3.2

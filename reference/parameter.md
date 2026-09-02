@@ -91,7 +91,7 @@ as
 [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
 and carries that constructor's subclass. A matrix family returns a
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md),
-which adds `dimension`, `rank`, `null_basis` and `role`.
+which adds `dimension`, `rank` and `null_basis`.
 
 ## A parameter owns its dimension
 

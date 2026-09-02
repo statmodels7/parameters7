@@ -23,7 +23,7 @@ rank and param_params by hand."><meta property="og:image" content="https://statm
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.18.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -73,8 +73,7 @@ properties directly and does no work; using it means computing <code>free_names<
 <span>  param_params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  dimension <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
 <span>  rank <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
-<span>  null_basis <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
-<span>  role <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span>
+<span>  null_basis <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -119,23 +118,12 @@ columns are an orthonormal basis of the common null space. Use
 for a full-rank family. The validator rejects any other shape, and
 reports both the rank and the shape when the two disagree.</p></dd>
 
-
-<dt id="arg-role">role<a class="anchor" aria-label="anchor" href="#arg-role"></a></dt>
-<dd><p>A single string, one of <code>"covariance"</code>, <code>"precision"</code> or
-<code>"either"</code>, recording which side of a model the matrix parametrizes. <strong>No
-numeric result depends on it.</strong> It is carried because the family name does
-not record it: the same <code><a href="log_cholesky.html">log_cholesky()</a></code> serves either side, and a
-consumer that prefixes a free name with the matrix it describes needs to
-know which. <code><a href="block_diag.html">block_diag()</a></code> reads it to give a composite the common role of
-its blocks, or <code>"either"</code> when they disagree, and <code><a href="kron_identity.html">kron_identity()</a></code> copies
-it.</p></dd>
-
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>An object of class <code>LogCholeskyParam</code>, a subclass of
 <code><a href="matrix_parameter.html">matrix_parameter()</a></code> adding no properties of its own. It carries
-<code>dimension</code>, <code>rank</code> (always \(p\)), <code>null_basis</code> (\(p\) by 0), <code>role</code>,
+<code>dimension</code>, <code>rank</code> (always \(p\)), <code>null_basis</code> (\(p\) by 0),
 <code>param_name</code> (<code>"log_cholesky"</code>), <code>n_free</code> (\(p(p+1)/2\)), <code>free_names</code> and
 <code>param_params</code>, whose only entry is <code>positions</code>.</p>
     </div>

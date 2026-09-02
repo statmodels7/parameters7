@@ -44,8 +44,7 @@ An object of class
 with `dimension` equal to `m * structure@dimension`, `n_free` and
 `free_names` the inner parameter's unchanged, `rank` equal to
 `m * structure@rank`, `null_basis` the inner one replicated blockwise,
-`role` copied from the inner parameter, and `param_params` holding
-`inner` and `m`.
+and `param_params` holding `inner` and `m`.
 
 ## Every quantity is a linear lift
 

@@ -6,8 +6,8 @@ a symmetric** one, so it inherits
 [`parameter()`](https://statmodels7.github.io/parameters7/reference/parameter.md)
 directly, never
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md):
-there is no `rank`, no `null_basis` and no `role`, and a transition
-matrix has no log-determinant, solve or factor to be asked for.
+there is no `rank` and no `null_basis`, and a transition matrix has no
+log-determinant, solve or factor to be asked for.
 
 [`transition_matrix()`](https://statmodels7.github.io/parameters7/reference/transition_matrix.md)
 builds one. The rows are independent in the parametrization, so every

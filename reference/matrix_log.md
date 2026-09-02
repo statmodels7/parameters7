@@ -16,7 +16,7 @@ quantities you want free; see **Details**.
 ## Usage
 
 ``` r
-matrix_log(dimension, role = c("either", "covariance", "precision"))
+matrix_log(dimension)
 ```
 
 ## Arguments
@@ -26,13 +26,6 @@ matrix_log(dimension, role = c("either", "covariance", "precision"))
   The side \\p\\ of the matrix. A single positive whole number, finite
   and at least 1; anything else throws
   `'dimension' must be a single positive integer.`
-
-- role:
-
-  A label recording which side of a model the matrix parametrizes:
-  `"either"` (the default), `"covariance"` or `"precision"`. No numeric
-  result depends on it, and it matters less here than elsewhere: the
-  inverse is the same family at \\-\eta\\.
 
 ## Value
 

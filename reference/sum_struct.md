@@ -8,11 +8,7 @@ move; what the free vector carries is the \\K\\ weights.
 ## Usage
 
 ``` r
-sum_struct(
-  components,
-  link = linkfunctions7::log_link(),
-  role = c("either", "covariance", "precision")
-)
+sum_struct(components, link = linkfunctions7::log_link())
 ```
 
 ## Arguments
@@ -33,11 +29,6 @@ sum_struct(
   real line; see
   [`diagonal_matrix()`](https://statmodels7.github.io/parameters7/reference/diagonal_matrix.md)
   for the two conditions.
-
-- role:
-
-  One of `"either"` (the default), `"covariance"` or `"precision"`. No
-  numeric result depends on it.
 
 ## Value
 

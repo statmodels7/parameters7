@@ -214,7 +214,7 @@ S7::method(param_d1, Wrong) <- function(s, eta, ...) {
 }
 w <- Wrong(param_name = "wrong", n_free = 1L, free_names = "log_s",
            param_params = list(), dimension = 2L, rank = 2L,
-           null_basis = matrix(numeric(0), 2, 0), role = "either")
+           null_basis = matrix(numeric(0), 2, 0))
 bad <- check_parameter(w, verbose = FALSE)
 bad[bad$status == "FAIL", ]
 #>               check status statistic

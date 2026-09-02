@@ -62,7 +62,6 @@ ma1 <- function(p, class = Ma1Param) {
     free_names = c("log_scale", "z_theta"),
     rank = as.integer(p),          # positive definite everywhere on the chart
     null_basis = matrix(0, p, 0),
-    role = "covariance",
     param_params = list()
   )
 }

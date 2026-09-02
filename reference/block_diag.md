@@ -12,7 +12,7 @@ random-effect term has.
 ## Usage
 
 ``` r
-block_diag(..., role = NULL)
+block_diag(...)
 ```
 
 ## Arguments
@@ -25,12 +25,6 @@ block_diag(..., role = NULL)
   which must be unique. A block that is not a `matrix_parameter` is
   rejected by position, so `block_diag(ar1(3), simplex(3))` reports that
   block 2 does not inherit from it.
-
-- role:
-
-  One of `"covariance"`, `"precision"` or `"either"`. Defaults to the
-  blocks' common role, and to `"either"` where they disagree. No numeric
-  result depends on it.
 
 ## Value
 

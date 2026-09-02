@@ -14,12 +14,7 @@ makes the object a ridge.
 ## Usage
 
 ``` r
-scaled_matrix(
-  p,
-  link = linkfunctions7::log_link(),
-  role = c("precision", "covariance", "either"),
-  tol = 1e-10
-)
+scaled_matrix(p, link = linkfunctions7::log_link(), tol = 1e-10)
 ```
 
 ## Arguments
@@ -45,12 +40,6 @@ scaled_matrix(
   for the two conditions. `NULL` means the matrix is fully known:
   `n_free` is then 0, `free_names` is empty, and `param_name` is
   `"fixed"`.
-
-- role:
-
-  A label recording which side of a model the matrix parametrizes,
-  defaulting to `"precision"` here because the consumer of a scaled
-  fixed matrix is a penalty. No numeric result depends on it.
 
 - tol:
 
