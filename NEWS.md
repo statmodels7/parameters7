@@ -1,3 +1,24 @@
+# parameters7 0.21.0
+
+* `param_inv_d1()` and `param_inv_d2()`, new generics: the first and second
+  derivatives of the inverse of a matrix parameter in its free values. The
+  default method, for any `matrix_parameter`, is the sandwich
+  `-M^-1 A_k M^-1` and its second-order twin, which is what every consumer
+  wrote by hand. The method for `log_cholesky()` is exact where that sandwich
+  is not: with `G = L^-1`, `B_k = G dL_k` and `C_k = B_k + B_k'`, the first
+  derivative is `-G' C_k G` and the second `G'(B_l' C_k + C_k B_l - dC_k/dl)G`,
+  and no product in it cancels.
+
+  Where the matrix is nearly singular along a direction that is not a
+  coordinate axis the sandwich loses its digits: at the free value
+  `log L22 = -11.5` of a two-dimensional log-Cholesky chart it reads the
+  first derivative with a relative error of 5.6e-08 and the second one
+  entirely wrong, where the exact method reads 5e-12 against a Richardson
+  difference of the inverse. At ordinary values the two agree to 1e-15.
+  distributions7's multivariate families read these for the derivatives of
+  `Sigma^-1`, which is what a random-effect covariance's penalty Hessian and
+  its derivatives are made of.
+
 # parameters7 0.20.0
 
 * `autoregressive_inv()` writes its derivative arrays out instead of taking

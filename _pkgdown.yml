@@ -65,6 +65,8 @@ reference:
   - param_d3logdet
   - param_d4logdet
   - param_solve
+  - param_inv_d1
+  - param_inv_d2
   - param_factor
 
 - title: What a reader reads
