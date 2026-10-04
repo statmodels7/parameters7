@@ -268,8 +268,9 @@ sum_struct_null_basis <- function(components) {
 #' Derivatives of the Weights of a Sum of Fixed Matrices
 #'
 #' @description
-#' Returns each weight and its first four derivatives in the free value that
-#' carries it, for every component at once, as a matrix with one row per order.
+#' Returns each weight and its derivatives to order `order` in the free value
+#' that carries it, for every component at once, as a matrix with one row per
+#' order.
 #'
 #' @details
 #' Each weight depends on one free value only, so the table is complete: there
@@ -279,22 +280,19 @@ sum_struct_null_basis <- function(components) {
 #'
 #' @param s A [SumStructParam()] object.
 #' @param eta A numeric vector of length `s@n_free`.
+#' @param order The highest derivative order wanted, an integer from 0 to 4.
 #'
-#' @return A 5 by \eqn{K} numeric matrix, row \eqn{m+1} holding the \eqn{m}-th
+#' @return An `order + 1` by \eqn{K} numeric matrix, row \eqn{m+1} holding the
+#'   \eqn{m}-th
 #'   derivative of the inverse link at each free value, so row 1 is the weights
 #'   themselves.
 #'
-#' @seealso [sum_struct_derivs()] and [sum_struct_logdet_derivs()], the two
-#'   callers.
+#' @seealso [sum_struct_logdet_derivs()], the caller; [sum_struct_derivs()]
+#'   reads the derivative of its own order alone.
 #'
 #' @keywords internal
-sum_struct_weight_derivs <- function(s, eta) {
-  lk <- .ss(s)$link
-  rbind(linkfunctions7::linkinv(lk, eta),
-        linkfunctions7::dlinkinv(lk, eta),
-        linkfunctions7::d2linkinv(lk, eta),
-        linkfunctions7::d3linkinv(lk, eta),
-        linkfunctions7::d4linkinv(lk, eta))
+sum_struct_weight_derivs <- function(s, eta, order) {
+  do.call(rbind, linkinv_upto(.ss(s)$link, eta, order))
 }
 
 #' Assemble a Sum of Fixed Matrices' Derivatives of a Given Order
@@ -323,14 +321,18 @@ sum_struct_weight_derivs <- function(s, eta) {
 #'
 #' @keywords internal
 sum_struct_derivs <- function(s, eta, order) {
-  cd <- sum_struct_weight_derivs(s, eta)
+  # a component reads the weight's derivative of this order alone
+  lk <- .ss(s)$link
+  wd <- switch(order,
+    linkfunctions7::dlinkinv(lk, eta), linkfunctions7::d2linkinv(lk, eta),
+    linkfunctions7::d3linkinv(lk, eta), linkfunctions7::d4linkinv(lk, eta))
   comp <- .ss(s)$components
   p <- s@dimension
   zero <- matrix(0, p, p)
   out <- lapply(param_tuple_indices(s, order), function(t) {
     k <- unique(t)
     if (length(k) > 1L) return(zero)
-    cd[order + 1L, k] * comp[[k]]
+    wd[k] * comp[[k]]
   })
   # the dimnames convention every family's matrices carry; one point
   # here covers all four derivative orders, which route through this
@@ -426,7 +428,7 @@ sum_struct_trace_term <- function(minv, comp, t) {
 #'
 #' @details
 #' This is Faa di Bruno with a diagonal inner map, written out here instead of
-#' going through [compose4()], because the outer function is a derivative in
+#' going through [compose_order()], because the outer function is a derivative in
 #' several weights at once, never a univariate composition. The product over the groups'
 #' partitions is the grid the loop walks; the partitions come from
 #' [numericals7::set_partitions()], the one enumeration the toolkit keeps.
@@ -451,7 +453,7 @@ sum_struct_trace_term <- function(minv, comp, t) {
 #' @keywords internal
 sum_struct_logdet_derivs <- function(s, eta, order) {
   comp <- .ss(s)$components
-  cd <- sum_struct_weight_derivs(s, eta)
+  cd <- sum_struct_weight_derivs(s, eta, order)
   minv <- solve(param_value(s, eta))
   out <- vapply(param_tuple_indices(s, order), function(t) {
     idx <- sort(unique(t))

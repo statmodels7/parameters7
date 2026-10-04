@@ -10,16 +10,98 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// ar_taylor_cpp
-List ar_taylor_cpp(int p, int q, NumericMatrix seeds);
-RcppExport SEXP _parameters7_ar_taylor_cpp(SEXP pSEXP, SEXP qSEXP, SEXP seedsSEXP) {
+// ar_value_cpp
+List ar_value_cpp(int p, int q, NumericMatrix seeds);
+RcppExport SEXP _parameters7_ar_value_cpp(SEXP pSEXP, SEXP qSEXP, SEXP seedsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< int >::type p(pSEXP);
     Rcpp::traits::input_parameter< int >::type q(qSEXP);
     Rcpp::traits::input_parameter< NumericMatrix >::type seeds(seedsSEXP);
-    rcpp_result_gen = Rcpp::wrap(ar_taylor_cpp(p, q, seeds));
+    rcpp_result_gen = Rcpp::wrap(ar_value_cpp(p, q, seeds));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ar_d1_cpp
+List ar_d1_cpp(int p, int q, NumericMatrix seeds, IntegerMatrix tuples);
+RcppExport SEXP _parameters7_ar_d1_cpp(SEXP pSEXP, SEXP qSEXP, SEXP seedsSEXP, SEXP tuplesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type p(pSEXP);
+    Rcpp::traits::input_parameter< int >::type q(qSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type seeds(seedsSEXP);
+    Rcpp::traits::input_parameter< IntegerMatrix >::type tuples(tuplesSEXP);
+    rcpp_result_gen = Rcpp::wrap(ar_d1_cpp(p, q, seeds, tuples));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ar_d2_cpp
+List ar_d2_cpp(int p, int q, NumericMatrix seeds, IntegerMatrix tuples);
+RcppExport SEXP _parameters7_ar_d2_cpp(SEXP pSEXP, SEXP qSEXP, SEXP seedsSEXP, SEXP tuplesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type p(pSEXP);
+    Rcpp::traits::input_parameter< int >::type q(qSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type seeds(seedsSEXP);
+    Rcpp::traits::input_parameter< IntegerMatrix >::type tuples(tuplesSEXP);
+    rcpp_result_gen = Rcpp::wrap(ar_d2_cpp(p, q, seeds, tuples));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ar_d3_cpp
+List ar_d3_cpp(int p, int q, NumericMatrix seeds, IntegerMatrix tuples);
+RcppExport SEXP _parameters7_ar_d3_cpp(SEXP pSEXP, SEXP qSEXP, SEXP seedsSEXP, SEXP tuplesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type p(pSEXP);
+    Rcpp::traits::input_parameter< int >::type q(qSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type seeds(seedsSEXP);
+    Rcpp::traits::input_parameter< IntegerMatrix >::type tuples(tuplesSEXP);
+    rcpp_result_gen = Rcpp::wrap(ar_d3_cpp(p, q, seeds, tuples));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ar_d4_cpp
+List ar_d4_cpp(int p, int q, NumericMatrix seeds, IntegerMatrix tuples);
+RcppExport SEXP _parameters7_ar_d4_cpp(SEXP pSEXP, SEXP qSEXP, SEXP seedsSEXP, SEXP tuplesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type p(pSEXP);
+    Rcpp::traits::input_parameter< int >::type q(qSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type seeds(seedsSEXP);
+    Rcpp::traits::input_parameter< IntegerMatrix >::type tuples(tuplesSEXP);
+    rcpp_result_gen = Rcpp::wrap(ar_d4_cpp(p, q, seeds, tuples));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ar_toeplitz_cpp
+List ar_toeplitz_cpp(NumericMatrix g, CharacterVector nm);
+RcppExport SEXP _parameters7_ar_toeplitz_cpp(SEXP gSEXP, SEXP nmSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type g(gSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type nm(nmSEXP);
+    rcpp_result_gen = Rcpp::wrap(ar_toeplitz_cpp(g, nm));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ar_taylor_jet_cpp
+List ar_taylor_jet_cpp(int p, int q, NumericMatrix seeds, int K);
+RcppExport SEXP _parameters7_ar_taylor_jet_cpp(SEXP pSEXP, SEXP qSEXP, SEXP seedsSEXP, SEXP KSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type p(pSEXP);
+    Rcpp::traits::input_parameter< int >::type q(qSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type seeds(seedsSEXP);
+    Rcpp::traits::input_parameter< int >::type K(KSEXP);
+    rcpp_result_gen = Rcpp::wrap(ar_taylor_jet_cpp(p, q, seeds, K));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -43,7 +125,13 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_parameters7_ar_taylor_cpp", (DL_FUNC) &_parameters7_ar_taylor_cpp, 3},
+    {"_parameters7_ar_value_cpp", (DL_FUNC) &_parameters7_ar_value_cpp, 3},
+    {"_parameters7_ar_d1_cpp", (DL_FUNC) &_parameters7_ar_d1_cpp, 4},
+    {"_parameters7_ar_d2_cpp", (DL_FUNC) &_parameters7_ar_d2_cpp, 4},
+    {"_parameters7_ar_d3_cpp", (DL_FUNC) &_parameters7_ar_d3_cpp, 4},
+    {"_parameters7_ar_d4_cpp", (DL_FUNC) &_parameters7_ar_d4_cpp, 4},
+    {"_parameters7_ar_toeplitz_cpp", (DL_FUNC) &_parameters7_ar_toeplitz_cpp, 2},
+    {"_parameters7_ar_taylor_jet_cpp", (DL_FUNC) &_parameters7_ar_taylor_jet_cpp, 4},
     {"_parameters7_chol_leibniz_cpp", (DL_FUNC) &_parameters7_chol_leibniz_cpp, 8},
     {NULL, NULL, 0}
 };

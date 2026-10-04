@@ -50,7 +50,7 @@ test_that("the chart lands inside the stationary region", {
     s <- autoregressive(q + 4L, order = q)
     for (i in 1:20) {
       eta <- c(rnorm(1), rnorm(q, sd = 2.5))
-      phi <- parameters7:::ar_taylor(s, eta)$phi[, 1L]
+      phi <- parameters7:::ar_tables(s, eta, 0L)$phi
       expect_gt(min(Mod(polyroot(c(1, -phi)))), 1)
       m <- param_value(s, eta)
       expect_gt(min(eigen(m, symmetric = TRUE, only.values = TRUE)$values), 0)
@@ -179,4 +179,42 @@ test_that("the compiled propagation matches written derivatives at q = 1", {
   expect_equal(pick(d4, 4L, c(1L, 1L, 2L, 2L)), g1(2, 2), tolerance = 1e-14)
   expect_equal(pick(d4, 4L, c(1L, 2L, 2L, 2L)), g1(1, 3), tolerance = 1e-14)
   expect_equal(pick(d4, 4L, c(2L, 2L, 2L, 2L)), g1(0, 4), tolerance = 1e-14)
+})
+
+
+test_that("each order's kernel agrees with the mechanical twin", {
+  # ar_taylor_jet_cpp pushes truncated derivative records through every
+  # product of the recursion and shares no algebra with the explicit kernels,
+  # which differentiate in the partial autocorrelations and apply the links
+  # once; each explicit kernel returns its own order's tuples alone
+  pack_col <- function(n, k, t) {
+    if (k == 0L) return(1L)
+    idx <- 0L
+    for (v in t) idx <- idx * n + (v - 1L)
+    1L + sum(n^(0:(k - 1L))) + idx
+  }
+  for (q in 1:4) {
+    s <- autoregressive(q + 6L, order = q)
+    set.seed(q)
+    eta <- c(rnorm(1, sd = 0.5), rnorm(q, sd = 0.8))
+    n <- q + 1L
+    seeds <- do.call(rbind, c(
+      list(unlist(linkinv_upto(s@param_params$link_scale, eta[1L], 4L))),
+      lapply(seq_len(q), function(k)
+        unlist(linkinv_upto(s@param_params$link_pacf, eta[k + 1L], 4L)))))
+    jet <- parameters7:::ar_taylor_jet_cpp(s@dimension, q, seeds, 4L)
+    v <- parameters7:::ar_tables(s, eta, 0L)
+    expect_equal(v$gamma, jet$gamma[, 1L], tolerance = 1e-14)
+    expect_equal(v$phi, jet$phi[, 1L], tolerance = 1e-14)
+    for (k in 1:4) {
+      tk <- parameters7:::ar_tables(s, eta, k)
+      tup <- tuple_indices(n, k)
+      expect_identical(ncol(tk$gamma), length(tup))
+      cols <- vapply(tup, function(t) pack_col(n, k, t), 0)
+      expect_equal(tk$gamma, jet$gamma[, cols, drop = FALSE], tolerance = 1e-12,
+                   label = paste("gamma, q =", q, "order", k))
+      expect_equal(tk$phi, jet$phi[, cols, drop = FALSE], tolerance = 1e-12,
+                   label = paste("phi, q =", q, "order", k))
+    }
+  }
 })

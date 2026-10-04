@@ -34,9 +34,8 @@ fixed as the point moves.
 }
 \details{
 The four share \code{\link[=ar_derivative]{ar_derivative()}} and differ only in the order they pass.
-\code{\link[=ar_taylor]{ar_taylor()}} fills all four orders in one pass whatever is asked, so the
-first order costs nearly what the fourth costs; see \code{\link[=autoregressive]{autoregressive()}} for the
-table.
+Each order runs its own kernel, which returns that order's components
+alone; see \code{\link[=autoregressive]{autoregressive()}} for the cost.
 }
 \seealso{
 \code{\link[=ar_derivative]{ar_derivative()}}, which assembles them, and

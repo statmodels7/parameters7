@@ -4,21 +4,24 @@
 \alias{corr_logdet_chains}
 \title{Log-Determinant Chains of a Correlation Parameter}
 \usage{
-corr_logdet_chains(s, eta)
+corr_logdet_chains(s, eta, order)
 }
 \arguments{
 \item{s}{A \code{\link[=CorrelationParam]{CorrelationParam()}} object.}
 
 \item{eta}{A numeric vector of free values, of length \code{s@n_free}.}
+
+\item{order}{The derivative order, an integer from 1 to 4.}
 }
 \value{
-A list of \code{s@n_free} elements, each a list of four numbers: the first
-to fourth derivative of \eqn{2\log\sin\theta_k} in \eqn{\eta_k}.
+A list of \code{s@n_free} numbers, the derivative of order \code{order} of
+\eqn{2\log\sin\theta_k} in \eqn{\eta_k}.
 }
 \description{
-Returns, for each free value, the four derivatives of \eqn{2\log\sin\theta} in
-that free value: the log-determinant's whole contribution from one angle. The
-family's four log-determinant derivative methods read nothing else.
+Returns, for each free value, the derivative of order \code{order} of
+\eqn{2\log\sin\theta} in that free value: the log-determinant's whole
+contribution from one angle. The family's four log-determinant derivative
+methods read nothing else.
 }
 \details{
 The factor is triangular, so \eqn{\lvert R \rvert = \prod_i L_{ii}^2} and
@@ -29,12 +32,12 @@ logarithm composed with the sine table \code{\link[=corr_tables]{corr_tables()}}
 holds.
 
 The four coefficients \eqn{2(-1)^{j-1}(j-1)!/\sin^j\theta} are the
-derivatives of \eqn{2\log u} at \eqn{u = \sin\theta}, and \code{\link[=compose4]{compose4()}} chains
+derivatives of \eqn{2\log u} at \eqn{u = \sin\theta}, and \code{\link[=compose_order]{compose_order()}} chains
 them onto the sine's own derivatives in the free value, which
 \code{\link[=corr_tables]{corr_tables()}} has already computed.
 }
 \seealso{
-\code{\link[=corr_tables]{corr_tables()}} for the sine table, \code{\link[=compose4]{compose4()}} for the chain, and
+\code{\link[=corr_tables]{corr_tables()}} for the sine table, \code{\link[=compose_order]{compose_order()}} for the chain, and
 \code{\link[=corr_logdet_derivative]{corr_logdet_derivative()}}, the only caller.
 }
 \keyword{internal}

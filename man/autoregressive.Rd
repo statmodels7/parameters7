@@ -103,15 +103,15 @@ the innovation variances, so no factorization is taken.
 }
 
 \section{What a call costs}{
-\code{\link[=ar_taylor]{ar_taylor()}} runs the recursion once and packs \strong{every} order up to the
-fourth, so \code{param_d1()} pays most of what \code{param_d4()} pays and the difference
-between them is the R-level assembly. Seconds per call, over repetition loops
-sized by elapsed time:\tabular{lllll}{
+Each derivative order has its own compiled kernel, \code{\link[=ar_tables]{ar_tables()}}, which
+returns that order's components alone, and the Toeplitz matrices are filled
+in compiled code. Seconds per call, over repetition loops sized by elapsed
+time:\tabular{lllll}{
    \eqn{q} \tab \eqn{p} \tab \code{param_value} \tab \code{param_d1} \tab \code{param_d4} \cr
-   1 \tab 10 \tab 0.00018 \tab 0.00024 \tab 0.00033 \cr
-   1 \tab 200 \tab 0.00143 \tab 0.00191 \tab 0.00375 \cr
-   2 \tab 200 \tab 0.00398 \tab 0.00516 \tab 0.01203 \cr
-   4 \tab 200 \tab 0.03313 \tab 0.03563 \tab 0.08313 \cr
+   1 \tab 10 \tab 0.00005 \tab 0.00008 \tab 0.00018 \cr
+   1 \tab 200 \tab 0.00013 \tab 0.00023 \tab 0.00044 \cr
+   2 \tab 200 \tab 0.00013 \tab 0.00030 \tab 0.00125 \cr
+   4 \tab 200 \tab 0.00015 \tab 0.00043 \tab 0.01550 \cr
 }
 }
 

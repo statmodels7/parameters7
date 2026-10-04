@@ -117,7 +117,7 @@ test_that("recip_derivs is the reciprocal's chain, not a truncated power", {
   got <- recip_derivs(v)
   want <- lapply(0:4, function(k) (-1)^k * exp(-e))
   expect_equal(unlist(got), unlist(want))
-  expect_true(all(unlist(power_derivs(h(e), -1L)) == 0))
+  expect_true(all(unlist(power_derivs(h(e), -1L, 4L)) == 0))
 })
 
 test_that("autoregressive_inv's written-out derivatives agree with the sum", {
@@ -154,7 +154,7 @@ test_that("a coefficient does not depend on a correlation its order misses", {
   eta <- c(0.3, atanh(c(0.6, -0.3, 0.4)))
   n <- s@n_free
   cd <- parameters7:::ar_inv_codes(param_tuple_indices(s, 1L), n)
-  f <- parameters7:::ar_inv_factors(s, eta, cd)
+  f <- parameters7:::ar_inv_factors(s, eta, cd, 1L)
   code <- function(v) {
     as.integer(sum(tabulate(v, nbins = n) * 5^(seq_len(n) - 1L))) + 1L
   }
@@ -178,7 +178,7 @@ test_that("the lower-order rows of U are the sub-family's own coefficients", {
   pr <- parameters7:::ar_prediction(s, eta)
   for (k in seq_len(q)) {
     sk <- autoregressive(p, order = k)
-    phik <- parameters7:::ar_taylor(sk, eta[seq_len(k + 1L)])$phi[, 1L]
+    phik <- parameters7:::ar_tables(sk, eta[seq_len(k + 1L)], 0L)$phi
     expect_identical(max(abs(-pr$u[k + 1L, seq.int(k, 1L)] - phik)), 0)
   }
   # and the factorization itself

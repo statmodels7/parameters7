@@ -4,21 +4,23 @@
 \alias{corr_tables}
 \title{Sines and Cosines of a Correlation Parameter's Angles}
 \usage{
-corr_tables(s, eta)
+corr_tables(s, eta, order)
 }
 \arguments{
 \item{s}{A \code{\link[=CorrelationParam]{CorrelationParam()}} object, whose \code{param_params$link} is read.}
 
 \item{eta}{A numeric vector of free values, of length \code{s@n_free}.}
+
+\item{order}{The highest derivative order wanted, an integer from 0 to 4.}
 }
 \value{
 A list with two components, \code{sin} and \code{cos}, each a list of
-\code{s@n_free} numeric vectors of length 5: the value at index 1 and the four
-derivatives in the free value at indices 2 to 5.
+\code{s@n_free} lists of \code{order + 1} numbers: the value at index 1 and the
+derivatives in the free value at the following indices.
 }
 \description{
-Returns, for every angle, the value and the first four derivatives \strong{in the
-free value} of both \eqn{\sin\theta} and \eqn{\cos\theta}. These tables are
+Returns, for every angle, the value and the derivatives to order \code{order}
+\strong{in the free value} of both \eqn{\sin\theta} and \eqn{\cos\theta}. These tables are
 the whole derivative machinery of the family: an entry of \eqn{L} is a product
 of such factors, so differentiating it replaces each factor by the derivative
 of the matching order, and nothing else has to be derived.
@@ -27,11 +29,12 @@ of the matching order, and nothing else has to be derived.
 Each angle depends on exactly one free value, so a table is indexed by free
 value and no cross terms appear at this level. The chain from
 \eqn{\mathrm{d}/\mathrm{d}\theta} to \eqn{\mathrm{d}/\mathrm{d}\eta} is
-\code{\link[=compose4]{compose4()}}'s, applied to the link's own four derivatives, so the accuracy is
-the link's and nothing is differenced.
+\code{\link[=compose_order]{compose_order()}}'s, applied to the link's own derivatives, so the accuracy
+is the link's and nothing is differenced. A value alone is \code{order = 0}, and
+no derivative is evaluated then.
 }
 \seealso{
-\code{\link[=compose4]{compose4()}} for the chain rule, \code{\link[=corr_dfactor]{corr_dfactor()}} which reads these
+\code{\link[=compose_order]{compose_order()}} for the chain rule, \code{\link[=corr_dfactor]{corr_dfactor()}} which reads these
 tables, and \code{\link[=corr_logdet_chains]{corr_logdet_chains()}}, which reads the \code{sin} half.
 }
 \keyword{internal}

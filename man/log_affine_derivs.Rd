@@ -4,19 +4,22 @@
 \alias{log_affine_derivs}
 \title{Derivatives of a Sum of Logarithms of Affine Functions}
 \usage{
-log_affine_derivs(r, terms)
+log_affine_derivs(r, terms, order)
 }
 \arguments{
 \item{r}{The point, a single number.}
 
 \item{terms}{A list of numeric triples \code{c(coefficient, a, b)}, one per
 logarithm.}
+
+\item{order}{The highest order wanted, an integer from 1 to 4.}
 }
 \value{
-A list of four numbers, the first to fourth derivative.
+A list of \code{order} numbers, the first to the \code{order}-th
+derivative.
 }
 \description{
-Returns the first four derivatives at \eqn{r} of
+Returns the derivatives of orders 1 to \code{order} at \eqn{r} of
 \eqn{\sum_t c_t \log(a_t + b_t r)}, using
 
 \deqn{\frac{\mathrm{d}^k}{\mathrm{d}r^k}\log(a + br)
@@ -31,7 +34,7 @@ symmetry from its two distinct eigenvalues,
 keeps them from being transcribed twice, which is where a sign would be lost.
 
 The result is in the \strong{correlation}, not in the free value; the caller chains
-it onto the link with \code{\link[=compose4]{compose4()}}.
+it onto the link with \code{\link[=compose_order]{compose_order()}}.
 }
 \seealso{
 \code{\link[=cs_logdet_terms]{cs_logdet_terms()}} and \code{\link[=ar1_logdet_terms]{ar1_logdet_terms()}} for the two term lists,

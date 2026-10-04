@@ -4,21 +4,25 @@
 \alias{sum_struct_weight_derivs}
 \title{Derivatives of the Weights of a Sum of Fixed Matrices}
 \usage{
-sum_struct_weight_derivs(s, eta)
+sum_struct_weight_derivs(s, eta, order)
 }
 \arguments{
 \item{s}{A \code{\link[=SumStructParam]{SumStructParam()}} object.}
 
 \item{eta}{A numeric vector of length \code{s@n_free}.}
+
+\item{order}{The highest derivative order wanted, an integer from 0 to 4.}
 }
 \value{
-A 5 by \eqn{K} numeric matrix, row \eqn{m+1} holding the \eqn{m}-th
+An \code{order + 1} by \eqn{K} numeric matrix, row \eqn{m+1} holding the
+\eqn{m}-th
 derivative of the inverse link at each free value, so row 1 is the weights
 themselves.
 }
 \description{
-Returns each weight and its first four derivatives in the free value that
-carries it, for every component at once, as a matrix with one row per order.
+Returns each weight and its derivatives to order \code{order} in the free value
+that carries it, for every component at once, as a matrix with one row per
+order.
 }
 \details{
 Each weight depends on one free value only, so the table is complete: there
@@ -27,7 +31,7 @@ reason a derivative of the value naming two weights is zero. It is computed
 once per call and read for every component of the order.
 }
 \seealso{
-\code{\link[=sum_struct_derivs]{sum_struct_derivs()}} and \code{\link[=sum_struct_logdet_derivs]{sum_struct_logdet_derivs()}}, the two
-callers.
+\code{\link[=sum_struct_logdet_derivs]{sum_struct_logdet_derivs()}}, the caller; \code{\link[=sum_struct_derivs]{sum_struct_derivs()}}
+reads the derivative of its own order alone.
 }
 \keyword{internal}

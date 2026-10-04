@@ -139,9 +139,9 @@ ar1_inv <- function(dimension, link_scale = linkfunctions7::log_link()) {
 #' Derivatives of a Reciprocal, for Composition
 #'
 #' @description
-#' Returns the value and four derivatives of \eqn{\eta \mapsto 1/h(\eta)} from
-#' the value and four derivatives of \eqn{h}, by composing \eqn{x^{-1}} onto
-#' them.
+#' Returns the value and the derivatives of \eqn{\eta \mapsto 1/h(\eta)} from
+#' the value and the derivatives of \eqn{h}, by composing \eqn{x^{-1}} onto
+#' them, to the order `v` carries.
 #'
 #' @details
 #' [power_derivs()] cannot serve here: it truncates beyond the exponent, which
@@ -149,18 +149,19 @@ ar1_inv <- function(dimension, link_scale = linkfunctions7::log_link()) {
 #' every order is non-zero. The outer derivatives written out are
 #' \eqn{-x^{-2}}, \eqn{2x^{-3}}, \eqn{-6x^{-4}} and \eqn{24x^{-5}}.
 #'
-#' @param v A list of five numbers: the value of \eqn{h} and its four
-#'   derivatives, as `econ_scalars()` returns for one link.
+#' @param v A list: the value of \eqn{h} and its derivatives to some order
+#'   up to four, as `econ_scalars()` returns for one link.
 #'
-#' @return A list of five numbers in the same shape, for \eqn{1/h}.
+#' @return A list of the same length, for \eqn{1/h}.
 #'
-#' @seealso [ar1_inv()], the caller, and [compose4()] for the chain.
+#' @seealso [ar1_inv()], the caller, and [compose_order()] for the chain.
 #'
 #' @keywords internal
 recip_derivs <- function(v) {
   x <- v[[1L]]
-  outer_d <- list(-x^-2, 2 * x^-3, -6 * x^-4, 24 * x^-5)
-  c(list(1 / x), compose4(outer_d, v[-1L]))
+  K <- length(v) - 1L
+  outer_d <- lapply(seq_len(K), function(k) (-1)^k * factorial(k) * x^-(k + 1L))
+  c(list(1 / x), lapply(seq_len(K), function(o) compose_order(outer_d, v[-1L], o)))
 }
 
 
@@ -184,10 +185,10 @@ recip_derivs <- function(v) {
 #' and it is finite throughout \eqn{|\rho| < 1}, which the correlation's link
 #' guarantees. The result is then chained onto the free value.
 #'
-#' @param v A list of five numbers: \eqn{\rho} and its four derivatives in the
-#'   free value, as `econ_scalars()` returns for one link.
+#' @param v A list: \eqn{\rho} and its derivatives in the free value to some
+#'   order up to four, as `econ_scalars()` returns for one link.
 #'
-#' @return A list of five numbers: \eqn{w} and its four derivatives in the free
+#' @return A list of the same length: \eqn{w} and its derivatives in the free
 #'   value.
 #'
 #' @seealso [ar1_inv()] and [autoregressive_inv()], which share it.
@@ -195,10 +196,13 @@ recip_derivs <- function(v) {
 #' @keywords internal
 w_derivs <- function(v) {
   r <- v[[1L]]
-  d <- vapply(0:4, function(k) {
+  K <- length(v) - 1L
+  d <- vapply(0:K, function(k) {
     factorial(k) / 2 * ((1 - r)^-(k + 1L) + (-1)^k * (1 + r)^-(k + 1L))
   }, numeric(1))
-  c(list(d[1L]), compose4(as.list(d[-1L]), v[-1L]))
+  c(list(d[1L]), lapply(seq_len(K), function(o) {
+    compose_order(as.list(d[-1L]), v[-1L], o)
+  }))
 }
 
 
@@ -206,7 +210,8 @@ w_derivs <- function(v) {
 #'
 #' @description
 #' Returns \eqn{G(\rho)}, the tridiagonal correlation pattern of the precision
-#' of an AR(1), together with its four derivatives in the second free value.
+#' of an AR(1), together with its derivatives in the second free value to the
+#' order the scalars carry.
 #'
 #' @details
 #' The three distinct entries are \eqn{w}, \eqn{2w-1} and \eqn{-\rho w} for
@@ -220,8 +225,9 @@ w_derivs <- function(v) {
 #' @param sc The scalars of [econ_scalars()] read on the inner [ar1()], whose
 #'   `rho` entry supplies the correlation and its link's derivatives.
 #'
-#' @return A list of five `s@dimension` square matrices: the pattern and its
-#'   four derivatives in the second free value.
+#' @return A list of `s@dimension` square matrices, one more than the
+#'   derivatives `sc` carries: the pattern and its derivatives in the second
+#'   free value.
 #'
 #' @seealso [ar1_inv()] for the formulas and `ar1_pattern()` for the
 #'   counterpart on the covariance side.
@@ -230,22 +236,27 @@ w_derivs <- function(v) {
 ar1_inv_pattern <- function(s, sc) {
   p <- s@dimension
   r <- sc$rho[[1L]]
-  # w and its four derivatives in RHO, by partial fractions. The chained
+  K <- length(sc$rho) - 1L
+  # w and its derivatives in RHO, by partial fractions. The chained
   # version is w_derivs(); here the derivatives in rho are wanted first,
   # because the other two entries are built from them before the chain.
-  w <- vapply(0:4, function(k) {
+  w <- vapply(0:K, function(k) {
     factorial(k) / 2 * ((1 - r)^-(k + 1L) + (-1)^k * (1 + r)^-(k + 1L))
   }, numeric(1))
 
-  # the three distinct entries, value then four derivatives in rho
+  # the three distinct entries, value then the derivatives in rho
   corner <- w
   interior <- c(2 * w[1L] - 1, 2 * w[-1L])
-  off <- vapply(0:4, function(k) {
+  off <- vapply(0:K, function(k) {
     -(r * w[k + 1L] + if (k >= 1L) k * w[k] else 0)
   }, numeric(1))
 
   # chain each onto the free value through the correlation's link
-  chain <- function(d) c(list(d[1L]), compose4(as.list(d[-1L]), sc$rho[-1L]))
+  chain <- function(d) {
+    c(list(d[1L]), lapply(seq_len(K), function(o) {
+      compose_order(as.list(d[-1L]), sc$rho[-1L], o)
+    }))
+  }
   cn <- chain(corner)
   it <- chain(interior)
   of <- chain(off)
@@ -254,7 +265,7 @@ ar1_inv_pattern <- function(s, sc) {
   is_corner <- outer(seq_len(p), seq_len(p), function(i, j) {
     i == j & (i == 1L | i == p)
   })
-  lapply(1:5, function(k) {
+  lapply(seq_len(K + 1L), function(k) {
     m <- matrix(0, p, p)
     m[lag == 1L] <- of[[k]]
     m[lag == 0L] <- it[[k]]
@@ -286,7 +297,7 @@ ar1_inv_pattern <- function(s, sc) {
 #' @keywords internal
 ar1_inv_derivative <- function(s, eta, order) {
   inner <- .inv_inner(s)
-  sc <- econ_scalars(inner, eta)
+  sc <- econ_scalars(inner, eta, order)
   tau <- recip_derivs(sc$scale)
   pt <- ar1_inv_pattern(s, sc)
   idx <- param_tuple_indices(s, order)
@@ -397,7 +408,7 @@ AutoregressiveInvParam <- S7::new_class("AutoregressiveInvParam",
 #'
 #' The lower-order rows of \eqn{U} are the coefficients of the SAME family at
 #' that order, measured to 0, so their derivative arrays come from the compiled
-#' Levinson-Durbin recursion of [ar_taylor()] run once per order, and a
+#' Levinson-Durbin recursion of [ar_tables()] run once per order, and a
 #' component differentiating in a partial autocorrelation an order does not
 #' reach is exactly zero. And \eqn{\tau_t} is a PRODUCT of one factor per free
 #' value, \eqn{1/v_0} from the scale and \eqn{(1-r_j^2)^{-1}} from each
@@ -552,15 +563,17 @@ ar_inv_codes <- function(idx, n) {
 #' @param s An [AutoregressiveInvParam()] object.
 #' @param eta A numeric vector of length `s@n_free`.
 #' @param cd The codes of [ar_inv_codes()].
+#' @param order The derivative order the codes belong to, which bounds every
+#'   factor's order.
 #'
 #' @return A list with `u` and `tau`, each a list indexed by code: `u` of
 #'   `s@dimension` square matrices, `tau` of numeric vectors of that length.
 #'
-#' @seealso [autoregressive_inv()] for the formula and [ar_taylor()] for the
+#' @seealso [autoregressive_inv()] for the formula and [ar_tables()] for the
 #'   recursion the coefficients come from.
 #'
 #' @keywords internal
-ar_inv_factors <- function(s, eta, cd) {
+ar_inv_factors <- function(s, eta, cd, order) {
   inner <- .inv_inner(s)
   p <- inner@dimension
   q <- inner@param_params$order
@@ -568,17 +581,26 @@ ar_inv_factors <- function(s, eta, cd) {
 
   # the coefficients of every order, with their derivative arrays, from the
   # lower-order families the constructor built once
+  # each order from its own kernel, the columns keyed by their sorted tuple
   tay <- lapply(seq_len(q), function(k) {
+    sk <- s@param_params$lower[[k]]
+    ek <- eta[seq_len(k + 1L)]
     list(n = k + 1L,
-         tay = ar_taylor(s@param_params$lower[[k]], eta[seq_len(k + 1L)]))
+         phi = lapply(0:order, function(o) {
+           ph <- ar_tables(sk, ek, o)$phi
+           if (o == 0L) return(list(m = matrix(ph, ncol = 1L), key = ""))
+           list(m = ph, key = vapply(tuple_indices(k + 1L, o), function(t)
+             paste(sort(t), collapse = ","), character(1)))
+         }))
   })
 
   # the univariate factors of tau: 1 / v0, then 1 / (1 - r_j^2)
   fac <- vector("list", n)
-  fac[[1L]] <- recip_derivs(link_derivs(inner@param_params$link_scale, eta[1L]))
+  fac[[1L]] <- recip_derivs(linkinv_upto(inner@param_params$link_scale,
+                                         eta[1L], order))
   for (j in seq_len(q)) {
-    fac[[j + 1L]] <- w_derivs(link_derivs(inner@param_params$link_pacf,
-                                          eta[j + 1L]))
+    fac[[j + 1L]] <- w_derivs(linkinv_upto(inner@param_params$link_pacf,
+                                           eta[j + 1L], order))
   }
   # which factors the prediction at row t has reached: the scale always, and
   # the first min(t - 1, q) correlations
@@ -600,8 +622,10 @@ ar_inv_factors <- function(s, eta, cd) {
     if (ord == 0L) diag(m) <- 1
     for (k in seq_len(q)) {
       tk <- tay[[k]]
-      cf <- if (ord && any(tup > tk$n)) rep(0, k) else
-        tk$tay$phi[, ar_pack_col(tk$n, ord, tup)]
+      cf <- if (ord && any(tup > tk$n)) rep(0, k) else {
+        tb <- tk$phi[[ord + 1L]]
+        tb$m[, if (ord) match(paste(tup, collapse = ","), tb$key) else 1L]
+      }
       for (t in rows_of[[k]]) m[t, seq.int(t - 1L, t - k)] <- -cf
     }
     u_list[[code]] <- m
@@ -618,31 +642,6 @@ ar_inv_factors <- function(s, eta, cd) {
   }
 
   list(u = u_list, tau = tau_list)
-}
-
-
-#' A Link's Inverse and Its Four Derivatives
-#'
-#' @description
-#' The five-element list every chain in this package consumes: the link's
-#' inverse at a free value and its first four derivatives.
-#'
-#' @param link A \pkg{linkfunctions7} link.
-#' @param e A single free value.
-#'
-#' @return A list of five numbers.
-#'
-#' @seealso `econ_scalars()`, which builds the same list for two links at once.
-#'
-#' @keywords internal
-link_derivs <- function(link, e) {
-  list(
-    linkfunctions7::linkinv(link, e),
-    linkfunctions7::dlinkinv(link, e),
-    linkfunctions7::d2linkinv(link, e),
-    linkfunctions7::d3linkinv(link, e),
-    linkfunctions7::d4linkinv(link, e)
-  )
 }
 
 
@@ -679,7 +678,7 @@ ar_inv_derivative <- function(s, eta, order) {
   p <- s@dimension
   st <- ar_inv_structure(s, order)
   cd <- st$cd
-  f <- ar_inv_factors(s, eta, cd)
+  f <- ar_inv_factors(s, eta, cd, order)
 
   # N = diag(tau) U and its arrays, by the inner Leibniz, one per distinct code
   nmat <- vector("list", length(f$u))

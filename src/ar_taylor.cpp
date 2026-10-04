@@ -2,34 +2,45 @@
 #include <vector>
 using namespace Rcpp;
 
-// The Levinson-Durbin recursion with its derivatives to fourth order,
+// NOT USED BY THE PACKAGE: the mechanical twin of ar_explicit.cpp, kept as
+// the reference the tests compare those kernels with, as the pig*_hd_jet_cpp
+// kernels are. It is a jet (truncated derivative records pushed through every
+// product), which production code does not use.
+//
+// The Levinson-Durbin recursion with its derivatives to order K (0 to 4),
 // propagated as plain arrays. Each tracked quantity carries its value and
-// the full symmetric derivative tensors with respect to the n = q + 1 free
-// values; the recursion is sums and products only, so the propagation rules
-// are the product rule written out per order below, term by term. Nothing
-// is differenced and no generic differentiation machinery is involved.
+// the full symmetric derivative tensors of orders 1 to K with respect to the
+// n = q + 1 free values; the tensors above K are empty and never formed. The
+// recursion is sums and products only, so the propagation rules are the
+// product rule written out per order below, term by term, the rule at order
+// k reading the orders below it. Nothing is differenced.
 
 struct T4 {
   double v;
   std::vector<double> d1, d2, d3, d4;
-  explicit T4(int n)
-    : v(0.0), d1(n, 0.0), d2((size_t)n * n, 0.0),
-      d3((size_t)n * n * n, 0.0), d4((size_t)n * n * n * n, 0.0) {}
+  T4(int n, int K)
+    : v(0.0), d1(K >= 1 ? n : 0, 0.0),
+      d2(K >= 2 ? (size_t)n * n : 0, 0.0),
+      d3(K >= 3 ? (size_t)n * n * n : 0, 0.0),
+      d4(K >= 4 ? (size_t)n * n * n * n : 0, 0.0) {}
 };
 
 // c = a * b: Leibniz, every subset of the differentiation indices going to
-// one factor and its complement to the other.
-static T4 t4_mul(const T4& a, const T4& b, int n) {
-  T4 c(n);
+// one factor and its complement to the other; orders above K are skipped.
+static T4 t4_mul(const T4& a, const T4& b, int n, int K) {
+  T4 c(n, K);
   c.v = a.v * b.v;
+  if (K < 1) return c;
   for (int i = 0; i < n; ++i)
     c.d1[i] = a.d1[i] * b.v + a.v * b.d1[i];
+  if (K < 2) return c;
   for (int i = 0; i < n; ++i)
     for (int j = 0; j < n; ++j) {
       size_t ij = (size_t)i * n + j;
       c.d2[ij] = a.d2[ij] * b.v + a.d1[i] * b.d1[j] + a.d1[j] * b.d1[i] +
         a.v * b.d2[ij];
     }
+  if (K < 3) return c;
   for (int i = 0; i < n; ++i)
     for (int j = 0; j < n; ++j)
       for (int k = 0; k < n; ++k) {
@@ -41,6 +52,7 @@ static T4 t4_mul(const T4& a, const T4& b, int n) {
           a.d1[i] * b.d2[jk] + a.d1[j] * b.d2[ik] + a.d1[k] * b.d2[ij] +
           a.v * b.d3[ijk];
       }
+  if (K < 4) return c;
   for (int i = 0; i < n; ++i)
     for (int j = 0; j < n; ++j)
       for (int k = 0; k < n; ++k)
@@ -66,35 +78,36 @@ static T4 t4_mul(const T4& a, const T4& b, int n) {
   return c;
 }
 
-static T4 t4_add(const T4& a, const T4& b, int n) {
-  T4 c(n);
+static T4 t4_add(const T4& a, const T4& b, int n, int K) {
+  T4 c(n, K);
   c.v = a.v + b.v;
-  for (size_t m = 0; m < a.d1.size(); ++m) c.d1[m] = a.d1[m] + b.d1[m];
-  for (size_t m = 0; m < a.d2.size(); ++m) c.d2[m] = a.d2[m] + b.d2[m];
-  for (size_t m = 0; m < a.d3.size(); ++m) c.d3[m] = a.d3[m] + b.d3[m];
-  for (size_t m = 0; m < a.d4.size(); ++m) c.d4[m] = a.d4[m] + b.d4[m];
+  for (size_t m = 0; m < c.d1.size(); ++m) c.d1[m] = a.d1[m] + b.d1[m];
+  for (size_t m = 0; m < c.d2.size(); ++m) c.d2[m] = a.d2[m] + b.d2[m];
+  for (size_t m = 0; m < c.d3.size(); ++m) c.d3[m] = a.d3[m] + b.d3[m];
+  for (size_t m = 0; m < c.d4.size(); ++m) c.d4[m] = a.d4[m] + b.d4[m];
   return c;
 }
 
-static T4 t4_sub(const T4& a, const T4& b, int n) {
-  T4 c(n);
+static T4 t4_sub(const T4& a, const T4& b, int n, int K) {
+  T4 c(n, K);
   c.v = a.v - b.v;
-  for (size_t m = 0; m < a.d1.size(); ++m) c.d1[m] = a.d1[m] - b.d1[m];
-  for (size_t m = 0; m < a.d2.size(); ++m) c.d2[m] = a.d2[m] - b.d2[m];
-  for (size_t m = 0; m < a.d3.size(); ++m) c.d3[m] = a.d3[m] - b.d3[m];
-  for (size_t m = 0; m < a.d4.size(); ++m) c.d4[m] = a.d4[m] - b.d4[m];
+  for (size_t m = 0; m < c.d1.size(); ++m) c.d1[m] = a.d1[m] - b.d1[m];
+  for (size_t m = 0; m < c.d2.size(); ++m) c.d2[m] = a.d2[m] - b.d2[m];
+  for (size_t m = 0; m < c.d3.size(); ++m) c.d3[m] = a.d3[m] - b.d3[m];
+  for (size_t m = 0; m < c.d4.size(); ++m) c.d4[m] = a.d4[m] - b.d4[m];
   return c;
 }
 
 // A free value's image under its link: derivatives sit on one variable's
-// diagonal because each depends on exactly one free value.
-static T4 t4_seed(int var, const NumericVector& g, int n) {
-  T4 s(n);
+// diagonal because each depends on exactly one free value. g holds the value
+// and the derivatives to order K.
+static T4 t4_seed(int var, const NumericVector& g, int n, int K) {
+  T4 s(n, K);
   s.v = g[0];
-  s.d1[var] = g[1];
-  s.d2[(size_t)var * n + var] = g[2];
-  s.d3[((size_t)var * n + var) * n + var] = g[3];
-  s.d4[(((size_t)var * n + var) * n + var) * n + var] = g[4];
+  if (K >= 1) s.d1[var] = g[1];
+  if (K >= 2) s.d2[(size_t)var * n + var] = g[2];
+  if (K >= 3) s.d3[((size_t)var * n + var) * n + var] = g[3];
+  if (K >= 4) s.d4[(((size_t)var * n + var) * n + var) * n + var] = g[4];
   return s;
 }
 
@@ -107,20 +120,21 @@ static void t4_pack(const T4& x, NumericMatrix& out, int row) {
   for (size_t m = 0; m < x.d4.size(); ++m) out(row, col++) = x.d4[m];
 }
 
-// seeds: (q + 1) x 5, row 0 the scale and rows 1..q the partial
-// autocorrelations, each row the link inverse and its four derivatives at
-// the free value. Returns gamma (p lags) and phi (q coefficients), each row
-// a packed derivative record of 1 + n + n^2 + n^3 + n^4 numbers.
+// seeds: (q + 1) x (K + 1), row 0 the scale and rows 1..q the partial
+// autocorrelations, each row the link inverse and its derivatives to order K
+// at the free value. Returns gamma (p lags) and phi (q coefficients), each
+// row a packed derivative record of 1 + n + ... + n^K numbers.
 // [[Rcpp::export]]
-List ar_taylor_cpp(int p, int q, NumericMatrix seeds) {
+List ar_taylor_jet_cpp(int p, int q, NumericMatrix seeds, int K) {
+  if (K < 0 || K > 4) stop("'K' must be an integer from 0 to 4.");
   int n = q + 1;
-  size_t comps = 1 + (size_t)n + (size_t)n * n + (size_t)n * n * n +
-    (size_t)n * n * n * n;
+  size_t comps = 1, pw = 1;
+  for (int k = 1; k <= K; ++k) { pw *= (size_t)n; comps += pw; }
 
-  T4 scale = t4_seed(0, seeds(0, _), n);
+  T4 scale = t4_seed(0, seeds(0, _), n, K);
   std::vector<T4> r;
   r.reserve(q);
-  for (int k = 0; k < q; ++k) r.push_back(t4_seed(k + 1, seeds(k + 1, _), n));
+  for (int k = 0; k < q; ++k) r.push_back(t4_seed(k + 1, seeds(k + 1, _), n, K));
 
   // Levinson-Durbin on the derivative records:
   //   phi_k^(k) = r_k,  phi_j^(k) = phi_j^(k-1) - r_k phi_{k-j}^(k-1),
@@ -128,30 +142,31 @@ List ar_taylor_cpp(int p, int q, NumericMatrix seeds) {
   // and the Yule-Walker continuation beyond the order.
   std::vector<T4> phi, rho;
   rho.reserve(p);
-  T4 one(n);
+  T4 one(n, K);
   one.v = 1.0;
   rho.push_back(one);
   for (int k = 1; k <= q; ++k) {
     std::vector<T4> nw;
     nw.reserve(k);
     for (int j = 1; j < k; ++j)
-      nw.push_back(t4_sub(phi[j - 1], t4_mul(r[k - 1], phi[k - j - 1], n), n));
+      nw.push_back(t4_sub(phi[j - 1], t4_mul(r[k - 1], phi[k - j - 1], n, K),
+                          n, K));
     nw.push_back(r[k - 1]);
     phi.swap(nw);
     T4 acc = r[k - 1];
     for (int j = 1; j < k; ++j)
-      acc = t4_add(acc, t4_mul(phi[j - 1], rho[k - j], n), n);
+      acc = t4_add(acc, t4_mul(phi[j - 1], rho[k - j], n, K), n, K);
     rho.push_back(acc);
   }
   for (int h = q + 1; h <= p - 1; ++h) {
-    T4 acc(n);
+    T4 acc(n, K);
     for (int j = 1; j <= q; ++j)
-      acc = t4_add(acc, t4_mul(phi[j - 1], rho[h - j], n), n);
+      acc = t4_add(acc, t4_mul(phi[j - 1], rho[h - j], n, K), n, K);
     rho.push_back(acc);
   }
 
   NumericMatrix gamma(p, (int)comps), phim(q, (int)comps);
-  for (int h = 0; h < p; ++h) t4_pack(t4_mul(scale, rho[h], n), gamma, h);
+  for (int h = 0; h < p; ++h) t4_pack(t4_mul(scale, rho[h], n, K), gamma, h);
   for (int j = 0; j < q; ++j) t4_pack(phi[j], phim, j);
   return List::create(Named("gamma") = gamma, Named("phi") = phim);
 }

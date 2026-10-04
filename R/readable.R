@@ -357,7 +357,8 @@ S7::method(param_readable, SimplexParam) <- function(s, eta, ...) {
 S7::method(param_readable, AutoregressiveParam) <- function(s, eta, ...) {
   q <- s@param_params$order
   n <- q + 1L
-  tay <- ar_taylor(s, eta)
+  tay <- ar_tables(s, eta, 1L)
+  phi0 <- ar_tables(s, eta, 0L)$phi
   scl <- c(
     linkfunctions7::linkinv(s@param_params$link_scale, eta[1L]),
     linkfunctions7::dlinkinv(s@param_params$link_scale, eta[1L])
@@ -373,9 +374,9 @@ S7::method(param_readable, AutoregressiveParam) <- function(s, eta, ...) {
   jac <- matrix(0, length(nm), s@n_free, dimnames = list(nm, NULL))
   jac[1L, 1L] <- scl[2L]
   for (k in seq_len(q)) jac[1L + k, 1L + k] <- rv[2L, k]
-  for (j in seq_len(q)) jac[1L + q + j, ] <- tay$phi[j, 1L + seq_len(n)]
+  for (j in seq_len(q)) jac[1L + q + j, ] <- tay$phi[j, seq_len(n)]
   list(
-    value = stats::setNames(c(scl[1L], rv[1L, ], tay$phi[, 1L]), nm),
+    value = stats::setNames(c(scl[1L], rv[1L, ], phi0), nm),
     jacobian = jac,
     transform = stats::setNames(
       c("log", rep("atanh", q), rep("identity", q)), nm

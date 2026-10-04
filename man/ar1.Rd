@@ -79,7 +79,7 @@ mixed derivative of it is exactly zero, and no determinant is computed.
 \section{Why the derivatives are harder than compound symmetry's}{
 The pattern is \strong{not} linear in the correlation. An entry is \eqn{\rho^{m}}
 for the lag \eqn{m}, so its derivatives in the free value are a power composed
-with the link, taken to fourth order by \code{\link[=compose4]{compose4()}}. Each distinct lag is
+with the link, taken to fourth order by \code{\link[=compose_order]{compose_order()}}. Each distinct lag is
 composed once and written into every entry that carries it, the matrix having
 only \eqn{p} distinct values.
 }

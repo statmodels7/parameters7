@@ -4,24 +4,27 @@
 \alias{econ_scalars}
 \title{The Scale and the Correlation of an Economical Parameter}
 \usage{
-econ_scalars(s, eta)
+econ_scalars(s, eta, order)
 }
 \arguments{
 \item{s}{A \code{\link[=CompoundSymmetryParam]{CompoundSymmetryParam()}} or \code{\link[=Ar1Param]{Ar1Param()}} object, whose
 \code{param_params$link_scale} and \code{param_params$link_rho} are read.}
 
 \item{eta}{A numeric vector of two free values.}
+
+\item{order}{The highest derivative order wanted, an integer from 0 to 4.}
 }
 \value{
-A list with two components, \code{scale} and \code{rho}, each a numeric vector
-of length 5: the value at index 1 and the four derivatives in that free
-value at indices 2 to 5.
+A list with two components, \code{scale} and \code{rho}, each a list of
+\code{order + 1} numbers: the value at index 1 and the derivatives in that free
+value at the following indices.
 }
 \description{
 Returns the two scalars a \code{\link[=compound_symmetry]{compound_symmetry()}} or \code{\link[=ar1]{ar1()}} parameter is built
-from, each with its value and its first four derivatives in its \strong{own} free
-value. Each scalar depends on one free value alone, so the two families are
-separable and their derivative assembly is a product of two chains.
+from, each with its value and its derivatives to order \code{order} in its
+\strong{own} free value. Each scalar depends on one free value alone, so the two
+families are separable and their derivative assembly is a product of two
+chains. A value alone is \code{order = 0}, and no derivative is evaluated then.
 }
 \seealso{
 \code{\link[=econ_derivative]{econ_derivative()}} and \code{\link[=cs_pattern]{cs_pattern()}}, which consume it, and

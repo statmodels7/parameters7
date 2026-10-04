@@ -222,8 +222,8 @@ correlation_matrix <- function(dimension) {
 #' Sines and Cosines of a Correlation Parameter's Angles
 #'
 #' @description
-#' Returns, for every angle, the value and the first four derivatives **in the
-#' free value** of both \eqn{\sin\theta} and \eqn{\cos\theta}. These tables are
+#' Returns, for every angle, the value and the derivatives to order `order`
+#' **in the free value** of both \eqn{\sin\theta} and \eqn{\cos\theta}. These tables are
 #' the whole derivative machinery of the family: an entry of \eqn{L} is a product
 #' of such factors, so differentiating it replaces each factor by the derivative
 #' of the matching order, and nothing else has to be derived.
@@ -232,38 +232,41 @@ correlation_matrix <- function(dimension) {
 #' Each angle depends on exactly one free value, so a table is indexed by free
 #' value and no cross terms appear at this level. The chain from
 #' \eqn{\mathrm{d}/\mathrm{d}\theta} to \eqn{\mathrm{d}/\mathrm{d}\eta} is
-#' [compose4()]'s, applied to the link's own four derivatives, so the accuracy is
-#' the link's and nothing is differenced.
+#' [compose_order()]'s, applied to the link's own derivatives, so the accuracy
+#' is the link's and nothing is differenced. A value alone is `order = 0`, and
+#' no derivative is evaluated then.
 #'
 #' @param s A [CorrelationParam()] object, whose `param_params$link` is read.
 #' @param eta A numeric vector of free values, of length `s@n_free`.
+#' @param order The highest derivative order wanted, an integer from 0 to 4.
 #'
 #' @return A list with two components, `sin` and `cos`, each a list of
-#'   `s@n_free` numeric vectors of length 5: the value at index 1 and the four
-#'   derivatives in the free value at indices 2 to 5.
+#'   `s@n_free` lists of `order + 1` numbers: the value at index 1 and the
+#'   derivatives in the free value at the following indices.
 #'
-#' @seealso [compose4()] for the chain rule, [corr_dfactor()] which reads these
+#' @seealso [compose_order()] for the chain rule, [corr_dfactor()] which reads these
 #'   tables, and [corr_logdet_chains()], which reads the `sin` half.
 #'
 #' @keywords internal
-corr_tables <- function(s, eta) {
-  link <- s@param_params$link
-  th <- linkfunctions7::linkinv(link, eta)
-  td <- list(
-    linkfunctions7::dlinkinv(link, eta),
-    linkfunctions7::d2linkinv(link, eta),
-    linkfunctions7::d3linkinv(link, eta),
-    linkfunctions7::d4linkinv(link, eta)
-  )
+corr_tables <- function(s, eta, order) {
+  ld <- linkinv_upto(s@param_params$link, eta, order)
+  th <- ld[[1L]]
+  td <- ld[-1L]
   sn <- vector("list", s@n_free)
   cs <- vector("list", s@n_free)
   for (k in seq_len(s@n_free)) {
     gd <- lapply(td, `[[`, k)
     t0 <- th[[k]]
-    fs <- list(cos(t0), -sin(t0), -cos(t0), sin(t0))
-    fc <- list(-sin(t0), -cos(t0), sin(t0), cos(t0))
-    sn[[k]] <- c(list(sin(t0)), compose4(fs, gd))
-    cs[[k]] <- c(list(cos(t0)), compose4(fc, gd))
+    s0 <- sin(t0); c0 <- cos(t0)
+    # the j-th derivatives of sin and cos cycle with period four
+    fs <- list(c0, -s0, -c0, s0)[seq_len(order)]
+    fc <- list(-s0, -c0, s0, c0)[seq_len(order)]
+    sn[[k]] <- c(list(s0), lapply(seq_len(order), function(o) {
+      compose_order(fs, gd, o)
+    }))
+    cs[[k]] <- c(list(c0), lapply(seq_len(order), function(o) {
+      compose_order(fc, gd, o)
+    }))
   }
   list(sin = sn, cos = cs)
 }
@@ -371,7 +374,7 @@ corr_dfactor <- function(s, tb, ks) {
 #'   [param_factor.CorrelationParam()] for \eqn{L} itself.
 #' @keywords internal
 S7::method(param_value, CorrelationParam) <- function(s, eta, ...) {
-  tb <- corr_tables(s, eta)
+  tb <- corr_tables(s, eta, 0L)
   l <- corr_dfactor(s, tb, integer(0))
   m <- tcrossprod(l)
   # the diagonal is one by construction; the assignment removes the rounding
@@ -403,7 +406,7 @@ S7::method(param_value, CorrelationParam) <- function(s, eta, ...) {
 #'   pays.
 #' @keywords internal
 S7::method(param_factor, CorrelationParam) <- function(s, eta, ...) {
-  corr_dfactor(s, corr_tables(s, eta), integer(0))
+  corr_dfactor(s, corr_tables(s, eta, 0L), integer(0))
 }
 
 
@@ -504,7 +507,7 @@ S7::method(param_free, CorrelationParam) <- function(s, m, ...) {
 #'
 #' @keywords internal
 corr_derivative <- function(s, eta, order) {
-  tb <- corr_tables(s, eta)
+  tb <- corr_tables(s, eta, order)
   dfac <- function(ks) corr_dfactor(s, tb, ks)
   idx <- param_tuple_indices(s, order)
   out <- lapply(idx, function(t) {
@@ -583,7 +586,7 @@ S7::method(param_d2, CorrelationParam) <- function(s, eta, ...) {
 #' of the sum are skipped instead of computed and discarded.
 #'
 #' The angles reach the free scale through a bounded link, so the chain to third
-#' order is [compose4()]'s and the accuracy is the link's; nothing is differenced.
+#' order is [compose_order()]'s and the accuracy is the link's; nothing is differenced.
 #' The diagonal is exactly zero.
 #' @param s A [CorrelationParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
@@ -629,9 +632,10 @@ S7::method(param_d4, CorrelationParam) <- function(s, eta, ...) {
 #' Log-Determinant Chains of a Correlation Parameter
 #'
 #' @description
-#' Returns, for each free value, the four derivatives of \eqn{2\log\sin\theta} in
-#' that free value: the log-determinant's whole contribution from one angle. The
-#' family's four log-determinant derivative methods read nothing else.
+#' Returns, for each free value, the derivative of order `order` of
+#' \eqn{2\log\sin\theta} in that free value: the log-determinant's whole
+#' contribution from one angle. The family's four log-determinant derivative
+#' methods read nothing else.
 #'
 #' @details
 #' The factor is triangular, so \eqn{\lvert R \rvert = \prod_i L_{ii}^2} and
@@ -642,28 +646,29 @@ S7::method(param_d4, CorrelationParam) <- function(s, eta, ...) {
 #' holds.
 #'
 #' The four coefficients \eqn{2(-1)^{j-1}(j-1)!/\sin^j\theta} are the
-#' derivatives of \eqn{2\log u} at \eqn{u = \sin\theta}, and [compose4()] chains
+#' derivatives of \eqn{2\log u} at \eqn{u = \sin\theta}, and [compose_order()] chains
 #' them onto the sine's own derivatives in the free value, which
 #' [corr_tables()] has already computed.
 #'
 #' @param s A [CorrelationParam()] object.
+#' @param order The derivative order, an integer from 1 to 4.
 #' @param eta A numeric vector of free values, of length `s@n_free`.
 #'
-#' @return A list of `s@n_free` elements, each a list of four numbers: the first
-#'   to fourth derivative of \eqn{2\log\sin\theta_k} in \eqn{\eta_k}.
+#' @return A list of `s@n_free` numbers, the derivative of order `order` of
+#'   \eqn{2\log\sin\theta_k} in \eqn{\eta_k}.
 #'
-#' @seealso [corr_tables()] for the sine table, [compose4()] for the chain, and
+#' @seealso [corr_tables()] for the sine table, [compose_order()] for the chain, and
 #'   [corr_logdet_derivative()], the only caller.
 #'
 #' @keywords internal
-corr_logdet_chains <- function(s, eta) {
-  tb <- corr_tables(s, eta)
+corr_logdet_chains <- function(s, eta, order) {
+  tb <- corr_tables(s, eta, order)
   lapply(seq_len(s@n_free), function(k) {
     sn <- tb$sin[[k]]
-    f <- lapply(1:4, function(j) {
+    f <- lapply(seq_len(order), function(j) {
       2 * (-1)^(j - 1L) * factorial(j - 1L) / sn[[1L]]^j
     })
-    compose4(f, sn[-1L])
+    compose_order(f, sn[-1L], order)
   })
 }
 
@@ -692,7 +697,7 @@ corr_logdet_chains <- function(s, eta) {
 #' @keywords internal
 S7::method(param_logdet, CorrelationParam) <- function(s, eta, ...) {
   if (s@n_free == 0L) return(0)
-  tb <- corr_tables(s, eta)
+  tb <- corr_tables(s, eta, 0L)
   2 * sum(vapply(tb$sin, function(x) log(x[[1L]]), numeric(1)))
 }
 
@@ -721,11 +726,11 @@ S7::method(param_logdet, CorrelationParam) <- function(s, eta, ...) {
 corr_logdet_derivative <- function(s, eta, order) {
   nm <- param_tuple_names(s, order)
   if (!length(nm)) return(stats::setNames(numeric(0), character(0)))
-  ch <- corr_logdet_chains(s, eta)
+  ch <- corr_logdet_chains(s, eta, order)
   idx <- param_tuple_indices(s, order)
   out <- vapply(idx, function(t) {
     if (any(t != t[1L])) return(0)
-    ch[[t[1L]]][[order]]
+    ch[[t[1L]]]
   }, numeric(1))
   stats::setNames(out, nm)
 }

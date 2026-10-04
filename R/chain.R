@@ -8,11 +8,13 @@ NULL
 # fourth-order check would notice.
 
 
-#' Compose Two Scalar Maps, to Fourth Order
+#' Compose Two Scalar Maps, One Order
 #'
 #' @description
-#' The derivatives of \eqn{f(g(x))} of orders one to four, from the
-#' derivatives of \eqn{f} at \eqn{g(x)} and of \eqn{g} at \eqn{x}.
+#' The derivative of order `k` of \eqn{f(g(x))}, from the derivatives of
+#' \eqn{f} at \eqn{g(x)} and of \eqn{g} at \eqn{x} up to that order. Each order
+#' is its own formula and forms nothing above it; a caller that needs several
+#' orders calls it once per order.
 #'
 #' @details
 #' Faa di Bruno's formula, whose coefficients are the numbers of set
@@ -30,20 +32,17 @@ NULL
 #' elementwise and the result has the same length. That is how the families use
 #' it: one call composes a whole table of angles or lags at once.
 #'
-#' Verified against `numDeriv` on \eqn{\exp(\sin x)} at \eqn{x = 0.7}, the first
-#' two orders agreeing to eight figures.
+#' @param fd A list or vector of the derivatives of the outer map at
+#'   \eqn{g(x)}, in order, at least `k` of them. Read with `[[`, so a list, a
+#'   numeric vector or a list of numeric vectors all serve. The **value** of
+#'   \eqn{f} is not needed and is not read.
+#' @param gd A list or vector of the derivatives of the inner map at \eqn{x},
+#'   in order, at least `k` of them, read the same way.
+#' @param k The order, an integer from 1 to 4.
 #'
-#' @param fd A list or vector of the four derivatives of the outer map at
-#'   \eqn{g(x)}, in order. Read with `[[`, so a list, a numeric vector or a
-#'   length-4 list of numeric vectors all serve. The **value** of \eqn{f} is not
-#'   needed and is not read.
-#' @param gd A list or vector of the four derivatives of the inner map at
-#'   \eqn{x}, in order, read the same way. The value of \eqn{g} is not needed
-#'   here either; the caller has already evaluated \eqn{f}'s derivatives at it.
-#'
-#' @return A list of four elements, the composite derivatives in order, each the
-#'   shape the arithmetic on `fd` and `gd` produces: a single number where both
-#'   are scalar, a vector where either is, a matrix where either is.
+#' @return The derivative of order `k` of the composition, the shape the
+#'   arithmetic on `fd` and `gd` produces: a single number where both are
+#'   scalar, a vector where either is, a matrix where either is.
 #'
 #' @seealso [leibniz_gram()] for the other piece of shared arithmetic,
 #'   [power_derivs()] for the commonest outer map here, and
@@ -51,15 +50,15 @@ NULL
 #'   coefficients count.
 #'
 #' @keywords internal
-compose4 <- function(fd, gd) {
-  f1 <- fd[[1L]]; f2 <- fd[[2L]]; f3 <- fd[[3L]]; f4 <- fd[[4L]]
-  g1 <- gd[[1L]]; g2 <- gd[[2L]]; g3 <- gd[[3L]]; g4 <- gd[[4L]]
-  list(
-    f1 * g1,
-    f2 * g1^2 + f1 * g2,
-    f3 * g1^3 + 3 * f2 * g1 * g2 + f1 * g3,
-    f4 * g1^4 + 6 * f3 * g1^2 * g2 + 3 * f2 * g2^2 + 4 * f2 * g1 * g3 +
-      f1 * g4
+compose_order <- function(fd, gd, k) {
+  switch(k,
+    fd[[1L]] * gd[[1L]],
+    fd[[2L]] * gd[[1L]]^2 + fd[[1L]] * gd[[2L]],
+    fd[[3L]] * gd[[1L]]^3 + 3 * fd[[2L]] * gd[[1L]] * gd[[2L]] +
+      fd[[1L]] * gd[[3L]],
+    fd[[4L]] * gd[[1L]]^4 + 6 * fd[[3L]] * gd[[1L]]^2 * gd[[2L]] +
+      3 * fd[[2L]] * gd[[2L]]^2 + 4 * fd[[2L]] * gd[[1L]] * gd[[3L]] +
+      fd[[1L]] * gd[[4L]]
   )
 }
 
@@ -67,27 +66,56 @@ compose4 <- function(fd, gd) {
 #' Derivatives of a Power, for Composition
 #'
 #' @description
-#' Returns the four derivatives of \eqn{r \mapsto r^{m}} at \eqn{r}, ready to be
-#' the outer map of a [compose4()] call. They are
+#' Returns the derivatives of orders 1 to `order` of \eqn{r \mapsto r^{m}} at
+#' \eqn{r}, ready to be the outer map of a [compose_order()] call. They are
 #' \eqn{m(m-1)\cdots(m-k+1)\,r^{m-k}} and vanish beyond order \eqn{m}, the power
 #' being a polynomial. `ar1_pattern()` calls it once per distinct lag.
 #'
 #' @param r The point, a single number or a vector.
-#' @param m The exponent, a non-negative integer. At `m = 0` all four are 0, the
-#'   power being the constant 1; at `m = 2` they are `c(2r, 2, 0, 0)`.
+#' @param m The exponent, a non-negative integer. At `m = 0` all are 0, the
+#'   power being the constant 1; at `m = 2` the first four are `c(2r, 2, 0, 0)`.
+#' @param order The highest order wanted, an integer from 0 to 4.
 #'
-#' @return A list of four elements, the first to fourth derivative, each the
-#'   shape of `r`.
+#' @return A list of `order` elements, the first to the `order`-th
+#'   derivative, each the shape of `r`.
 #'
-#' @seealso [compose4()], which chains these onto a link's derivatives, and
-#'   `ar1_pattern()`, the caller.
+#' @seealso [compose_order()], which chains these onto a link's derivatives,
+#'   and `ar1_pattern()`, the caller.
 #'
 #' @keywords internal
-power_derivs <- function(r, m) {
-  lapply(1:4, function(k) {
+power_derivs <- function(r, m, order) {
+  lapply(seq_len(order), function(k) {
     if (k > m) return(0)
     prod(m - seq_len(k) + 1L) * r^(m - k)
   })
+}
+
+
+#' A Link Inverse and Its Derivatives, to a Given Order
+#'
+#' @description
+#' Returns \eqn{g^{-1}(\eta)} and its derivatives of orders 1 to `order`, the
+#' seed every family composes its map from. Each order is one call of the
+#' link's own generic (`dlinkinv()` to `d4linkinv()`), and no order above
+#' `order` is evaluated.
+#'
+#' @param link A \pkg{linkfunctions7} link.
+#' @param e A numeric vector of free values.
+#' @param order The highest order wanted, an integer from 0 to 4.
+#'
+#' @return A list of `order + 1` elements: the value, then the derivatives in
+#'   order, each the shape of `e`.
+#'
+#' @seealso [compose_order()], which composes onto these.
+#'
+#' @keywords internal
+linkinv_upto <- function(link, e, order) {
+  out <- list(linkfunctions7::linkinv(link, e))
+  if (order >= 1L) out[[2L]] <- linkfunctions7::dlinkinv(link, e)
+  if (order >= 2L) out[[3L]] <- linkfunctions7::d2linkinv(link, e)
+  if (order >= 3L) out[[4L]] <- linkfunctions7::d3linkinv(link, e)
+  if (order >= 4L) out[[5L]] <- linkfunctions7::d4linkinv(link, e)
+  out
 }
 
 
@@ -127,7 +155,7 @@ power_derivs <- function(r, m) {
 #'
 #' @return A symmetric `p` by `p` numeric matrix, with no dimnames.
 #'
-#' @seealso [compose4()] for the other piece of shared arithmetic,
+#' @seealso [compose_order()] for the other piece of shared arithmetic,
 #'   [chol_dfactor()] and [corr_dfactor()] for the two `dfactor` arguments the
 #'   package supplies, and [chol_leibniz()], the compiled route that replaces
 #'   this for the log-Cholesky family.

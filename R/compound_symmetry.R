@@ -200,42 +200,34 @@ compound_symmetry <- function(dimension,
 #'
 #' @description
 #' Returns the two scalars a [compound_symmetry()] or [ar1()] parameter is built
-#' from, each with its value and its first four derivatives in its **own** free
-#' value. Each scalar depends on one free value alone, so the two families are
-#' separable and their derivative assembly is a product of two chains.
+#' from, each with its value and its derivatives to order `order` in its
+#' **own** free value. Each scalar depends on one free value alone, so the two
+#' families are separable and their derivative assembly is a product of two
+#' chains. A value alone is `order = 0`, and no derivative is evaluated then.
 #'
 #' @param s A [CompoundSymmetryParam()] or [Ar1Param()] object, whose
 #'   `param_params$link_scale` and `param_params$link_rho` are read.
 #' @param eta A numeric vector of two free values.
+#' @param order The highest derivative order wanted, an integer from 0 to 4.
 #'
-#' @return A list with two components, `scale` and `rho`, each a numeric vector
-#'   of length 5: the value at index 1 and the four derivatives in that free
-#'   value at indices 2 to 5.
+#' @return A list with two components, `scale` and `rho`, each a list of
+#'   `order + 1` numbers: the value at index 1 and the derivatives in that free
+#'   value at the following indices.
 #'
 #' @seealso [econ_derivative()] and [cs_pattern()], which consume it, and
 #'   [param_value.CompoundSymmetryParam()].
 #'
 #' @keywords internal
-econ_scalars <- function(s, eta) {
-  ls <- s@param_params$link_scale
-  lr <- s@param_params$link_rho
-  grab <- function(link, e) {
-    list(
-      linkfunctions7::linkinv(link, e),
-      linkfunctions7::dlinkinv(link, e),
-      linkfunctions7::d2linkinv(link, e),
-      linkfunctions7::d3linkinv(link, e),
-      linkfunctions7::d4linkinv(link, e)
-    )
-  }
-  list(scale = grab(ls, eta[1L]), rho = grab(lr, eta[2L]))
+econ_scalars <- function(s, eta, order) {
+  list(scale = linkinv_upto(s@param_params$link_scale, eta[1L], order),
+       rho = linkinv_upto(s@param_params$link_rho, eta[2L], order))
 }
 
 
 #' Derivatives of a Sum of Logarithms of Affine Functions
 #'
 #' @description
-#' Returns the first four derivatives at \eqn{r} of
+#' Returns the derivatives of orders 1 to `order` at \eqn{r} of
 #' \eqn{\sum_t c_t \log(a_t + b_t r)}, using
 #'
 #' \deqn{\frac{\mathrm{d}^k}{\mathrm{d}r^k}\log(a + br)
@@ -250,20 +242,22 @@ econ_scalars <- function(s, eta) {
 #' keeps them from being transcribed twice, which is where a sign would be lost.
 #'
 #' The result is in the **correlation**, not in the free value; the caller chains
-#' it onto the link with [compose4()].
+#' it onto the link with [compose_order()].
 #'
 #' @param r The point, a single number.
 #' @param terms A list of numeric triples `c(coefficient, a, b)`, one per
 #'   logarithm.
+#' @param order The highest order wanted, an integer from 1 to 4.
 #'
-#' @return A list of four numbers, the first to fourth derivative.
+#' @return A list of `order` numbers, the first to the `order`-th
+#'   derivative.
 #'
 #' @seealso [cs_logdet_terms()] and [ar1_logdet_terms()] for the two term lists,
 #'   and [econ_logdet_derivative()], which chains the result onto the link.
 #'
 #' @keywords internal
-log_affine_derivs <- function(r, terms) {
-  lapply(1:4, function(k) {
+log_affine_derivs <- function(r, terms, order) {
+  lapply(seq_len(order), function(k) {
     sum(vapply(terms, function(t) {
       t[1L] * (-1)^(k - 1L) * factorial(k - 1L) * t[3L]^k / (t[2L] + t[3L] * r)^k
     }, numeric(1)))
@@ -291,9 +285,9 @@ log_affine_derivs <- function(r, terms) {
 #' @param eta A numeric vector of two free values.
 #' @param order The derivative order: 1, 2, 3 or 4.
 #' @param pattern A function of the parameter and the scalars of
-#'   [econ_scalars()], returning a list of five matrices: the pattern
-#'   \eqn{P(\rho)} and its four derivatives in the second free value. See
-#'   [cs_pattern()] and `ar1_pattern()`.
+#'   [econ_scalars()], returning a list of matrices: the pattern
+#'   \eqn{P(\rho)} and its derivatives in the second free value, to the order
+#'   the scalars carry. See [cs_pattern()] and `ar1_pattern()`.
 #'
 #' @return A list of `choose(order + 1, order)`, that is `order + 1`, symmetric
 #'   matrices keyed as `param_tuple_names(s, order)` and in that order, each
@@ -305,7 +299,7 @@ log_affine_derivs <- function(r, terms) {
 #'
 #' @keywords internal
 econ_derivative <- function(s, eta, order, pattern) {
-  sc <- econ_scalars(s, eta)
+  sc <- econ_scalars(s, eta, order)
   pt <- pattern(s, sc)
   idx <- param_tuple_indices(s, order)
   out <- lapply(idx, function(t) {
@@ -352,21 +346,22 @@ econ_derivative <- function(s, eta, order, pattern) {
 #'
 #' @keywords internal
 econ_logdet_derivative <- function(s, eta, order, terms) {
-  sc <- econ_scalars(s, eta)
+  sc <- econ_scalars(s, eta, order)
   p <- s@dimension
   sd <- sc$scale
   rd <- sc$rho
   # p * log(scale), composed through the link
-  a_log <- lapply(1:4, function(k) {
+  a_log <- lapply(seq_len(order), function(k) {
     (-1)^(k - 1L) * factorial(k - 1L) / sd[[1L]]^k
   })
-  d_scale <- compose4(a_log, sd[-1L])
-  d_rho <- compose4(log_affine_derivs(rd[[1L]], terms), rd[-1L])
+  d_scale <- compose_order(a_log, sd[-1L], order)
+  d_rho <- compose_order(log_affine_derivs(rd[[1L]], terms, order), rd[-1L],
+                         order)
 
   idx <- param_tuple_indices(s, order)
   out <- vapply(idx, function(t) {
-    if (all(t == 1L)) return(p * d_scale[[order]])
-    if (all(t == 2L)) return(d_rho[[order]])
+    if (all(t == 1L)) return(p * d_scale)
+    if (all(t == 2L)) return(d_rho)
     0
   }, numeric(1))
   stats::setNames(out, param_tuple_names(s, order))
@@ -377,19 +372,20 @@ econ_logdet_derivative <- function(s, eta, order, terms) {
 #'
 #' @description
 #' Returns \eqn{P(\rho) = I + \rho(J - I)}, the correlation pattern of a
-#' compound-symmetric matrix, together with its four derivatives in the second
-#' free value. The pattern is **linear** in the correlation, so every derivative
+#' compound-symmetric matrix, together with its derivatives in the second free
+#' value to the order the scalars carry. The pattern is **linear** in the correlation, so every derivative
 #' is the matching derivative of \eqn{\rho} times the constant matrix
 #' \eqn{J - I}, and no order needs its own algebra.
 #'
 #' @param s A [CompoundSymmetryParam()] object, whose `dimension` supplies
 #'   \eqn{I} and \eqn{J}.
 #' @param sc The scalars of [econ_scalars()], whose `rho` component supplies the
-#'   correlation and its four derivatives.
+#'   correlation and its derivatives.
 #'
-#' @return A list of five `s@dimension` by `s@dimension` matrices: the pattern at
-#'   index 1 and its four derivatives at indices 2 to 5. Each derivative has a
-#'   zero diagonal, the diagonal of the pattern being the constant 1.
+#' @return A list of `s@dimension` by `s@dimension` matrices, one more than the
+#'   derivatives `sc` carries: the pattern at index 1 and its derivatives at
+#'   the following indices. Each derivative has a zero diagonal, the diagonal
+#'   of the pattern being the constant 1.
 #'
 #' @seealso [econ_derivative()], the caller, and `ar1_pattern()`, the AR(1)
 #'   counterpart, which is not linear in the correlation.
@@ -399,7 +395,8 @@ cs_pattern <- function(s, sc) {
   p <- s@dimension
   off <- matrix(1, p, p) - diag(p)
   r <- sc$rho
-  c(list(diag(p) + r[[1L]] * off), lapply(2:5, function(k) r[[k]] * off))
+  c(list(diag(p) + r[[1L]] * off),
+    lapply(seq_along(r)[-1L], function(k) r[[k]] * off))
 }
 
 
@@ -421,7 +418,7 @@ cs_pattern <- function(s, sc) {
 #'   [param_solve.CompoundSymmetryParam()] for the closed matrix inverse.
 #' @keywords internal
 S7::method(param_value, CompoundSymmetryParam) <- function(s, eta, ...) {
-  sc <- econ_scalars(s, eta)
+  sc <- econ_scalars(s, eta, 0L)
   name_dims(sc$scale[[1L]] * cs_pattern(s, sc)[[1L]], s)
 }
 
@@ -498,7 +495,7 @@ S7::method(param_free, CompoundSymmetryParam) <- function(s, m, ...) {
 #' @keywords internal
 S7::method(param_solve, CompoundSymmetryParam) <- function(s, eta, b = NULL, ...) {
   p <- s@dimension
-  sc <- econ_scalars(s, eta)
+  sc <- econ_scalars(s, eta, 0L)
   v <- sc$scale[[1L]]
   r <- sc$rho[[1L]]
   inv <- (diag(p) - (r / (1 + (p - 1) * r)) * matrix(1, p, p)) / (v * (1 - r))
@@ -620,7 +617,7 @@ cs_logdet_terms <- function(s) {
 #'   orders, and [cs_logdet_terms()] for the two terms.
 #' @keywords internal
 S7::method(param_logdet, CompoundSymmetryParam) <- function(s, eta, ...) {
-  sc <- econ_scalars(s, eta)
+  sc <- econ_scalars(s, eta, 0L)
   p <- s@dimension
   r <- sc$rho[[1L]]
   p * log(sc$scale[[1L]]) + log(1 + (p - 1) * r) + (p - 1) * log(1 - r)

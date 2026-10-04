@@ -45,7 +45,7 @@ term whose \code{dfactor} returns \code{NULL} is skipped before the product is f
 and for both families that use this most terms do.
 }
 \seealso{
-\code{\link[=compose4]{compose4()}} for the other piece of shared arithmetic,
+\code{\link[=compose_order]{compose_order()}} for the other piece of shared arithmetic,
 \code{\link[=chol_dfactor]{chol_dfactor()}} and \code{\link[=corr_dfactor]{corr_dfactor()}} for the two \code{dfactor} arguments the
 package supplies, and \code{\link[=chol_leibniz]{chol_leibniz()}}, the compiled route that replaces
 this for the log-Cholesky family.

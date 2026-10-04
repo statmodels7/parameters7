@@ -14,9 +14,9 @@ econ_derivative(s, eta, order, pattern)
 \item{order}{The derivative order: 1, 2, 3 or 4.}
 
 \item{pattern}{A function of the parameter and the scalars of
-\code{\link[=econ_scalars]{econ_scalars()}}, returning a list of five matrices: the pattern
-\eqn{P(\rho)} and its four derivatives in the second free value. See
-\code{\link[=cs_pattern]{cs_pattern()}} and \code{ar1_pattern()}.}
+\code{\link[=econ_scalars]{econ_scalars()}}, returning a list of matrices: the pattern
+\eqn{P(\rho)} and its derivatives in the second free value, to the order
+the scalars carry. See \code{\link[=cs_pattern]{cs_pattern()}} and \code{ar1_pattern()}.}
 }
 \value{
 A list of \code{choose(order + 1, order)}, that is \code{order + 1}, symmetric

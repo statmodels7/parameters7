@@ -102,7 +102,7 @@ Ar1Param <- S7::new_class("Ar1Param", parent = matrix_parameter)
 #'
 #' The pattern is **not** linear in the correlation. An entry is \eqn{\rho^{m}}
 #' for the lag \eqn{m}, so its derivatives in the free value are a power composed
-#' with the link, taken to fourth order by [compose4()]. Each distinct lag is
+#' with the link, taken to fourth order by [compose_order()]. Each distinct lag is
 #' composed once and written into every entry that carries it, the matrix having
 #' only \eqn{p} distinct values.
 #'
@@ -195,10 +195,12 @@ ar1 <- function(dimension,
 #'
 #' @description
 #' Returns \eqn{P(\rho)_{ij} = \rho^{|i-j|}}, the correlation pattern of an AR(1)
-#' matrix, together with its four derivatives in the second free value. Each
+#' matrix, together with its derivatives in the second free value to the
+#' order the scalars carry. Each
 #' entry is a **power** of the correlation, so unlike [cs_pattern()]'s the
-#' pattern is not linear and each order needs a genuine chain: [compose4()]
-#' composes \eqn{\rho \mapsto \rho^m} with the link's own four derivatives.
+#' pattern is not linear and each order needs a genuine chain: [compose_order()]
+#' composes \eqn{\rho \mapsto \rho^m} with the link's own derivatives, one
+#' order at a time.
 #'
 #' @details
 #' Only \eqn{p} distinct lags occur, so each is composed once and the result
@@ -207,14 +209,14 @@ ar1 <- function(dimension,
 #'
 #' @param s An [Ar1Param()] object, whose `dimension` supplies the lags.
 #' @param sc The scalars of [econ_scalars()], whose `rho` component supplies the
-#'   correlation and its four derivatives in the free value.
+#'   correlation and its derivatives in the free value.
 #'
-#' @return A list of five `s@dimension` by `s@dimension` matrices: the pattern at
-#'   index 1 and its four derivatives at indices 2 to 5, each derivative with a
-#'   zero diagonal.
+#' @return A list of `s@dimension` by `s@dimension` matrices, one more than the
+#'   derivatives `sc` carries: the pattern at index 1 and its derivatives at
+#'   the following indices, each derivative with a zero diagonal.
 #'
 #' @seealso [cs_pattern()], the compound-symmetric counterpart, which is linear in
-#'   the correlation, [compose4()] for the chain, and [econ_derivative()], the
+#'   the correlation, [compose_order()] for the chain, and [econ_derivative()], the
 #'   caller.
 #'
 #' @keywords internal
@@ -222,10 +224,14 @@ ar1_pattern <- function(s, sc) {
   p <- s@dimension
   lag <- abs(outer(seq_len(p), seq_len(p), "-"))
   r <- sc$rho
+  K <- length(r) - 1L
   by_lag <- lapply(0:(p - 1L), function(m) {
-    c(list(r[[1L]]^m), compose4(power_derivs(r[[1L]], m), r[-1L]))
+    pw <- power_derivs(r[[1L]], m, K)
+    c(list(r[[1L]]^m), lapply(seq_len(K), function(o) {
+      compose_order(pw, r[-1L], o)
+    }))
   })
-  lapply(1:5, function(k) {
+  lapply(seq_len(K + 1L), function(k) {
     matrix(vapply(as.vector(lag), function(m) by_lag[[m + 1L]][[k]], numeric(1)),
            p, p)
   })
@@ -250,7 +256,7 @@ ar1_pattern <- function(s, sc) {
 #'   `ar1_pattern()` for the pattern.
 #' @keywords internal
 S7::method(param_value, Ar1Param) <- function(s, eta, ...) {
-  sc <- econ_scalars(s, eta)
+  sc <- econ_scalars(s, eta, 0L)
   name_dims(sc$scale[[1L]] * ar1_pattern(s, sc)[[1L]], s)
 }
 
@@ -332,7 +338,7 @@ S7::method(param_free, Ar1Param) <- function(s, m, ...) {
 #' @keywords internal
 S7::method(param_solve, Ar1Param) <- function(s, eta, b = NULL, ...) {
   p <- s@dimension
-  sc <- econ_scalars(s, eta)
+  sc <- econ_scalars(s, eta, 0L)
   v <- sc$scale[[1L]]
   r <- sc$rho[[1L]]
   t_mat <- diag(c(1, rep(1 + r^2, p - 2L), 1), nrow = p)
@@ -358,7 +364,7 @@ S7::method(param_solve, Ar1Param) <- function(s, eta, b = NULL, ...) {
 #' The pattern's derivatives are the ones that need work here. An entry is
 #' \eqn{\rho^{|i-j|}}, a power where [compound_symmetry()]'s pattern is linear,
 #' so each is composed with the rhobit link to the order asked, through
-#' [compose4()]. Each distinct lag is composed once.
+#' [compose_order()]. Each distinct lag is composed once.
 #' @details
 #' The four methods return lists of `order + 1` matrices, keyed by the tuple names
 #' of their own order:
@@ -454,7 +460,7 @@ ar1_logdet_terms <- function(s) {
 #'   `ar1_logdet_terms()` for the two terms.
 #' @keywords internal
 S7::method(param_logdet, Ar1Param) <- function(s, eta, ...) {
-  sc <- econ_scalars(s, eta)
+  sc <- econ_scalars(s, eta, 0L)
   p <- s@dimension
   p * log(sc$scale[[1L]]) + (p - 1) * log(1 - sc$rho[[1L]]^2)
 }

@@ -4,22 +4,26 @@
 \alias{dr_scale_derivs}
 \title{Derivatives of the Inverse Link at Every Scale Coordinate}
 \usage{
-dr_scale_derivs(s, eta)
+dr_scale_derivs(s, eta, order)
 }
 \arguments{
 \item{s}{A \code{\link[=DrProdParam]{DrProdParam()}} object.}
 
 \item{eta}{A numeric vector of length \code{s@n_free}; only its first \eqn{p}
 entries are read.}
+
+\item{order}{The highest derivative order wanted, an integer from 0 to 4.}
 }
 \value{
-A 5 by \eqn{p} numeric matrix, row \eqn{k+1} holding the \eqn{k}-th
+An \code{order + 1} by \eqn{p} numeric matrix, row \eqn{k+1} holding the
+\eqn{k}-th
 derivative of the inverse link at each scale coordinate, so row 1 is the
 scales themselves.
 }
 \description{
-Returns \eqn{d_j} and its first four derivatives in the free value that
-carries it, for every \eqn{j} at once, as a matrix with one row per order.
+Returns \eqn{d_j} and its derivatives to order \code{order} in the free value
+that carries it, for every \eqn{j} at once, as a matrix with one row per
+order.
 }
 \details{
 Each scale depends on one free value only, so the table is complete: there are

@@ -47,7 +47,7 @@ Two facts make every order exact without a new recursion.
 
 The lower-order rows of \eqn{U} are the coefficients of the SAME family at
 that order, measured to 0, so their derivative arrays come from the compiled
-Levinson-Durbin recursion of \code{\link[=ar_taylor]{ar_taylor()}} run once per order, and a
+Levinson-Durbin recursion of \code{\link[=ar_tables]{ar_tables()}} run once per order, and a
 component differentiating in a partial autocorrelation an order does not
 reach is exactly zero. And \eqn{\tau_t} is a PRODUCT of one factor per free
 value, \eqn{1/v_0} from the scale and \eqn{(1-r_j^2)^{-1}} from each

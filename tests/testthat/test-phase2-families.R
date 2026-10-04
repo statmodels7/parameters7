@@ -113,7 +113,7 @@ test_that("a correlation parameter stays a correlation matrix", {
   # SUPPORTED on those two entries; it is zero even there when the two angles
   # sit beyond the columns the rows share.
   eta <- rnorm(s@n_free)
-  tb <- parameters7:::corr_tables(s, eta)
+  tb <- parameters7:::corr_tables(s, eta, 2L)
   rows <- s@param_params$row
   cross <- which(vapply(param_tuple_indices(s, 2L), function(t) {
     rows[t[1L]] != rows[t[2L]]
@@ -173,13 +173,13 @@ test_that("a corrupted closed form is caught", {
   expect_true(all(check_parameter(ar1(4), verbose = FALSE)$status == "OK"))
 })
 
-test_that("compose4 reproduces a composition it does not know about", {
+test_that("compose_order reproduces a composition it does not know about", {
   # exp(sin(x)) differentiated four times, against Richardson: the helper is
   # the one piece every phase-two family leans on
   x <- 0.7
   g <- list(cos(x), -sin(x), -cos(x), sin(x))
   f <- rep(list(exp(sin(x))), 4)
-  got <- compose4(f, g)
+  got <- lapply(1:4, function(o) compose_order(f, g, o))
   h <- function(z) exp(sin(z))
   for (o in 1:4) {
     want <- numDeriv::genD(h, x)$D

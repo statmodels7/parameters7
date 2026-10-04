@@ -26,7 +26,7 @@ weight.
 }
 \details{
 This is Faa di Bruno with a diagonal inner map, written out here instead of
-going through \code{\link[=compose4]{compose4()}}, because the outer function is a derivative in
+going through \code{\link[=compose_order]{compose_order()}}, because the outer function is a derivative in
 several weights at once, never a univariate composition. The product over the groups'
 partitions is the grid the loop walks; the partitions come from
 \code{\link[numericals7:set_partitions]{numericals7::set_partitions()}}, the one enumeration the toolkit keeps.

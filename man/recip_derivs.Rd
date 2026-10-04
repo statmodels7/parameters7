@@ -7,16 +7,16 @@
 recip_derivs(v)
 }
 \arguments{
-\item{v}{A list of five numbers: the value of \eqn{h} and its four
-derivatives, as \code{econ_scalars()} returns for one link.}
+\item{v}{A list: the value of \eqn{h} and its derivatives to some order
+up to four, as \code{econ_scalars()} returns for one link.}
 }
 \value{
-A list of five numbers in the same shape, for \eqn{1/h}.
+A list of the same length, for \eqn{1/h}.
 }
 \description{
-Returns the value and four derivatives of \eqn{\eta \mapsto 1/h(\eta)} from
-the value and four derivatives of \eqn{h}, by composing \eqn{x^{-1}} onto
-them.
+Returns the value and the derivatives of \eqn{\eta \mapsto 1/h(\eta)} from
+the value and the derivatives of \eqn{h}, by composing \eqn{x^{-1}} onto
+them, to the order \code{v} carries.
 }
 \details{
 \code{\link[=power_derivs]{power_derivs()}} cannot serve here: it truncates beyond the exponent, which
@@ -25,6 +25,6 @@ every order is non-zero. The outer derivatives written out are
 \eqn{-x^{-2}}, \eqn{2x^{-3}}, \eqn{-6x^{-4}} and \eqn{24x^{-5}}.
 }
 \seealso{
-\code{\link[=ar1_inv]{ar1_inv()}}, the caller, and \code{\link[=compose4]{compose4()}} for the chain.
+\code{\link[=ar1_inv]{ar1_inv()}}, the caller, and \code{\link[=compose_order]{compose_order()}} for the chain.
 }
 \keyword{internal}

@@ -4,26 +4,28 @@
 \alias{power_derivs}
 \title{Derivatives of a Power, for Composition}
 \usage{
-power_derivs(r, m)
+power_derivs(r, m, order)
 }
 \arguments{
 \item{r}{The point, a single number or a vector.}
 
-\item{m}{The exponent, a non-negative integer. At \code{m = 0} all four are 0, the
-power being the constant 1; at \code{m = 2} they are \verb{c(2r, 2, 0, 0)}.}
+\item{m}{The exponent, a non-negative integer. At \code{m = 0} all are 0, the
+power being the constant 1; at \code{m = 2} the first four are \verb{c(2r, 2, 0, 0)}.}
+
+\item{order}{The highest order wanted, an integer from 0 to 4.}
 }
 \value{
-A list of four elements, the first to fourth derivative, each the
-shape of \code{r}.
+A list of \code{order} elements, the first to the \code{order}-th
+derivative, each the shape of \code{r}.
 }
 \description{
-Returns the four derivatives of \eqn{r \mapsto r^{m}} at \eqn{r}, ready to be
-the outer map of a \code{\link[=compose4]{compose4()}} call. They are
+Returns the derivatives of orders 1 to \code{order} of \eqn{r \mapsto r^{m}} at
+\eqn{r}, ready to be the outer map of a \code{\link[=compose_order]{compose_order()}} call. They are
 \eqn{m(m-1)\cdots(m-k+1)\,r^{m-k}} and vanish beyond order \eqn{m}, the power
 being a polynomial. \code{ar1_pattern()} calls it once per distinct lag.
 }
 \seealso{
-\code{\link[=compose4]{compose4()}}, which chains these onto a link's derivatives, and
-\code{ar1_pattern()}, the caller.
+\code{\link[=compose_order]{compose_order()}}, which chains these onto a link's derivatives,
+and \code{ar1_pattern()}, the caller.
 }
 \keyword{internal}

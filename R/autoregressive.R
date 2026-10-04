@@ -118,17 +118,17 @@ AutoregressiveParam <- S7::new_class("AutoregressiveParam",
 #'
 #' # What a call costs
 #'
-#' [ar_taylor()] runs the recursion once and packs **every** order up to the
-#' fourth, so `param_d1()` pays most of what `param_d4()` pays and the difference
-#' between them is the R-level assembly. Seconds per call, over repetition loops
-#' sized by elapsed time:
+#' Each derivative order has its own compiled kernel, [ar_tables()], which
+#' returns that order's components alone, and the Toeplitz matrices are filled
+#' in compiled code. Seconds per call, over repetition loops sized by elapsed
+#' time:
 #'
 #' | \eqn{q} | \eqn{p} | `param_value` | `param_d1` | `param_d4` |
 #' |---|---|---|---|---|
-#' | 1 | 10 | 0.00018 | 0.00024 | 0.00033 |
-#' | 1 | 200 | 0.00143 | 0.00191 | 0.00375 |
-#' | 2 | 200 | 0.00398 | 0.00516 | 0.01203 |
-#' | 4 | 200 | 0.03313 | 0.03563 | 0.08313 |
+#' | 1 | 10 | 0.00005 | 0.00008 | 0.00018 |
+#' | 1 | 200 | 0.00013 | 0.00023 | 0.00044 |
+#' | 2 | 200 | 0.00013 | 0.00030 | 0.00125 |
+#' | 4 | 200 | 0.00015 | 0.00043 | 0.01550 |
 #'
 #' # Against ar1()
 #'
@@ -252,124 +252,50 @@ autoregressive <- function(dimension, order,
 }
 
 
-#' The Levinson-Durbin Recursion With Its Derivatives
+#' The Levinson-Durbin Recursion and One Derivative Order
 #'
 #' @description
-#' Runs the compiled recursion `ar_taylor_cpp`. The scale and the partial
-#' autocorrelations enter as their link inverses carrying four derivatives each,
-#' and the autocorrelations, the coefficients and every partial derivative to
-#' fourth order come back as packed arrays.
+#' Runs the compiled kernel of one order: `ar_value_cpp()` at order 0 and
+#' `ar_d1_cpp()` to `ar_d4_cpp()` above. The scale and the partial
+#' autocorrelations enter as their link inverses with derivatives to `order`,
+#' and the autocovariances and the autoregressive coefficients come back with
+#' the derivative components of that order alone.
 #'
 #' @details
-#' The recursion is sums and products only, so the propagation rules are the
-#' product rule written out per order: every derivative is exact and nothing is
-#' differenced.
-#'
-#' It always fills **all four orders**, whatever order the caller went on to
-#' want. Measured at \eqn{q = 2}, `gamma` comes back 6 by 121 for \eqn{p = 6},
-#' and \eqn{121 = 1 + 3 + 3^2 + 3^3 + 3^4}. That is why `param_d1()` costs nearly
-#' what `param_d4()` costs (0.00516 s against 0.01203 s at \eqn{q = 2},
-#' \eqn{p = 200}): the difference between them is the R-level assembly, not the
-#' recursion.
+#' The coefficients are multilinear in the partial autocorrelations \eqn{r}:
+#' step \eqn{k} of the recursion is affine in \eqn{r_k} and the earlier
+#' coefficients do not involve it. The kernel differentiates the recursion in
+#' \eqn{r} for every multiset of indices up to `order`, the products by
+#' Leibniz over the sub-multisets without a repeated index, and applies the
+#' links once at the end through the partial Bell polynomials, each
+#' \eqn{r_k} depending on its own free value alone.
 #'
 #' @param s An [AutoregressiveParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`.
+#' @param order The derivative order, an integer from 0 to 4.
 #'
-#' @return A list with `n`, the number of free values \eqn{q + 1}; `gamma`, a
-#'   matrix with one row per lag \eqn{0, \dots, p-1}; and `phi`, one row per
-#'   autoregressive coefficient. Each row packs the value first and then the full
-#'   derivative tensors of orders one to four in row-major order, so it has
-#'   \eqn{1 + n + n^2 + n^3 + n^4} columns.
+#' @return A list with `gamma` and `phi`. At order 0, `gamma` holds the
+#'   autocovariances at lags \eqn{0, \dots, p-1} and `phi` the \eqn{q}
+#'   coefficients. Above, each is a matrix (\eqn{p} and \eqn{q} rows) with one
+#'   column per index tuple of [param_tuple_indices()] at that order, in its
+#'   order.
 #'
-#' @seealso [ar_pack_col()] for the column a component sits in, [ar_assemble()]
-#'   for the matrix built from one column, and [autoregressive()] for the
-#'   recursion itself.
+#' @seealso [autoregressive()] for the recursion itself, and
+#'   [ar_derivative()], which assembles the matrices.
 #'
 #' @keywords internal
-ar_taylor <- function(s, eta) {
+ar_tables <- function(s, eta, order) {
   q <- s@param_params$order
-  grab <- function(link, e) {
-    c(
-      linkfunctions7::linkinv(link, e),
-      linkfunctions7::dlinkinv(link, e),
-      linkfunctions7::d2linkinv(link, e),
-      linkfunctions7::d3linkinv(link, e),
-      linkfunctions7::d4linkinv(link, e)
-    )
-  }
-  seeds <- rbind(
-    grab(s@param_params$link_scale, eta[1L]),
-    t(vapply(seq_len(q), function(k) {
-      grab(s@param_params$link_pacf, eta[k + 1L])
-    }, numeric(5)))
-  )
-  out <- ar_taylor_cpp(s@dimension, q, seeds)
-  out$n <- q + 1L
-  out
-}
-
-
-#' The Matrix and Its Derivatives, From the Packed Arrays
-#'
-#' @description
-#' Fills the Toeplitz matrix \eqn{M_{ij} = \gamma_{\lvert i - j \rvert}} from one
-#' column of [ar_taylor()]'s packed rows, taking either the value column or one
-#' derivative component. Every derivative of the matrix is Toeplitz too, the
-#' Toeplitz structure being a property of the family, fixed as the point moves,
-#' so one indexing operation serves all five cases.
-#'
-#' @param s An [AutoregressiveParam()] object, whose `dimension` is read.
-#' @param tay The arrays of [ar_taylor()].
-#' @param order The derivative order 1 to 4, or 0 for the value.
-#' @param tuple The index tuple of that order, ignored at order 0.
-#'
-#' @return A symmetric `s@dimension` by `s@dimension` numeric matrix, with no
-#'   dimnames.
-#'
-#' @seealso [ar_pack_col()], which locates the column, and [ar_derivative()],
-#'   which loops this over the tuples of an order.
-#'
-#' @keywords internal
-ar_assemble <- function(s, tay, order = 0L, tuple = NULL) {
-  p <- s@dimension
-  lag <- abs(outer(seq_len(p), seq_len(p), "-"))
-  vals <- tay$gamma[, ar_pack_col(tay$n, order, tuple)]
-  matrix(vals[lag + 1L], p, p)
-}
-
-
-#' The Column of a Packed Derivative Record
-#'
-#' @description
-#' Locates a derivative component in a row of [ar_taylor()]'s output. The value
-#' sits in column 1 and the full tensors of orders one to four follow it in
-#' row-major order, so order \eqn{k} begins at column
-#' \eqn{1 + \sum_{j<k} n^{j}} and the tuple \eqn{(t_1, \dots, t_k)} sits
-#' \eqn{\sum_i (t_i - 1) n^{k-i}} further on.
-#'
-#' @details
-#' At \eqn{n = 3} the value is column 1, the three first-order components are
-#' columns 2 to 4, and the nine second-order ones are columns 5 to 13:
-#' \eqn{(1,1)} is 5, \eqn{(1,2)} is 6 and \eqn{(3,3)} is 13. The tensor is stored
-#' **full**, with one column per ordered tuple, so \eqn{(1,2)} and \eqn{(2,1)} are two
-#' columns holding the same number; the caller reads whichever one
-#' [param_tuple_indices()] hands it.
-#'
-#' @param n The number of free values, \eqn{q + 1}.
-#' @param order The derivative order 1 to 4, or 0 for the value.
-#' @param tuple The index tuple, 1-based, of length `order`. Ignored at order 0.
-#'
-#' @return A single column index.
-#'
-#' @seealso [ar_taylor()] for the layout this describes.
-#'
-#' @keywords internal
-ar_pack_col <- function(n, order = 0L, tuple = NULL) {
-  if (order == 0L) return(1L)
-  off <- 1L + cumsum(c(0L, n^(1:3)))[order]
-  idx <- 0L
-  for (t in tuple) idx <- idx * n + (t - 1L)
-  off + idx + 1L
+  grab <- function(link, e) unlist(linkinv_upto(link, e, order))
+  seeds <- do.call(rbind, c(
+    list(grab(s@param_params$link_scale, eta[1L])),
+    lapply(seq_len(q), function(k) grab(s@param_params$link_pacf, eta[k + 1L]))
+  ))
+  if (order == 0L) return(ar_value_cpp(s@dimension, q, seeds))
+  tup <- do.call(rbind, tuple_indices(q + 1L, order))
+  storage.mode(tup) <- "integer"
+  kern <- switch(order, ar_d1_cpp, ar_d2_cpp, ar_d3_cpp, ar_d4_cpp)
+  kern(s@dimension, q, seeds, tup)
 }
 
 
@@ -377,13 +303,14 @@ ar_pack_col <- function(n, order = 0L, tuple = NULL) {
 #' @name param_value.AutoregressiveParam
 #' @description
 #' Returns the Toeplitz matrix \eqn{\gamma_0 \rho_{\lvert i-j \rvert}}, the
-#' autocorrelations coming from the Levinson-Durbin recursion of [ar_taylor()]
+#' autocorrelations coming from the Levinson-Durbin recursion of [ar_tables()]
 #' and the marginal variance from the scale link. Positive definite at every free
 #' vector, the partial autocorrelations being inside \eqn{(-1, 1)} by
 #' construction.
 #'
-#' The cost is the recursion, which is linear in \eqn{p}: 0.00018 s at
-#' \eqn{q = 1, p = 10} and 0.00143 s at \eqn{q = 1, p = 200}.
+#' The cost is the recursion, which is linear in \eqn{p}, and the filling of
+#' the matrix: 0.00005 s at \eqn{q = 1, p = 10} and 0.00013 s at
+#' \eqn{q = 1, p = 200}.
 #' @param s An [AutoregressiveParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic.
@@ -391,19 +318,21 @@ ar_pack_col <- function(n, order = 0L, tuple = NULL) {
 #' @return A positive definite Toeplitz `s@dimension` by `s@dimension` numeric
 #'   matrix with dimnames `v1`, `v2`, ...
 #' @seealso [param_free.AutoregressiveParam()] for the inverse, and
-#'   [ar_assemble()], which fills it.
+#'   [ar_tables()], which computes it.
 #' @keywords internal
 S7::method(param_value, AutoregressiveParam) <- function(s, eta, ...) {
-  name_dims(ar_assemble(s, ar_taylor(s, eta)), s)
+  g <- ar_tables(s, eta, 0L)$gamma
+  ar_toeplitz_cpp(matrix(g, ncol = 1L), paste0("v", seq_len(s@dimension)))[[1L]]
 }
 
 
 #' Derivative Components of an Autoregressive Parameter
 #'
 #' @description
-#' Assembles one derivative order by running [ar_taylor()] once and reading the
-#' matching column out of the packed arrays for each tuple of the order. The four
-#' methods differ only in the order they pass.
+#' Assembles one derivative order from the kernel of that order: one Toeplitz
+#' matrix per index tuple, filled in compiled code from the column of
+#' autocovariance derivatives [ar_tables()] returns for it. The four methods
+#' differ only in the order they pass.
 #'
 #' @param s An [AutoregressiveParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`.
@@ -413,16 +342,13 @@ S7::method(param_value, AutoregressiveParam) <- function(s, eta, ...) {
 #'   keyed as `param_tuple_names(s, order)` and in that order, each
 #'   `s@dimension` by `s@dimension` with dimnames.
 #'
-#' @seealso [ar_taylor()] for the recursion, [ar_assemble()] for one component,
-#'   and [param_d1.AutoregressiveParam()], which calls this.
+#' @seealso [ar_tables()] for the recursion, and
+#'   [param_d1.AutoregressiveParam()], which calls this.
 #'
 #' @keywords internal
 ar_derivative <- function(s, eta, order) {
-  tay <- ar_taylor(s, eta)
-  idx <- param_tuple_indices(s, order)
-  out <- lapply(idx, function(t) {
-    name_dims(ar_assemble(s, tay, order, t), s)
-  })
+  g <- ar_tables(s, eta, order)$gamma
+  out <- ar_toeplitz_cpp(g, paste0("v", seq_len(s@dimension)))
   stats::setNames(out, param_tuple_names(s, order))
 }
 
@@ -442,9 +368,8 @@ ar_derivative <- function(s, eta, order) {
 #' fixed as the point moves.
 #' @details
 #' The four share [ar_derivative()] and differ only in the order they pass.
-#' [ar_taylor()] fills all four orders in one pass whatever is asked, so the
-#' first order costs nearly what the fourth costs; see [autoregressive()] for the
-#' table.
+#' Each order runs its own kernel, which returns that order's components
+#' alone; see [autoregressive()] for the cost.
 #' @param s An [AutoregressiveParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic.
@@ -709,7 +634,7 @@ S7::method(param_logdet, AutoregressiveParam) <- function(s, eta, ...) {
 #' \eqn{\gamma_0} are \eqn{(-1)^{k-1}(k-1)!/\gamma_0^{k}}, and each partial
 #' autocorrelation contributes \eqn{(p-k)\log(1 - r_k^2)}, whose derivatives come
 #' from [log_affine_derivs()] applied to the two factors \eqn{1 - r} and
-#' \eqn{1 + r}. Both are then carried onto the free scale by [compose4()], the
+#' \eqn{1 + r}. Both are then carried onto the free scale by [compose_order()], the
 #' Faa di Bruno chain with a one-dimensional inner map.
 #'
 #' @param s An [AutoregressiveParam()] object.
@@ -719,7 +644,7 @@ S7::method(param_logdet, AutoregressiveParam) <- function(s, eta, ...) {
 #' @return A numeric vector of `choose(s@n_free + order - 1, order)` values keyed
 #'   as `param_tuple_names(s, order)` and in that order.
 #'
-#' @seealso [compose4()] and [log_affine_derivs()] for the two pieces, and
+#' @seealso [compose_order()] and [log_affine_derivs()] for the two pieces, and
 #'   [param_dlogdet.AutoregressiveParam()], which calls this.
 #'
 #' @keywords internal
@@ -728,28 +653,25 @@ ar_logdet_derivative <- function(s, eta, order) {
   q <- s@param_params$order
   ls <- s@param_params$link_scale
   lr <- s@param_params$link_pacf
+  # the derivative of order `order` of a function of one free value, through
+  # its link: the outer derivatives and the link's, both to that order
   chain <- function(link, e, outer_fun) {
-    gd <- list(
-      linkfunctions7::dlinkinv(link, e),
-      linkfunctions7::d2linkinv(link, e),
-      linkfunctions7::d3linkinv(link, e),
-      linkfunctions7::d4linkinv(link, e)
-    )
-    compose4(outer_fun(linkfunctions7::linkinv(link, e)), gd)
+    gd <- linkinv_upto(link, e, order)
+    compose_order(outer_fun(gd[[1L]]), gd[-1L], order)
   }
   d_scale <- chain(ls, eta[1L], function(x) {
-    lapply(1:4, function(k) (-1)^(k - 1L) * factorial(k - 1L) / x^k)
+    lapply(seq_len(order), function(k) (-1)^(k - 1L) * factorial(k - 1L) / x^k)
   })
   d_pacf <- lapply(seq_len(q), function(k) {
     chain(lr, eta[k + 1L], function(x) {
-      log_affine_derivs(x, list(c(p - k, 1, -1), c(p - k, 1, 1)))
+      log_affine_derivs(x, list(c(p - k, 1, -1), c(p - k, 1, 1)), order)
     })
   })
 
   idx <- param_tuple_indices(s, order)
   out <- vapply(idx, function(t) {
     if (any(t != t[1L])) return(0)
-    if (t[1L] == 1L) p * d_scale[[order]] else d_pacf[[t[1L] - 1L]][[order]]
+    if (t[1L] == 1L) p * d_scale else d_pacf[[t[1L] - 1L]]
   }, numeric(1))
   stats::setNames(out, param_tuple_names(s, order))
 }

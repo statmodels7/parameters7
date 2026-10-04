@@ -4,7 +4,7 @@
 \alias{ar_inv_factors}
 \title{The Prediction Factors of an Inverse Autoregression, With Derivatives}
 \usage{
-ar_inv_factors(s, eta, cd)
+ar_inv_factors(s, eta, cd, order)
 }
 \arguments{
 \item{s}{An \code{\link[=AutoregressiveInvParam]{AutoregressiveInvParam()}} object.}
@@ -12,6 +12,9 @@ ar_inv_factors(s, eta, cd)
 \item{eta}{A numeric vector of length \code{s@n_free}.}
 
 \item{cd}{The codes of \code{\link[=ar_inv_codes]{ar_inv_codes()}}.}
+
+\item{order}{The derivative order the codes belong to, which bounds every
+factor's order.}
 }
 \value{
 A list with \code{u} and \code{tau}, each a list indexed by code: \code{u} of
@@ -41,7 +44,7 @@ it is exactly zero whenever it differentiates in a factor that row does not
 carry.
 }
 \seealso{
-\code{\link[=autoregressive_inv]{autoregressive_inv()}} for the formula and \code{\link[=ar_taylor]{ar_taylor()}} for the
+\code{\link[=autoregressive_inv]{autoregressive_inv()}} for the formula and \code{\link[=ar_tables]{ar_tables()}} for the
 recursion the coefficients come from.
 }
 \keyword{internal}

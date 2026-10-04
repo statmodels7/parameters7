@@ -7,11 +7,11 @@
 w_derivs(v)
 }
 \arguments{
-\item{v}{A list of five numbers: \eqn{\rho} and its four derivatives in the
-free value, as \code{econ_scalars()} returns for one link.}
+\item{v}{A list: \eqn{\rho} and its derivatives in the free value to some
+order up to four, as \code{econ_scalars()} returns for one link.}
 }
 \value{
-A list of five numbers: \eqn{w} and its four derivatives in the free
+A list of the same length: \eqn{w} and its derivatives in the free
 value.
 }
 \description{

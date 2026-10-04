@@ -11,17 +11,18 @@ cs_pattern(s, sc)
 \eqn{I} and \eqn{J}.}
 
 \item{sc}{The scalars of \code{\link[=econ_scalars]{econ_scalars()}}, whose \code{rho} component supplies the
-correlation and its four derivatives.}
+correlation and its derivatives.}
 }
 \value{
-A list of five \code{s@dimension} by \code{s@dimension} matrices: the pattern at
-index 1 and its four derivatives at indices 2 to 5. Each derivative has a
-zero diagonal, the diagonal of the pattern being the constant 1.
+A list of \code{s@dimension} by \code{s@dimension} matrices, one more than the
+derivatives \code{sc} carries: the pattern at index 1 and its derivatives at
+the following indices. Each derivative has a zero diagonal, the diagonal
+of the pattern being the constant 1.
 }
 \description{
 Returns \eqn{P(\rho) = I + \rho(J - I)}, the correlation pattern of a
-compound-symmetric matrix, together with its four derivatives in the second
-free value. The pattern is \strong{linear} in the correlation, so every derivative
+compound-symmetric matrix, together with its derivatives in the second free
+value to the order the scalars carry. The pattern is \strong{linear} in the correlation, so every derivative
 is the matching derivative of \eqn{\rho} times the constant matrix
 \eqn{J - I}, and no order needs its own algebra.
 }

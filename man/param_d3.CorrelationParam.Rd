@@ -23,7 +23,7 @@ rows of \eqn{L} or reaches past the columns an entry involves, so most terms
 of the sum are skipped instead of computed and discarded.
 
 The angles reach the free scale through a bounded link, so the chain to third
-order is \code{\link[=compose4]{compose4()}}'s and the accuracy is the link's; nothing is differenced.
+order is \code{\link[=compose_order]{compose_order()}}'s and the accuracy is the link's; nothing is differenced.
 The diagonal is exactly zero.
 }
 \seealso{

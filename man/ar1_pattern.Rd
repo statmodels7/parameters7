@@ -10,19 +10,21 @@ ar1_pattern(s, sc)
 \item{s}{An \code{\link[=Ar1Param]{Ar1Param()}} object, whose \code{dimension} supplies the lags.}
 
 \item{sc}{The scalars of \code{\link[=econ_scalars]{econ_scalars()}}, whose \code{rho} component supplies the
-correlation and its four derivatives in the free value.}
+correlation and its derivatives in the free value.}
 }
 \value{
-A list of five \code{s@dimension} by \code{s@dimension} matrices: the pattern at
-index 1 and its four derivatives at indices 2 to 5, each derivative with a
-zero diagonal.
+A list of \code{s@dimension} by \code{s@dimension} matrices, one more than the
+derivatives \code{sc} carries: the pattern at index 1 and its derivatives at
+the following indices, each derivative with a zero diagonal.
 }
 \description{
 Returns \eqn{P(\rho)_{ij} = \rho^{|i-j|}}, the correlation pattern of an AR(1)
-matrix, together with its four derivatives in the second free value. Each
+matrix, together with its derivatives in the second free value to the
+order the scalars carry. Each
 entry is a \strong{power} of the correlation, so unlike \code{\link[=cs_pattern]{cs_pattern()}}'s the
-pattern is not linear and each order needs a genuine chain: \code{\link[=compose4]{compose4()}}
-composes \eqn{\rho \mapsto \rho^m} with the link's own four derivatives.
+pattern is not linear and each order needs a genuine chain: \code{\link[=compose_order]{compose_order()}}
+composes \eqn{\rho \mapsto \rho^m} with the link's own derivatives, one
+order at a time.
 }
 \details{
 Only \eqn{p} distinct lags occur, so each is composed once and the result
@@ -31,7 +33,7 @@ so the diagonal of every derivative is exactly zero.
 }
 \seealso{
 \code{\link[=cs_pattern]{cs_pattern()}}, the compound-symmetric counterpart, which is linear in
-the correlation, \code{\link[=compose4]{compose4()}} for the chain, and \code{\link[=econ_derivative]{econ_derivative()}}, the
+the correlation, \code{\link[=compose_order]{compose_order()}} for the chain, and \code{\link[=econ_derivative]{econ_derivative()}}, the
 caller.
 }
 \keyword{internal}

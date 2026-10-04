@@ -1,3 +1,35 @@
+# parameters7 0.22.0
+
+* Every helper forms only the orders its caller reads. The value of a
+  parameter, its solve and its log-determinant no longer evaluate any
+  derivative, and a derivative of order k no longer forms the orders above
+  k. `compose4()`, which always composed four orders, is replaced by
+  `compose_order()`, one order per call; `power_derivs()`,
+  `log_affine_derivs()`, `econ_scalars()`, `corr_tables()`,
+  `dr_scale_derivs()` and `sum_struct_weight_derivs()` take the highest
+  order wanted, and `linkinv_upto()` replaces the five-element link tables
+  each family built for itself. The compiled Levinson-Durbin recursion of
+  `autoregressive()` propagates only the tensors up to the order asked for:
+  the value, which carried every tensor to order four, is now the recursion
+  on numbers alone. The derivatives are unchanged (each order is the same
+  arithmetic), and the record of order k is bit for bit the leading columns
+  of the order-four one. Measured at p = 40, the value of an
+  `autoregressive(order = 3)` takes 0.20 ms against 3.55 and its first
+  derivative 0.8 against 4.0; the value of an `ar1()` 1.3 ms against 6.3.
+
+* `autoregressive()` no longer runs a jet. Each derivative order has its own
+  compiled kernel (`ar_d1_cpp()` to `ar_d4_cpp()`, and `ar_value_cpp()`),
+  which differentiates the Levinson-Durbin recursion in the partial
+  autocorrelations, where the coefficients are multilinear, keeps one entry
+  per multiset of indices, applies the links once through the partial Bell
+  polynomials and returns that order's components alone. The Toeplitz
+  matrices are filled in compiled code (`ar_toeplitz_cpp()`), where the R
+  assembly recomputed the lag matrix for every component. Measured at q = 4,
+  p = 200: `param_value()` 0.15 ms against 0.60, `param_d1()` 0.43 against
+  2.8, `param_d4()` 15.5 against 55.6. The former recursion stays compiled as
+  `ar_taylor_jet_cpp()`, the tests' independent reference, which the new
+  kernels match to 1e-12 at every order.
+
 # parameters7 0.21.0
 
 * `param_inv_d1()` and `param_inv_d2()`, new generics: the first and second

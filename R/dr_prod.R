@@ -254,8 +254,9 @@ check_unit_diagonal <- function(correlation) {
 #' Derivatives of the Inverse Link at Every Scale Coordinate
 #'
 #' @description
-#' Returns \eqn{d_j} and its first four derivatives in the free value that
-#' carries it, for every \eqn{j} at once, as a matrix with one row per order.
+#' Returns \eqn{d_j} and its derivatives to order `order` in the free value
+#' that carries it, for every \eqn{j} at once, as a matrix with one row per
+#' order.
 #'
 #' @details
 #' Each scale depends on one free value only, so the table is complete: there are
@@ -269,8 +270,10 @@ check_unit_diagonal <- function(correlation) {
 #' @param s A [DrProdParam()] object.
 #' @param eta A numeric vector of length `s@n_free`; only its first \eqn{p}
 #'   entries are read.
+#' @param order The highest derivative order wanted, an integer from 0 to 4.
 #'
-#' @return A 5 by \eqn{p} numeric matrix, row \eqn{k+1} holding the \eqn{k}-th
+#' @return An `order + 1` by \eqn{p} numeric matrix, row \eqn{k+1} holding the
+#'   \eqn{k}-th
 #'   derivative of the inverse link at each scale coordinate, so row 1 is the
 #'   scales themselves.
 #'
@@ -278,14 +281,9 @@ check_unit_diagonal <- function(correlation) {
 #'   log-determinant's own chain.
 #'
 #' @keywords internal
-dr_scale_derivs <- function(s, eta) {
-  lk <- .dr(s)$link
+dr_scale_derivs <- function(s, eta, order) {
   e <- eta[seq_len(.dr(s)$p)]
-  rbind(linkfunctions7::linkinv(lk, e),
-        linkfunctions7::dlinkinv(lk, e),
-        linkfunctions7::d2linkinv(lk, e),
-        linkfunctions7::d3linkinv(lk, e),
-        linkfunctions7::d4linkinv(lk, e))
+  do.call(rbind, linkinv_upto(.dr(s)$link, e, order))
 }
 
 #' The Scale Factor of a Derivative Component
@@ -383,7 +381,7 @@ dr_scale_factor <- function(sd, tuple) {
 dr_prod_derivs <- function(s, eta, order) {
   pp <- .dr(s)
   p <- pp$p
-  sd <- dr_scale_derivs(s, eta)
+  sd <- dr_scale_derivs(s, eta, order)
   ec <- .dr_eta_cor(s, eta)
   cor_cache <- list()
   cor_component <- function(t) {
