@@ -12,7 +12,7 @@ Description: Parametrizations of constrained parameter spaces as objects. A
     a likelihood needs. Numerical fallbacks make a user-defined parameter
     work from its map alone, and a diagnostic verifies every component
     against an independent route.
-License: MIT + file LICENSE
+License: GPL (>= 2)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 URL: https://statmodels7.github.io/parameters7/,
