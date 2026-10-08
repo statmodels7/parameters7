@@ -41,14 +41,32 @@ test_that("the exact method holds where the covariance is nearly singular", {
   e2 <- param_inv_d2(s, eta)
   d2 <- S7::method(param_inv_d2, matrix_parameter)(s, eta)
   for (k in 1:3) expect_lt(rel(e1[[k]], rich_inv(s, eta, k)), 1e-9)
+  # The second-order reference is symbolic: here solve() itself is off by
+  # 4e-10 and a Richardson difference of it by 1e-6, which is platform
+  # dependent (1.05e-6 on ubuntu). With eta = (a, b, c), L = [[e^a, 0],
+  # [c, e^b]] and Sigma^{-1} has the closed form below.
+  ex <- list(
+    i11 = quote((c^2 + exp(2 * b)) / (exp(2 * a) * exp(2 * b))),
+    i21 = quote(-(c * exp(a)) / (exp(2 * a) * exp(2 * b))),
+    i22 = quote(exp(2 * a) / (exp(2 * a) * exp(2 * b))))
+  vars <- c("a", "b", "c")
+  env <- list(a = eta[1], b = eta[2], c = eta[3])
+  sym_d2 <- function(j, k) {
+    v <- vapply(ex, function(e) eval(D(D(e, vars[j]), vars[k]), env), numeric(1))
+    matrix(c(v[1], v[2], v[2], v[3]), 2)
+  }
+  expect_lt(max(abs(param_value(s, eta) -
+                      matrix(c(exp(2 * eta[1]), eta[3] * exp(eta[1]),
+                               eta[3] * exp(eta[1]),
+                               eta[3]^2 + exp(2 * eta[2])), 2))), 1e-15)
   idx <- param_tuple_indices(s, 2L)
   for (i in seq_along(idx)) {
-    ref <- rich_inv(s, eta, idx[[i]][1], idx[[i]][2])
-    expect_lt(rel(e2[[i]], ref), 1e-6)
+    ref <- sym_d2(idx[[i]][1], idx[[i]][2])
+    expect_lt(rel(e2[[i]], ref), 1e-12)
   }
   # the negative control: the sandwich's second derivative is out there
   worst <- max(vapply(seq_along(idx), function(i)
-    rel(d2[[i]], rich_inv(s, eta, idx[[i]][1], idx[[i]][2])), numeric(1)))
+    rel(d2[[i]], sym_d2(idx[[i]][1], idx[[i]][2])), numeric(1)))
   expect_gt(worst, 1e-2)
 })
 
