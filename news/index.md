@@ -1,5 +1,14 @@
 # Changelog
 
+## parameters7 0.22.1
+
+- The test of
+  [`param_inv_d2()`](https://statmodels7.github.io/parameters7/reference/param_inv_d1.md)
+  at a nearly singular covariance compares it with symbolic second
+  derivatives of the inverse, to 1e-12. The Richardson difference it
+  used had an error of about 1e-6 there, above the tolerance on Linux
+  (1.05e-6); the method agrees with the symbolic values to 4e-16.
+
 ## parameters7 0.22.0
 
 - Every helper forms only the orders its caller reads. The value of a

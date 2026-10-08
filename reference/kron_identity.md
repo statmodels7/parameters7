@@ -145,5 +145,5 @@ c(dimension = r@dimension, rank = r@rank, null = ncol(r@null_basis))
 #> dimension      rank      null 
 #>         8         4         4 
 max(abs(param_value(r, 0.3) %*% r@null_basis))
-#> [1] 9.932153e-16
+#> [1] 1.040818e-15
 ```

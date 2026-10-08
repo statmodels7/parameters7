@@ -154,11 +154,11 @@ c(second = max(abs(param_d2logdet(s, eta))),
 
 # The inverse is the map at -eta: a sign flip, not a factorization.
 max(abs(param_solve(s, eta) - param_value(s, -eta)))
-#> [1] 2.220446e-15
+#> [1] 1.554312e-15
 max(abs(param_solve(s, eta) - solve(M)))
-#> [1] 4.440892e-16
+#> [1] 1.110223e-15
 
 # The round trip closes.
 max(abs(param_free(s, M) - eta))
-#> [1] 1.887379e-15
+#> [1] 1.831868e-15
 ```

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,6 +35,10 @@
       <small>Source: <a href="https://github.com/statmodels7/parameters7/blob/master/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.22.1" id="parameters7-0221">parameters7 0.22.1<a class="anchor" aria-label="anchor" href="#parameters7-0221"></a></h2>
+<ul><li>The test of <code><a href="../reference/param_inv_d1.html">param_inv_d2()</a></code> at a nearly singular covariance compares it with symbolic second derivatives of the inverse, to 1e-12. The Richardson difference it used had an error of about 1e-6 there, above the tolerance on Linux (1.05e-6); the method agrees with the symbolic values to 4e-16.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.22.0" id="parameters7-0220">parameters7 0.22.0<a class="anchor" aria-label="anchor" href="#parameters7-0220"></a></h2>
 <ul><li>Every helper forms only the orders its caller reads. The value of a parameter, its solve and its log-determinant no longer evaluate any derivative, and a derivative of order k no longer forms the orders above

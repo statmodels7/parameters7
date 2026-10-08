@@ -72,7 +72,7 @@ closed form.
 # A scalar matrix: every order is the matrix again, so the error shows.
 s <- scalar_matrix(2)
 max(abs(numerical_d4(s, 0.3)[[1]] - param_value(s, 0.3)))
-#> [1] 4.126531e-05
+#> [1] 7.178321e-06
 
 # Against a family that writes its own: five digits, as stated.
 q <- log_cholesky(2)
