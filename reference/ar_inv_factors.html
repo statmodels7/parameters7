@@ -11,7 +11,7 @@ code of the sub-multiset differentiated in."><meta property="og:image" content="
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,7 +48,7 @@ code of the sub-multiset differentiated in.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ar_inv_factors</span><span class="op">(</span><span class="va">s</span>, <span class="va">eta</span>, <span class="va">cd</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ar_inv_factors</span><span class="op">(</span><span class="va">s</span>, <span class="va">eta</span>, <span class="va">cd</span>, <span class="va">order</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -65,6 +65,11 @@ code of the sub-multiset differentiated in.</p>
 
 <dt id="arg-cd">cd<a class="anchor" aria-label="anchor" href="#arg-cd"></a></dt>
 <dd><p>The codes of <code><a href="ar_inv_codes.html">ar_inv_codes()</a></code>.</p></dd>
+
+
+<dt id="arg-order">order<a class="anchor" aria-label="anchor" href="#arg-order"></a></dt>
+<dd><p>The derivative order the codes belong to, which bounds every
+factor's order.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -92,7 +97,7 @@ carry.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="autoregressive_inv.html">autoregressive_inv()</a></code> for the formula and <code><a href="ar_taylor.html">ar_taylor()</a></code> for the
+    <div class="dont-index"><p><code><a href="autoregressive_inv.html">autoregressive_inv()</a></code> for the formula and <code><a href="ar_tables.html">ar_tables()</a></code> for the
 recursion the coefficients come from.</p></div>
     </div>
 

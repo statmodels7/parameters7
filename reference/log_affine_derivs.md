@@ -1,7 +1,7 @@
 # Derivatives of a Sum of Logarithms of Affine Functions
 
-Returns the first four derivatives at \\r\\ of \\\sum_t c_t \log(a_t +
-b_t r)\\, using
+Returns the derivatives of orders 1 to `order` at \\r\\ of \\\sum_t c_t
+\log(a_t + b_t r)\\, using
 
 \$\$\frac{\mathrm{d}^k}{\mathrm{d}r^k}\log(a + br) =
 (-1)^{k-1}(k-1)!\\\frac{b^k}{(a + br)^k}.\$\$
@@ -9,7 +9,7 @@ b_t r)\\, using
 ## Usage
 
 ``` r
-log_affine_derivs(r, terms)
+log_affine_derivs(r, terms, order)
 ```
 
 ## Arguments
@@ -22,9 +22,13 @@ log_affine_derivs(r, terms)
 
   A list of numeric triples `c(coefficient, a, b)`, one per logarithm.
 
+- order:
+
+  The highest order wanted, an integer from 1 to 4.
+
 ## Value
 
-A list of four numbers, the first to fourth derivative.
+A list of `order` numbers, the first to the `order`-th derivative.
 
 ## Details
 
@@ -37,7 +41,7 @@ where a sign would be lost.
 
 The result is in the **correlation**, not in the free value; the caller
 chains it onto the link with
-[`compose4()`](https://statmodels7.github.io/parameters7/reference/compose4.md).
+[`compose_order()`](https://statmodels7.github.io/parameters7/reference/compose_order.md).
 
 ## See also
 

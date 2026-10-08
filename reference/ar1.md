@@ -94,7 +94,7 @@ mixed derivative of it is exactly zero, and no determinant is computed.
 The pattern is **not** linear in the correlation. An entry is
 \\\rho^{m}\\ for the lag \\m\\, so its derivatives in the free value are
 a power composed with the link, taken to fourth order by
-[`compose4()`](https://statmodels7.github.io/parameters7/reference/compose4.md).
+[`compose_order()`](https://statmodels7.github.io/parameters7/reference/compose_order.md).
 Each distinct lag is composed once and written into every entry that
 carries it, the matrix having only \\p\\ distinct values.
 

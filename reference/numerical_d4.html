@@ -17,7 +17,7 @@ a closed form instead."><meta property="og:image" content="https://statmodels7.g
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -108,7 +108,7 @@ independent reference for a closed form.</p></div>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># A scalar matrix: every order is the matrix again, so the error shows.</span></span></span>
 <span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="scalar_matrix.html">scalar_matrix</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu">numerical_d4</span><span class="op">(</span><span class="va">s</span>, <span class="fl">0.3</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">-</span> <span class="fu"><a href="param_value.html">param_value</a></span><span class="op">(</span><span class="va">s</span>, <span class="fl">0.3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 7.178321e-06</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4.126531e-05</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Against a family that writes its own: five digits, as stated.</span></span></span>
 <span class="r-in"><span><span class="va">q</span> <span class="op">&lt;-</span> <span class="fu"><a href="log_cholesky.html">log_cholesky</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span></span>

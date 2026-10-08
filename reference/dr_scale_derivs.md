@@ -1,12 +1,13 @@
 # Derivatives of the Inverse Link at Every Scale Coordinate
 
-Returns \\d_j\\ and its first four derivatives in the free value that
-carries it, for every \\j\\ at once, as a matrix with one row per order.
+Returns \\d_j\\ and its derivatives to order `order` in the free value
+that carries it, for every \\j\\ at once, as a matrix with one row per
+order.
 
 ## Usage
 
 ``` r
-dr_scale_derivs(s, eta)
+dr_scale_derivs(s, eta, order)
 ```
 
 ## Arguments
@@ -22,11 +23,15 @@ dr_scale_derivs(s, eta)
   A numeric vector of length `s@n_free`; only its first \\p\\ entries
   are read.
 
+- order:
+
+  The highest derivative order wanted, an integer from 0 to 4.
+
 ## Value
 
-A 5 by \\p\\ numeric matrix, row \\k+1\\ holding the \\k\\-th derivative
-of the inverse link at each scale coordinate, so row 1 is the scales
-themselves.
+An `order + 1` by \\p\\ numeric matrix, row \\k+1\\ holding the \\k\\-th
+derivative of the inverse link at each scale coordinate, so row 1 is the
+scales themselves.
 
 ## Details
 

@@ -40,12 +40,12 @@ contributes \\(p-k)\log(1 - r_k^2)\\, whose derivatives come from
 [`log_affine_derivs()`](https://statmodels7.github.io/parameters7/reference/log_affine_derivs.md)
 applied to the two factors \\1 - r\\ and \\1 + r\\. Both are then
 carried onto the free scale by
-[`compose4()`](https://statmodels7.github.io/parameters7/reference/compose4.md),
+[`compose_order()`](https://statmodels7.github.io/parameters7/reference/compose_order.md),
 the Faa di Bruno chain with a one-dimensional inner map.
 
 ## See also
 
-[`compose4()`](https://statmodels7.github.io/parameters7/reference/compose4.md)
+[`compose_order()`](https://statmodels7.github.io/parameters7/reference/compose_order.md)
 and
 [`log_affine_derivs()`](https://statmodels7.github.io/parameters7/reference/log_affine_derivs.md)
 for the two pieces, and

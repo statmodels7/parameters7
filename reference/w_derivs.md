@@ -16,15 +16,14 @@ w_derivs(v)
 
 - v:
 
-  A list of five numbers: \\\rho\\ and its four derivatives in the free
-  value, as
+  A list: \\\rho\\ and its derivatives in the free value to some order
+  up to four, as
   [`econ_scalars()`](https://statmodels7.github.io/parameters7/reference/econ_scalars.md)
   returns for one link.
 
 ## Value
 
-A list of five numbers: \\w\\ and its four derivatives in the free
-value.
+A list of the same length: \\w\\ and its derivatives in the free value.
 
 ## Details
 

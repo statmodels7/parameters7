@@ -3,15 +3,16 @@
 Returns the two scalars a
 [`compound_symmetry()`](https://statmodels7.github.io/parameters7/reference/compound_symmetry.md)
 or [`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md)
-parameter is built from, each with its value and its first four
-derivatives in its **own** free value. Each scalar depends on one free
+parameter is built from, each with its value and its derivatives to
+order `order` in its **own** free value. Each scalar depends on one free
 value alone, so the two families are separable and their derivative
-assembly is a product of two chains.
+assembly is a product of two chains. A value alone is `order = 0`, and
+no derivative is evaluated then.
 
 ## Usage
 
 ``` r
-econ_scalars(s, eta)
+econ_scalars(s, eta, order)
 ```
 
 ## Arguments
@@ -29,11 +30,15 @@ econ_scalars(s, eta)
 
   A numeric vector of two free values.
 
+- order:
+
+  The highest derivative order wanted, an integer from 0 to 4.
+
 ## Value
 
-A list with two components, `scale` and `rho`, each a numeric vector of
-length 5: the value at index 1 and the four derivatives in that free
-value at indices 2 to 5.
+A list with two components, `scale` and `rho`, each a list of
+`order + 1` numbers: the value at index 1 and the derivatives in that
+free value at the following indices.
 
 ## See also
 

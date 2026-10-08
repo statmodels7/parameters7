@@ -21,7 +21,7 @@ two that are not matrices pass all seven, with nothing skipped anywhere."><meta 
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -180,8 +180,8 @@ see <strong>Value</strong>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [OK         ] round trip           3.25e-16</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [OK         ] first derivatives    2.90e-11</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [OK         ] second derivatives   3.67e-11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   [OK         ] log-determinant      6.13e-15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   [OK         ] logdet gradient      1.61e-13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [OK         ] log-determinant      4.03e-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [OK         ] logdet gradient      1.62e-13</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [OK         ] logdet hessian       0.00e+00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [OK         ] solve and factor     6.04e-15</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [OK         ] shapes and names  </span>
@@ -194,11 +194,11 @@ see <strong>Value</strong>.</p>
 <span class="r-in"><span><span class="va">P</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/crossprod.html" class="external-link">crossprod</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="fl">6</span><span class="op">)</span>, differences <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu">check_parameter</span><span class="op">(</span><span class="fu"><a href="scaled_matrix.html">scaled_matrix</a></span><span class="op">(</span><span class="va">P</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Parameter: scaled   (6 x 6, rank 4, 1 free)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   [OK         ] membership           3.19e-16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [OK         ] membership           2.31e-16</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [OK         ] round trip           5.55e-17</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [OK         ] first derivatives    2.40e-11</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [OK         ] second derivatives   2.40e-11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   [OK         ] log-determinant      4.33e-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [OK         ] log-determinant      2.89e-15</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [OK         ] logdet gradient      1.78e-15</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [OK         ] logdet hessian       0.00e+00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [NOT CHECKED] solve             </span>

@@ -52,7 +52,7 @@ product is formed, and for both families that use this most terms do.
 
 ## See also
 
-[`compose4()`](https://statmodels7.github.io/parameters7/reference/compose4.md)
+[`compose_order()`](https://statmodels7.github.io/parameters7/reference/compose_order.md)
 for the other piece of shared arithmetic,
 [`chol_dfactor()`](https://statmodels7.github.io/parameters7/reference/chol_dfactor.md)
 and

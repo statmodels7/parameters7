@@ -47,12 +47,10 @@ order \\k\\.
 
 The four share
 [`ar_derivative()`](https://statmodels7.github.io/parameters7/reference/ar_derivative.md)
-and differ only in the order they pass.
-[`ar_taylor()`](https://statmodels7.github.io/parameters7/reference/ar_taylor.md)
-fills all four orders in one pass whatever is asked, so the first order
-costs nearly what the fourth costs; see
+and differ only in the order they pass. Each order runs its own kernel,
+which returns that order's components alone; see
 [`autoregressive()`](https://statmodels7.github.io/parameters7/reference/autoregressive.md)
-for the table.
+for the cost.
 
 ## See also
 

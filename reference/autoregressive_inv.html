@@ -15,7 +15,7 @@ and the partial autocorrelations of the process whose precision this is."><meta 
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -99,7 +99,7 @@ predecessors, and \(\tau_t = 1/v_t\) the reciprocal innovation variances.
 Two facts make every order exact without a new recursion.</p>
 <p>The lower-order rows of \(U\) are the coefficients of the SAME family at
 that order, measured to 0, so their derivative arrays come from the compiled
-Levinson-Durbin recursion of <code><a href="ar_taylor.html">ar_taylor()</a></code> run once per order, and a
+Levinson-Durbin recursion of <code><a href="ar_tables.html">ar_tables()</a></code> run once per order, and a
 component differentiating in a partial autocorrelation an order does not
 reach is exactly zero. And \(\tau_t\) is a PRODUCT of one factor per free
 value, \(1/v_0\) from the scale and \((1-r_j^2)^{-1}\) from each

@@ -25,7 +25,7 @@ Details."><meta property="og:image" content="https://statmodels7.github.io/param
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -187,13 +187,13 @@ the map at \(-\eta\).</p></div>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># The inverse is the map at -eta: a sign flip, not a factorization.</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="param_solve.html">param_solve</a></span><span class="op">(</span><span class="va">s</span>, <span class="va">eta</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="param_value.html">param_value</a></span><span class="op">(</span><span class="va">s</span>, <span class="op">-</span><span class="va">eta</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.554312e-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2.220446e-15</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="param_solve.html">param_solve</a></span><span class="op">(</span><span class="va">s</span>, <span class="va">eta</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/solve.html" class="external-link">solve</a></span><span class="op">(</span><span class="va">M</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.110223e-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4.440892e-16</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># The round trip closes.</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="param_free.html">param_free</a></span><span class="op">(</span><span class="va">s</span>, <span class="va">M</span><span class="op">)</span> <span class="op">-</span> <span class="va">eta</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.831868e-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.887379e-15</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

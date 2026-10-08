@@ -136,7 +136,7 @@ c(dimension = s@dimension, rank = s@rank)
 #> dimension      rank 
 #>         6         4 
 max(abs(param_value(s, 0.4) %*% s@null_basis))
-#> [1] 2.597026e-15
+#> [1] 1.97724e-15
 
 # The derivative of the log pseudo-determinant is the rank, at any scale.
 c(at_minus_4 = param_dlogdet(s, -4), at_4 = param_dlogdet(s, 4),

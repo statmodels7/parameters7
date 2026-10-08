@@ -23,7 +23,7 @@ the object a ridge."><meta property="og:image" content="https://statmodels7.gith
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -172,7 +172,7 @@ pseudo-determinant.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span> dimension      rank </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         6         4 </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="param_value.html">param_value</a></span><span class="op">(</span><span class="va">s</span>, <span class="fl">0.4</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="va">s</span><span class="op">@</span><span class="va">null_basis</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2.597026e-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.97724e-15</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># The derivative of the log pseudo-determinant is the rank, at any scale.</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>at_minus_4 <span class="op">=</span> <span class="fu"><a href="param_dlogdet.html">param_dlogdet</a></span><span class="op">(</span><span class="va">s</span>, <span class="op">-</span><span class="fl">4</span><span class="op">)</span>, at_4 <span class="op">=</span> <span class="fu"><a href="param_dlogdet.html">param_dlogdet</a></span><span class="op">(</span><span class="va">s</span>, <span class="fl">4</span><span class="op">)</span>,</span></span>

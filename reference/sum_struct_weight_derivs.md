@@ -1,13 +1,13 @@
 # Derivatives of the Weights of a Sum of Fixed Matrices
 
-Returns each weight and its first four derivatives in the free value
-that carries it, for every component at once, as a matrix with one row
-per order.
+Returns each weight and its derivatives to order `order` in the free
+value that carries it, for every component at once, as a matrix with one
+row per order.
 
 ## Usage
 
 ``` r
-sum_struct_weight_derivs(s, eta)
+sum_struct_weight_derivs(s, eta, order)
 ```
 
 ## Arguments
@@ -22,11 +22,15 @@ sum_struct_weight_derivs(s, eta)
 
   A numeric vector of length `s@n_free`.
 
+- order:
+
+  The highest derivative order wanted, an integer from 0 to 4.
+
 ## Value
 
-A 5 by \\K\\ numeric matrix, row \\m+1\\ holding the \\m\\-th derivative
-of the inverse link at each free value, so row 1 is the weights
-themselves.
+An `order + 1` by \\K\\ numeric matrix, row \\m+1\\ holding the \\m\\-th
+derivative of the inverse link at each free value, so row 1 is the
+weights themselves.
 
 ## Details
 
@@ -37,7 +41,7 @@ It is computed once per call and read for every component of the order.
 
 ## See also
 
-[`sum_struct_derivs()`](https://statmodels7.github.io/parameters7/reference/sum_struct_derivs.md)
-and
 [`sum_struct_logdet_derivs()`](https://statmodels7.github.io/parameters7/reference/sum_struct_logdet_derivs.md),
-the two callers.
+the caller;
+[`sum_struct_derivs()`](https://statmodels7.github.io/parameters7/reference/sum_struct_derivs.md)
+reads the derivative of its own order alone.

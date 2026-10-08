@@ -35,8 +35,9 @@ econ_derivative(s, eta, order, pattern)
 
   A function of the parameter and the scalars of
   [`econ_scalars()`](https://statmodels7.github.io/parameters7/reference/econ_scalars.md),
-  returning a list of five matrices: the pattern \\P(\rho)\\ and its
-  four derivatives in the second free value. See
+  returning a list of matrices: the pattern \\P(\rho)\\ and its
+  derivatives in the second free value, to the order the scalars carry.
+  See
   [`cs_pattern()`](https://statmodels7.github.io/parameters7/reference/cs_pattern.md)
   and
   [`ar1_pattern()`](https://statmodels7.github.io/parameters7/reference/ar1_pattern.md).

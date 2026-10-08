@@ -1,9 +1,10 @@
 # Derivative Components of an Autoregressive Parameter
 
-Assembles one derivative order by running
-[`ar_taylor()`](https://statmodels7.github.io/parameters7/reference/ar_taylor.md)
-once and reading the matching column out of the packed arrays for each
-tuple of the order. The four methods differ only in the order they pass.
+Assembles one derivative order from the kernel of that order: one
+Toeplitz matrix per index tuple, filled in compiled code from the column
+of autocovariance derivatives
+[`ar_tables()`](https://statmodels7.github.io/parameters7/reference/ar_tables.md)
+returns for it. The four methods differ only in the order they pass.
 
 ## Usage
 
@@ -35,9 +36,7 @@ by `s@dimension` with dimnames.
 
 ## See also
 
-[`ar_taylor()`](https://statmodels7.github.io/parameters7/reference/ar_taylor.md)
-for the recursion,
-[`ar_assemble()`](https://statmodels7.github.io/parameters7/reference/ar_assemble.md)
-for one component, and
+[`ar_tables()`](https://statmodels7.github.io/parameters7/reference/ar_tables.md)
+for the recursion, and
 [`param_d1.AutoregressiveParam()`](https://statmodels7.github.io/parameters7/reference/param_d1.AutoregressiveParam.md),
 which calls this.

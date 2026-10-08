@@ -7,7 +7,7 @@ integer code of the sub-multiset differentiated in.
 ## Usage
 
 ``` r
-ar_inv_factors(s, eta, cd)
+ar_inv_factors(s, eta, cd, order)
 ```
 
 ## Arguments
@@ -26,6 +26,11 @@ ar_inv_factors(s, eta, cd)
 
   The codes of
   [`ar_inv_codes()`](https://statmodels7.github.io/parameters7/reference/ar_inv_codes.md).
+
+- order:
+
+  The derivative order the codes belong to, which bounds every factor's
+  order.
 
 ## Value
 
@@ -57,5 +62,5 @@ carry.
 
 [`autoregressive_inv()`](https://statmodels7.github.io/parameters7/reference/autoregressive_inv.md)
 for the formula and
-[`ar_taylor()`](https://statmodels7.github.io/parameters7/reference/ar_taylor.md)
+[`ar_tables()`](https://statmodels7.github.io/parameters7/reference/ar_tables.md)
 for the recursion the coefficients come from.

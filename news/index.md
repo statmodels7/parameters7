@@ -1,5 +1,80 @@
 # Changelog
 
+## parameters7 0.22.0
+
+- Every helper forms only the orders its caller reads. The value of a
+  parameter, its solve and its log-determinant no longer evaluate any
+  derivative, and a derivative of order k no longer forms the orders
+  above
+  11. `compose4()`, which always composed four orders, is replaced by
+      [`compose_order()`](https://statmodels7.github.io/parameters7/reference/compose_order.md),
+      one order per call;
+      [`power_derivs()`](https://statmodels7.github.io/parameters7/reference/power_derivs.md),
+      [`log_affine_derivs()`](https://statmodels7.github.io/parameters7/reference/log_affine_derivs.md),
+      [`econ_scalars()`](https://statmodels7.github.io/parameters7/reference/econ_scalars.md),
+      [`corr_tables()`](https://statmodels7.github.io/parameters7/reference/corr_tables.md),
+      [`dr_scale_derivs()`](https://statmodels7.github.io/parameters7/reference/dr_scale_derivs.md)
+      and
+      [`sum_struct_weight_derivs()`](https://statmodels7.github.io/parameters7/reference/sum_struct_weight_derivs.md)
+      take the highest order wanted, and
+      [`linkinv_upto()`](https://statmodels7.github.io/parameters7/reference/linkinv_upto.md)
+      replaces the five-element link tables each family built for
+      itself. The compiled Levinson-Durbin recursion of
+      [`autoregressive()`](https://statmodels7.github.io/parameters7/reference/autoregressive.md)
+      propagates only the tensors up to the order asked for: the value,
+      which carried every tensor to order four, is now the recursion on
+      numbers alone. The derivatives are unchanged (each order is the
+      same arithmetic), and the record of order k is bit for bit the
+      leading columns of the order-four one. Measured at p = 40, the
+      value of an `autoregressive(order = 3)` takes 0.20 ms against 3.55
+      and its first derivative 0.8 against 4.0; the value of an
+      [`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md)
+      1.3 ms against 6.3.
+- [`autoregressive()`](https://statmodels7.github.io/parameters7/reference/autoregressive.md)
+  no longer runs a jet. Each derivative order has its own compiled
+  kernel (`ar_d1_cpp()` to `ar_d4_cpp()`, and `ar_value_cpp()`), which
+  differentiates the Levinson-Durbin recursion in the partial
+  autocorrelations, where the coefficients are multilinear, keeps one
+  entry per multiset of indices, applies the links once through the
+  partial Bell polynomials and returns that order’s components alone.
+  The Toeplitz matrices are filled in compiled code
+  (`ar_toeplitz_cpp()`), where the R assembly recomputed the lag matrix
+  for every component. Measured at q = 4, p = 200:
+  [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
+  0.15 ms against 0.60,
+  [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md)
+  0.43 against 2.8,
+  [`param_d4()`](https://statmodels7.github.io/parameters7/reference/param_d4.md)
+  15.5 against 55.6. The former recursion stays compiled as
+  `ar_taylor_jet_cpp()`, the tests’ independent reference, which the new
+  kernels match to 1e-12 at every order.
+
+## parameters7 0.21.0
+
+- [`param_inv_d1()`](https://statmodels7.github.io/parameters7/reference/param_inv_d1.md)
+  and
+  [`param_inv_d2()`](https://statmodels7.github.io/parameters7/reference/param_inv_d1.md),
+  new generics: the first and second derivatives of the inverse of a
+  matrix parameter in its free values. The default method, for any
+  `matrix_parameter`, is the sandwich `-M^-1 A_k M^-1` and its
+  second-order twin, which is what every consumer wrote by hand. The
+  method for
+  [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
+  is exact where that sandwich is not: with `G = L^-1`, `B_k = G dL_k`
+  and `C_k = B_k + B_k'`, the first derivative is `-G' C_k G` and the
+  second `G'(B_l' C_k + C_k B_l - dC_k/dl)G`, and no product in it
+  cancels.
+
+  Where the matrix is nearly singular along a direction that is not a
+  coordinate axis the sandwich loses its digits: at the free value
+  `log L22 = -11.5` of a two-dimensional log-Cholesky chart it reads the
+  first derivative with a relative error of 5.6e-08 and the second one
+  entirely wrong, where the exact method reads 5e-12 against a
+  Richardson difference of the inverse. At ordinary values the two agree
+  to 1e-15. distributions7’s multivariate families read these for the
+  derivatives of `Sigma^-1`, which is what a random-effect covariance’s
+  penalty Hessian and its derivatives are made of.
+
 ## parameters7 0.20.0
 
 - [`autoregressive_inv()`](https://statmodels7.github.io/parameters7/reference/autoregressive_inv.md)
@@ -550,9 +625,8 @@
   definite, rather than at `-1`.
 
 - All three are closed form to fourth order, in the value and in the
-  log-determinant. Two helpers carry that:
-  [`compose4()`](https://statmodels7.github.io/parameters7/reference/compose4.md)
-  for the chain rule to fourth order and
+  log-determinant. Two helpers carry that: `compose4()` for the chain
+  rule to fourth order and
   [`leibniz_gram()`](https://statmodels7.github.io/parameters7/reference/leibniz_gram.md)
   for the derivative of a Gram product, which the log-Cholesky family
   now shares.

@@ -1,6 +1,6 @@
 # Log-Determinant Chains of a Correlation Parameter
 
-Returns, for each free value, the four derivatives of
+Returns, for each free value, the derivative of order `order` of
 \\2\log\sin\theta\\ in that free value: the log-determinant's whole
 contribution from one angle. The family's four log-determinant
 derivative methods read nothing else.
@@ -8,7 +8,7 @@ derivative methods read nothing else.
 ## Usage
 
 ``` r
-corr_logdet_chains(s, eta)
+corr_logdet_chains(s, eta, order)
 ```
 
 ## Arguments
@@ -23,10 +23,14 @@ corr_logdet_chains(s, eta)
 
   A numeric vector of free values, of length `s@n_free`.
 
+- order:
+
+  The derivative order, an integer from 1 to 4.
+
 ## Value
 
-A list of `s@n_free` elements, each a list of four numbers: the first to
-fourth derivative of \\2\log\sin\theta_k\\ in \\\eta_k\\.
+A list of `s@n_free` numbers, the derivative of order `order` of
+\\2\log\sin\theta_k\\ in \\\eta_k\\.
 
 ## Details
 
@@ -40,7 +44,7 @@ already holds.
 
 The four coefficients \\2(-1)^{j-1}(j-1)!/\sin^j\theta\\ are the
 derivatives of \\2\log u\\ at \\u = \sin\theta\\, and
-[`compose4()`](https://statmodels7.github.io/parameters7/reference/compose4.md)
+[`compose_order()`](https://statmodels7.github.io/parameters7/reference/compose_order.md)
 chains them onto the sine's own derivatives in the free value, which
 [`corr_tables()`](https://statmodels7.github.io/parameters7/reference/corr_tables.md)
 has already computed.
@@ -49,7 +53,7 @@ has already computed.
 
 [`corr_tables()`](https://statmodels7.github.io/parameters7/reference/corr_tables.md)
 for the sine table,
-[`compose4()`](https://statmodels7.github.io/parameters7/reference/compose4.md)
+[`compose_order()`](https://statmodels7.github.io/parameters7/reference/compose_order.md)
 for the chain, and
 [`corr_logdet_derivative()`](https://statmodels7.github.io/parameters7/reference/corr_logdet_derivative.md),
 the only caller.

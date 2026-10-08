@@ -65,7 +65,7 @@ variances. Two facts make every order exact without a new recursion.
 The lower-order rows of \\U\\ are the coefficients of the SAME family at
 that order, measured to 0, so their derivative arrays come from the
 compiled Levinson-Durbin recursion of
-[`ar_taylor()`](https://statmodels7.github.io/parameters7/reference/ar_taylor.md)
+[`ar_tables()`](https://statmodels7.github.io/parameters7/reference/ar_tables.md)
 run once per order, and a component differentiating in a partial
 autocorrelation an order does not reach is exactly zero. And \\\tau_t\\
 is a PRODUCT of one factor per free value, \\1/v_0\\ from the scale and

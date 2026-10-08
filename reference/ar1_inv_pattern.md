@@ -1,8 +1,8 @@
 # The Pattern of an Inverse AR(1) Parameter
 
 Returns \\G(\rho)\\, the tridiagonal correlation pattern of the
-precision of an AR(1), together with its four derivatives in the second
-free value.
+precision of an AR(1), together with its derivatives in the second free
+value to the order the scalars carry.
 
 ## Usage
 
@@ -28,8 +28,8 @@ ar1_inv_pattern(s, sc)
 
 ## Value
 
-A list of five `s@dimension` square matrices: the pattern and its four
-derivatives in the second free value.
+A list of `s@dimension` square matrices, one more than the derivatives
+`sc` carries: the pattern and its derivatives in the second free value.
 
 ## Details
 

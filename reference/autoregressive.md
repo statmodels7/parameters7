@@ -121,21 +121,19 @@ with \\U\\ unit lower triangular holding the predictor coefficients and
 
 ## What a call costs
 
-[`ar_taylor()`](https://statmodels7.github.io/parameters7/reference/ar_taylor.md)
-runs the recursion once and packs **every** order up to the fourth, so
-[`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md)
-pays most of what
-[`param_d4()`](https://statmodels7.github.io/parameters7/reference/param_d4.md)
-pays and the difference between them is the R-level assembly. Seconds
-per call, over repetition loops sized by elapsed time:
+Each derivative order has its own compiled kernel,
+[`ar_tables()`](https://statmodels7.github.io/parameters7/reference/ar_tables.md),
+which returns that order's components alone, and the Toeplitz matrices
+are filled in compiled code. Seconds per call, over repetition loops
+sized by elapsed time:
 
 |       |       |               |            |            |
 |-------|-------|---------------|------------|------------|
 | \\q\\ | \\p\\ | `param_value` | `param_d1` | `param_d4` |
-| 1     | 10    | 0.00018       | 0.00024    | 0.00033    |
-| 1     | 200   | 0.00143       | 0.00191    | 0.00375    |
-| 2     | 200   | 0.00398       | 0.00516    | 0.01203    |
-| 4     | 200   | 0.03313       | 0.03563    | 0.08313    |
+| 1     | 10    | 0.00005       | 0.00008    | 0.00018    |
+| 1     | 200   | 0.00013       | 0.00023    | 0.00044    |
+| 2     | 200   | 0.00013       | 0.00030    | 0.00125    |
+| 4     | 200   | 0.00015       | 0.00043    | 0.01550    |
 
 ## Against ar1()
 

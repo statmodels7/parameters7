@@ -23,7 +23,7 @@ fixed as the point moves."><meta property="og:image" content="https://statmodels
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.20.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -92,9 +92,8 @@ dimnames, keyed as <code>param_tuple_names(s, order)</code> and in that order:
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The four share <code><a href="ar_derivative.html">ar_derivative()</a></code> and differ only in the order they pass.
-<code><a href="ar_taylor.html">ar_taylor()</a></code> fills all four orders in one pass whatever is asked, so the
-first order costs nearly what the fourth costs; see <code><a href="autoregressive.html">autoregressive()</a></code> for the
-table.</p>
+Each order runs its own kernel, which returns that order's components
+alone; see <code><a href="autoregressive.html">autoregressive()</a></code> for the cost.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

@@ -569,6 +569,9 @@ through an explicit inverse.
   : Fourth Derivatives of the Log-Determinant
 - [`param_solve()`](https://statmodels7.github.io/parameters7/reference/param_solve.md)
   : Solve Through a Parameter's Matrix
+- [`param_inv_d1()`](https://statmodels7.github.io/parameters7/reference/param_inv_d1.md)
+  [`param_inv_d2()`](https://statmodels7.github.io/parameters7/reference/param_inv_d1.md)
+  : Derivatives of the Inverse of a Matrix Parameter
 - [`param_factor()`](https://statmodels7.github.io/parameters7/reference/param_factor.md)
   : A Factor of a Parameter's Matrix
 
@@ -658,8 +661,6 @@ that the derivations can be followed from the code that implements them.
   : The Log-Determinant Terms of an AR(1) Parameter
 - [`ar1_pattern()`](https://statmodels7.github.io/parameters7/reference/ar1_pattern.md)
   : The Pattern of an AR(1) Parameter
-- [`ar_assemble()`](https://statmodels7.github.io/parameters7/reference/ar_assemble.md)
-  : The Matrix and Its Derivatives, From the Packed Arrays
 - [`ar_derivative()`](https://statmodels7.github.io/parameters7/reference/ar_derivative.md)
   : Derivative Components of an Autoregressive Parameter
 - [`ar_inv_codes()`](https://statmodels7.github.io/parameters7/reference/ar_inv_codes.md)
@@ -673,12 +674,10 @@ that the derivations can be followed from the code that implements them.
   : The Subset Structure of One Derivative Order, Memoized
 - [`ar_logdet_derivative()`](https://statmodels7.github.io/parameters7/reference/ar_logdet_derivative.md)
   : Log-Determinant Components of an Autoregressive Parameter
-- [`ar_pack_col()`](https://statmodels7.github.io/parameters7/reference/ar_pack_col.md)
-  : The Column of a Packed Derivative Record
 - [`ar_prediction()`](https://statmodels7.github.io/parameters7/reference/ar_prediction.md)
   : The Prediction Form of an Autoregressive Parameter
-- [`ar_taylor()`](https://statmodels7.github.io/parameters7/reference/ar_taylor.md)
-  : The Levinson-Durbin Recursion With Its Derivatives
+- [`ar_tables()`](https://statmodels7.github.io/parameters7/reference/ar_tables.md)
+  : The Levinson-Durbin Recursion and One Derivative Order
 - [`block_derivs_by_tuple()`](https://statmodels7.github.io/parameters7/reference/block_derivs_by_tuple.md)
   : The Blocks' Derivative Components, Keyed by Local Index Tuple
 - [`block_diag_derivs()`](https://statmodels7.github.io/parameters7/reference/block_diag_derivs.md)
@@ -709,6 +708,8 @@ that the derivations can be followed from the code that implements them.
   : The Cholesky Factor Behind a Free Vector
 - [`chol_dfactor()`](https://statmodels7.github.io/parameters7/reference/chol_dfactor.md)
   : The Factor of a Log-Cholesky Parameter, and Its Derivatives
+- [`chol_inv_pieces()`](https://statmodels7.github.io/parameters7/reference/chol_inv_pieces.md)
+  : The Pieces Behind a Log-Cholesky Inverse's Derivatives
 - [`chol_leibniz()`](https://statmodels7.github.io/parameters7/reference/chol_leibniz.md)
   : Derivative Components of a Log-Cholesky Parameter
 - [`chol_pd()`](https://statmodels7.github.io/parameters7/reference/chol_pd.md)
@@ -717,8 +718,8 @@ that the derivations can be followed from the code that implements them.
   : Positions of the Free Values in the Lower Triangle
 - [`combinat_perms()`](https://statmodels7.github.io/parameters7/reference/combinat_perms.md)
   : All Orderings of a Tuple
-- [`compose4()`](https://statmodels7.github.io/parameters7/reference/compose4.md)
-  : Compose Two Scalar Maps, to Fourth Order
+- [`compose_order()`](https://statmodels7.github.io/parameters7/reference/compose_order.md)
+  : Compose Two Scalar Maps, One Order
 - [`corr_derivative()`](https://statmodels7.github.io/parameters7/reference/corr_derivative.md)
   : Derivative Components of a Correlation Parameter
 - [`corr_dfactor()`](https://statmodels7.github.io/parameters7/reference/corr_dfactor.md)
@@ -771,6 +772,8 @@ that the derivations can be followed from the code that implements them.
   : One Stencil Along One Free Value
 - [`fd_step()`](https://statmodels7.github.io/parameters7/reference/fd_step.md)
   : Finite-Difference Step for a Free Value
+- [`inv_derivs_check()`](https://statmodels7.github.io/parameters7/reference/inv_derivs_check.md)
+  : The Contract Check of the Inverse's Derivatives
 - [`inverse_derivs()`](https://statmodels7.github.io/parameters7/reference/inverse_derivs.md)
   : Derivatives of an Inverse Parameter of a Given Order
 - [`is_base_param_class()`](https://statmodels7.github.io/parameters7/reference/is_base_param_class.md)
@@ -779,10 +782,10 @@ that the derivations can be followed from the code that implements them.
   : The Inner Parameter, the Block Count, and the Lift
 - [`leibniz_gram()`](https://statmodels7.github.io/parameters7/reference/leibniz_gram.md)
   : A Gram Product's Derivatives From Its Factor's
-- [`link_derivs()`](https://statmodels7.github.io/parameters7/reference/link_derivs.md)
-  : A Link's Inverse and Its Four Derivatives
 - [`link_tag()`](https://statmodels7.github.io/parameters7/reference/link_tag.md)
   : A Short Name for a Link
+- [`linkinv_upto()`](https://statmodels7.github.io/parameters7/reference/linkinv_upto.md)
+  : A Link Inverse and Its Derivatives, to a Given Order
 - [`log_affine_derivs()`](https://statmodels7.github.io/parameters7/reference/log_affine_derivs.md)
   : Derivatives of a Sum of Logarithms of Affine Functions
 - [`mixed_stencil()`](https://statmodels7.github.io/parameters7/reference/mixed_stencil.md)
@@ -1047,6 +1050,9 @@ that the derivations can be followed from the code that implements them.
   : Free Vector of a Transition Matrix Parameter
 - [`param_free.parameter`](https://statmodels7.github.io/parameters7/reference/param_free.parameter.md)
   : Rejection to Invert Without a Closed Form
+- [`param_inv_d1()`](https://statmodels7.github.io/parameters7/reference/param_inv_d1.md)
+  [`param_inv_d2()`](https://statmodels7.github.io/parameters7/reference/param_inv_d1.md)
+  : Derivatives of the Inverse of a Matrix Parameter
 - [`param_logdet.Ar1Param`](https://statmodels7.github.io/parameters7/reference/param_logdet.Ar1Param.md)
   : Log-Determinant of an AR(1) Parameter
 - [`param_logdet.AutoregressiveParam`](https://statmodels7.github.io/parameters7/reference/param_logdet.AutoregressiveParam.md)

@@ -38,7 +38,7 @@ as `param_tuple_names(s, order)` and in that order.
 
 This is Faa di Bruno with a diagonal inner map, written out here instead
 of going through
-[`compose4()`](https://statmodels7.github.io/parameters7/reference/compose4.md),
+[`compose_order()`](https://statmodels7.github.io/parameters7/reference/compose_order.md),
 because the outer function is a derivative in several weights at once,
 never a univariate composition. The product over the groups' partitions
 is the grid the loop walks; the partitions come from

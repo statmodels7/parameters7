@@ -166,8 +166,8 @@ r <- check_parameter(log_cholesky(3))
 #>   [OK         ] round trip           3.25e-16
 #>   [OK         ] first derivatives    2.90e-11
 #>   [OK         ] second derivatives   3.67e-11
-#>   [OK         ] log-determinant      6.13e-15
-#>   [OK         ] logdet gradient      1.61e-13
+#>   [OK         ] log-determinant      4.03e-15
+#>   [OK         ] logdet gradient      1.62e-13
 #>   [OK         ] logdet hessian       0.00e+00
 #>   [OK         ] solve and factor     6.04e-15
 #>   [OK         ] shapes and names  
@@ -180,11 +180,11 @@ r$status
 P <- crossprod(diff(diag(6), differences = 2))
 d <- check_parameter(scaled_matrix(P))
 #> Parameter: scaled   (6 x 6, rank 4, 1 free)
-#>   [OK         ] membership           3.19e-16
+#>   [OK         ] membership           2.31e-16
 #>   [OK         ] round trip           5.55e-17
 #>   [OK         ] first derivatives    2.40e-11
 #>   [OK         ] second derivatives   2.40e-11
-#>   [OK         ] log-determinant      4.33e-15
+#>   [OK         ] log-determinant      2.89e-15
 #>   [OK         ] logdet gradient      1.78e-15
 #>   [OK         ] logdet hessian       0.00e+00
 #>   [NOT CHECKED] solve             

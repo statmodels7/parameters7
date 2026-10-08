@@ -1,10 +1,11 @@
 # The Pattern of a Compound-Symmetric Parameter
 
 Returns \\P(\rho) = I + \rho(J - I)\\, the correlation pattern of a
-compound-symmetric matrix, together with its four derivatives in the
-second free value. The pattern is **linear** in the correlation, so
-every derivative is the matching derivative of \\\rho\\ times the
-constant matrix \\J - I\\, and no order needs its own algebra.
+compound-symmetric matrix, together with its derivatives in the second
+free value to the order the scalars carry. The pattern is **linear** in
+the correlation, so every derivative is the matching derivative of
+\\\rho\\ times the constant matrix \\J - I\\, and no order needs its own
+algebra.
 
 ## Usage
 
@@ -24,14 +25,14 @@ cs_pattern(s, sc)
 
   The scalars of
   [`econ_scalars()`](https://statmodels7.github.io/parameters7/reference/econ_scalars.md),
-  whose `rho` component supplies the correlation and its four
-  derivatives.
+  whose `rho` component supplies the correlation and its derivatives.
 
 ## Value
 
-A list of five `s@dimension` by `s@dimension` matrices: the pattern at
-index 1 and its four derivatives at indices 2 to 5. Each derivative has
-a zero diagonal, the diagonal of the pattern being the constant 1.
+A list of `s@dimension` by `s@dimension` matrices, one more than the
+derivatives `sc` carries: the pattern at index 1 and its derivatives at
+the following indices. Each derivative has a zero diagonal, the diagonal
+of the pattern being the constant 1.
 
 ## See also
 

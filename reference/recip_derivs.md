@@ -1,8 +1,8 @@
 # Derivatives of a Reciprocal, for Composition
 
-Returns the value and four derivatives of \\\eta \mapsto 1/h(\eta)\\
-from the value and four derivatives of \\h\\, by composing \\x^{-1}\\
-onto them.
+Returns the value and the derivatives of \\\eta \mapsto 1/h(\eta)\\ from
+the value and the derivatives of \\h\\, by composing \\x^{-1}\\ onto
+them, to the order `v` carries.
 
 ## Usage
 
@@ -14,14 +14,14 @@ recip_derivs(v)
 
 - v:
 
-  A list of five numbers: the value of \\h\\ and its four derivatives,
-  as
+  A list: the value of \\h\\ and its derivatives to some order up to
+  four, as
   [`econ_scalars()`](https://statmodels7.github.io/parameters7/reference/econ_scalars.md)
   returns for one link.
 
 ## Value
 
-A list of five numbers in the same shape, for \\1/h\\.
+A list of the same length, for \\1/h\\.
 
 ## Details
 
@@ -35,5 +35,5 @@ non-zero. The outer derivatives written out are \\-x^{-2}\\,
 
 [`ar1_inv()`](https://statmodels7.github.io/parameters7/reference/ar1_inv.md),
 the caller, and
-[`compose4()`](https://statmodels7.github.io/parameters7/reference/compose4.md)
+[`compose_order()`](https://statmodels7.github.io/parameters7/reference/compose_order.md)
 for the chain.

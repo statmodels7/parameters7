@@ -141,5 +141,5 @@ max(abs(param_d1(s, eta)[[1]] - (-N %*% A[[1]] %*% N)))
 
 # The free vector is the inner family's, so the round trip closes on it.
 max(abs(param_free(s, param_value(s, eta)) - eta))
-#> [1] 3.330669e-16
+#> [1] 5.551115e-16
 ```

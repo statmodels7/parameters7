@@ -166,5 +166,5 @@ c(rank = d@rank, logdet = param_logdet(d, log(2)), check = log(3 * 2))
 
 # The round trip closes.
 max(abs(param_free(s, param_value(s, eta)) - eta))
-#> [1] 3.330669e-16
+#> [1] 4.440892e-16
 ```

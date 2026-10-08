@@ -16,7 +16,7 @@ The pattern's derivatives are the ones that need work here. An entry is
 [`compound_symmetry()`](https://statmodels7.github.io/parameters7/reference/compound_symmetry.md)'s
 pattern is linear, so each is composed with the rhobit link to the order
 asked, through
-[`compose4()`](https://statmodels7.github.io/parameters7/reference/compose4.md).
+[`compose_order()`](https://statmodels7.github.io/parameters7/reference/compose_order.md).
 Each distinct lag is composed once.
 
 ## Arguments

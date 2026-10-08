@@ -10,7 +10,7 @@ instead of computed and discarded.
 
 The angles reach the free scale through a bounded link, so the chain to
 third order is
-[`compose4()`](https://statmodels7.github.io/parameters7/reference/compose4.md)'s
+[`compose_order()`](https://statmodels7.github.io/parameters7/reference/compose_order.md)'s
 and the accuracy is the link's; nothing is differenced. The diagonal is
 exactly zero.
 
