@@ -2,12 +2,12 @@
 
 Returns \\G(\rho)\\, the tridiagonal correlation pattern of the
 precision of an AR(1), together with its derivatives in the second free
-value to the order the scalars carry.
+value to the order that the scalars carry.
 
 ## Usage
 
 ``` r
-ar1_inv_pattern(s, sc)
+ar1_inv_pattern(s, z, order)
 ```
 
 ## Arguments
@@ -18,27 +18,29 @@ ar1_inv_pattern(s, sc)
   [`Ar1InvParam()`](https://statmodels7.github.io/parameters7/reference/Ar1InvParam.md)
   object, whose `dimension` supplies \\p\\.
 
-- sc:
+- z:
 
-  The scalars of
-  [`econ_scalars()`](https://statmodels7.github.io/parameters7/reference/econ_scalars.md)
-  read on the inner
-  [`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md),
-  whose `rho` entry supplies the correlation and its link's derivatives.
+  The second free value.
+
+- order:
+
+  The highest derivative order wanted, from 0 to 4.
 
 ## Value
 
-A list of `s@dimension` square matrices, one more than the derivatives
-`sc` carries: the pattern and its derivatives in the second free value.
+A list of `order + 1` square matrices of side `s@dimension`: the pattern
+and its derivatives in the second free value.
 
 ## Details
 
 The three distinct entries are \\w\\, \\2w-1\\ and \\-\rho w\\ for \\w =
-(1-\rho^2)^{-1}\\, so one sequence of derivatives of \\w\\ in \\\rho\\
-serves all three. Writing \\w\\ by partial fractions as
-\\\tfrac{1}{2}\\(1-\rho)^{-1} + (1+\rho)^{-1}\\\\ makes every order an
-exact expression rather than a repeated quotient rule, and it is finite
-throughout \\\|\rho\| \< 1\\, which the rhobit link guarantees.
+(1-\rho^2)^{-1}\\. Under the rhobit link, with \\\rho = \tanh z\\, they
+are \\\cosh^2 z\\, \\\cosh 2z\\ and \\-\tfrac{1}{2}\sinh 2z\\, so one
+sequence of derivatives of \\w\\ in \\z\\, from
+[`cosh2_derivs()`](https://statmodels7.github.io/parameters7/reference/cosh2_derivs.md),
+serves all three: the second is \\2w^{(k)}\\ above order zero and the
+third is \\-\tfrac{1}{2}w^{(k+1)}\\. Nothing is chained through the link
+and no difference \\1 - \rho^2\\ is formed.
 
 ## See also
 

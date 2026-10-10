@@ -3,7 +3,7 @@
 Returns \\L = \mathrm{diag}(\sqrt{h(\eta_1)}, \dots,
 \sqrt{h(\eta_p)})\\. The Cholesky factor of a diagonal matrix is the
 diagonal of its square roots, so this is \\p\\ square roots and no
-factorization, against the base class's \\O(p^3)\\.
+factorization, against the \\O(p^3)\\ of the base method.
 
 ## Arguments
 
@@ -33,4 +33,4 @@ no dimnames.
 [`param_factor()`](https://statmodels7.github.io/parameters7/reference/param_factor.md)
 for the generic and
 [`param_factor.matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/param_factor.matrix_parameter.md)
-for what a family without a closed form pays.
+for the base method.

@@ -1,9 +1,8 @@
 # Construct a Correlation Matrix Parameter
 
 Returns an object holding the spherical parametrization of a correlation
-matrix: symmetric, positive definite, and with a unit diagonal that
-holds exactly, with no correction applied afterwards. Each row of the
-Cholesky factor is a point on the unit sphere written in angular
+matrix: symmetric, positive definite, and with a unit diagonal. Each row
+of the Cholesky factor is a point on the unit sphere written in angular
 coordinates, and each angle is carried onto the whole real line by a
 bounded link, so any free vector in \\\mathbb{R}^{p(p-1)/2}\\ gives a
 valid correlation matrix.
@@ -25,7 +24,7 @@ correlation_matrix(dimension)
 
   The side \\p\\ of the matrix. A single positive whole number, finite
   and at least 1; \\p = 1\\ gives a constant with no free values, as
-  **Details** describes. Anything else throws
+  **Details** describes. Any other value signals the error
   `'dimension' must be a single positive integer.`
 
 ## Value
@@ -50,23 +49,26 @@ a unit vector and \\R = LL^\top\\ has a unit diagonal by construction.
 It is positive definite at every value of the angles, \\L\\ being
 triangular with a positive diagonal. The angles reach the free scale
 through `linkfunctions7::bounded_link(lwr = 0, upr = pi)`, so there is
-nothing to constrain and no boundary to run into.
+nothing to constrain on the free scale; in double precision the boundary
+is reached at large free values (see below).
+[`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
+sets the diagonal to exactly 1 to remove the rounding of the telescoping
+sum.
 
-## How the derivatives behave, and a claim that does not hold
+## Derivatives
 
-Derivatives come from the same Leibniz rule the log-Cholesky family
+Derivatives come from the same Leibniz rule that the log-Cholesky family
 uses, \\R\\ being a Gram product again; what changes is the factor,
 whose entries are products of sines and cosines of angles that each
 depend on one free value.
 
 The rows of \\L\\ are independent, so a derivative of the **factor** in
-free values from two different rows is zero. That is **not** true of
+free values from two different rows is zero. The same does not hold for
 \\R\\: its entry \\(i, j)\\ is the inner product of rows \\i\\ and \\j\\
 of \\L\\, so a second derivative across those two rows need not vanish.
-What does hold is that such a component is supported on exactly the
-entries \\(i, j)\\ and \\(j, i)\\, and is zero even there when the two
-angles differentiated sit beyond the columns the two rows share. A
-structural claim about a product is not a claim about its factors.
+Such a component is supported on the entries \\(i, j)\\ and \\(j, i)\\,
+and is zero even there when the two angles differentiated lie beyond the
+columns that the two rows share.
 
 ## The log-determinant is separable
 
@@ -81,24 +83,23 @@ determinant is computed.
 
 ## Reading the free vector
 
-It runs row by row, and the names `z{i}.{j}` say which row and which
-angle, the row.column convention
+It runs row by row, and the names `z{i}.{j}` give the row and the angle,
+in the row.column convention that
 [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
 uses. The `z` records the link, so a free value of 0.4 is not an angle
 of 0.4; the angle is `bounded_link(0, pi)`'s inverse of it. The ordering
 is part of the interface.
 
-## Where double precision gives out
+## The boundary in double precision
 
-Measured at \\p = 3\\ with every free value equal: at 5 the smallest
-eigenvalue is \\3 \times 10^{-8}\\ and at 10 it is \\-2 \times
-10^{-16}\\, the matrix having reached its boundary in double precision
-with a correlation of \\-1\\ to every printed digit. The parametrization
-is exact; what gives out is the representation of a correlation one ulp
-from the edge. A fit that walks a free value past about \\\pm 8\\ is
-reporting a boundary, and
+As the free values grow, the angles approach 0 or \\\pi\\ and a
+correlation approaches \\\pm 1\\. At \\p = 3\\ with every free value
+equal to 10 the matrix is singular in double precision, with a
+correlation equal to \\-1\\ to every printed digit. A free value beyond
+about \\\pm 8\\ in a fit therefore indicates a correlation at the
+boundary, and
 [`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)
-sweeps to \\\pm 2\\ for that reason.
+sweeps only to \\\pm 2\\.
 
 ## p = 1 is a constant
 
@@ -116,8 +117,8 @@ is 0.
 [`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)
 passes, reporting its two log-determinant derivative rows as
 `NOT CHECKED`, there being no free value to differentiate in. The family
-therefore degenerates to a constant rather than refusing, so it stays
-composable inside
+therefore degenerates to a constant instead of signaling an error, so it
+can still be composed inside
 [`block_diag()`](https://statmodels7.github.io/parameters7/reference/block_diag.md);
 it carries no information of its own.
 
@@ -145,7 +146,7 @@ for an unstructured matrix,
 [`compound_symmetry()`](https://statmodels7.github.io/parameters7/reference/compound_symmetry.md)
 and
 [`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md)
-for structured correlations with two free values, and
+for structured covariances with two free values, and
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
 for the map.
 
@@ -172,11 +173,12 @@ diag(r)
 eigen(r, only.values = TRUE)$values > 0
 #> [1] TRUE TRUE TRUE
 
-# The round trip closes exactly.
+# The round trip closes up to rounding.
 max(abs(param_free(s, r) - eta))
 #> [1] 2.498002e-16
 
-# Absurd free values stay in the set, which is the point.
+# Large free values still give a unit diagonal, although the matrix is then
+# close to singular (see Details).
 m <- param_value(s, c(-30, 40, -20))
 c(min_diag = min(diag(m)), max_abs_corr = max(abs(m[upper.tri(m)])))
 #>     min_diag max_abs_corr 

@@ -10,11 +10,7 @@ for an
 parameter, closed form at every order. The map from the partial
 autocorrelations to the matrix is polynomial, so the derivative arrays
 propagated through the Levinson-Durbin recursion give each derivative
-exactly and nothing is differenced. Measured against one central
-difference of
-[`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md),
-the first derivatives agree to \\5 \times 10^{-11}\\, which is the
-difference's own accuracy.
+exactly and nothing is differenced.
 
 Every component is Toeplitz, the structure being a property of the
 family and fixed as the point moves.
@@ -48,9 +44,7 @@ order \\k\\.
 The four share
 [`ar_derivative()`](https://statmodels7.github.io/parameters7/reference/ar_derivative.md)
 and differ only in the order they pass. Each order runs its own kernel,
-which returns that order's components alone; see
-[`autoregressive()`](https://statmodels7.github.io/parameters7/reference/autoregressive.md)
-for the cost.
+which returns the components of that order only.
 
 ## See also
 

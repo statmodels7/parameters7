@@ -1,11 +1,11 @@
 # Sines and Cosines of a Correlation Parameter's Angles
 
 Returns, for every angle, the value and the derivatives to order `order`
-**in the free value** of both \\\sin\theta\\ and \\\cos\theta\\. These
-tables are the whole derivative machinery of the family: an entry of
-\\L\\ is a product of such factors, so differentiating it replaces each
-factor by the derivative of the matching order, and nothing else has to
-be derived.
+**in the free value** of both \\\sin\theta\\ and \\\cos\theta\\. All the
+derivatives of the family are built from these tables: an entry of \\L\\
+is a product of such factors, so differentiating it replaces each factor
+by the derivative of the matching order, and nothing else has to be
+derived.
 
 ## Usage
 

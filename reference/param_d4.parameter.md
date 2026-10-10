@@ -1,6 +1,6 @@
 # Default Fourth Derivatives
 
-The method every
+The method that every
 [`parameter()`](https://statmodels7.github.io/parameters7/reference/parameter.md)
 inherits when it registers no
 [`param_d4()`](https://statmodels7.github.io/parameters7/reference/param_d4.md)
@@ -10,11 +10,9 @@ as
 [`param_d3.parameter()`](https://statmodels7.github.io/parameters7/reference/param_d3.parameter.md)
 does, with the multiplicities summing to four. The step is
 \\\varepsilon^{1/6}\max(1, \|\eta_k\|)\\, about \\2.5 \times 10^{-3}\\
-near the origin, and rounding amplified by \\h^{-4}\\ leaves about five
-digits: measured against a closed form on a \\2 \times 2\\ covariance
-the gap is \\1.2 \times 10^{-4}\\ on entries of size 24. Enough to catch
-a wrong closed form, not enough to fit with. No family in this package
-reaches it.
+near the origin, and rounding is amplified by \\h^{-4}\\, so the result
+is enough to catch a wrong closed form and not enough for use in a fit.
+The families in this package do not reach it.
 
 ## Arguments
 

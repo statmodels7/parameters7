@@ -7,8 +7,8 @@ matrix.
 
 \\h''''\\ comes from
 [`linkfunctions7::d4linkinv()`](https://statmodels7.github.io/linkfunctions7/reference/d4linkinv.html).
-This is the order at which a numerical route is least usable, keeping
-about five digits, so the closed form matters most here.
+This is the order at which a numerical route is least accurate, so the
+closed form matters most here.
 
 ## Arguments
 

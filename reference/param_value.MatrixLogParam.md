@@ -3,7 +3,8 @@
 Returns \\M = \exp(S)\\, through the eigendecomposition of \\S\\: \\Q
 \exp(\Lambda) Q^\top\\, the exponential applied to the eigenvalues.
 Positive definiteness needs no checking, every \\e^{\lambda}\\ being
-positive whatever \\S\\ is. The cost is one \\O(p^3)\\
+positive whatever \\S\\ is, up to the overflow of the exponential for an
+eigenvalue above about 709.78. The cost is one \\O(p^3)\\
 eigendecomposition.
 
 ## Arguments

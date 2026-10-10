@@ -38,9 +38,9 @@ h^{(m)}/h\\ the four orders are
 4u_1u_3 - 3u_2^2 + 12u_1^2u_2 - 6u_1^4.\$\$
 
 The division by \\h\\ happens once, at the start, so every term is a
-ratio of order one, never a derivative that can be large on its own.
-That matters at the ends of a link's range, where \\h\\ and \\h^{(m)}\\
-can both be extreme while the ratio is ordinary.
+ratio and not a derivative that can be large on its own. This keeps the
+arithmetic in range at the ends of a link's range, where \\h\\ and
+\\h^{(m)}\\ can both be extreme while the ratio is moderate.
 
 Under the log link \\h = e^\eta\\ gives \\u_m = 1\\ for every \\m\\, so
 the first order is 1 and the second, third and fourth are exactly 0,
@@ -51,9 +51,10 @@ reports a linear log-determinant.
 ## See also
 
 [`diag_logdet_higher()`](https://statmodels7.github.io/parameters7/reference/diag_logdet_higher.md),
-[`param_d3logdet.ScaledMatrixParam()`](https://statmodels7.github.io/parameters7/reference/param_d3logdet.ScaledMatrixParam.md)
+[`param_d3logdet.ScaledMatrixParam()`](https://statmodels7.github.io/parameters7/reference/param_d3logdet.ScaledMatrixParam.md),
+[`param_d4logdet.ScaledMatrixParam()`](https://statmodels7.github.io/parameters7/reference/param_d4logdet.ScaledMatrixParam.md)
 and
-[`param_d4logdet.ScaledMatrixParam()`](https://statmodels7.github.io/parameters7/reference/param_d4logdet.ScaledMatrixParam.md),
+[`dr_prod_logdet_derivs()`](https://statmodels7.github.io/parameters7/reference/dr_prod_logdet_derivs.md),
 the callers, and
 [`linkfunctions7::dlinkinv()`](https://statmodels7.github.io/linkfunctions7/reference/dlinkinv.html)
 for the link derivatives read.

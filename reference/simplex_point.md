@@ -27,18 +27,17 @@ and no names. The names `p1` ... `pK` are applied by
 ## Details
 
 The naive expression \\e^{\eta_a}/(1 + \sum_b e^{\eta_b})\\ is `Inf/Inf`
-from about \\\eta = 710\\. With the shift, a free value of 800 returns
-\\\pi_1 = 1\\ and \\\pi_K = 0\\ with the vector summing to exactly 1,
-and at 500 it returns \\\pi_K = 7 \times 10^{-218}\\, still
-representable. The value is then on the boundary of the simplex, which
+from about \\\eta = 710\\. With the shift, a free value of 500 returns
+\\\pi_K = 7 \times 10^{-218}\\, still representable, and a free value of
+800 returns \\\pi_1 = 1\\ and \\\pi_K = 0\\ with the vector summing to
+exactly 1. That value is on the boundary of the simplex, which
 [`param_free()`](https://statmodels7.github.io/parameters7/reference/param_free.md)
 cannot invert.
 
 ## See also
 
-[`param_value.SimplexParam()`](https://statmodels7.github.io/parameters7/reference/param_value.SimplexParam.md)
-and
-[`param_value.TransitionMatrixParam()`](https://statmodels7.github.io/parameters7/reference/param_value.TransitionMatrixParam.md),
-the two callers, and
+[`param_value.SimplexParam()`](https://statmodels7.github.io/parameters7/reference/param_value.SimplexParam.md),
+[`param_value.TransitionMatrixParam()`](https://statmodels7.github.io/parameters7/reference/param_value.TransitionMatrixParam.md)
+and the derivative methods of both families, which call it, and
 [`simplex_tensors()`](https://statmodels7.github.io/parameters7/reference/simplex_tensors.md)
 for the derivatives of the same map.

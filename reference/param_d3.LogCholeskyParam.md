@@ -6,10 +6,10 @@ factor differentiated more than once survives only where the repetitions
 name the same diagonal free value, every derivative of \\e^{\eta_k}\\
 being itself.
 
-Two consequences a reader will meet in the output. A component repeating
-a below-diagonal free value three times is exactly zero, \\M\\ being
-quadratic in it. A component repeating a diagonal value three times is
-not, that value entering through an exponential.
+Two consequences follow. A component repeating a below-diagonal free
+value three times is exactly zero, \\M\\ being quadratic in it. A
+component repeating a diagonal value three times is not, that value
+entering through an exponential.
 
 ## Arguments
 

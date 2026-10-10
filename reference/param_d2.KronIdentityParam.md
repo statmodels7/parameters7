@@ -24,8 +24,8 @@ compute and the list is exactly the inner parameter's, lifted.
 ## Value
 
 A list of `choose(s@n_free + 1, 2)` symmetric matrices keyed as
-`param_tuple_names(s)` and in that order, each block diagonal with no
-dimnames.
+`param_tuple_names(s)` and in that order, each block diagonal and
+labeled `v1`, `v2`, ..., `v(md)` on both margins.
 
 ## See also
 

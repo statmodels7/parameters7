@@ -1,9 +1,9 @@
 # Row and Chart Coordinate of Each Free Value
 
-Returns, for each of the \\K(K-1)\\ free values, the row it belongs to
-and its position inside that row's simplex chart, in the order the free
-vector uses. Every method of the family reads it to split the free
-vector into rows.
+Returns, for each of the \\K(K-1)\\ free values, the row to which it
+belongs and its position inside that row's simplex chart, in the order
+that the free vector uses. Every method of the family reads it to split
+the free vector into rows.
 
 ## Usage
 

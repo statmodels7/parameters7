@@ -1,7 +1,7 @@
 # A Short Name for a Link
 
-The word a free name uses to say which transformation produced a
-coordinate, given the link that produced it.
+Returns the word that a free name uses to say which transformation
+produced a coordinate, given the link that produced it.
 
 ## Usage
 
@@ -13,7 +13,7 @@ link_tag(link)
 
 - link:
 
-  A linkfunctions7 link, or any object with a `link_name` property.
+  A linkfunctions7 link, or any S7 object with a `link_name` property.
 
 ## Value
 
@@ -32,7 +32,7 @@ a parametric link names itself with its parameters, as in
 `"bounded(lwr=-0.25, upr=1)"`, and that cannot appear inside an
 identifier. The identity link has no tag, so a coordinate that is
 already free keeps the plain name of the quantity. A bounded link is
-tagged by the transformation it performs: a doubly bounded one is a
+tagged by the transformation that it performs: a doubly bounded one is a
 scaled logit, and a singly bounded one a shifted logarithm. A link
 written outside linkfunctions7 falls back on its own name reduced to
 lowercase letters, digits and underscores.

@@ -13,7 +13,7 @@ to this function, differing only in the pattern passed."><meta property="og:imag
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -74,7 +74,7 @@ to this function, differing only in the <code>pattern</code> passed.</p>
 <dd><p>A function of the parameter and the scalars of
 <code><a href="econ_scalars.html">econ_scalars()</a></code>, returning a list of matrices: the pattern
 \(P(\rho)\) and its derivatives in the second free value, to the order
-the scalars carry. See <code><a href="cs_pattern.html">cs_pattern()</a></code> and <code><a href="ar1_pattern.html">ar1_pattern()</a></code>.</p></dd>
+that the scalars carry. See <code><a href="cs_pattern.html">cs_pattern()</a></code> and <code><a href="ar1_pattern.html">ar1_pattern()</a></code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -88,9 +88,8 @@ matrices keyed as <code>param_tuple_names(s, order)</code> and in that order, ea
     <p>The value is a <strong>product</strong> of a function of the first free value and a
 function of the second, so a component with \(a\) scale indices and \(b\)
 correlation indices is the \(a\)-th derivative of the scale times the
-\(b\)-th derivative of the pattern. Nothing is approximated and no order is
-special: only the counts \(a\) and \(b\) matter, and a tuple is fully
-described by them.</p>
+\(b\)-th derivative of the pattern. Every derivative is exact, and a tuple
+enters only through the counts \(a\) and \(b\).</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

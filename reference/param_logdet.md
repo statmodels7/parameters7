@@ -6,10 +6,10 @@ a rank-deficient one. This is the quantity a Gaussian likelihood needs
 beside the quadratic form, and every matrix family answers it, in closed
 form where one exists.
 
-One generic covers both cases because a consumer asks the same question
-of either: what normalizing constant does this matrix contribute. Which
-answer is the right one follows from the object's declared `rank`, so
-the caller does not have to branch.
+One generic covers both cases because the quantity needed from either is
+the normalizing constant that the matrix contributes. The declared
+`rank` determines whether the result is the log-determinant or the log
+pseudo-determinant, so the caller does not have to branch.
 
 ## Usage
 
@@ -24,8 +24,9 @@ param_logdet(s, eta, ...)
   An object inheriting from class
   [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md).
   A family whose value is not a symmetric matrix has no method, and the
-  call fails at dispatch with
-  `Can't find method for param_logdet(<SimplexParam>)`.
+  call fails at dispatch with S7's "Can't find method" error, which
+  names the class (for instance
+  [`parameters7::SimplexParam`](https://statmodels7.github.io/parameters7/reference/SimplexParam.md)).
 
 - eta:
 
@@ -33,7 +34,7 @@ param_logdet(s, eta, ...)
 
 - ...:
 
-  Passed to the method. No method in this package reads it.
+  Passed to the method. The methods in this package do not read it.
 
 ## Value
 
@@ -52,27 +53,28 @@ consumer declares that, as
 [`inverse_of()`](https://statmodels7.github.io/parameters7/reference/inverse_of.md)
 does when the side is fixed.
 
-## Computed from the parametrization, not from the matrix
+## Closed forms and the base method
 
 A closed form is usually far cheaper than a decomposition, and often
 simply linear. In the log-Cholesky parametrization \\\log\|M\| =
 2\sum\_{i=1}^{p} \eta_i\\, twice the sum of the first \\p\\ free values,
-so no factorization happens at all. The
+so no factorization happens at all. For the
 [`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md)
-family answers \\p\\\eta_1 + (p-1)\log(1 - \rho^2)\\, again in constant
+family it is \\p\\\eta_1 + (p-1)\log(1 - \rho^2)\\, again in constant
 work whatever \\p\\ is. The base method on
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md),
 which a family written elsewhere inherits, takes an eigendecomposition
-and sums the logs of the eigenvalues above a relative tolerance, at
-\\O(p^3)\\.
+and sums the logs of the largest \\r\\ eigenvalues, \\r\\ being the
+declared rank, at \\O(p^3)\\.
 
 ## Rank deficiency
 
 A deficient family returns the log pseudo-determinant, and its
-`null_basis` says which directions were left out. That is the quantity
-an improper prior contributes to a marginal likelihood: the penalized
-normal equations invert \\X^\top X + \lambda P\\, which is non-singular
-even when \\P\\ is not, so the deficiency never has to be inverted.
+`null_basis` records which directions were left out. That is the
+quantity an improper prior contributes to a marginal likelihood: the
+penalized normal equations invert \\X^\top X + \lambda P\\, which is
+non-singular even when \\P\\ is not, so the deficiency never has to be
+inverted.
 [`param_solve()`](https://statmodels7.github.io/parameters7/reference/param_solve.md)
 and
 [`param_factor()`](https://statmodels7.github.io/parameters7/reference/param_factor.md)

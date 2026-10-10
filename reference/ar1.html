@@ -19,7 +19,7 @@ strong an assumption."><meta property="og:image" content="https://statmodels7.gi
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,8 +69,8 @@ strong an assumption.</p>
 
 <dl><dt id="arg-dimension">dimension<a class="anchor" aria-label="anchor" href="#arg-dimension"></a></dt>
 <dd><p>The side \(p\) of the matrix, <strong>at least 2</strong>. A one by one
-matrix has no correlation, so <code>ar1(1)</code> throws a message saying the family
-would carry a free value with no effect.</p></dd>
+matrix has no correlation, so <code>ar1(1)</code> signals an error stating that the
+family would carry a free value with no effect.</p></dd>
 
 
 <dt id="arg-link-scale">link_scale<a class="anchor" aria-label="anchor" href="#arg-link-scale"></a></dt>
@@ -91,15 +91,19 @@ empty <code>null_basis</code>, <code>param_name</code> <code>"ar1"</code>, and <
     <div class="section level2">
     <h2 id="the-correlation-is-unrestricted">The correlation is unrestricted<a class="anchor" aria-label="anchor" href="#the-correlation-is-unrestricted"></a></h2>
     <p>Unlike <code><a href="compound_symmetry.html">compound_symmetry()</a></code>, the bound is \(|\rho| &lt; 1\) at every
-dimension, so the correlation rides <code><a href="https://statmodels7.github.io/linkfunctions7/reference/rhobit_link.html" class="external-link">linkfunctions7::rhobit_link()</a></code>, the
+dimension, so the correlation is mapped by <code><a href="https://statmodels7.github.io/linkfunctions7/reference/rhobit_link.html" class="external-link">linkfunctions7::rhobit_link()</a></code>, the
 inverse hyperbolic tangent, and every free value gives a positive definite
-matrix. A free value of 0 is a correlation of 0 here, where in
-<code><a href="compound_symmetry.html">compound_symmetry()</a></code> it is the midpoint of a dimension-dependent interval.</p>
+matrix in exact arithmetic. In double precision the correlation rounds to
+\(-1\) or 1 from \(|\eta_2|\) of about 19, and the matrix is then
+singular to rounding; the log-determinant, its derivatives and the inverse
+are evaluated from \(\eta_2\) and stay accurate there. A free value of 0
+is a correlation of 0 here, where in <code><a href="compound_symmetry.html">compound_symmetry()</a></code> it is the
+midpoint of a dimension-dependent interval.</p>
     </div>
     <div class="section level2">
     <h2 id="the-inverse-is-tridiagonal">The inverse is tridiagonal<a class="anchor" aria-label="anchor" href="#the-inverse-is-tridiagonal"></a></h2>
-    <p>This is the property the family is used for. An AR(1) process is Markov, so
-its precision has no entries beyond the first off-diagonal:</p>
+    <p>An AR(1) process is Markov, so its precision has no entries beyond the first
+off-diagonal:</p>
 <p>$$M^{-1} = \frac{1}{\sigma^2(1-\rho^2)}
   \begin{pmatrix}
     1 &amp; -\rho &amp; &amp; \\
@@ -107,13 +111,14 @@ its precision has no entries beyond the first off-diagonal:</p>
      &amp; \ddots &amp; \ddots &amp; \ddots \\
      &amp; &amp; -\rho &amp; 1
   \end{pmatrix}.$$</p>
-<p><code><a href="param_solve.html">param_solve()</a></code> returns it from that form, so no factorization is performed
-and the cost is \(O(p)\) entries against the base class's \(O(p^3)\).</p>
-<p>Note what this does <strong>not</strong> say: the precision is tridiagonal without being
-AR(1). Its own correlation at lag 1 is not constant along the diagonal
-(measured at \(p = 4\), \(\rho = 0.6\): \(-0.514\) at the ends and
-\(-0.441\) in the middle), and its lag-2 correlation is 0 where an AR(1)
-would have \(\rho^2\). So an AR(1) covariance and an AR(1) precision are
+<p><code><a href="param_solve.html">param_solve()</a></code> builds it from that form, so no factorization is performed;
+the matrix is assembled densely and multiplied by <code>b</code>, at \(O(p^2)\) per
+column of <code>b</code>.</p>
+<p>The precision is tridiagonal but is not itself an AR(1) matrix. Its lag-1
+correlation is not constant along the diagonal (at \(p = 4\) and
+\(\rho = 0.6\) it is \(-0.514\) at the ends and \(-0.441\) in the
+middle), and its lag-2 correlation is 0, where an AR(1) matrix has
+\(\rho^2\). An AR(1) covariance and an AR(1) precision therefore define
 different models. This family is the AR(1) pattern itself, whichever side a
 consumer puts it on; <code><a href="ar1_inv.html">ar1_inv()</a></code> is the family whose value is the matrix
 above, so that the AR(1) process is the one written on the other side.</p>
@@ -126,8 +131,9 @@ above, so that the AR(1) process is the one written on the other side.</p>
 mixed derivative of it is exactly zero, and no determinant is computed.</p>
     </div>
     <div class="section level2">
-    <h2 id="why-the-derivatives-are-harder-than-compound-symmetry-s">Why the derivatives are harder than compound symmetry's<a class="anchor" aria-label="anchor" href="#why-the-derivatives-are-harder-than-compound-symmetry-s"></a></h2>
-    <p>The pattern is <strong>not</strong> linear in the correlation. An entry is \(\rho^{m}\)
+    <h2 id="derivatives-of-the-pattern">Derivatives of the pattern<a class="anchor" aria-label="anchor" href="#derivatives-of-the-pattern"></a></h2>
+    <p>Unlike the pattern of <code><a href="compound_symmetry.html">compound_symmetry()</a></code>, this pattern is not linear in
+the correlation. An entry is \(\rho^{m}\)
 for the lag \(m\), so its derivatives in the free value are a power composed
 with the link, taken to fourth order by <code><a href="compose_order.html">compose_order()</a></code>. Each distinct lag is
 composed once and written into every entry that carries it, the matrix having

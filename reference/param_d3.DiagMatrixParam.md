@@ -7,8 +7,8 @@ component is the exact zero matrix.
 
 \\h'''\\ comes from
 [`linkfunctions7::d3linkinv()`](https://statmodels7.github.io/linkfunctions7/reference/d3linkinv.html),
-so the accuracy is the link's; a family without a closed form here would
-get a product stencil good to about six digits instead.
+so the accuracy is the link's; a family without a closed form here gets
+a less accurate product stencil.
 
 ## Arguments
 

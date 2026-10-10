@@ -3,8 +3,8 @@
 The log-determinant of the assembled matrix where the family has full
 rank, and its log **pseudo**-determinant, the sum over the `s@rank`
 largest eigenvalues, where it does not. A sum of fixed matrices has no
-structure a closed form could exploit, so this is the one family here
-that assembles and decomposes.
+structure that a closed form could exploit, so this method assembles the
+matrix and decomposes it.
 
 ## Arguments
 
@@ -30,14 +30,10 @@ A single number.
 
 Which branch is taken is decided by `s@rank`, fixed at construction from
 the components' shared null space, and never by counting eigenvalues at
-the point: that count falls as the weights spread apart, which
-[`sum_struct()`](https://statmodels7.github.io/parameters7/reference/sum_struct.md)
-measures. So the number of eigenvalues summed does not move as a fit
-walks the free vector.
-
-Measured on `sum_struct(list(matrix(1, 3, 3)))`, of rank 1, at a weight
-of 2: the pseudo-determinant is \\\log 6\\, its one non-zero eigenvalue,
-to the printed digit.
+the point: that count falls as the weights spread apart (see
+[`sum_struct()`](https://statmodels7.github.io/parameters7/reference/sum_struct.md)).
+So the number of eigenvalues summed does not move as a fit walks the
+free vector.
 
 ## See also
 

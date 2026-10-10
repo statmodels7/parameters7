@@ -3,18 +3,18 @@
 \(\eta\) on the unconstrained scale, returns the constrained value it
 produces. The shape depends on the family. A matrix_parameter() returns a
 symmetric \(p \times p\) matrix, simplex() a probability vector, and
-transition_matrix() a row-stochastic matrix. Whatever \(\eta\) is
-handed in, the value satisfies the family's constraint, so a caller never
-has to test the result.
+transition_matrix() a row-stochastic matrix. For every finite
+\(\eta\) the value satisfies the family's constraint, within the range of
+floating-point arithmetic, so a caller does not have to test the result.
 This is the only method a new family must write. Every derivative order is
 then available numerically, and for a matrix family so are the
 log-determinant, the solve and the factor."><meta property="og:description" content="Evaluates the map a parametrization stands for: given a free vector
 \(\eta\) on the unconstrained scale, returns the constrained value it
 produces. The shape depends on the family. A matrix_parameter() returns a
 symmetric \(p \times p\) matrix, simplex() a probability vector, and
-transition_matrix() a row-stochastic matrix. Whatever \(\eta\) is
-handed in, the value satisfies the family's constraint, so a caller never
-has to test the result.
+transition_matrix() a row-stochastic matrix. For every finite
+\(\eta\) the value satisfies the family's constraint, within the range of
+floating-point arithmetic, so a caller does not have to test the result.
 This is the only method a new family must write. Every derivative order is
 then available numerically, and for a matrix family so are the
 log-determinant, the solve and the factor."><meta property="og:image" content="https://statmodels7.github.io/parameters7/logo.png"></head><body>
@@ -25,7 +25,7 @@ log-determinant, the solve and the factor."><meta property="og:image" content="h
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,9 +59,9 @@ log-determinant, the solve and the factor."><meta property="og:image" content="h
 \(\eta\) on the unconstrained scale, returns the constrained value it
 produces. The shape depends on the family. A <code><a href="matrix_parameter.html">matrix_parameter()</a></code> returns a
 symmetric \(p \times p\) matrix, <code><a href="simplex.html">simplex()</a></code> a probability vector, and
-<code><a href="transition_matrix.html">transition_matrix()</a></code> a row-stochastic matrix. Whatever \(\eta\) is
-handed in, the value satisfies the family's constraint, so a caller never
-has to test the result.</p>
+<code><a href="transition_matrix.html">transition_matrix()</a></code> a row-stochastic matrix. For every finite
+\(\eta\) the value satisfies the family's constraint, within the range of
+floating-point arithmetic, so a caller does not have to test the result.</p>
 <p>This is the only method a new family must write. Every derivative order is
 then available numerically, and for a matrix family so are the
 log-determinant, the solve and the factor.</p>
@@ -89,7 +89,7 @@ label into the result.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Passed to the method. No method in this package reads it; it is
+<dd><p>Passed to the method. The methods in this package do not read it; it is
 part of the signature so that a family written elsewhere can take further
 arguments of its own.</p></dd>
 
@@ -123,10 +123,10 @@ edge to reach.</p>
     </div>
     <div class="section level2">
     <h2 id="what-is-exact-and-what-is-not">What is exact and what is not<a class="anchor" aria-label="anchor" href="#what-is-exact-and-what-is-not"></a></h2>
-    <p>Every family in this package writes its own <code>param_value()</code> out in closed
-form. None of them falls back to anything, and <code><a href="param_is_numerical.html">param_is_numerical()</a></code>
-returns <code>FALSE</code> for all nine components of all fifteen. The numerical
-methods on <code><a href="parameter.html">parameter()</a></code> exist for a family written elsewhere.</p>
+    <p>Every family in this package writes its own <code>param_value()</code> and its
+derivatives out, and <code><a href="param_is_numerical.html">param_is_numerical()</a></code> returns <code>FALSE</code> for every
+component of every family. The numerical methods on <code><a href="parameter.html">parameter()</a></code> serve a
+family written elsewhere.</p>
     </div>
     <div class="section level2">
     <h2 id="notation">Notation<a class="anchor" aria-label="anchor" href="#notation"></a></h2>

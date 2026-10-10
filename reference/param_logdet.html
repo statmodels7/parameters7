@@ -4,18 +4,18 @@ pseudo-determinant, the sum of the logs of the non-zero eigenvalues, for a
 rank-deficient one. This is the quantity a Gaussian likelihood needs beside
 the quadratic form, and every matrix family answers it, in closed form where
 one exists.
-One generic covers both cases because a consumer asks the same question of
-either: what normalizing constant does this matrix contribute. Which answer
-is the right one follows from the object's declared rank, so the caller
-does not have to branch."><meta property="og:description" content="Returns \(\log|M|\) for a full-rank family, and the log
+One generic covers both cases because the quantity needed from either is the
+normalizing constant that the matrix contributes. The declared rank
+determines whether the result is the log-determinant or the log
+pseudo-determinant, so the caller does not have to branch."><meta property="og:description" content="Returns \(\log|M|\) for a full-rank family, and the log
 pseudo-determinant, the sum of the logs of the non-zero eigenvalues, for a
 rank-deficient one. This is the quantity a Gaussian likelihood needs beside
 the quadratic form, and every matrix family answers it, in closed form where
 one exists.
-One generic covers both cases because a consumer asks the same question of
-either: what normalizing constant does this matrix contribute. Which answer
-is the right one follows from the object's declared rank, so the caller
-does not have to branch."><meta property="og:image" content="https://statmodels7.github.io/parameters7/logo.png"></head><body>
+One generic covers both cases because the quantity needed from either is the
+normalizing constant that the matrix contributes. The declared rank
+determines whether the result is the log-determinant or the log
+pseudo-determinant, so the caller does not have to branch."><meta property="og:image" content="https://statmodels7.github.io/parameters7/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -23,7 +23,7 @@ does not have to branch."><meta property="og:image" content="https://statmodels7
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,10 +58,10 @@ pseudo-determinant, the sum of the logs of the non-zero eigenvalues, for a
 rank-deficient one. This is the quantity a Gaussian likelihood needs beside
 the quadratic form, and every matrix family answers it, in closed form where
 one exists.</p>
-<p>One generic covers both cases because a consumer asks the same question of
-either: what normalizing constant does this matrix contribute. Which answer
-is the right one follows from the object's declared <code>rank</code>, so the caller
-does not have to branch.</p>
+<p>One generic covers both cases because the quantity needed from either is the
+normalizing constant that the matrix contributes. The declared <code>rank</code>
+determines whether the result is the log-determinant or the log
+pseudo-determinant, so the caller does not have to branch.</p>
     </div>
 
     <div class="section level2">
@@ -76,7 +76,8 @@ does not have to branch.</p>
 <dl><dt id="arg-s">s<a class="anchor" aria-label="anchor" href="#arg-s"></a></dt>
 <dd><p>An object inheriting from class <code><a href="matrix_parameter.html">matrix_parameter()</a></code>. A family whose
 value is not a symmetric matrix has no method, and the call fails at
-dispatch with <code>Can't find method for param_logdet(&lt;SimplexParam&gt;)</code>.</p></dd>
+dispatch with S7's "Can't find method" error, which names the class (for
+instance <code><a href="SimplexParam.html">parameters7::SimplexParam</a></code>).</p></dd>
 
 
 <dt id="arg-eta">eta<a class="anchor" aria-label="anchor" href="#arg-eta"></a></dt>
@@ -84,7 +85,7 @@ dispatch with <code>Can't find method for param_logdet(&lt;SimplexParam&gt;)</co
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Passed to the method. No method in this package reads it.</p></dd>
+<dd><p>Passed to the method. The methods in this package do not read it.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -103,20 +104,21 @@ A parameter does not record which side it was built for: the consumer
 declares that, as <code><a href="inverse_of.html">inverse_of()</a></code> does when the side is fixed.</p>
     </div>
     <div class="section level2">
-    <h2 id="computed-from-the-parametrization-not-from-the-matrix">Computed from the parametrization, not from the matrix<a class="anchor" aria-label="anchor" href="#computed-from-the-parametrization-not-from-the-matrix"></a></h2>
+    <h2 id="closed-forms-and-the-base-method">Closed forms and the base method<a class="anchor" aria-label="anchor" href="#closed-forms-and-the-base-method"></a></h2>
     <p>A closed form is usually far cheaper than a decomposition, and often simply
 linear. In the log-Cholesky parametrization
 \(\log|M| = 2\sum_{i=1}^{p} \eta_i\), twice the sum of the first \(p\)
-free values, so no factorization happens at all. The <code><a href="ar1.html">ar1()</a></code> family answers
+free values, so no factorization happens at all. For the <code><a href="ar1.html">ar1()</a></code> family it is
 \(p\,\eta_1 + (p-1)\log(1 - \rho^2)\), again in constant work whatever
 \(p\) is. The base method on <code><a href="matrix_parameter.html">matrix_parameter()</a></code>, which a family written
 elsewhere inherits, takes an eigendecomposition and sums the logs of the
-eigenvalues above a relative tolerance, at \(O(p^3)\).</p>
+largest \(r\) eigenvalues, \(r\) being the declared rank, at
+\(O(p^3)\).</p>
     </div>
     <div class="section level2">
     <h2 id="rank-deficiency">Rank deficiency<a class="anchor" aria-label="anchor" href="#rank-deficiency"></a></h2>
     <p>A deficient family returns the log pseudo-determinant, and its <code>null_basis</code>
-says which directions were left out. That is the quantity an improper prior
+records which directions were left out. That is the quantity an improper prior
 contributes to a marginal likelihood: the penalized normal equations invert
 \(X^\top X + \lambda P\), which is non-singular even when \(P\) is not,
 so the deficiency never has to be inverted. <code><a href="param_solve.html">param_solve()</a></code> and

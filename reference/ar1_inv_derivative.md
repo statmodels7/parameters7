@@ -31,7 +31,7 @@ ar1_inv_derivative(s, eta, order)
 
 A named list of `s@dimension` square matrices, keyed and ordered as
 [`param_tuple_names()`](https://statmodels7.github.io/parameters7/reference/param_tuple_names.md)
-says.
+gives them.
 
 ## See also
 

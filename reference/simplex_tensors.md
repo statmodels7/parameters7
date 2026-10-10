@@ -2,9 +2,9 @@
 
 The arrays \\D_1\[a, b\]\\ to \\D_4\[a, b, c, d, e\]\\ of derivatives of
 \\\pi\\ in the free values, built by applying the product rule to
-\\\partial_b \pi_a = \pi_a(\delta\_{ab} - \pi_b)\\ as many times as the
-order asks. The first index runs over the \\K\\ categories of the value,
-the rest over the \\K - 1\\ free values.
+\\\partial_b \pi_a = \pi_a(\delta\_{ab} - \pi_b)\\ once for each order
+up to `order`. The first index runs over the \\K\\ categories of the
+value, the rest over the \\K - 1\\ free values.
 
 ## Usage
 
@@ -37,7 +37,7 @@ so the cost of the fourth is \\K(K-1)^4\\ entries and the whole set is
 built in one pass. Nothing is differenced.
 
 Every slice sums to zero over its first index, \\\sum_a \pi_a\\ being
-the constant 1, which is the identity
+the constant 1, which is the identity that
 [`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)
 tests.
 

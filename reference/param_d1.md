@@ -30,7 +30,7 @@ param_d1(s, eta, ...)
 
 - ...:
 
-  Passed to the method. No method in this package reads it.
+  Passed to the method. The methods in this package do not read it.
 
 ## Value
 
@@ -79,7 +79,7 @@ for the higher orders,
 [`param_dlogdet()`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.md)
 for the derivative of the log-determinant, and
 [`param_is_numerical()`](https://statmodels7.github.io/parameters7/reference/param_is_numerical.md)
-to ask which route an object takes.
+to find out which route an object takes.
 
 ## Examples
 

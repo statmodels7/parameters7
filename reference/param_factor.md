@@ -5,8 +5,8 @@ factor of the matrix the parametrization produces. Simulation is the
 usual reason to want it: \\L z\\ with \\z\\ standard normal has
 covariance \\M\\, so one factor draws as many vectors as needed. For
 [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
-the factor is what the parametrization holds anyway, so it is returned
-without any arithmetic.
+the factor is assembled directly from the free vector, with one
+exponential per diagonal entry and no decomposition.
 
 ## Usage
 
@@ -28,7 +28,7 @@ param_factor(s, eta, ...)
 
 - ...:
 
-  Passed to the method. No method in this package reads it.
+  Passed to the method. The methods in this package do not read it.
 
 ## Value
 
@@ -37,11 +37,12 @@ positive diagonal, satisfying `L %*% t(L) == param_value(s, eta)`.
 
 ## Rank deficiency is rejected
 
-A deficient matrix has no Cholesky factor: a triangular \\L\\ with \\L
-L^\top = M\\ would need a zero on the diagonal, and the factor is then
-not unique. The generic signals an error naming the family and its rank
-before dispatching. To simulate from a deficient covariance, take an
-eigendecomposition and use the eigenvectors of the non-zero eigenvalues;
+A deficient matrix has no Cholesky factor with a positive diagonal: a
+triangular \\L\\ with \\L L^\top = M\\ would need a zero on the
+diagonal, and the factor is then not unique. The generic signals an
+error naming the family and its rank before dispatching. To simulate
+from a deficient covariance, take an eigendecomposition and use the
+eigenvectors of the non-zero eigenvalues;
 [`param_null_basis()`](https://statmodels7.github.io/parameters7/reference/param_null_basis.md)
 gives the directions that carry no variance.
 
@@ -50,8 +51,8 @@ gives the directions that carry no variance.
 [`simplex()`](https://statmodels7.github.io/parameters7/reference/simplex.md)
 and
 [`transition_matrix()`](https://statmodels7.github.io/parameters7/reference/transition_matrix.md)
-are checked for and refused by name, their value not being a symmetric
-matrix.
+are rejected with an error that names the family, because their value is
+not a symmetric matrix.
 
 ## Notation
 
@@ -66,7 +67,8 @@ for a solve through the same factor,
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
 for the matrix it factors, and
 [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md),
-whose free values are the logarithms of this factor's diagonal.
+whose first \\p\\ free values are the logarithms of this factor's
+diagonal.
 
 ## Examples
 
@@ -97,7 +99,7 @@ round(cov(y) - param_value(s, eta), 2)
 #> v2 0.01 0.01 0.00
 #> v3 0.00 0.00 0.03
 
-# A rank-deficient family has no factor and says so.
+# A rank-deficient family has no factor, and the call signals an error.
 try(param_factor(scaled_matrix(crossprod(diff(diag(6), differences = 2))), 0))
 #> Error : 'scaled' is rank deficient (4 of 6), so it has no Cholesky factor.
 ```

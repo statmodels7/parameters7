@@ -2,13 +2,14 @@
 
 The S7 class of correlation matrices, symmetric positive definite with a
 unit diagonal, in the spherical parametrization of Rapisarda, Brigo and
-Mercurio (2007). The unit diagonal holds by construction, never by a
-correction, so every free vector gives a genuine correlation matrix.
+Mercurio (2007). The rows of the factor are unit vectors, so the unit
+diagonal holds by construction, and every free vector gives a
+correlation matrix.
 
 [`correlation_matrix()`](https://statmodels7.github.io/parameters7/reference/correlation_matrix.md)
 builds one. The free values are angles carried onto the real line, and
-`param_params` records the row and column each belongs to together with
-the `bounded_link(0, pi)` that carries it.
+`param_params` records the row and the column to which each belongs,
+together with the `bounded_link(0, pi)` that carries it.
 
 ## Usage
 
@@ -38,7 +39,7 @@ CorrelationParam(
 - free_names:
 
   A character vector of length `n_free`, one label per free value, in
-  the order the free vector holds them. Must be unique.
+  the order in which the free vector holds them. Must be unique.
 
 - param_params:
 
@@ -52,7 +53,7 @@ CorrelationParam(
 
 - rank:
 
-  The rank of the matrix the family produces, a single integer in
+  The rank of the matrix that the family produces, a single integer in
   `0:dimension`. It is a property of the family, so a family whose value
   is positive definite at every \\\eta\\ declares \\p\\ here.
 
@@ -62,15 +63,14 @@ CorrelationParam(
   an orthonormal basis of the common null space. Use
   [`param_null_basis()`](https://statmodels7.github.io/parameters7/reference/param_null_basis.md)
   to obtain one, or `matrix(numeric(0), dimension, 0)` for a full-rank
-  family. The validator rejects any other shape, and reports both the
-  rank and the shape when the two disagree.
+  family. The validator rejects any other shape.
 
 ## Value
 
 An object of class `CorrelationParam`, a subclass of
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
 adding no properties of its own. `param_params` holds `row` and `col`,
-the position each angle belongs to, and `link`, a
+the position of each angle, and `link`, a
 `linkfunctions7::bounded_link(lwr = 0, upr = pi)`. `n_free` is
 \\p(p-1)/2\\ and `rank` is \\p\\.
 
@@ -87,7 +87,7 @@ the constructor,
 [`dr_prod()`](https://statmodels7.github.io/parameters7/reference/dr_prod.md)
 to give this a diagonal scale and make it a covariance, and
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
-for the properties this inherits.
+for the properties that this class inherits.
 
 ## Examples
 

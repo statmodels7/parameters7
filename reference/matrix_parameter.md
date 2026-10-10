@@ -1,27 +1,36 @@
-# The Abstract Class of a Symmetric Matrix Parameter
+# The Base Class of a Symmetric Matrix Parameter
 
 Extends
 [`parameter()`](https://statmodels7.github.io/parameters7/reference/parameter.md)
 to the branch whose value is a symmetric positive semidefinite \\p
-\times p\\ matrix. Beyond the map itself, such a family can answer the
-four things a Gaussian likelihood asks of a covariance or a precision:
-the log-determinant, a solve against a right-hand side, a factor, and
-the rank and null space when the matrix is singular. Those four generics
-are registered here, so a subclass supplying only
+\times p\\ matrix. Beyond the map itself, such a family supplies what a
+Gaussian likelihood needs from a covariance or a precision: the
+log-determinant and its derivatives, a solve against a right-hand side
+and a factor, whose generics have base methods registered on this class,
+so that a subclass supplying only
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
-inherits all of them.
+inherits all of them; and the rank and the null space of a singular
+matrix, which are properties set at construction.
 
-The class is abstract. Every matrix family in the package returns a
-subclass of it:
+Every matrix family in the package returns a subclass of it:
 [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md),
 [`matrix_log()`](https://statmodels7.github.io/parameters7/reference/matrix_log.md),
 [`diagonal_matrix()`](https://statmodels7.github.io/parameters7/reference/diagonal_matrix.md),
+[`scalar_matrix()`](https://statmodels7.github.io/parameters7/reference/scalar_matrix.md),
 [`correlation_matrix()`](https://statmodels7.github.io/parameters7/reference/correlation_matrix.md),
 [`compound_symmetry()`](https://statmodels7.github.io/parameters7/reference/compound_symmetry.md),
 [`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md),
 [`autoregressive()`](https://statmodels7.github.io/parameters7/reference/autoregressive.md),
+[`ar1_inv()`](https://statmodels7.github.io/parameters7/reference/ar1_inv.md),
+[`autoregressive_inv()`](https://statmodels7.github.io/parameters7/reference/autoregressive_inv.md),
 [`scaled_matrix()`](https://statmodels7.github.io/parameters7/reference/scaled_matrix.md)
-and the four compositions.
+and the five compositions
+[`kron_identity()`](https://statmodels7.github.io/parameters7/reference/kron_identity.md),
+[`block_diag()`](https://statmodels7.github.io/parameters7/reference/block_diag.md),
+[`dr_prod()`](https://statmodels7.github.io/parameters7/reference/dr_prod.md),
+[`sum_struct()`](https://statmodels7.github.io/parameters7/reference/sum_struct.md)
+and
+[`inverse_of()`](https://statmodels7.github.io/parameters7/reference/inverse_of.md).
 
 ## Usage
 
@@ -51,7 +60,7 @@ matrix_parameter(
 - free_names:
 
   A character vector of length `n_free`, one label per free value, in
-  the order the free vector holds them. Must be unique.
+  the order in which the free vector holds them. Must be unique.
 
 - param_params:
 
@@ -65,7 +74,7 @@ matrix_parameter(
 
 - rank:
 
-  The rank of the matrix the family produces, a single integer in
+  The rank of the matrix that the family produces, a single integer in
   `0:dimension`. It is a property of the family, so a family whose value
   is positive definite at every \\\eta\\ declares \\p\\ here.
 
@@ -75,8 +84,7 @@ matrix_parameter(
   an orthonormal basis of the common null space. Use
   [`param_null_basis()`](https://statmodels7.github.io/parameters7/reference/param_null_basis.md)
   to obtain one, or `matrix(numeric(0), dimension, 0)` for a full-rank
-  family. The validator rejects any other shape, and reports both the
-  rank and the shape when the two disagree.
+  family. The validator rejects any other shape.
 
 ## Value
 
@@ -96,9 +104,8 @@ with three further properties
 
   a `dimension` by `dimension - rank` matrix with orthonormal columns.
 
-plus the four it inherits, `param_name`, `n_free`, `free_names` and
-`param_params`. The class is abstract, so a useful object comes from a
-constructor such as
+plus the four that it inherits, `param_name`, `n_free`, `free_names` and
+`param_params`. A useful object comes from a constructor such as
 [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md).
 
 ## Rank and null space are fixed at construction
@@ -112,14 +119,18 @@ them: counting the small eigenvalues of an assembled matrix is not scale
 invariant, and reads a component whose weight is small as a null
 direction.
 [`param_null_basis()`](https://statmodels7.github.io/parameters7/reference/param_null_basis.md)
-computes them from the components and carries the measurement.
+computes them from the components, and its examples show the comparison.
 
 Most families here are full rank, so `rank` is \\p\\ and `null_basis`
 has zero columns.
 [`scaled_matrix()`](https://statmodels7.github.io/parameters7/reference/scaled_matrix.md)
-admits a deficient fixed matrix, and
+admits a deficient fixed matrix and
 [`sum_struct()`](https://statmodels7.github.io/parameters7/reference/sum_struct.md)
-a deficient sum, and both then report the deficiency.
+a deficient sum, and
+[`block_diag()`](https://statmodels7.github.io/parameters7/reference/block_diag.md)
+and
+[`kron_identity()`](https://statmodels7.github.io/parameters7/reference/kron_identity.md)
+carry the deficiency of a deficient block; each then reports it.
 
 ## What a non-matrix family does instead
 
@@ -130,14 +141,14 @@ inherit
 [`parameter()`](https://statmodels7.github.io/parameters7/reference/parameter.md)
 directly. They hold no `dimension`, `rank` or `null_basis`, and
 [`param_logdet()`](https://statmodels7.github.io/parameters7/reference/param_logdet.md)
-has no method for them, so asking for the log-determinant of a
-probability vector fails at dispatch. The absence is structural.
+has no method for them, so a call for the log-determinant of a
+probability vector fails at dispatch.
 
 ## Notation
 
 \\\eta\\ is the free vector, the point on the unconstrained scale, and
 \\d\\ its length. \\p\\ is the side of the matrix. \\M\\ is the matrix
-the map produces, \\\Sigma\\ when it is read as a covariance and
+that the map produces, \\\Sigma\\ when it is read as a covariance and
 \\\Omega\\ when it is read as a precision.
 
 ## See also
@@ -149,7 +160,7 @@ for the base class and the naming convention for free values.
 [`param_factor()`](https://statmodels7.github.io/parameters7/reference/param_factor.md)
 and
 [`param_null_basis()`](https://statmodels7.github.io/parameters7/reference/param_null_basis.md)
-for the four quantities this branch adds.
+for the quantities that this branch adds.
 
 ## Examples
 
@@ -161,7 +172,7 @@ c(parameter = S7::S7_inherits(s, parameter),
 #>        parameter matrix_parameter 
 #>             TRUE             TRUE 
 
-# The three properties this branch adds.
+# The three properties that this branch adds.
 c(dimension = s@dimension, rank = s@rank, null_columns = ncol(s@null_basis))
 #>    dimension         rank null_columns 
 #>            3            3            0 

@@ -5,13 +5,13 @@ linear in the free vector, so every derivative above the first vanishes
 at every \\\eta\\. The zeros are exact, so a consumer can drop the term
 instead of carrying small numbers through a contraction.
 
-It also means this family cannot exercise the order: a check of a
-log-determinant's third derivative against a numerical reference passes
-here whatever is missing, both sides being zero.
-[`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md)
-and
+A comparison of a general third log-determinant derivative against a
+numerical reference therefore compares two zeros on this family.
+[`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md),
 [`compound_symmetry()`](https://statmodels7.github.io/parameters7/reference/compound_symmetry.md)
-are where this order has content.
+and
+[`correlation_matrix()`](https://statmodels7.github.io/parameters7/reference/correlation_matrix.md)
+are families where this order is not zero.
 
 ## Arguments
 

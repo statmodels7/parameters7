@@ -13,7 +13,7 @@ the same on two runs, without leaving the caller's stream changed."><meta proper
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,15 +72,16 @@ effect on the global environment.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>A validator wants both properties and they pull against each other. Drawing
-from the caller's stream makes the worst error reported move between runs;
-calling <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed()</a></code> fixes that and replaces whatever state the caller had,
-so a call inside a simulation silently changes the simulation. Saving the
-state on entry and restoring it with <code><a href="https://rdrr.io/r/base/on.exit.html" class="external-link">base::on.exit()</a></code> gives the fixed draw
-and leaves the caller alone.</p>
+    <p>A validator should report the same numbers on every run and should leave the
+caller's random stream unchanged, and the two requirements conflict. Drawing
+from the caller's stream makes the worst error reported vary between runs;
+calling <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed()</a></code> removes that variation but replaces the state of the
+caller's stream, so a call inside a simulation changes the simulation. Saving
+the state on entry and restoring it with <code><a href="https://rdrr.io/r/base/on.exit.html" class="external-link">base::on.exit()</a></code> gives the fixed
+draw and leaves the caller's stream as it was.</p>
 <p><code>restore_seed(NULL)</code> removes <code>.Random.seed</code> again, which is the right answer
-when the caller had never drawn a random number: leaving the seed the
-validator set behind would be the leak this exists to prevent.</p>
+when the caller had never drawn a random number, so the seed that the
+validator set is not left behind.</p>
     </div>
 
     <div class="section level2">

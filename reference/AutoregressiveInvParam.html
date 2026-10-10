@@ -11,7 +11,7 @@ autoregression of that order. autoregressive_inv() builds one."><meta property="
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -74,7 +74,7 @@ integer, agreeing with <code>length(free_names)</code>.</p></dd>
 
 <dt id="arg-free-names">free_names<a class="anchor" aria-label="anchor" href="#arg-free-names"></a></dt>
 <dd><p>A character vector of length <code>n_free</code>, one label per free
-value, in the order the free vector holds them. Must be unique.</p></dd>
+value, in the order in which the free vector holds them. Must be unique.</p></dd>
 
 
 <dt id="arg-param-params">param_params<a class="anchor" aria-label="anchor" href="#arg-param-params"></a></dt>
@@ -88,7 +88,7 @@ smaller than 1. The validator rejects a vector and a value below 1.</p></dd>
 
 
 <dt id="arg-rank">rank<a class="anchor" aria-label="anchor" href="#arg-rank"></a></dt>
-<dd><p>The rank of the matrix the family produces, a single integer in
+<dd><p>The rank of the matrix that the family produces, a single integer in
 <code>0:dimension</code>. It is a property of the family, so a family whose value is
 positive definite at every \(\eta\) declares \(p\) here.</p></dd>
 
@@ -97,15 +97,16 @@ positive definite at every \(\eta\) declares \(p\) here.</p></dd>
 <dd><p>A <code>dimension</code> by <code>dimension - rank</code> numeric matrix whose
 columns are an orthonormal basis of the common null space. Use
 <code><a href="param_null_basis.html">param_null_basis()</a></code> to obtain one, or <code>matrix(numeric(0), dimension, 0)</code>
-for a full-rank family. The validator rejects any other shape, and
-reports both the rank and the shape when the two disagree.</p></dd>
+for a full-rank family. The validator rejects any other shape.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>An object of class <code>AutoregressiveInvParam</code>, a subclass of
 <code><a href="InverseParam.html">InverseParam()</a></code> adding no properties of its own. <code>param_params</code> holds
-<code>inner</code>, the <code><a href="autoregressive.html">autoregressive()</a></code> family being inverted.</p>
+<code>inner</code>, the <code><a href="autoregressive.html">autoregressive()</a></code> family being inverted, <code>lower</code>, the
+<code><a href="autoregressive.html">autoregressive()</a></code> families of orders 1 to \(q\), and <code>cache</code>, an
+environment that memoizes the subset structure of each derivative order.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

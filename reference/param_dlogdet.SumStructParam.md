@@ -36,19 +36,21 @@ above it, `choose(s@n_free + k - 1, k)` values keyed as
 
 The four share
 [`sum_struct_logdet_derivs()`](https://statmodels7.github.io/parameters7/reference/sum_struct_logdet_derivs.md)
-and differ only in the order they pass. **Nothing vanishes here**,
-unlike the value's own derivatives: at two variance components the mixed
-second derivative is \\-0.245\\ against \\0.245\\ for each pure one, the
-same size. The log-determinant of a sum is not a sum, which is why this
+and differ only in the order they pass. Where the family is rank
+deficient they differentiate the log pseudo-determinant that
+[`param_logdet()`](https://statmodels7.github.io/parameters7/reference/param_logdet.md)
+returns. Unlike the value's own derivatives, the mixed components are in
+general not zero: for the two variance components of the example in
+[`sum_struct()`](https://statmodels7.github.io/parameters7/reference/sum_struct.md)
+the mixed second derivative is \\-0.245\\ against \\0.245\\ for each
+pure one. The log-determinant of a sum is not a sum, which is why this
 family needs an expansion where
 [`block_diag()`](https://statmodels7.github.io/parameters7/reference/block_diag.md)
 and
 [`dr_prod()`](https://statmodels7.github.io/parameters7/reference/dr_prod.md)
 need none.
 
-It is the dearest quantity the family computes;
-[`sum_struct()`](https://statmodels7.github.io/parameters7/reference/sum_struct.md)
-carries the timings and the accuracy against a stencil.
+It is the most expensive quantity of the family.
 
 ## See also
 

@@ -7,10 +7,12 @@ J\\\\ is
 (p-1)\rho}J\right\],\$\$
 
 compound symmetric again, so the inverse is written down and no
-factorization is performed: the cost is \\O(p^2)\\ for the product
-against `b`, against the base class's \\O(p^3)\\ Cholesky. Measured
-against [`base::solve()`](https://rdrr.io/r/base/solve.html) on the
-assembled matrix, the two agree to \\2 \times 10^{-16}\\.
+factorization is performed: the cost is \\O(p^2)\\ per column of `b`,
+against the \\O(p^3)\\ Cholesky factorization of the base method. The
+factors \\1 + (p-1)\rho\\ and \\1 - \rho\\ are evaluated from the second
+free value, as \\p\omega\\ and \\p(1-\omega)/(p-1)\\ with \\\omega\\ the
+logistic function of that value, so the inverse stays accurate where the
+correlation rounds to one of its bounds.
 
 An exchangeable covariance has an exchangeable precision, so the family
 is closed under the choice of side.

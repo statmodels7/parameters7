@@ -7,8 +7,8 @@ is that row's
 [`simplex()`](https://statmodels7.github.io/parameters7/reference/simplex.md)
 second derivative, embedded in that row.
 
-Measured at \\K = 3\\: `alr1.1:alr2.1` is 0 exactly and `alr1.1:alr1.1`
-is not. Of the 21 components at \\K = 3\\, only 9 can be non-zero.
+At \\K = 3\\, `alr1.1:alr2.1` is exactly 0 and `alr1.1:alr1.1` is not.
+Of the 21 components at \\K = 3\\, only 9 can be non-zero.
 
 ## Arguments
 

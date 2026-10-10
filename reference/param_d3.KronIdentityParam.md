@@ -23,8 +23,8 @@ Closed form: the inner parameter's third derivatives, each lifted into
 ## Value
 
 A list of `choose(s@n_free + 2, 3)` symmetric matrices keyed as
-`param_tuple_names(s, 3)` and in that order, each block diagonal with no
-dimnames.
+`param_tuple_names(s, 3)` and in that order, each block diagonal and
+labeled `v1`, `v2`, ..., `v(md)` on both margins.
 
 ## See also
 

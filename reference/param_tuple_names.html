@@ -17,7 +17,7 @@ derivative list beside the index tuples param_tuple_indices() returns.'><meta pr
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -73,8 +73,8 @@ supply the labels and whose <code>n_free</code> supplies \(d\).</p></dd>
 <dd><p>The derivative order. <code>2</code> by default, which is the order
 <code><a href="param_d2.html">param_d2()</a></code> and <code><a href="param_d2logdet.html">param_d2logdet()</a></code> use; <code>3</code> and <code>4</code> name the components of
 <code><a href="param_d3.html">param_d3()</a></code> and <code><a href="param_d4.html">param_d4()</a></code>. <code>1</code> is accepted and returns the free names
-themselves. Anything else throws <code>'order' must be 1, 2, 3 or 4.</code>, the
-contract stopping at fourth order.</p></dd>
+themselves. Any other value signals the error
+<code>'order' must be 1, 2, 3 or 4.</code></p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -95,14 +95,12 @@ and of every derivative list of that order. For \(d = 6\), which is a
 1296 ordered ones.</p>
     </div>
     <div class="section level2">
-    <h2 id="why-the-keys-and-the-tuples-come-from-one-enumeration">Why the keys and the tuples come from one enumeration<a class="anchor" aria-label="anchor" href="#why-the-keys-and-the-tuples-come-from-one-enumeration"></a></h2>
-    <p>Nothing in the toolkit recovers an index by splitting a key apart. Taking
-<code>"log_L1:log_L2"</code> and splitting on <code>":"</code> works until a free name contains the
-separator itself, and then it yields the wrong number of pieces and the
-failure is silent. Generating the names and the indices from one enumeration
-cannot be fooled that way. <code>param_tuple_names()</code> calls
-<code><a href="param_tuple_indices.html">param_tuple_indices()</a></code> and labels what it gets, so the two agree by
-construction.</p>
+    <h2 id="one-enumeration-for-the-keys-and-the-tuples">One enumeration for the keys and the tuples<a class="anchor" aria-label="anchor" href="#one-enumeration-for-the-keys-and-the-tuples"></a></h2>
+    <p>The package never recovers an index by splitting a key apart. Splitting
+<code>"log_L1:log_L2"</code> on <code>":"</code> gives the wrong number of pieces when a free name
+contains the separator, and no error is signaled. <code>param_tuple_names()</code>
+calls <code><a href="param_tuple_indices.html">param_tuple_indices()</a></code> and labels what it gets, so the names and the
+indices agree by construction.</p>
     </div>
     <div class="section level2">
     <h2 id="notation">Notation<a class="anchor" aria-label="anchor" href="#notation"></a></h2>
@@ -141,8 +139,8 @@ derivative order.</p>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Special.html" class="external-link">choose</a></span><span class="op">(</span><span class="fl">6</span> <span class="op">+</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span> <span class="op">-</span> <span class="fl">1</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1]   6  21  56 126</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Order 2 puts the diagonal pairs first, which is how a consumer filling a</span></span></span>
-<span class="r-in"><span><span class="co"># Hessian wants them.</span></span></span>
+<span class="r-in"><span><span class="co"># Order 2 puts the diagonal pairs first, the order in which a Hessian is</span></span></span>
+<span class="r-in"><span><span class="co"># filled.</span></span></span>
 <span class="r-in"><span><span class="fu">param_tuple_names</span><span class="op">(</span><span class="va">s</span>, <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "log_L1:log_L1" "log_L2:log_L2" "L2.1:L2.1"     "log_L1:log_L2"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [5] "log_L1:L2.1"   "log_L2:L2.1"  </span>

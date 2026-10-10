@@ -13,7 +13,7 @@ param_d4() of this family are one call each to this function."><meta property="o
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -74,14 +74,15 @@ tables of <code><a href="corr_tables.html">corr_tables()</a></code>. The four me
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A list of <code>choose(s@n_free + order - 1, order)</code> symmetric matrices
 keyed as <code>param_tuple_names(s, order)</code> and in that order, each
-<code>s@dimension</code> by <code>s@dimension</code> with a zero diagonal.</p>
+<code>s@dimension</code> by <code>s@dimension</code> with a diagonal of exact zeros.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Every term of the Leibniz sum whose factor derivative is <code>NULL</code> is skipped, and
-most are: a multiset spanning two rows of \(L\) contributes nothing. The
-diagonal of the result is zero at every order above zero, the diagonal of
-\(R\) being the constant 1.</p>
+    <p>Every term of the Leibniz sum whose factor derivative is <code>NULL</code> is skipped: a
+multiset spanning two rows of \(L\) contributes nothing. The diagonal of
+\(R\) is the constant 1, so the diagonal of every derivative is zero; the
+Leibniz sum gives it up to rounding, and it is then set to exactly 0, as
+<code><a href="param_value.CorrelationParam.html">param_value.CorrelationParam()</a></code> sets the diagonal of \(R\) to exactly 1.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

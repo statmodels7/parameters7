@@ -1,7 +1,7 @@
 # The Number of Diagonal Entries Each Free Value Owns
 
-Returns \\m_k\\, the number of diagonal entries the \\k\\-th free value
-controls: 1 for every value of a
+Returns \\m_k\\, the number of diagonal entries that the \\k\\-th free
+value controls: 1 for every value of a
 [`diagonal_matrix()`](https://statmodels7.github.io/parameters7/reference/diagonal_matrix.md),
 and \\p\\ for the single value of a
 [`scalar_matrix()`](https://statmodels7.github.io/parameters7/reference/scalar_matrix.md).

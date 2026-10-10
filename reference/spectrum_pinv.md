@@ -1,11 +1,12 @@
 # Moore-Penrose Inverse From a Parameter's Spectrum
 
 Builds the pseudo-inverse of \\M(\eta)\\ as \\\sum\_{j \in
-\mathrm{keep}} \lambda_j^{-1} v_j v_j^\top\\, over the directions
-[`param_spectrum()`](https://statmodels7.github.io/parameters7/reference/param_spectrum.md)'s
-`keep` flag marks. It is what the rank-deficient branches of the
-base-class log-determinant derivatives use in place of \\M^{-1}\\ in the
-trace identities.
+\mathrm{keep}} \lambda_j^{-1} v_j v_j^\top\\, over the directions that
+the `keep` flag of
+[`param_spectrum()`](https://statmodels7.github.io/parameters7/reference/param_spectrum.md)
+marks. The base-class log-determinant derivatives use it in place of
+\\M^{-1}\\ in the trace identities, and for a full-rank family it is the
+ordinary inverse.
 
 ## Usage
 

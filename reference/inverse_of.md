@@ -1,8 +1,8 @@
 # Construct the Inverse of a Matrix Parameter
 
 Returns the family \\N(\eta) = S(\eta)^{-1}\\ for a matrix family \\S\\:
-the same free vector, the inverted value. It is the composition that
-says "the other side" to a consumer that fixes one, as
+the same free vector, the inverted value. It gives the other side of the
+pair (covariance or precision) to a consumer that fixes one of them, as
 `penalties7::structured_penalty()` fixes the precision.
 
 ## Usage
@@ -25,7 +25,8 @@ An object of class
 [`InverseParam()`](https://statmodels7.github.io/parameters7/reference/InverseParam.md),
 with `dimension`, `rank`, `n_free` and `free_names` the inner family's,
 `null_basis` a `dimension` by 0 matrix, and `param_name`
-`"inverse_of(inner)"`.
+`"inverse_of(<inner>)"` with the inner family's name written in, for
+example `"inverse_of(ar1)"`.
 
 ## What it is for
 
@@ -44,19 +45,18 @@ are and
 and
 [`autoregressive()`](https://statmodels7.github.io/parameters7/reference/autoregressive.md)
 are not. For a family that is not closed the two sides are different
-models, and this wrapper is how the one the family does not name is
-written: `inverse_of(correlation_matrix(3))` is the matrix whose inverse
-is a correlation matrix, which no chart of the package produces
+models, and this wrapper writes the side that the family does not name:
+`inverse_of(correlation_matrix(3))` is the matrix whose inverse is a
+correlation matrix, which the other charts of the package do not produce
 directly.
 
-Where the inverse has a structure worth exploiting the package writes it
-out instead:
+Where the inverse has a structure that a closed form can use, the
+package writes it out instead:
 [`ar1_inv()`](https://statmodels7.github.io/parameters7/reference/ar1_inv.md)
 and
 [`autoregressive_inv()`](https://statmodels7.github.io/parameters7/reference/autoregressive_inv.md)
 give the same values as `inverse_of(ar1())` and
-`inverse_of(autoregressive())` and reach them in \\O(p)\\ entries rather
-than through a factorization.
+`inverse_of(autoregressive())` and reach them without a factorization.
 
 ## The derivatives
 
@@ -74,7 +74,15 @@ elsewhere in the toolkit. The number of terms is the Fubini number of
 the order: 1, 3, 13 and 75.
 
 Every factor is the inner family's own closed form, so nothing is
-differenced: the arithmetic is exact wherever the inner family's is.
+differenced. The products are formed in floating point, however, and the
+partition sum loses accuracy roughly as the square of the condition
+number of the inner matrix. For an inner
+[`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
+family, the first two orders are computed by
+[`param_inv_d1()`](https://statmodels7.github.io/parameters7/reference/param_inv_d1.md)
+and
+[`param_inv_d2()`](https://statmodels7.github.io/parameters7/reference/param_inv_d1.md),
+which are exact, and the sum is used only for orders three and four.
 
 ## The log-determinant
 
@@ -112,7 +120,7 @@ which a family with a closed inverse implements and which this reads.
 ## Examples
 
 ``` r
-# The inverse of an AR(1) correlation is tridiagonal, so the family whose
+# The inverse of an AR(1) covariance is tridiagonal, so the family whose
 # value is that inverse is a different model from ar1() itself.
 s <- inverse_of(ar1(5))
 eta <- c(log(2), atanh(0.6))

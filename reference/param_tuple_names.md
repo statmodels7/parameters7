@@ -40,9 +40,8 @@ param_tuple_names(s, order = 2L)
   [`param_d3()`](https://statmodels7.github.io/parameters7/reference/param_d3.md)
   and
   [`param_d4()`](https://statmodels7.github.io/parameters7/reference/param_d4.md).
-  `1` is accepted and returns the free names themselves. Anything else
-  throws `'order' must be 1, 2, 3 or 4.`, the contract stopping at
-  fourth order.
+  `1` is accepted and returns the free names themselves. Any other value
+  signals the error `'order' must be 1, 2, 3 or 4.`
 
 ## Value
 
@@ -63,16 +62,15 @@ returned and of every derivative list of that order. For \\d = 6\\,
 which is a \\3 \times 3\\ unstructured covariance, order 4 has 126
 components against 1296 ordered ones.
 
-## Why the keys and the tuples come from one enumeration
+## One enumeration for the keys and the tuples
 
-Nothing in the toolkit recovers an index by splitting a key apart.
-Taking `"log_L1:log_L2"` and splitting on `":"` works until a free name
-contains the separator itself, and then it yields the wrong number of
-pieces and the failure is silent. Generating the names and the indices
-from one enumeration cannot be fooled that way. `param_tuple_names()`
-calls
+The package never recovers an index by splitting a key apart. Splitting
+`"log_L1:log_L2"` on `":"` gives the wrong number of pieces when a free
+name contains the separator, and no error is signaled.
+`param_tuple_names()` calls
 [`param_tuple_indices()`](https://statmodels7.github.io/parameters7/reference/param_tuple_indices.md)
-and labels what it gets, so the two agree by construction.
+and labels what it gets, so the names and the indices agree by
+construction.
 
 ## Notation
 
@@ -116,8 +114,8 @@ vapply(1:4, function(k) length(param_tuple_names(q, k)), integer(1))
 choose(6 + 1:4 - 1, 1:4)
 #> [1]   6  21  56 126
 
-# Order 2 puts the diagonal pairs first, which is how a consumer filling a
-# Hessian wants them.
+# Order 2 puts the diagonal pairs first, the order in which a Hessian is
+# filled.
 param_tuple_names(s, 2)
 #> [1] "log_L1:log_L1" "log_L2:log_L2" "L2.1:L2.1"     "log_L1:log_L2"
 #> [5] "log_L1:L2.1"   "log_L2:L2.1"  

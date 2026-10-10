@@ -13,7 +13,7 @@ where param_solve.AutoregressiveParam()'s banded precision comes from."><meta pr
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -83,8 +83,10 @@ innovation variances fall by a factor \(1 - r_k^2\) at each of the first
 \((2, 1.02, 0.9282, 0.9282, 0.9282, 0.9282)\) and every row of \(U\) from
 the third on repeats \((-0.91, 0.30)\), which are the coefficients
 \(\phi = (0.91, -0.30)\) with a sign.</p>
-<p>Both come from the same recursion the derivatives use, run here without
-derivatives, since a solve needs no arrays.</p>
+<p>Both come from the same recursion that the derivatives use, run here without
+derivatives, since a solve needs no arrays. Each factor \(1 - r_k^2\) is
+evaluated by <code><a href="sech2.html">sech2()</a></code> in the free value, so the innovation variances keep
+their accuracy where \(r_k\) rounds to \(-1\) or 1.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

@@ -11,7 +11,7 @@ its value being a vector: there is no `dimension`, no `rank` and no
 [`param_solve()`](https://statmodels7.github.io/parameters7/reference/param_solve.md)
 and
 [`param_factor()`](https://statmodels7.github.io/parameters7/reference/param_factor.md)
-have no method for it, so asking for the log-determinant of a
+have no method for it, so a call for the log-determinant of a
 probability vector fails at dispatch.
 
 [`simplex()`](https://statmodels7.github.io/parameters7/reference/simplex.md)
@@ -33,7 +33,7 @@ SimplexParam(
 - param_name:
 
   A single character string naming the family, used in the error
-  messages the validators raise and in the object's `print` output.
+  messages that the validators raise and in the object's `print` output.
   `"log_cholesky"`, `"ar1"` and so on.
 
 - n_free:
@@ -46,10 +46,10 @@ SimplexParam(
 - free_names:
 
   A character vector of length `n_free`, one label per free value, in
-  the order the free vector holds them. Fixed at construction and part
-  of the interface: consumers build their parameter tables from these
-  labels, so the ordering is not free to change. The validator rejects a
-  duplicated label and a length other than `n_free`.
+  the order in which the free vector holds them. Fixed at construction
+  and part of the interface: consumers build their parameter tables from
+  these labels, so the ordering is not free to change. The validator
+  rejects a duplicated label and a length other than `n_free`.
 
 - param_params:
 
@@ -58,8 +58,8 @@ SimplexParam(
   [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
   stores the row and column index of each free value here;
   [`sum_struct()`](https://statmodels7.github.io/parameters7/reference/sum_struct.md)
-  stores its component matrices. Nothing outside the family looks inside
-  it.
+  stores its component matrices. Only the methods of that family read
+  the list.
 
 ## Value
 
@@ -74,9 +74,11 @@ holds `n_cat`.
 [`simplex()`](https://statmodels7.github.io/parameters7/reference/simplex.md),
 the constructor,
 [`transition_matrix()`](https://statmodels7.github.io/parameters7/reference/transition_matrix.md),
-which is one of these per row, and
+which is one of these per row,
 [`parameter()`](https://statmodels7.github.io/parameters7/reference/parameter.md)
-for the properties this inherits and the four generics it does not get.
+for the properties that this class inherits, and
+[`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
+for the generics that it does not get.
 
 ## Examples
 
@@ -92,7 +94,7 @@ c(parameter = S7::S7_inherits(s, parameter),
 vapply(2:5, function(k) simplex(k)@n_free, integer(1))
 #> [1] 1 2 3 4
 
-# And no log-determinant to ask for.
+# And no log-determinant.
 try(param_logdet(s, c(0, 0)))
 #> Error : Can't find method for `param_logdet(<parameters7::SimplexParam>)`.
 ```

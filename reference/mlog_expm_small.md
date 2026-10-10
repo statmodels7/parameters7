@@ -1,11 +1,10 @@
 # Exponential of a Small Upper Triangular Matrix
 
 Scaling and squaring with a Taylor series, written out here for the tiny
-bidiagonal matrices
+bidiagonal matrices that
 [`dd_exp()`](https://statmodels7.github.io/parameters7/reference/dd_exp.md)
-builds. Deterministic and dependency free: the matrices are at most 5 by
-5, so a general-purpose matrix exponential would be a dependency bought
-for nothing.
+builds. The matrices are at most 5 by 5, so a general-purpose matrix
+exponential, and the dependency that it would bring, is not needed.
 
 ## Usage
 

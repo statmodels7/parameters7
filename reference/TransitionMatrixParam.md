@@ -7,7 +7,7 @@ a symmetric** one, so it inherits
 directly, never
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md):
 there is no `rank` and no `null_basis`, and a transition matrix has no
-log-determinant, solve or factor to be asked for.
+log-determinant, solve or factor.
 
 [`transition_matrix()`](https://statmodels7.github.io/parameters7/reference/transition_matrix.md)
 builds one. The rows are independent in the parametrization, so every
@@ -31,7 +31,7 @@ TransitionMatrixParam(
 - param_name:
 
   A single character string naming the family, used in the error
-  messages the validators raise and in the object's `print` output.
+  messages that the validators raise and in the object's `print` output.
   `"log_cholesky"`, `"ar1"` and so on.
 
 - n_free:
@@ -44,10 +44,10 @@ TransitionMatrixParam(
 - free_names:
 
   A character vector of length `n_free`, one label per free value, in
-  the order the free vector holds them. Fixed at construction and part
-  of the interface: consumers build their parameter tables from these
-  labels, so the ordering is not free to change. The validator rejects a
-  duplicated label and a length other than `n_free`.
+  the order in which the free vector holds them. Fixed at construction
+  and part of the interface: consumers build their parameter tables from
+  these labels, so the ordering is not free to change. The validator
+  rejects a duplicated label and a length other than `n_free`.
 
 - param_params:
 
@@ -56,8 +56,8 @@ TransitionMatrixParam(
   [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
   stores the row and column index of each free value here;
   [`sum_struct()`](https://statmodels7.github.io/parameters7/reference/sum_struct.md)
-  stores its component matrices. Nothing outside the family looks inside
-  it.
+  stores its component matrices. Only the methods of that family read
+  the list.
 
 ## Value
 
@@ -74,7 +74,8 @@ the constructor,
 [`simplex()`](https://statmodels7.github.io/parameters7/reference/simplex.md),
 which is one row of this, and
 [`parameter()`](https://statmodels7.github.io/parameters7/reference/parameter.md)
-for the properties this inherits and the generics it does not get.
+for the properties that this class inherits and the generics that it
+does not get.
 
 ## Examples
 

@@ -4,24 +4,20 @@ the basis direction \(E_k\) by the eigenvectors of \(S\), weight it
 entrywise by the two-point divided differences
 \(e[\lambda_i, \lambda_j]\), and rotate back. Exact, with no
 differencing.
-Note that \(\partial_k M\) is not \(E_k \exp(S)\): the exponential of a
-matrix does not commute with an arbitrary direction, which is why the
-weighting by divided differences appears at all. Where the eigenvalues are
-equal the weight is \(e^{\lambda}\) and the formula reduces to the scalar
-one, which dd_exp()'s Opitz route delivers exactly.
-Measured against a central difference of param_value() at \(p = 3\), the
-agreement is \(1.5 \times 10^{-10}\), which is the difference's own accuracy."><meta property="og:description" content="The Frechet derivative of the matrix exponential, by Daleckii-Krein: rotate
+The derivative \(\partial_k M\) differs from \(E_k \exp(S)\), because the
+exponential of a matrix does not commute with an arbitrary direction; the
+weighting by divided differences accounts for this. Where the eigenvalues
+are equal the weight is \(e^{\lambda}\) and the formula reduces to the
+scalar one, which the Opitz route of dd_exp() delivers exactly."><meta property="og:description" content="The Frechet derivative of the matrix exponential, by Daleckii-Krein: rotate
 the basis direction \(E_k\) by the eigenvectors of \(S\), weight it
 entrywise by the two-point divided differences
 \(e[\lambda_i, \lambda_j]\), and rotate back. Exact, with no
 differencing.
-Note that \(\partial_k M\) is not \(E_k \exp(S)\): the exponential of a
-matrix does not commute with an arbitrary direction, which is why the
-weighting by divided differences appears at all. Where the eigenvalues are
-equal the weight is \(e^{\lambda}\) and the formula reduces to the scalar
-one, which dd_exp()'s Opitz route delivers exactly.
-Measured against a central difference of param_value() at \(p = 3\), the
-agreement is \(1.5 \times 10^{-10}\), which is the difference's own accuracy."><meta property="og:image" content="https://statmodels7.github.io/parameters7/logo.png"></head><body>
+The derivative \(\partial_k M\) differs from \(E_k \exp(S)\), because the
+exponential of a matrix does not commute with an arbitrary direction; the
+weighting by divided differences accounts for this. Where the eigenvalues
+are equal the weight is \(e^{\lambda}\) and the formula reduces to the
+scalar one, which the Opitz route of dd_exp() delivers exactly."><meta property="og:image" content="https://statmodels7.github.io/parameters7/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -29,7 +25,7 @@ agreement is \(1.5 \times 10^{-10}\), which is the difference's own accuracy."><
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,13 +60,11 @@ the basis direction \(E_k\) by the eigenvectors of \(S\), weight it
 entrywise by the two-point divided differences
 \(e[\lambda_i, \lambda_j]\), and rotate back. Exact, with no
 differencing.</p>
-<p>Note that \(\partial_k M\) is <strong>not</strong> \(E_k \exp(S)\): the exponential of a
-matrix does not commute with an arbitrary direction, which is why the
-weighting by divided differences appears at all. Where the eigenvalues are
-equal the weight is \(e^{\lambda}\) and the formula reduces to the scalar
-one, which <code><a href="dd_exp.html">dd_exp()</a></code>'s Opitz route delivers exactly.</p>
-<p>Measured against a central difference of <code><a href="param_value.html">param_value()</a></code> at \(p = 3\), the
-agreement is \(1.5 \times 10^{-10}\), which is the difference's own accuracy.</p>
+<p>The derivative \(\partial_k M\) differs from \(E_k \exp(S)\), because the
+exponential of a matrix does not commute with an arbitrary direction; the
+weighting by divided differences accounts for this. Where the eigenvalues
+are equal the weight is \(e^{\lambda}\) and the formula reduces to the
+scalar one, which the Opitz route of <code><a href="dd_exp.html">dd_exp()</a></code> delivers exactly.</p>
     </div>
 
 

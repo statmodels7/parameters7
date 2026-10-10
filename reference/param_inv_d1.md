@@ -1,7 +1,7 @@
 # Derivatives of the Inverse of a Matrix Parameter
 
 `param_inv_d1()` returns the first derivatives of \\M^{-1}\\ in the free
-values, and `param_inv_d2()` the second, where \\M\\ is the matrix
+values, and `param_inv_d2()` the second, where \\M\\ is the matrix that
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
 returns.
 
@@ -27,7 +27,7 @@ param_inv_d2(s, eta, ...)
 
 - ...:
 
-  Passed to the method. No method in this package reads it.
+  Passed to the method. The methods in this package do not read it.
 
 ## Value
 
@@ -50,11 +50,9 @@ and
 [`param_d2()`](https://statmodels7.github.io/parameters7/reference/param_d2.md).
 
 Where \\M\\ is nearly singular along a direction that is not a
-coordinate axis, \\M^{-1}\\ has large entries of nearly rank one and the
-products above cancel: at a log-Cholesky free value \\\log L\_{22} =
--11.5\\ the default reads \\\partial M^{-1}\\ with a relative error of
-\\10^{-7}\\, and a trace against it, of products of order \\10^{10}\\,
-is out by a number of order one.
+coordinate axis, \\M^{-1}\\ has large entries of nearly rank one, the
+products above cancel, and the default method loses accuracy as the
+condition number of \\M\\ grows.
 
 The method for
 [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
@@ -62,8 +60,9 @@ is exact there. With \\M = L L^\top\\, \\G = L^{-1}\\, \\B_k =
 G\\\partial_k L\\ and \\C_k = B_k + B_k^\top\\, \$\$\partial_k M^{-1} =
 -G^\top C_k G, \qquad \partial\_{kl} M^{-1} = G^\top\big(B_l^\top C_k +
 C_k B_l - \partial_l C_k\big) G,\$\$ where \\\partial_l B_k = -B_l B_k +
-G\\\partial\_{kl} L\\. No product carries a cancellation: the entries of
-\\G\\ grow as \\1/L\_{ii}\\ and each term is of the size of the result.
+G\\\partial\_{kl} L\\. These products involve no cancellation: the
+entries of \\G\\ grow as \\1/L\_{ii}\\ and each term is of the size of
+the result.
 
 ## See also
 

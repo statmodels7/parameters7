@@ -4,10 +4,10 @@ Returns \\M = \mathrm{diag}(h(\eta_1), \dots, h(\eta_p))\\, the inverse
 link applied to each free value and placed on the diagonal. For a
 [`scalar_matrix()`](https://statmodels7.github.io/parameters7/reference/scalar_matrix.md)
 the one free value is recycled, giving \\h(\eta_1) I\\. Positive
-definiteness follows from the link, whose range
+definiteness follows from the link, which
 [`check_positive_link()`](https://statmodels7.github.io/parameters7/reference/check_positive_link.md)
-restricted to the non-negative half line at construction, so nothing is
-tested here.
+required at construction to map into the non-negative half line, so
+nothing is tested here.
 
 ## Arguments
 

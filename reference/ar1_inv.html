@@ -15,7 +15,7 @@ precision this is."><meta property="og:image" content="https://statmodels7.githu
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -104,19 +104,22 @@ factorization, so there is one copy of it in the package.</p>
 matrix function of the second, so a component with \(a\) scale indices and
 \(b\) correlation indices is \((\partial^a\tau)(\partial^b G)\) and no
 mixed expansion is needed. The scale factor is the reciprocal of the link's
-inverse, chained through \(x\mapsto x^{-1}\); the pattern's three distinct
-entries are written in \(w\) alone,</p>
-<p>$$w^{(k)} = \frac{k!}{2}\left\{(1-\rho)^{-(k+1)}
-  + (-1)^k (1+\rho)^{-(k+1)}\right\},$$</p>
-<p>with \(G_{11}^{(k)} = w^{(k)}\), \(G_{ii} = 2w - 1\) so
-\(G_{ii}^{(k)} = 2w^{(k)}\) above order zero, and
-\(G_{i,i\pm1}^{(k)} = -(\rho\,w^{(k)} + k\,w^{(k-1)})\) by the Leibniz
-rule. Each is then chained onto the free value through the correlation's
-link.</p>
+inverse, chained through \(x\mapsto x^{-1}\). Under the rhobit link,
+with \(\rho = \tanh z\), the pattern's three distinct entries are
+\(G_{11} = w = \cosh^2 z\), \(G_{ii} = 2w - 1 = \cosh 2z\) and
+\(G_{i,i\pm1} = -\tfrac{1}{2}\sinh 2z\), so their derivatives in \(z\)
+are written out directly,</p>
+<p>$$w^{(k)} = 2^{k-1}\sinh 2z \;(k \text{ odd}), \qquad
+  w^{(k)} = 2^{k-1}\cosh 2z \;(k \text{ even}),$$</p>
+<p>with \(G_{ii}^{(k)} = 2w^{(k)}\) above order zero and
+\(G_{i,i\pm1}^{(k)} = -\tfrac{1}{2}w^{(k+1)}\). No difference
+\(1 - \rho^2\) is formed, so the derivatives keep their accuracy where
+\(\rho\) rounds to \(-1\) or 1.</p>
 <p>This is what the family adds over <code>inverse_of(ar1(p))</code>, which reaches the
-same numbers through the ordered-block-partition sum: there a fourth-order
-component is 75 products of five matrices, here it is one elementwise
-product. The two agree to machine precision, which is what a test asserts.</p>
+same numbers through the ordered-block-partition sum. There a fourth-order
+component is a sum of 75 products, one for each ordered set partition of its
+four positions, each of three to nine matrices; here it is one elementwise
+product. The two routes agree to rounding.</p>
     </div>
     <div class="section level2">
     <h2 id="the-log-determinant">The log-determinant<a class="anchor" aria-label="anchor" href="#the-log-determinant"></a></h2>
@@ -129,8 +132,8 @@ four orders are <code><a href="ar1.html">ar1()</a></code>'s negated, and the clo
 
 
 <p>\(p\) is the matrix side, \(\sigma^2\) the AR(1) process's variance,
-\(\rho\) its lag-one correlation, \(\tau = \sigma^{-2}\) and
-\(w = (1-\rho^2)^{-1}\).</p>
+\(\rho = \tanh z\) its lag-one correlation, \(\tau = \sigma^{-2}\) and
+\(w = (1-\rho^2)^{-1} = \cosh^2 z\).</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -160,7 +163,7 @@ order-\(q\) case, and <code><a href="inverse_of.html">inverse_of()</a></code> fo
 <span class="r-in"><span><span class="co"># The written-out derivatives agree with the general composition's.</span></span></span>
 <span class="r-in"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu"><a href="inverse_of.html">inverse_of</a></span><span class="op">(</span><span class="fu"><a href="ar1.html">ar1</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="param_d4.html">param_d4</a></span><span class="op">(</span><span class="va">s</span>, <span class="va">eta</span><span class="op">)</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="param_d4.html">param_d4</a></span><span class="op">(</span><span class="va">g</span>, <span class="va">eta</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.918465e-13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2.131628e-13</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

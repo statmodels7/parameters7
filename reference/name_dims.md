@@ -1,9 +1,10 @@
 # Name the Rows and Columns of a Parameter's Matrix
 
-Applies the dimension labels every matrix a parameter produces carries:
-`"v1"`, `"v2"`, ..., `"vp"` on both margins, `p` being the parameter's
-`dimension`. One convention across the families, so a consumer can read
-a printed covariance without knowing which parametrization built it.
+Applies the dimension labels that every matrix produced by a parameter
+carries: `"v1"`, `"v2"`, ..., `"vp"` on both margins, `p` being the
+parameter's `dimension`. One convention across the families, so a
+consumer can read a printed covariance without knowing which
+parametrization built it.
 
 It covers the value and the four derivative orders. A factor and a solve
 are left as each family produces them, the families disagreeing there,

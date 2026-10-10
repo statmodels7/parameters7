@@ -1,18 +1,17 @@
-# Rejection to Invert Without a Closed Form
+# Default Inverse Map
 
-The method every
+The method that every
 [`parameter()`](https://statmodels7.github.io/parameters7/reference/parameter.md)
 inherits when it registers no
 [`param_free()`](https://statmodels7.github.io/parameters7/reference/param_free.md)
-of its own. It always signals an error, naming the family, and it is the
-one generic whose base method refuses instead of computing. Nothing here
-is approximated, which is the point: an inverse obtained by minimizing
-\\\lVert V(\eta) - m \rVert\\ would hand back a plausible \\\eta\\ for a
-matrix that is nowhere in the family's set, and the caller could not
-tell that answer from a correct one. The inverse map is written out
-exactly or refused.
+of its own. It always signals an error naming the family; it is the one
+generic whose base method rejects the call instead of computing. An
+inverse obtained by minimizing \\\lVert V(\eta) - m \rVert\\ would
+return an \\\eta\\ even for a matrix that lies outside the family's set,
+and the caller could not distinguish that result from a correct one, so
+the inverse map is either written out exactly or rejected.
 
-All fifteen families in this package write theirs out, so this method is
+Every family in this package writes its inverse out, so this method is
 reached only by a family defined elsewhere.
 
 ## Arguments

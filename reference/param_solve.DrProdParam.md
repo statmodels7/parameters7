@@ -44,16 +44,13 @@ a lower triangular `s@dimension` by `s@dimension` matrix.
 ## Details
 
 The scaling is done by dividing and multiplying rows, which for a
-diagonal matrix is what the products amount to. Measured at \\p = 3\\
-with the default block, the solve agrees with
-[`solve()`](https://rdrr.io/r/base/solve.html) on the assembled matrix
-to \\7 \times 10^{-15}\\ and `tcrossprod(param_factor(s, eta))` with the
-matrix to \\4 \times 10^{-16}\\. The factor is lower triangular, as
+diagonal matrix is what the products amount to. The factor is lower
+triangular, as
 [`param_factor()`](https://statmodels7.github.io/parameters7/reference/param_factor.md)
 requires, because scaling the rows of a lower triangular matrix leaves
 it lower triangular.
 
-Neither is ever refused for rank: this family admits no deficient
+Neither is rejected for rank: this family admits no deficient
 correlation block, so it is always of full rank.
 
 ## See also
@@ -61,4 +58,4 @@ correlation block, so it is always of full rank.
 [`param_solve()`](https://statmodels7.github.io/parameters7/reference/param_solve.md)
 and
 [`param_factor()`](https://statmodels7.github.io/parameters7/reference/param_factor.md)
-for the two contracts.
+for the two generics.

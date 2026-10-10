@@ -6,8 +6,8 @@ The Jacobian is the softmax map's,
 \(\partial p_i/\partial\eta_j = p_i(\delta_{ij} - p_j)\), with the reference
 category's row contributing \(-p_K p_j\). It is \(K\) by \(K-1\): one
 more quantity than there are free values, since the reference probability is
-determined by the others. Its columns sum to zero, \(\sum_i p_i\) being
-the constant 1, measured at \(7 \times 10^{-18}\).
+determined by the others. Its columns sum to zero up to rounding,
+\(\sum_i p_i\) being the constant 1.
 Every interval is built on the logit scale, so it stays inside \((0, 1)\)."><meta property="og:description" content="Declares the probability vector itself, p1 ... pK, which a reader of a
 mixture weight or a state distribution needs: the free values are log
 ratios against the last category and are not interpretable on their own.
@@ -15,8 +15,8 @@ The Jacobian is the softmax map's,
 \(\partial p_i/\partial\eta_j = p_i(\delta_{ij} - p_j)\), with the reference
 category's row contributing \(-p_K p_j\). It is \(K\) by \(K-1\): one
 more quantity than there are free values, since the reference probability is
-determined by the others. Its columns sum to zero, \(\sum_i p_i\) being
-the constant 1, measured at \(7 \times 10^{-18}\).
+determined by the others. Its columns sum to zero up to rounding,
+\(\sum_i p_i\) being the constant 1.
 Every interval is built on the logit scale, so it stays inside \((0, 1)\)."><meta property="og:image" content="https://statmodels7.github.io/parameters7/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
@@ -25,7 +25,7 @@ Every interval is built on the logit scale, so it stays inside \((0, 1)\)."><met
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,8 +62,8 @@ ratios against the last category and are not interpretable on their own.</p>
 \(\partial p_i/\partial\eta_j = p_i(\delta_{ij} - p_j)\), with the reference
 category's row contributing \(-p_K p_j\). It is \(K\) by \(K-1\): one
 more quantity than there are free values, since the reference probability is
-determined by the others. Its <strong>columns</strong> sum to zero, \(\sum_i p_i\) being
-the constant 1, measured at \(7 \times 10^{-18}\).</p>
+determined by the others. Its <strong>columns</strong> sum to zero up to rounding,
+\(\sum_i p_i\) being the constant 1.</p>
 <p>Every interval is built on the logit scale, so it stays inside \((0, 1)\).</p>
     </div>
 

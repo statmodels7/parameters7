@@ -5,9 +5,8 @@ positive semidefinite matrices, each carried by one positive free value.
 [`sum_struct()`](https://statmodels7.github.io/parameters7/reference/sum_struct.md)
 builds one.
 
-It is the variance-components covariance, and the one family here whose
-free values are weights rather than entries: `n_free` is the number of
-components, whatever the dimension.
+It is the variance-components covariance. Its free values are weights:
+`n_free` is the number of components, whatever the dimension.
 
 ## Usage
 
@@ -37,7 +36,7 @@ SumStructParam(
 - free_names:
 
   A character vector of length `n_free`, one label per free value, in
-  the order the free vector holds them. Must be unique.
+  the order in which the free vector holds them. Must be unique.
 
 - param_params:
 
@@ -51,7 +50,7 @@ SumStructParam(
 
 - rank:
 
-  The rank of the matrix the family produces, a single integer in
+  The rank of the matrix that the family produces, a single integer in
   `0:dimension`. It is a property of the family, so a family whose value
   is positive definite at every \\\eta\\ declares \\p\\ here.
 
@@ -61,8 +60,7 @@ SumStructParam(
   an orthonormal basis of the common null space. Use
   [`param_null_basis()`](https://statmodels7.github.io/parameters7/reference/param_null_basis.md)
   to obtain one, or `matrix(numeric(0), dimension, 0)` for a full-rank
-  family. The validator rejects any other shape, and reports both the
-  rank and the shape when the two disagree.
+  family. The validator rejects any other shape.
 
 ## Value
 
@@ -79,7 +77,7 @@ the constructor,
 [`scaled_matrix()`](https://statmodels7.github.io/parameters7/reference/scaled_matrix.md)
 for the one-component case with the matrix fixed, and
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
-for the properties this inherits.
+for the properties that this class inherits.
 
 ## Examples
 

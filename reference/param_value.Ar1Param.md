@@ -2,8 +2,10 @@
 
 Returns \\M\_{ij} = \sigma^2 \rho^{\|i-j\|}\\: the common variance on
 the diagonal and a covariance falling geometrically with the lag.
-Positive definiteness holds at every free vector, the rhobit link
-keeping \\\|\rho\| \< 1\\, so nothing is tested here.
+Positive definiteness holds at every free vector in exact arithmetic,
+the rhobit link keeping \\\|\rho\| \< 1\\, so nothing is tested here; in
+double precision \\\rho\\ rounds to \\-1\\ or 1 from \\\|\eta_2\|\\ of
+about 19.
 
 ## Arguments
 

@@ -9,9 +9,7 @@ for a
 [`dr_prod()`](https://statmodels7.github.io/parameters7/reference/dr_prod.md)
 parameter. The log-determinant is separable in the scales and separable
 from the correlation, so a component mixing two scales, or a scale with
-a correlation, is exactly zero: measured at \\p = 3\\, 12 of the 21
-second-order components, 43 of 56 at third order and 108 of 126 at
-fourth.
+a correlation, is exactly zero.
 
 ## Arguments
 
@@ -39,9 +37,10 @@ above it, `choose(s@n_free + k - 1, k)` values keyed as
 
 The four share
 [`dr_prod_logdet_derivs()`](https://statmodels7.github.io/parameters7/reference/dr_prod_logdet_derivs.md)
-and differ only in the order they pass. At first order the scale entries
-are 2 whatever the point, the scales entering \\\log\lvert\Sigma\rvert\\
-through \\2\log d_j\\ and the log link canceling its own derivative.
+and differ only in the order they pass. Under the default log link the
+first-order scale entries are 2 at every point, the scales entering
+\\\log\lvert\Sigma\rvert\\ through \\2\log d_j\\ and the log link
+canceling its own derivative.
 
 ## See also
 

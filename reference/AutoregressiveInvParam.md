@@ -35,7 +35,7 @@ AutoregressiveInvParam(
 - free_names:
 
   A character vector of length `n_free`, one label per free value, in
-  the order the free vector holds them. Must be unique.
+  the order in which the free vector holds them. Must be unique.
 
 - param_params:
 
@@ -49,7 +49,7 @@ AutoregressiveInvParam(
 
 - rank:
 
-  The rank of the matrix the family produces, a single integer in
+  The rank of the matrix that the family produces, a single integer in
   `0:dimension`. It is a property of the family, so a family whose value
   is positive definite at every \\\eta\\ declares \\p\\ here.
 
@@ -59,8 +59,7 @@ AutoregressiveInvParam(
   an orthonormal basis of the common null space. Use
   [`param_null_basis()`](https://statmodels7.github.io/parameters7/reference/param_null_basis.md)
   to obtain one, or `matrix(numeric(0), dimension, 0)` for a full-rank
-  family. The validator rejects any other shape, and reports both the
-  rank and the shape when the two disagree.
+  family. The validator rejects any other shape.
 
 ## Value
 
@@ -68,7 +67,10 @@ An object of class `AutoregressiveInvParam`, a subclass of
 [`InverseParam()`](https://statmodels7.github.io/parameters7/reference/InverseParam.md)
 adding no properties of its own. `param_params` holds `inner`, the
 [`autoregressive()`](https://statmodels7.github.io/parameters7/reference/autoregressive.md)
-family being inverted.
+family being inverted, `lower`, the
+[`autoregressive()`](https://statmodels7.github.io/parameters7/reference/autoregressive.md)
+families of orders 1 to \\q\\, and `cache`, an environment that memoizes
+the subset structure of each derivative order.
 
 ## See also
 

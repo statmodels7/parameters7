@@ -2,8 +2,8 @@
 
 Closed form: \\\partial^4\_\eta M = h''''(\eta)\\P\\, from
 [`linkfunctions7::d4linkinv()`](https://statmodels7.github.io/linkfunctions7/reference/d4linkinv.html).
-Exact, where a family without a closed form would get a product stencil
-good to about five digits at this order.
+Exact, where a family without a closed form gets a product stencil that
+is least accurate at this order.
 
 ## Arguments
 

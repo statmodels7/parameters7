@@ -13,7 +13,7 @@ log-determinant is a sum over the blocks."><meta property="og:image" content="ht
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,9 +77,10 @@ generic.</p></dd>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The four share <code><a href="block_diag_logdet_derivs.html">block_diag_logdet_derivs()</a></code> and differ only in the order they
 pass. The first order names its result by <code>s@free_names</code>, one value per free
-value; the orders above it are keyed by tuple, as the contract requires.</p>
-<p>A block's <strong>own</strong> mixed components are not zero, this separability being over
-blocks, never over free values. Compare <code><a href="ar1.html">ar1()</a></code>, where it is over free values
+value; the orders above it are keyed by tuple, as <code><a href="param_tuple_names.html">param_tuple_names()</a></code>
+defines.</p>
+<p>A block's <strong>own</strong> mixed components are in general not zero, this
+separability being over blocks and not over free values. Compare <code><a href="ar1.html">ar1()</a></code>, where it is over free values
 and every mixed component vanishes.</p>
     </div>
     <div class="section level2">

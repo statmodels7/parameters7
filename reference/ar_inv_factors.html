@@ -11,7 +11,7 @@ code of the sub-multiset differentiated in."><meta property="og:image" content="
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,15 +82,17 @@ factor's order.</p></dd>
     <p>\(U\) is unit lower triangular of bandwidth \(q\), row \(t\) holding
 the coefficients of the best linear predictor of \(y_t\) from its
 predecessors, which for \(t\) beyond the order are the autoregression's
-own. Those lower-order coefficients are the coefficients of the SAME family
-at that order, measured exactly: <code><a href="ar_prediction.html">ar_prediction()</a></code>'s row \(k+1\) and
-<code>autoregressive(p, order = k)</code>'s <code>phi</code> agree to 0. So the intermediate
-derivative arrays come from the compiled Levinson-Durbin recursion run once
-per order, and nothing is rederived here. A component differentiating in a
-partial autocorrelation the order does not reach is exactly zero.</p>
-<p>\(\tau_t = 1/v_t\) is a PRODUCT of one factor per free value:
-\(1/v_0\) from the scale, and \((1-r_j^2)^{-1}\) from each partial
-autocorrelation the prediction at \(t\) has reached. A mixed derivative of
+own. Those lower-order coefficients are the coefficients of the same family
+at that order (row \(k+1\) of <code><a href="ar_prediction.html">ar_prediction()</a></code>, negated and read
+backwards, is the <code>phi</code> of <code>autoregressive(p, order = k)</code> up to rounding), so
+the intermediate derivative arrays come from the compiled Levinson-Durbin
+recursion run once per order, and nothing is rederived here. A component
+differentiating in a partial autocorrelation that the order does not reach
+is exactly zero.</p>
+<p>\(\tau_t = 1/v_t\) is a product of one factor per free value:
+\(1/v_0\) from the scale, and \((1-r_j^2)^{-1} = \cosh^2 z_j\) from
+each partial autocorrelation that the prediction at \(t\) has reached,
+differentiated in \(z_j\) by <code><a href="cosh2_derivs.html">cosh2_derivs()</a></code>. A mixed derivative of
 a product of univariate factors is the product of their own derivatives, and
 it is exactly zero whenever it differentiates in a factor that row does not
 carry.</p>

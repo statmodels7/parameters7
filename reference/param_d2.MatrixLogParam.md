@@ -5,10 +5,10 @@ contracted against three-point divided differences \\e\[\lambda_i,
 \lambda_j, \lambda_k\]\\, summed over both orderings of the two
 directions.
 
-Summing over the orderings, never over the distinct ones, is what brings
-a repeated index out right: the component in one free value twice gets
-its factor of 2 from the sum instead of from a correction applied
-afterwards.
+For the component in one free value twice the two orderings coincide;
+[`mlog_contract()`](https://statmodels7.github.io/parameters7/reference/mlog_contract.md)
+evaluates that ordering once and multiplies it by 2, which gives the sum
+over both orderings.
 
 ## Arguments
 

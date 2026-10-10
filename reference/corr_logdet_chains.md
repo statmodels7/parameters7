@@ -38,7 +38,7 @@ The factor is triangular, so \\\lvert R \rvert = \prod_i L\_{ii}^2\\ and
 \$\$\log\lvert R \rvert = 2 \sum\_{i,k} \log \sin\theta\_{ik},\$\$ a sum
 with one term per free value. The log-determinant is therefore
 separable, every mixed derivative is exactly zero, and each pure one is
-the logarithm composed with the sine table
+the logarithm composed with the sine table that
 [`corr_tables()`](https://statmodels7.github.io/parameters7/reference/corr_tables.md)
 already holds.
 

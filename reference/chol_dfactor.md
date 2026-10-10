@@ -2,7 +2,7 @@
 
 Returns \\\partial^S L\\ for a multiset \\S\\ of free-value indices, or
 `NULL` where that derivative is identically zero. Almost all of them
-are, and that is what keeps the Leibniz sum of
+are, which keeps the Leibniz sum of
 [`chol_leibniz()`](https://statmodels7.github.io/parameters7/reference/chol_leibniz.md)
 short.
 

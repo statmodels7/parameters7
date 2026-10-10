@@ -39,17 +39,13 @@ exactly zero. Each non-zero one is supported on a single row.
 
 The rows are parametrized independently, so
 [`simplex_tensors()`](https://statmodels7.github.io/parameters7/reference/simplex_tensors.md)
-is evaluated once per row and
-[`simplex_components()`](https://statmodels7.github.io/parameters7/reference/simplex_components.md)
-slices it with a `wrap` that does the embedding. Nothing of size \\K^2
-(K(K-1))^{\text{order}}\\ is built: the cross-row components are never
-computed, only skipped.
+is evaluated once per row, and each slice of a row's tensor is embedded
+in that row of a \\K \times K\\ matrix of zeros. The cross-row
+components are not computed; each is returned as a matrix of zeros.
 
 ## See also
 
-[`simplex_tensors()`](https://statmodels7.github.io/parameters7/reference/simplex_tensors.md)
-and
-[`simplex_components()`](https://statmodels7.github.io/parameters7/reference/simplex_components.md),
-which do the per-row work, and
+[`simplex_tensors()`](https://statmodels7.github.io/parameters7/reference/simplex_tensors.md),
+which does the per-row work, and
 [`tm_positions()`](https://statmodels7.github.io/parameters7/reference/tm_positions.md)
 for the row map.

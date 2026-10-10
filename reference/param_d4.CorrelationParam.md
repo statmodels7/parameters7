@@ -2,8 +2,7 @@
 
 Closed form, the Leibniz rule with four differentiations distributed
 over the two factors of \\R = LL^\top\\. This is the order at which a
-numerical route is least usable, keeping about five digits, and the
-spherical construction pays nothing for it: every factor derivative is a
+numerical route is least accurate, and here every factor derivative is a
 product of trigonometric tables that
 [`corr_tables()`](https://statmodels7.github.io/parameters7/reference/corr_tables.md)
 has already built.
@@ -34,7 +33,8 @@ The diagonal is exactly zero.
 ## Value
 
 A list of `choose(s@n_free + 3, 4)` symmetric matrices keyed as
-`param_tuple_names(s, 4)` and in that order, each with a zero diagonal.
+`param_tuple_names(s, 4)` and in that order, each with a diagonal of
+exact zeros.
 
 ## See also
 

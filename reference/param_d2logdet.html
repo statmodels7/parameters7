@@ -13,7 +13,7 @@ of a covariance parametrized this way."><meta property="og:image" content="https
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,7 +67,7 @@ of a covariance parametrized this way.</p>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Passed to the method. No method in this package reads it.</p></dd>
+<dd><p>Passed to the method. The methods in this package do not read it.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -85,12 +85,11 @@ once more, with \(\partial_l M^{-1} = -M^{-1}(\partial_l M)M^{-1}\),</p>
   - \mathrm{tr}\!\left(M^{-1}(\partial_k M) M^{-1} (\partial_l M)\right),$$</p>
 <p>and with the Moore-Penrose inverse in place of \(M^{-1}\) when the family
 is rank deficient.</p>
-<p>The second trace is the term a hand-written closed form usually drops. Without
-it the answer would be the trace of the second derivative of the matrix, which
-is a different quantity, and dropping it is invisible on any family whose
-log-determinant happens to be linear. <code><a href="check_parameter.html">check_parameter()</a></code> compares this route
-against <code><a href="param_d2.html">param_d2()</a></code> on every family it is given, and the example below runs
-the same comparison in five lines.</p>
+<p>Without the second trace the result would be the trace of the second
+derivative of the matrix, which is a different quantity and is not zero even
+for <code><a href="log_cholesky.html">log_cholesky()</a></code>, whose log-determinant is linear. <code><a href="check_parameter.html">check_parameter()</a></code>
+compares this method with one central difference of <code><a href="param_dlogdet.html">param_dlogdet()</a></code>, and
+the example below compares it with the two traces.</p>
     </div>
     <div class="section level2">
     <h2 id="notation">Notation<a class="anchor" aria-label="anchor" href="#notation"></a></h2>
@@ -121,7 +120,7 @@ keys, and <code><a href="param_d2.html">param_d2()</a></code>, which this must a
 <span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="va">Minv</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="va">d1</span><span class="op">[[</span><span class="va">k</span><span class="op">]</span><span class="op">]</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="va">Minv</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="va">d1</span><span class="op">[[</span><span class="va">l</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span>, <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu">param_d2logdet</span><span class="op">(</span><span class="va">s</span>, <span class="va">eta</span><span class="op">)</span> <span class="op">-</span> <span class="va">pred</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2.664535e-15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.776357e-15</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Dropping the second trace would give a different answer here, so the</span></span></span>
 <span class="r-in"><span><span class="co"># comparison above has something to catch.</span></span></span>
@@ -132,7 +131,7 @@ keys, and <code><a href="param_d2.html">param_d2()</a></code>, which this must a
 <span class="r-out co"><span class="r-pr">#&gt;</span>            0.000000           -3.354331            0.000000 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># For log_cholesky the log-determinant is linear in eta, so every second</span></span></span>
-<span class="r-in"><span><span class="co"># derivative is exactly zero and the check above could not see a mistake.</span></span></span>
+<span class="r-in"><span><span class="co"># derivative is exactly zero.</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu">param_d2logdet</span><span class="op">(</span><span class="fu"><a href="log_cholesky.html">log_cholesky</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="fl">6</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
 <span class="r-in"><span></span></span>

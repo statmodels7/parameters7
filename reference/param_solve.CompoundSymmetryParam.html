@@ -4,18 +4,24 @@
 $$\frac{1}{\sigma^2(1-\rho)}
   \left[I - \frac{\rho}{1 + (p-1)\rho}J\right],$$
 compound symmetric again, so the inverse is written down and no factorization
-is performed: the cost is \(O(p^2)\) for the product against b, against
-the base class's \(O(p^3)\) Cholesky. Measured against base::solve() on the
-assembled matrix, the two agree to \(2 \times 10^{-16}\).
+is performed: the cost is \(O(p^2)\) per column of b, against the
+\(O(p^3)\) Cholesky factorization of the base method. The factors
+\(1 + (p-1)\rho\) and \(1 - \rho\) are evaluated from the second free
+value, as \(p\omega\) and \(p(1-\omega)/(p-1)\) with \(\omega\) the
+logistic function of that value, so the inverse stays accurate where the
+correlation rounds to one of its bounds.
 An exchangeable covariance has an exchangeable precision, so the family is
 closed under the choice of side."><meta property="og:description" content="Exact, by Sherman-Morrison. The inverse of
 \(\sigma^2\{(1-\rho)I + \rho J\}\) is
 $$\frac{1}{\sigma^2(1-\rho)}
   \left[I - \frac{\rho}{1 + (p-1)\rho}J\right],$$
 compound symmetric again, so the inverse is written down and no factorization
-is performed: the cost is \(O(p^2)\) for the product against b, against
-the base class's \(O(p^3)\) Cholesky. Measured against base::solve() on the
-assembled matrix, the two agree to \(2 \times 10^{-16}\).
+is performed: the cost is \(O(p^2)\) per column of b, against the
+\(O(p^3)\) Cholesky factorization of the base method. The factors
+\(1 + (p-1)\rho\) and \(1 - \rho\) are evaluated from the second free
+value, as \(p\omega\) and \(p(1-\omega)/(p-1)\) with \(\omega\) the
+logistic function of that value, so the inverse stays accurate where the
+correlation rounds to one of its bounds.
 An exchangeable covariance has an exchangeable precision, so the family is
 closed under the choice of side."><meta property="og:image" content="https://statmodels7.github.io/parameters7/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -25,7 +31,7 @@ closed under the choice of side."><meta property="og:image" content="https://sta
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,9 +66,12 @@ closed under the choice of side."><meta property="og:image" content="https://sta
 <p>$$\frac{1}{\sigma^2(1-\rho)}
   \left[I - \frac{\rho}{1 + (p-1)\rho}J\right],$$</p>
 <p>compound symmetric again, so the inverse is written down and no factorization
-is performed: the cost is \(O(p^2)\) for the product against <code>b</code>, against
-the base class's \(O(p^3)\) Cholesky. Measured against <code><a href="https://rdrr.io/r/base/solve.html" class="external-link">base::solve()</a></code> on the
-assembled matrix, the two agree to \(2 \times 10^{-16}\).</p>
+is performed: the cost is \(O(p^2)\) per column of <code>b</code>, against the
+\(O(p^3)\) Cholesky factorization of the base method. The factors
+\(1 + (p-1)\rho\) and \(1 - \rho\) are evaluated from the second free
+value, as \(p\omega\) and \(p(1-\omega)/(p-1)\) with \(\omega\) the
+logistic function of that value, so the inverse stays accurate where the
+correlation rounds to one of its bounds.</p>
 <p>An exchangeable covariance has an exchangeable precision, so the family is
 closed under the choice of side.</p>
     </div>

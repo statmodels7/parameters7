@@ -4,7 +4,7 @@ symmetric positive semidefinite matrix \(P\), supplied by the caller, times
 one positive scale. With link = NULL it holds \(P\) alone and has no free
 value.
 This is the commonest penalty in semiparametric regression, and it is the
-reason the package admits rank-deficient matrices at all. \(P\) may be the
+reason why the package accepts rank-deficient matrices. \(P\) may be the
 Gram matrix of a basis derivative, a difference penalty
 \(\Delta^\top \Delta\), a neighborhood matrix, or the identity, which makes
 the object a ridge."><meta property="og:description" content="Returns an object holding the map \(M(\eta) = h(\eta)\,P\): a fixed
@@ -12,7 +12,7 @@ symmetric positive semidefinite matrix \(P\), supplied by the caller, times
 one positive scale. With link = NULL it holds \(P\) alone and has no free
 value.
 This is the commonest penalty in semiparametric regression, and it is the
-reason the package admits rank-deficient matrices at all. \(P\) may be the
+reason why the package accepts rank-deficient matrices. \(P\) may be the
 Gram matrix of a basis derivative, a difference penalty
 \(\Delta^\top \Delta\), a neighborhood matrix, or the identity, which makes
 the object a ridge."><meta property="og:image" content="https://statmodels7.github.io/parameters7/logo.png"></head><body>
@@ -23,7 +23,7 @@ the object a ridge."><meta property="og:image" content="https://statmodels7.gith
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,7 +58,7 @@ symmetric positive semidefinite matrix \(P\), supplied by the caller, times
 one positive scale. With <code>link = NULL</code> it holds \(P\) alone and has no free
 value.</p>
 <p>This is the commonest penalty in semiparametric regression, and it is the
-reason the package admits rank-deficient matrices at all. \(P\) may be the
+reason why the package accepts rank-deficient matrices. \(P\) may be the
 Gram matrix of a basis derivative, a difference penalty
 \(\Delta^\top \Delta\), a neighborhood matrix, or the identity, which makes
 the object a ridge.</p>
@@ -75,10 +75,10 @@ the object a ridge.</p>
 
 <dl><dt id="arg-p">p<a class="anchor" aria-label="anchor" href="#arg-p"></a></dt>
 <dd><p>A symmetric positive semidefinite numeric matrix. It must be square,
-free of <code>NA</code>, and symmetric to \(10^{-8}\) relative, and it is symmetrized
-before use. A matrix whose largest eigenvalue is not positive throws <code>'p' must be positive semidefinite and not identically zero.</code>, and one whose
-smallest eigenvalue is below <code>-tol * max(ev)</code> throws a message quoting both
-eigenvalues.</p></dd>
+free of <code>NA</code>, and symmetric to \(10^{-8}\) times the larger of 1 and its
+largest entry, and it is symmetrized before use. A matrix whose largest
+eigenvalue is not positive signals the error <code>'p' must be positive semidefinite and not identically zero.</code>, and one whose smallest eigenvalue
+is below <code>-tol * max(ev)</code> signals an error quoting both eigenvalues.</p></dd>
 
 
 <dt id="arg-link">link<a class="anchor" aria-label="anchor" href="#arg-link"></a></dt>
@@ -106,8 +106,9 @@ from <code><a href="param_null_basis.html">param_null_basis()</a></code>, and <c
 <code>logdet_p</code>.</p>
     </div>
     <div class="section level2">
-    <h2 id="everything-is-a-constant-times-a-function-of-the-scale">Everything is a constant times a function of the scale<a class="anchor" aria-label="anchor" href="#everything-is-a-constant-times-a-function-of-the-scale"></a></h2>
-    <p>Nothing here needs deriving. With the default log link, where
+    <h2 id="derivatives-and-log-determinant">Derivatives and log-determinant<a class="anchor" aria-label="anchor" href="#derivatives-and-log-determinant"></a></h2>
+    <p>Every quantity is a constant times a function of the scale. With the default
+log link, where
 \(h(\eta) = e^{\eta}\) and \(\lambda = h(\eta)\),</p>
 <p>$$\partial_\eta M = M, \qquad \partial^2_\eta M = M,$$
 $$\log|M|_+ = r\,\eta + \log|P|_+, \qquad
@@ -118,24 +119,24 @@ $$\log|M|_+ = r\,\eta + \log|P|_+, \qquad
 derivatives carry that link's own, through <code><a href="diag_dlog.html">diag_dlog()</a></code>.</p>
     </div>
     <div class="section level2">
-    <h2 id="why-the-derivative-of-the-log-pseudo-determinant-matters">Why the derivative of the log pseudo-determinant matters<a class="anchor" aria-label="anchor" href="#why-the-derivative-of-the-log-pseudo-determinant-matters"></a></h2>
-    <p>It equals the rank, and that is what leaves the scale estimable. Write a
+    <h2 id="the-derivative-of-the-log-pseudo-determinant">The derivative of the log pseudo-determinant<a class="anchor" aria-label="anchor" href="#the-derivative-of-the-log-pseudo-determinant"></a></h2>
+    <p>Under the log link it equals the rank, which makes the scale estimable. Write a
 penalty as a negative log prior,</p>
 <p>$$\tfrac{\lambda}{2}\beta^\top P \beta - \tfrac{r}{2}\log\lambda,$$</p>
 <p>and the stationary point is \(\lambda = r / (\beta^\top P \beta)\). Drop the
 second term and the derivative keeps one sign, sending the scale to zero. That
-second term is the normalizing constant of the prior, which is why this
-package keeps it.</p>
+second term is the normalizing constant of the prior, and <code><a href="param_logdet.html">param_logdet()</a></code>
+includes it.</p>
     </div>
     <div class="section level2">
-    <h2 id="rank-deficiency-is-admitted-and-what-it-means">Rank deficiency is admitted, and what it means<a class="anchor" aria-label="anchor" href="#rank-deficiency-is-admitted-and-what-it-means"></a></h2>
+    <h2 id="rank-deficiency">Rank deficiency<a class="anchor" aria-label="anchor" href="#rank-deficiency"></a></h2>
     <p>A deficient \(P\) makes the corresponding Gaussian improper, so it is a
 legitimate <strong>penalty</strong> without being a legitimate density. Both readings of a
 multivariate Gaussian need full rank: a singular covariance is degenerate on a
-subspace, and a singular precision does not normalize. The object still
-answers <code><a href="param_logdet.html">param_logdet()</a></code>, with the pseudo-determinant, and <code><a href="param_solve.html">param_solve()</a></code> and
-<code><a href="param_factor.html">param_factor()</a></code> reject it, a consumer of an improper prior needing the
-quadratic form and the pseudo-determinant instead of an inverse.</p>
+subspace, and a singular precision does not normalize. <code><a href="param_logdet.html">param_logdet()</a></code>
+returns the pseudo-determinant, while <code><a href="param_solve.html">param_solve()</a></code> and <code><a href="param_factor.html">param_factor()</a></code>
+reject the object, because a consumer of an improper prior needs the
+quadratic form and the pseudo-determinant and not an inverse.</p>
     </div>
     <div class="section level2">
     <h2 id="notation">Notation<a class="anchor" aria-label="anchor" href="#notation"></a></h2>
@@ -190,7 +191,7 @@ pseudo-determinant.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span> closed_form     numeric </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   0.1250415   0.1250528 </span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># A deficient family has no inverse and says so.</span></span></span>
+<span class="r-in"><span><span class="co"># A deficient family has no inverse, and the call signals an error.</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="param_solve.html">param_solve</a></span><span class="op">(</span><span class="va">s</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Error : 'scaled' is rank deficient (4 of 6), so it has no inverse. A consumer of</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   an improper prior needs the quadratic form and the log</span>

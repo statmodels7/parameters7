@@ -15,7 +15,7 @@ a property of the family and can be computed once, at construction."><meta prope
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -79,13 +79,11 @@ at negligible singular values are returned, which is the intersection of the
 row spaces' orthogonal complements.</p>
 <p>Each component is <strong>divided by its own largest entry</strong> before stacking.
 Without that normalization a component whose scale is many orders below
-another's sinks below the tolerance and is read as absent, which is exactly
-the failure a rank taken from an assembled matrix shows: see <code><a href="sum_struct.html">sum_struct()</a></code>
-for the measured table, where the eigenvalue count of \(M(\eta)\) falls from
-4 to 1 as the weights spread while the family's rank stays 4.</p>
-<p>The tolerance is LAPACK's usual one, <code>max(dim) * eps * max(d)</code>. Where the
-stacked matrix has fewer singular values than the side, the missing directions
-are null by construction and are appended.</p>
+another's would fall below the tolerance and be read as absent, which is the
+failure that a rank taken from an assembled matrix shows (see <code><a href="sum_struct.html">sum_struct()</a></code>).</p>
+<p>The tolerance is <code>max(dim) * eps * max(d)</code>, the default rank tolerance of
+MATLAB and NumPy. The stacked matrix has at least as many rows as columns, so
+its decomposition returns one singular value per column.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

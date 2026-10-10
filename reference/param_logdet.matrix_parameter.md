@@ -1,6 +1,6 @@
 # Default Log-Determinant
 
-The method every
+The method that every
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
 inherits when it registers no
 [`param_logdet()`](https://statmodels7.github.io/parameters7/reference/param_logdet.md)
@@ -11,12 +11,11 @@ logarithms: the log-determinant for a full-rank family and the log
 pseudo-determinant otherwise. Which eigenvalues are kept is decided by
 position, from the declared rank, and never from their size.
 
-Exact, not approximated, so
+The result is exact up to rounding, so
 [`param_is_numerical()`](https://statmodels7.github.io/parameters7/reference/param_is_numerical.md)
 reporting `TRUE` here means that the answer costs \\O(p^3)\\ and cannot
-be checked against an eigendecomposition, not that it is inaccurate.
-Measured against a closed form on a \\4 \times 4\\ AR(1) covariance, the
-agreement is \\4 \times 10^{-15}\\.
+be checked against an eigendecomposition; it does not mean that the
+answer is inaccurate.
 
 ## Arguments
 
@@ -41,11 +40,11 @@ A single number.
 
 ## Details
 
-A non-positive eigenvalue among the ones the rank keeps throws, naming
-the family and the counts: the family has declared a rank it does not
-have at this \\\eta\\, so [`log()`](https://rdrr.io/r/base/Log.html) of
-a non-positive number would be the wrong thing to return. This is the
-check that catches a
+A non-positive eigenvalue among those that the rank keeps signals an
+error naming the family and the counts: the family has declared a rank
+it does not have at this \\\eta\\, so
+[`log()`](https://rdrr.io/r/base/Log.html) of a non-positive number
+would be the wrong thing to return. This is the check that catches a
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
 method whose matrix leaves the positive semidefinite cone.
 

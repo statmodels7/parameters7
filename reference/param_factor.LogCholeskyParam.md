@@ -1,10 +1,9 @@
 # Factor of a Log-Cholesky Parameter
 
-Returns \\L\\ by assembling it from the free vector, which is all this
-family's parametrization is: no factorization is taken, because the
-factor is what \\\eta\\ holds. It is the only family here whose factor
-is free, and it is \\O(p^2)\\ against the base class's \\O(p^3)\\
-Cholesky.
+Returns \\L\\ by assembling it from the free vector: no factorization is
+taken, because the free vector holds the factor. The assembly is
+\\O(p^2)\\, against the \\O(p^3)\\ Cholesky factorization of the base
+method.
 
 The diagonal is `exp(eta[1:p])` and the entries below it are the
 remaining free values, so a caller who wants a standard deviation off
@@ -38,4 +37,4 @@ exactly, and carrying no dimnames.
 [`chol_assemble()`](https://statmodels7.github.io/parameters7/reference/chol_assemble.md),
 which does the assembly, and
 [`param_factor.matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/param_factor.matrix_parameter.md)
-for what every other family pays.
+for the base method.

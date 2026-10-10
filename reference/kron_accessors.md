@@ -1,8 +1,8 @@
 # The Inner Parameter, the Block Count, and the Lift
 
-The three one-line accessors every
+The three one-line accessors that the
 [`KronIdentityParam()`](https://statmodels7.github.io/parameters7/reference/KronIdentityParam.md)
-method uses. `.kron_inner()` returns the per-block parameter,
+methods use. `.kron_inner()` returns the per-block parameter,
 `.kron_m()` the number of blocks, and `.kron_lift()` places a `d` by `d`
 matrix into `m` identical diagonal blocks as `kronecker(diag(m), x)`.
 
@@ -32,10 +32,10 @@ elsewhere.
 
 ## Details
 
-They exist so that the twelve methods below read as one line each and
-the storage of `param_params` appears in one place. `.kron_lift()` is
-the whole arithmetic of the composition: the value, every derivative
-component and the factor are the inner quantity passed through it.
+They keep the methods below short and the storage of `param_params` in
+one place. `.kron_lift()` is the whole arithmetic of the composition:
+the value, every derivative component and the factor are the inner
+quantity passed through it.
 
 Note that [`kronecker()`](https://rdrr.io/r/base/kronecker.html) drops
 dimnames, so a lifted matrix carries none where the inner one carried

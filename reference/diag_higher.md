@@ -4,8 +4,8 @@ Assembles a whole derivative order of a diagonal family, orders three
 and four. A diagonal family is separable, so a component is the zero
 matrix unless every index of the tuple names the **same** free value,
 and a surviving one carries \\h'''(\eta_k)\\ or \\h''''(\eta_k)\\ in the
-entries that value owns. Most of the list is therefore exactly zero: at
-\\p = 3\\ only 3 of the 10 third-order components are non-zero.
+entries that the value owns. Most of the list is therefore exactly zero:
+at \\p = 3\\ only 3 of the 10 third-order components are non-zero.
 
 ## Usage
 

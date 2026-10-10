@@ -39,17 +39,16 @@ An object of class
 with `n_free`, `free_names` and `dimension`
 [`autoregressive()`](https://statmodels7.github.io/parameters7/reference/autoregressive.md)'s.
 
-## The value and the log-determinant are closed
+## The value and the log-determinant
 
 An autoregression of order \\q\\ is Markov of that order, so its
 precision carries no entry beyond the \\q\\-th diagonal. The value comes
 from
 [`param_solve.AutoregressiveParam()`](https://statmodels7.github.io/parameters7/reference/param_solve.AutoregressiveParam.md),
-which reads it off the prediction form of the process rather than
+which reads it off the prediction form of the process instead of
 factorizing, and the log-determinant is
 [`autoregressive()`](https://statmodels7.github.io/parameters7/reference/autoregressive.md)'s
-negated. Both are therefore \\O(p)\\ in the entries that matter and
-exact.
+negated. Both are exact, and neither factorizes a matrix of side \\p\\.
 
 ## The derivative arrays
 
@@ -62,26 +61,25 @@ the coefficients of the best linear predictor of \\y_t\\ from its
 predecessors, and \\\tau_t = 1/v_t\\ the reciprocal innovation
 variances. Two facts make every order exact without a new recursion.
 
-The lower-order rows of \\U\\ are the coefficients of the SAME family at
-that order, measured to 0, so their derivative arrays come from the
-compiled Levinson-Durbin recursion of
+The lower-order rows of \\U\\ are the coefficients of the same family at
+that order, so their derivative arrays come from the compiled
+Levinson-Durbin recursion of
 [`ar_tables()`](https://statmodels7.github.io/parameters7/reference/ar_tables.md)
 run once per order, and a component differentiating in a partial
-autocorrelation an order does not reach is exactly zero. And \\\tau_t\\
-is a PRODUCT of one factor per free value, \\1/v_0\\ from the scale and
-\\(1-r_j^2)^{-1}\\ from each correlation the prediction has reached, so
-a mixed derivative of it is a product of univariate derivatives and is
-exactly zero where it differentiates in a factor a row does not carry.
+autocorrelation that an order does not reach is exactly zero. And
+\\\tau_t\\ is a product of one factor per free value, \\1/v_0\\ from the
+scale and \\(1-r_j^2)^{-1}\\ from each correlation that the prediction
+has reached, so a mixed derivative of it is a product of univariate
+derivatives and is exactly zero where it differentiates in a factor that
+a row does not carry.
 
 What is left is the Leibniz rule over three factors, taken twice so that
 a component costs \\2^m\\ matrix products rather than \\3^m\\.
 
-Measured against `inverse_of(autoregressive(p, q))`, which reaches the
-same numbers through the ordered-block-partition sum, at order four:
-**11.2x** at \\p = 6, q = 2\\, 11.4x at \\p = 20, q = 3\\ and **22.8x**
-at \\p = 100\\, with the two agreeing to 7e-11 over six shapes and two
-free vectors each. That agreement is what licenses the written-out
-route, the two sharing no arithmetic.
+The result agrees with `inverse_of(autoregressive(p, q))`, which reaches
+the same values through the ordered-block-partition sum and shares no
+arithmetic with this route. At order four the written-out route is
+faster, increasingly so as \\p\\ grows.
 
 ## See also
 

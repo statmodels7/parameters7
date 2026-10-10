@@ -1,10 +1,10 @@
 # One Product Stencil for a Mixed Partial Derivative
 
-Differentiates `f` once in each component an index tuple names, using a
-central factor per distinct component of the order that component's
-multiplicity asks for. The whole tensor product is summed in one pass,
-so the result is a single stencil, never a composition of lower-order
-numerical derivatives.
+Differentiates `f` once in each component that an index tuple names,
+using a central factor per distinct component, of the order given by
+that component's multiplicity. The whole tensor product is summed in one
+pass, so the result is a single stencil, never a composition of
+lower-order numerical derivatives.
 
 ## Usage
 
@@ -39,10 +39,10 @@ Each factor's nodes and weights come from
 [`numericals7::fd_offsets()`](https://statmodels7.github.io/numericals7/reference/fd_offsets.html)
 and
 [`numericals7::fd_weights()`](https://statmodels7.github.io/numericals7/reference/fd_weights.html)
-at accuracy 2: two points at order one, three at order two, five at
-orders three and four. They are read from there instead of being written
-out here, because a table of stencil coefficients kept in a second place
-is a table that can come to disagree with the first.
+at accuracy 2: three nodes at orders one and two and five at orders
+three and four, of which two, three, four and five carry a non-zero
+weight. They are read from there instead of being written out here, so
+that the two tables cannot disagree.
 
 The step for each factor is
 [`fd_step()`](https://statmodels7.github.io/parameters7/reference/fd_step.md)

@@ -2,8 +2,8 @@
 
 Returns the additive log-ratio, \\\eta_a = \log(\pi_a/\pi_K)\\, exact
 and a true inverse of
-[`param_value.SimplexParam()`](https://statmodels7.github.io/parameters7/reference/param_value.SimplexParam.md):
-the round trip closes to \\2 \times 10^{-16}\\.
+[`param_value.SimplexParam()`](https://statmodels7.github.io/parameters7/reference/param_value.SimplexParam.md),
+up to rounding.
 
 ## Arguments
 
@@ -28,16 +28,18 @@ A numeric vector of length `s@n_free`, named by `s@free_names`.
 
 ## Details
 
-Two rejections, both with their own message. A vector with a
-non-positive entry is outside the **open** simplex, and \\\log 0\\ is
-not finite; a vector that does not sum to 1 is not a probability vector,
-and it is **not renormalized**, a silent repair being the kind of thing
-that hides a caller's defect for a long time.
+Three rejections, each with its own message. An argument that is not a
+numeric vector of length \\K\\ is rejected. A vector with a non-positive
+or missing entry is outside the **open** simplex, and \\\log 0\\ is not
+finite. A vector that does not sum to 1 is not a probability vector, and
+it is **not renormalized**, because a silent repair would hide an error
+in the caller.
 
-The first rejection is the one a fit runs into.
+The second rejection is the one that a fit meets: a large positive free
+value makes
 [`simplex_point()`](https://statmodels7.github.io/parameters7/reference/simplex_point.md)
-saturates a large free value to an exact 0 in the reference category, so
-a value produced at the boundary cannot be inverted back.
+return an exact 0 in the reference category, so a value produced at the
+boundary cannot be inverted back.
 
 ## See also
 

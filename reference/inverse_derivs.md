@@ -2,7 +2,7 @@
 
 The ordered-block-partition sum of
 [`inverse_of()`](https://statmodels7.github.io/parameters7/reference/inverse_of.md),
-run over the enumeration the class is keyed by.
+run over the enumeration by which the class is keyed.
 
 ## Usage
 
@@ -30,7 +30,7 @@ inverse_derivs(s, eta, order)
 
 A named list of `s@dimension` square matrices, keyed and ordered as
 [`param_tuple_names()`](https://statmodels7.github.io/parameters7/reference/param_tuple_names.md)
-says.
+gives them.
 
 ## Details
 

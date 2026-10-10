@@ -21,7 +21,7 @@ this family are one call each to this function."><meta property="og:image" conte
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,14 +90,13 @@ keyed as <code>param_tuple_names(s, order)</code> and in that order, each
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Measured against <code><a href="dot-chol_leibniz_r.html">.chol_leibniz_r()</a></code>, the dense R twin, on the same free
-vector: <strong>30x</strong> at \(p = 8\) and order 4 (0.295 s against 8.89 s over 82251
-components), 30x at \(p = 8\) order 2, 35x at \(p = 5\) order 4 and 19x at
-\(p = 3\) order 2. The two agree <strong>exactly</strong>, to 0, at \(p = 5\) order 4.</p>
+    <p><code><a href="dot-chol_leibniz_r.html">.chol_leibniz_r()</a></code>, the dense R twin, forms full matrix products and returns
+the same components; the compiled route is faster, by a factor that grows
+with \(p\) and with the order.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="dot-chol_leibniz_r.html">.chol_leibniz_r()</a></code>, the R twin the tests hold it against,
+    <div class="dont-index"><p><code><a href="dot-chol_leibniz_r.html">.chol_leibniz_r()</a></code>, the R twin against which the tests check it,
 <code><a href="chol_dfactor.html">chol_dfactor()</a></code> for the factor's derivatives, and <code><a href="leibniz_gram.html">leibniz_gram()</a></code>.</p></div>
     </div>
 

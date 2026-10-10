@@ -8,9 +8,9 @@ returns a symmetric \\p \times p\\ matrix,
 [`simplex()`](https://statmodels7.github.io/parameters7/reference/simplex.md)
 a probability vector, and
 [`transition_matrix()`](https://statmodels7.github.io/parameters7/reference/transition_matrix.md)
-a row-stochastic matrix. Whatever \\\eta\\ is handed in, the value
-satisfies the family's constraint, so a caller never has to test the
-result.
+a row-stochastic matrix. For every finite \\\eta\\ the value satisfies
+the family's constraint, within the range of floating-point arithmetic,
+so a caller does not have to test the result.
 
 This is the only method a new family must write. Every derivative order
 is then available numerically, and for a matrix family so are the
@@ -43,9 +43,9 @@ param_value(s, eta, ...)
 
 - ...:
 
-  Passed to the method. No method in this package reads it; it is part
-  of the signature so that a family written elsewhere can take further
-  arguments of its own.
+  Passed to the method. The methods in this package do not read it; it
+  is part of the signature so that a family written elsewhere can take
+  further arguments of its own.
 
 ## Value
 
@@ -79,13 +79,13 @@ unconstrained scale having no edge to reach.
 
 ## What is exact and what is not
 
-Every family in this package writes its own `param_value()` out in
-closed form. None of them falls back to anything, and
+Every family in this package writes its own `param_value()` and its
+derivatives out, and
 [`param_is_numerical()`](https://statmodels7.github.io/parameters7/reference/param_is_numerical.md)
-returns `FALSE` for all nine components of all fifteen. The numerical
+returns `FALSE` for every component of every family. The numerical
 methods on
 [`parameter()`](https://statmodels7.github.io/parameters7/reference/parameter.md)
-exist for a family written elsewhere.
+serve a family written elsewhere.
 
 ## Notation
 

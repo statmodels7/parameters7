@@ -13,7 +13,7 @@ the \((n-1)!\) orderings of the tail with the first index held."><meta property=
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,8 +59,9 @@ the \((n-1)!\) orderings of the tail with the first index held.</p>
 
 
 <dl><dt id="arg-minv">minv<a class="anchor" aria-label="anchor" href="#arg-minv"></a></dt>
-<dd><p>The inverse of the assembled matrix, computed once by the caller
-and reused for every component of the order.</p></dd>
+<dd><p>The inverse of the assembled matrix, or its pseudo-inverse on the
+complement of the null space where the family is rank deficient, computed
+once by the caller and reused for every component of the order.</p></dd>
 
 
 <dt id="arg-comp">comp<a class="anchor" aria-label="anchor" href="#arg-comp"></a></dt>
@@ -81,8 +82,8 @@ and reused for every component of the order.</p></dd>
 permutation leaves the trace unchanged, so fixing one position counts each
 distinct cycle once. The orderings come from <code><a href="multiset_orderings.html">multiset_orderings()</a></code> and are
 counted with multiplicity, which see.</p>
-<p>This is a derivative in the <strong>weights</strong>, not in the free values;
-<code><a href="sum_struct_logdet_derivs.html">sum_struct_logdet_derivs()</a></code> carries it onto the free scale.</p>
+<p>This is a derivative in the <strong>weights</strong>; <code><a href="sum_struct_logdet_derivs.html">sum_struct_logdet_derivs()</a></code>
+carries it onto the free scale.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

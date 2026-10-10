@@ -5,11 +5,8 @@ Returns the matrix logarithm of `m`, read off its eigendecomposition as
 Exact and a true inverse of
 [`param_value.MatrixLogParam()`](https://statmodels7.github.io/parameters7/reference/param_value.MatrixLogParam.md),
 the matrix logarithm of a symmetric positive definite matrix being
-unique among symmetric matrices. Measured, the round trip closes to \\2
-\times 10^{-15}\\, a little looser than
-[`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)'s
-\\7 \times 10^{-17}\\ because two eigendecompositions stand between the
-two ends.
+unique among symmetric matrices. The round trip passes through two
+eigendecompositions, one in each direction.
 
 ## Arguments
 
@@ -36,7 +33,7 @@ A numeric vector of length `s@n_free`, named by `s@free_names`.
 
 A matrix that is not positive definite is rejected: the logarithm of a
 non-positive eigenvalue is not a real number, so there is no free vector
-to return. The verdict is spectral, as it is everywhere in this package.
+to return. The test is on the eigenvalues of `m`.
 
 ## See also
 

@@ -1,6 +1,6 @@
 # Default Log-Determinant Hessian
 
-The method every
+The method that every
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
 inherits when it registers no
 [`param_d2logdet()`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.md)
@@ -13,14 +13,13 @@ M)M^{-1}\\,
 M\right) - \mathrm{tr}\\\left(M^{+} (\partial_k M)\\ M^{+} (\partial_l
 M)\right),\$\$
 
-with \\M^{+}\\ the pseudo-inverse over the directions the declared rank
-keeps. The second trace is formed as `sum(t(mi %*% dk) * (mi %*% dl))`,
-which is the trace of the product without the product being multiplied
-out.
+with \\M^{+}\\ the pseudo-inverse over the directions that the declared
+rank keeps. The second trace is formed as
+`sum(t(mi %*% dk) * (mi %*% dl))`, which is the trace of the product
+without the product being multiplied out.
 
-Exact given the derivative arrays, so the accuracy is theirs. With
-analytic arrays the answer agrees with a closed form to \\1 \times
-10^{-14}\\; with numerical ones, to \\6 \times 10^{-8}\\.
+Exact given the derivative arrays, so the accuracy is theirs: rounding
+with analytic arrays, and that of the stencils with numerical ones.
 
 ## Arguments
 

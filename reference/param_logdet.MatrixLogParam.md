@@ -9,8 +9,7 @@ Closed form and linear. The eigenvalues of \\M = \exp(S)\\ are
 the sum of the diagonal free values. One
 [`sum()`](https://rdrr.io/r/base/sum.html) over \\p\\ numbers: no
 eigendecomposition and no determinant, with nothing growing in \\p\\
-beyond the sum itself. It agrees with the eigenvalues of the assembled
-matrix to the printed digit.
+beyond the sum itself.
 
 ## Arguments
 

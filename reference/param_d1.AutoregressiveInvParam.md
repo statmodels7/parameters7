@@ -2,9 +2,10 @@
 
 The four orders of \\\partial\Omega\\ for \\\Omega\\ the precision of an
 autoregression of order \\q\\, written out from the prediction
-factorization rather than assembled by the ordered-block-partition sum
+factorization instead of assembled by the ordered-block-partition sum
+that
 [`inverse_of()`](https://statmodels7.github.io/parameters7/reference/inverse_of.md)
-uses. The two routes agree to machine precision.
+uses. The two routes agree to rounding.
 
 ## Arguments
 
@@ -26,7 +27,7 @@ uses. The two routes agree to machine precision.
 
 A named list of `s@dimension` square matrices, keyed as
 [`param_tuple_names()`](https://statmodels7.github.io/parameters7/reference/param_tuple_names.md)
-says.
+gives them.
 
 ## See also
 

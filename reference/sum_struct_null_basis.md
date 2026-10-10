@@ -35,15 +35,13 @@ intersection of the row spaces' orthogonal complements.
 
 Each component is **divided by its own largest entry** before stacking.
 Without that normalization a component whose scale is many orders below
-another's sinks below the tolerance and is read as absent, which is
-exactly the failure a rank taken from an assembled matrix shows: see
-[`sum_struct()`](https://statmodels7.github.io/parameters7/reference/sum_struct.md)
-for the measured table, where the eigenvalue count of \\M(\eta)\\ falls
-from 4 to 1 as the weights spread while the family's rank stays 4.
+another's would fall below the tolerance and be read as absent, which is
+the failure that a rank taken from an assembled matrix shows (see
+[`sum_struct()`](https://statmodels7.github.io/parameters7/reference/sum_struct.md)).
 
-The tolerance is LAPACK's usual one, `max(dim) * eps * max(d)`. Where
-the stacked matrix has fewer singular values than the side, the missing
-directions are null by construction and are appended.
+The tolerance is `max(dim) * eps * max(d)`, the default rank tolerance
+of MATLAB and NumPy. The stacked matrix has at least as many rows as
+columns, so its decomposition returns one singular value per column.
 
 ## See also
 

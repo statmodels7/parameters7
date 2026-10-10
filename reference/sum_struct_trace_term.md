@@ -15,8 +15,10 @@ sum_struct_trace_term(minv, comp, t)
 
 - minv:
 
-  The inverse of the assembled matrix, computed once by the caller and
-  reused for every component of the order.
+  The inverse of the assembled matrix, or its pseudo-inverse on the
+  complement of the null space where the family is rank deficient,
+  computed once by the caller and reused for every component of the
+  order.
 
 - comp:
 
@@ -38,7 +40,7 @@ each distinct cycle once. The orderings come from
 [`multiset_orderings()`](https://statmodels7.github.io/parameters7/reference/multiset_orderings.md)
 and are counted with multiplicity, which see.
 
-This is a derivative in the **weights**, not in the free values;
+This is a derivative in the **weights**;
 [`sum_struct_logdet_derivs()`](https://statmodels7.github.io/parameters7/reference/sum_struct_logdet_derivs.md)
 carries it onto the free scale.
 

@@ -2,11 +2,11 @@
 
 Closed form. The log-determinant is a sum of \\\log h(\eta_k)\\ terms,
 so each pure component is the third derivative of \\\log h\\ at that
-free value, times the number of entries the value owns, and every mixed
-component is exactly zero.
+free value, times the number of entries that the value owns, and every
+mixed component is exactly zero.
 
 Under the log link the whole vector is zero, \\\log h(\eta) = \eta\\
-being linear. A link with curvature is where this order has content.
+being linear; under a link with curvature it is not.
 
 ## Arguments
 

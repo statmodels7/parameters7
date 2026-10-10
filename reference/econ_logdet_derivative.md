@@ -34,12 +34,12 @@ econ_logdet_derivative(s, eta, order, terms)
 
 - terms:
 
-  The affine-logarithm terms of \\q\\, as
-  [`cs_logdet_terms()`](https://statmodels7.github.io/parameters7/reference/cs_logdet_terms.md)
-  or
-  [`ar1_logdet_terms()`](https://statmodels7.github.io/parameters7/reference/ar1_logdet_terms.md)
-  returns them; see
-  [`log_affine_derivs()`](https://statmodels7.github.io/parameters7/reference/log_affine_derivs.md).
+  A function of the second free value and the order that returns the
+  order-th derivative of \\q\\ in that free value, as
+  [`cs_logdet_chain()`](https://statmodels7.github.io/parameters7/reference/cs_logdet_chain.md)
+  and
+  [`ar1_logdet_chain()`](https://statmodels7.github.io/parameters7/reference/ar1_logdet_chain.md)
+  do.
 
 ## Value
 
@@ -59,9 +59,11 @@ first order.
 
 ## See also
 
-[`log_affine_derivs()`](https://statmodels7.github.io/parameters7/reference/log_affine_derivs.md)
+[`cs_logdet_chain()`](https://statmodels7.github.io/parameters7/reference/cs_logdet_chain.md)
+and
+[`ar1_logdet_chain()`](https://statmodels7.github.io/parameters7/reference/ar1_logdet_chain.md)
 for the correlation's chain,
 [`econ_scalars()`](https://statmodels7.github.io/parameters7/reference/econ_scalars.md)
-for the two links' derivatives, and
+for the scale's link derivatives, and
 [`econ_derivative()`](https://statmodels7.github.io/parameters7/reference/econ_derivative.md),
 its counterpart for the matrix itself.

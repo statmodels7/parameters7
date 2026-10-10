@@ -8,7 +8,7 @@ in each component,
 \$\$\partial_k V \approx \frac{V(\eta + h e_k) - V(\eta - h
 e_k)}{2h},\$\$
 
-at the step
+at the step that
 [`fd_step()`](https://statmodels7.github.io/parameters7/reference/fd_step.md)
 gives for a first derivative. This is the method
 [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md)
@@ -36,35 +36,32 @@ numerical_d1(s, eta)
 ## Value
 
 A list of `s@n_free` estimates named by `s@free_names`, each shaped like
-[`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)'s
-result and symmetrized for a matrix family.
+the result of
+[`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
+and symmetrized for a matrix family.
 
 ## Details
 
 The step is \\\varepsilon^{1/3}\max(1, \|\eta_k\|)\\, about \\6.1 \times
 10^{-6}\\ near the origin, giving a truncation error of order \\h^2\\.
-Measured against the closed form of a \\2 \times 2\\ log-Cholesky
-covariance, the agreement is \\7 \times 10^{-11}\\ absolute on entries
-of size 3, so eleven digits or so. The example below runs that
-comparison.
+The example below compares the result with a closed form.
 
-The result is symmetrized for a
-[`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md),
-as `(A + t(A)) / 2`. The derivative of a symmetric matrix is symmetric,
-so the halving corrects rounding and changes nothing else. `V` costs
-\\2d\\ evaluations of the map.
+For a matrix family each estimate is symmetrized as `(m + t(m)) / 2`, as
+the higher orders are, so that an asymmetry of rounding size in
+[`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
+does not reach the derivative. It costs \\2d\\ evaluations of the map.
 
 ## See also
 
 [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md),
-the generic this serves,
+the generic that this serves,
 [`numerical_d2()`](https://statmodels7.github.io/parameters7/reference/numerical_d2.md),
 [`numerical_d3()`](https://statmodels7.github.io/parameters7/reference/numerical_d3.md)
 and
 [`numerical_d4()`](https://statmodels7.github.io/parameters7/reference/numerical_d4.md)
 for the higher orders, and
 [`param_is_numerical()`](https://statmodels7.github.io/parameters7/reference/param_is_numerical.md)
-to ask whether a given family reaches this at all.
+to find out whether a given family reaches this.
 
 ## Examples
 
@@ -81,7 +78,7 @@ numerical_d1(s, 0.3)
 max(abs(numerical_d1(s, 0.3)[[1]] - param_value(s, 0.3)))
 #> [1] 7.642331e-12
 
-# Against a family that writes its own: the two agree to about 1e-10.
+# Against a family that writes its own.
 q <- log_cholesky(2)
 eta <- c(0.2, -0.1, 0.4)
 max(abs(unlist(numerical_d1(q, eta)) - unlist(param_d1(q, eta))))

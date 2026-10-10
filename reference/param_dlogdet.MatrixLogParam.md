@@ -5,10 +5,11 @@ Closed form and constant: 1 in each of the \\p\\ diagonal directions and
 \\\sum_i \eta_i\\. The value does not depend on `eta`, which is read
 only for its length.
 
-Note the 1 where
+The gradient is 1 where that of
 [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
-answers 2: there the diagonal free value is \\\log L\_{ii}\\ and \\\|M\|
-= \|L\|^2\\, here it is an eigenvalue of the logarithm and enters once.
+is 2: there the diagonal free value is \\\log L\_{ii}\\ and \\\|M\| =
+\|L\|^2\\, while here it is a diagonal entry of \\S\\, and \\\log\|M\| =
+\mathrm{tr}(S)\\ contains it once.
 
 ## Arguments
 
@@ -37,4 +38,4 @@ A numeric vector of length `s@n_free`, named by `s@free_names`, holding
 [`param_logdet.MatrixLogParam()`](https://statmodels7.github.io/parameters7/reference/param_logdet.MatrixLogParam.md)
 for the quantity differentiated, and
 [`param_dlogdet.LogCholeskyParam()`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.LogCholeskyParam.md),
-which answers 2.
+which returns 2.

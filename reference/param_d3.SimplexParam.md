@@ -2,8 +2,8 @@
 
 Closed form, the same product rule applied a third time, which is the
 cumulant recursion of a categorical indicator at third order. Exact,
-where a family without a closed form would get a product stencil good to
-about six digits. Every component sums to zero over the category index.
+where a family without a closed form gets a less accurate product
+stencil. Every component sums to zero over the category index.
 
 ## Arguments
 

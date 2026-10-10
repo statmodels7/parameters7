@@ -13,7 +13,7 @@ quadratic form plus this, so it is needed at every iteration of a fit."><meta pr
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,7 +67,7 @@ quadratic form plus this, so it is needed at every iteration of a fit.</p>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Passed to the method. No method in this package reads it.</p></dd>
+<dd><p>Passed to the method. The methods in this package do not read it.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -80,8 +80,8 @@ quadratic form plus this, so it is needed at every iteration of a fit.</p>
 <p>with the Moore-Penrose inverse in place of \(M^{-1}\) when the family is
 rank deficient. A closed form here is therefore never an independent claim:
 it has to agree with <code><a href="param_d1.html">param_d1()</a></code> through that trace, and
-<code><a href="check_parameter.html">check_parameter()</a></code> runs both routes and compares them. The example below
-does the same in three lines.</p>
+<code><a href="check_parameter.html">check_parameter()</a></code> runs both routes and compares them, and the example below
+makes the same comparison.</p>
     </div>
     <div class="section level2">
     <h2 id="what-the-answer-looks-like">What the answer looks like<a class="anchor" aria-label="anchor" href="#what-the-answer-looks-like"></a></h2>

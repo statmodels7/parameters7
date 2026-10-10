@@ -7,9 +7,11 @@ recursion:
 k)\log(1 - r_k^{2}).\$\$
 
 A sum of \\q + 1\\ terms at any dimension, with no factorization and no
-determinant taken. Measured against
-[`determinant()`](https://rdrr.io/r/base/det.html), the gap is \\2
-\times 10^{-15}\\ at \\p = 5\\ and \\4 \times 10^{-14}\\ at \\p = 100\\.
+determinant taken. Under the rhobit link \\1 - r_k^2 = \mathrm{sech}^2
+z_k\\, and each logarithm is evaluated by
+[`log_sech2()`](https://statmodels7.github.io/parameters7/reference/sech2.md)
+in the free value \\z_k\\, so the sum keeps its accuracy where \\r_k\\
+rounds to \\-1\\ or 1.
 
 ## Arguments
 

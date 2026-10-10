@@ -1,10 +1,10 @@
 # Positions of the Free Values in the Lower Triangle
 
 Returns the row and column of each free value of a log-Cholesky
-parameter, in the order the free vector uses: the \\p\\ diagonal entries
-first, then the strictly below-diagonal entries column by column.
-Everything in the family reads it, so the ordering is decided once here
-and nowhere else.
+parameter, in the order that the free vector uses: the \\p\\ diagonal
+entries first, then the strictly below-diagonal entries column by
+column. Everything in the family reads it, so the ordering is decided
+once here and nowhere else.
 
 ## Usage
 

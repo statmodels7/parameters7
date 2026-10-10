@@ -1,6 +1,6 @@
 # One Row of a Diagnostic Table
 
-Builds one row of the table
+Builds one row of the table that
 [`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)
 accumulates and returns. Strings are kept as strings, so the assembled
 table's `check` and `status` columns come out character.

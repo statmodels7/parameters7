@@ -15,7 +15,7 @@ are one call each to this function."><meta property="og:image" content="https://
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,14 +82,14 @@ them exactly zero. Each non-zero one is supported on a single row.</p>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The rows are parametrized independently, so <code><a href="simplex_tensors.html">simplex_tensors()</a></code> is evaluated
-once per row and <code><a href="simplex_components.html">simplex_components()</a></code> slices it with a <code>wrap</code> that does the
-embedding. Nothing of size \(K^2 (K(K-1))^{\text{order}}\) is built: the
-cross-row components are never computed, only skipped.</p>
+once per row, and each slice of a row's tensor is embedded in that row of a
+\(K \times K\) matrix of zeros. The cross-row components are not computed;
+each is returned as a matrix of zeros.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="simplex_tensors.html">simplex_tensors()</a></code> and <code><a href="simplex_components.html">simplex_components()</a></code>, which do the per-row
-work, and <code><a href="tm_positions.html">tm_positions()</a></code> for the row map.</p></div>
+    <div class="dont-index"><p><code><a href="simplex_tensors.html">simplex_tensors()</a></code>, which does the per-row work, and
+<code><a href="tm_positions.html">tm_positions()</a></code> for the row map.</p></div>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

@@ -36,8 +36,8 @@ econ_derivative(s, eta, order, pattern)
   A function of the parameter and the scalars of
   [`econ_scalars()`](https://statmodels7.github.io/parameters7/reference/econ_scalars.md),
   returning a list of matrices: the pattern \\P(\rho)\\ and its
-  derivatives in the second free value, to the order the scalars carry.
-  See
+  derivatives in the second free value, to the order that the scalars
+  carry. See
   [`cs_pattern()`](https://statmodels7.github.io/parameters7/reference/cs_pattern.md)
   and
   [`ar1_pattern()`](https://statmodels7.github.io/parameters7/reference/ar1_pattern.md).
@@ -53,9 +53,8 @@ matrices keyed as `param_tuple_names(s, order)` and in that order, each
 The value is a **product** of a function of the first free value and a
 function of the second, so a component with \\a\\ scale indices and
 \\b\\ correlation indices is the \\a\\-th derivative of the scale times
-the \\b\\-th derivative of the pattern. Nothing is approximated and no
-order is special: only the counts \\a\\ and \\b\\ matter, and a tuple is
-fully described by them.
+the \\b\\-th derivative of the pattern. Every derivative is exact, and a
+tuple enters only through the counts \\a\\ and \\b\\.
 
 ## See also
 

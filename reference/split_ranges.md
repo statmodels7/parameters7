@@ -1,7 +1,7 @@
 # Consecutive Index Ranges of Given Widths
 
-Turns the widths \\n_1, \ldots, n_B\\ into the ranges they occupy when
-laid end to end. It is called twice at construction, once for the
+Turns the widths \\n_1, \ldots, n_B\\ into the ranges that they occupy
+when laid end to end. It is called twice at construction, once for the
 blocks' rows in the matrix and once for their stretches of the free
 vector.
 

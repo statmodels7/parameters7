@@ -15,7 +15,7 @@ same stencils as the rest of the toolkit."><meta property="og:image" content="ht
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -92,8 +92,7 @@ derivative does.</p></dd>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The sum \(h^{-k}\sum_j w_j f(\eta + s_j h e_k)\) is accumulated term by
 term, skipping the nodes whose weight is zero, so <code>f</code> is called once per
-non-zero weight: three times for a first or second derivative, five for a
-third or fourth. The accumulator starts at <code>NULL</code> and takes the shape of the
+non-zero weight: two, three, four and five times at orders one to four. The accumulator starts at <code>NULL</code> and takes the shape of the
 first term, which is why <code>f</code> may return a matrix, a vector or a scalar without
 this function knowing which.</p>
 <p><code><a href="https://statmodels7.github.io/numericals7/reference/fd_derivative.html" class="external-link">numericals7::fd_derivative()</a></code> cannot serve here. Its <code>f</code> maps a vector of

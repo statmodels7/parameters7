@@ -3,13 +3,9 @@
 Solves blockwise: \\M^{-1} = I_m \otimes S^{-1}\\, so the rows of `b`
 belonging to each block are handed to the inner parameter's own
 [`param_solve()`](https://statmodels7.github.io/parameters7/reference/param_solve.md)
-in turn. Nothing of side \\md\\ is factorized, and the method inherits
-whatever the inner parameter does, including a closed inverse where it
-has one.
-
-Measured at \\m = 3\\ over a 2 x 2 log-Cholesky covariance, the result
-agrees with [`base::solve()`](https://rdrr.io/r/base/solve.html) on the
-assembled matrix to \\3 \times 10^{-17}\\.
+in turn. Nothing of side \\md\\ is factorized, and the method uses the
+inner parameter's own route, including a closed inverse where it has
+one.
 
 The generic has already rejected a rank-deficient composite, which a
 deficient inner parameter produces, and filled `b` with the identity

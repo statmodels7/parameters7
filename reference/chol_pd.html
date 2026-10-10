@@ -13,7 +13,7 @@ from the eigenvalues."><meta property="og:image" content="https://statmodels7.gi
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,7 +51,7 @@ from the eigenvalues.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">chol_pd</span><span class="op">(</span><span class="va">m</span>, tol <span class="op">=</span> <span class="fl">1e-12</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">chol_pd</span><span class="op">(</span><span class="va">m</span>, tol <span class="op">=</span> <span class="fl">1e-14</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -60,37 +60,40 @@ from the eigenvalues.</p>
 
 <dl><dt id="arg-m">m<a class="anchor" aria-label="anchor" href="#arg-m"></a></dt>
 <dd><p>A symmetric numeric matrix. Not checked for symmetry; the callers
-have already symmetrized.</p></dd>
+pass the value of <code><a href="param_value.html">param_value()</a></code> or a matrix already symmetrized by
+<code><a href="check_matrix.html">check_matrix()</a></code>.</p></dd>
 
 
 <dt id="arg-tol">tol<a class="anchor" aria-label="anchor" href="#arg-tol"></a></dt>
 <dd><p>The relative tolerance below which the smallest eigenvalue counts
 as zero, so <code>m</code> is rejected when <code>min(ev) &lt;= tol * max(ev)</code>. Defaults to
-<code>1e-12</code>. At that default <code>diag(c(1, 1e-12))</code> returns <code>NULL</code>, the test being
-an inequality, and <code>diag(c(1, 1e-11))</code> factors.</p></dd>
+<code>1e-14</code>. At that default <code>diag(c(1, 1e-14))</code> returns <code>NULL</code>, the test being
+an inequality, and <code>diag(c(1, 1e-13))</code> factors.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>The lower triangular \(L\) with \(M = L L^\top\), or <code>NULL</code> when
-<code>m</code> has no eigenvalues, has an <code>NA</code> among them, has a non-positive largest
-eigenvalue, fails the relative test, or makes <code><a href="https://rdrr.io/r/base/chol.html" class="external-link">base::chol()</a></code> raise after
-all.</p>
+<code>m</code> is empty, has a missing or non-finite entry, has a non-positive largest
+eigenvalue, fails the relative test, or makes <code><a href="https://rdrr.io/r/base/chol.html" class="external-link">base::chol()</a></code> signal an
+error.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The verdict comes from the spectrum, because <code><a href="https://rdrr.io/r/base/chol.html" class="external-link">chol()</a></code> is not a rank test. On a matrix with an exactly zero
-eigenvalue the pivot that ought to be zero comes out positive or negative
-according to rounding, so <code><a href="https://rdrr.io/r/base/chol.html" class="external-link">chol()</a></code> succeeds on some platforms and fails on
-others, and a branch that asks it whether a matrix is usable gets a different
-answer on different machines. <code>min(ev) &lt;= tol * max(ev)</code> is a statement about
-the matrix; a caught error is a statement about the arithmetic.</p>
+    <p>The verdict comes from the spectrum because <code><a href="https://rdrr.io/r/base/chol.html" class="external-link">chol()</a></code> is not a rank test. On
+a matrix with an exactly zero eigenvalue the pivot that ought to be zero
+comes out positive or negative according to rounding, so <code><a href="https://rdrr.io/r/base/chol.html" class="external-link">chol()</a></code> succeeds on
+some platforms and fails on others. The test <code>min(ev) &lt;= tol * max(ev)</code> does
+not depend on the platform in that way.</p>
+<p>The default tolerance, \(10^{-14}\) (about 45 times the machine epsilon),
+is above the rounding level of an eigenvalue that is exactly zero and below
+the conditioning that <code><a href="param_value.html">param_value()</a></code> reaches on ordinary free vectors, so a
+badly conditioned but positive definite value is accepted.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="param_factor.html">param_factor()</a></code>, the generic whose base method calls this, and
-<code><a href="param_spectrum.html">param_spectrum()</a></code> for the decomposition the deficient branches use
-instead.</p></div>
+<code><a href="param_spectrum.html">param_spectrum()</a></code> for the decomposition that the log-determinant uses.</p></div>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

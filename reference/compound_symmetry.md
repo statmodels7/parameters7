@@ -4,12 +4,12 @@ Returns an object holding the exchangeable covariance
 
 \$\$M(\eta) = \sigma^2\\(1-\rho)I + \rho J\\,\$\$
 
-with \\\sigma^2\\ positive and \\\rho\\ the correlation every pair
-shares. Two free values at every dimension, against
-[`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)'s
-\\p(p+1)/2\\, so it is the parametrization to use when the measurements
-are exchangeable: repeated measures on a subject, items in a block, the
-covariance a random intercept induces.
+with \\\sigma^2\\ positive and \\\rho\\ the correlation that every pair
+shares. Two free values at every dimension, against the \\p(p+1)/2\\ of
+[`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md),
+so it is the parametrization to use when the measurements are
+exchangeable: repeated measures on a subject, items in a block, the
+covariance that a random intercept induces.
 
 ## Usage
 
@@ -22,8 +22,8 @@ compound_symmetry(dimension, link_scale = linkfunctions7::log_link())
 - dimension:
 
   The side \\p\\ of the matrix, **at least 2**. A one by one matrix has
-  no correlation, so `compound_symmetry(1)` throws a message saying the
-  family would carry a free value with no effect.
+  no correlation, so `compound_symmetry(1)` signals an error stating
+  that the family would carry a free value with no effect.
 
 - link_scale:
 
@@ -45,7 +45,7 @@ defaults, `rank` equal to `dimension`, an empty `null_basis`,
 `param_name` `"compound_symmetry"`, and `param_params` holding
 `link_scale` and `link_rho`.
 
-## The correlation is bounded below as well as above
+## Bounds of the correlation
 
 The eigenvalues are \\\sigma^2\\1 + (p-1)\rho\\\\ once and
 \\\sigma^2(1-\rho)\\ with multiplicity \\p-1\\, so the matrix is
@@ -53,17 +53,17 @@ positive definite exactly when
 
 \$\$-\frac{1}{p-1} \< \rho \< 1.\$\$
 
-The correlation therefore rides
+The correlation is therefore mapped by
 `linkfunctions7::bounded_link(-1/(p-1), 1)`. A `rhobit_link()` onto
-\\(-1, 1)\\ would let a caller build an indefinite matrix at a perfectly
-ordinary free value: at \\p = 4\\ a correlation of \\-0.5\\ is inside
-\\(-1, 1)\\ and outside the cone. The bound depends on the dimension, so
-two objects of different sizes carry different links.
+\\(-1, 1)\\ would give an indefinite matrix at an ordinary free value:
+at \\p = 4\\ a correlation of \\-0.5\\ is inside \\(-1, 1)\\ and outside
+the cone. The bound depends on the dimension, so two objects of
+different sizes carry different links.
 
-One consequence to expect: a free value of 0 is the **midpoint** of that
-interval, so at \\p = 4\\ it is a correlation of \\1/3\\, not of 0.
+A free value of 0 is the **midpoint** of that interval, so at \\p = 4\\
+it gives a correlation of \\1/3\\.
 
-## Two quantities that cost nothing
+## The log-determinant and the inverse
 
 From the eigenvalues,
 
@@ -80,15 +80,15 @@ returns it in closed form and factorizes nothing. An exchangeable
 covariance has an exchangeable precision, which leaves the family closed
 under the choice of side.
 
-## Why the derivatives are easy
+## The derivatives
 
 The value is the scale times a pattern **linear** in the correlation,
 \\I + \rho(J - I)\\, so a component with \\a\\ scale indices and \\b\\
 correlation indices is the \\a\\-th derivative of the scale times the
 \\b\\-th derivative of the pattern. All four orders follow from the two
-links' own derivatives with no further algebra, and any component with
-three or more correlation indices reduces to the third derivative of the
-link alone.
+links' own derivatives with no further algebra: a component with \\b\\
+correlation indices carries the \\b\\-th derivative of the correlation's
+link times the constant matrix \\J - I\\.
 
 ## Notation
 
@@ -152,7 +152,7 @@ round(param_solve(s, eta), 4)
 max(abs(param_solve(s, eta) - solve(m)))
 #> [1] 1.110223e-16
 
-# The round trip closes exactly.
+# The round trip closes up to rounding.
 max(abs(param_free(s, m) - eta))
 #> [1] 3.330669e-16
 

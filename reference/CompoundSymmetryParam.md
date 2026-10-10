@@ -3,7 +3,7 @@
 The S7 class of compound-symmetric covariance matrices: equal variances
 and one common correlation, so **two** free values at every dimension.
 It is the covariance of an exchangeable set of measurements, and the one
-a random intercept induces.
+that a random intercept induces.
 
 [`compound_symmetry()`](https://statmodels7.github.io/parameters7/reference/compound_symmetry.md)
 builds one. `param_params` records the two links, and the correlation's
@@ -38,7 +38,7 @@ CompoundSymmetryParam(
 - free_names:
 
   A character vector of length `n_free`, one label per free value, in
-  the order the free vector holds them. Must be unique.
+  the order in which the free vector holds them. Must be unique.
 
 - param_params:
 
@@ -52,7 +52,7 @@ CompoundSymmetryParam(
 
 - rank:
 
-  The rank of the matrix the family produces, a single integer in
+  The rank of the matrix that the family produces, a single integer in
   `0:dimension`. It is a property of the family, so a family whose value
   is positive definite at every \\\eta\\ declares \\p\\ here.
 
@@ -62,8 +62,7 @@ CompoundSymmetryParam(
   an orthonormal basis of the common null space. Use
   [`param_null_basis()`](https://statmodels7.github.io/parameters7/reference/param_null_basis.md)
   to obtain one, or `matrix(numeric(0), dimension, 0)` for a full-rank
-  family. The validator rejects any other shape, and reports both the
-  rank and the shape when the two disagree.
+  family. The validator rejects any other shape.
 
 ## Value
 
@@ -79,7 +78,7 @@ the constructor,
 [`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md)
 for the other two-value family, and
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
-for the properties this inherits.
+for the properties that this class inherits.
 
 ## Examples
 

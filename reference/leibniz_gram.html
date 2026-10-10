@@ -9,7 +9,7 @@ derivatives of \(L\)."><meta property="og:image" content="https://statmodels7.gi
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,10 +82,11 @@ $$\partial^T (L L^\top) = \sum_{S \subseteq T}
 the sum running over subsets of <em>positions</em> in the tuple, which
 handles a repeated index correctly without a multiplicity bookkeeping of
 its own.</p>
-<p>The result is symmetric by construction, with no symmetrizing step: the term
-for a subset \(S\) and the term for its complement are transposes of each
-other, so the sum pairs off. Measured at orders 1 to 3 on a random factor, the
-asymmetry is exactly 0.</p>
+<p>The result is symmetric in exact arithmetic, with no symmetrizing step: the
+term for a subset \(S\) and the term for its complement are transposes of
+each other, so the sum pairs off. In floating point the two terms of a pair
+are added in different orders in an entry and in its transpose, so the
+asymmetry is of the size of the rounding error.</p>
 <p>The loop walks the \(2^{|T|}\) subsets through a bit mask, so the cost is
 \(2^{\text{order}}\) matrix products at worst, and far fewer in practice: a
 term whose <code>dfactor</code> returns <code>NULL</code> is skipped before the product is formed,

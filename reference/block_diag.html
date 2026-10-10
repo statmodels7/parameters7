@@ -19,7 +19,7 @@ random-effect term has."><meta property="og:image" content="https://statmodels7.
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,8 +71,8 @@ random-effect term has.</p>
 <dd><p>One or more objects inheriting from <code><a href="matrix_parameter.html">matrix_parameter()</a></code>, or a
 single list of them. Named arguments supply the block labels, which must be
 unique. A block that is not a <code>matrix_parameter</code> is rejected by position, so
-<code>block_diag(ar1(3), simplex(3))</code> reports that block 2 does not inherit from
-it.</p></dd>
+the error of <code>block_diag(ar1(3), simplex(3))</code> states that block 2 does not
+inherit from it.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -82,36 +82,35 @@ it.</p></dd>
 labels, and <code>null_basis</code> the block diagonal of the blocks'.</p>
     </div>
     <div class="section level2">
-    <h2 id="nothing-is-rederived-and-the-reason">Nothing is rederived, and the reason<a class="anchor" aria-label="anchor" href="#nothing-is-rederived-and-the-reason"></a></h2>
+    <h2 id="derivatives-log-determinant-and-rank">Derivatives, log-determinant and rank<a class="anchor" aria-label="anchor" href="#derivatives-log-determinant-and-rank"></a></h2>
     <p>The free values of one block do not enter another, so</p>
 <p>$$\partial_k M = \mathrm{diag}(0, \ldots, \partial_k S_b, \ldots, 0),
       \qquad \log\lvert M \rvert_{+} = \sum_b \log\lvert S_b \rvert_{+},
       \qquad M^{-1} = \mathrm{diag}(S_1^{-1}, \ldots, S_B^{-1}),$$</p>
 <p>and a derivative whose indices do not all belong to one block is
 <strong>identically zero</strong>, at every order and for the log-determinant as well as
-for the value. Measured on <code>block_diag(log_cholesky(2), ar1(3))</code>, whose five
-free values split 3 and 2: 6 of the 15 second-order components are
-cross-block, 21 of 35 at third order and 50 of 70 at fourth, and every one of
-them is exactly 0. What is left is fetched from the block and placed in the
+for the value. For <code>block_diag(log_cholesky(2), ar1(3))</code>, whose five free
+values split 3 and 2, 6 of the 15 second-order components are cross-block,
+21 of 35 at third order and 50 of 70 at fourth, and every one of them is
+exactly 0. What is left is fetched from the block and placed in the
 rows and columns that block occupies.</p>
 <p>The rank is the sum of the blocks' ranks and the null basis is their block
-diagonal, both read from the components and never from an assembled matrix,
-which is the rule this package follows everywhere: a rank is a property of the
-family, and counting eigenvalues of the assembled matrix would make it a
-property of the arithmetic. A deficient block is therefore admitted, and the
-composite reports the deficiency: with a rank-one \(P\) of side 2,
+diagonal, both taken from the blocks and not from the eigenvalues of the
+assembled matrix, because the rank is a property of the family and an
+eigenvalue count would depend on the free vector. A deficient block is
+therefore admitted, and the composite reports the deficiency: with a rank-one \(P\) of side 2,
 <code>block_diag(scaled_matrix(P), ar1(3))</code> has rank 4 of 5 and a null basis of one
 column, <code><a href="param_logdet.html">param_logdet()</a></code> returns the log pseudo-determinant, and
-<code><a href="param_solve.html">param_solve()</a></code> is refused by the generic.</p>
+<code><a href="param_solve.html">param_solve()</a></code> is rejected by the generic.</p>
     </div>
     <div class="section level2">
     <h2 id="against-kron-identity-">Against kron_identity()<a class="anchor" aria-label="anchor" href="#against-kron-identity-"></a></h2>
     <p><code><a href="kron_identity.html">kron_identity()</a></code> repeats <strong>one</strong> block \(m\) times and they share a single
 free vector, so its <code>n_free</code> does not grow with \(m\). Here the blocks are
 different objects and their free vectors are concatenated, so the composite has
-\(\sum_b d_b\) free values. Use this one where the groups have different
-structures, and that one where they have the same structure and the same
-parameters.</p>
+\(\sum_b d_b\) free values. This composition suits groups with different
+structures, and <code><a href="kron_identity.html">kron_identity()</a></code> suits groups with the same structure and
+the same parameters.</p>
     </div>
     <div class="section level2">
     <h2 id="labels">Labels<a class="anchor" aria-label="anchor" href="#labels"></a></h2>
@@ -132,8 +131,8 @@ vector it owns.</p>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="kron_identity.html">kron_identity()</a></code> for identical blocks, <code><a href="dr_prod.html">dr_prod()</a></code> and
-<code><a href="sum_struct.html">sum_struct()</a></code> for the other two compositions, and <code><a href="matrix_parameter.html">matrix_parameter()</a></code> for
-the contract every block meets.</p></div>
+<code><a href="sum_struct.html">sum_struct()</a></code> for two other compositions, and <code><a href="matrix_parameter.html">matrix_parameter()</a></code> for the
+class from which every block inherits.</p></div>
     </div>
 
     <div class="section level2">

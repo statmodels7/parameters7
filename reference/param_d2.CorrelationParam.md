@@ -9,12 +9,11 @@ with each \\\partial^S L\\ from
 [`corr_dfactor()`](https://statmodels7.github.io/parameters7/reference/corr_dfactor.md)
 and zero wherever the multiset \\S\\ spans two rows of \\L\\.
 
-What survives is worth knowing before reading a result. A component in
-two angles from **different** rows \\i\\ and \\j\\ does not vanish: the
-two outer terms drop, but \\L_k L_l^\top + L_l L_k^\top\\ is supported
-on exactly the entries \\(i, j)\\ and \\(j, i)\\. It is zero even there
-when the two angles sit beyond the columns the two rows share. The
-diagonal is exactly zero at every order.
+A component in two angles from **different** rows \\i\\ and \\j\\ does
+not vanish: the two outer terms drop, but \\L_k L_l^\top + L_l
+L_k^\top\\ is supported on the entries \\(i, j)\\ and \\(j, i)\\. It is
+zero even there when the two angles lie beyond the columns that the two
+rows share. The diagonal is exactly zero at every order.
 
 ## Arguments
 
@@ -36,7 +35,8 @@ diagonal is exactly zero at every order.
 ## Value
 
 A list of `choose(s@n_free + 1, 2)` symmetric matrices keyed as
-`param_tuple_names(s)` and in that order, each with a zero diagonal.
+`param_tuple_names(s)` and in that order, each with a diagonal of exact
+zeros.
 
 ## See also
 

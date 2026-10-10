@@ -5,7 +5,7 @@ Closed form, and it is the link's own derivative placed on a diagonal:
 \$\$\partial_k M = h'(\eta_k)\\ \textstyle\sum\_{i:\\ o_i = k}
 E\_{ii},\$\$
 
-where \\o_i\\ is the free value entry \\i\\ belongs to. For a
+where \\o_i\\ is the free value to which entry \\i\\ belongs. For a
 [`diagonal_matrix()`](https://statmodels7.github.io/parameters7/reference/diagonal_matrix.md)
 that is one entry, so \\\partial_k M\\ is \\h'(\eta_k) E\_{kk}\\; for a
 [`scalar_matrix()`](https://statmodels7.github.io/parameters7/reference/scalar_matrix.md)

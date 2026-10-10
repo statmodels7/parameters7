@@ -1,6 +1,6 @@
 # Default Fourth Log-Determinant Derivatives
 
-The method every
+The method that every
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
 inherits when it registers no
 [`param_d4logdet()`](https://statmodels7.github.io/parameters7/reference/param_d4logdet.md)
@@ -41,34 +41,32 @@ second-order block per tuple.
 A numeric vector of `choose(s@n_free + 3, 4)` entries, keyed as
 `param_tuple_names(s, 4)` and in that order.
 
-## This is the least accurate quantity the package can produce
+## Accuracy
 
 With analytic
 [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md)
 and
-[`param_d2()`](https://statmodels7.github.io/parameters7/reference/param_d2.md)
-the differencing is a single layer on an exact identity, and on a \\4
-\times 4\\ AR(1) covariance the answer agrees with the closed form to
-\\2 \times 10^{-6}\\ on entries of size 2.2.
+[`param_d2()`](https://statmodels7.github.io/parameters7/reference/param_d2.md),
+or with a family's own
+[`param_d2logdet()`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.md),
+the differencing is a single layer on an exact quantity, at the order-2
+step.
 
 With only
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
 supplied, the numerical arrays would feed a numerical second-order block
-which is then differenced twice more, and the layers compound: the same
-measurement gives an absolute error of **9**, larger than the quantity
-itself. That number is not usable and the method refuses to return it,
-through
+that is then differenced twice more, and the error can exceed the
+quantity itself. The method signals an error instead, through
 [`check_analytic_arrays()`](https://statmodels7.github.io/parameters7/reference/check_analytic_arrays.md).
-A family that needs a fourth derivative of its log-determinant must
-supply at least
+A family that needs a fourth derivative of its log-determinant supplies
+at least
 [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md)
 and
 [`param_d2()`](https://statmodels7.github.io/parameters7/reference/param_d2.md)
-in closed form, and preferably
-[`param_d2logdet()`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.md)
-as well.
+in closed form, or its own
+[`param_d2logdet()`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.md).
 [`param_is_numerical()`](https://statmodels7.github.io/parameters7/reference/param_is_numerical.md)
-is how a consumer finds out which case it is in.
+reports which components are numerical.
 
 ## See also
 
@@ -77,4 +75,4 @@ for the generic,
 [`param_d3logdet.matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/param_d3logdet.matrix_parameter.md)
 for the order below, and
 [`param_is_numerical()`](https://statmodels7.github.io/parameters7/reference/param_is_numerical.md)
-to ask which components are numerical.
+to find out which components are numerical.

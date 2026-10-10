@@ -10,7 +10,8 @@ for a
 parameter. The value being linear in the weights, a component is
 **exactly zero** unless every index names the same free value, and is
 then that weight's \\m\\-th derivative times its own fixed matrix.
-Nothing is differenced and no matrix arithmetic is done.
+Nothing is differenced, and the only matrix arithmetic is a
+multiplication by a scalar.
 
 ## Arguments
 
@@ -43,8 +44,8 @@ and differ only in the order they pass. At \\K = 2\\ the zeros are 1 of
 the 3 second-order components, 2 of 4 at third order and 3 of 5 at
 fourth. Compare
 [`param_dlogdet.SumStructParam()`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.SumStructParam.md),
-where nothing vanishes: the value is linear in the weights and its
-log-determinant is not.
+where the mixed components are in general not zero: the value is linear
+in the weights and its log-determinant is not.
 
 ## See also
 

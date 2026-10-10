@@ -25,7 +25,7 @@ param_dlogdet(s, eta, ...)
 
 - ...:
 
-  Passed to the method. No method in this package reads it.
+  Passed to the method. The methods in this package do not read it.
 
 ## Value
 
@@ -42,8 +42,8 @@ claim: it has to agree with
 [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md)
 through that trace, and
 [`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)
-runs both routes and compares them. The example below does the same in
-three lines.
+runs both routes and compares them, and the example below makes the same
+comparison.
 
 ## What the answer looks like
 

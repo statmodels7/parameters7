@@ -15,7 +15,7 @@ weight."><meta property="og:image" content="https://statmodels7.github.io/parame
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -85,12 +85,12 @@ going through <code><a href="compose_order.html">compose_order()</a></code>, bec
 several weights at once, never a univariate composition. The product over the groups'
 partitions is the grid the loop walks; the partitions come from
 <code><a href="https://statmodels7.github.io/numericals7/reference/set_partitions.html" class="external-link">numericals7::set_partitions()</a></code>, the one enumeration the toolkit keeps.</p>
-<p>It is the dearest quantity this family computes: at side 6 and \(K = 5\) the
-fourth order costs 0.013 s against 0.0007 s for the value's own fourth
-derivatives, the expansion evaluating a chain of matrix products per ordering.
-Against one stencil on the analytic order below, the four orders agree to
-\(7 \times 10^{-11}\), \(1 \times 10^{-11}\), \(3 \times 10^{-12}\) and
-\(3 \times 10^{-13}\).</p>
+<p>Where the family is rank deficient, the derivatives are those of the log
+pseudo-determinant: the inverse in the expansion is replaced by
+\((M + ZZ^\top)^{-1} - ZZ^\top\), with \(Z\) the orthonormal basis of the
+declared null space, which does not move with the free vector.</p>
+<p>It is the most expensive quantity of this family, the expansion evaluating a
+chain of matrix products for each ordering.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

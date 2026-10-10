@@ -2,13 +2,13 @@
 
 Evaluates each block at its own stretch of the free vector and writes it
 into the rows and columns that block occupies, leaving the off-diagonal
-blocks at the zeros the matrix was created with. Each block is exactly
-what its own family returns, to the bit.
+blocks at the zeros with which the matrix was created. Each block is
+identical to what its own family returns.
 
 The value is labeled `v1`, `v2`, ..., `vp` on both margins, the
-convention
+convention that
 [`name_dims()`](https://statmodels7.github.io/parameters7/reference/name_dims.md)
-states and every family in the package follows.
+states.
 
 ## Arguments
 

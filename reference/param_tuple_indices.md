@@ -25,8 +25,8 @@ param_tuple_indices(s, order = 2L)
 
 - order:
 
-  The derivative order: `1`, `2` (the default), `3` or `4`. Anything
-  else throws `'order' must be 1, 2, 3 or 4.`
+  The derivative order: `1`, `2` (the default), `3` or `4`. Any other
+  value signals the error `'order' must be 1, 2, 3 or 4.`
 
 ## Value
 
@@ -36,12 +36,12 @@ order within a tuple.
 
 ## Details
 
-The order at orders 3 and 4 matches the enumeration distributions7 uses
-for its own higher derivatives, so a consumer contracting a parameter's
-derivative array against a distribution's can walk the two lists
-together without reindexing. Both come from
-[`numericals7::tuple_indices()`](https://statmodels7.github.io/numericals7/reference/tuple_indices.html),
-which is the single copy of the enumeration in the toolkit.
+At orders 3 and 4 the tuples come in the same order as in the
+enumeration that distributions7 uses for its own higher derivatives, so
+a consumer contracting a parameter's derivative array against a
+distribution's can walk the two lists together without reindexing. The
+tuples come from
+[`numericals7::tuple_indices()`](https://statmodels7.github.io/numericals7/reference/tuple_indices.html).
 
 ## Notation
 

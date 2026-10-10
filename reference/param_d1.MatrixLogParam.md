@@ -5,18 +5,13 @@ rotate the basis direction \\E_k\\ by the eigenvectors of \\S\\, weight
 it entrywise by the two-point divided differences \\e\[\lambda_i,
 \lambda_j\]\\, and rotate back. Exact, with no differencing.
 
-Note that \\\partial_k M\\ is **not** \\E_k \exp(S)\\: the exponential
-of a matrix does not commute with an arbitrary direction, which is why
-the weighting by divided differences appears at all. Where the
-eigenvalues are equal the weight is \\e^{\lambda}\\ and the formula
-reduces to the scalar one, which
-[`dd_exp()`](https://statmodels7.github.io/parameters7/reference/dd_exp.md)'s
-Opitz route delivers exactly.
-
-Measured against a central difference of
-[`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
-at \\p = 3\\, the agreement is \\1.5 \times 10^{-10}\\, which is the
-difference's own accuracy.
+The derivative \\\partial_k M\\ differs from \\E_k \exp(S)\\, because
+the exponential of a matrix does not commute with an arbitrary
+direction; the weighting by divided differences accounts for this. Where
+the eigenvalues are equal the weight is \\e^{\lambda}\\ and the formula
+reduces to the scalar one, which the Opitz route of
+[`dd_exp()`](https://statmodels7.github.io/parameters7/reference/dd_exp.md)
+delivers exactly.
 
 ## Arguments
 

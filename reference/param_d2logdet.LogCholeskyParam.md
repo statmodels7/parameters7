@@ -5,14 +5,14 @@ linear in the free vector, so its second derivative vanishes at every
 \\\eta\\. The zeros are exact, so a consumer can drop the term entirely
 instead of carrying small numbers through a contraction.
 
-This is worth knowing when checking another family: a comparison of a
-log-determinant Hessian against a numerical reference can pass on
-[`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
-while a term is missing, both sides being zero.
-[`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md)
-and
+A comparison of a general log-determinant Hessian against a numerical
+reference therefore compares two zeros on
+[`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md).
+[`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md),
 [`compound_symmetry()`](https://statmodels7.github.io/parameters7/reference/compound_symmetry.md)
-are the families where this order has something to get wrong.
+and
+[`correlation_matrix()`](https://statmodels7.github.io/parameters7/reference/correlation_matrix.md)
+are families where this order is not zero.
 
 ## Arguments
 

@@ -3,8 +3,8 @@
 Evaluates \\\partial^{S_D}(d_i d_j)\\ for every pair \\(i, j)\\ at once,
 given the multiset \\S_D\\ of scale indices. It is zero wherever \\S_D\\
 contains an index naming neither \\i\\ nor \\j\\, so the result is
-**supported on the rows and columns those indices name**, and that
-sparsity is half of why the composition costs so little.
+**supported on the rows and columns that those indices name**, which
+keeps the cost of the composition low.
 
 ## Usage
 
@@ -16,7 +16,8 @@ dr_scale_factor(sd, tuple)
 
 - sd:
 
-  A 5 by \\p\\ matrix of inverse-link derivatives, as returned by
+  An `order + 1` by \\p\\ matrix of inverse-link derivatives, as
+  returned by
   [`dr_scale_derivs()`](https://statmodels7.github.io/parameters7/reference/dr_scale_derivs.md).
 
 - tuple:
@@ -33,9 +34,8 @@ A symmetric \\p\\ by \\p\\ numeric matrix.
 
 Three cases, and the arithmetic differs in each:
 
-- **no indices.** The factor is \\d_i d_j\\, an outer product, and that
-  is the case a component differentiating the correlation alone falls
-  into.
+- **no indices.** The factor is \\d_i d_j\\, an outer product, the case
+  of a component that differentiates the correlation alone.
 
 - **one distinct index \\k\\, with multiplicity \\m\\.** Off the
   diagonal the entry carries one factor of \\d_k\\, so it is \\d_k^{(m)}

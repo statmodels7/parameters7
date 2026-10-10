@@ -2,9 +2,8 @@
 
 Reads the standard deviations off the diagonal as
 \\\sqrt{\Sigma\_{jj}}\\, divides them out, and hands the resulting
-correlation matrix to the correlation block. Exact wherever the block
-is: measured at \\p = 3\\ with the default block, the round trip closes
-to \\7 \times 10^{-16}\\.
+correlation matrix to the correlation block, so the round trip is as
+exact as the block's.
 
 ## Arguments
 
@@ -26,7 +25,8 @@ to \\7 \times 10^{-16}\\.
 ## Value
 
 A numeric vector of length `s@n_free`: the linked standard deviations
-followed by the correlation block's own free vector.
+followed by the correlation block's own free vector, named by
+`s@free_names`.
 
 ## Details
 
@@ -35,12 +35,11 @@ A matrix with a non-positive diagonal entry is rejected with
 is reported by the correlation block's own message, which is the more
 specific of the two.
 
-This is where a `correlation` block that carries a scale of its own
-shows: the division always leaves a unit diagonal, so such a block is
-handed a matrix its own scale cannot be recovered from, and the round
-trip fails without any error being signaled. See
+The division always leaves a unit diagonal, so a block that carried a
+scale of its own would receive a matrix from which its scale cannot be
+recovered, and the round trip would fail without an error.
 [`dr_prod()`](https://statmodels7.github.io/parameters7/reference/dr_prod.md)
-on that requirement.
+rejects such a block at construction.
 
 ## See also
 

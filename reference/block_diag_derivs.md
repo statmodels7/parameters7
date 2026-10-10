@@ -1,6 +1,6 @@
 # Assemble a Block Diagonal's Derivatives of a Given Order
 
-Places each block's own component in the rows and columns that block
+Places each block's own component in the rows and columns that the block
 occupies, and returns a zero matrix for a tuple whose indices are not
 all owned by one block.
 

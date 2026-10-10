@@ -1,13 +1,12 @@
 # Defining a parameter
 
-A covariance matrix is not a vector of free numbers. Something has to
-carry it from an unconstrained vector an optimizer can step in to a
-matrix that is positive definite at every point of that vector, and it
-has to carry the derivatives with it, because a fitting routine
-differentiates through the map. A family that only worked for the
-fourteen charts this package ships would have solved nothing. This
-vignette builds one it does not ship, and shows what the package
-guarantees about it at each step.
+A covariance matrix is not a vector of free numbers. A map has to carry
+an unconstrained vector, in which an optimizer can step, to a matrix
+that is positive definite at every point of that vector, and it has to
+carry the derivatives with it, because a fitting routine differentiates
+through the map. A model may need a map that the package does not ship.
+This vignette builds one, and shows at each step what the package
+provides for it.
 
 The example is an MA(1) autocovariance. For
 $`x_k = e_k + \theta e_{k-1}`$ with $`\operatorname{Var}(e) = \sigma^2`$
@@ -20,10 +19,11 @@ whatever the dimension.
 ## The minimum
 
 A new parameter is a subclass of `parameter` (or of `matrix_parameter`,
-if it is a matrix and a consumer will want its determinant and its
-solves) and a method for
+if its value is a symmetric matrix and a consumer needs its determinant
+and its solves) with a method for
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md).
-Nothing else is required.
+The value carries the dimension labels `v1`, `v2`, … on both margins, as
+the families of the package do.
 
 ``` r
 
@@ -36,6 +36,7 @@ ma1_band <- function(p, d, o) {
     m[cbind(i, i + 1)] <- o
     m[cbind(i + 1, i)] <- o
   }
+  dimnames(m) <- rep(list(paste0("v", seq_len(p))), 2)
   m
 }
 
@@ -49,8 +50,8 @@ S7::method(param_value, Ma1Param) <- function(s, eta, ...) {
 
 The constructor fills in what the class records about itself. `rank` and
 `null_basis` are properties of the *family*, not of a point: they must
-not move with the free vector, which is why a family whose null space
-depends on its coordinates has to reject rather than record one.
+not move with the free vector, so a family whose null space would depend
+on its coordinates is rejected at construction instead of recorded.
 
 ``` r
 
@@ -68,22 +69,23 @@ ma1 <- function(p, class = Ma1Param) {
 
 s <- ma1(5)
 round(param_value(s, c(log(1.4), atanh(0.6))), 4)
-#>        [,1]   [,2]   [,3]   [,4]   [,5]
-#> [1,] 2.6656 1.1760 0.0000 0.0000 0.0000
-#> [2,] 1.1760 2.6656 1.1760 0.0000 0.0000
-#> [3,] 0.0000 1.1760 2.6656 1.1760 0.0000
-#> [4,] 0.0000 0.0000 1.1760 2.6656 1.1760
-#> [5,] 0.0000 0.0000 0.0000 1.1760 2.6656
+#>        v1     v2     v3     v4     v5
+#> v1 2.6656 1.1760 0.0000 0.0000 0.0000
+#> v2 1.1760 2.6656 1.1760 0.0000 0.0000
+#> v3 0.0000 1.1760 2.6656 1.1760 0.0000
+#> v4 0.0000 0.0000 1.1760 2.6656 1.1760
+#> v5 0.0000 0.0000 0.0000 1.1760 2.6656
 ```
 
-That is the whole of the compulsory part. Every other generic now
-answers.
+Every generic except the inverse map
+[`param_free()`](https://statmodels7.github.io/parameters7/reference/param_free.md)
+now has a method.
 
-## What comes free, and what it costs
+## The base-class methods
 
 The derivatives, the log-determinant and its derivatives, the solve and
-the factor all have numerical fallbacks on the base class, so the family
-is usable at once:
+the factor all have methods on the base classes, so the family can be
+used at once:
 
 ``` r
 
@@ -91,7 +93,9 @@ eta <- c(log(1.4), atanh(0.6))
 str(param_d1(s, eta), max.level = 1)
 #> List of 2
 #>  $ log_scale: num [1:5, 1:5] 5.33 2.35 0 0 0 ...
+#>   ..- attr(*, "dimnames")=List of 2
 #>  $ z_theta  : num [1:5, 1:5] 1.51 1.25 0 0 0 ...
+#>   ..- attr(*, "dimnames")=List of 2
 param_logdet(s, eta)
 #> [1] 3.80883
 round(param_solve(s, eta, b = c(1, 0, 0, 0, 0)), 6)
@@ -104,8 +108,9 @@ round(param_solve(s, eta, b = c(1, 0, 0, 0, 0)), 6)
 ```
 
 [`param_is_numerical()`](https://statmodels7.github.io/parameters7/reference/param_is_numerical.md)
-says which of them are differences and which are formulas, so a reader
-can tell what the object is doing:
+reports which quantities come from the base class: the derivatives of
+the value are then finite differences, and the log-determinant and its
+first two derivatives come from an eigendecomposition.
 
 ``` r
 
@@ -116,8 +121,8 @@ unlist(param_is_numerical(s))
 #>           TRUE           TRUE           TRUE           TRUE
 ```
 
-Compare a shipped family, where the answer is empty because every order
-is written out:
+For a family of the package every entry is `FALSE`, because every
+quantity is written out:
 
 ``` r
 
@@ -128,15 +133,16 @@ unlist(param_is_numerical(log_cholesky(3)))
 #>          FALSE          FALSE          FALSE          FALSE
 ```
 
-The cost is accuracy and time. A fallback of order $`k`$ applies **one**
-stencil to the highest analytic order the family supplies, never a chain
-of first differences, so supplying the first derivative improves every
-order above it.
+The default second derivative and the default log-determinant
+derivatives read the analytic first derivative when the family supplies
+one, and the value otherwise; the default third and fourth derivatives
+apply one stencil to the value. Supplying the first derivative therefore
+improves the second derivative and the log-determinant derivatives.
 
 ## Adding a closed form
 
-Register one method and it takes over through dispatch. The MA(1)
-derivatives are elementary: with $`t = \tanh z`$ and $`t' = 1 - t^2`$,
+A registered method takes over through dispatch. The MA(1) derivatives
+are elementary: with $`t = \tanh z`$ and $`t' = 1 - t^2`$,
 
 ``` math
 \frac{\partial\Sigma}{\partial\log\sigma} = 2\Sigma,\qquad
@@ -158,21 +164,22 @@ S7::method(param_d1, Ma1Param) <- function(s, eta, ...) {
   )
 }
 
-unlist(param_is_numerical(s))["d1"]
-#> <NA> 
-#>   NA
+unlist(param_is_numerical(s))["param_d1"]
+#> param_d1 
+#>    FALSE
 ```
 
-The [`setNames()`](https://rdrr.io/r/stats/setNames.html) is part of the
-contract, no decoration: the components of a derivative list are named
-by `free_names`, and those of a second derivative by
+The [`setNames()`](https://rdrr.io/r/stats/setNames.html) is required:
+the components of a derivative list are named by `free_names`, and those
+of a second derivative by
 [`param_tuple_names()`](https://statmodels7.github.io/parameters7/reference/param_tuple_names.md).
-A method returning the right numbers in an unnamed list is caught by the
-validator’s ninth check, which is how this one was written correctly on
-the second attempt.
+A method that returns the right numbers in an unnamed list fails the
+ninth check of the validator.
 
-The higher orders are still numerical, and are now one stencil on this,
-no longer on the value:
+The default second derivative now differences this first derivative, and
+the third and fourth orders remain stencils on the value. The following
+chunk compares the first derivative with a central difference of the
+value:
 
 ``` r
 
@@ -190,18 +197,18 @@ max(abs(param_d1(s, eta)[[2]] - fd[[2]]))
 
 ## The log-determinant
 
-The contract asks for $`\log\lvert\Sigma\rvert`$ and its derivatives,
-because a likelihood carrying a covariance carries that term. For most
-families it is computed from a factorization; here the matrix is a
-symmetric tridiagonal Toeplitz, whose eigenvalues are known in closed
-form,
+A likelihood with a covariance contains $`\log\lvert\Sigma\rvert`$, so a
+family can register methods for it and its derivatives. For a family
+without such a method it is computed from an eigendecomposition; here
+the matrix is a symmetric tridiagonal Toeplitz matrix, whose eigenvalues
+are known in closed form,
 
 ``` math
 \lambda_k = \sigma^2\bigl(1 + \theta^2 + 2\theta\cos\tfrac{k\pi}{p+1}\bigr),
   \qquad k = 1,\dots,p,
 ```
 
-so the determinant costs $`p`$ cosines and no decomposition at all:
+so the determinant costs $`p`$ cosines and no decomposition:
 
 ``` r
 
@@ -222,11 +229,12 @@ c(closed = param_logdet(s, eta),
 ## Validating it
 
 [`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)
-asks what can be asked: that the value is symmetric and positive
-definite across the chart, that every derivative order agrees with a
-numerical reference, that the log-determinant and its derivatives agree
-with the value’s, and that the solve and the factor reproduce the
-matrix.
+checks that the value is symmetric and positive definite across the
+chart, that the inverse map recovers the free vector, that the first and
+second derivatives agree with a numerical reference, that the
+log-determinant and its gradient and Hessian agree with the value, that
+the solve and the factor reproduce the matrix, and that the shapes and
+names are as declared.
 
 ``` r
 
@@ -235,23 +243,23 @@ res
 #>                check      status    statistic
 #> 1         membership          OK 0.000000e+00
 #> 2         round trip NOT CHECKED           NA
-#> 3  first derivatives          OK 2.813683e-11
+#> 3  first derivatives          OK 3.878954e-11
 #> 4 second derivatives NOT CHECKED           NA
 #> 5    log-determinant          OK 3.188277e-16
 #> 6    logdet gradient NOT CHECKED           NA
 #> 7     logdet hessian NOT CHECKED           NA
 #> 8   solve and factor          OK 5.087223e-16
-#> 9   shapes and names        FAIL           NA
+#> 9   shapes and names          OK           NA
 ```
 
-An order that comes from a fallback is compared against a numerical
-differentiation of the order below it, which is the same arithmetic
-twice and would agree however wrong the family is. Those are reported as
-**unchecked**, never as passed, so the report distinguishes what was
-verified from what was merely computed.
+A quantity that comes from the base class would be compared with a
+numerical differentiation, which is the same arithmetic twice and would
+agree however wrong the family is. Such a quantity is reported as **NOT
+CHECKED**, so the report distinguishes what was verified from what was
+only computed.
 
-The way to test a validator is to break something and confirm it
-complains:
+A validator is tested by breaking something and confirming that the
+check fails:
 
 ``` r
 
@@ -259,7 +267,7 @@ Ma1Broken <- S7::new_class("Ma1Broken", parent = Ma1Param)
 
 S7::method(param_d1, Ma1Broken) <- function(s, eta, ...) {
   d <- S7::method(param_d1, Ma1Param)(s, eta)   # correct, then spoiled
-  d[[1]] <- d[[1]] * 1.05                       # five per cent out
+  d[[1]] <- d[[1]] * 1.05                       # 5 percent too large
   d
 }
 
@@ -271,20 +279,18 @@ bad[bad$status != "OK", ]
 #> 4 second derivatives NOT CHECKED        NA
 #> 6    logdet gradient NOT CHECKED        NA
 #> 7     logdet hessian NOT CHECKED        NA
-#> 9   shapes and names        FAIL        NA
 ```
 
-An error of one part in twenty is caught, and the checks that were
-already unchecked stay so.
+An error of one part in twenty is caught, and the checks that were not
+checked before remain NOT CHECKED.
 
 ## Rank, the null space and the solve
 
-A family is allowed to be rank deficient, and then the honest answers
-change.
+A family may be rank deficient, and then some results change.
 [`scaled_matrix()`](https://statmodels7.github.io/parameters7/reference/scaled_matrix.md)
 on a singular matrix records the rank, reports the **log
 pseudo-determinant**, the determinant itself being $`-\infty`$, and
-refuses the solve:
+rejects the solve:
 
 ``` r
 
@@ -301,20 +307,21 @@ try(param_solve(sm, 0))
 #>   model actually inverts and solve that.
 ```
 
-The refusal is deliberate. What a consumer of an improper prior needs is
-the quadratic form and the log pseudo-determinant; the matrix it
-actually inverts is $`X'X + \lambda P`$, which is non-singular. A
-pseudo-inverse returned under the name of a solve would be a different
-object with the same name.
+The rejection is deliberate. A consumer of an improper prior needs the
+quadratic form and the log pseudo-determinant, and the matrix that it
+inverts is $`X'X + \lambda P`$, which is non-singular. A pseudo-inverse
+returned by
+[`param_solve()`](https://statmodels7.github.io/parameters7/reference/param_solve.md)
+would be a different quantity from the inverse.
 
-## A name says the coordinate, not the quantity
+## Names of coordinates and quantities
 
-A free value is unconstrained by construction, so a name that promises a
-bounded quantity and reports a free one misleads. `free_names` records
-the *transform*, and
+A free value is unconstrained, so a name that suggests a bounded
+quantity for a free value would mislead. `free_names` records the
+*transform*, and
 [`param_readable()`](https://statmodels7.github.io/parameters7/reference/param_readable.md)
-reports what the family is about, with the Jacobian from the free vector
-so a delta method can follow:
+reports the quantities that the family describes, with the Jacobian from
+the free vector for the delta method:
 
 ``` r
 
@@ -332,16 +339,23 @@ data.frame(quantity = rownames(rd$jacobian), value = signif(rd$value, 6),
 #> 5     phi2 0.197375
 ```
 
-The two are different numbers on purpose: the coordinate is a partial
-autocorrelation and `phi1` is the first autoregressive coefficient,
-which appears nowhere in $`\Sigma`$’s coordinates. The coefficients are
-intervalled on the identity scale, the stationary region not being a
-box.
+The coordinate `z_pacf1` is the inverse hyperbolic tangent of the first
+partial autocorrelation, `pacf1`, and `phi1` is the first autoregressive
+coefficient, which does not appear among the coordinates. The intervals
+of the coefficients are built on the identity scale, the stationary
+region not being a box.
 
 ## Composing
 
-Four wrappers build a parameter from others, and none of them rederives
-anything, because the free values of one part do not enter another:
+Five wrappers build a parameter from others:
+[`block_diag()`](https://statmodels7.github.io/parameters7/reference/block_diag.md),
+[`kron_identity()`](https://statmodels7.github.io/parameters7/reference/kron_identity.md),
+[`dr_prod()`](https://statmodels7.github.io/parameters7/reference/dr_prod.md),
+[`sum_struct()`](https://statmodels7.github.io/parameters7/reference/sum_struct.md)
+and
+[`inverse_of()`](https://statmodels7.github.io/parameters7/reference/inverse_of.md).
+Each assembles its derivatives from those of its parts, with no new
+derivation:
 
 ``` r
 
@@ -355,13 +369,15 @@ blk@free_names
 
 In a block diagonal every component whose indices span two blocks is
 exactly zero at every order. `kron_identity(s, m)` repeats one block
-$`m`$ times over one free vector, as grouped random effects need;
+$`m`$ times over one shared free vector, as grouped random effects need;
 [`dr_prod()`](https://statmodels7.github.io/parameters7/reference/dr_prod.md)
-writes a covariance as $`DRD`$, so the coordinates are standard
-deviations and correlations;
+writes a covariance as $`DRD`$, so the coordinates are the linked
+standard deviations followed by those of the correlation block;
 [`sum_struct()`](https://statmodels7.github.io/parameters7/reference/sum_struct.md)
 is a non-negative combination of fixed matrices, and its log-determinant
-derivatives are the cyclic trace expansion.
+derivatives are the cyclic trace expansion;
+[`inverse_of()`](https://statmodels7.github.io/parameters7/reference/inverse_of.md)
+gives the family whose value is the inverse of another family’s.
 
 [`sum_struct()`](https://statmodels7.github.io/parameters7/reference/sum_struct.md)
 reads its rank from the components **stacked and individually
@@ -378,16 +394,20 @@ falls as the weights spread apart.
   method, with the constructor recording `n_free`, `free_names`, and for
   a matrix the `dimension`, `rank` and `null_basis`.
 - Rank and null space are properties of the family and must not move
-  with the free vector; a family whose null space does move rejects
-  instead.
-- Everything else has a numerical fallback, and
+  with the free vector; a family whose null space would move is
+  rejected.
+- Every generic except
+  [`param_free()`](https://statmodels7.github.io/parameters7/reference/param_free.md)
+  has a method on the base classes, and
   [`param_is_numerical()`](https://statmodels7.github.io/parameters7/reference/param_is_numerical.md)
-  says which is which.
-- Register closed forms one at a time; each takes over through dispatch,
-  and each improves the fallbacks above it.
+  reports which quantities use it.
+- Closed forms can be registered one at a time, each taking over through
+  dispatch; a closed first derivative improves the default second
+  derivative and the log-determinant derivatives.
 - [`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)
-  verifies what can be verified and reports the rest as unchecked.
+  verifies what can be verified and reports the rest as NOT CHECKED.
 - `free_names` names the transform;
   [`param_readable()`](https://statmodels7.github.io/parameters7/reference/param_readable.md)
   names the quantity and carries the Jacobian.
-- The four composition wrappers rederive nothing.
+- The five composition wrappers assemble their derivatives from those of
+  their parts.

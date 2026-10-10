@@ -9,8 +9,8 @@ for a
 [`block_diag()`](https://statmodels7.github.io/parameters7/reference/block_diag.md)
 parameter: each block's own derivatives, placed in the rows and columns
 that block occupies, and **exactly zero** for a tuple spanning two
-blocks. Nothing is rederived and nothing is differenced, so the
-composite is as exact as its blocks are.
+blocks. The blocks' derivatives are used as they are, with no
+differencing, so the composite is as exact as its blocks are.
 
 ## Arguments
 

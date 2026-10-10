@@ -1,7 +1,7 @@
-# The Contract Check of the Inverse's Derivatives
+# Argument Check for the Inverse's Derivatives
 
-Refuses a parameter that is not a matrix or has no inverse, naming the
-function that was called.
+Signals an error when a parameter is not a matrix or has no inverse. The
+message names the function that was called.
 
 ## Usage
 

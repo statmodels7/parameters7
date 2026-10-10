@@ -6,12 +6,14 @@ and **genuinely free**. No entry is transformed; the free values fill
 the lower triangle of \\S\\ directly, the diagonal first and then below
 the diagonal column by column, and the exponential does the rest. Any
 vector in \\\mathbb{R}^{p(p+1)/2}\\ gives a positive definite matrix,
-the exponential of a symmetric matrix having positive eigenvalues.
+the exponential of a symmetric matrix having positive eigenvalues, as
+long as no eigenvalue of \\S\\ exceeds about 709.78, above which the
+exponential overflows in double precision.
 
 It parametrizes the same cone as
 [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
-with the same number of free values. Which to reach for depends on which
-quantities you want free; see **Details**.
+with the same number of free values. The choice between the two depends
+on which quantities should have a closed form; see **Details**.
 
 ## Usage
 
@@ -24,7 +26,7 @@ matrix_log(dimension)
 - dimension:
 
   The side \\p\\ of the matrix. A single positive whole number, finite
-  and at least 1; anything else throws
+  and at least 1; any other value signals the error
   `'dimension' must be a single positive integer.`
 
 ## Value
@@ -35,16 +37,15 @@ with `n_free` equal to \\p(p+1)/2\\, `free_names` `S1` ... `Sp` then
 `S2.1`, `S3.1`, ..., `rank` equal to `dimension`, an empty `null_basis`,
 `param_name` `"matrix_log"`, and `param_params` holding `positions`.
 
-## Two quantities cost nothing
+## The log-determinant and the inverse
 
 \$\$\log\|M\| = \mathrm{tr}(S) = \sum\_{i=1}^{p} \eta_i,\$\$
 
 the sum of the diagonal free values, so the log-determinant is linear
 and its second, third and fourth derivatives are exactly zero. And the
 inverse is \\M^{-1} = \exp(-S)\\, evaluated through the same
-eigendecomposition, with no factorization: measured,
-`param_solve(s, eta)` and `param_value(s, -eta)` agree to \\2 \times
-10^{-15}\\.
+eigendecomposition, with no factorization, so `param_solve(s, eta)` and
+`param_value(s, -eta)` agree up to rounding.
 
 ## The derivatives, and the reason for the Opitz route
 
@@ -56,39 +57,27 @@ the eigenvalues, summed over the orderings of the directions.
 
 The divided differences come from the Opitz theorem, the exponential of
 a small upper bidiagonal matrix read off its corner, in place of the
-recursive quotient, which cancels catastrophically under near-repeated
-eigenvalues. Measured at eigenvalues \\0.5\\ and \\0.5 + g\\, against
-the exact limit \\1.648721270700127\\ at \\g = 0\\:
-
-|             |                   |                   |
-|-------------|-------------------|-------------------|
-| gap \\g\\   | Opitz             | quotient          |
-| \\10^{-3}\\ | 1.649545906191066 | 1.649545906190929 |
-| \\10^{-6}\\ | 1.648722095061039 | 1.648722095023754 |
-| \\10^{-9}\\ | 1.648721271524488 | 1.648721206226264 |
-
-At a gap of \\10^{-9}\\ the quotient has lost eight digits and the Opitz
-value has lost one. Repeated eigenvalues are not a pathology here: a
-[`scalar_matrix()`](https://statmodels7.github.io/parameters7/reference/scalar_matrix.md)-like
-\\S\\, or any \\S\\ with a symmetry, has them exactly.
+recursive quotient, which cancels catastrophically when two eigenvalues
+nearly coincide. The Opitz value stays accurate to rounding there.
+Repeated eigenvalues occur in ordinary use: an \\S\\ proportional to the
+identity, or any \\S\\ with a symmetry, has them exactly.
 
 ## Choosing between the two unstructured charts
 
-[`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)'s
-derivatives are sparse products of single-entry matrices, and they are
-far cheaper: measured at \\p = 4\\, one fourth-order derivative array
-costs **3.4 s** here against **0.003 s** there, a factor of a thousand,
-the contraction summing over \\4! = 24\\ orderings per component at
-\\p^4\\ entries each.
-
-What this chart buys is the other end. Its log-determinant is linear and
-its inverse is a sign flip, where
-[`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)'s
-inverse is a triangular solve. Reach for it when the covariance and the
-precision are both wanted at once, or when the free values themselves
-should be an unconstrained symmetric matrix; reach for
+The derivatives of
 [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
-when derivatives are taken in a loop.
+are sparse products of single-entry matrices and are far cheaper. Here a
+fourth-order component sums over up to \\4! = 24\\ orderings of its
+directions, each a contraction of \\O(p^5)\\ operations.
+
+This chart has a linear log-determinant and an inverse that is the map
+at \\-\eta\\, while the inverse of
+[`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
+needs a triangular solve. It suits a model that needs the covariance and
+the precision together, or one whose free values should form an
+unconstrained symmetric matrix.
+[`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
+suits a model that takes derivatives repeatedly.
 
 ## Notation
 
@@ -152,7 +141,7 @@ c(second = max(abs(param_d2logdet(s, eta))),
 #> second  third fourth 
 #>      0      0      0 
 
-# The inverse is the map at -eta: a sign flip, not a factorization.
+# The inverse is the map at -eta, computed with no factorization.
 max(abs(param_solve(s, eta) - param_value(s, -eta)))
 #> [1] 1.554312e-15
 max(abs(param_solve(s, eta) - solve(M)))

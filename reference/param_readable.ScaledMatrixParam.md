@@ -1,13 +1,12 @@
 # The Scale of a Fixed Matrix
 
-Declares the multiplier \\h(\eta)\\, the one quantity a
+Declares the multiplier \\h(\eta)\\, the one quantity that describes a
 [`scaled_matrix()`](https://statmodels7.github.io/parameters7/reference/scaled_matrix.md)
-is about, with its interval on the log scale. The fixed matrix itself is
-the caller's own and needs no reporting.
+beyond its fixed matrix, with its interval on the log scale. The fixed
+matrix is supplied by the caller and is not reported.
 
 A parameter built with `link = NULL` has no free value and nothing to
-declare, so this returns `NULL` there, which is the same answer the base
-class gives and means the same thing.
+declare, so this method returns `NULL` there, as the base method does.
 
 ## Arguments
 

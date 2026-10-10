@@ -2,10 +2,10 @@
 
 Returns \\P(\rho) = I + \rho(J - I)\\, the correlation pattern of a
 compound-symmetric matrix, together with its derivatives in the second
-free value to the order the scalars carry. The pattern is **linear** in
-the correlation, so every derivative is the matching derivative of
-\\\rho\\ times the constant matrix \\J - I\\, and no order needs its own
-algebra.
+free value to the order that the scalars carry. The pattern is
+**linear** in the correlation, so every derivative is the matching
+derivative of \\\rho\\ times the constant matrix \\J - I\\, and every
+order uses the same formula.
 
 ## Usage
 
@@ -30,9 +30,9 @@ cs_pattern(s, sc)
 ## Value
 
 A list of `s@dimension` by `s@dimension` matrices, one more than the
-derivatives `sc` carries: the pattern at index 1 and its derivatives at
-the following indices. Each derivative has a zero diagonal, the diagonal
-of the pattern being the constant 1.
+number of derivatives that `sc` carries: the pattern at index 1 and its
+derivatives at the following indices. Each derivative has a zero
+diagonal, the diagonal of the pattern being the constant 1.
 
 ## See also
 

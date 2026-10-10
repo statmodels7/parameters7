@@ -5,8 +5,10 @@ transition matrix of a Markov chain on \\K\\ states, with each row an
 independent
 [`simplex()`](https://statmodels7.github.io/parameters7/reference/simplex.md)
 in the additive log-ratio chart. \\K(K-1)\\ free values in all, and
-every free vector gives positive entries with rows summing to exactly 1,
-so a chain can be estimated without a constraint.
+every free vector gives non-negative entries with rows summing to 1 up
+to rounding, so a chain can be estimated without a constraint. An entry
+underflows to exactly 0 when its free value is more than about 745 below
+the largest in its row.
 
 ## Usage
 
@@ -19,7 +21,7 @@ transition_matrix(n_state)
 - n_state:
 
   The number of states \\K\\, **at least 2**. A single integer; `1`, a
-  fraction, `NA` and a vector all throw
+  fraction, `NA` and a vector all signal the error
   `'n_state' must be a single integer of at least 2.` A one-state chain
   has nothing to estimate.
 
@@ -45,21 +47,22 @@ Each row is parametrized by its own \\K-1\\ free values and no others,
 so every derivative array is **block diagonal by row**: a component
 pairing free values of two different rows is exactly the zero matrix,
 and a component inside row \\i\\ is zero everywhere outside row \\i\\.
-The implementation evaluates the simplex kernels row by row and never
-stores those zeros.
+The implementation evaluates the simplex kernels row by row and does not
+compute the cross-row components, which are returned as matrices of
+zeros.
 
-Measured at \\K = 3\\: the second-derivative component `alr1.1:alr2.1`,
-spanning two rows, is 0 exactly, while `alr1.1:alr1.1` is not.
+At \\K = 3\\, the second-derivative component `alr1.1:alr2.1`, spanning
+two rows, is exactly 0, while `alr1.1:alr1.1` is not.
 
 ## Reading the free vector
 
-It runs row by row, and the names `alr{i}.{j}` say which row and which
-chart coordinate, the row.column convention
+It runs row by row, and the names `alr{i}.{j}` give the row and the
+chart coordinate, in the row.column convention that
 [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
 uses. The `alr` records the chart, so a free value of 0.5 is not a
 probability of 0.5: it is a log ratio against the row's last state.
 
-## What it has and has not got
+## Available methods
 
 All four derivative orders are closed form, inherited from
 [`simplex()`](https://statmodels7.github.io/parameters7/reference/simplex.md)'s
@@ -90,7 +93,7 @@ and
 [`param_free()`](https://statmodels7.github.io/parameters7/reference/param_free.md)
 for the map and its inverse, and
 [`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)
-for the battery a non-matrix family gets.
+for the battery that a non-matrix family gets.
 
 ## Examples
 
@@ -112,12 +115,12 @@ round(m, 4)
 #> s2 0.4641 0.3455 0.1904
 #> s3 0.6317 0.2452 0.1231
 
-# Every row is a probability distribution, exactly.
+# Every row is a probability distribution, up to rounding.
 rowSums(m)
 #> s1 s2 s3 
 #>  1  1  1 
 
-# The round trip closes exactly.
+# The round trip closes up to rounding.
 max(abs(param_free(s, m) - eta))
 #> [1] 2.220446e-16
 
@@ -136,7 +139,7 @@ c(across_rows = max(abs(d2[["alr1.1:alr2.1"]])),
 #> across_rows  within_row 
 #>  0.00000000  0.02960676 
 
-# There is no log-determinant to ask for: the value is not symmetric.
+# There is no log-determinant: the value is not symmetric.
 try(param_logdet(s, eta))
 #> Error : Can't find method for `param_logdet(<parameters7::TransitionMatrixParam>)`.
 ```

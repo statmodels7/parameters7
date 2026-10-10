@@ -27,7 +27,7 @@ param_d3(s, eta, ...)
 
 - ...:
 
-  Passed to the method. No method in this package reads it.
+  Passed to the method. The methods in this package do not read it.
 
 ## Value
 
@@ -96,7 +96,8 @@ length(d3)
 max(abs(d3[["L2.1:L2.1:L2.1"]]))
 #> [1] 0
 
-# It does not vanish in a diagonal free value, which enters through a log.
+# It does not vanish in a diagonal free value, which enters through an
+# exponential.
 d3[["log_L1:log_L1:log_L1"]]
 #>            v1        v2
 #> v1 11.9345976 0.4885611

@@ -29,7 +29,8 @@ variances.
 
 A `s@dimension` by `s@dimension` lower triangular numeric matrix with a
 positive diagonal and unit row norms, satisfying
-`L %*% t(L) == param_value(s, eta)`, and carrying no dimnames.
+`L %*% t(L) == param_value(s, eta)` up to rounding, and carrying no
+dimnames.
 
 ## See also
 

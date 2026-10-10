@@ -39,7 +39,7 @@ BlockDiagParam(
 - free_names:
 
   A character vector of length `n_free`, one label per free value, in
-  the order the free vector holds them. Must be unique.
+  the order in which the free vector holds them. Must be unique.
 
 - param_params:
 
@@ -53,7 +53,7 @@ BlockDiagParam(
 
 - rank:
 
-  The rank of the matrix the family produces, a single integer in
+  The rank of the matrix that the family produces, a single integer in
   `0:dimension`. It is a property of the family, so a family whose value
   is positive definite at every \\\eta\\ declares \\p\\ here.
 
@@ -63,17 +63,16 @@ BlockDiagParam(
   an orthonormal basis of the common null space. Use
   [`param_null_basis()`](https://statmodels7.github.io/parameters7/reference/param_null_basis.md)
   to obtain one, or `matrix(numeric(0), dimension, 0)` for a full-rank
-  family. The validator rejects any other shape, and reports both the
-  rank and the shape when the two disagree.
+  family. The validator rejects any other shape.
 
 ## Value
 
 An object of class `BlockDiagParam`, a subclass of
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
 adding no properties of its own. `param_params` holds `blocks`,
-`labels`, `rows` and `free` (the ranges each block occupies in the
-matrix and in the free vector) and `owner` (the block each free value
-belongs to). `dimension`, `n_free` and `rank` are the sums of the
+`labels`, `rows` and `free` (the ranges that each block occupies in the
+matrix and in the free vector) and `owner` (the block to which each free
+value belongs). `dimension`, `n_free` and `rank` are the sums of the
 blocks'.
 
 ## See also
@@ -83,12 +82,13 @@ the constructor,
 [`kron_identity()`](https://statmodels7.github.io/parameters7/reference/kron_identity.md)
 for identical blocks, and
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
-for the properties this inherits.
+for the properties that this class inherits.
 
 ## Examples
 
 ``` r
-# Everything the composite is, is the sum of what the blocks are.
+# The dimension, the number of free values and the rank are the sums of the
+# blocks'.
 s <- block_diag(subject = log_cholesky(2), time = ar1(3))
 c(dimension = s@dimension, n_free = s@n_free, rank = s@rank)
 #> dimension    n_free      rank 

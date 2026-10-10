@@ -5,13 +5,11 @@ Exact, and tridiagonal. The precision of an AR(1) covariance is
 corners of the diagonal, \\1+\rho^2\\ elsewhere on it, and \\-\rho\\ on
 the two first off-diagonals. Every other entry is exactly zero, an AR(1)
 process being Markov, so the inverse is written down and no
-factorization is performed: the cost is \\O(p)\\ entries against the
-base class's \\O(p^3)\\ Cholesky.
-
-Measured at \\p = 4\\ and \\\rho = 0.6\\: the entries beyond the first
-off-diagonal are 0 exactly, and the whole matrix agrees with
-[`base::solve()`](https://rdrr.io/r/base/solve.html) on the assembled
-covariance to \\1 \times 10^{-16}\\.
+factorization is performed. The matrix is assembled densely and
+multiplied by `b`, at \\O(p^2)\\ per column of `b`. The factor \\1 -
+\rho^2\\ is evaluated from the free value \\z\\ as \\\mathrm{sech}^2 z =
+4e^{-2\|z\|}/(1 + e^{-2\|z\|})^2\\, so the inverse stays accurate where
+\\\rho\\ rounds to \\-1\\ or 1.
 
 ## Arguments
 

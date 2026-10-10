@@ -35,13 +35,13 @@ as `param_tuple_names(s, order)` and in that order.
 
 ## Details
 
-Two separabilities at once, and it is worth keeping them apart: the
-scales separate from each other, so a component naming two different
-scales is zero, and the correlation separates from the scales, so a
-mixed component is zero. What survives is \\2\\\partial^m \log d_k\\ on
-the diagonal of the scale block, through
+Two separabilities hold at once. The scales separate from each other, so
+a component naming two different scales is zero, and the correlation
+separates from the scales, so a component mixing a scale with a
+correlation coordinate is zero. What survives is \\2\\\partial^m \log
+d_k\\ on the diagonal of the scale block, through
 [`diag_dlog()`](https://statmodels7.github.io/parameters7/reference/diag_dlog.md),
-and whatever the correlation family answers.
+and the correlation family's own derivatives.
 
 ## See also
 

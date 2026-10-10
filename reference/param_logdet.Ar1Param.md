@@ -5,9 +5,11 @@ Closed form. The determinant of the correlation pattern is
 
 \$\$\log\|M\| = p\log\sigma^2 + (p-1)\log(1-\rho^2).\$\$
 
-Two logarithms and no factorization, whatever \\p\\ is, against the base
-class's \\O(p^3)\\ eigendecomposition. Measured at \\p = 4\\ against the
-eigenvalues of the assembled matrix, the two agree to the printed digit.
+Two logarithms and no factorization, whatever \\p\\ is, where the base
+method takes an \\O(p^3)\\ eigendecomposition. With \\\rho = \tanh z\\,
+the second term is evaluated as \\(p-1)\\2\log 2 - 2\|z\| - 2\log(1 +
+e^{-2\|z\|})\\\\, which does not lose accuracy where \\\rho\\ rounds to
+\\-1\\ or 1.
 
 ## Arguments
 
@@ -27,12 +29,11 @@ eigenvalues of the assembled matrix, the two agree to the printed digit.
 
 ## Value
 
-A single number, finite at every free vector, the rhobit link keeping
-\\1-\rho^2\\ strictly positive.
+A single number, finite at every free vector.
 
 ## See also
 
 [`param_dlogdet.Ar1Param()`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.Ar1Param.md)
 for its four derivative orders, and
-[`ar1_logdet_terms()`](https://statmodels7.github.io/parameters7/reference/ar1_logdet_terms.md)
-for the two terms.
+[`ar1_logdet_chain()`](https://statmodels7.github.io/parameters7/reference/ar1_logdet_chain.md)
+for the derivatives of the correlation's term.

@@ -5,9 +5,10 @@ derivative of \(L\) in a multiset of indices is non-zero only for an empty
 multiset, a single index, or a repetition of one diagonal free value, so of
 the \(2^4\) ways to split a quadruple between the factors almost all
 contribute nothing.
-Exact at this order, which is where the contract stops: a fourth-order chain
-rule through a link needs this much. Nothing is differenced, so the accuracy
-is machine precision, against the \(10^{-4}\) a stencil would give.
+Exact at this order, the highest that the package provides, and a
+fourth-order chain rule through a link needs it. Nothing is differenced, so
+the accuracy is that of rounding, where a stencil at this order is accurate
+to about five digits.
 A component repeating a below-diagonal free value three or more times is
 exactly zero, \(M\) being quadratic in each of those."><meta property="og:description" content="Closed form, by the same Leibniz rule on \(M = L L^\top\) as at third order,
 with the four differentiations distributed over the two factors. The
@@ -15,9 +16,10 @@ derivative of \(L\) in a multiset of indices is non-zero only for an empty
 multiset, a single index, or a repetition of one diagonal free value, so of
 the \(2^4\) ways to split a quadruple between the factors almost all
 contribute nothing.
-Exact at this order, which is where the contract stops: a fourth-order chain
-rule through a link needs this much. Nothing is differenced, so the accuracy
-is machine precision, against the \(10^{-4}\) a stencil would give.
+Exact at this order, the highest that the package provides, and a
+fourth-order chain rule through a link needs it. Nothing is differenced, so
+the accuracy is that of rounding, where a stencil at this order is accurate
+to about five digits.
 A component repeating a below-diagonal free value three or more times is
 exactly zero, \(M\) being quadratic in each of those."><meta property="og:image" content="https://statmodels7.github.io/parameters7/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -27,7 +29,7 @@ exactly zero, \(M\) being quadratic in each of those."><meta property="og:image"
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,9 +65,10 @@ derivative of \(L\) in a multiset of indices is non-zero only for an empty
 multiset, a single index, or a repetition of one diagonal free value, so of
 the \(2^4\) ways to split a quadruple between the factors almost all
 contribute nothing.</p>
-<p>Exact at this order, which is where the contract stops: a fourth-order chain
-rule through a link needs this much. Nothing is differenced, so the accuracy
-is machine precision, against the \(10^{-4}\) a stencil would give.</p>
+<p>Exact at this order, the highest that the package provides, and a
+fourth-order chain rule through a link needs it. Nothing is differenced, so
+the accuracy is that of rounding, where a stencil at this order is accurate
+to about five digits.</p>
 <p>A component repeating a below-diagonal free value three or more times is
 exactly zero, \(M\) being quadratic in each of those.</p>
     </div>
@@ -97,8 +100,8 @@ components, at \(p = 8\) it is 82251.</p>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="chol_leibniz.html">chol_leibniz()</a></code>, which assembles it, <code><a href="param_d3.LogCholeskyParam.html">param_d3.LogCholeskyParam()</a></code>
-for the order below, and <code><a href="numerical_d4.html">numerical_d4()</a></code> for what a family without a closed
-form gets instead.</p></div>
+for the order below, and <code><a href="numerical_d4.html">numerical_d4()</a></code> for the route of a family without
+a closed form.</p></div>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

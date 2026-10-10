@@ -36,7 +36,7 @@ by `s@dimension` and labeled `v1`, `v2`, ..., `vp` on both margins.
 ## Details
 
 The correlation's arrays are fetched at most once per order and re-keyed
-by the sorted local index tuple, the same device
+by the sorted local index tuple, the same device that
 [`block_derivs_by_tuple()`](https://statmodels7.github.io/parameters7/reference/block_derivs_by_tuple.md)
 uses and for the same reason: the composite's names are not the block's,
 but the sorted index tuple is a key both sides can compute.

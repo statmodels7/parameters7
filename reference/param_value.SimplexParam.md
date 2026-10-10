@@ -2,8 +2,9 @@
 
 Returns the probability vector \\\pi\\, the softmax of the free vector
 with the reference category's implicit 0 appended, named `p1` ... `pK`.
-The entries are positive and sum to exactly 1 at every free vector, so
-nothing is tested and nothing is renormalized. Computed through
+The entries are non-negative and sum to 1 up to rounding at every free
+vector, so nothing is tested and nothing is renormalized. Computed
+through
 [`simplex_point()`](https://statmodels7.github.io/parameters7/reference/simplex_point.md)'s
 log-sum-exp shift, so a large free value saturates instead of
 overflowing.

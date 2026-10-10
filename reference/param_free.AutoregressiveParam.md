@@ -2,8 +2,8 @@
 
 Reads the marginal variance off the common diagonal entry and the
 partial autocorrelations off the Levinson-Durbin recursion run forwards
-on the autocorrelations. Exact where `m` is in the set: measured at \\p
-= 6\\, \\q = 2\\, the round trip closes to \\1.1 \times 10^{-16}\\.
+on the autocorrelations. The inverse is exact on the set that this
+family describes.
 
 ## Arguments
 
@@ -29,12 +29,14 @@ A numeric vector of length `s@n_free`, named by `s@free_names`.
 
 ## Details
 
-Four things are rejected rather than approximated, each with a message
-of its own, because the set this family describes is much smaller than
-the set of symmetric positive definite matrices and a caller who lands
-outside it has a model error, not a rounding one:
+The following are rejected, each with a message of its own, because the
+set that this family describes is much smaller than the set of symmetric
+positive definite matrices, and a matrix outside it indicates a model
+error and not a rounding error:
 
 - a diagonal that is not constant, which is not stationary;
+
+- a non-positive diagonal;
 
 - a matrix that is not Toeplitz, which is rejected instead of being
   averaged along its diagonals;

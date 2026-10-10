@@ -25,7 +25,7 @@ param_d2logdet(s, eta, ...)
 
 - ...:
 
-  Passed to the method. No method in this package reads it.
+  Passed to the method. The methods in this package do not read it.
 
 ## Value
 
@@ -48,15 +48,15 @@ M)\right),\$\$
 and with the Moore-Penrose inverse in place of \\M^{-1}\\ when the
 family is rank deficient.
 
-The second trace is the term a hand-written closed form usually drops.
-Without it the answer would be the trace of the second derivative of the
-matrix, which is a different quantity, and dropping it is invisible on
-any family whose log-determinant happens to be linear.
+Without the second trace the result would be the trace of the second
+derivative of the matrix, which is a different quantity and is not zero
+even for
+[`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md),
+whose log-determinant is linear.
 [`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)
-compares this route against
-[`param_d2()`](https://statmodels7.github.io/parameters7/reference/param_d2.md)
-on every family it is given, and the example below runs the same
-comparison in five lines.
+compares this method with one central difference of
+[`param_dlogdet()`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.md),
+and the example below compares it with the two traces.
 
 ## Notation
 
@@ -93,7 +93,7 @@ pred <- vapply(seq_along(idx), function(i) {
     sum(diag(Minv %*% d1[[k]] %*% Minv %*% d1[[l]]))
 }, numeric(1))
 max(abs(param_d2logdet(s, eta) - pred))
-#> [1] 2.664535e-15
+#> [1] 1.776357e-15
 
 # Dropping the second trace would give a different answer here, so the
 # comparison above has something to catch.
@@ -104,7 +104,7 @@ param_d2logdet(s, eta)
 #>            0.000000           -3.354331            0.000000 
 
 # For log_cholesky the log-determinant is linear in eta, so every second
-# derivative is exactly zero and the check above could not see a mistake.
+# derivative is exactly zero.
 max(abs(param_d2logdet(log_cholesky(3), rep(0.2, 6))))
 #> [1] 0
 ```

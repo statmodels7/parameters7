@@ -2,7 +2,7 @@
 
 Assembles one derivative order from the kernel of that order: one
 Toeplitz matrix per index tuple, filled in compiled code from the column
-of autocovariance derivatives
+of autocovariance derivatives that
 [`ar_tables()`](https://statmodels7.github.io/parameters7/reference/ar_tables.md)
 returns for it. The four methods differ only in the order they pass.
 

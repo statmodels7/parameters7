@@ -4,9 +4,8 @@ Closed form, the same Leibniz rule on \\R = LL^\top\\ with the three
 differentiations distributed over the two factors. Each \\\partial^S L\\
 comes from
 [`corr_dfactor()`](https://statmodels7.github.io/parameters7/reference/corr_dfactor.md),
-which returns `NULL` whenever \\S\\ spans two rows of \\L\\ or reaches
-past the columns an entry involves, so most terms of the sum are skipped
-instead of computed and discarded.
+which returns `NULL` whenever \\S\\ spans two rows of \\L\\, so those
+terms of the sum are skipped instead of computed and discarded.
 
 The angles reach the free scale through a bounded link, so the chain to
 third order is
@@ -34,7 +33,8 @@ exactly zero.
 ## Value
 
 A list of `choose(s@n_free + 2, 3)` symmetric matrices keyed as
-`param_tuple_names(s, 3)` and in that order, each with a zero diagonal.
+`param_tuple_names(s, 3)` and in that order, each with a diagonal of
+exact zeros.
 
 ## See also
 

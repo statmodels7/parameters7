@@ -17,7 +17,7 @@ exactly zero and the pure ones are the two chains taken separately."><meta prope
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,15 +82,17 @@ generic.</p></dd>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The scale's chain is \(p\) times the derivatives of \(\log h\), which under
 the default log link is \(p\) at first order and 0 above it. The
-correlation's is <code><a href="log_affine_derivs.html">log_affine_derivs()</a></code> on the two terms of
-<code><a href="ar1_logdet_terms.html">ar1_logdet_terms()</a></code>, chained onto the rhobit link.</p>
+correlation's is <code><a href="ar1_logdet_chain.html">ar1_logdet_chain()</a></code>, the derivatives in the free value
+written in closed form in \(\tanh z\) and \(\mathrm{sech}^2 z\), so that
+they stay accurate where \(\rho\) rounds to \(-1\) or 1.</p>
 <p>The four methods return vectors of <code>order + 1</code> entries, keyed by the tuple
 names of their own order. At \(p = 4\) and \(\rho = 0.6\) the second order
 is \((0, -3.84, 0)\) over <code>log_scale:log_scale</code>, <code>z_rho:z_rho</code> and
 <code>log_scale:z_rho</code>.</p>
-<p>Together with <code><a href="compound_symmetry.html">compound_symmetry()</a></code>, this is one of the two families where the
-higher log-determinant orders are non-zero, so a check of them has content
-here where on <code><a href="log_cholesky.html">log_cholesky()</a></code> it would compare two zeros.</p>
+<p>The higher log-determinant orders are not zero here, as for
+<code><a href="compound_symmetry.html">compound_symmetry()</a></code>, <code><a href="autoregressive.html">autoregressive()</a></code> and <code><a href="correlation_matrix.html">correlation_matrix()</a></code>, so a
+check of them compares non-zero numbers, where on <code><a href="log_cholesky.html">log_cholesky()</a></code> it would
+compare two zeros.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

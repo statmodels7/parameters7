@@ -2,14 +2,14 @@
 
 Closed form, from
 [`simplex()`](https://statmodels7.github.io/parameters7/reference/simplex.md)'s
-cumulant recursion at fourth order, embedded row by row, and the top of
-the contract. A component whose four free values do not all belong to
-one row is exactly the zero matrix.
+cumulant recursion at fourth order, embedded row by row. A component
+whose four free values do not all belong to one row is exactly the zero
+matrix.
 
-Exactness matters most here: a product stencil at fourth order keeps
-about five digits, and the list is large, so a numerical route would be
-both slow and poor. The row-wise structure is what keeps it affordable
-at all, the cross-row components never being evaluated.
+A product stencil at fourth order, as in
+[`numerical_d4()`](https://statmodels7.github.io/parameters7/reference/numerical_d4.md),
+is far less accurate, and the list is large. The cross-row components
+are not evaluated.
 
 ## Arguments
 

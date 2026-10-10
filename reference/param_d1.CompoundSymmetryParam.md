@@ -15,8 +15,8 @@ indices and \\b\\ correlation indices is
 \sigma^2}{\mathrm{d}\eta_1^a} \cdot \frac{\mathrm{d}^b
 P}{\mathrm{d}\eta_2^b},\$\$
 
-one derivative of each chain. Only the counts \\a\\ and \\b\\ matter, so
-a tuple is fully described by them and no order is a special case.
+one derivative of each chain. A tuple enters only through the counts
+\\a\\ and \\b\\, and every order uses the same formula.
 
 ## Arguments
 
@@ -60,9 +60,9 @@ The lists are this short because there are two free values: at \\d = 2\\
 the count \\\binom{d+k-1}{k}\\ is \\k+1\\.
 
 Every component with at least one correlation index has a zero diagonal,
-the diagonal of \\P\\ being the constant 1; and any component whose
-correlation indices number two or more carries only the link's own
-higher derivative, \\P\\ being linear in \\\rho\\.
+the diagonal of \\P\\ being the constant 1; and a component with \\b\\
+correlation indices carries the \\b\\-th derivative of the link alone,
+\\P\\ being linear in \\\rho\\.
 
 ## See also
 

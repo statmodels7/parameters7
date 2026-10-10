@@ -43,8 +43,12 @@ innovation variances fall by a factor \\1 - r_k^2\\ at each of the first
 from the third on repeats \\(-0.91, 0.30)\\, which are the coefficients
 \\\phi = (0.91, -0.30)\\ with a sign.
 
-Both come from the same recursion the derivatives use, run here without
-derivatives, since a solve needs no arrays.
+Both come from the same recursion that the derivatives use, run here
+without derivatives, since a solve needs no arrays. Each factor \\1 -
+r_k^2\\ is evaluated by
+[`sech2()`](https://statmodels7.github.io/parameters7/reference/sech2.md)
+in the free value, so the innovation variances keep their accuracy where
+\\r_k\\ rounds to \\-1\\ or 1.
 
 ## See also
 

@@ -17,7 +17,7 @@ zero, and accurate under nearly repeated ones, where it cancels."><meta property
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,11 +76,10 @@ most 5 of them, the number fourth-order derivatives need.</p></dd>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Measured at \(\lambda = (0.5,\, 0.5 + g)\), against the exact limit
-\(e^{0.5} = 1.648721270700127\) reached at \(g = 0\):</p><table class="table table"><tr><td>gap \(g\)</td><td>Opitz</td><td>quotient</td></tr><tr><td>\(10^{-3}\)</td><td>1.649545906191066</td><td>1.649545906190929</td></tr><tr><td>\(10^{-6}\)</td><td>1.648722095061039</td><td>1.648722095023754</td></tr><tr><td>\(10^{-9}\)</td><td>1.648721271524488</td><td>1.648721206226264</td></tr></table><p>The quotient has lost eight digits at a gap of \(10^{-9}\) and the Opitz
-value one. Near-repeated eigenvalues are ordinary here: any \(S\) with a
-symmetry has them, and an exactly repeated pair is what a scalar multiple of
-the identity gives.</p>
+    <p>When two arguments nearly coincide, the quotient loses accuracy as the gap
+shrinks, while the Opitz value stays accurate to rounding. Near-repeated
+eigenvalues are ordinary here: any \(S\) with a symmetry has them, and a
+scalar multiple of the identity has an exactly repeated pair.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

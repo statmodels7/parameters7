@@ -1,10 +1,10 @@
 # Fourth Derivatives of a Simplex Parameter
 
-Closed form, the cumulant recursion at fourth order, which is where the
-contract stops. Exact, and that matters most here: a product stencil at
-fourth order keeps about five digits, and this array is what a
-fourth-order chain rule through a link reads. Every component sums to
-zero over the category index, measured at \\1.7 \times 10^{-17}\\.
+Closed form, the cumulant recursion at fourth order, the highest order
+that the package provides. A product stencil at fourth order is the
+least accurate of the four, and a fourth-order chain rule through a link
+uses this array. Every component sums to zero over the category index,
+up to rounding.
 
 The array holds \\K(K-1)^4\\ entries, so it is the largest object the
 family builds; at \\K = 4\\ that is 324.

@@ -6,9 +6,7 @@ Closed form. The factor is triangular with \\L\_{ii} = \prod\_{k\<i}
 \$\$\log\|R\| = 2 \sum\_{i,k} \log \sin\theta\_{ik},\$\$
 
 one term per free value. It is `2 * sum(log(sines))`: no factorization,
-no determinant, no eigendecomposition. Measured against the eigenvalues
-of the assembled matrix at \\p = 3\\, the two agree to the printed
-digit.
+no determinant, no eigendecomposition.
 
 It is always negative or zero, a correlation matrix having determinant
 at most 1, with 0 reached only at the identity.

@@ -9,8 +9,8 @@ for a
 [`dr_prod()`](https://statmodels7.github.io/parameters7/reference/dr_prod.md)
 parameter. Each component is the scale factor times the correlation's
 own component, elementwise, the two groups of free values being
-disjoint, so nothing of the correlation family is rederived and nothing
-is differenced.
+disjoint, so the correlation family's own components are used and
+nothing is differenced.
 
 ## Arguments
 
@@ -40,9 +40,7 @@ At order 1, a list of `s@n_free` symmetric matrices named by
 The four share
 [`dr_prod_derivs()`](https://statmodels7.github.io/parameters7/reference/dr_prod_derivs.md)
 and differ only in the order they pass. Both factors are sparse, and
-where their supports miss each other the component is exactly zero:
-measured at \\p = 3\\ that is 1 of the 21 second-order components, 10 of
-56 at third order and 37 of 126 at fourth. See
+where their supports miss each other the component is exactly zero; see
 [`dr_prod()`](https://statmodels7.github.io/parameters7/reference/dr_prod.md)
 for the rule.
 

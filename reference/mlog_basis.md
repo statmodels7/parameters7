@@ -3,8 +3,8 @@
 Returns \\\partial S / \partial \eta_k\\, which is a constant matrix,
 \\S\\ being linear in the free vector: a single 1 on the diagonal for a
 diagonal free value, and a symmetric pair of 1s below and above the
-diagonal for the rest. These are the directions the Frechet derivatives
-contract against.
+diagonal for the rest. These are the directions against which the
+Frechet derivatives contract.
 
 Because they do not depend on \\\eta\\, the whole nonlinearity of the
 family sits in the exponential, and all four derivative orders are

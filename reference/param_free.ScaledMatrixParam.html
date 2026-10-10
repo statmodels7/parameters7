@@ -13,7 +13,7 @@ param_value.ScaledMatrixParam()."><meta property="og:image" content="https://sta
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -74,13 +74,14 @@ fixed matrix, already checked for shape and symmetry by the generic.</p></dd>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Three rejections. The ratio must be positive, or <code>m</code> is not a positive
+    <p>Four rejections. The ratio must be positive, or <code>m</code> is not a positive
 multiple. <code>m</code> must then agree with <code>h * p</code> to \(10^{-8}\) relative
 everywhere, or it is not a multiple of \(P\) at all: the ratio at one entry
 is not enough, since any matrix has <em>some</em> ratio there. And for a fixed
 parameter, built with <code>link = NULL</code>, the multiple must be 1 to \(10^{-8}\),
 the object having no free value to absorb anything else; the result is then
-<code>numeric(0)</code>.</p>
+<code>numeric(0)</code>. Otherwise the multiple must lie inside the open range of the
+link.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

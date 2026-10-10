@@ -13,7 +13,7 @@ multiplied by a count of entries."><meta property="og:image" content="https://st
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,17 +81,18 @@ multiplied by a count of entries.</p>
 <p>$$u_1, \quad u_2 - u_1^2, \quad u_3 - 3u_1u_2 + 2u_1^3, \quad
   u_4 - 4u_1u_3 - 3u_2^2 + 12u_1^2u_2 - 6u_1^4.$$</p>
 <p>The division by \(h\) happens once, at the start, so every term is a ratio
-of order one, never a derivative that can be large on its own. That matters
-at the ends of a link's range, where \(h\) and \(h^{(m)}\) can both be
-extreme while the ratio is ordinary.</p>
+and not a derivative that can be large on its own. This keeps the arithmetic
+in range at the ends of a link's range, where \(h\) and \(h^{(m)}\) can
+both be extreme while the ratio is moderate.</p>
 <p>Under the log link \(h = e^\eta\) gives \(u_m = 1\) for every \(m\), so
 the first order is 1 and the second, third and fourth are exactly 0, which is
 why a default <code><a href="diagonal_matrix.html">diagonal_matrix()</a></code> reports a linear log-determinant.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="diag_logdet_higher.html">diag_logdet_higher()</a></code>, <code><a href="param_d3logdet.ScaledMatrixParam.html">param_d3logdet.ScaledMatrixParam()</a></code> and
-<code><a href="param_d4logdet.ScaledMatrixParam.html">param_d4logdet.ScaledMatrixParam()</a></code>, the callers, and
+    <div class="dont-index"><p><code><a href="diag_logdet_higher.html">diag_logdet_higher()</a></code>, <code><a href="param_d3logdet.ScaledMatrixParam.html">param_d3logdet.ScaledMatrixParam()</a></code>,
+<code><a href="param_d4logdet.ScaledMatrixParam.html">param_d4logdet.ScaledMatrixParam()</a></code> and <code><a href="dr_prod_logdet_derivs.html">dr_prod_logdet_derivs()</a></code>, the
+callers, and
 <code><a href="https://statmodels7.github.io/linkfunctions7/reference/dlinkinv.html" class="external-link">linkfunctions7::dlinkinv()</a></code> for the link derivatives read.</p></div>
     </div>
 

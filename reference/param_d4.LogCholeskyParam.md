@@ -7,10 +7,10 @@ empty multiset, a single index, or a repetition of one diagonal free
 value, so of the \\2^4\\ ways to split a quadruple between the factors
 almost all contribute nothing.
 
-Exact at this order, which is where the contract stops: a fourth-order
-chain rule through a link needs this much. Nothing is differenced, so
-the accuracy is machine precision, against the \\10^{-4}\\ a stencil
-would give.
+Exact at this order, the highest that the package provides, and a
+fourth-order chain rule through a link needs it. Nothing is differenced,
+so the accuracy is that of rounding, where a stencil at this order is
+accurate to about five digits.
 
 A component repeating a below-diagonal free value three or more times is
 exactly zero, \\M\\ being quadratic in each of those.
@@ -45,4 +45,4 @@ which assembles it,
 [`param_d3.LogCholeskyParam()`](https://statmodels7.github.io/parameters7/reference/param_d3.LogCholeskyParam.md)
 for the order below, and
 [`numerical_d4()`](https://statmodels7.github.io/parameters7/reference/numerical_d4.md)
-for what a family without a closed form gets instead.
+for the route of a family without a closed form.

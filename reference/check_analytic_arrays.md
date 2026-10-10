@@ -1,18 +1,23 @@
-# Refuse an Order That Would Difference a Difference
+# Reject an Order That Would Difference a Difference
 
-Signals an error when the caller asks
+Signals an error when
 [`param_d3logdet.matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/param_d3logdet.matrix_parameter.md)
 or
 [`param_d4logdet.matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/param_d4logdet.matrix_parameter.md)
-of a family whose derivative arrays are themselves numerical. Both
-fallbacks difference
-[`param_d2logdet()`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.md),
-which is an exact identity **given**
+is called for a family whose
+[`param_d2logdet()`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.md)
+is itself numerical. Both fallbacks difference
+[`param_d2logdet()`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.md).
+A family's own
+[`param_d2logdet()`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.md)
+is exact, and so is the base-class one **given**
 [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md)
 and
 [`param_d2()`](https://statmodels7.github.io/parameters7/reference/param_d2.md);
-where those are supplied the differencing is one layer, and where they
-are not it is two, which is the nesting the toolkit forbids everywhere.
+in either case the differencing is one layer. Where the base-class
+[`param_d2logdet()`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.md)
+reads numerical arrays it is two, which is the nesting that the toolkit
+avoids everywhere.
 
 ## Usage
 
@@ -30,40 +35,39 @@ check_analytic_arrays(s, order)
 
 - order:
 
-  The order being asked for, 3 or 4, which the message names.
+  The order requested, 3 or 4, which the message names.
 
 ## Value
 
-Invisibly `TRUE`. A family whose
+Invisibly `TRUE`. For a family whose
+[`param_d2logdet()`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.md)
+comes from the base class and whose
 [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md)
 or
 [`param_d2()`](https://statmodels7.github.io/parameters7/reference/param_d2.md)
-comes from the base class throws instead, with both the missing method
-and the remedy named.
+comes from the base class too, an error that names the missing method
+and the remedy.
 
 ## Details
 
-The refusal is not a matter of accuracy alone. Measured on a \\4 \times
-4\\ AR(1) covariance whose family supplies
-[`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
-and nothing else, order three came back \\7.5 \times 10^{-3}\\ against a
-quantity of size 4.45 and order four came back **9.07** against a
-quantity of size 2.17, which is four times the size of what it
-estimates. Nothing downstream could tell such a number from a usable
-one:
+With numerical arrays, the fourth order can come back larger than the
+quantity that it estimates, and
 [`param_is_numerical()`](https://statmodels7.github.io/parameters7/reference/param_is_numerical.md)
-reports `TRUE` for the order in both regimes.
+reports `TRUE` for the order whether the arrays are analytic or not, so
+a consumer could not distinguish such a number from a usable one.
 
-Only the two arrays are read, and not
+A family that writes its own
 [`param_d2logdet()`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.md)
-itself. A family that writes its own second-order log-determinant out is
-asked for nothing further, that method being reached before this guard
-is.
+passes whether or not its
+[`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md)
+and
+[`param_d2()`](https://statmodels7.github.io/parameters7/reference/param_d2.md)
+are analytic.
 
 ## See also
 
 [`param_is_numerical()`](https://statmodels7.github.io/parameters7/reference/param_is_numerical.md),
-which answers the question this asks, and
+which reports the routes read here, and
 [`param_d3logdet.matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/param_d3logdet.matrix_parameter.md)
 and
 [`param_d4logdet.matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/param_d4logdet.matrix_parameter.md),

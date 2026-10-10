@@ -3,15 +3,13 @@
 \(Q \log(\Lambda) Q^\top\) and then read out of the lower triangle. Exact
 and a true inverse of param_value.MatrixLogParam(), the matrix logarithm of
 a symmetric positive definite matrix being unique among symmetric matrices.
-Measured, the round trip closes to \(2 \times 10^{-15}\), a little looser
-than log_cholesky()'s \(7 \times 10^{-17}\) because two
-eigendecompositions stand between the two ends."><meta property="og:description" content="Returns the matrix logarithm of m, read off its eigendecomposition as
+The round trip passes through two eigendecompositions, one in each
+direction."><meta property="og:description" content="Returns the matrix logarithm of m, read off its eigendecomposition as
 \(Q \log(\Lambda) Q^\top\) and then read out of the lower triangle. Exact
 and a true inverse of param_value.MatrixLogParam(), the matrix logarithm of
 a symmetric positive definite matrix being unique among symmetric matrices.
-Measured, the round trip closes to \(2 \times 10^{-15}\), a little looser
-than log_cholesky()'s \(7 \times 10^{-17}\) because two
-eigendecompositions stand between the two ends."><meta property="og:image" content="https://statmodels7.github.io/parameters7/logo.png"></head><body>
+The round trip passes through two eigendecompositions, one in each
+direction."><meta property="og:image" content="https://statmodels7.github.io/parameters7/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -19,7 +17,7 @@ eigendecompositions stand between the two ends."><meta property="og:image" conte
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,9 +51,8 @@ eigendecompositions stand between the two ends."><meta property="og:image" conte
 \(Q \log(\Lambda) Q^\top\) and then read out of the lower triangle. Exact
 and a true inverse of <code><a href="param_value.MatrixLogParam.html">param_value.MatrixLogParam()</a></code>, the matrix logarithm of
 a symmetric positive definite matrix being unique among symmetric matrices.
-Measured, the round trip closes to \(2 \times 10^{-15}\), a little looser
-than <code><a href="log_cholesky.html">log_cholesky()</a></code>'s \(7 \times 10^{-17}\) because two
-eigendecompositions stand between the two ends.</p>
+The round trip passes through two eigendecompositions, one in each
+direction.</p>
     </div>
 
 
@@ -84,7 +81,7 @@ matrix, already checked for shape and symmetry by the generic.</p></dd>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>A matrix that is not positive definite is rejected: the logarithm of a
 non-positive eigenvalue is not a real number, so there is no free vector to
-return. The verdict is spectral, as it is everywhere in this package.</p>
+return. The test is on the eigenvalues of <code>m</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

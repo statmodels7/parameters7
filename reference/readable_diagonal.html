@@ -17,7 +17,7 @@ which is why their three methods are one call each."><meta property="og:image" c
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,7 +66,7 @@ which is why their three methods are one call each.</p>
 
 <dl><dt id="arg-links">links<a class="anchor" aria-label="anchor" href="#arg-links"></a></dt>
 <dd><p>A list of <span class="pkg">linkfunctions7</span> links, one per quantity, in the
-order of the free values they read. <code>links[[k]]</code> must be the link of
+order of the free values that they read. <code>links[[k]]</code> must be the link of
 <code>eta[k]</code>; the correspondence is positional and is not checked.</p></dd>
 
 
@@ -80,8 +80,8 @@ order of the free values they read. <code>links[[k]]</code> must be the link of
 
 
 <dt id="arg-transform">transform<a class="anchor" aria-label="anchor" href="#arg-transform"></a></dt>
-<dd><p>A character vector naming the scale each interval is built
-on, the same length as <code>nm</code>.</p></dd>
+<dd><p>A character vector naming the scale on which each interval
+is built, the same length as <code>nm</code>.</p></dd>
 
 
 <dt id="arg-label">label<a class="anchor" aria-label="anchor" href="#arg-label"></a></dt>
@@ -96,9 +96,9 @@ with <code>nm</code> as its row names, and is diagonal.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="param_readable.html">param_readable()</a></code> for the contract, and
-<code><a href="param_readable.AutoregressiveParam.html">param_readable.AutoregressiveParam()</a></code> for the one family whose Jacobian is
-not diagonal.</p></div>
+    <div class="dont-index"><p><code><a href="param_readable.html">param_readable()</a></code> for the structure of the declaration, and
+<code><a href="param_readable.AutoregressiveParam.html">param_readable.AutoregressiveParam()</a></code> and <code><a href="param_readable.SimplexParam.html">param_readable.SimplexParam()</a></code>
+for the two families whose Jacobian is not diagonal.</p></div>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

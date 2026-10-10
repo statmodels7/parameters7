@@ -26,7 +26,7 @@ param_d3logdet(s, eta, ...)
 
 - ...:
 
-  Passed to the method. No method in this package reads it.
+  Passed to the method. The methods in this package do not read it.
 
 ## Value
 
@@ -46,16 +46,13 @@ per block of a partition of the index set, with the sign and the
 multiplicity the two rules produce. The Moore-Penrose inverse replaces
 \\M^{-1}\\ for a rank-deficient family.
 
-The expansion is not transcribed anywhere. The methods differentiate the
-derivative arrays
-[`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md)
-through
-[`param_d4()`](https://statmodels7.github.io/parameters7/reference/param_d4.md)
-instead, and
-[`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)
-holds the result against a numerical differentiation of the order below,
-which shares none of its arithmetic. A twenty-term expansion written out
-by hand is exactly the kind of thing that is wrong and looks right.
+The expansion is not written out in the package. Each family in this
+package computes this order without differencing, and the base method on
+[`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
+takes one central difference of
+[`param_d2logdet()`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.md).
+A written-out expansion has one term per set partition of the indices,
+five at third order, and a transcription of it is easy to get wrong.
 
 ## Notation
 
@@ -88,8 +85,7 @@ param_d3logdet(s, c(0.3, 0.8))
 #>         log_scale:z_rho:z_rho             z_rho:z_rho:z_rho 
 #>                  0.000000e+00                  4.454798e+00 
 
-# A central difference of the order below agrees, and shares no arithmetic
-# with the route the method takes.
+# A central difference of the order below agrees.
 h <- 1e-4
 e <- c(0, h)
 fd <- (param_d2logdet(s, c(0.3, 0.8) + e) -

@@ -15,7 +15,7 @@ forms \(\Sigma\) and neither factorizes it."><meta property="og:image" content="
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -84,18 +84,15 @@ as many columns as <code>b</code>; <code><a href="param_factor.html">param_facto
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The scaling is done by dividing and multiplying rows, which for a diagonal
-matrix is what the products amount to. Measured at \(p = 3\) with the
-default block, the solve agrees with <code><a href="https://rdrr.io/r/base/solve.html" class="external-link">solve()</a></code> on the assembled matrix to
-\(7 \times 10^{-15}\) and <code>tcrossprod(param_factor(s, eta))</code> with the matrix
-to \(4 \times 10^{-16}\). The factor is lower triangular, as
+matrix is what the products amount to. The factor is lower triangular, as
 <code><a href="param_factor.html">param_factor()</a></code> requires, because scaling the rows of a lower triangular
 matrix leaves it lower triangular.</p>
-<p>Neither is ever refused for rank: this family admits no deficient correlation
+<p>Neither is rejected for rank: this family admits no deficient correlation
 block, so it is always of full rank.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="param_solve.html">param_solve()</a></code> and <code><a href="param_factor.html">param_factor()</a></code> for the two contracts.</p></div>
+    <div class="dont-index"><p><code><a href="param_solve.html">param_solve()</a></code> and <code><a href="param_factor.html">param_factor()</a></code> for the two generics.</p></div>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

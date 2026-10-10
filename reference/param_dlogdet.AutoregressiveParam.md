@@ -9,9 +9,8 @@ for an
 [`autoregressive()`](https://statmodels7.github.io/parameters7/reference/autoregressive.md)
 parameter, closed form at every order and **separable**: the
 log-determinant is a sum with one term per free value, so every mixed
-component is exactly zero. At \\q = 2\\ that is 3 of the 6 components at
-order 2, 7 of 10 at order 3 and 12 of 15 at order 4, and the zeros are
-exact, not merely small.
+component is exactly zero. At \\q = 2\\ the mixed components are 3 of
+the 6 at order 2, 7 of 10 at order 3 and 12 of 15 at order 4.
 
 ## Arguments
 

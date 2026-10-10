@@ -2,7 +2,7 @@
 
 Everything the derivative contractions need: the eigendecomposition of
 \\S\\, the rotated basis directions, and the divided-difference tables
-of the orders asked for, computed once per free vector.
+of the requested orders, computed once per free vector.
 
 ## Usage
 
@@ -37,8 +37,9 @@ tables `dd2` up to `dd<order+1>`.
 Everything here depends on \\\eta\\ alone, never on the index tuple, so
 it is computed once and every component of the order reads it. The
 rotated directions are \\Q^\top E_k Q\\ for each basis direction
-\\E_k\\, and the tables hold one divided difference per combination of
-eigenvalues with repetition, up to `order + 1` points.
+\\E_k\\. The table of \\m\\ points is an array with one divided
+difference for each ordered \\m\\-tuple of eigenvalue indices, \\p^m\\
+entries in all, for \\m\\ up to `order + 1`.
 
 ## See also
 

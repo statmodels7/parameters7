@@ -7,16 +7,12 @@ one is
 \$\$\partial\_{kk} \log\|M\| = m_k\left\\\frac{h''(\eta_k)}{h(\eta_k)} -
 \left(\frac{h'(\eta_k)}{h(\eta_k)}\right)^{2}\right\\,\$\$
 
-the second derivative of \\\log h\\ times the number of entries the
+the second derivative of \\\log h\\ times the number of entries that the
 value owns.
 
 Under the **log** link this is identically zero, \\\log h(\eta) = \eta\\
-being linear, so a check of this quantity against a numerical reference
-on a default
-[`diagonal_matrix()`](https://statmodels7.github.io/parameters7/reference/diagonal_matrix.md)
-compares two zeros and would pass whatever was missing. Under a
-square-root link at \\\eta = (1, 2)\\ it is \\(-2, -0.5)\\, which is
-where the formula has content.
+being linear. Under a softplus link at \\\eta = (1, 2)\\ the pure
+components are \\(-0.160, -0.122)\\.
 
 ## Arguments
 

@@ -1,7 +1,7 @@
 # The Scale and the Correlation of an AR(1)
 
 Declares two quantities: the marginal variance and the correlation at
-lag one, the two things an AR(1) covariance is about. Their intervals
+lag one, which together describe an AR(1) covariance. Their intervals
 are built on the log and the inverse hyperbolic tangent, so a variance
 stays positive and a correlation stays inside \\(-1, 1)\\.
 

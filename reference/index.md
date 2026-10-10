@@ -2,9 +2,10 @@
 
 ## Families
 
-The parametrizations. Each maps an unconstrained vector to a matrix in
-its own constrained set. Which side of a model a matrix parametrizes is
-the consumer’s to say, not the parametrization’s.
+The parametrizations. Each maps an unconstrained vector onto its own
+constrained set: symmetric matrices, probability vectors or
+row-stochastic matrices. The consumer decides on which side of a model a
+matrix is used.
 
 - [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
   : Construct an Unstructured Positive Definite Parameter
@@ -66,9 +67,8 @@ the consumer’s to say, not the parametrization’s.
 
 ## Derivatives
 
-Exact to fourth order, on the unconstrained scale, which is what joint
-estimation over the coefficients and the constrained parameters
-consumes.
+Exact to fourth order, on the unconstrained scale, as joint estimation
+over the coefficients and the constrained parameters requires.
 
 - [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md)
   : First Derivatives of a Parameter's Value
@@ -83,7 +83,7 @@ consumes.
 - [`param_tuple_indices()`](https://statmodels7.github.io/parameters7/reference/param_tuple_indices.md)
   : Index Tuples Behind the Derivative Component Names
 
-## What a likelihood asks of the matrix
+## Log-determinant and solves
 
 The log-determinant, or the log pseudo-determinant when the family is
 rank deficient, and the solves, computed through a factor instead of
@@ -107,20 +107,21 @@ through an explicit inverse.
 - [`param_factor()`](https://statmodels7.github.io/parameters7/reference/param_factor.md)
   : A Factor of a Parameter's Matrix
 
-## What a reader reads
+## Interpretable quantities
 
-The quantities a family is about, with the Jacobian of the map from the
-free vector and the scale each interval belongs on, so that a consumer
-can report them by the delta method rather than reporting coordinates.
+The quantities that a family declares, with the Jacobian of the map from
+the free vector and the scale on which each interval is built, so that a
+consumer can report them by the delta method instead of reporting
+coordinates.
 
 - [`param_readable()`](https://statmodels7.github.io/parameters7/reference/param_readable.md)
-  : Quantities a Family Is About
+  : Interpretable Quantities of a Family
 
 ## Rank
 
 A rank read off an assembled matrix is not scale invariant, so it is
 computed once from the components and membership is tested against the
-null space it implies.
+null space that it implies.
 
 - [`param_null_basis()`](https://statmodels7.github.io/parameters7/reference/param_null_basis.md)
   : An Orthonormal Basis of a Null Space, and the Rank That Goes With It
@@ -145,9 +146,9 @@ null space it implies.
 The S7 classes; each page lists the methods that dispatch on it.
 
 - [`parameter()`](https://statmodels7.github.io/parameters7/reference/parameter.md)
-  : The Abstract Class of a Constrained Parameter
+  : The Base Class of a Constrained Parameter
 - [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
-  : The Abstract Class of a Symmetric Matrix Parameter
+  : The Base Class of a Symmetric Matrix Parameter
 - [`LogCholeskyParam()`](https://statmodels7.github.io/parameters7/reference/LogCholeskyParam.md)
   : Unstructured Positive Definite Parameter
 - [`MatrixLogParam()`](https://statmodels7.github.io/parameters7/reference/MatrixLogParam.md)
@@ -171,26 +172,27 @@ The S7 classes; each page lists the methods that dispatch on it.
 
 ## Base-class defaults
 
-The methods registered on the abstract class, which every parameter
-inherits unless it registers something more specific.
+The methods registered on the base classes, which every parameter
+inherits unless it registers a method of its own.
 
 - [`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)
   : Validate a Covariance Parameter
 - [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
-  : The Abstract Class of a Symmetric Matrix Parameter
+  : The Base Class of a Symmetric Matrix Parameter
 
 ## Internals
 
-The machinery the exported functions are built from. None of it is
-exported, and none is needed to use the package; it is documented so
-that the derivations can be followed from the code that implements them.
+The internal functions from which the exported ones are built. They are
+not exported and are not needed to use the package; they are documented
+so that the derivations can be followed from the code that implements
+them.
 
 - [`ar1_inv_derivative()`](https://statmodels7.github.io/parameters7/reference/ar1_inv_derivative.md)
   : Derivative Arrays of an Inverse AR(1) Parameter
 - [`ar1_inv_pattern()`](https://statmodels7.github.io/parameters7/reference/ar1_inv_pattern.md)
   : The Pattern of an Inverse AR(1) Parameter
-- [`ar1_logdet_terms()`](https://statmodels7.github.io/parameters7/reference/ar1_logdet_terms.md)
-  : The Log-Determinant Terms of an AR(1) Parameter
+- [`ar1_logdet_chain()`](https://statmodels7.github.io/parameters7/reference/ar1_logdet_chain.md)
+  : Log-Determinant Chain of an AR(1) Parameter
 - [`ar1_pattern()`](https://statmodels7.github.io/parameters7/reference/ar1_pattern.md)
   : The Pattern of an AR(1) Parameter
 - [`ar_derivative()`](https://statmodels7.github.io/parameters7/reference/ar_derivative.md)
@@ -220,7 +222,7 @@ that the derivations can be followed from the code that implements them.
   [`restore_seed()`](https://statmodels7.github.io/parameters7/reference/capture_seed.md)
   : Capture and Restore the Caller's Random Stream
 - [`check_analytic_arrays()`](https://statmodels7.github.io/parameters7/reference/check_analytic_arrays.md)
-  : Refuse an Order That Would Difference a Difference
+  : Reject an Order That Would Difference a Difference
 - [`check_eta()`](https://statmodels7.github.io/parameters7/reference/check_eta.md)
   : Validate a Free Vector Against a Parameter
 - [`check_matrix()`](https://statmodels7.github.io/parameters7/reference/check_matrix.md)
@@ -235,7 +237,7 @@ that the derivations can be followed from the code that implements them.
 - [`check_row()`](https://statmodels7.github.io/parameters7/reference/check_row.md)
   : One Row of a Diagnostic Table
 - [`check_unit_diagonal()`](https://statmodels7.github.io/parameters7/reference/check_unit_diagonal.md)
-  : Refuse a Correlation Block That Carries a Scale
+  : Reject a Correlation Block That Carries a Scale
 - [`chol_assemble()`](https://statmodels7.github.io/parameters7/reference/chol_assemble.md)
   : The Cholesky Factor Behind a Free Vector
 - [`chol_dfactor()`](https://statmodels7.github.io/parameters7/reference/chol_dfactor.md)
@@ -262,8 +264,10 @@ that the derivations can be followed from the code that implements them.
   : Log-Determinant Components of a Correlation Parameter
 - [`corr_tables()`](https://statmodels7.github.io/parameters7/reference/corr_tables.md)
   : Sines and Cosines of a Correlation Parameter's Angles
-- [`cs_logdet_terms()`](https://statmodels7.github.io/parameters7/reference/cs_logdet_terms.md)
-  : The Log-Determinant Terms of a Compound-Symmetric Parameter
+- [`cosh2_derivs()`](https://statmodels7.github.io/parameters7/reference/cosh2_derivs.md)
+  : Derivatives of the Reciprocal of One Minus a Squared Correlation
+- [`cs_logdet_chain()`](https://statmodels7.github.io/parameters7/reference/cs_logdet_chain.md)
+  : Log-Determinant Chain of a Compound-Symmetric Parameter
 - [`cs_pattern()`](https://statmodels7.github.io/parameters7/reference/cs_pattern.md)
   : The Pattern of a Compound-Symmetric Parameter
 - [`dd_exp()`](https://statmodels7.github.io/parameters7/reference/dd_exp.md)
@@ -305,11 +309,11 @@ that the derivations can be followed from the code that implements them.
 - [`fd_step()`](https://statmodels7.github.io/parameters7/reference/fd_step.md)
   : Finite-Difference Step for a Free Value
 - [`inv_derivs_check()`](https://statmodels7.github.io/parameters7/reference/inv_derivs_check.md)
-  : The Contract Check of the Inverse's Derivatives
+  : Argument Check for the Inverse's Derivatives
 - [`inverse_derivs()`](https://statmodels7.github.io/parameters7/reference/inverse_derivs.md)
   : Derivatives of an Inverse Parameter of a Given Order
 - [`is_base_param_class()`](https://statmodels7.github.io/parameters7/reference/is_base_param_class.md)
-  : Is This the Package's Own Base Class?
+  : Test for the Package's Own Base Classes
 - [`kron_accessors`](https://statmodels7.github.io/parameters7/reference/kron_accessors.md)
   : The Inner Parameter, the Block Count, and the Lift
 - [`leibniz_gram()`](https://statmodels7.github.io/parameters7/reference/leibniz_gram.md)
@@ -318,8 +322,6 @@ that the derivations can be followed from the code that implements them.
   : A Short Name for a Link
 - [`linkinv_upto()`](https://statmodels7.github.io/parameters7/reference/linkinv_upto.md)
   : A Link Inverse and Its Derivatives, to a Given Order
-- [`log_affine_derivs()`](https://statmodels7.github.io/parameters7/reference/log_affine_derivs.md)
-  : Derivatives of a Sum of Logarithms of Affine Functions
 - [`mixed_stencil()`](https://statmodels7.github.io/parameters7/reference/mixed_stencil.md)
   : One Product Stencil for a Mixed Partial Derivative
 - [`mlog_basis()`](https://statmodels7.github.io/parameters7/reference/mlog_basis.md)
@@ -581,7 +583,7 @@ that the derivations can be followed from the code that implements them.
 - [`param_free.TransitionMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_free.TransitionMatrixParam.md)
   : Free Vector of a Transition Matrix Parameter
 - [`param_free.parameter`](https://statmodels7.github.io/parameters7/reference/param_free.parameter.md)
-  : Rejection to Invert Without a Closed Form
+  : Default Inverse Map
 - [`param_inv_d1()`](https://statmodels7.github.io/parameters7/reference/param_inv_d1.md)
   [`param_inv_d2()`](https://statmodels7.github.io/parameters7/reference/param_inv_d1.md)
   : Derivatives of the Inverse of a Matrix Parameter
@@ -654,7 +656,7 @@ that the derivations can be followed from the code that implements them.
 - [`param_solve.matrix_parameter`](https://statmodels7.github.io/parameters7/reference/param_solve.matrix_parameter.md)
   : Default Solve
 - [`param_spectrum()`](https://statmodels7.github.io/parameters7/reference/param_spectrum.md)
-  : The Spectral Decomposition a Parameter's Quantities Are Read From
+  : The Spectral Decomposition of a Parameter's Matrix
 - [`param_value.Ar1Param`](https://statmodels7.github.io/parameters7/reference/param_value.Ar1Param.md)
   : Value of an AR(1) Parameter
 - [`param_value.AutoregressiveParam`](https://statmodels7.github.io/parameters7/reference/param_value.AutoregressiveParam.md)
@@ -699,6 +701,10 @@ that the derivations can be followed from the code that implements them.
   : Derivatives of a Reciprocal, for Composition
 - [`scaled_scale()`](https://statmodels7.github.io/parameters7/reference/scaled_scale.md)
   : The Scale Behind a Free Vector, and Its Derivatives
+- [`sech2()`](https://statmodels7.github.io/parameters7/reference/sech2.md)
+  [`log_sech2()`](https://statmodels7.github.io/parameters7/reference/sech2.md)
+  [`log_sech2_deriv()`](https://statmodels7.github.io/parameters7/reference/sech2.md)
+  : The Squared Hyperbolic Secant and Its Logarithm
 - [`simplex_components()`](https://statmodels7.github.io/parameters7/reference/simplex_components.md)
   : Extract Named Components From Softmax Tensors
 - [`simplex_point()`](https://statmodels7.github.io/parameters7/reference/simplex_point.md)
@@ -729,5 +735,3 @@ that the derivations can be followed from the code that implements them.
   : Row and Chart Coordinate of Each Free Value
 - [`tuple_indices()`](https://statmodels7.github.io/parameters7/reference/tuple_indices.md)
   : The Index Tuples of a Given Width
-- [`w_derivs()`](https://statmodels7.github.io/parameters7/reference/w_derivs.md)
-  : Derivatives of the Reciprocal of One Minus a Squared Correlation

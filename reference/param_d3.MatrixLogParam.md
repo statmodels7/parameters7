@@ -1,11 +1,11 @@
 # Third Derivatives of a Matrix Logarithm Parameter
 
 Chains of three rotated directions contracted against four-point divided
-differences, summed over the six orderings. Exact, where a numerical
-route at this order keeps about six digits.
+differences, summed over the orderings of the three directions. Exact,
+with no differencing.
 
-The cost grows quickly: six orderings per component, each an \\O(p^4)\\
-contraction, and \\\binom{d+2}{3}\\ components. See
+The cost grows quickly: up to six orderings per component, each an
+\\O(p^4)\\ contraction, and \\\binom{d+2}{3}\\ components. See
 [`matrix_log()`](https://statmodels7.github.io/parameters7/reference/matrix_log.md)
 for the comparison with
 [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md),

@@ -24,11 +24,10 @@ partition.
 
 ## Details
 
-Built from
-[`numericals7::set_partitions()`](https://statmodels7.github.io/numericals7/reference/set_partitions.html),
-the toolkit's single copy of the unordered enumeration, by taking every
-permutation of each partition's blocks. The count is the Fubini number:
-1, 3, 13, 75 for `k` of 1 to 4.
+Built from the unordered enumeration of
+[`numericals7::set_partitions()`](https://statmodels7.github.io/numericals7/reference/set_partitions.html)
+by taking every permutation of each partition's blocks. The count is the
+Fubini number: 1, 3, 13, 75 for `k` of 1 to 4.
 
 ## See also
 

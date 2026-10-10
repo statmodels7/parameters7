@@ -6,8 +6,8 @@ times one positive scale. With `link = NULL` it holds \\P\\ alone and
 has no free value.
 
 This is the commonest penalty in semiparametric regression, and it is
-the reason the package admits rank-deficient matrices at all. \\P\\ may
-be the Gram matrix of a basis derivative, a difference penalty
+the reason why the package accepts rank-deficient matrices. \\P\\ may be
+the Gram matrix of a basis derivative, a difference penalty
 \\\Delta^\top \Delta\\, a neighborhood matrix, or the identity, which
 makes the object a ridge.
 
@@ -22,11 +22,11 @@ scaled_matrix(p, link = linkfunctions7::log_link(), tol = 1e-10)
 - p:
 
   A symmetric positive semidefinite numeric matrix. It must be square,
-  free of `NA`, and symmetric to \\10^{-8}\\ relative, and it is
-  symmetrized before use. A matrix whose largest eigenvalue is not
-  positive throws
+  free of `NA`, and symmetric to \\10^{-8}\\ times the larger of 1 and
+  its largest entry, and it is symmetrized before use. A matrix whose
+  largest eigenvalue is not positive signals the error
   `'p' must be positive semidefinite and not identically zero.`, and one
-  whose smallest eigenvalue is below `-tol * max(ev)` throws a message
+  whose smallest eigenvalue is below `-tol * max(ev)` signals an error
   quoting both eigenvalues.
 
 - link:
@@ -58,10 +58,11 @@ with `n_free` 1 or 0, `free_names` a single link-tagged label or empty,
 [`param_null_basis()`](https://statmodels7.github.io/parameters7/reference/param_null_basis.md),
 and `param_params` holding `p`, `link` and `logdet_p`.
 
-## Everything is a constant times a function of the scale
+## Derivatives and log-determinant
 
-Nothing here needs deriving. With the default log link, where \\h(\eta)
-= e^{\eta}\\ and \\\lambda = h(\eta)\\,
+Every quantity is a constant times a function of the scale. With the
+default log link, where \\h(\eta) = e^{\eta}\\ and \\\lambda =
+h(\eta)\\,
 
 \$\$\partial\_\eta M = M, \qquad \partial^2\_\eta M = M,\$\$
 \$\$\log\|M\|\_+ = r\\\eta + \log\|P\|\_+, \qquad \partial\_\eta
@@ -72,32 +73,32 @@ with \\r\\ the rank and \\\log\|P\|\_+\\ the log pseudo-determinant of
 derivatives carry that link's own, through
 [`diag_dlog()`](https://statmodels7.github.io/parameters7/reference/diag_dlog.md).
 
-## Why the derivative of the log pseudo-determinant matters
+## The derivative of the log pseudo-determinant
 
-It equals the rank, and that is what leaves the scale estimable. Write a
-penalty as a negative log prior,
+Under the log link it equals the rank, which makes the scale estimable.
+Write a penalty as a negative log prior,
 
 \$\$\tfrac{\lambda}{2}\beta^\top P \beta - \tfrac{r}{2}\log\lambda,\$\$
 
 and the stationary point is \\\lambda = r / (\beta^\top P \beta)\\. Drop
 the second term and the derivative keeps one sign, sending the scale to
-zero. That second term is the normalizing constant of the prior, which
-is why this package keeps it.
+zero. That second term is the normalizing constant of the prior, and
+[`param_logdet()`](https://statmodels7.github.io/parameters7/reference/param_logdet.md)
+includes it.
 
-## Rank deficiency is admitted, and what it means
+## Rank deficiency
 
 A deficient \\P\\ makes the corresponding Gaussian improper, so it is a
 legitimate **penalty** without being a legitimate density. Both readings
 of a multivariate Gaussian need full rank: a singular covariance is
 degenerate on a subspace, and a singular precision does not normalize.
-The object still answers
-[`param_logdet()`](https://statmodels7.github.io/parameters7/reference/param_logdet.md),
-with the pseudo-determinant, and
+[`param_logdet()`](https://statmodels7.github.io/parameters7/reference/param_logdet.md)
+returns the pseudo-determinant, while
 [`param_solve()`](https://statmodels7.github.io/parameters7/reference/param_solve.md)
 and
 [`param_factor()`](https://statmodels7.github.io/parameters7/reference/param_factor.md)
-reject it, a consumer of an improper prior needing the quadratic form
-and the pseudo-determinant instead of an inverse.
+reject the object, because a consumer of an improper prior needs the
+quadratic form and the pseudo-determinant and not an inverse.
 
 ## Notation
 
@@ -154,7 +155,7 @@ c(closed_form = s@rank / bPb, numeric = optimize(obj, c(1e-6, 100))$minimum)
 #> closed_form     numeric 
 #>   0.1250415   0.1250528 
 
-# A deficient family has no inverse and says so.
+# A deficient family has no inverse, and the call signals an error.
 try(param_solve(s, 0))
 #> Error : 'scaled' is rank deficient (4 of 6), so it has no inverse. A consumer of
 #>   an improper prior needs the quadratic form and the log

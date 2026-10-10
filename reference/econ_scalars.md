@@ -1,13 +1,13 @@
 # The Scale and the Correlation of an Economical Parameter
 
-Returns the two scalars a
+Returns the two scalars from which a
 [`compound_symmetry()`](https://statmodels7.github.io/parameters7/reference/compound_symmetry.md)
 or [`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md)
-parameter is built from, each with its value and its derivatives to
-order `order` in its **own** free value. Each scalar depends on one free
-value alone, so the two families are separable and their derivative
-assembly is a product of two chains. A value alone is `order = 0`, and
-no derivative is evaluated then.
+parameter is built, each with its value and its derivatives to order
+`order` in its **own** free value. Each scalar depends on one free value
+alone, so the two families are separable and their derivative assembly
+is a product of two chains. A value alone is `order = 0`, and no
+derivative is evaluated then.
 
 ## Usage
 

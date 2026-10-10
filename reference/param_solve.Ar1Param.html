@@ -3,19 +3,19 @@
 \(\{\sigma^2(1-\rho^2)\}^{-1}\) times the matrix with 1 at the two corners
 of the diagonal, \(1+\rho^2\) elsewhere on it, and \(-\rho\) on the two
 first off-diagonals. Every other entry is exactly zero, an AR(1) process being
-Markov, so the inverse is written down and no factorization is performed: the
-cost is \(O(p)\) entries against the base class's \(O(p^3)\) Cholesky.
-Measured at \(p = 4\) and \(\rho = 0.6\): the entries beyond the first
-off-diagonal are 0 exactly, and the whole matrix agrees with base::solve() on
-the assembled covariance to \(1 \times 10^{-16}\)."><meta property="og:description" content="Exact, and tridiagonal. The precision of an AR(1) covariance is
+Markov, so the inverse is written down and no factorization is performed. The
+matrix is assembled densely and multiplied by b, at \(O(p^2)\) per column
+of b. The factor \(1 - \rho^2\) is evaluated from the free value \(z\)
+as \(\mathrm{sech}^2 z = 4e^{-2|z|}/(1 + e^{-2|z|})^2\), so the inverse stays
+accurate where \(\rho\) rounds to \(-1\) or 1."><meta property="og:description" content="Exact, and tridiagonal. The precision of an AR(1) covariance is
 \(\{\sigma^2(1-\rho^2)\}^{-1}\) times the matrix with 1 at the two corners
 of the diagonal, \(1+\rho^2\) elsewhere on it, and \(-\rho\) on the two
 first off-diagonals. Every other entry is exactly zero, an AR(1) process being
-Markov, so the inverse is written down and no factorization is performed: the
-cost is \(O(p)\) entries against the base class's \(O(p^3)\) Cholesky.
-Measured at \(p = 4\) and \(\rho = 0.6\): the entries beyond the first
-off-diagonal are 0 exactly, and the whole matrix agrees with base::solve() on
-the assembled covariance to \(1 \times 10^{-16}\)."><meta property="og:image" content="https://statmodels7.github.io/parameters7/logo.png"></head><body>
+Markov, so the inverse is written down and no factorization is performed. The
+matrix is assembled densely and multiplied by b, at \(O(p^2)\) per column
+of b. The factor \(1 - \rho^2\) is evaluated from the free value \(z\)
+as \(\mathrm{sech}^2 z = 4e^{-2|z|}/(1 + e^{-2|z|})^2\), so the inverse stays
+accurate where \(\rho\) rounds to \(-1\) or 1."><meta property="og:image" content="https://statmodels7.github.io/parameters7/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -23,7 +23,7 @@ the assembled covariance to \(1 \times 10^{-16}\)."><meta property="og:image" co
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,11 +57,11 @@ the assembled covariance to \(1 \times 10^{-16}\)."><meta property="og:image" co
 \(\{\sigma^2(1-\rho^2)\}^{-1}\) times the matrix with 1 at the two corners
 of the diagonal, \(1+\rho^2\) elsewhere on it, and \(-\rho\) on the two
 first off-diagonals. Every other entry is exactly zero, an AR(1) process being
-Markov, so the inverse is written down and no factorization is performed: the
-cost is \(O(p)\) entries against the base class's \(O(p^3)\) Cholesky.</p>
-<p>Measured at \(p = 4\) and \(\rho = 0.6\): the entries beyond the first
-off-diagonal are 0 exactly, and the whole matrix agrees with <code><a href="https://rdrr.io/r/base/solve.html" class="external-link">base::solve()</a></code> on
-the assembled covariance to \(1 \times 10^{-16}\).</p>
+Markov, so the inverse is written down and no factorization is performed. The
+matrix is assembled densely and multiplied by <code>b</code>, at \(O(p^2)\) per column
+of <code>b</code>. The factor \(1 - \rho^2\) is evaluated from the free value \(z\)
+as \(\mathrm{sech}^2 z = 4e^{-2|z|}/(1 + e^{-2|z|})^2\), so the inverse stays
+accurate where \(\rho\) rounds to \(-1\) or 1.</p>
     </div>
 
 

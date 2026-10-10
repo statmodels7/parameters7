@@ -3,7 +3,7 @@
 Closed form and constant: 2 in each of the \\p\\ diagonal directions and
 0 in the \\p(p-1)/2\\ below-diagonal ones, since \\\log\|M\|\\ is
 \\2\sum_i \eta_i\\ and does not involve the rest of \\\eta\\ at all. The
-value does not depend on `eta`, which is read only for its length.
+value does not depend on `eta`, which the method does not read.
 
 ## Arguments
 

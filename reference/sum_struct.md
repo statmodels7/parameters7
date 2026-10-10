@@ -18,8 +18,11 @@ sum_struct(components, link = linkfunctions7::log_link())
   A non-empty list of symmetric positive semidefinite numeric matrices
   of the same side. Each is checked for all three properties, the
   semidefiniteness spectrally at a relative tolerance of \\10^{-8}\\.
-  Named entries supply the free-value labels, which must be unique;
-  unnamed ones are `w1`, `w2`, ...
+  The components must also be linearly independent as vectors, because
+  otherwise their weights would not be identified; the constructor
+  signals an error when they are not. Named entries supply the
+  free-value labels, which must be unique; unnamed ones are `w1`, `w2`,
+  ...
 
 - link:
 
@@ -41,13 +44,13 @@ space, and `rank` the side less its width.
 ## What it is for
 
 This is the variance-components covariance \\\sum_k \sigma_k^2
-Z_kZ_k^\top\\, and it is also the matrix a penalty with one smoothing
-parameter per component assembles. penalties7's `additive_penalty()`
-builds the same sum for its own purposes; the difference is that a
-penalty is a function of the coefficients while this is a matrix map, so
-a distribution can take it as a covariance.
+Z_kZ_k^\top\\, and it is also the matrix that a penalty with one
+smoothing parameter per component assembles. penalties7's
+`additive_penalty()` builds the same sum for its own purposes; the
+difference is that a penalty is a function of the coefficients while
+this is a matrix map, so a distribution can take it as a covariance.
 
-## The value is linear, so most derivative components vanish
+## Derivatives of the value
 
 \$\$\partial^{m}\_{\eta_k} M = c_k^{(m)}(\eta_k)\\ P_k,\$\$
 
@@ -67,51 +70,32 @@ M^{-1}P\_{\sigma(n)}\bigr),\$\$
 
 the sum running over the \\(n-1)!\\ cyclic orderings **counted with
 multiplicity**, and are then carried onto the free scale by a chain rule
-whose Jacobian is diagonal. Counting with multiplicity is load bearing
-and the cost of getting it wrong is measured: deduplicating the
-orderings that coincide when an index repeats leaves a third-order
-component too small by exactly 2 and a fourth-order one by exactly 6.
-
-Against one stencil on the analytic order below, the four orders agree
-to \\7 \times 10^{-11}\\, \\1 \times 10^{-11}\\, \\3 \times 10^{-12}\\
-and \\3 \times 10^{-13}\\.
+whose Jacobian is diagonal. If the orderings that coincide when an index
+repeats were counted once, the trace term whose indices are all equal
+would be too small by a factor of 2 at third order and of 6 at fourth,
+and the derivatives of the log-determinant would be wrong.
 
 ## The rank is fixed at construction
 
 The null space of a sum of positive semidefinite matrices is the
 **intersection** of theirs, so it does not move with the weights, and it
 is read from the components stacked and individually normalized, never
-from an assembled matrix. The distinction is measurable, not merely
-conceptual. Take \\P_1 = \mathbf{1}\mathbf{1}^\top\\ of side 4, of rank
-1, and \\P_2\\ the first-difference penalty, of rank 3: their null
-spaces meet only at the origin, so the family has rank 4, and counting
-eigenvalues of \\M(\eta)\\ above \\10^{-10}\\ of the largest gives
+from an assembled matrix. With \\P_1 = \mathbf{1}\mathbf{1}^\top\\ of
+side 4, of rank 1, and \\P_2\\ the first-difference penalty, of rank 3,
+the null spaces meet only at the origin and the family has rank 4;
+counting the eigenvalues of \\M(\eta)\\ above \\10^{-10}\\ of the
+largest gives 4 while the weight of \\P_1\\ is up to \\10^{9}\\ times
+that of \\P_2\\, and 1 from a ratio of \\10^{10}\\. Weights ten orders
+of magnitude apart occur in ordinary fitted models. Where there **is** a
+shared null space, the basis is annihilated by \\M(\eta)\\ up to
+rounding whatever the ratio of the weights.
 
-|  |  |  |  |  |  |
-|----|----|----|----|----|----|
-| weight ratio | \\10^{0}\\ | \\10^{3.5}\\ | \\10^{6.9}\\ | \\10^{10.4}\\ | \\10^{13.9}\\ |
-| eigenvalue count | 4 | 4 | 4 | 1 | 1 |
+## Cost
 
-while the family reports 4 throughout. Weights ten orders of magnitude
-apart are an ordinary fitted model. Where there **is** a shared null
-space it is held exactly: on the first- and second-difference penalties
-over five points, whose null spaces meet in the constants, the residual
-\\\lVert M N\rVert / \lVert M\rVert\\ stays at \\3 \times 10^{-16}\\
-over fourteen decades of weight ratio.
-
-## What a call costs
-
-The log-determinant's fourth derivatives are the expensive quantity, the
-expansion evaluating \\(n-1)!\\ matrix chains per component and one set
-partition per repeated index. Seconds per call at side 6, over
-repetition loops sized by elapsed time:
-
-|       |               |            |                 |                  |
-|-------|---------------|------------|-----------------|------------------|
-| \\K\\ | `param_value` | `param_d4` | `param_dlogdet` | `param_d4logdet` |
-| 2     | 0.00003       | 0.00017    | 0.00029         | 0.00172          |
-| 3     | 0.00002       | 0.00022    | 0.00037         | 0.00344          |
-| 5     | 0.00003       | 0.00068    | 0.00039         | 0.01328          |
+The fourth derivatives of the log-determinant are the expensive
+quantity, the expansion evaluating \\(n-1)!\\ matrix chains per
+component and one set partition per repeated index, so the cost grows
+quickly with \\K\\.
 
 ## Notation
 

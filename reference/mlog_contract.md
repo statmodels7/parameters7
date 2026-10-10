@@ -1,8 +1,9 @@
 # One Derivative Component by the Daleckii-Krein Contraction
 
 Contracts the rotated directions of one index tuple against the
-divided-difference table of the matching order, sums over **every
-ordering** of the directions, and rotates the result back by \\Q\\.
+divided-difference table of the matching order and sums over the
+orderings of the directions. The result is in the eigenbasis of \\S\\;
+the caller rotates it back by \\Q\\.
 
 ## Usage
 
@@ -25,22 +26,22 @@ mlog_contract(tb, dirs)
 
 ## Value
 
-A symmetric numeric matrix of the side `tb$q` has, with no dimnames.
+A symmetric numeric matrix with the side of `tb$q`, in the eigenbasis of
+\\S\\ and with no dimnames.
 
 ## Details
 
-The sum runs over every ordering, never over the distinct ones, so a
-tuple with repeated indices is counted with its multiplicity and needs
-no correction afterwards. That is where a hand-written version of this
-goes wrong: summing the distinct orderings and forgetting the \\\prod_j
-m_j!\\ factor gives a result that is too small by exactly that factor,
-which looks plausible.
+The multilinear form sums over all orderings of the directions. The loop
+runs over the distinct orderings, which
+[`combinat_perms()`](https://statmodels7.github.io/parameters7/reference/combinat_perms.md)
+returns, and the sum is multiplied by \\\prod_j m_j!\\, where the
+\\m_j\\ are the multiplicities of the repeated indices, because each
+distinct ordering occurs that many times among all of them. Without that
+factor the result would be too small by exactly that factor.
 
 The cost is the reason this family's higher orders are expensive: at
-order 4 there are 24 orderings per component, each an \\O(p^4)\\
-contraction. See
-[`matrix_log()`](https://statmodels7.github.io/parameters7/reference/matrix_log.md)
-for the measurement.
+order 4 a component with four different indices has 24 orderings, each a
+contraction of \\O(p^5)\\ operations.
 
 ## See also
 

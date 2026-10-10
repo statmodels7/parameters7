@@ -11,7 +11,7 @@ correlation's own component of the matching order, elementwise."><meta property=
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,7 +76,7 @@ keyed as <code>param_tuple_names(s, order)</code> and in that order, each
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The correlation's arrays are fetched at most once per order and re-keyed by
-the sorted local index tuple, the same device <code><a href="block_derivs_by_tuple.html">block_derivs_by_tuple()</a></code> uses
+the sorted local index tuple, the same device that <code><a href="block_derivs_by_tuple.html">block_derivs_by_tuple()</a></code> uses
 and for the same reason: the composite's names are not the block's, but the
 sorted index tuple is a key both sides can compute.</p>
 <p>A component whose correlation part is empty reads the correlation's <strong>value</strong>,

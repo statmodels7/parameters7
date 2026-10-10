@@ -3,8 +3,9 @@
 Fills the lower triangle of \\S\\ with the free values, in the order
 `param_params$positions` records, and mirrors it to the upper triangle.
 No transformation is applied: the free values **are** the entries of
-\\S\\, which is where this chart parts company with
-[`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)'s.
+\\S\\. In
+[`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md),
+by contrast, the diagonal free values are logarithms.
 
 ## Usage
 

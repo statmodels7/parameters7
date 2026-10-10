@@ -1,16 +1,16 @@
 # Validate a Covariance Parameter
 
 Runs a battery of numerical checks on a parametrization, each against a
-route the implementation does not itself take, and reports what passed,
-what failed and what could not be checked. Write a family of your own,
-call this on it, and read the table: a `FAIL` names the quantity whose
-closed form is wrong, and the statistic beside it is the relative size
-of the disagreement.
+route that the implementation does not itself take, and reports what
+passed, what failed and what could not be checked. For a family written
+by the user, a `FAIL` in the table names the quantity whose closed form
+is wrong, and the statistic beside it is the relative size of the
+disagreement.
 
-It is also the validator the package holds itself to. Measured over all
-fifteen constructors: thirteen matrix families pass all nine checks and
-the two that are not matrices pass all seven, with nothing skipped
-anywhere.
+The families of this package pass every check that applies to them. A
+rank-deficient family has no solve to check, and a family without free
+values has no log-determinant gradient or Hessian; those rows are
+reported as NOT CHECKED.
 
 ## Usage
 
@@ -24,16 +24,20 @@ check_parameter(s, tol = 1e-06, verbose = TRUE)
 
   An object inheriting from class
   [`parameter()`](https://statmodels7.github.io/parameters7/reference/parameter.md).
-  Anything else throws `'s' must inherit from class 'parameter'.`
+  Any other value signals the error
+  `'s' must inherit from class 'parameter'.`
 
 - tol:
 
-  The relative tolerance a check has to meet, defaulting to `1e-6`. The
-  comparisons are relative to the larger of 1 and the size of the
+  The relative tolerance that a check has to meet, defaulting to `1e-6`.
+  The comparisons are relative to the larger of 1 and the size of the
   reference, so the tolerance is dimensionless. `1e-6` is loose enough
-  for the third and fourth derivative comparisons, which rest on
-  stencils good to about \\10^{-5}\\, and tight enough to catch an error
-  of one part in a thousand.
+  for the first and second derivative comparisons, which rest on central
+  differences, and tight enough to catch an error of one part in a
+  thousand. For a family that is not a matrix, the thresholds of the
+  four derivative orders are \\10^{-6}\\, \\10^{-5}\\, \\10^{-4}\\ and
+  \\5 \times 10^{-3}\\ at the default, and each is multiplied by
+  `tol / 1e-6` otherwise.
 
 - verbose:
 
@@ -59,12 +63,16 @@ it has nine rows and the columns
   numeric, the worst relative discrepancy, `NA` for a check that was
   skipped or has no number.
 
-For a family that is not a matrix it has seven rows and the columns
-`check`, `status` and `note`, the last being **character** and holding a
-formatted number or the empty string. Test the `status` column, which is
-common to both.
+For a family that is not a matrix it has the columns `check`, `status`
+and `note`, the last being **character** and holding a formatted number,
+the string `numerical` or the empty string, with seven rows for
+[`simplex()`](https://statmodels7.github.io/parameters7/reference/simplex.md)
+and
+[`transition_matrix()`](https://statmodels7.github.io/parameters7/reference/transition_matrix.md)
+and five for any other such family. The `status` column is common to
+both.
 
-## Not checked is a third verdict
+## The NOT CHECKED status
 
 A quantity that comes from a numerical fallback is reported as **NOT
 CHECKED**, never as passed. Comparing a finite difference against a
@@ -73,16 +81,17 @@ wrong the parametrization is.
 [`param_is_numerical()`](https://statmodels7.github.io/parameters7/reference/param_is_numerical.md)
 is what decides, and a family supplying only
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
-therefore comes back with six of the nine rows skipped: it has nothing
-an independent route could contradict.
+therefore comes back with six of the nine rows not checked, because
+nothing in it can be compared with an independent route.
 
-## The nine checks, and the route each is held against
+## The nine checks and their references
 
-1.  **membership**: the matrix is symmetric and positive semidefinite, a
+1.  **membership**: the matrix is symmetric to within `tol` (relative to
+    the larger of 1 and its largest entry) and positive semidefinite, a
     full-rank family has a strictly positive smallest eigenvalue, and a
     rank-deficient one annihilates its declared null space. The last is
-    tested through the null basis, never by counting eigenvalues, a
-    count of small eigenvalues not being scale invariant.
+    tested through the null basis and not by counting eigenvalues, since
+    a count of small eigenvalues is not scale invariant.
 
 2.  **round trip**:
     [`param_free()`](https://statmodels7.github.io/parameters7/reference/param_free.md)
@@ -96,7 +105,7 @@ an independent route could contradict.
     analytic first derivatives.
 
 5.  **log-determinant** against the sum of the logs of the eigenvalues
-    the declared rank keeps.
+    that the declared rank keeps.
 
 6.  **logdet gradient** against \\\mathrm{tr}(M^{+} \partial_k M)\\,
     with the pseudo-inverse formed from an eigendecomposition instead of
@@ -109,18 +118,20 @@ an independent route could contradict.
 
 8.  **solve and factor** against
     [`base::solve()`](https://rdrr.io/r/base/solve.html), where the
-    family is of full rank; skipped for a deficient one, which has no
-    inverse.
+    family is of full rank; for a deficient one, which has no inverse,
+    the row is named `solve` and reported as NOT CHECKED.
 
 9.  **shapes and names**: the declared dimension, the lengths and the
     names match what the methods return. Structural, so it carries no
     statistic.
 
-Each check reports the worst discrepancy over the free vectors
+Each check except the shapes check reports the worst discrepancy over
+every free vector that
 [`sweep_etas()`](https://statmodels7.github.io/parameters7/reference/sweep_etas.md)
-supplies, four of which are drawn at random.
+supplies, four of which are drawn at random; the shapes check reads the
+origin.
 
-## Neither branch touches the caller's random stream
+## The caller's random stream
 
 Both batteries draw from a fixed seed, so two calls on the same family
 report the same statistics, and both put back the `.Random.seed` they
@@ -135,24 +146,26 @@ and
 through [`base::on.exit()`](https://rdrr.io/r/base/on.exit.html), so it
 happens even when a check signals.
 
-## A family that is not a matrix gets a different battery
+## The battery for a family that is not a matrix
 
+A family whose value is not a symmetric matrix has no log-determinant,
+no solve and no factor, so other checks run instead: the inverse round
+trip and the four derivative orders against the single-stencil
+construction, and, for
 [`simplex()`](https://statmodels7.github.io/parameters7/reference/simplex.md)
 and
-[`transition_matrix()`](https://statmodels7.github.io/parameters7/reference/transition_matrix.md)
-have no log-determinant, no solve and no factor, so seven other checks
-run instead: the inverse round trip, the four derivative orders against
-the single-stencil construction, that the value stays on the simplex,
-and that every derivative component sums to zero over the value index.
-**The returned table has different columns in that case**; see
-**Value**.
+[`transition_matrix()`](https://statmodels7.github.io/parameters7/reference/transition_matrix.md),
+that the value stays on the simplex and that every derivative component
+sums to zero over the value index. A derivative order that comes from a
+numerical fallback is reported as **NOT CHECKED** there too. **The
+returned table has different columns in that case**; see **Value**.
 
 ## See also
 
 [`param_is_numerical()`](https://statmodels7.github.io/parameters7/reference/param_is_numerical.md),
 which decides what is checkable, and
 [`param_null_basis()`](https://statmodels7.github.io/parameters7/reference/param_null_basis.md)
-for the null space check 1 uses.
+for the null space that check 1 uses.
 
 ## Examples
 
@@ -164,8 +177,8 @@ r <- check_parameter(log_cholesky(3))
 #> Parameter: log_cholesky   (3 x 3, rank 3, 6 free)
 #>   [OK         ] membership           0.00e+00
 #>   [OK         ] round trip           3.25e-16
-#>   [OK         ] first derivatives    2.90e-11
-#>   [OK         ] second derivatives   3.67e-11
+#>   [OK         ] first derivatives    4.45e-11
+#>   [OK         ] second derivatives   4.45e-11
 #>   [OK         ] log-determinant      6.13e-15
 #>   [OK         ] logdet gradient      1.61e-13
 #>   [OK         ] logdet hessian       0.00e+00
@@ -202,7 +215,7 @@ names(v)
 nrow(v)
 #> [1] 7
 
-# What a real defect looks like. This first derivative is 5 per cent wrong.
+# A real defect: this first derivative is 5 percent wrong.
 Wrong <- S7::new_class("Wrong", parent = matrix_parameter)
 S7::method(param_value, Wrong) <- function(s, eta, ...) {
   m <- diag(rep(exp(eta[1]), 2))

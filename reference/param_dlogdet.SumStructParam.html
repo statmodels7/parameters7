@@ -13,7 +13,7 @@ Jacobian."><meta property="og:image" content="https://statmodels7.github.io/para
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,13 +76,14 @@ generic.</p></dd>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The four share <code><a href="sum_struct_logdet_derivs.html">sum_struct_logdet_derivs()</a></code> and differ only in the order they
-pass. <strong>Nothing vanishes here</strong>, unlike the value's own derivatives: at two
-variance components the mixed second derivative is \(-0.245\) against
-\(0.245\) for each pure one, the same size. The log-determinant of a sum is
-not a sum, which is why this family needs an expansion where <code><a href="block_diag.html">block_diag()</a></code>
-and <code><a href="dr_prod.html">dr_prod()</a></code> need none.</p>
-<p>It is the dearest quantity the family computes; <code><a href="sum_struct.html">sum_struct()</a></code> carries the
-timings and the accuracy against a stencil.</p>
+pass. Where the family is rank deficient they differentiate the log
+pseudo-determinant that <code><a href="param_logdet.html">param_logdet()</a></code> returns. Unlike the value's own
+derivatives, the mixed components are in general not zero: for the two
+variance components of the example in <code><a href="sum_struct.html">sum_struct()</a></code> the mixed second
+derivative is \(-0.245\) against \(0.245\) for each pure one. The
+log-determinant of a sum is not a sum, which is why this family needs an
+expansion where <code><a href="block_diag.html">block_diag()</a></code> and <code><a href="dr_prod.html">dr_prod()</a></code> need none.</p>
+<p>It is the most expensive quantity of the family.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

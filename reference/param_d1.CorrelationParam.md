@@ -8,10 +8,10 @@ with the factor's derivative \\L_k\\ built from the trigonometric tables
 of the angles: differentiating an entry of \\L\\ replaces one sine or
 cosine factor by its own derivative in the free value.
 
-The diagonal of every component is **exactly zero**, the diagonal of
-\\R\\ being the constant 1. Angle \\\theta\_{ij}\\ belongs to row \\i\\,
-so \\\partial_k L\\ is supported on that row alone, though \\\partial_k
-R\\ is not.
+The diagonal of every component is exactly zero, the diagonal of \\R\\
+being the constant 1. Angle \\\theta\_{ij}\\ belongs to row \\i\\, so
+\\\partial_k L\\ is supported on that row alone, though \\\partial_k R\\
+is not.
 
 ## Arguments
 
@@ -33,7 +33,7 @@ R\\ is not.
 ## Value
 
 A list of `s@n_free` symmetric matrices named by `s@free_names`, each
-`s@dimension` by `s@dimension` with a zero diagonal.
+`s@dimension` by `s@dimension` with a diagonal of exact zeros.
 
 ## See also
 

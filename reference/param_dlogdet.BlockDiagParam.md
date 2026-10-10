@@ -39,10 +39,12 @@ The four share
 [`block_diag_logdet_derivs()`](https://statmodels7.github.io/parameters7/reference/block_diag_logdet_derivs.md)
 and differ only in the order they pass. The first order names its result
 by `s@free_names`, one value per free value; the orders above it are
-keyed by tuple, as the contract requires.
+keyed by tuple, as
+[`param_tuple_names()`](https://statmodels7.github.io/parameters7/reference/param_tuple_names.md)
+defines.
 
-A block's **own** mixed components are not zero, this separability being
-over blocks, never over free values. Compare
+A block's **own** mixed components are in general not zero, this
+separability being over blocks and not over free values. Compare
 [`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md),
 where it is over free values and every mixed component vanishes.
 

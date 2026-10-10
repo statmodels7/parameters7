@@ -3,8 +3,8 @@
 Returns an object holding the map \\M = \tau I\\ with \\\tau =
 h(\eta_1)\\ positive: a diagonal matrix with **one** free value shared
 by every entry, whatever \\p\\ is. It is the simplest parametrization in
-the package, and it is what a random effect with a single variance
-component needs.
+the package, and it is the parametrization of a random effect with a
+single variance component.
 
 ## Usage
 
@@ -17,7 +17,7 @@ scalar_matrix(dimension, link = linkfunctions7::log_link())
 - dimension:
 
   The side \\p\\ of the matrix. A single positive whole number, finite
-  and at least 1; anything else throws.
+  and at least 1; any other value signals an error.
 
 - link:
 
@@ -52,10 +52,10 @@ positive multiple of a fixed matrix that happens to be the identity. The
 two give the same value at the same free value. Prefer this one when the
 matrix is the identity and
 [`scaled_matrix()`](https://statmodels7.github.io/parameters7/reference/scaled_matrix.md)
-when it is not, and note that
+when it is not;
 [`scaled_matrix()`](https://statmodels7.github.io/parameters7/reference/scaled_matrix.md)
-admits a rank-deficient fixed matrix while this family is always of full
-rank.
+accepts a rank-deficient fixed matrix, while this family is always of
+full rank.
 
 ## Notation
 

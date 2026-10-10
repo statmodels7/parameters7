@@ -34,10 +34,10 @@ by `s@dimension` and labeled `v1`, `v2`, ..., `vp` on both margins.
 
 ## Details
 
-No arithmetic is done on the matrices at all: a surviving component is
-one scalar times a component the object has held since construction, and
-the rest share a single zero matrix. At \\K = 2\\ that is 1 of the 3
-second-order components, 2 of 4 at third order and 3 of 5 at fourth.
+A surviving component is one scalar times a component that the object
+has held since construction, and the rest share a single zero matrix; no
+other arithmetic is done on the matrices. At \\K = 2\\ that is 1 of the
+3 second-order components, 2 of 4 at third order and 3 of 5 at fourth.
 
 ## See also
 

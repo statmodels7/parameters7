@@ -2,7 +2,7 @@
 
 Assembles \\L\\ from the free vector: the diagonal is the exponential of
 the first `dimension` values and the rest are placed below it, at the
-positions
+positions that
 [`chol_positions()`](https://statmodels7.github.io/parameters7/reference/chol_positions.md)
 recorded. Both
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
@@ -40,10 +40,10 @@ strictly positive diagonal, and no dimnames.
 The exponential is applied by subsetting on `on_diagonal`, never through
 [`ifelse()`](https://rdrr.io/r/base/ifelse.html), which evaluates both
 branches over the whole vector. Here that would only exponentiate values
-it then discards; the same shape in
+that it then discards; the same shape in
 [`param_free()`](https://statmodels7.github.io/parameters7/reference/param_free.md)
 would take a logarithm of below-diagonal entries that are free to be
-negative, and warn about the `NaN`s it throws away.
+negative, and warn about the `NaN`s that it discards.
 
 ## See also
 

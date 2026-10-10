@@ -14,8 +14,10 @@ block_derivs_by_tuple(block, eta, order)
 - block:
 
   A
-  [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md),
-  one block of the composite.
+  [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md):
+  one block of the composite, or the inner family of an
+  [`inverse_of()`](https://statmodels7.github.io/parameters7/reference/inverse_of.md)
+  parameter.
 
 - eta:
 
@@ -43,5 +45,7 @@ the same way.
 
 ## See also
 
-[`block_diag_derivs()`](https://statmodels7.github.io/parameters7/reference/block_diag_derivs.md),
-the only caller.
+[`block_diag_derivs()`](https://statmodels7.github.io/parameters7/reference/block_diag_derivs.md)
+and
+[`inverse_derivs()`](https://statmodels7.github.io/parameters7/reference/inverse_derivs.md),
+the two callers.

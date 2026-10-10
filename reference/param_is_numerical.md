@@ -1,13 +1,16 @@
 # Which of a Parameter's Quantities Come From the Base Class
 
 Reports, one derivative quantity at a time, whether the parameter has a
-method of its own or takes the numerical one registered on
+method of its own or takes the one registered on
 [`parameter()`](https://statmodels7.github.io/parameters7/reference/parameter.md)
 and
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md).
-Ask it before trusting a fourth-order derivative of a family you did not
-write: `FALSE` everywhere means every quantity is a closed form, and
-`TRUE` somewhere marks a component whose accuracy is a stencil's.
+It is the test to run before relying on a fourth-order derivative of a
+family written elsewhere: `FALSE` everywhere means that every quantity
+has a method of the family's own, and `TRUE` marks a component computed
+by a base method, a stencil for the derivatives of the value, an
+eigendecomposition for the log-determinant and its first two
+derivatives, and a stencil on the order below for its third and fourth.
 
 ## Usage
 
@@ -32,7 +35,7 @@ over `param_d1`, `param_d2`, `param_d3`, `param_d4`, `param_logdet`,
 `param_d4logdet`; **four** for a family that is not a matrix, over the
 derivative orders alone, the log-determinant not existing there.
 
-## Why the question is worth asking
+## Why the answer matters
 
 Whether an independent check exists depends on the answer. A derivative
 computed by finite differences cannot be checked against a finite
@@ -58,21 +61,20 @@ them as numerical would suggest an approximation that is not there.
 is absent because a family that does not implement it has nothing at
 all, and
 [`param_free()`](https://statmodels7.github.io/parameters7/reference/param_free.md)
-because its base method throws.
+because its base method signals an error.
 
-## Every shipped family answers FALSE
+## Every family in the package returns FALSE
 
-Measured over all fifteen constructors in this package, at every
-component: none of them uses a numerical route. The fallbacks exist for
-a family written elsewhere, and the example below builds one to show
-what a `TRUE` looks like.
+Every constructor in this package returns `FALSE` at every component.
+The fallbacks serve a family written elsewhere, and the example below
+builds one to show what a `TRUE` looks like.
 
 ## See also
 
 [`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md),
 which reports a numerical component as not checked, and
 [`numerical_d1()`](https://statmodels7.github.io/parameters7/reference/numerical_d1.md)
-and its higher-order siblings, the routes a `TRUE` names.
+and its higher-order siblings, the routes that a `TRUE` names.
 
 ## Examples
 

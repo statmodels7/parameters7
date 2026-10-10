@@ -27,7 +27,7 @@ param_d2(s, eta, ...)
 
 - ...:
 
-  Passed to the method. No method in this package reads it.
+  Passed to the method. The methods in this package do not read it.
 
 ## Value
 
@@ -40,17 +40,17 @@ the value, symmetric for a matrix family.
 The list is keyed by
 [`param_tuple_names()`](https://statmodels7.github.io/parameters7/reference/param_tuple_names.md),
 which puts the \\d\\ diagonal pairs first and then the \\d(d-1)/2\\
-off-diagonal ones in lexicographic order. Diagonal first is what a
-consumer filling a Hessian wants, and the ordering is part of the
+off-diagonal ones in lexicographic order. The diagonal pairs come first
+because a Hessian is filled that way, and the ordering is part of the
 interface:
 [`param_tuple_indices()`](https://statmodels7.github.io/parameters7/reference/param_tuple_indices.md)
 returns the index pairs in exactly the same order, so a caller can walk
 the two together.
 
 Both come from one enumeration, and neither is produced by taking a key
-apart. Splitting `"log_L1:log_L2"` on `":"` looks equivalent and is not:
-a free value whose own label contains the separator splits into the
-wrong number of pieces, and the failure is silent.
+apart. Splitting `"log_L1:log_L2"` on `":"` would give the wrong number
+of pieces whenever a free name contains the separator, and no error
+would be signaled.
 
 ## Exact, or one stencil
 
@@ -66,7 +66,7 @@ is itself numerical it works on
 directly: a three-point second difference where the two indices
 coincide, and one difference in each of the two components where they
 differ. A mixed derivative in two different variables is one stencil
-however it is written; the nesting the toolkit forbids is two
+however it is written; the nesting that the package avoids is two
 differences in the same variable.
 
 ## Notation

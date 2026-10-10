@@ -7,8 +7,9 @@ exactly zero. The fourth derivative of \\\log h\\ is \\u_4 - 4u_1u_3 -
 3u_2^2 + 12u_1^2u_2 - 6u_1^4\\ with \\u_m = h^{(m)}/h\\, written out in
 [`diag_dlog()`](https://statmodels7.github.io/parameters7/reference/diag_dlog.md).
 
-Under the log link the whole vector is zero. This is the order where a
-numerical route is least usable, so the closed form is worth most here.
+Under the log link the whole vector is zero. This is the order at which
+a numerical route is least accurate, so the closed form matters most
+here.
 
 ## Arguments
 

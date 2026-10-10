@@ -3,15 +3,17 @@
 an inner matrix parameter, \(I_m \otimes S(\eta)\). The blocks share one
 free vector, so n_free is the inner parameter's however large \(m\) is,
 and the free names are the inner ones unchanged.
-It is the first of the four composition wrappers, and the cheapest: every
-quantity of the contract is a linear lift of the inner parameter's, so nothing
-is rederived and nothing of size \((md)^2\) is decomposed."><meta property="og:description" content="The S7 class of a block-diagonal matrix built from \(m\) identical copies of
+It is one of the five composition wrappers. The value, the derivatives, the
+log-determinant, the solve and the factor are each a linear lift of the inner
+parameter's, so no new derivation is needed and no matrix of side \(md\)
+is decomposed."><meta property="og:description" content="The S7 class of a block-diagonal matrix built from \(m\) identical copies of
 an inner matrix parameter, \(I_m \otimes S(\eta)\). The blocks share one
 free vector, so n_free is the inner parameter's however large \(m\) is,
 and the free names are the inner ones unchanged.
-It is the first of the four composition wrappers, and the cheapest: every
-quantity of the contract is a linear lift of the inner parameter's, so nothing
-is rederived and nothing of size \((md)^2\) is decomposed."><meta property="og:image" content="https://statmodels7.github.io/parameters7/logo.png"></head><body>
+It is one of the five composition wrappers. The value, the derivatives, the
+log-determinant, the solve and the factor are each a linear lift of the inner
+parameter's, so no new derivation is needed and no matrix of side \(md\)
+is decomposed."><meta property="og:image" content="https://statmodels7.github.io/parameters7/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -19,7 +21,7 @@ is rederived and nothing of size \((md)^2\) is decomposed."><meta property="og:i
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,9 +55,10 @@ is rederived and nothing of size \((md)^2\) is decomposed."><meta property="og:i
 an inner matrix parameter, \(I_m \otimes S(\eta)\). The blocks <strong>share one
 free vector</strong>, so <code>n_free</code> is the inner parameter's however large \(m\) is,
 and the free names are the inner ones unchanged.</p>
-<p>It is the first of the four composition wrappers, and the cheapest: every
-quantity of the contract is a linear lift of the inner parameter's, so nothing
-is rederived and nothing of size \((md)^2\) is decomposed.</p>
+<p>It is one of the five composition wrappers. The value, the derivatives, the
+log-determinant, the solve and the factor are each a linear lift of the inner
+parameter's, so no new derivation is needed and no matrix of side \(md\)
+is decomposed.</p>
     </div>
 
     <div class="section level2">
@@ -86,7 +89,7 @@ integer, agreeing with <code>length(free_names)</code>.</p></dd>
 
 <dt id="arg-free-names">free_names<a class="anchor" aria-label="anchor" href="#arg-free-names"></a></dt>
 <dd><p>A character vector of length <code>n_free</code>, one label per free
-value, in the order the free vector holds them. Must be unique.</p></dd>
+value, in the order in which the free vector holds them. Must be unique.</p></dd>
 
 
 <dt id="arg-param-params">param_params<a class="anchor" aria-label="anchor" href="#arg-param-params"></a></dt>
@@ -100,7 +103,7 @@ smaller than 1. The validator rejects a vector and a value below 1.</p></dd>
 
 
 <dt id="arg-rank">rank<a class="anchor" aria-label="anchor" href="#arg-rank"></a></dt>
-<dd><p>The rank of the matrix the family produces, a single integer in
+<dd><p>The rank of the matrix that the family produces, a single integer in
 <code>0:dimension</code>. It is a property of the family, so a family whose value is
 positive definite at every \(\eta\) declares \(p\) here.</p></dd>
 
@@ -109,8 +112,7 @@ positive definite at every \(\eta\) declares \(p\) here.</p></dd>
 <dd><p>A <code>dimension</code> by <code>dimension - rank</code> numeric matrix whose
 columns are an orthonormal basis of the common null space. Use
 <code><a href="param_null_basis.html">param_null_basis()</a></code> to obtain one, or <code>matrix(numeric(0), dimension, 0)</code>
-for a full-rank family. The validator rejects any other shape, and
-reports both the rank and the shape when the two disagree.</p></dd>
+for a full-rank family. The validator rejects any other shape.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -118,13 +120,14 @@ reports both the rank and the shape when the two disagree.</p></dd>
     <p>An object of class <code>KronIdentityParam</code>, a subclass of
 <code><a href="matrix_parameter.html">matrix_parameter()</a></code> adding no properties of its own. <code>param_params</code> holds
 <code>inner</code>, the per-block parameter, and <code>m</code>, the number of blocks.
-<code>param_name</code> is <code>kron(Im, &lt;inner&gt;)</code>.</p>
+<code>param_name</code> is <code>kron(I&lt;m&gt;, &lt;inner&gt;)</code> with the number of blocks and the
+inner family's name written in, for example <code>"kron(I3, log_cholesky)"</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="kron_identity.html">kron_identity()</a></code>, the constructor, <code><a href="block_diag.html">block_diag()</a></code> for blocks that
 are <strong>not</strong> identical and do not share a free vector, and
-<code><a href="matrix_parameter.html">matrix_parameter()</a></code> for the properties this inherits.</p></div>
+<code><a href="matrix_parameter.html">matrix_parameter()</a></code> for the properties that this class inherits.</p></div>
     </div>
 
     <div class="section level2">

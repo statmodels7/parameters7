@@ -3,7 +3,7 @@
 Estimates the distinct third derivatives by applying one product stencil
 directly to
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md),
-per index tuple. A component the tuple repeats contributes the
+per index tuple. A component that the tuple repeats contributes the
 one-dimensional stencil of the matching order, and a component appearing
 once contributes a two-point central factor; the product is evaluated in
 a single pass over the map. This is the method
@@ -53,7 +53,7 @@ nodes skipped. A tuple naming one component three times costs four
 evaluations of the map, one naming a component twice and another once
 six, and one naming three distinct components eight.
 
-## Why it goes straight to the map
+## The stencil is applied to the map
 
 A lower-order numerical derivative is never differenced. The rounding of
 a difference is amplified by \\h^{-k}\\, so two stages multiply their
@@ -66,14 +66,12 @@ implements, at the price of more evaluations of the map.
 ## Accuracy
 
 Truncation is of order \\h^2\\ at a step of \\\varepsilon^{1/5}\max(1,
-\|\eta_k\|)\\. Measured against the closed form of a \\2 \times 2\\
-log-Cholesky covariance, the agreement is \\7 \times 10^{-6}\\ absolute
-on entries of size 12, so about six digits.
+\|\eta_k\|)\\, and rounding is of order \\\varepsilon / h^3\\.
 
 ## See also
 
 [`param_d3()`](https://statmodels7.github.io/parameters7/reference/param_d3.md),
-the generic this serves,
+the generic that this serves,
 [`mixed_stencil()`](https://statmodels7.github.io/parameters7/reference/mixed_stencil.md),
 which builds the product, and
 [`numerical_d4()`](https://statmodels7.github.io/parameters7/reference/numerical_d4.md)

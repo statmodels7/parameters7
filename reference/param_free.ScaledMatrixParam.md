@@ -29,13 +29,14 @@ A numeric vector of length `s@n_free` named by `s@free_names`, or
 
 ## Details
 
-Three rejections. The ratio must be positive, or `m` is not a positive
+Four rejections. The ratio must be positive, or `m` is not a positive
 multiple. `m` must then agree with `h * p` to \\10^{-8}\\ relative
 everywhere, or it is not a multiple of \\P\\ at all: the ratio at one
 entry is not enough, since any matrix has *some* ratio there. And for a
 fixed parameter, built with `link = NULL`, the multiple must be 1 to
 \\10^{-8}\\, the object having no free value to absorb anything else;
-the result is then `numeric(0)`.
+the result is then `numeric(0)`. Otherwise the multiple must lie inside
+the open range of the link.
 
 ## See also
 

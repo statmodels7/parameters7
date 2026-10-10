@@ -1,14 +1,14 @@
 # Value of a Scales-Times-Correlation Parameter
 
 Forms \\D R D\\ as `outer(d, d) * R`, the elementwise product being what
-two diagonal multiplications amount to. The correlation block is asked
-for its own value at its own stretch of the free vector, so the
-composite is exactly what that family returns, rescaled.
+two diagonal multiplications amount to. The correlation block is
+evaluated at its own stretch of the free vector, so the composite is the
+value of that family, rescaled.
 
 The value is labeled `v1`, `v2`, ..., `vp` on both margins, the
-convention
+convention that
 [`name_dims()`](https://statmodels7.github.io/parameters7/reference/name_dims.md)
-states and every family in the package follows.
+states.
 
 ## Arguments
 

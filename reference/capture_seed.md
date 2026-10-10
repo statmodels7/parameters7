@@ -28,18 +28,19 @@ effect on the global environment.
 
 ## Details
 
-A validator wants both properties and they pull against each other.
-Drawing from the caller's stream makes the worst error reported move
+A validator should report the same numbers on every run and should leave
+the caller's random stream unchanged, and the two requirements conflict.
+Drawing from the caller's stream makes the worst error reported vary
 between runs; calling [`set.seed()`](https://rdrr.io/r/base/Random.html)
-fixes that and replaces whatever state the caller had, so a call inside
-a simulation silently changes the simulation. Saving the state on entry
-and restoring it with
+removes that variation but replaces the state of the caller's stream, so
+a call inside a simulation changes the simulation. Saving the state on
+entry and restoring it with
 [`base::on.exit()`](https://rdrr.io/r/base/on.exit.html) gives the fixed
-draw and leaves the caller alone.
+draw and leaves the caller's stream as it was.
 
 `restore_seed(NULL)` removes `.Random.seed` again, which is the right
-answer when the caller had never drawn a random number: leaving the seed
-the validator set behind would be the leak this exists to prevent.
+answer when the caller had never drawn a random number, so the seed that
+the validator set is not left behind.
 
 ## Examples
 

@@ -15,8 +15,8 @@ dr_prod(dimension, correlation = NULL, link = linkfunctions7::log_link())
 
 - dimension:
 
-  The side \\p\\ of the matrix, at least 2: a 1 by 1 correlation carries
-  nothing, and the constructor says so.
+  The side \\p\\ of the matrix, at least 2: a 1 by 1 correlation matrix
+  has no free value, and the constructor signals an error.
 
 - correlation:
 
@@ -24,9 +24,14 @@ dr_prod(dimension, correlation = NULL, link = linkfunctions7::log_link())
   [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
   of side `dimension` **producing correlation matrices**, that is with a
   unit diagonal at every free vector. Defaults to
-  [`correlation_matrix(dimension)`](https://statmodels7.github.io/parameters7/reference/correlation_matrix.md),
-  which is the only shipped family with that property. A block carrying
-  a scale of its own, such as
+  [`correlation_matrix(dimension)`](https://statmodels7.github.io/parameters7/reference/correlation_matrix.md);
+  [`block_diag()`](https://statmodels7.github.io/parameters7/reference/block_diag.md)
+  and
+  [`kron_identity()`](https://statmodels7.github.io/parameters7/reference/kron_identity.md)
+  of
+  [`correlation_matrix()`](https://statmodels7.github.io/parameters7/reference/correlation_matrix.md)
+  blocks have the property as well. A block carrying a scale of its own,
+  such as
   [`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md),
   makes the composite unidentified, the same matrix arising from a whole
   ray of free vectors; the constructor reads the diagonal at two probe
@@ -52,18 +57,20 @@ with `n_free` equal to \\p\\ plus the correlation's, `free_names` the
 tagged `log_sd1` ... `log_sdp` followed by the correlation's own, `rank`
 equal to `dimension`, and an empty `null_basis`.
 
-## What the separation buys
+## The separation of scales and correlations
 
-The quantities a reader takes off a fitted covariance are the standard
-deviations and the correlations, and here they **are** the coordinates.
-A
+The quantities that a reader takes off a fitted covariance are the
+standard deviations and the correlations. Here the standard deviations
+are the inverse link of the first \\p\\ coordinates, and the
+correlations are the value of the correlation block at the remaining
+ones. A
 [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
-factor produces the same set of matrices with no coordinate meaning
-anything on its own. Measured at \\\eta = (0, \log 2, \log 0.5, 1, 1.2,
-0.9)\\: `sqrt(diag(M))` is \\(1, 2, 0.5)\\, which is `exp(eta[1:3])`,
-and dividing them out returns the correlation block's own value exactly.
+factor produces the same set of matrices with coordinates that have no
+separate meaning. The example below reads the standard deviations off
+the diagonal and recovers the correlation block's value by dividing them
+out.
 
-## Every derivative factorizes
+## Derivatives
 
 Because \\\Sigma\_{ij} = d_i d_j R\_{ij}\\ and the two groups of free
 values are disjoint,
@@ -72,19 +79,17 @@ values are disjoint,
 \bigl\[\partial^{S_R} R\_{ij}\bigr\],\$\$
 
 where \\S_D\\ and \\S_R\\ are the parts of the multiset \\S\\ falling in
-each group. Nothing of the correlation family is rederived: its own
-components are fetched and multiplied entrywise.
+each group. The correlation family's own components are fetched and
+multiplied entrywise, with no new derivation.
 
 Both factors are **sparse**, and where their supports miss each other
 the component is exactly zero. The scale factor is supported on the rows
-and columns the indices of \\S_D\\ name, and vanishes altogether once
-\\S_D\\ names three distinct scales; a correlation derivative is
-supported on the two entries its angle governs. So `log_sd1:z3.2` is
-zero, the first factor living in row and column 1 and the second on
-entries \\(3,2)\\ and \\(2,3)\\. Measured at \\p = 3\\, the
-disjoint-support rule predicts every exact zero: 1 of the 21
-second-order components, 10 of 56 at third order and 37 of 126 at
-fourth.
+and columns that the indices of \\S_D\\ name, and vanishes altogether
+once \\S_D\\ names three distinct scales; a correlation derivative in an
+angle of row \\i\\ is supported on the entries of row and column \\i\\
+whose inner product involves that angle, which for `z3.2` are \\(3,2)\\
+and \\(2,3)\\. So `log_sd1:z3.2` is zero, the first factor living in row
+and column 1 and the second on entries \\(3,2)\\ and \\(2,3)\\.
 
 ## The log-determinant
 
@@ -92,9 +97,9 @@ fourth.
 
 separable in the scales and separable from the correlation, so a
 component mixing two scales, or a scale with a correlation, is exactly
-zero: 12 of the 21 second-order components, 43 of 56 and 108 of 126. The
-first derivative in a scale is 2 whatever the point, the scales entering
-on both sides.
+zero. Under the default log link the first derivative in a scale is 2 at
+every point, the scales entering on both sides; for another link it is
+\\2h'(\eta)/h(\eta)\\.
 
 ## The correlation block must have full rank
 
@@ -114,8 +119,8 @@ rejects one instead of recording a rank that is not stable.
 [`correlation_matrix()`](https://statmodels7.github.io/parameters7/reference/correlation_matrix.md)
 for the default block,
 [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
-for the same set of matrices in coordinates that mean nothing
-separately, and
+for the same set of matrices in coordinates without a separate meaning,
+and
 [`block_diag()`](https://statmodels7.github.io/parameters7/reference/block_diag.md),
 [`kron_identity()`](https://statmodels7.github.io/parameters7/reference/kron_identity.md)
 and
@@ -132,7 +137,8 @@ s@free_names
 eta <- c(log(1), log(2), log(0.5), 1.0, 1.2, 0.9)
 M <- param_value(s, eta)
 
-# The standard deviations are the coordinates, read back off the diagonal.
+# The standard deviations are the inverse link of the first coordinates,
+# read back off the diagonal.
 rbind(from_matrix = sqrt(diag(M)), from_eta = exp(eta[1:3]))
 #>             v1 v2  v3
 #> from_matrix  1  2 0.5

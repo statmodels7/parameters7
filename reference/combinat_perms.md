@@ -1,12 +1,11 @@
 # All Orderings of a Tuple
 
-Returns every permutation of an index tuple as a list, including the
-ones that coincide when the tuple has repeats: `combinat_perms(c(1, 1))`
-gives two elements and never one. The multiplicity is deliberate: it is
-what leaves
-[`mlog_contract()`](https://statmodels7.github.io/parameters7/reference/mlog_contract.md)'s
-sum over orderings correct for a repeated tuple without a correction
-factor.
+Returns the distinct permutations of an index tuple as a list. When the
+tuple has repeated entries, permutations that coincide appear once, so
+`combinat_perms(c(1, 1))` gives one element.
+[`mlog_contract()`](https://statmodels7.github.io/parameters7/reference/mlog_contract.md)
+restores the multiplicity with the product of the factorials of the
+repeat counts.
 
 ## Usage
 
@@ -22,7 +21,9 @@ combinat_perms(x)
 
 ## Value
 
-A list of `factorial(length(x))` integer vectors.
+A list of the distinct orderings of `x`, each an integer vector:
+`factorial(length(x))` of them when the entries of `x` are all
+different, and fewer when some repeat.
 
 ## See also
 

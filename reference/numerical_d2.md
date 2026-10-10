@@ -34,7 +34,7 @@ A list of `choose(s@n_free + 1, 2)` estimates keyed as
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)'s
 result and symmetrized for a matrix family.
 
-## Three routes, one layer each
+## The three routes
 
 Writing \\V(\eta)\\ for
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
@@ -56,7 +56,7 @@ e_k - h_l e_l)}{4 h_k h_l},\$\$
 and a diagonal pair the three-point second difference. All three carry a
 truncation error of order \\h^2\\.
 
-## Why none of them nests
+## Single-layer differences
 
 The rule the toolkit follows is that differences are never composed **in
 the same variable**: a difference of a difference multiplies the error
@@ -68,14 +68,18 @@ coordinates commute into a single product stencil, so it is one layer as
 well. The diagonal case uses the second-difference stencil directly and
 never sees a first difference at all.
 
-The steps are the order-2 ones, \\\varepsilon^{1/4}\max(1,
-\|\eta_k\|)\\, about \\1.2 \times 10^{-4}\\ near the origin, since it is
-a second derivative being estimated whichever route is taken.
+On the analytic route the step is the order-1 one,
+\\\varepsilon^{1/3}\max(1, \|\eta_l\|)\\, about \\6.1 \times 10^{-6}\\
+near the origin, because a first derivative of an analytic array is
+taken. The two routes on
+[`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
+use the order-2 step, \\\varepsilon^{1/4}\max(1, \|\eta_k\|)\\, about
+\\1.2 \times 10^{-4}\\.
 
 ## See also
 
 [`param_d2()`](https://statmodels7.github.io/parameters7/reference/param_d2.md),
-the generic this serves,
+the generic that this serves,
 [`numerical_d1()`](https://statmodels7.github.io/parameters7/reference/numerical_d1.md)
 for the order below, and
 [`mixed_stencil()`](https://statmodels7.github.io/parameters7/reference/mixed_stencil.md),

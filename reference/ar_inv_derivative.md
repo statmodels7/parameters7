@@ -30,7 +30,7 @@ ar_inv_derivative(s, eta, order)
 
 A named list of `s@dimension` square matrices, keyed and ordered as
 [`param_tuple_names()`](https://statmodels7.github.io/parameters7/reference/param_tuple_names.md)
-says.
+gives them.
 
 ## Details
 
@@ -38,7 +38,7 @@ Writing \\N = \mathrm{diag}(\tau)U\\, the inner Leibniz gives
 \\\partial_T N = \sum\_{R \subseteq T} \mathrm{diag}(\partial_R \tau)
 \partial\_{T \setminus R} U\\, and the outer one \\\partial_I \Omega =
 \sum\_{S \subseteq I} (\partial_S U)^\top \partial\_{I \setminus S} N\\.
-Both sums run over subsets of the index POSITIONS, which is what makes a
+Both sums run over subsets of the index positions, which is what makes a
 repeated index count with its multiplicity. Every \\\partial_S N\\ is
 built once and read by every component that needs it.
 

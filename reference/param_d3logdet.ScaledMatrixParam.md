@@ -5,9 +5,8 @@ Closed form. The log-(pseudo-)determinant is \\r \log h(\eta) +
 the matching derivative of \\\log h\\, and the constant contributes
 nothing. With one free value there is one component.
 
-Under the default log link \\\log h(\eta) = \eta\\, so the answer is
-exactly zero and this family cannot exercise the order; a link with
-curvature can.
+Under the default log link \\\log h(\eta) = \eta\\, so the result is
+exactly zero; under a link with curvature it is not.
 
 ## Arguments
 

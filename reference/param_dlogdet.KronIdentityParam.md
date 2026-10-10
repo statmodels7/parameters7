@@ -3,7 +3,7 @@
 Closed form: \\m\\ times the inner parameter's gradient. A shared free
 value moves every block, so the gradient is multiplied rather than
 copied: at \\m = 3\\ over a 2 x 2 log-Cholesky covariance it is
-`c(6, 6, 0)` where the inner parameter answers `c(2, 2, 0)`.
+`c(6, 6, 0)` where the inner parameter returns `c(2, 2, 0)`.
 
 ## Arguments
 

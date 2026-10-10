@@ -1,20 +1,17 @@
 # Fourth Derivatives of a Matrix Logarithm Parameter
 
 Chains of four rotated directions contracted against five-point divided
-differences, summed over the twenty-four orderings. Exact, and the most
-expensive quantity the package computes: measured at \\p = 4\\ one call
-costs **3.4 s**, against 0.003 s for
-[`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)'s
-fourth derivatives on the same matrix size.
-
-That factor of a thousand is the trade this chart makes, and it is worth
-knowing before putting a
-[`matrix_log()`](https://statmodels7.github.io/parameters7/reference/matrix_log.md)
-inside a loop that takes fourth derivatives. It buys a linear
-log-determinant and an inverse that is a sign flip; if those are not
-what the model needs,
+differences, summed over the orderings of the four directions, up to
+twenty-four per component. Exact, and much more expensive than the
+fourth derivatives of
 [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
-parametrizes the same cone.
+on a matrix of the same size.
+
+The cost is the price of a linear log-determinant and of an inverse
+equal to the map at \\-\eta\\. When fourth derivatives are taken
+repeatedly and those two properties are not needed,
+[`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
+parametrizes the same cone at a much lower cost.
 
 ## Arguments
 

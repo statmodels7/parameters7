@@ -6,10 +6,9 @@ taken over a plain count of variables instead of over a parameter
 object, so that anything holding derivatives over \\d\\ variables can
 use it without constructing a
 [`parameter()`](https://statmodels7.github.io/parameters7/reference/parameter.md).
-A one-line forward to
+It forwards to
 [`numericals7::tuple_indices()`](https://statmodels7.github.io/numericals7/reference/tuple_indices.html),
-which is the toolkit's single copy of this enumeration. Delegating means
-this copy cannot come to disagree with the one a consumer is keyed by.
+so the two enumerations cannot disagree.
 
 ## Usage
 
@@ -25,7 +24,7 @@ tuple_indices(d, order = 2L)
 
 - order:
 
-  The derivative order: 1, 2, 3 or 4. Anything else throws
+  The derivative order: 1, 2, 3 or 4. Any other value signals the error
   `'order' must be 1, 2, 3 or 4.`
 
 ## Value

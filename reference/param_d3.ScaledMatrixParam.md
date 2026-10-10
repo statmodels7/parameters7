@@ -2,9 +2,9 @@
 
 Closed form: \\\partial^3\_\eta M = h'''(\eta)\\P\\, from
 [`linkfunctions7::d3linkinv()`](https://statmodels7.github.io/linkfunctions7/reference/d3linkinv.html).
-Every order is the same fixed matrix times a link derivative, so this
-family costs nothing at any order and is exact at all of them. Under the
-default log link it is the matrix again.
+Every order is the same fixed matrix times a link derivative, so every
+order costs one multiplication and is exact. Under the default log link
+it is the matrix again.
 
 ## Arguments
 

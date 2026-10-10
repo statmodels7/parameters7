@@ -6,10 +6,15 @@ Closed form, from the two distinct eigenvalues
 \$\$\log\|M\| = p\log\sigma^2 + \log\\1+(p-1)\rho\\ +
 (p-1)\log(1-\rho).\$\$
 
-Three logarithms and no factorization, whatever \\p\\ is, against the
-base class's \\O(p^3)\\ eigendecomposition. Measured at \\p = 4\\
-against the eigenvalues of the assembled matrix, the two agree to the
-printed digit.
+Three logarithms and no factorization, whatever \\p\\ is, where the base
+method takes an \\O(p^3)\\ eigendecomposition.
+
+The two correlation logarithms are evaluated from the second free value,
+as \\\log p + \log\omega\\ and \\\log(p/(p-1)) + \log(1-\omega)\\ with
+\\\omega\\ the logistic function of that value, through
+`plogis(., log.p = TRUE)`, and not from the rounded correlation. The
+value is then accurate at every free value, including those where the
+correlation rounds to one of its bounds.
 
 ## Arguments
 
@@ -36,5 +41,5 @@ strictly positive inside the correlation's link bounds.
 
 [`param_dlogdet.CompoundSymmetryParam()`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.CompoundSymmetryParam.md)
 for its four derivative orders, and
-[`cs_logdet_terms()`](https://statmodels7.github.io/parameters7/reference/cs_logdet_terms.md)
-for the two terms.
+[`cs_logdet_chain()`](https://statmodels7.github.io/parameters7/reference/cs_logdet_chain.md)
+for the derivatives of the correlation's term.

@@ -2,8 +2,8 @@
 
 Returns the distinct fourth derivatives of the log-determinant, or of
 the log pseudo-determinant, keyed as `param_tuple_names(s, 4)`. This is
-the top of the contract: the exact Hessian of a marginal criterion
-reaches it, and nothing in the toolkit asks for a fifth.
+the highest order that the package provides, and the exact Hessian of a
+marginal criterion reaches it.
 
 ## Usage
 
@@ -24,7 +24,7 @@ param_d4logdet(s, eta, ...)
 
 - ...:
 
-  Passed to the method. No method in this package reads it.
+  Passed to the method. The methods in this package do not read it.
 
 ## Value
 
@@ -40,30 +40,32 @@ The same two rules as at third order. The trace is linear, and
 so every term is a trace of an alternating product
 \\M^{-1}(\partial\_{I_1}M)M^{-1}(\partial\_{I_2}M)\cdots\\, one factor
 per block of a partition of the four indices. The number of terms grows
-with the number of partitions, which is why the expansion is
-differentiated rather than written out: the methods differentiate
-[`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md)
-through
-[`param_d4()`](https://statmodels7.github.io/parameters7/reference/param_d4.md),
-and
-[`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)
-compares the result with a numerical differentiation of
+with the number of partitions, so the expansion is not written out: each
+family in this package computes this order without differencing, and the
+base method on
+[`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
+takes one central difference of
 [`param_d3logdet()`](https://statmodels7.github.io/parameters7/reference/param_d3logdet.md).
 
-## Accuracy of the check
+## Checking this order
 
-The reference is one stencil on the analytic third order, so the
-comparison is limited by that stencil rather than by the closed form. A
-family whose log-determinant is linear in \\\eta\\, which includes
+One central difference of
+[`param_d3logdet()`](https://statmodels7.github.io/parameters7/reference/param_d3logdet.md),
+as in the example below, is a reference for this order, and the
+comparison is limited by that stencil rather than by the closed form.
+[`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)
+does not run this comparison. A family whose log-determinant is linear
+in \\\eta\\, which includes
 [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
 and
 [`matrix_log()`](https://statmodels7.github.io/parameters7/reference/matrix_log.md),
-returns exact zeros here, and a check against them cannot catch a
-mistake;
-[`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md)
+returns exact zeros here;
+[`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md),
+[`compound_symmetry()`](https://statmodels7.github.io/parameters7/reference/compound_symmetry.md),
+[`correlation_matrix()`](https://statmodels7.github.io/parameters7/reference/correlation_matrix.md)
 and
-[`compound_symmetry()`](https://statmodels7.github.io/parameters7/reference/compound_symmetry.md)
-are the families where this order has something to get wrong.
+[`autoregressive()`](https://statmodels7.github.io/parameters7/reference/autoregressive.md)
+are among the families where this order is not zero.
 
 ## Notation
 

@@ -4,21 +4,19 @@ $$\partial_{kl} R = L_{kl} L^\top + L_k L_l^\top + L_l L_k^\top
                       + L L_{kl}^\top,$$
 with each \(\partial^S L\) from corr_dfactor() and zero wherever the
 multiset \(S\) spans two rows of \(L\).
-What survives is worth knowing before reading a result. A component in two
-angles from different rows \(i\) and \(j\) does not vanish: the two
+A component in two angles from different rows \(i\) and \(j\) does not vanish: the two
 outer terms drop, but \(L_k L_l^\top + L_l L_k^\top\) is supported on
-exactly the entries \((i, j)\) and \((j, i)\). It is zero even there when
-the two angles sit beyond the columns the two rows share. The diagonal is
+the entries \((i, j)\) and \((j, i)\). It is zero even there when the
+two angles lie beyond the columns that the two rows share. The diagonal is
 exactly zero at every order."><meta property="og:description" content="Closed form, by the Leibniz rule on \(R = LL^\top\) taken twice,
 $$\partial_{kl} R = L_{kl} L^\top + L_k L_l^\top + L_l L_k^\top
                       + L L_{kl}^\top,$$
 with each \(\partial^S L\) from corr_dfactor() and zero wherever the
 multiset \(S\) spans two rows of \(L\).
-What survives is worth knowing before reading a result. A component in two
-angles from different rows \(i\) and \(j\) does not vanish: the two
+A component in two angles from different rows \(i\) and \(j\) does not vanish: the two
 outer terms drop, but \(L_k L_l^\top + L_l L_k^\top\) is supported on
-exactly the entries \((i, j)\) and \((j, i)\). It is zero even there when
-the two angles sit beyond the columns the two rows share. The diagonal is
+the entries \((i, j)\) and \((j, i)\). It is zero even there when the
+two angles lie beyond the columns that the two rows share. The diagonal is
 exactly zero at every order."><meta property="og:image" content="https://statmodels7.github.io/parameters7/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
@@ -27,7 +25,7 @@ exactly zero at every order."><meta property="og:image" content="https://statmod
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,11 +60,10 @@ exactly zero at every order."><meta property="og:image" content="https://statmod
                       + L L_{kl}^\top,$$</p>
 <p>with each \(\partial^S L\) from <code><a href="corr_dfactor.html">corr_dfactor()</a></code> and zero wherever the
 multiset \(S\) spans two rows of \(L\).</p>
-<p>What survives is worth knowing before reading a result. A component in two
-angles from <strong>different</strong> rows \(i\) and \(j\) does not vanish: the two
+<p>A component in two angles from <strong>different</strong> rows \(i\) and \(j\) does not vanish: the two
 outer terms drop, but \(L_k L_l^\top + L_l L_k^\top\) is supported on
-exactly the entries \((i, j)\) and \((j, i)\). It is zero even there when
-the two angles sit beyond the columns the two rows share. The diagonal is
+the entries \((i, j)\) and \((j, i)\). It is zero even there when the
+two angles lie beyond the columns that the two rows share. The diagonal is
 exactly zero at every order.</p>
     </div>
 
@@ -91,7 +88,8 @@ checked by the generic.</p></dd>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A list of <code>choose(s@n_free + 1, 2)</code> symmetric matrices keyed as
-<code>param_tuple_names(s)</code> and in that order, each with a zero diagonal.</p>
+<code>param_tuple_names(s)</code> and in that order, each with a diagonal of exact
+zeros.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

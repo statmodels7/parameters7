@@ -2,8 +2,9 @@
 
 Recovers the weights by least squares on the components' entries,
 stacking the \\P_k\\ as columns and solving against the entries of `m`.
-Exact where `m` is in the span: measured on two variance components over
-three coefficients, the round trip closes to \\3 \times 10^{-16}\\.
+Where `m` is in the span, the round trip closes up to rounding when the
+weights are of comparable size, and its error grows with the spread of
+the weights.
 
 ## Arguments
 
@@ -25,13 +26,14 @@ three coefficients, the round trip closes to \\3 \times 10^{-16}\\.
 
 ## Value
 
-A numeric vector of length `s@n_free`, the linked weights.
+A numeric vector of length `s@n_free`, the linked weights, named by
+`s@free_names`.
 
 ## Details
 
-Two refusals, and they are different failures:
+Two rejections, each with its own message:
 
-- a matrix the combination cannot reproduce, checked by residual at
+- a matrix that the combination cannot reproduce, checked by residual at
   \\10^{-8}\\ relative to `max(1, max(abs(m)))`. The span is
   \\K\\-dimensional inside the \\p(p+1)/2\\-dimensional space of
   symmetric matrices, so almost every matrix is outside it and this is
@@ -39,10 +41,10 @@ Two refusals, and they are different failures:
 
 - a matrix in the span needing a **non-positive weight**, which the link
   cannot carry. Such a matrix may still be positive semidefinite, so the
-  refusal is about the parametrization, never about the matrix.
+  rejection concerns the parametrization and not the matrix.
 
-The least-squares solve is exact wherever it succeeds, the residual
-check being what separates a solution from a projection.
+The residual check separates a solution of the system from a
+least-squares projection.
 
 ## See also
 

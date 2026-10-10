@@ -17,7 +17,7 @@ dispatches to when a family has not written its own."><meta property="og:image" 
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -79,7 +79,7 @@ dispatches to when a family has not written its own.</p>
 <code><a href="param_value.html">param_value()</a></code>'s result and symmetrized for a matrix family.</p>
     </div>
     <div class="section level2">
-    <h2 id="three-routes-one-layer-each">Three routes, one layer each<a class="anchor" aria-label="anchor" href="#three-routes-one-layer-each"></a></h2>
+    <h2 id="the-three-routes">The three routes<a class="anchor" aria-label="anchor" href="#the-three-routes"></a></h2>
     <p>Writing \(V(\eta)\) for <code><a href="param_value.html">param_value()</a></code> and \(\partial_k V\) for an
 analytic first derivative, the component \((k, l)\) is</p>
 <p>$$\partial_{kl} V \approx
@@ -93,7 +93,7 @@ the four-point mixed stencil</p>
 truncation error of order \(h^2\).</p>
     </div>
     <div class="section level2">
-    <h2 id="why-none-of-them-nests">Why none of them nests<a class="anchor" aria-label="anchor" href="#why-none-of-them-nests"></a></h2>
+    <h2 id="single-layer-differences">Single-layer differences<a class="anchor" aria-label="anchor" href="#single-layer-differences"></a></h2>
     <p>The rule the toolkit follows is that differences are never composed <strong>in the
 same variable</strong>: a difference of a difference multiplies the error of the
 first stage into the second, and a fourth derivative built that way is noise.
@@ -102,13 +102,15 @@ is numerical. The four-point stencil differences two <em>different</em> componen
 and two differences along different coordinates commute into a single product
 stencil, so it is one layer as well. The diagonal case uses the
 second-difference stencil directly and never sees a first difference at all.</p>
-<p>The steps are the order-2 ones, \(\varepsilon^{1/4}\max(1, |\eta_k|)\),
-about \(1.2 \times 10^{-4}\) near the origin, since it is a second
-derivative being estimated whichever route is taken.</p>
+<p>On the analytic route the step is the order-1 one,
+\(\varepsilon^{1/3}\max(1, |\eta_l|)\), about \(6.1 \times 10^{-6}\) near
+the origin, because a first derivative of an analytic array is taken. The two
+routes on <code><a href="param_value.html">param_value()</a></code> use the order-2 step,
+\(\varepsilon^{1/4}\max(1, |\eta_k|)\), about \(1.2 \times 10^{-4}\).</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="param_d2.html">param_d2()</a></code>, the generic this serves, <code><a href="numerical_d1.html">numerical_d1()</a></code> for the
+    <div class="dont-index"><p><code><a href="param_d2.html">param_d2()</a></code>, the generic that this serves, <code><a href="numerical_d1.html">numerical_d1()</a></code> for the
 order below, and <code><a href="mixed_stencil.html">mixed_stencil()</a></code>, which the third and fourth orders use.</p></div>
     </div>
 

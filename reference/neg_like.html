@@ -11,7 +11,7 @@ shape the inner family returned them in."><meta property="og:image" content="htt
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,10 +65,9 @@ shape the inner family returned them in.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The container is part of the contract: <code><a href="check_parameter.html">check_parameter()</a></code> subtracts the
-result of <code><a href="param_dlogdet.html">param_dlogdet()</a></code> from a reference, which a list does not
-support, so an <code><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply()</a></code> over a numeric vector turns a correct value into
-an error several frames away.</p>
+    <p>The type matters: <code><a href="check_parameter.html">check_parameter()</a></code> subtracts the result of
+<code><a href="param_dlogdet.html">param_dlogdet()</a></code> from a reference, which a list does not support, so the
+negation of a numeric vector has to stay a numeric vector.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

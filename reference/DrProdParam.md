@@ -5,9 +5,10 @@ The S7 class of a covariance written as \\D R D\\, for a diagonal matrix
 [`dr_prod()`](https://statmodels7.github.io/parameters7/reference/dr_prod.md)
 builds one.
 
-Its free values are the standard deviations and the correlation's own
-coordinates, so the quantities a reader takes off a fitted covariance
-are the coordinates themselves.
+Its free values are the linked standard deviations followed by the
+correlation's own coordinates, so the standard deviations and the
+correlations of a fitted covariance are read directly off the free
+vector, through the link and the correlation block.
 
 ## Usage
 
@@ -37,7 +38,7 @@ DrProdParam(
 - free_names:
 
   A character vector of length `n_free`, one label per free value, in
-  the order the free vector holds them. Must be unique.
+  the order in which the free vector holds them. Must be unique.
 
 - param_params:
 
@@ -51,7 +52,7 @@ DrProdParam(
 
 - rank:
 
-  The rank of the matrix the family produces, a single integer in
+  The rank of the matrix that the family produces, a single integer in
   `0:dimension`. It is a property of the family, so a family whose value
   is positive definite at every \\\eta\\ declares \\p\\ here.
 
@@ -61,8 +62,7 @@ DrProdParam(
   an orthonormal basis of the common null space. Use
   [`param_null_basis()`](https://statmodels7.github.io/parameters7/reference/param_null_basis.md)
   to obtain one, or `matrix(numeric(0), dimension, 0)` for a full-rank
-  family. The validator rejects any other shape, and reports both the
-  rank and the shape when the two disagree.
+  family. The validator rejects any other shape.
 
 ## Value
 
@@ -79,7 +79,7 @@ the constructor,
 [`correlation_matrix()`](https://statmodels7.github.io/parameters7/reference/correlation_matrix.md)
 for the default block, and
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
-for the properties this inherits.
+for the properties that this class inherits.
 
 ## Examples
 

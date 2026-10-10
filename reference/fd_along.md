@@ -49,10 +49,10 @@ Whatever `f` returns, differentiated `order` times in component `k`.
 
 The sum \\h^{-k}\sum_j w_j f(\eta + s_j h e_k)\\ is accumulated term by
 term, skipping the nodes whose weight is zero, so `f` is called once per
-non-zero weight: three times for a first or second derivative, five for
-a third or fourth. The accumulator starts at `NULL` and takes the shape
-of the first term, which is why `f` may return a matrix, a vector or a
-scalar without this function knowing which.
+non-zero weight: two, three, four and five times at orders one to four.
+The accumulator starts at `NULL` and takes the shape of the first term,
+which is why `f` may return a matrix, a vector or a scalar without this
+function knowing which.
 
 [`numericals7::fd_derivative()`](https://statmodels7.github.io/numericals7/reference/fd_derivative.html)
 cannot serve here. Its `f` maps a vector of points to the values at

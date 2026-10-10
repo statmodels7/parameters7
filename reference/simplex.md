@@ -7,12 +7,12 @@ unconstrained free values, with the last category as reference,
 \$\$\pi_a = \frac{e^{\eta_a}}{1 + \sum_b e^{\eta_b}}, \qquad \pi_K =
 \frac{1}{1 + \sum_b e^{\eta_b}}.\$\$
 
-Every free vector gives positive entries summing to exactly 1, so a
-mixture weight, a categorical probability or a latent-state distribution
-can be estimated without a constraint. This is the first family here
-whose value is **not a matrix**; see
+Every free vector gives non-negative entries that sum to 1 up to
+rounding, so a mixture weight, a categorical probability or a
+latent-state distribution can be estimated without a constraint. The
+value is **not a matrix**; see
 [`SimplexParam()`](https://statmodels7.github.io/parameters7/reference/SimplexParam.md)
-for what that costs.
+for the consequences.
 
 ## Usage
 
@@ -25,7 +25,7 @@ simplex(n_cat)
 - n_cat:
 
   The number of categories \\K\\, **at least 2**. A single integer; `1`,
-  a fraction, `NA` and a vector all throw
+  a fraction, `NA` and a vector all signal the error
   `'n_cat' must be a single integer of at least 2.` A one-category
   simplex is the constant 1 and has nothing to estimate.
 
@@ -50,27 +50,26 @@ rule applied repeatedly:
 \$\$\partial_b \pi_a = \pi_a(\delta\_{ab} - \pi_b).\$\$
 
 At first order that is the covariance matrix of a categorical indicator,
-which is why the tensors are the same objects a multinomial score
-already carries. All four orders are closed form and no stencil is used.
+the same array that appears in the score of a multinomial model. All
+four orders are closed form and no stencil is used.
 
-## An identity worth checking against
+## The derivatives sum to zero
 
 \\\sum_a \pi_a = 1\\ at every \\\eta\\, so differentiating it gives
 \\\sum_a \partial \pi_a = 0\\, and the same at every higher order. Every
-derivative component therefore sums to zero over the value index.
-Measured over all four orders the worst sum is \\1.7 \times 10^{-17}\\,
-and
+derivative component therefore sums to zero over the value index, up to
+rounding, and
 [`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)
-runs exactly this check: a derivative array that does not sum to zero is
-wrong whatever else it agrees with.
+tests this identity: a derivative array that fails it is wrong, whatever
+other check it passes.
 
 ## Large free values saturate instead of overflowing
 
 [`simplex_point()`](https://statmodels7.github.io/parameters7/reference/simplex_point.md)
 applies the log-sum-exp shift, so a free value of 800 gives \\\pi_1 =
-1\\ and \\\pi_K = 0\\ with the vector still summing to exactly 1, where
-the naive expression would divide `Inf` by `Inf`. Note that the value
-then sits on the **boundary** of the simplex, so
+1\\ and \\\pi_K = 0\\ with the vector summing to exactly 1, where the
+naive expression would divide `Inf` by `Inf`. The value then lies on the
+**boundary** of the simplex, so
 [`param_free()`](https://statmodels7.github.io/parameters7/reference/param_free.md)
 cannot invert it: \\\log(0)\\ is not finite.
 
@@ -78,8 +77,8 @@ cannot invert it: \\\log(0)\\ is not finite.
 
 The other common chart chains through \\K - 1\\ nested logistic maps, so
 its derivatives compose that many times and are not symmetric in the
-categories. The additive log-ratio's close over \\\pi\\ in one rule, and
-every category but the reference enters the same way.
+categories. The derivatives of the additive log-ratio close over \\\pi\\
+in one rule, and every category but the reference enters the same way.
 
 ## Notation
 
@@ -101,7 +100,7 @@ and
 [`param_free()`](https://statmodels7.github.io/parameters7/reference/param_free.md)
 for the map and its inverse, and
 [`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md),
-whose seven-check battery is what a non-matrix family gets.
+whose battery for a family that is not a matrix runs here.
 
 ## Examples
 
@@ -123,7 +122,7 @@ all.equal(unname(pi),
           c(exp(eta), 1) / (1 + sum(exp(eta))))
 #> [1] TRUE
 
-# The round trip closes exactly.
+# The round trip closes up to rounding.
 max(abs(param_free(s, pi) - eta))
 #> [1] 2.220446e-16
 

@@ -1,18 +1,16 @@
 # Default Third Derivatives
 
-The method every
+The method that every
 [`parameter()`](https://statmodels7.github.io/parameters7/reference/parameter.md)
 inherits when it registers no
 [`param_d3()`](https://statmodels7.github.io/parameters7/reference/param_d3.md)
 of its own. It applies one product stencil per index tuple directly to
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md),
 never to a lower-order numerical derivative, with a one-dimensional
-factor per distinct component of the order that component's multiplicity
-asks for. The step is \\\varepsilon^{1/5}\max(1, \|\eta_k\|)\\, about
-\\7.4 \times 10^{-4}\\ near the origin, and the truncation error is of
-order \\h^2\\; measured against a closed form on a \\2 \times 2\\
-covariance the gap is \\7 \times 10^{-6}\\ on entries of size 12. No
-family in this package reaches it.
+factor per distinct component, of the order given by that component's
+multiplicity. The step is \\\varepsilon^{1/5}\max(1, \|\eta_k\|)\\,
+about \\7.4 \times 10^{-4}\\ near the origin, and the truncation error
+is of order \\h^2\\. The families in this package do not reach it.
 
 ## Arguments
 

@@ -31,8 +31,9 @@ power_derivs(r, m, order)
 
 ## Value
 
-A list of `order` elements, the first to the `order`-th derivative, each
-the shape of `r`.
+A list of `order` elements, the first to the `order`-th derivative. The
+elements of order at most `m` have the shape of `r`, and those of higher
+order are the scalar 0.
 
 ## See also
 

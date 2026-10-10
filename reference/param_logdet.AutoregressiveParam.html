@@ -3,15 +3,17 @@
 $$\log\lvert M \rvert = p\log\gamma_0
   + \sum_{k=1}^{q} (p - k)\log(1 - r_k^{2}).$$
 A sum of \(q + 1\) terms at any dimension, with no factorization and no
-determinant taken. Measured against determinant(), the gap is
-\(2 \times 10^{-15}\) at \(p = 5\) and \(4 \times 10^{-14}\) at
-\(p = 100\)."><meta property="og:description" content="Closed form, from the innovation variances of the Levinson-Durbin recursion:
+determinant taken. Under the rhobit link \(1 - r_k^2 = \mathrm{sech}^2
+z_k\), and each logarithm is evaluated by log_sech2() in the free value
+\(z_k\), so the sum keeps its accuracy where \(r_k\) rounds to \(-1\)
+or 1."><meta property="og:description" content="Closed form, from the innovation variances of the Levinson-Durbin recursion:
 $$\log\lvert M \rvert = p\log\gamma_0
   + \sum_{k=1}^{q} (p - k)\log(1 - r_k^{2}).$$
 A sum of \(q + 1\) terms at any dimension, with no factorization and no
-determinant taken. Measured against determinant(), the gap is
-\(2 \times 10^{-15}\) at \(p = 5\) and \(4 \times 10^{-14}\) at
-\(p = 100\)."><meta property="og:image" content="https://statmodels7.github.io/parameters7/logo.png"></head><body>
+determinant taken. Under the rhobit link \(1 - r_k^2 = \mathrm{sech}^2
+z_k\), and each logarithm is evaluated by log_sech2() in the free value
+\(z_k\), so the sum keeps its accuracy where \(r_k\) rounds to \(-1\)
+or 1."><meta property="og:image" content="https://statmodels7.github.io/parameters7/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -19,7 +21,7 @@ determinant taken. Measured against determinant(), the gap is
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,9 +55,10 @@ determinant taken. Measured against determinant(), the gap is
 <p>$$\log\lvert M \rvert = p\log\gamma_0
   + \sum_{k=1}^{q} (p - k)\log(1 - r_k^{2}).$$</p>
 <p>A sum of \(q + 1\) terms at any dimension, with no factorization and no
-determinant taken. Measured against <code><a href="https://rdrr.io/r/base/det.html" class="external-link">determinant()</a></code>, the gap is
-\(2 \times 10^{-15}\) at \(p = 5\) and \(4 \times 10^{-14}\) at
-\(p = 100\).</p>
+determinant taken. Under the rhobit link \(1 - r_k^2 = \mathrm{sech}^2
+z_k\), and each logarithm is evaluated by <code><a href="sech2.html">log_sech2()</a></code> in the free value
+\(z_k\), so the sum keeps its accuracy where \(r_k\) rounds to \(-1\)
+or 1.</p>
     </div>
 
 

@@ -66,22 +66,25 @@ The value is a **product** of a function of the first free value and a
 matrix function of the second, so a component with \\a\\ scale indices
 and \\b\\ correlation indices is \\(\partial^a\tau)(\partial^b G)\\ and
 no mixed expansion is needed. The scale factor is the reciprocal of the
-link's inverse, chained through \\x\mapsto x^{-1}\\; the pattern's three
-distinct entries are written in \\w\\ alone,
+link's inverse, chained through \\x\mapsto x^{-1}\\. Under the rhobit
+link, with \\\rho = \tanh z\\, the pattern's three distinct entries are
+\\G\_{11} = w = \cosh^2 z\\, \\G\_{ii} = 2w - 1 = \cosh 2z\\ and
+\\G\_{i,i\pm1} = -\tfrac{1}{2}\sinh 2z\\, so their derivatives in \\z\\
+are written out directly,
 
-\$\$w^{(k)} = \frac{k!}{2}\left\\(1-\rho)^{-(k+1)} + (-1)^k
-(1+\rho)^{-(k+1)}\right\\,\$\$
+\$\$w^{(k)} = 2^{k-1}\sinh 2z \\(k \text{ odd}), \qquad w^{(k)} =
+2^{k-1}\cosh 2z \\(k \text{ even}),\$\$
 
-with \\G\_{11}^{(k)} = w^{(k)}\\, \\G\_{ii} = 2w - 1\\ so
-\\G\_{ii}^{(k)} = 2w^{(k)}\\ above order zero, and \\G\_{i,i\pm1}^{(k)}
-= -(\rho\\w^{(k)} + k\\w^{(k-1)})\\ by the Leibniz rule. Each is then
-chained onto the free value through the correlation's link.
+with \\G\_{ii}^{(k)} = 2w^{(k)}\\ above order zero and
+\\G\_{i,i\pm1}^{(k)} = -\tfrac{1}{2}w^{(k+1)}\\. No difference \\1 -
+\rho^2\\ is formed, so the derivatives keep their accuracy where
+\\\rho\\ rounds to \\-1\\ or 1.
 
 This is what the family adds over `inverse_of(ar1(p))`, which reaches
-the same numbers through the ordered-block-partition sum: there a
-fourth-order component is 75 products of five matrices, here it is one
-elementwise product. The two agree to machine precision, which is what a
-test asserts.
+the same numbers through the ordered-block-partition sum. There a
+fourth-order component is a sum of 75 products, one for each ordered set
+partition of its four positions, each of three to nine matrices; here it
+is one elementwise product. The two routes agree to rounding.
 
 ## The log-determinant
 
@@ -94,8 +97,8 @@ what is negated.
 ## Notation
 
 \\p\\ is the matrix side, \\\sigma^2\\ the AR(1) process's variance,
-\\\rho\\ its lag-one correlation, \\\tau = \sigma^{-2}\\ and \\w =
-(1-\rho^2)^{-1}\\.
+\\\rho = \tanh z\\ its lag-one correlation, \\\tau = \sigma^{-2}\\ and
+\\w = (1-\rho^2)^{-1} = \cosh^2 z\\.
 
 ## See also
 
@@ -129,5 +132,5 @@ max(abs(param_value(s, eta) %*% param_value(ar1(5), eta) - diag(5)))
 # The written-out derivatives agree with the general composition's.
 g <- inverse_of(ar1(5))
 max(abs(unlist(param_d4(s, eta)) - unlist(param_d4(g, eta))))
-#> [1] 1.918465e-13
+#> [1] 2.131628e-13
 ```

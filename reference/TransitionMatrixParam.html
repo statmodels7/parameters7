@@ -3,14 +3,14 @@
 additive log-ratio parametrization. Its value is a matrix but not a
 symmetric one, so it inherits parameter() directly, never
 matrix_parameter(): there is no rank and no null_basis, and a
-transition matrix has no log-determinant, solve or factor to be asked for.
+transition matrix has no log-determinant, solve or factor.
 transition_matrix() builds one. The rows are independent in the
 parametrization, so every derivative array is block diagonal by row and the
 family reuses simplex()'s kernels row by row."><meta property="og:description" content="The S7 class of row-stochastic matrices, each row on the open simplex in the
 additive log-ratio parametrization. Its value is a matrix but not a
 symmetric one, so it inherits parameter() directly, never
 matrix_parameter(): there is no rank and no null_basis, and a
-transition matrix has no log-determinant, solve or factor to be asked for.
+transition matrix has no log-determinant, solve or factor.
 transition_matrix() builds one. The rows are independent in the
 parametrization, so every derivative array is block diagonal by row and the
 family reuses simplex()'s kernels row by row."><meta property="og:image" content="https://statmodels7.github.io/parameters7/logo.png"></head><body>
@@ -21,7 +21,7 @@ family reuses simplex()'s kernels row by row."><meta property="og:image" content
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,7 +55,7 @@ family reuses simplex()'s kernels row by row."><meta property="og:image" content
 additive log-ratio parametrization. Its value is a matrix but <strong>not a
 symmetric</strong> one, so it inherits <code><a href="parameter.html">parameter()</a></code> directly, never
 <code><a href="matrix_parameter.html">matrix_parameter()</a></code>: there is no <code>rank</code> and no <code>null_basis</code>, and a
-transition matrix has no log-determinant, solve or factor to be asked for.</p>
+transition matrix has no log-determinant, solve or factor.</p>
 <p><code><a href="transition_matrix.html">transition_matrix()</a></code> builds one. The rows are independent in the
 parametrization, so every derivative array is block diagonal by row and the
 family reuses <code><a href="simplex.html">simplex()</a></code>'s kernels row by row.</p>
@@ -77,7 +77,8 @@ family reuses <code><a href="simplex.html">simplex()</a></code>'s kernels row by
 
 <dl><dt id="arg-param-name">param_name<a class="anchor" aria-label="anchor" href="#arg-param-name"></a></dt>
 <dd><p>A single character string naming the family, used in the
-error messages the validators raise and in the object's <code>print</code> output.
+error messages that the validators raise and in the object's <code>print</code>
+output.
 <code>"log_cholesky"</code>, <code>"ar1"</code> and so on.</p></dd>
 
 
@@ -90,7 +91,8 @@ disagrees with <code>free_names</code>.</p></dd>
 
 <dt id="arg-free-names">free_names<a class="anchor" aria-label="anchor" href="#arg-free-names"></a></dt>
 <dd><p>A character vector of length <code>n_free</code>, one label per free
-value, in the order the free vector holds them. Fixed at construction and
+value, in the order in which the free vector holds them. Fixed at
+construction and
 part of the interface: consumers build their parameter tables from these
 labels, so the ordering is not free to change. The validator rejects a
 duplicated label and a length other than <code>n_free</code>.</p></dd>
@@ -100,7 +102,7 @@ duplicated label and a length other than <code>n_free</code>.</p></dd>
 <dd><p>A list of whatever the family needs in order to evaluate
 itself, read only by that family's own methods. <code><a href="log_cholesky.html">log_cholesky()</a></code> stores
 the row and column index of each free value here; <code><a href="sum_struct.html">sum_struct()</a></code> stores
-its component matrices. Nothing outside the family looks inside it.</p></dd>
+its component matrices. Only the methods of that family read the list.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -113,8 +115,8 @@ its component matrices. Nothing outside the family looks inside it.</p></dd>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="transition_matrix.html">transition_matrix()</a></code>, the constructor, <code><a href="simplex.html">simplex()</a></code>, which is one
-row of this, and <code><a href="parameter.html">parameter()</a></code> for the properties this inherits and the
-generics it does not get.</p></div>
+row of this, and <code><a href="parameter.html">parameter()</a></code> for the properties that this class
+inherits and the generics that it does not get.</p></div>
     </div>
 
     <div class="section level2">

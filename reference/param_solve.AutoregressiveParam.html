@@ -11,7 +11,7 @@ and applied."><meta property="og:image" content="https://statmodels7.github.io/p
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,10 +76,8 @@ by the generic, so <code>param_solve(s, eta)</code> is the whole precision.</p><
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The precision is <strong>banded of bandwidth \(q\)</strong>, which is the content of an
-order-\(q\) Markov property: no partial correlation beyond the lag.
-Measured at \(q = 3\) and \(p = 9\), all 30 entries outside the band are
-exactly 0 and 51 of the 81 entries are non-zero; against <code><a href="https://rdrr.io/r/base/solve.html" class="external-link">solve()</a></code> on the
-assembled matrix the agreement is \(7 \times 10^{-16}\).</p>
+order-\(q\) Markov property: no partial correlation beyond the lag. Every
+entry outside the band is exactly 0.</p>
 <p>The bandedness is not exploited for speed here, the whole \(p\) by \(p\)
 precision being formed and multiplied. What it buys a consumer is the
 structure: a model assembling a penalty from this parameter gets a banded

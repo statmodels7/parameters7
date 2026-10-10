@@ -42,21 +42,24 @@ A list with `u` and `tau`, each a list indexed by code: `u` of
 \\U\\ is unit lower triangular of bandwidth \\q\\, row \\t\\ holding the
 coefficients of the best linear predictor of \\y_t\\ from its
 predecessors, which for \\t\\ beyond the order are the autoregression's
-own. Those lower-order coefficients are the coefficients of the SAME
-family at that order, measured exactly:
-[`ar_prediction()`](https://statmodels7.github.io/parameters7/reference/ar_prediction.md)'s
-row \\k+1\\ and `autoregressive(p, order = k)`'s `phi` agree to 0. So
-the intermediate derivative arrays come from the compiled
-Levinson-Durbin recursion run once per order, and nothing is rederived
-here. A component differentiating in a partial autocorrelation the order
-does not reach is exactly zero.
+own. Those lower-order coefficients are the coefficients of the same
+family at that order (row \\k+1\\ of
+[`ar_prediction()`](https://statmodels7.github.io/parameters7/reference/ar_prediction.md),
+negated and read backwards, is the `phi` of
+`autoregressive(p, order = k)` up to rounding), so the intermediate
+derivative arrays come from the compiled Levinson-Durbin recursion run
+once per order, and nothing is rederived here. A component
+differentiating in a partial autocorrelation that the order does not
+reach is exactly zero.
 
-\\\tau_t = 1/v_t\\ is a PRODUCT of one factor per free value: \\1/v_0\\
-from the scale, and \\(1-r_j^2)^{-1}\\ from each partial autocorrelation
-the prediction at \\t\\ has reached. A mixed derivative of a product of
-univariate factors is the product of their own derivatives, and it is
-exactly zero whenever it differentiates in a factor that row does not
-carry.
+\\\tau_t = 1/v_t\\ is a product of one factor per free value: \\1/v_0\\
+from the scale, and \\(1-r_j^2)^{-1} = \cosh^2 z_j\\ from each partial
+autocorrelation that the prediction at \\t\\ has reached, differentiated
+in \\z_j\\ by
+[`cosh2_derivs()`](https://statmodels7.github.io/parameters7/reference/cosh2_derivs.md).
+A mixed derivative of a product of univariate factors is the product of
+their own derivatives, and it is exactly zero whenever it differentiates
+in a factor that row does not carry.
 
 ## See also
 

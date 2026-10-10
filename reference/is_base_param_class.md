@@ -1,14 +1,14 @@
-# Is This the Package's Own Base Class?
+# Test for the Package's Own Base Classes
 
-Asks whether an S7 class is
+Returns whether an S7 class is
 [`parameter()`](https://statmodels7.github.io/parameters7/reference/parameter.md)
 or
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md),
-the two abstract classes this package registers its fallback methods on.
-That is how a method a subclass wrote is told apart from one it merely
-inherited, which is the question
+the two base classes on which this package registers its fallback
+methods. The test distinguishes a method that a subclass wrote from one
+that it inherited, which is what
 [`param_is_numerical()`](https://statmodels7.github.io/parameters7/reference/param_is_numerical.md)
-answers and
+reports and what
 [`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)
 acts on.
 
@@ -24,8 +24,8 @@ is_base_param_class(cls)
 
   An S7 class object, as `S7::S7_class(x)` returns or as
   `attr(method, "signature")[[1]]` holds. Anything else returns `FALSE`
-  rather than throwing, [`attr()`](https://rdrr.io/r/base/attr.html) on
-  a non-class giving `NULL`.
+  without an error, [`attr()`](https://rdrr.io/r/base/attr.html) on a
+  non-class giving `NULL`.
 
 ## Value
 

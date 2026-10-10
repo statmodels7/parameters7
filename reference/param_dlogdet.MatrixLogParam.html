@@ -3,15 +3,17 @@
 in the \(p(p-1)/2\) below-diagonal ones, the log-determinant being
 \(\sum_i \eta_i\). The value does not depend on eta, which is read only
 for its length.
-Note the 1 where log_cholesky() answers 2: there the diagonal free value is
-\(\log L_{ii}\) and \(|M| = |L|^2\), here it is an eigenvalue of the
-logarithm and enters once."><meta property="og:description" content="Closed form and constant: 1 in each of the \(p\) diagonal directions and 0
+The gradient is 1 where that of log_cholesky() is 2: there the diagonal
+free value is \(\log L_{ii}\) and \(|M| = |L|^2\), while here it is a
+diagonal entry of \(S\), and \(\log|M| = \mathrm{tr}(S)\) contains it
+once."><meta property="og:description" content="Closed form and constant: 1 in each of the \(p\) diagonal directions and 0
 in the \(p(p-1)/2\) below-diagonal ones, the log-determinant being
 \(\sum_i \eta_i\). The value does not depend on eta, which is read only
 for its length.
-Note the 1 where log_cholesky() answers 2: there the diagonal free value is
-\(\log L_{ii}\) and \(|M| = |L|^2\), here it is an eigenvalue of the
-logarithm and enters once."><meta property="og:image" content="https://statmodels7.github.io/parameters7/logo.png"></head><body>
+The gradient is 1 where that of log_cholesky() is 2: there the diagonal
+free value is \(\log L_{ii}\) and \(|M| = |L|^2\), while here it is a
+diagonal entry of \(S\), and \(\log|M| = \mathrm{tr}(S)\) contains it
+once."><meta property="og:image" content="https://statmodels7.github.io/parameters7/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -19,7 +21,7 @@ logarithm and enters once."><meta property="og:image" content="https://statmodel
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,9 +55,10 @@ logarithm and enters once."><meta property="og:image" content="https://statmodel
 in the \(p(p-1)/2\) below-diagonal ones, the log-determinant being
 \(\sum_i \eta_i\). The value does not depend on <code>eta</code>, which is read only
 for its length.</p>
-<p>Note the 1 where <code><a href="log_cholesky.html">log_cholesky()</a></code> answers 2: there the diagonal free value is
-\(\log L_{ii}\) and \(|M| = |L|^2\), here it is an eigenvalue of the
-logarithm and enters once.</p>
+<p>The gradient is 1 where that of <code><a href="log_cholesky.html">log_cholesky()</a></code> is 2: there the diagonal
+free value is \(\log L_{ii}\) and \(|M| = |L|^2\), while here it is a
+diagonal entry of \(S\), and \(\log|M| = \mathrm{tr}(S)\) contains it
+once.</p>
     </div>
 
 
@@ -84,7 +87,7 @@ holding 1 and 0.</p>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="param_logdet.MatrixLogParam.html">param_logdet.MatrixLogParam()</a></code> for the quantity differentiated, and
-<code><a href="param_dlogdet.LogCholeskyParam.html">param_dlogdet.LogCholeskyParam()</a></code>, which answers 2.</p></div>
+<code><a href="param_dlogdet.LogCholeskyParam.html">param_dlogdet.LogCholeskyParam()</a></code>, which returns 2.</p></div>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

@@ -35,10 +35,7 @@ A numeric matrix with `s@dimension` rows and as many columns as `b`.
 
 The precision is **banded of bandwidth \\q\\**, which is the content of
 an order-\\q\\ Markov property: no partial correlation beyond the lag.
-Measured at \\q = 3\\ and \\p = 9\\, all 30 entries outside the band are
-exactly 0 and 51 of the 81 entries are non-zero; against
-[`solve()`](https://rdrr.io/r/base/solve.html) on the assembled matrix
-the agreement is \\7 \times 10^{-16}\\.
+Every entry outside the band is exactly 0.
 
 The bandedness is not exploited for speed here, the whole \\p\\ by \\p\\
 precision being formed and multiplied. What it buys a consumer is the

@@ -1,6 +1,6 @@
 # Value of a Block Replication
 
-\#' Returns \\I_m \otimes S(\eta)\\, the inner parameter's matrix placed
+Returns \\I_m \otimes S(\eta)\\, the inner parameter's matrix placed
 into \\m\\ identical diagonal blocks. One
 [`kronecker()`](https://rdrr.io/r/base/kronecker.html) call and no
 arithmetic of its own: the value is the inner value lifted.
@@ -29,8 +29,8 @@ parameter's labels, so the result is relabeled over the composite side,
 ## Value
 
 A `s@dimension` by `s@dimension` symmetric numeric matrix, block
-diagonal with `m` identical blocks, and labeled `v1`, `v2`, ..., `vp` on
-both margins. Positive definite exactly when the inner parameter is.
+diagonal with `m` identical blocks, and labeled `v1`, `v2`, ..., `v(md)`
+on both margins. Positive definite exactly when the inner parameter is.
 
 ## See also
 

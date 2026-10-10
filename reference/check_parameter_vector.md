@@ -1,12 +1,16 @@
 # The Reduced Battery for a Parameter That Is Not a Matrix
 
-What
+The checks that
 [`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)
-runs for a family whose value is not a symmetric matrix, so has no
-log-determinant, no solve and no factor. Seven checks: the inverse round
-trip, each of the four derivative orders against the single-stencil
-numerical construction, that the value stays on the simplex, and that
-every derivative component sums to zero over the value index.
+runs for a family whose value is not a symmetric matrix and which
+therefore has no log-determinant, no solve and no factor: the inverse
+round trip and each of the four derivative orders against the
+single-stencil numerical construction, and, for
+[`simplex()`](https://statmodels7.github.io/parameters7/reference/simplex.md)
+and
+[`transition_matrix()`](https://statmodels7.github.io/parameters7/reference/transition_matrix.md),
+that the value stays on the simplex and that every derivative component
+sums to zero over the value index.
 
 ## Usage
 
@@ -25,7 +29,10 @@ check_parameter_vector(s, tol = 1e-06, verbose = TRUE)
 
 - tol:
 
-  The relative tolerance a check has to meet.
+  The relative tolerance that a check has to meet. The thresholds of the
+  four derivative orders are \\10^{-6}\\, \\10^{-5}\\, \\10^{-4}\\ and
+  \\5 \times 10^{-3}\\ at the default `1e-6`, and each is multiplied by
+  `tol / 1e-6` otherwise.
 
 - verbose:
 
@@ -33,19 +40,26 @@ check_parameter_vector(s, tol = 1e-06, verbose = TRUE)
 
 ## Value
 
-Invisibly, a seven-row data frame with columns `check`, `status` and
-`note`. Note that `note` is **character**, holding a formatted number or
-the empty string, where
-[`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)'s
-matrix branch returns a numeric `statistic`.
+Invisibly, a data frame with columns `check`, `status` and `note`, with
+seven rows for
+[`simplex()`](https://statmodels7.github.io/parameters7/reference/simplex.md)
+and
+[`transition_matrix()`](https://statmodels7.github.io/parameters7/reference/transition_matrix.md)
+and five for any other family. The `status` is `"OK"`, `"FAIL"` or, for
+a derivative order that comes from a numerical fallback,
+`"NOT CHECKED"`. The column `note` is **character**, holding a formatted
+number, the string `numerical` or the empty string, where the matrix
+branch of
+[`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)
+returns a numeric `statistic`.
 
 ## Details
 
 The last check is an identity the set itself supplies. Differentiating
 \\\sum_a \pi_a = 1\\ gives \\\sum_a \partial \pi_a = 0\\, and
 differentiating again gives the same for every higher order, so a
-derivative array that does not sum to zero is wrong whatever else it
-agrees with. A
+derivative array that fails the identity is wrong, whatever other check
+it passes. A
 [`transition_matrix()`](https://statmodels7.github.io/parameters7/reference/transition_matrix.md)
 satisfies it row by row, its rows being simplexes.
 
@@ -61,14 +75,8 @@ unchanged. The derivative comparisons are against
 [`numerical_d1()`](https://statmodels7.github.io/parameters7/reference/numerical_d1.md)
 through
 [`numerical_d4()`](https://statmodels7.github.io/parameters7/reference/numerical_d4.md),
-which at third and fourth order are themselves good to about
-\\10^{-5}\\: measured on
-[`simplex()`](https://statmodels7.github.io/parameters7/reference/simplex.md)
-and
-[`transition_matrix()`](https://statmodels7.github.io/parameters7/reference/transition_matrix.md)
-the four orders come back at \\4 \times 10^{-12}\\, \\4 \times
-10^{-12}\\, \\3 \times 10^{-7}\\ and \\3 \times 10^{-5}\\, and the
-widening is the reference's.
+whose accuracy decreases with the order, so the thresholds widen with
+the order.
 
 ## See also
 
@@ -77,4 +85,4 @@ which dispatches here, and
 [`simplex()`](https://statmodels7.github.io/parameters7/reference/simplex.md)
 and
 [`transition_matrix()`](https://statmodels7.github.io/parameters7/reference/transition_matrix.md),
-the two families that reach it.
+the two families in this package that reach it.

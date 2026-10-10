@@ -5,10 +5,10 @@ copies of an inner matrix parameter, \\I_m \otimes S(\eta)\\. The blocks
 **share one free vector**, so `n_free` is the inner parameter's however
 large \\m\\ is, and the free names are the inner ones unchanged.
 
-It is the first of the four composition wrappers, and the cheapest:
-every quantity of the contract is a linear lift of the inner
-parameter's, so nothing is rederived and nothing of size \\(md)^2\\ is
-decomposed.
+It is one of the five composition wrappers. The value, the derivatives,
+the log-determinant, the solve and the factor are each a linear lift of
+the inner parameter's, so no new derivation is needed and no matrix of
+side \\md\\ is decomposed.
 
 ## Usage
 
@@ -38,7 +38,7 @@ KronIdentityParam(
 - free_names:
 
   A character vector of length `n_free`, one label per free value, in
-  the order the free vector holds them. Must be unique.
+  the order in which the free vector holds them. Must be unique.
 
 - param_params:
 
@@ -52,7 +52,7 @@ KronIdentityParam(
 
 - rank:
 
-  The rank of the matrix the family produces, a single integer in
+  The rank of the matrix that the family produces, a single integer in
   `0:dimension`. It is a property of the family, so a family whose value
   is positive definite at every \\\eta\\ declares \\p\\ here.
 
@@ -62,8 +62,7 @@ KronIdentityParam(
   an orthonormal basis of the common null space. Use
   [`param_null_basis()`](https://statmodels7.github.io/parameters7/reference/param_null_basis.md)
   to obtain one, or `matrix(numeric(0), dimension, 0)` for a full-rank
-  family. The validator rejects any other shape, and reports both the
-  rank and the shape when the two disagree.
+  family. The validator rejects any other shape.
 
 ## Value
 
@@ -71,7 +70,8 @@ An object of class `KronIdentityParam`, a subclass of
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
 adding no properties of its own. `param_params` holds `inner`, the
 per-block parameter, and `m`, the number of blocks. `param_name` is
-`kron(Im, <inner>)`.
+`kron(I<m>, <inner>)` with the number of blocks and the inner family's
+name written in, for example `"kron(I3, log_cholesky)"`.
 
 ## See also
 
@@ -81,7 +81,7 @@ the constructor,
 for blocks that are **not** identical and do not share a free vector,
 and
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
-for the properties this inherits.
+for the properties that this class inherits.
 
 ## Examples
 

@@ -1,8 +1,8 @@
 # Fourth Log-Determinant Derivatives of a Block Replication
 
 Closed form: \\m\\ times the inner parameter's fourth-order vector.
-Exact where the inner parameter's is, so the composition never
-introduces the accuracy loss a fallback at this order would.
+Exact where the inner parameter's is, so the composition adds no loss of
+accuracy.
 
 ## Arguments
 

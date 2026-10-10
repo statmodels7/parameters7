@@ -4,8 +4,8 @@ Returns the rank and an orthonormal basis of the common null space of
 one or more symmetric positive semidefinite matrices. Each matrix is
 scaled to unit maximum entry, the scaled matrices are stacked into one
 tall matrix, and the rank and the null space are read off its singular
-value decomposition. Every
-[`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
+value decomposition.
+[`scaled_matrix()`](https://statmodels7.github.io/parameters7/reference/scaled_matrix.md)
 calls it once at construction to fill its `rank` and `null_basis`
 properties.
 
@@ -20,19 +20,22 @@ param_null_basis(mats, tol = 1e-10)
 - mats:
 
   A list of symmetric numeric matrices, all of the same side, or a
-  single matrix, which is wrapped in a list. An empty list throws
-  `'mats' must not be empty.`; the matrices themselves are not checked
-  for symmetry or definiteness, the callers being the package's own
-  constructors.
+  single matrix, which is wrapped in a list. An empty list signals the
+  error `'mats' must not be empty.`; the matrices themselves are not
+  checked for symmetry or definiteness, the callers being the package's
+  own constructors.
 
 - tol:
 
   The relative tolerance below which a singular value counts as zero: a
   singular value \\s_j\\ is null when \\s_j \le \mathrm{tol} \cdot
-  \max_i s_i\\. Defaults to `1e-10`. The default sits well below the
-  singular values a genuine rank carries and well above the \\10^{-16}\\
-  the zero directions of a stacked, normalized set of matrices reach, so
-  the gap between the two is wide and the exact value is not delicate.
+  \max_i s_i\\. Defaults to `1e-10`, well above the \\10^{-16}\\ that
+  the zero directions of a stacked, normalized set of matrices reach. It
+  is below the smallest non-zero singular value of a typical penalty,
+  but a long, finely spaced penalty can fall under it (a
+  second-difference penalty on 800 coefficients has a relative smallest
+  non-zero singular value of about \\8 \times 10^{-11}\\), and such a
+  direction is then counted as null; a smaller `tol` recovers it.
 
 ## Value
 
@@ -59,16 +62,12 @@ invariant: a component whose weight is small contributes eigenvalues
 below the tolerance, and they are then counted as null directions that
 are not there.
 
-Measured on the tensor-product penalty of two second-difference
-penalties over 4 and 8 coefficients, whose true rank is 28 out of 32.
-Counting the eigenvalues of the assembled sum above a relative tolerance
-of \\10^{-10}\\ answers 28 while the two weights are within \\10^{8}\\
-of each other, and 24 once the ratio reaches \\10^{10}\\: four
-directions the penalty does penalize are read as null. Smoothing
-parameters ten orders of magnitude apart are an ordinary fitted model,
-not a pathology. The stacked route answers 28 at every ratio, and the
-basis it returns is annihilated by the assembled matrix to \\3 \times
-10^{-16}\\ relative even at the worst one.
+The examples show this on the tensor-product penalty of two
+second-difference penalties over 4 and 8 coefficients, whose rank is 28
+out of 32: counting the eigenvalues of the assembled sum gives 24 when
+the two weights differ by a factor of \\10^{10}\\, while the stacked
+route gives 28. Smoothing parameters that differ by ten orders of
+magnitude occur in ordinary fitted models.
 
 ## The scaling
 
@@ -93,12 +92,11 @@ basis** is a matrix whose columns span \\\\v : M v = 0 \text{ for every
 ## See also
 
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md),
-whose `rank` and `null_basis` properties this fills, and the two
-families that can be rank deficient and so are the ones whose answer is
-not trivial:
+whose `rank` and `null_basis` properties this fills, and
 [`scaled_matrix()`](https://statmodels7.github.io/parameters7/reference/scaled_matrix.md)
 and
-[`sum_struct()`](https://statmodels7.github.io/parameters7/reference/sum_struct.md).
+[`sum_struct()`](https://statmodels7.github.io/parameters7/reference/sum_struct.md),
+the two families that accept a rank-deficient matrix of their own.
 
 ## Examples
 

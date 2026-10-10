@@ -1,19 +1,18 @@
 # Default Second Derivatives
 
-The method every
+The method that every
 [`parameter()`](https://statmodels7.github.io/parameters7/reference/parameter.md)
 inherits when it registers no
 [`param_d2()`](https://statmodels7.github.io/parameters7/reference/param_d2.md)
 of its own. It takes exactly one difference per component, of whichever
 quantity the family already supplies: the analytic
 [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md)
-where there is one, and
+where there is one, at the order-1 step, and
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
 itself where there is not, through a three-point second difference on
-the diagonal and a four-point mixed stencil off it. The step is the
-order-2 one, \\\varepsilon^{1/4}\max(1, \|\eta_k\|)\\, about \\1.2
-\times 10^{-4}\\ near the origin, and the truncation error is of order
-\\h^2\\ on every route. No family in this package reaches it.
+the diagonal and a four-point mixed stencil off it, at the order-2 step.
+The truncation error is of order \\h^2\\ on every route. The families in
+this package do not reach it.
 
 ## Arguments
 

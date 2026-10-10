@@ -3,17 +3,13 @@
 autoregressive() parameter, closed form at every order. The map from the
 partial autocorrelations to the matrix is polynomial, so the derivative arrays
 propagated through the Levinson-Durbin recursion give each derivative exactly
-and nothing is differenced. Measured against one central difference of
-param_value(), the first derivatives agree to \(5 \times 10^{-11}\), which
-is the difference's own accuracy.
+and nothing is differenced.
 Every component is Toeplitz, the structure being a property of the family and
 fixed as the point moves."><meta property="og:description" content="param_d1(), param_d2(), param_d3() and param_d4() for an
 autoregressive() parameter, closed form at every order. The map from the
 partial autocorrelations to the matrix is polynomial, so the derivative arrays
 propagated through the Levinson-Durbin recursion give each derivative exactly
-and nothing is differenced. Measured against one central difference of
-param_value(), the first derivatives agree to \(5 \times 10^{-11}\), which
-is the difference's own accuracy.
+and nothing is differenced.
 Every component is Toeplitz, the structure being a property of the family and
 fixed as the point moves."><meta property="og:image" content="https://statmodels7.github.io/parameters7/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -23,7 +19,7 @@ fixed as the point moves."><meta property="og:image" content="https://statmodels
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,9 +53,7 @@ fixed as the point moves."><meta property="og:image" content="https://statmodels
 <code><a href="autoregressive.html">autoregressive()</a></code> parameter, closed form at every order. The map from the
 partial autocorrelations to the matrix is polynomial, so the derivative arrays
 propagated through the Levinson-Durbin recursion give each derivative exactly
-and nothing is differenced. Measured against one central difference of
-<code><a href="param_value.html">param_value()</a></code>, the first derivatives agree to \(5 \times 10^{-11}\), which
-is the difference's own accuracy.</p>
+and nothing is differenced.</p>
 <p>Every component is Toeplitz, the structure being a property of the family and
 fixed as the point moves.</p>
     </div>
@@ -92,8 +86,8 @@ dimnames, keyed as <code>param_tuple_names(s, order)</code> and in that order:
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The four share <code><a href="ar_derivative.html">ar_derivative()</a></code> and differ only in the order they pass.
-Each order runs its own kernel, which returns that order's components
-alone; see <code><a href="autoregressive.html">autoregressive()</a></code> for the cost.</p>
+Each order runs its own kernel, which returns the components of that order
+only.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

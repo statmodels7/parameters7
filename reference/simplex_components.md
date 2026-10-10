@@ -2,8 +2,8 @@
 
 Slices the tensors of
 [`simplex_tensors()`](https://statmodels7.github.io/parameters7/reference/simplex_tensors.md)
-into the named list a derivative generic returns, one entry per distinct
-index tuple, keyed as `param_tuple_names(s, order)`.
+into the named list that a derivative generic returns, one entry per
+distinct index tuple, keyed as `param_tuple_names(s, order)`.
 
 ## Usage
 
@@ -15,10 +15,9 @@ simplex_components(s, tens, order, wrap = identity)
 
 - s:
 
-  The parameter the tuples belong to, a
+  The
   [`SimplexParam()`](https://statmodels7.github.io/parameters7/reference/SimplexParam.md)
-  or, through `wrap`, one row's worth of a
-  [`TransitionMatrixParam()`](https://statmodels7.github.io/parameters7/reference/TransitionMatrixParam.md).
+  to which the tuples belong.
 
 - tens:
 
@@ -32,10 +31,8 @@ simplex_components(s, tens, order, wrap = identity)
 
 - wrap:
 
-  A function applied to each raw slice before it is stored. `identity`
-  by default, which is the simplex's own case;
-  [`transition_matrix()`](https://statmodels7.github.io/parameters7/reference/transition_matrix.md)
-  passes a function embedding the slice in a row.
+  A function applied to each raw slice before it is stored, `identity`
+  by default. Every caller in the package uses the default.
 
 ## Value
 
@@ -45,16 +42,17 @@ result.
 
 ## Details
 
-The `wrap` argument is how
+The `wrap` argument is a function applied to each slice before it is
+stored, `identity` by default. A simplex component is a vector of length
+\\K\\ and is returned as it stands.
 [`transition_matrix()`](https://statmodels7.github.io/parameters7/reference/transition_matrix.md)
-reuses this. A simplex component is a vector of length \\K\\ and is
-returned as it stands; a transition matrix's is that vector placed into
-one row of a \\K \times K\\ matrix of zeros, and the caller passes the
-function that does the placing.
+does not call this function: its derivative method slices the tensors
+itself and places each slice in one row of a \\K \times K\\ matrix of
+zeros.
 
 ## See also
 
 [`simplex_tensors()`](https://statmodels7.github.io/parameters7/reference/simplex_tensors.md)
 for the arrays sliced, and
-[`tm_derivative()`](https://statmodels7.github.io/parameters7/reference/tm_derivative.md)
-for the `wrap` that embeds a row.
+[`tm_derivative()`](https://statmodels7.github.io/parameters7/reference/tm_derivative.md),
+which slices the same arrays row by row for a transition matrix.

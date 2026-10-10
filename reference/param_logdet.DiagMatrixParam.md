@@ -7,8 +7,13 @@ log-determinant exactly. For a
 the one entry is counted \\p\\ times, giving \\p \log h(\eta_1)\\.
 
 Under the **log** link \\\log h(\eta) = \eta\\, so the result is
-`sum(eta)` and the quantity is linear in the free vector; under any
-other link it is not.
+`sum(eta)` for a
+[`diagonal_matrix()`](https://statmodels7.github.io/parameters7/reference/diagonal_matrix.md)
+and `dimension * eta` for a
+[`scalar_matrix()`](https://statmodels7.github.io/parameters7/reference/scalar_matrix.md),
+linear in the free vector as long as the link's inverse does not reach
+the floor that linkfunctions7 applies to it; under another link it is
+not linear.
 
 ## Arguments
 

@@ -4,12 +4,18 @@ logarithms of the diagonal entries, which for a diagonal matrix is the
 log-determinant exactly. For a scalar_matrix() the one entry is counted
 \(p\) times, giving \(p \log h(\eta_1)\).
 Under the log link \(\log h(\eta) = \eta\), so the result is sum(eta)
-and the quantity is linear in the free vector; under any other link it is not."><meta property="og:description" content="Returns \(\log|M| = \sum_{i=1}^{p} \log h(\eta_i)\), the sum of the
+for a diagonal_matrix() and dimension * eta for a scalar_matrix(), linear
+in the free vector as long as the link's inverse does not reach the floor
+that linkfunctions7 applies to it; under another link it is not
+linear."><meta property="og:description" content="Returns \(\log|M| = \sum_{i=1}^{p} \log h(\eta_i)\), the sum of the
 logarithms of the diagonal entries, which for a diagonal matrix is the
 log-determinant exactly. For a scalar_matrix() the one entry is counted
 \(p\) times, giving \(p \log h(\eta_1)\).
 Under the log link \(\log h(\eta) = \eta\), so the result is sum(eta)
-and the quantity is linear in the free vector; under any other link it is not."><meta property="og:image" content="https://statmodels7.github.io/parameters7/logo.png"></head><body>
+for a diagonal_matrix() and dimension * eta for a scalar_matrix(), linear
+in the free vector as long as the link's inverse does not reach the floor
+that linkfunctions7 applies to it; under another link it is not
+linear."><meta property="og:image" content="https://statmodels7.github.io/parameters7/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -17,7 +23,7 @@ and the quantity is linear in the free vector; under any other link it is not.">
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,7 +58,10 @@ logarithms of the diagonal entries, which for a diagonal matrix is the
 log-determinant exactly. For a <code><a href="scalar_matrix.html">scalar_matrix()</a></code> the one entry is counted
 \(p\) times, giving \(p \log h(\eta_1)\).</p>
 <p>Under the <strong>log</strong> link \(\log h(\eta) = \eta\), so the result is <code>sum(eta)</code>
-and the quantity is linear in the free vector; under any other link it is not.</p>
+for a <code><a href="diagonal_matrix.html">diagonal_matrix()</a></code> and <code>dimension * eta</code> for a <code><a href="scalar_matrix.html">scalar_matrix()</a></code>, linear
+in the free vector as long as the link's inverse does not reach the floor
+that <span class="pkg">linkfunctions7</span> applies to it; under another link it is not
+linear.</p>
     </div>
 
 

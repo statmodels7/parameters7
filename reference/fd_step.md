@@ -1,9 +1,9 @@
 # Finite-Difference Step for a Free Value
 
-Returns the step a central difference should use in one component of
-\\\eta\\, scaled by the size of that component. A one-line forward to
+Returns the step for a central difference in one component of \\\eta\\,
+scaled by the size of that component. It forwards to
 [`numericals7::fd_step()`](https://statmodels7.github.io/numericals7/reference/fd_step.html)
-at accuracy 2, so the step a fallback here takes and the step the
+at accuracy 2, so the step of a fallback here and the step that the
 stencil library documents cannot drift apart.
 
 ## Usage
@@ -29,15 +29,15 @@ A single positive number.
 ## Details
 
 The rule is \\\varepsilon^{1/(k+2)} \max(1, \|\eta_k\|)\\ for a \\k\\-th
-derivative, which balances the truncation error against the rounding the
-division by \\h^k\\ amplifies. In doubles that is \\6.1 \times 10^{-6}\\
-at first order and \\1.2 \times 10^{-4}\\ at second, both scaling up
-once \\\|\eta_k\|\\ passes 1.
+derivative, which balances the truncation error against the rounding
+that the division by \\h^k\\ amplifies. In doubles that is \\6.1 \times
+10^{-6}\\ at first order and \\1.2 \times 10^{-4}\\ at second, both
+scaling up once \\\|\eta_k\|\\ passes 1.
 
-No clamping happens, and there is nothing to clamp away from. The
-response and parameter steps in distributions7 have to keep a node
-inside a bounded support; the unconstrained scale has no boundary
-anywhere, so `bounds` is left at its default.
+The step is not clamped. The unconstrained scale has no boundary, so the
+`bounds` argument of
+[`numericals7::fd_step()`](https://statmodels7.github.io/numericals7/reference/fd_step.html)
+is left at its default.
 
 ## See also
 

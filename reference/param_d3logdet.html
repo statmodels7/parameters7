@@ -15,7 +15,7 @@ the third derivative is what the movement contracts against."><meta property="og
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,7 +70,7 @@ the third derivative is what the movement contracts against.</p>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Passed to the method. No method in this package reads it.</p></dd>
+<dd><p>Passed to the method. The methods in this package do not read it.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -88,12 +88,11 @@ alternating products
 block of a partition of the index set, with the sign and the multiplicity the
 two rules produce. The Moore-Penrose inverse replaces \(M^{-1}\) for a
 rank-deficient family.</p>
-<p>The expansion is not transcribed anywhere. The methods differentiate the
-derivative arrays <code><a href="param_d1.html">param_d1()</a></code> through <code><a href="param_d4.html">param_d4()</a></code> instead, and
-<code><a href="check_parameter.html">check_parameter()</a></code> holds the result against a numerical differentiation of
-the order below, which shares none of its arithmetic. A twenty-term expansion
-written out by hand is exactly the kind of thing that is wrong and looks
-right.</p>
+<p>The expansion is not written out in the package. Each family in this package
+computes this order without differencing, and the base method on
+<code><a href="matrix_parameter.html">matrix_parameter()</a></code> takes one central difference of <code><a href="param_d2logdet.html">param_d2logdet()</a></code>. A
+written-out expansion has one term per set partition of the indices, five at
+third order, and a transcription of it is easy to get wrong.</p>
     </div>
     <div class="section level2">
     <h2 id="notation">Notation<a class="anchor" aria-label="anchor" href="#notation"></a></h2>
@@ -121,8 +120,7 @@ third derivative of the matrix itself.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         log_scale:z_rho:z_rho             z_rho:z_rho:z_rho </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                  0.000000e+00                  4.454798e+00 </span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># A central difference of the order below agrees, and shares no arithmetic</span></span></span>
-<span class="r-in"><span><span class="co"># with the route the method takes.</span></span></span>
+<span class="r-in"><span><span class="co"># A central difference of the order below agrees.</span></span></span>
 <span class="r-in"><span><span class="va">h</span> <span class="op">&lt;-</span> <span class="fl">1e-4</span></span></span>
 <span class="r-in"><span><span class="va">e</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">h</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">fd</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fu"><a href="param_d2logdet.html">param_d2logdet</a></span><span class="op">(</span><span class="va">s</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.3</span>, <span class="fl">0.8</span><span class="op">)</span> <span class="op">+</span> <span class="va">e</span><span class="op">)</span> <span class="op">-</span></span></span>

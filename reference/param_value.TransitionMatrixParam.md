@@ -3,10 +3,10 @@
 Returns the transition matrix: each row is the softmax of that row's own
 \\K-1\\ free values, through
 [`simplex_point()`](https://statmodels7.github.io/parameters7/reference/simplex_point.md),
-so each row is positive and sums to exactly 1. Nothing is tested and
-nothing is renormalized; the row sums are a property of the map. Rows
-are the distributions, so \\P\_{ij}\\ is the probability of moving from
-state \\i\\ to state \\j\\.
+so each row is non-negative and sums to 1 up to rounding. Nothing is
+tested and nothing is renormalized; the row sums are a property of the
+map. Rows are the distributions, so \\P\_{ij}\\ is the probability of
+moving from state \\i\\ to state \\j\\.
 
 ## Arguments
 
@@ -27,8 +27,8 @@ state \\i\\ to state \\j\\.
 
 ## Value
 
-A \\K \times K\\ numeric matrix with positive entries and rows summing
-to 1, with dimnames `s1`, `s2`, ... on both margins.
+A \\K \times K\\ numeric matrix with non-negative entries and rows
+summing to 1, with dimnames `s1`, `s2`, ... on both margins.
 
 ## See also
 

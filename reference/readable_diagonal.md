@@ -25,8 +25,8 @@ readable_diagonal(links, eta, nm, transform, label)
 - links:
 
   A list of linkfunctions7 links, one per quantity, in the order of the
-  free values they read. `links[[k]]` must be the link of `eta[k]`; the
-  correspondence is positional and is not checked.
+  free values that they read. `links[[k]]` must be the link of `eta[k]`;
+  the correspondence is positional and is not checked.
 
 - eta:
 
@@ -38,8 +38,8 @@ readable_diagonal(links, eta, nm, transform, label)
 
 - transform:
 
-  A character vector naming the scale each interval is built on, the
-  same length as `nm`.
+  A character vector naming the scale on which each interval is built,
+  the same length as `nm`.
 
 - label:
 
@@ -55,6 +55,8 @@ its row names, and is diagonal.
 ## See also
 
 [`param_readable()`](https://statmodels7.github.io/parameters7/reference/param_readable.md)
-for the contract, and
+for the structure of the declaration, and
 [`param_readable.AutoregressiveParam()`](https://statmodels7.github.io/parameters7/reference/param_readable.AutoregressiveParam.md)
-for the one family whose Jacobian is not diagonal.
+and
+[`param_readable.SimplexParam()`](https://statmodels7.github.io/parameters7/reference/param_readable.SimplexParam.md)
+for the two families whose Jacobian is not diagonal.

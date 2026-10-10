@@ -7,9 +7,9 @@ positive **definite** only where the components' null spaces meet at the
 origin, which is the condition `rank` records.
 
 The value is labeled `v1`, `v2`, ..., `vp` on both margins, the
-convention
+convention that
 [`name_dims()`](https://statmodels7.github.io/parameters7/reference/name_dims.md)
-states and every family in the package follows.
+states.
 
 ## Arguments
 

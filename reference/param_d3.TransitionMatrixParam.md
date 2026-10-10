@@ -4,8 +4,7 @@ Closed form, from
 [`simplex()`](https://statmodels7.github.io/parameters7/reference/simplex.md)'s
 cumulant recursion at third order, embedded row by row. A component
 whose three free values do not all belong to one row is exactly the zero
-matrix, so the great majority of the list is zero and is skipped instead
-of computed.
+matrix, so most of the list is zero and is not computed.
 
 ## Arguments
 

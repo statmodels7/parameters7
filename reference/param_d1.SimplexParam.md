@@ -4,9 +4,10 @@ Closed form:
 
 \$\$\partial_b \pi_a = \pi_a(\delta\_{ab} - \pi_b),\$\$
 
-which is the covariance structure of a categorical indicator: the same
-array a multinomial score already carries. Every component sums to zero
-over the category index, \\\sum_a \pi_a\\ being the constant 1.
+which is the covariance structure of a categorical indicator, the same
+array that appears in the score of a multinomial model. Every component
+sums to zero over the category index, \\\sum_a \pi_a\\ being the
+constant 1.
 
 ## Arguments
 

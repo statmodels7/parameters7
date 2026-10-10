@@ -4,12 +4,13 @@ Returns the Toeplitz matrix \\\gamma_0 \rho\_{\lvert i-j \rvert}\\, the
 autocorrelations coming from the Levinson-Durbin recursion of
 [`ar_tables()`](https://statmodels7.github.io/parameters7/reference/ar_tables.md)
 and the marginal variance from the scale link. Positive definite at
-every free vector, the partial autocorrelations being inside \\(-1, 1)\\
-by construction.
+every free vector in exact arithmetic, the partial autocorrelations
+being inside \\(-1, 1)\\ by construction; see
+[`autoregressive()`](https://statmodels7.github.io/parameters7/reference/autoregressive.md)
+for the edge of the chart in double precision.
 
 The cost is the recursion, which is linear in \\p\\, and the filling of
-the matrix: 0.00005 s at \\q = 1, p = 10\\ and 0.00013 s at \\q = 1, p =
-200\\.
+the matrix.
 
 ## Arguments
 

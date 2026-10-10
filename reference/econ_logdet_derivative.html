@@ -15,7 +15,7 @@ passed."><meta property="og:image" content="https://statmodels7.github.io/parame
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -74,9 +74,9 @@ passed.</p>
 
 
 <dt id="arg-terms">terms<a class="anchor" aria-label="anchor" href="#arg-terms"></a></dt>
-<dd><p>The affine-logarithm terms of \(q\), as
-<code><a href="cs_logdet_terms.html">cs_logdet_terms()</a></code> or <code><a href="ar1_logdet_terms.html">ar1_logdet_terms()</a></code> returns them; see
-<code><a href="log_affine_derivs.html">log_affine_derivs()</a></code>.</p></dd>
+<dd><p>A function of the second free value and the order that returns
+the order-th derivative of \(q\) in that free value, as
+<code><a href="cs_logdet_chain.html">cs_logdet_chain()</a></code> and <code><a href="ar1_logdet_chain.html">ar1_logdet_chain()</a></code> do.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -97,9 +97,9 @@ order.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="log_affine_derivs.html">log_affine_derivs()</a></code> for the correlation's chain, <code><a href="econ_scalars.html">econ_scalars()</a></code>
-for the two links' derivatives, and <code><a href="econ_derivative.html">econ_derivative()</a></code>, its counterpart for
-the matrix itself.</p></div>
+    <div class="dont-index"><p><code><a href="cs_logdet_chain.html">cs_logdet_chain()</a></code> and <code><a href="ar1_logdet_chain.html">ar1_logdet_chain()</a></code> for the correlation's
+chain, <code><a href="econ_scalars.html">econ_scalars()</a></code> for the scale's link derivatives, and
+<code><a href="econ_derivative.html">econ_derivative()</a></code>, its counterpart for the matrix itself.</p></div>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

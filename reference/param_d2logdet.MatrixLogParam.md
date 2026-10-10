@@ -6,13 +6,13 @@ linear in the free vector, so its second derivative vanishes at every
 
 As with
 [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md),
-that means this family cannot exercise the order: a check of a
-log-determinant Hessian against a numerical reference passes here
-whatever is missing.
-[`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md)
-and
+the order is zero for this family, so a test of a general
+log-determinant Hessian has nothing to compare here.
+[`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md),
 [`compound_symmetry()`](https://statmodels7.github.io/parameters7/reference/compound_symmetry.md)
-are where it has content.
+and
+[`correlation_matrix()`](https://statmodels7.github.io/parameters7/reference/correlation_matrix.md)
+are families where it is not zero.
 
 ## Arguments
 

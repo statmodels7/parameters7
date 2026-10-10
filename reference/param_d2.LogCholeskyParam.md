@@ -12,10 +12,9 @@ again. A below-diagonal value enters \\L\\ linearly, so any second
 derivative touching one of those drops the outer terms and leaves the
 two cross products.
 
-One consequence is worth knowing when reading a result: \\M\\ is
-quadratic in each below-diagonal free value, so the component keyed by
-that value twice is a constant in \\\eta\\, and every third and fourth
-derivative repeating it is exactly zero.
+\\M\\ is quadratic in each below-diagonal free value, so the component
+keyed by that value twice is a constant in \\\eta\\, and every third and
+fourth derivative repeating it is exactly zero.
 
 ## Arguments
 

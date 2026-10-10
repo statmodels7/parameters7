@@ -19,7 +19,7 @@ covariance is parametrized this way."><meta property="og:image" content="https:/
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.22.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,7 +76,7 @@ covariance is parametrized this way.</p>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Passed to the method. No method in this package reads it.</p></dd>
+<dd><p>Passed to the method. The methods in this package do not read it.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -89,13 +89,13 @@ value, symmetric for a matrix family.</p>
     <h2 id="keys-and-their-order">Keys and their order<a class="anchor" aria-label="anchor" href="#keys-and-their-order"></a></h2>
     <p>The list is keyed by <code><a href="param_tuple_names.html">param_tuple_names()</a></code>, which puts the \(d\) diagonal
 pairs first and then the \(d(d-1)/2\) off-diagonal ones in lexicographic
-order. Diagonal first is what a consumer filling a Hessian wants, and the
-ordering is part of the interface: <code><a href="param_tuple_indices.html">param_tuple_indices()</a></code> returns the index
+order. The diagonal pairs come first because a Hessian is filled that way,
+and the ordering is part of the interface: <code><a href="param_tuple_indices.html">param_tuple_indices()</a></code> returns the index
 pairs in exactly the same order, so a caller can walk the two together.</p>
 <p>Both come from one enumeration, and neither is produced by taking a key
-apart. Splitting <code>"log_L1:log_L2"</code> on <code>":"</code> looks equivalent and is not: a
-free value whose own label contains the separator splits into the wrong
-number of pieces, and the failure is silent.</p>
+apart. Splitting <code>"log_L1:log_L2"</code> on <code>":"</code> would give the wrong number of
+pieces whenever a free name contains the separator, and no error would be
+signaled.</p>
     </div>
     <div class="section level2">
     <h2 id="exact-or-one-stencil">Exact, or one stencil<a class="anchor" aria-label="anchor" href="#exact-or-one-stencil"></a></h2>
@@ -106,8 +106,8 @@ once, in the other index. Where <code><a href="param_d1.html">param_d1()</a></co
 <code><a href="param_value.html">param_value()</a></code> directly: a three-point second difference where the two
 indices coincide, and one difference in each of the two components where they
 differ. A mixed derivative in two different variables is one stencil however
-it is written; the nesting the toolkit forbids is two differences in the same
-variable.</p>
+it is written; the nesting that the package avoids is two differences in the
+same variable.</p>
     </div>
     <div class="section level2">
     <h2 id="notation">Notation<a class="anchor" aria-label="anchor" href="#notation"></a></h2>

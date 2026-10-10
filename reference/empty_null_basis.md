@@ -1,10 +1,11 @@
 # No Null Space
 
 The empty basis a full-rank family declares. Every family whose value is
-positive definite at every free vector passes this to its
+positive definite at every free vector passes this, or an equal empty
+matrix, to its
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
 constructor. The validator's shape rule, `dimension` by
-`dimension - rank`, asks for exactly this when `rank` is `dimension`.
+`dimension - rank`, requires exactly this when `rank` is `dimension`.
 
 ## Usage
 

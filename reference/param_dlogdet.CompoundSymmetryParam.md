@@ -37,22 +37,27 @@ A named numeric vector of `order + 1` entries, keyed as
 The scale's chain is \\p\\ times the derivatives of \\\log h\\, which
 under the default log link is \\p\\ at first order and 0 above it. The
 correlation's is
-[`log_affine_derivs()`](https://statmodels7.github.io/parameters7/reference/log_affine_derivs.md)
-on the two terms of
-[`cs_logdet_terms()`](https://statmodels7.github.io/parameters7/reference/cs_logdet_terms.md),
-chained onto the bounded link.
+[`cs_logdet_chain()`](https://statmodels7.github.io/parameters7/reference/cs_logdet_chain.md),
+the derivatives of \\q\\ in the second free value written in closed form
+in the logistic function of that value, so that they stay accurate where
+the correlation rounds to one of its bounds.
 
 The four methods return vectors of `order + 1` entries, keyed by the
 tuple names of their own order. At \\p = 4\\ and \\\eta = (\log 2,
 0.8)\\ the second order is \\(0, -0.856, 0)\\ over
 `log_scale:log_scale`, `logit_rho:logit_rho` and `log_scale:logit_rho`:
-the first zero from the log link and the last from the separability.
+the first zero comes from the log link and the last from the
+separability.
 
 Unlike
 [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md),
 where the whole log-determinant is linear, the correlation's chain is
-non-zero at all four orders, so this family is one of the two where a
-check of the higher orders has content.
+non-zero at all four orders, so a check of the higher orders compares
+non-zero numbers for this family, as for
+[`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md),
+[`autoregressive()`](https://statmodels7.github.io/parameters7/reference/autoregressive.md)
+and
+[`correlation_matrix()`](https://statmodels7.github.io/parameters7/reference/correlation_matrix.md).
 
 ## See also
 

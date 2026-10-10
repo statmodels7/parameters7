@@ -2,9 +2,12 @@
 
 The S7 class of a fixed symmetric positive semidefinite matrix \\P\\
 carried by a single positive scale, \\M(\eta) = h(\eta) P\\. It is the
-only family in the package that is routinely **rank deficient**: \\P\\
-may be a difference penalty or a basis Gram matrix with a genuine null
-space, and the class records that rank and null basis at construction.
+family through which a **rank-deficient** matrix usually enters the
+package
+([`sum_struct()`](https://statmodels7.github.io/parameters7/reference/sum_struct.md)
+also accepts a deficient sum): \\P\\ may be a difference penalty or a
+basis Gram matrix with a genuine null space, and the class records that
+rank and null basis at construction.
 
 [`scaled_matrix()`](https://statmodels7.github.io/parameters7/reference/scaled_matrix.md)
 builds one. With `link = NULL` the object holds \\P\\ itself and has no
@@ -39,7 +42,7 @@ ScaledMatrixParam(
 - free_names:
 
   A character vector of length `n_free`, one label per free value, in
-  the order the free vector holds them. Must be unique.
+  the order in which the free vector holds them. Must be unique.
 
 - param_params:
 
@@ -53,7 +56,7 @@ ScaledMatrixParam(
 
 - rank:
 
-  The rank of the matrix the family produces, a single integer in
+  The rank of the matrix that the family produces, a single integer in
   `0:dimension`. It is a property of the family, so a family whose value
   is positive definite at every \\\eta\\ declares \\p\\ here.
 
@@ -63,8 +66,7 @@ ScaledMatrixParam(
   an orthonormal basis of the common null space. Use
   [`param_null_basis()`](https://statmodels7.github.io/parameters7/reference/param_null_basis.md)
   to obtain one, or `matrix(numeric(0), dimension, 0)` for a full-rank
-  family. The validator rejects any other shape, and reports both the
-  rank and the shape when the two disagree.
+  family. The validator rejects any other shape.
 
 ## Value
 
@@ -80,7 +82,7 @@ pseudo-determinant of \\P\\ computed once at construction. `n_free` is
 [`scaled_matrix()`](https://statmodels7.github.io/parameters7/reference/scaled_matrix.md),
 the constructor, and
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
-for the properties this inherits.
+for the properties that this class inherits.
 
 ## Examples
 
@@ -91,7 +93,8 @@ c(S7::S7_inherits(r, ScaledMatrixParam), rank = r@rank, n_free = r@n_free)
 #>          rank n_free 
 #>      1      3      1 
 
-# A second-difference penalty is deficient by two, and says so.
+# A second-difference penalty is deficient by two, and the object records
+# the rank.
 q <- scaled_matrix(crossprod(diff(diag(6), differences = 2)))
 c(dimension = q@dimension, rank = q@rank, null = ncol(q@null_basis))
 #> dimension      rank      null 

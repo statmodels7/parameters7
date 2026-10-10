@@ -1,6 +1,6 @@
 # Default Third Log-Determinant Derivatives
 
-The method every
+The method that every
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
 inherits when it registers no
 [`param_d3logdet()`](https://statmodels7.github.io/parameters7/reference/param_d3logdet.md)
@@ -43,7 +43,7 @@ per tuple.
 A numeric vector of `choose(s@n_free + 2, 3)` entries, keyed as
 `param_tuple_names(s, 3)` and in that order.
 
-## How accurate it is depends on the family, not on this method
+## Accuracy
 
 [`param_d2logdet()`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.md)
 is an exact identity **given** the matrix derivative arrays, so
@@ -51,20 +51,22 @@ differencing it is a single numerical layer whenever
 [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md)
 and
 [`param_d2()`](https://statmodels7.github.io/parameters7/reference/param_d2.md)
-are analytic. Measured on a \\4 \times 4\\ AR(1) covariance with
-analytic arrays, the answer agrees with the closed form to \\3 \times
-10^{-10}\\ on entries of size 4.5.
+are analytic.
 
-Where the arrays are themselves numerical the layers would compound, and
-the method refuses instead of answering: the same measurement gives \\8
-\times 10^{-3}\\, a relative error near two parts in a thousand, and
-nothing downstream could tell that number from the accurate one.
+A family's own
+[`param_d2logdet()`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.md)
+is exact, and differencing it is a single layer too. Where the
+base-class
+[`param_d2logdet()`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.md)
+reads numerical arrays the layers would compound, and the method signals
+an error instead of returning a value;
 [`check_analytic_arrays()`](https://statmodels7.github.io/parameters7/reference/check_analytic_arrays.md)
-is the guard, and a family that needs this order should write
+is the guard. A family that needs this order writes
 [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md)
 and
 [`param_d2()`](https://statmodels7.github.io/parameters7/reference/param_d2.md)
-out, which recovers the \\10^{-10}\\.
+out, or its own
+[`param_d2logdet()`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.md).
 
 ## See also
 

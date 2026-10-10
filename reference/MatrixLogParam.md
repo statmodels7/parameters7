@@ -2,15 +2,15 @@
 
 The S7 class of unstructured symmetric positive definite matrices in the
 matrix logarithm parametrization, \\M = \exp(S)\\ with \\S\\ symmetric
-and its lower triangle read straight off the free vector. It is the
-other chart onto the same cone
+and its lower triangle read straight off the free vector. It is a second
+chart onto the cone that
 [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
-parametrizes, with a different set of quantities coming free.
+parametrizes, with different quantities in closed form.
 
 [`matrix_log()`](https://statmodels7.github.io/parameters7/reference/matrix_log.md)
-builds one. Every quantity is exact, and every derivative goes through
-the eigendecomposition of \\S\\, so the object holds no auxiliary data
-at all.
+builds one. Every quantity is exact, and every derivative is computed
+through the eigendecomposition of \\S\\. The object stores only the
+positions of the free values in `param_params$positions`.
 
 ## Usage
 
@@ -40,7 +40,7 @@ MatrixLogParam(
 - free_names:
 
   A character vector of length `n_free`, one label per free value, in
-  the order the free vector holds them. Must be unique.
+  the order in which the free vector holds them. Must be unique.
 
 - param_params:
 
@@ -54,7 +54,7 @@ MatrixLogParam(
 
 - rank:
 
-  The rank of the matrix the family produces, a single integer in
+  The rank of the matrix that the family produces, a single integer in
   `0:dimension`. It is a property of the family, so a family whose value
   is positive definite at every \\\eta\\ declares \\p\\ here.
 
@@ -64,8 +64,7 @@ MatrixLogParam(
   an orthonormal basis of the common null space. Use
   [`param_null_basis()`](https://statmodels7.github.io/parameters7/reference/param_null_basis.md)
   to obtain one, or `matrix(numeric(0), dimension, 0)` for a full-rank
-  family. The validator rejects any other shape, and reports both the
-  rank and the shape when the two disagree.
+  family. The validator rejects any other shape.
 
 ## Value
 
@@ -82,7 +81,7 @@ the constructor,
 [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
 for the other unstructured chart, and
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
-for the properties this inherits.
+for the properties that this class inherits.
 
 ## Examples
 

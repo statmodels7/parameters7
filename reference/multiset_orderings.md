@@ -24,12 +24,11 @@ A list of `factorial(length(v))` integer vectors.
 
 ## Details
 
-The distinction is load bearing, and its cost is measured. The cyclic
-sum behind the log-determinant expansion runs over \\(n-1)!\\ orderings,
-and two that happen to be equal still count twice; deduplicating them
-leaves a third derivative in one weight too small by exactly 2 and a
-fourth by exactly 6, which is \\2!\\ and \\3!\\, the orderings of the
-tail. Both are numbers a reader would accept without noticing.
+The cyclic sum behind the log-determinant expansion runs over \\(n-1)!\\
+orderings, and two that happen to be equal still count twice. Counting
+them once would make the trace term whose indices are all equal too
+small by the factors \\2!\\ and \\3!\\, the numbers of orderings of the
+tail at third and fourth order.
 
 ## See also
 

@@ -2,7 +2,7 @@
 
 Returns \\P(\rho)\_{ij} = \rho^{\|i-j\|}\\, the correlation pattern of
 an AR(1) matrix, together with its derivatives in the second free value
-to the order the scalars carry. Each entry is a **power** of the
+to the order that the scalars carry. Each entry is a **power** of the
 correlation, so unlike
 [`cs_pattern()`](https://statmodels7.github.io/parameters7/reference/cs_pattern.md)'s
 the pattern is not linear and each order needs a genuine chain:
@@ -34,8 +34,9 @@ ar1_pattern(s, sc)
 ## Value
 
 A list of `s@dimension` by `s@dimension` matrices, one more than the
-derivatives `sc` carries: the pattern at index 1 and its derivatives at
-the following indices, each derivative with a zero diagonal.
+number of derivatives that `sc` carries: the pattern at index 1 and its
+derivatives at the following indices, each derivative with a zero
+diagonal.
 
 ## Details
 

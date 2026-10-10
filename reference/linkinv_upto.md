@@ -1,9 +1,9 @@
 # A Link Inverse and Its Derivatives, to a Given Order
 
-Returns \\g^{-1}(\eta)\\ and its derivatives of orders 1 to `order`, the
-seed every family composes its map from. Each order is one call of the
-link's own generic (`dlinkinv()` to `d4linkinv()`), and no order above
-`order` is evaluated.
+Returns \\g^{-1}(\eta)\\ and its derivatives of orders 1 to `order`,
+from which the families built on a link compose their maps. Each order
+is one call of the link's own generic (`dlinkinv()` to `d4linkinv()`),
+and the orders above `order` are not evaluated.
 
 ## Usage
 

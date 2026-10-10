@@ -37,14 +37,17 @@ corr_derivative(s, eta, order)
 
 A list of `choose(s@n_free + order - 1, order)` symmetric matrices keyed
 as `param_tuple_names(s, order)` and in that order, each `s@dimension`
-by `s@dimension` with a zero diagonal.
+by `s@dimension` with a diagonal of exact zeros.
 
 ## Details
 
 Every term of the Leibniz sum whose factor derivative is `NULL` is
-skipped, and most are: a multiset spanning two rows of \\L\\ contributes
-nothing. The diagonal of the result is zero at every order above zero,
-the diagonal of \\R\\ being the constant 1.
+skipped: a multiset spanning two rows of \\L\\ contributes nothing. The
+diagonal of \\R\\ is the constant 1, so the diagonal of every derivative
+is zero; the Leibniz sum gives it up to rounding, and it is then set to
+exactly 0, as
+[`param_value.CorrelationParam()`](https://statmodels7.github.io/parameters7/reference/param_value.CorrelationParam.md)
+sets the diagonal of \\R\\ to exactly 1.
 
 ## See also
 
