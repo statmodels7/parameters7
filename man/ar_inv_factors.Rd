@@ -38,8 +38,9 @@ differentiating in a partial autocorrelation that the order does not reach
 is exactly zero.
 
 \eqn{\tau_t = 1/v_t} is a product of one factor per free value:
-\eqn{1/v_0} from the scale, and \eqn{(1-r_j^2)^{-1}} from each partial
-autocorrelation that the prediction at \eqn{t} has reached. A mixed derivative of
+\eqn{1/v_0} from the scale, and \eqn{(1-r_j^2)^{-1} = \cosh^2 z_j} from
+each partial autocorrelation that the prediction at \eqn{t} has reached,
+differentiated in \eqn{z_j} by \code{\link[=cosh2_derivs]{cosh2_derivs()}}. A mixed derivative of
 a product of univariate factors is the product of their own derivatives, and
 it is exactly zero whenever it differentiates in a factor that row does not
 carry.

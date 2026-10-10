@@ -13,8 +13,8 @@ checked by the generic.}
 }
 \value{
 A list of \code{choose(s@n_free + 3, 4)} symmetric matrices keyed as
-\code{param_tuple_names(s, 4)} and in that order, each with a diagonal that is
-zero up to rounding.
+\code{param_tuple_names(s, 4)} and in that order, each with a diagonal of
+exact zeros.
 }
 \description{
 Closed form, the Leibniz rule with four differentiations distributed over the
@@ -25,7 +25,7 @@ trigonometric tables that \code{\link[=corr_tables]{corr_tables()}} has already 
 \code{\link[=corr_dfactor]{corr_dfactor()}}'s vanishing rules do most of the work. A quadruple spanning
 three rows of \eqn{L} contributes nothing at all, since a Leibniz term splits
 the four indices between two factors and each factor must stay within one row.
-The diagonal is zero up to rounding.
+The diagonal is exactly zero.
 }
 \seealso{
 \code{\link[=corr_derivative]{corr_derivative()}}, which assembles it,

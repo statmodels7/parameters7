@@ -53,17 +53,19 @@ The value is a \strong{product} of a function of the first free value and a
 matrix function of the second, so a component with \eqn{a} scale indices and
 \eqn{b} correlation indices is \eqn{(\partial^a\tau)(\partial^b G)} and no
 mixed expansion is needed. The scale factor is the reciprocal of the link's
-inverse, chained through \eqn{x\mapsto x^{-1}}; the pattern's three distinct
-entries are written in \eqn{w} alone,
+inverse, chained through \eqn{x\mapsto x^{-1}}. Under the rhobit link,
+with \eqn{\rho = \tanh z}, the pattern's three distinct entries are
+\eqn{G_{11} = w = \cosh^2 z}, \eqn{G_{ii} = 2w - 1 = \cosh 2z} and
+\eqn{G_{i,i\pm1} = -\tfrac{1}{2}\sinh 2z}, so their derivatives in \eqn{z}
+are written out directly,
 
-\deqn{w^{(k)} = \frac{k!}{2}\left\{(1-\rho)^{-(k+1)}
-  + (-1)^k (1+\rho)^{-(k+1)}\right\},}
+\deqn{w^{(k)} = 2^{k-1}\sinh 2z \;(k \text{ odd}), \qquad
+  w^{(k)} = 2^{k-1}\cosh 2z \;(k \text{ even}),}
 
-with \eqn{G_{11}^{(k)} = w^{(k)}}, \eqn{G_{ii} = 2w - 1} so
-\eqn{G_{ii}^{(k)} = 2w^{(k)}} above order zero, and
-\eqn{G_{i,i\pm1}^{(k)} = -(\rho\,w^{(k)} + k\,w^{(k-1)})} by the Leibniz
-rule. Each is then chained onto the free value through the correlation's
-link.
+with \eqn{G_{ii}^{(k)} = 2w^{(k)}} above order zero and
+\eqn{G_{i,i\pm1}^{(k)} = -\tfrac{1}{2}w^{(k+1)}}. No difference
+\eqn{1 - \rho^2} is formed, so the derivatives keep their accuracy where
+\eqn{\rho} rounds to \eqn{-1} or 1.
 
 This is what the family adds over \code{inverse_of(ar1(p))}, which reaches the
 same numbers through the ordered-block-partition sum. There a fourth-order
@@ -81,8 +83,8 @@ four orders are \code{\link[=ar1]{ar1()}}'s negated, and the closed form
 \section{Notation}{
 
 \eqn{p} is the matrix side, \eqn{\sigma^2} the AR(1) process's variance,
-\eqn{\rho} its lag-one correlation, \eqn{\tau = \sigma^{-2}} and
-\eqn{w = (1-\rho^2)^{-1}}.
+\eqn{\rho = \tanh z} its lag-one correlation, \eqn{\tau = \sigma^{-2}} and
+\eqn{w = (1-\rho^2)^{-1} = \cosh^2 z}.
 }
 
 \examples{

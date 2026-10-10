@@ -16,8 +16,7 @@ corr_derivative(s, eta, order)
 \value{
 A list of \code{choose(s@n_free + order - 1, order)} symmetric matrices
 keyed as \code{param_tuple_names(s, order)} and in that order, each
-\code{s@dimension} by \code{s@dimension} with a diagonal that is zero up to
-rounding.
+\code{s@dimension} by \code{s@dimension} with a diagonal of exact zeros.
 }
 \description{
 Assembles a whole derivative order of \eqn{R = LL^\top} by the Leibniz rule,
@@ -28,8 +27,9 @@ tables of \code{\link[=corr_tables]{corr_tables()}}. The four methods \code{\lin
 \details{
 Every term of the Leibniz sum whose factor derivative is \code{NULL} is skipped: a
 multiset spanning two rows of \eqn{L} contributes nothing. The diagonal of
-the result is zero up to rounding at every order above zero, the diagonal of
-\eqn{R} being the constant 1.
+\eqn{R} is the constant 1, so the diagonal of every derivative is zero; the
+Leibniz sum gives it up to rounding, and it is then set to exactly 0, as
+\code{\link[=param_value.CorrelationParam]{param_value.CorrelationParam()}} sets the diagonal of \eqn{R} to exactly 1.
 }
 \seealso{
 \code{\link[=corr_dfactor]{corr_dfactor()}} for the factor's derivatives, \code{\link[=leibniz_gram]{leibniz_gram()}} for

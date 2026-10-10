@@ -4,18 +4,18 @@
 \alias{ar1_inv_pattern}
 \title{The Pattern of an Inverse AR(1) Parameter}
 \usage{
-ar1_inv_pattern(s, sc)
+ar1_inv_pattern(s, z, order)
 }
 \arguments{
 \item{s}{An \code{\link[=Ar1InvParam]{Ar1InvParam()}} object, whose \code{dimension} supplies \eqn{p}.}
 
-\item{sc}{The scalars of \code{\link[=econ_scalars]{econ_scalars()}} read on the inner \code{\link[=ar1]{ar1()}}, whose
-\code{rho} entry supplies the correlation and its link's derivatives.}
+\item{z}{The second free value.}
+
+\item{order}{The highest derivative order wanted, from 0 to 4.}
 }
 \value{
-A list of \code{s@dimension} square matrices, one more than the number of
-derivatives that \code{sc} carries: the pattern and its derivatives in the second
-free value.
+A list of \code{order + 1} square matrices of side \code{s@dimension}: the
+pattern and its derivatives in the second free value.
 }
 \description{
 Returns \eqn{G(\rho)}, the tridiagonal correlation pattern of the precision
@@ -24,11 +24,12 @@ order that the scalars carry.
 }
 \details{
 The three distinct entries are \eqn{w}, \eqn{2w-1} and \eqn{-\rho w} for
-\eqn{w = (1-\rho^2)^{-1}}, so one sequence of derivatives of \eqn{w} in
-\eqn{\rho} serves all three. Writing \eqn{w} by partial fractions as
-\eqn{\tfrac{1}{2}\{(1-\rho)^{-1} + (1+\rho)^{-1}\}} makes every order an
-exact expression, with no repeated quotient rule, and it is finite throughout
-\eqn{|\rho| < 1}, which the rhobit link guarantees in exact arithmetic.
+\eqn{w = (1-\rho^2)^{-1}}. Under the rhobit link, with \eqn{\rho = \tanh z},
+they are \eqn{\cosh^2 z}, \eqn{\cosh 2z} and \eqn{-\tfrac{1}{2}\sinh 2z},
+so one sequence of derivatives of \eqn{w} in \eqn{z}, from
+\code{\link[=cosh2_derivs]{cosh2_derivs()}}, serves all three: the second is \eqn{2w^{(k)}} above
+order zero and the third is \eqn{-\tfrac{1}{2}w^{(k+1)}}. Nothing is
+chained through the link and no difference \eqn{1 - \rho^2} is formed.
 }
 \seealso{
 \code{\link[=ar1_inv]{ar1_inv()}} for the formulas and \code{ar1_pattern()} for the

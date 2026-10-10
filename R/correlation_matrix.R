@@ -495,8 +495,9 @@ S7::method(param_free, CorrelationParam) <- function(s, m, ...) {
 #' @details
 #' Every term of the Leibniz sum whose factor derivative is `NULL` is skipped: a
 #' multiset spanning two rows of \eqn{L} contributes nothing. The diagonal of
-#' the result is zero up to rounding at every order above zero, the diagonal of
-#' \eqn{R} being the constant 1.
+#' \eqn{R} is the constant 1, so the diagonal of every derivative is zero; the
+#' Leibniz sum gives it up to rounding, and it is then set to exactly 0, as
+#' [param_value.CorrelationParam()] sets the diagonal of \eqn{R} to exactly 1.
 #'
 #' @param s A [CorrelationParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`.
@@ -504,8 +505,7 @@ S7::method(param_free, CorrelationParam) <- function(s, m, ...) {
 #'
 #' @return A list of `choose(s@n_free + order - 1, order)` symmetric matrices
 #'   keyed as `param_tuple_names(s, order)` and in that order, each
-#'   `s@dimension` by `s@dimension` with a diagonal that is zero up to
-#'   rounding.
+#'   `s@dimension` by `s@dimension` with a diagonal of exact zeros.
 #'
 #' @seealso [corr_dfactor()] for the factor's derivatives, [leibniz_gram()] for
 #'   the sum, and [chol_leibniz()], the same construction for the log-Cholesky
@@ -517,7 +517,9 @@ corr_derivative <- function(s, eta, order) {
   dfac <- function(ks) corr_dfactor(s, tb, ks)
   idx <- param_tuple_indices(s, order)
   out <- lapply(idx, function(t) {
-    name_dims(leibniz_gram(dfac, t, s@dimension), s)
+    m <- leibniz_gram(dfac, t, s@dimension)
+    diag(m) <- 0
+    name_dims(m, s)
   })
   stats::setNames(out, param_tuple_names(s, order))
 }
@@ -534,7 +536,7 @@ corr_derivative <- function(s, eta, order) {
 #' the angles: differentiating an entry of \eqn{L} replaces one sine or cosine
 #' factor by its own derivative in the free value.
 #'
-#' The diagonal of every component is zero up to rounding, the diagonal of
+#' The diagonal of every component is exactly zero, the diagonal of
 #' \eqn{R} being the constant 1. Angle \eqn{\theta_{ij}} belongs to row \eqn{i}, so
 #' \eqn{\partial_k L} is supported on that row alone, though
 #' \eqn{\partial_k R} is not.
@@ -543,8 +545,7 @@ corr_derivative <- function(s, eta, order) {
 #'   checked by the generic.
 #' @param ... Unused, and accepted so the signature matches the generic's.
 #' @return A list of `s@n_free` symmetric matrices named by `s@free_names`, each
-#'   `s@dimension` by `s@dimension` with a diagonal that is zero up to
-#'   rounding.
+#'   `s@dimension` by `s@dimension` with a diagonal of exact zeros.
 #' @seealso [corr_derivative()], which assembles it, [corr_tables()] for the
 #'   trigonometric derivatives, and [param_d2.CorrelationParam()] for the order
 #'   above.
@@ -568,14 +569,14 @@ S7::method(param_d1, CorrelationParam) <- function(s, eta, ...) {
 #' outer terms drop, but \eqn{L_k L_l^\top + L_l L_k^\top} is supported on
 #' the entries \eqn{(i, j)} and \eqn{(j, i)}. It is zero even there when the
 #' two angles lie beyond the columns that the two rows share. The diagonal is
-#' zero up to rounding at every order.
+#' exactly zero at every order.
 #' @param s A [CorrelationParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic.
 #' @param ... Unused, and accepted so the signature matches the generic's.
 #' @return A list of `choose(s@n_free + 1, 2)` symmetric matrices keyed as
-#'   `param_tuple_names(s)` and in that order, each with a diagonal that is
-#'   zero up to rounding.
+#'   `param_tuple_names(s)` and in that order, each with a diagonal of exact
+#'   zeros.
 #' @seealso [corr_derivative()], which assembles it, [corr_dfactor()] for the
 #'   vanishing rules, and [param_d1.CorrelationParam()] for the order below.
 #' @keywords internal
@@ -594,14 +595,14 @@ S7::method(param_d2, CorrelationParam) <- function(s, eta, ...) {
 #'
 #' The angles reach the free scale through a bounded link, so the chain to third
 #' order is [compose_order()]'s and the accuracy is the link's; nothing is
-#' differenced. The diagonal is zero up to rounding.
+#' differenced. The diagonal is exactly zero.
 #' @param s A [CorrelationParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic.
 #' @param ... Unused, and accepted so the signature matches the generic's.
 #' @return A list of `choose(s@n_free + 2, 3)` symmetric matrices keyed as
-#'   `param_tuple_names(s, 3)` and in that order, each with a diagonal that is
-#'   zero up to rounding.
+#'   `param_tuple_names(s, 3)` and in that order, each with a diagonal of
+#'   exact zeros.
 #' @seealso [corr_derivative()], which assembles it, and
 #'   [param_d4.CorrelationParam()] for the order above.
 #' @keywords internal
@@ -620,14 +621,14 @@ S7::method(param_d3, CorrelationParam) <- function(s, eta, ...) {
 #' [corr_dfactor()]'s vanishing rules do most of the work. A quadruple spanning
 #' three rows of \eqn{L} contributes nothing at all, since a Leibniz term splits
 #' the four indices between two factors and each factor must stay within one row.
-#' The diagonal is zero up to rounding.
+#' The diagonal is exactly zero.
 #' @param s A [CorrelationParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic.
 #' @param ... Unused, and accepted so the signature matches the generic's.
 #' @return A list of `choose(s@n_free + 3, 4)` symmetric matrices keyed as
-#'   `param_tuple_names(s, 4)` and in that order, each with a diagonal that is
-#'   zero up to rounding.
+#'   `param_tuple_names(s, 4)` and in that order, each with a diagonal of
+#'   exact zeros.
 #' @seealso [corr_derivative()], which assembles it,
 #'   [param_d3.CorrelationParam()] for the order below, and [numerical_d4()] for
 #'   the alternative.

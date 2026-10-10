@@ -67,17 +67,19 @@ Ar1InvParam <- S7::new_class("Ar1InvParam", parent = InverseParam)
 #' matrix function of the second, so a component with \eqn{a} scale indices and
 #' \eqn{b} correlation indices is \eqn{(\partial^a\tau)(\partial^b G)} and no
 #' mixed expansion is needed. The scale factor is the reciprocal of the link's
-#' inverse, chained through \eqn{x\mapsto x^{-1}}; the pattern's three distinct
-#' entries are written in \eqn{w} alone,
+#' inverse, chained through \eqn{x\mapsto x^{-1}}. Under the rhobit link,
+#' with \eqn{\rho = \tanh z}, the pattern's three distinct entries are
+#' \eqn{G_{11} = w = \cosh^2 z}, \eqn{G_{ii} = 2w - 1 = \cosh 2z} and
+#' \eqn{G_{i,i\pm1} = -\tfrac{1}{2}\sinh 2z}, so their derivatives in \eqn{z}
+#' are written out directly,
 #'
-#' \deqn{w^{(k)} = \frac{k!}{2}\left\{(1-\rho)^{-(k+1)}
-#'   + (-1)^k (1+\rho)^{-(k+1)}\right\},}
+#' \deqn{w^{(k)} = 2^{k-1}\sinh 2z \;(k \text{ odd}), \qquad
+#'   w^{(k)} = 2^{k-1}\cosh 2z \;(k \text{ even}),}
 #'
-#' with \eqn{G_{11}^{(k)} = w^{(k)}}, \eqn{G_{ii} = 2w - 1} so
-#' \eqn{G_{ii}^{(k)} = 2w^{(k)}} above order zero, and
-#' \eqn{G_{i,i\pm1}^{(k)} = -(\rho\,w^{(k)} + k\,w^{(k-1)})} by the Leibniz
-#' rule. Each is then chained onto the free value through the correlation's
-#' link.
+#' with \eqn{G_{ii}^{(k)} = 2w^{(k)}} above order zero and
+#' \eqn{G_{i,i\pm1}^{(k)} = -\tfrac{1}{2}w^{(k+1)}}. No difference
+#' \eqn{1 - \rho^2} is formed, so the derivatives keep their accuracy where
+#' \eqn{\rho} rounds to \eqn{-1} or 1.
 #'
 #' This is what the family adds over `inverse_of(ar1(p))`, which reaches the
 #' same numbers through the ordered-block-partition sum. There a fourth-order
@@ -93,8 +95,8 @@ Ar1InvParam <- S7::new_class("Ar1InvParam", parent = InverseParam)
 #'
 #' @section Notation:
 #' \eqn{p} is the matrix side, \eqn{\sigma^2} the AR(1) process's variance,
-#' \eqn{\rho} its lag-one correlation, \eqn{\tau = \sigma^{-2}} and
-#' \eqn{w = (1-\rho^2)^{-1}}.
+#' \eqn{\rho = \tanh z} its lag-one correlation, \eqn{\tau = \sigma^{-2}} and
+#' \eqn{w = (1-\rho^2)^{-1} = \cosh^2 z}.
 #'
 #' @param dimension The side of the matrix, at least 2.
 #' @param link_scale The link carrying the AR(1) process's variance, passed to
@@ -169,43 +171,35 @@ recip_derivs <- function(v) {
 #' Derivatives of the Reciprocal of One Minus a Squared Correlation
 #'
 #' @description
-#' Returns the value and four derivatives of
-#' \eqn{\eta \mapsto w = (1 - \rho(\eta)^2)^{-1}}, the quantity every inverse
-#' autoregression is written in: it is the reciprocal of the innovation
-#' variance's share at one lag, and it multiplies every entry of an inverse
-#' AR(1) and every diagonal of an inverse AR(\eqn{q}).
+#' Returns the value and the derivatives to order `order` of
+#' \eqn{w = (1 - \rho^2)^{-1}} in the free value \eqn{z}, for
+#' \eqn{\rho = \tanh z} under the rhobit link. \eqn{w} is the quantity every
+#' inverse autoregression is written in: it is the reciprocal of the
+#' innovation variance's share at one lag, and it multiplies every entry of an
+#' inverse AR(1) and every diagonal of an inverse AR(\eqn{q}).
 #'
 #' @details
-#' Since \eqn{w = \tfrac{1}{2}\{(1-\rho)^{-1} + (1+\rho)^{-1}\}} by partial
-#' fractions, every order has an exact expression, with no repeated quotient
-#' rule,
+#' Under the rhobit link \eqn{w = \cosh^2 z = (1 + \cosh 2z)/2}, so every
+#' order is elementary: \eqn{w^{(k)} = 2^{k-1}\sinh 2z} for odd \eqn{k} and
+#' \eqn{2^{k-1}\cosh 2z} for even \eqn{k}. Written in \eqn{z}, no difference
+#' \eqn{1 - \rho^2} is formed, and the result keeps its accuracy where
+#' \eqn{\rho} rounds to \eqn{-1} or 1.
 #'
-#' \deqn{w^{(k)} = \frac{k!}{2}\left\{(1-\rho)^{-(k+1)}
-#'   + (-1)^k (1+\rho)^{-(k+1)}\right\},}
+#' @param z The free value, a single number.
+#' @param order The highest order wanted, an integer from 0 to 5.
 #'
-#' and it is finite throughout \eqn{|\rho| < 1}, which the correlation's link
-#' guarantees in exact arithmetic. The result is then chained onto the free
-#' value.
+#' @return A list of `order + 1` numbers: \eqn{w} and its derivatives in
+#'   \eqn{z}.
 #'
-#' @param v A list: \eqn{\rho} and its derivatives in the free value to some
-#'   order up to four, as `econ_scalars()` returns for one link.
-#'
-#' @return A list of the same length: \eqn{w} and its derivatives in the free
-#'   value.
-#'
-#' @seealso [autoregressive_inv()], whose factors call it, and [ar1_inv()],
-#'   whose pattern uses the same expression written in \eqn{\rho}.
+#' @seealso [autoregressive_inv()], whose factors call it, and
+#'   `ar1_inv_pattern()`, which builds the inverse AR(1) pattern from it.
 #'
 #' @keywords internal
-w_derivs <- function(v) {
-  r <- v[[1L]]
-  K <- length(v) - 1L
-  d <- vapply(0:K, function(k) {
-    factorial(k) / 2 * ((1 - r)^-(k + 1L) + (-1)^k * (1 + r)^-(k + 1L))
-  }, numeric(1))
-  c(list(d[1L]), lapply(seq_len(K), function(o) {
-    compose_order(as.list(d[-1L]), v[-1L], o)
-  }))
+cosh2_derivs <- function(z, order) {
+  ch <- cosh(2 * z)
+  sh <- sinh(2 * z)
+  c(list((1 + ch) / 2),
+    lapply(seq_len(order), function(k) 2^(k - 1L) * if (k %% 2L) sh else ch))
 }
 
 
@@ -218,51 +212,33 @@ w_derivs <- function(v) {
 #'
 #' @details
 #' The three distinct entries are \eqn{w}, \eqn{2w-1} and \eqn{-\rho w} for
-#' \eqn{w = (1-\rho^2)^{-1}}, so one sequence of derivatives of \eqn{w} in
-#' \eqn{\rho} serves all three. Writing \eqn{w} by partial fractions as
-#' \eqn{\tfrac{1}{2}\{(1-\rho)^{-1} + (1+\rho)^{-1}\}} makes every order an
-#' exact expression, with no repeated quotient rule, and it is finite throughout
-#' \eqn{|\rho| < 1}, which the rhobit link guarantees in exact arithmetic.
+#' \eqn{w = (1-\rho^2)^{-1}}. Under the rhobit link, with \eqn{\rho = \tanh z},
+#' they are \eqn{\cosh^2 z}, \eqn{\cosh 2z} and \eqn{-\tfrac{1}{2}\sinh 2z},
+#' so one sequence of derivatives of \eqn{w} in \eqn{z}, from
+#' [cosh2_derivs()], serves all three: the second is \eqn{2w^{(k)}} above
+#' order zero and the third is \eqn{-\tfrac{1}{2}w^{(k+1)}}. Nothing is
+#' chained through the link and no difference \eqn{1 - \rho^2} is formed.
 #'
 #' @param s An [Ar1InvParam()] object, whose `dimension` supplies \eqn{p}.
-#' @param sc The scalars of [econ_scalars()] read on the inner [ar1()], whose
-#'   `rho` entry supplies the correlation and its link's derivatives.
+#' @param z The second free value.
+#' @param order The highest derivative order wanted, from 0 to 4.
 #'
-#' @return A list of `s@dimension` square matrices, one more than the number of
-#'   derivatives that `sc` carries: the pattern and its derivatives in the second
-#'   free value.
+#' @return A list of `order + 1` square matrices of side `s@dimension`: the
+#'   pattern and its derivatives in the second free value.
 #'
 #' @seealso [ar1_inv()] for the formulas and `ar1_pattern()` for the
 #'   counterpart on the covariance side.
 #'
 #' @keywords internal
-ar1_inv_pattern <- function(s, sc) {
+ar1_inv_pattern <- function(s, z, order) {
   p <- s@dimension
-  r <- sc$rho[[1L]]
-  K <- length(sc$rho) - 1L
-  # w and its derivatives in RHO, by partial fractions. The chained
-  # version is w_derivs(); here the derivatives in rho are wanted first,
-  # because the other two entries are built from them before the chain.
-  w <- vapply(0:K, function(k) {
-    factorial(k) / 2 * ((1 - r)^-(k + 1L) + (-1)^k * (1 + r)^-(k + 1L))
-  }, numeric(1))
-
-  # the three distinct entries, value then the derivatives in rho
-  corner <- w
-  interior <- c(2 * w[1L] - 1, 2 * w[-1L])
-  off <- vapply(0:K, function(k) {
-    -(r * w[k + 1L] + if (k >= 1L) k * w[k] else 0)
-  }, numeric(1))
-
-  # chain each onto the free value through the correlation's link
-  chain <- function(d) {
-    c(list(d[1L]), lapply(seq_len(K), function(o) {
-      compose_order(as.list(d[-1L]), sc$rho[-1L], o)
-    }))
-  }
-  cn <- chain(corner)
-  it <- chain(interior)
-  of <- chain(off)
+  # w = cosh(z)^2 and its derivatives in z, one order beyond the request
+  # because the off-diagonal entry -sinh(2z)/2 is -w'/2
+  w <- unlist(cosh2_derivs(z, order + 1L))
+  K <- order
+  cn <- w[seq_len(K + 1L)]
+  it <- c(2 * w[1L] - 1, 2 * w[seq_len(K) + 1L])
+  of <- -w[seq_len(K + 1L) + 1L] / 2
 
   lag <- abs(outer(seq_len(p), seq_len(p), "-"))
   is_corner <- outer(seq_len(p), seq_len(p), function(i, j) {
@@ -302,7 +278,7 @@ ar1_inv_derivative <- function(s, eta, order) {
   inner <- .inv_inner(s)
   sc <- econ_scalars(inner, eta, order)
   tau <- recip_derivs(sc$scale)
-  pt <- ar1_inv_pattern(s, sc)
+  pt <- ar1_inv_pattern(s, eta[2L], order)
   idx <- param_tuple_indices(s, order)
   out <- lapply(idx, function(t) {
     a <- sum(t == 1L)
@@ -556,8 +532,9 @@ ar_inv_codes <- function(idx, n) {
 #' is exactly zero.
 #'
 #' \eqn{\tau_t = 1/v_t} is a product of one factor per free value:
-#' \eqn{1/v_0} from the scale, and \eqn{(1-r_j^2)^{-1}} from each partial
-#' autocorrelation that the prediction at \eqn{t} has reached. A mixed derivative of
+#' \eqn{1/v_0} from the scale, and \eqn{(1-r_j^2)^{-1} = \cosh^2 z_j} from
+#' each partial autocorrelation that the prediction at \eqn{t} has reached,
+#' differentiated in \eqn{z_j} by [cosh2_derivs()]. A mixed derivative of
 #' a product of univariate factors is the product of their own derivatives, and
 #' it is exactly zero whenever it differentiates in a factor that row does not
 #' carry.
@@ -596,13 +573,13 @@ ar_inv_factors <- function(s, eta, cd, order) {
          }))
   })
 
-  # the univariate factors of tau: 1 / v0, then 1 / (1 - r_j^2)
+  # the univariate factors of tau: 1 / v0, then 1 / (1 - r_j^2), which is
+  # cosh(z_j)^2 under the rhobit link and is written in z_j
   fac <- vector("list", n)
   fac[[1L]] <- recip_derivs(linkinv_upto(inner@param_params$link_scale,
                                          eta[1L], order))
   for (j in seq_len(q)) {
-    fac[[j + 1L]] <- w_derivs(linkinv_upto(inner@param_params$link_pacf,
-                                           eta[j + 1L], order))
+    fac[[j + 1L]] <- cosh2_derivs(eta[j + 1L], order)
   }
   # which factors the prediction at row t has reached: the scale always, and
   # the first min(t - 1, q) correlations

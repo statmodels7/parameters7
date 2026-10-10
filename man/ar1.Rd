@@ -41,8 +41,9 @@ inverse hyperbolic tangent, and every free value gives a positive definite
 matrix in exact arithmetic. In double precision the correlation rounds to
 \eqn{-1} or 1 from \eqn{|\eta_2|} of about 19, and the matrix is then
 singular to rounding; the log-determinant, its derivatives and the inverse
-are evaluated from \eqn{\eta_2} and stay accurate there. A free value of 0 is a correlation of 0 here, where in
-\code{\link[=compound_symmetry]{compound_symmetry()}} it is the midpoint of a dimension-dependent interval.
+are evaluated from \eqn{\eta_2} and stay accurate there. A free value of 0
+is a correlation of 0 here, where in \code{\link[=compound_symmetry]{compound_symmetry()}} it is the
+midpoint of a dimension-dependent interval.
 }
 
 \section{The inverse is tridiagonal}{

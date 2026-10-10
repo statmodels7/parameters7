@@ -373,15 +373,16 @@ fd_along <- function(f, eta, k, order = 1L, h = NULL) {
 #' \eqn{6.1 \times 10^{-6}} near the origin, giving a truncation error of order
 #' \eqn{h^2}. The example below compares the result with a closed form.
 #'
-#' The result is not symmetrized; it is symmetric whenever [param_value()]
-#' returns a symmetric matrix, the difference of two symmetric matrices being
-#' symmetric. It costs \eqn{2d} evaluations of the map.
+#' For a matrix family each estimate is symmetrized as `(m + t(m)) / 2`, as
+#' the higher orders are, so that an asymmetry of rounding size in
+#' [param_value()] does not reach the derivative. It costs \eqn{2d}
+#' evaluations of the map.
 #'
 #' @param s A [parameter()] object, of any branch.
 #' @param eta A numeric vector of free values, of length `s@n_free`.
 #'
 #' @return A list of `s@n_free` estimates named by `s@free_names`, each shaped
-#'   like the result of [param_value()].
+#'   like the result of [param_value()] and symmetrized for a matrix family.
 #'
 #' @seealso [param_d1()], the generic that this serves, [numerical_d2()],
 #'   [numerical_d3()] and [numerical_d4()] for the higher orders, and
@@ -405,6 +406,9 @@ numerical_d1 <- function(s, eta) {
   names(out) <- s@free_names
   for (k in seq_len(s@n_free)) {
     out[[k]] <- fd_along(function(e) param_value(s, e), eta, k, 1L)
+    if (S7::S7_inherits(s, matrix_parameter)) {
+      out[[k]] <- (out[[k]] + t(out[[k]])) / 2
+    }
   }
   out
 }
@@ -528,7 +532,7 @@ numerical_d2 <- function(s, eta) {
 #'   checked by the generic.
 #' @param ... Unused, and accepted so the signature matches the generic's.
 #' @return A list of `s@n_free` estimates named by `s@free_names`, each shaped
-#'   like the result of [param_value()].
+#'   like the result of [param_value()] and symmetrized for a matrix family.
 #' @seealso [numerical_d1()], which does the work, and [param_is_numerical()]
 #'   to find out whether a family reaches this method.
 #' @keywords internal
@@ -679,11 +683,13 @@ S7::method(param_d2logdet, matrix_parameter) <- function(s, eta, ...) {
 #'
 #' @description
 #' Signals an error when [param_d3logdet.matrix_parameter()] or
-#' [param_d4logdet.matrix_parameter()] is called for a family whose derivative
-#' arrays are themselves numerical. Both fallbacks difference [param_d2logdet()], which is
-#' an exact identity **given** [param_d1()] and [param_d2()]; where those are
-#' supplied the differencing is one layer, and where they are not it is two,
-#' which is the nesting that the toolkit avoids everywhere.
+#' [param_d4logdet.matrix_parameter()] is called for a family whose
+#' [param_d2logdet()] is itself numerical. Both fallbacks difference
+#' [param_d2logdet()]. A family's own [param_d2logdet()] is exact, and so is
+#' the base-class one **given** [param_d1()] and [param_d2()]; in either case
+#' the differencing is one layer. Where the base-class [param_d2logdet()] reads
+#' numerical arrays it is two, which is the nesting that the toolkit avoids
+#' everywhere.
 #'
 #' @details
 #' With numerical arrays, the fourth order can come back larger than the
@@ -691,16 +697,15 @@ S7::method(param_d2logdet, matrix_parameter) <- function(s, eta, ...) {
 #' order whether the arrays are analytic or not, so a consumer could not
 #' distinguish such a number from a usable one.
 #'
-#' Only the two arrays are read, and not [param_d2logdet()] itself, so a family
-#' that writes its own [param_d2logdet()] but not [param_d1()] and [param_d2()]
-#' is rejected as well.
+#' A family that writes its own [param_d2logdet()] passes whether or not its
+#' [param_d1()] and [param_d2()] are analytic.
 #'
 #' @param s A [matrix_parameter()] object.
 #' @param order The order requested, 3 or 4, which the message names.
 #'
-#' @return Invisibly `TRUE`. For a family whose [param_d1()] or [param_d2()]
-#'   comes from the base class, an error that names the missing method and the
-#'   remedy.
+#' @return Invisibly `TRUE`. For a family whose [param_d2logdet()] comes from
+#'   the base class and whose [param_d1()] or [param_d2()] comes from the base
+#'   class too, an error that names the missing method and the remedy.
 #'
 #' @seealso [param_is_numerical()], which reports the routes read here, and
 #'   [param_d3logdet.matrix_parameter()] and [param_d4logdet.matrix_parameter()],
@@ -709,6 +714,7 @@ S7::method(param_d2logdet, matrix_parameter) <- function(s, eta, ...) {
 #' @keywords internal
 check_analytic_arrays <- function(s, order) {
   num <- param_is_numerical(s)
+  if (!num[["param_d2logdet"]]) return(invisible(TRUE))
   miss <- c("param_d1()", "param_d2()")[c(num[["param_d1"]], num[["param_d2"]])]
   if (!length(miss)) return(invisible(TRUE))
   stop(sprintf(paste0(
@@ -716,7 +722,8 @@ check_analytic_arrays <- function(s, order) {
     "  numerical. This family has no analytic %s, so\n",
     "  param_d2logdet(), which this order differences, is already one\n",
     "  difference deep, and the two layers would compound.\n",
-    "  Write param_d1() and param_d2() out, or register param_d%dlogdet()."
+    "  Write param_d1() and param_d2() out, or register param_d2logdet()\n",
+    "  or param_d%dlogdet()."
   ), order, paste(miss, collapse = " and "), order), call. = FALSE)
 }
 
@@ -1121,10 +1128,12 @@ S7::method(param_d4, parameter) <- function(s, eta, ...) {
 #' arrays, so differencing it is a single numerical layer whenever
 #' [param_d1()] and [param_d2()] are analytic.
 #'
-#' Where the arrays are themselves numerical the layers would compound, and the
-#' method signals an error instead of returning a value; [check_analytic_arrays()]
-#' is the guard. A family that needs this order writes [param_d1()] and
-#' [param_d2()] out.
+#' A family's own [param_d2logdet()] is exact, and differencing it is a single
+#' layer too. Where the base-class [param_d2logdet()] reads numerical arrays
+#' the layers would compound, and the method signals an error instead of
+#' returning a value; [check_analytic_arrays()] is the guard. A family that
+#' needs this order writes [param_d1()] and [param_d2()] out, or its own
+#' [param_d2logdet()].
 #' @param s A [matrix_parameter()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic.
@@ -1173,15 +1182,16 @@ S7::method(param_d3logdet, matrix_parameter) <- function(s, eta, ...) {
 #' @details
 #' # Accuracy
 #'
-#' With analytic [param_d1()] and [param_d2()] the differencing is a single
-#' layer on an exact identity, at the order-2 step.
+#' With analytic [param_d1()] and [param_d2()], or with a family's own
+#' [param_d2logdet()], the differencing is a single layer on an exact
+#' quantity, at the order-2 step.
 #'
 #' With only [param_value()] supplied, the numerical arrays would feed a
 #' numerical second-order block that is then differenced twice more, and the
 #' error can exceed the quantity itself. The method signals an error instead,
 #' through [check_analytic_arrays()]. A family that needs a fourth derivative of
 #' its log-determinant supplies at least [param_d1()] and [param_d2()] in closed
-#' form. [param_is_numerical()] reports which components are numerical.
+#' form, or its own [param_d2logdet()]. [param_is_numerical()] reports which components are numerical.
 #' @param s A [matrix_parameter()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic.

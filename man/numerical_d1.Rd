@@ -13,7 +13,7 @@ numerical_d1(s, eta)
 }
 \value{
 A list of \code{s@n_free} estimates named by \code{s@free_names}, each shaped
-like the result of \code{\link[=param_value]{param_value()}}.
+like the result of \code{\link[=param_value]{param_value()}} and symmetrized for a matrix family.
 }
 \description{
 Estimates \eqn{\partial V / \partial \eta_k} for every free value by one
@@ -31,9 +31,10 @@ The step is \eqn{\varepsilon^{1/3}\max(1, |\eta_k|)}, about
 \eqn{6.1 \times 10^{-6}} near the origin, giving a truncation error of order
 \eqn{h^2}. The example below compares the result with a closed form.
 
-The result is not symmetrized; it is symmetric whenever \code{\link[=param_value]{param_value()}}
-returns a symmetric matrix, the difference of two symmetric matrices being
-symmetric. It costs \eqn{2d} evaluations of the map.
+For a matrix family each estimate is symmetrized as \code{(m + t(m)) / 2}, as
+the higher orders are, so that an asymmetry of rounding size in
+\code{\link[=param_value]{param_value()}} does not reach the derivative. It costs \eqn{2d}
+evaluations of the map.
 }
 \examples{
 # A scalar matrix is exp(eta) times the identity, so the derivative is the

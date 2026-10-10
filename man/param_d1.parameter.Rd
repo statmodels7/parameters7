@@ -13,7 +13,7 @@ checked by the generic.}
 }
 \value{
 A list of \code{s@n_free} estimates named by \code{s@free_names}, each shaped
-like the result of \code{\link[=param_value]{param_value()}}.
+like the result of \code{\link[=param_value]{param_value()}} and symmetrized for a matrix family.
 }
 \description{
 The method that every \code{\link[=parameter]{parameter()}} inherits when it registers no \code{\link[=param_d1]{param_d1()}} of

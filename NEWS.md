@@ -20,6 +20,32 @@
   `ar1_logdet_chain()` hold the closed forms; `cs_logdet_terms()` and
   `ar1_logdet_terms()` are removed.
 
+* `autoregressive()`, `autoregressive_inv()` and `ar1_inv()` evaluate every
+  factor `1 - r^2` from the free value of the partial autocorrelation: the
+  log-determinant of `autoregressive()`, its derivatives and the innovation
+  variances of its solve through `sech2()` and `log_sech2()`, and the factor
+  `1 / (1 - r^2)` of the two precisions as `cosh(z)^2` through
+  `cosh2_derivs()`. Formed from `r`, they lost their digits as `r` rounded
+  to one of its bounds: from `z = 20` on, the derivatives of `ar1_inv()` and
+  `autoregressive_inv()` had a relative error of 1, and the log-determinant
+  of `autoregressive(4, 1)` stayed at -106.05. The derivative arrays of
+  `autoregressive()` and `autoregressive_inv()` also need linkfunctions7
+  0.5.2, whose rhobit inverse derivatives keep their accuracy for a large
+  free value; it is now the minimum version. All of these agree with
+  90-digit references to 1e-12 at free values up to 20, and those of
+  `ar1_inv()` up to 40. `w_derivs()` and
+  `log_affine_derivs()` are removed.
+
+* The default third and fourth log-determinant derivatives accept a family
+  that writes its own `param_d2logdet()`, which they difference, whatever
+  its `param_d1()` and `param_d2()`; they rejected it.
+
+* `numerical_d1()` symmetrizes its estimates for a matrix family, as the
+  higher orders do.
+
+* The derivatives of `correlation_matrix()` have a diagonal of exact zeros
+  at every order; it was zero only up to rounding.
+
 * `sum_struct()`: the log-determinant derivatives of a rank-deficient family
   use the pseudo-inverse on the complement of the declared null space; they
   stopped with a LAPACK error. The constructor rejects linearly dependent

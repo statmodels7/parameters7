@@ -36,10 +36,12 @@ second-order block per tuple.
 arrays, so differencing it is a single numerical layer whenever
 \code{\link[=param_d1]{param_d1()}} and \code{\link[=param_d2]{param_d2()}} are analytic.
 
-Where the arrays are themselves numerical the layers would compound, and the
-method signals an error instead of returning a value; \code{\link[=check_analytic_arrays]{check_analytic_arrays()}}
-is the guard. A family that needs this order writes \code{\link[=param_d1]{param_d1()}} and
-\code{\link[=param_d2]{param_d2()}} out.
+A family's own \code{\link[=param_d2logdet]{param_d2logdet()}} is exact, and differencing it is a single
+layer too. Where the base-class \code{\link[=param_d2logdet]{param_d2logdet()}} reads numerical arrays
+the layers would compound, and the method signals an error instead of
+returning a value; \code{\link[=check_analytic_arrays]{check_analytic_arrays()}} is the guard. A family that
+needs this order writes \code{\link[=param_d1]{param_d1()}} and \code{\link[=param_d2]{param_d2()}} out, or its own
+\code{\link[=param_d2logdet]{param_d2logdet()}}.
 }
 
 \seealso{

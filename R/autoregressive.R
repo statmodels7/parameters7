@@ -74,9 +74,10 @@ AutoregressiveParam <- S7::new_class("AutoregressiveParam",
 #' chart. As the partial autocorrelations approach \eqn{\pm 1}, the smallest
 #' eigenvalue of the matrix falls to the rounding level, and with several free
 #' values of absolute size 6 to 10, depending on \eqn{p} and \eqn{q}, the
-#' computed matrix can be indefinite. The log-determinant and the derivatives
-#' lose accuracy in the same region, because they are formed from
-#' \eqn{1 - r_k^2}.
+#' computed matrix can be indefinite. The log-determinant, its derivatives and
+#' the innovation variances of the inverse use the factors \eqn{1 - r_k^2},
+#' which are evaluated from the free values by [sech2()] and [log_sech2()] and
+#' keep their accuracy in that region.
 #'
 #' # The polynomial map from the partial autocorrelations
 #'
@@ -504,7 +505,9 @@ S7::method(param_free, AutoregressiveParam) <- function(s, m, ...) {
 #' \eqn{\phi = (0.91, -0.30)} with a sign.
 #'
 #' Both come from the same recursion that the derivatives use, run here without
-#' derivatives, since a solve needs no arrays.
+#' derivatives, since a solve needs no arrays. Each factor \eqn{1 - r_k^2} is
+#' evaluated by [sech2()] in the free value, so the innovation variances keep
+#' their accuracy where \eqn{r_k} rounds to \eqn{-1} or 1.
 #'
 #' @param s An [AutoregressiveParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`.
@@ -538,7 +541,9 @@ ar_prediction <- function(s, eta) {
     k <- min(t - 1L, q)
     if (k >= 1L) u[t, seq.int(t - 1L, t - k)] <- -coef[[k]]
   }
-  v <- v0 * cumprod(c(1, (1 - r^2)))[pmin(seq_len(p), q + 1L)]
+  # 1 - r_k^2 = sech(z_k)^2, which sech2() writes so that it does not cancel
+  # where r_k rounds to -1 or 1
+  v <- v0 * cumprod(c(1, sech2(eta[seq_len(q) + 1L])))[pmin(seq_len(p), q + 1L)]
   list(u = u, v = v)
 }
 
@@ -584,7 +589,10 @@ S7::method(param_solve, AutoregressiveParam) <- function(s, eta, b = NULL, ...) 
 #'   + \sum_{k=1}^{q} (p - k)\log(1 - r_k^{2}).}
 #'
 #' A sum of \eqn{q + 1} terms at any dimension, with no factorization and no
-#' determinant taken.
+#' determinant taken. Under the rhobit link \eqn{1 - r_k^2 = \mathrm{sech}^2
+#' z_k}, and each logarithm is evaluated by [log_sech2()] in the free value
+#' \eqn{z_k}, so the sum keeps its accuracy where \eqn{r_k} rounds to \eqn{-1}
+#' or 1.
 #' @param s An [AutoregressiveParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic.
@@ -596,11 +604,8 @@ S7::method(param_solve, AutoregressiveParam) <- function(s, eta, b = NULL, ...) 
 S7::method(param_logdet, AutoregressiveParam) <- function(s, eta, ...) {
   p <- s@dimension
   q <- s@param_params$order
-  r <- vapply(seq_len(q), function(k) {
-    linkfunctions7::linkinv(s@param_params$link_pacf, eta[k + 1L])
-  }, numeric(1))
   v0 <- linkfunctions7::linkinv(s@param_params$link_scale, eta[1L])
-  p * log(v0) + sum((p - seq_len(q)) * log(1 - r^2))
+  p * log(v0) + sum((p - seq_len(q)) * log_sech2(eta[seq_len(q) + 1L]))
 }
 
 
@@ -614,11 +619,12 @@ S7::method(param_logdet, AutoregressiveParam) <- function(s, eta, ...) {
 #' @details
 #' The scale term is \eqn{p \log \gamma_0}: the derivatives of
 #' \eqn{\log \gamma_0} in \eqn{\gamma_0} are \eqn{(-1)^{k-1}(k-1)!/\gamma_0^{k}},
-#' and the factor \eqn{p} is applied afterwards. Each partial
-#' autocorrelation contributes \eqn{(p-k)\log(1 - r_k^2)}, whose derivatives come
-#' from [log_affine_derivs()] applied to the two factors \eqn{1 - r} and
-#' \eqn{1 + r}. Both are then carried onto the free scale by [compose_order()], the
-#' Faa di Bruno chain with a one-dimensional inner map.
+#' and the factor \eqn{p} is applied afterwards; they are carried onto the free
+#' scale by [compose_order()], the Faa di Bruno chain with a one-dimensional
+#' inner map. Each partial autocorrelation contributes
+#' \eqn{(p-k)\log(1 - r_k^2) = (p-k)\log\mathrm{sech}^2 z_k} under the rhobit
+#' link, whose derivatives in \eqn{z_k} are \eqn{p - k} times those of
+#' [log_sech2_deriv()], written in the free value with no chain.
 #'
 #' @param s An [AutoregressiveParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`.
@@ -627,28 +633,21 @@ S7::method(param_logdet, AutoregressiveParam) <- function(s, eta, ...) {
 #' @return A numeric vector of `choose(s@n_free + order - 1, order)` values keyed
 #'   as `param_tuple_names(s, order)` and in that order.
 #'
-#' @seealso [compose_order()] and [log_affine_derivs()] for the two pieces, and
+#' @seealso [compose_order()] and [log_sech2_deriv()] for the two pieces, and
 #'   [param_dlogdet.AutoregressiveParam()], which calls this.
 #'
 #' @keywords internal
 ar_logdet_derivative <- function(s, eta, order) {
   p <- s@dimension
   q <- s@param_params$order
-  ls <- s@param_params$link_scale
-  lr <- s@param_params$link_pacf
-  # the derivative of order `order` of a function of one free value, through
-  # its link: the outer derivatives and the link's, both to that order
-  chain <- function(link, e, outer_fun) {
-    gd <- linkinv_upto(link, e, order)
-    compose_order(outer_fun(gd[[1L]]), gd[-1L], order)
-  }
-  d_scale <- chain(ls, eta[1L], function(x) {
-    lapply(seq_len(order), function(k) (-1)^(k - 1L) * factorial(k - 1L) / x^k)
-  })
+  # the scale's term through its link: the outer derivatives of log and the
+  # link's, both to that order
+  gd <- linkinv_upto(s@param_params$link_scale, eta[1L], order)
+  d_scale <- compose_order(lapply(seq_len(order), function(k) {
+    (-1)^(k - 1L) * factorial(k - 1L) / gd[[1L]]^k
+  }), gd[-1L], order)
   d_pacf <- lapply(seq_len(q), function(k) {
-    chain(lr, eta[k + 1L], function(x) {
-      log_affine_derivs(x, list(c(p - k, 1, -1), c(p - k, 1, 1)), order)
-    })
+    (p - k) * log_sech2_deriv(eta[k + 1L], order)
   })
 
   idx <- param_tuple_indices(s, order)

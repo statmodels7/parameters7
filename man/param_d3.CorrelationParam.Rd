@@ -13,8 +13,8 @@ checked by the generic.}
 }
 \value{
 A list of \code{choose(s@n_free + 2, 3)} symmetric matrices keyed as
-\code{param_tuple_names(s, 3)} and in that order, each with a diagonal that is
-zero up to rounding.
+\code{param_tuple_names(s, 3)} and in that order, each with a diagonal of
+exact zeros.
 }
 \description{
 Closed form, the same Leibniz rule on \eqn{R = LL^\top} with the three
@@ -25,7 +25,7 @@ and discarded.
 
 The angles reach the free scale through a bounded link, so the chain to third
 order is \code{\link[=compose_order]{compose_order()}}'s and the accuracy is the link's; nothing is
-differenced. The diagonal is zero up to rounding.
+differenced. The diagonal is exactly zero.
 }
 \seealso{
 \code{\link[=corr_derivative]{corr_derivative()}}, which assembles it, and

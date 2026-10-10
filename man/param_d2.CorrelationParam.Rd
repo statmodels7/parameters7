@@ -13,8 +13,8 @@ checked by the generic.}
 }
 \value{
 A list of \code{choose(s@n_free + 1, 2)} symmetric matrices keyed as
-\code{param_tuple_names(s)} and in that order, each with a diagonal that is
-zero up to rounding.
+\code{param_tuple_names(s)} and in that order, each with a diagonal of exact
+zeros.
 }
 \description{
 Closed form, by the Leibniz rule on \eqn{R = LL^\top} taken twice,
@@ -29,7 +29,7 @@ A component in two angles from \strong{different} rows \eqn{i} and \eqn{j} does 
 outer terms drop, but \eqn{L_k L_l^\top + L_l L_k^\top} is supported on
 the entries \eqn{(i, j)} and \eqn{(j, i)}. It is zero even there when the
 two angles lie beyond the columns that the two rows share. The diagonal is
-zero up to rounding at every order.
+exactly zero at every order.
 }
 \seealso{
 \code{\link[=corr_derivative]{corr_derivative()}}, which assembles it, \code{\link[=corr_dfactor]{corr_dfactor()}} for the

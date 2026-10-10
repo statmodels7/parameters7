@@ -31,15 +31,16 @@ where they differ, both at the order-2 step
 of the whole second-order block per tuple.
 }
 \section{Accuracy}{
-With analytic \code{\link[=param_d1]{param_d1()}} and \code{\link[=param_d2]{param_d2()}} the differencing is a single
-layer on an exact identity, at the order-2 step.
+With analytic \code{\link[=param_d1]{param_d1()}} and \code{\link[=param_d2]{param_d2()}}, or with a family's own
+\code{\link[=param_d2logdet]{param_d2logdet()}}, the differencing is a single layer on an exact
+quantity, at the order-2 step.
 
 With only \code{\link[=param_value]{param_value()}} supplied, the numerical arrays would feed a
 numerical second-order block that is then differenced twice more, and the
 error can exceed the quantity itself. The method signals an error instead,
 through \code{\link[=check_analytic_arrays]{check_analytic_arrays()}}. A family that needs a fourth derivative of
 its log-determinant supplies at least \code{\link[=param_d1]{param_d1()}} and \code{\link[=param_d2]{param_d2()}} in closed
-form. \code{\link[=param_is_numerical]{param_is_numerical()}} reports which components are numerical.
+form, or its own \code{\link[=param_d2logdet]{param_d2logdet()}}. \code{\link[=param_is_numerical]{param_is_numerical()}} reports which components are numerical.
 }
 
 \seealso{

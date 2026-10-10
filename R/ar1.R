@@ -64,8 +64,9 @@ Ar1Param <- S7::new_class("Ar1Param", parent = matrix_parameter)
 #' matrix in exact arithmetic. In double precision the correlation rounds to
 #' \eqn{-1} or 1 from \eqn{|\eta_2|} of about 19, and the matrix is then
 #' singular to rounding; the log-determinant, its derivatives and the inverse
-#' are evaluated from \eqn{\eta_2} and stay accurate there. A free value of 0 is a correlation of 0 here, where in
-#' [compound_symmetry()] it is the midpoint of a dimension-dependent interval.
+#' are evaluated from \eqn{\eta_2} and stay accurate there. A free value of 0
+#' is a correlation of 0 here, where in [compound_symmetry()] it is the
+#' midpoint of a dimension-dependent interval.
 #'
 #' # The inverse is tridiagonal
 #'
@@ -346,10 +347,9 @@ S7::method(param_solve, Ar1Param) <- function(s, eta, b = NULL, ...) {
   sc <- econ_scalars(s, eta, 0L)
   v <- sc$scale[[1L]]
   r <- sc$rho[[1L]]
-  # 1 - rho^2 = sech(z)^2, written in exp(-2|z|) so that it does not cancel
+  # 1 - rho^2 = sech(z)^2, which sech2() writes so that it does not cancel
   # where rho rounds to -1 or 1
-  a <- exp(-2 * abs(eta[2L]))
-  one_minus <- 4 * a / (1 + a)^2
+  one_minus <- sech2(eta[2L])
   t_mat <- diag(c(1, rep(1 + r^2, p - 2L), 1), nrow = p)
   off <- cbind(seq_len(p - 1L), seq.int(2L, p))
   t_mat[off] <- -r
@@ -422,6 +422,51 @@ S7::method(param_d4, Ar1Param) <- function(s, eta, ...) {
 }
 
 
+#' The Squared Hyperbolic Secant and Its Logarithm
+#'
+#' @description
+#' `sech2()` returns \eqn{\mathrm{sech}^2 z = 1 - \tanh^2 z}, `log_sech2()`
+#' its logarithm, and `log_sech2_deriv()` the derivative of the logarithm of
+#' order 1 to 4 in \eqn{z}. Under the rhobit link these are the factor
+#' \eqn{1 - \rho^2} of [ar1()] and the factors \eqn{1 - r_k^2} of
+#' [autoregressive()], written in the free value.
+#'
+#' @details
+#' \eqn{\mathrm{sech}^2 z} is evaluated as \eqn{4a/(1 + a)^2} with
+#' \eqn{a = e^{-2|z|}}, and its logarithm as
+#' \eqn{2\log 2 - 2|z| - 2\log(1 + a)}. Neither is computed from
+#' \eqn{1 - \tanh^2 z}, which loses all accuracy once \eqn{\tanh z} rounds to
+#' \eqn{-1} or 1. With \eqn{t = \tanh z} and \eqn{u = \mathrm{sech}^2 z}, from
+#' \eqn{t' = u} and \eqn{u' = -2tu}, the four derivatives of the logarithm are
+#' \eqn{-2t}, \eqn{-2u}, \eqn{4tu} and \eqn{4u(u - 2t^2)}.
+#'
+#' @param z The free value, a numeric vector.
+#' @param order The derivative order, an integer from 1 to 4.
+#'
+#' @return A numeric vector of the length of `z`.
+#'
+#' @seealso [ar1_logdet_chain()] and [ar_logdet_derivative()], which call
+#'   `log_sech2_deriv()`.
+#'
+#' @keywords internal
+sech2 <- function(z) {
+  a <- exp(-2 * abs(z))
+  4 * a / (1 + a)^2
+}
+
+#' @rdname sech2
+log_sech2 <- function(z) {
+  2 * log(2) - 2 * abs(z) - 2 * log1p(exp(-2 * abs(z)))
+}
+
+#' @rdname sech2
+log_sech2_deriv <- function(z, order) {
+  t <- tanh(z)
+  u <- sech2(z)
+  switch(order, -2 * t, -2 * u, 4 * t * u, 4 * u * (u - 2 * t^2))
+}
+
+
 #' Log-Determinant Chain of an AR(1) Parameter
 #'
 #' @description
@@ -430,12 +475,9 @@ S7::method(param_d4, Ar1Param) <- function(s, eta, ...) {
 #' \eqn{\rho = \tanh z} under the rhobit link.
 #'
 #' @details
-#' With \eqn{t = \tanh z} and \eqn{u = 1 - t^2 = \mathrm{sech}^2 z},
-#' \eqn{q = -2(p-1)\log\cosh z}, and from \eqn{t' = u} and \eqn{u' = -2tu} the
-#' four derivatives are \eqn{-2(p-1)t}, \eqn{-2(p-1)u}, \eqn{4(p-1)tu} and
-#' \eqn{4(p-1)u(u - 2t^2)}. The factor \eqn{u} is evaluated as
-#' \eqn{4e^{-2|z|}/(1 + e^{-2|z|})^2}, never as \eqn{1 - t^2}, which loses all
-#' accuracy once \eqn{t} rounds to \eqn{-1} or 1.
+#' \eqn{q = (p-1)\log\mathrm{sech}^2 z}, so each derivative is \eqn{p - 1}
+#' times the one that [log_sech2_deriv()] returns, which is written in the
+#' free value and keeps its accuracy where \eqn{\rho} rounds to \eqn{-1} or 1.
 #'
 #' @param s An [Ar1Param()] object, whose `dimension` supplies \eqn{p}.
 #'
@@ -448,16 +490,7 @@ S7::method(param_d4, Ar1Param) <- function(s, eta, ...) {
 #' @keywords internal
 ar1_logdet_chain <- function(s) {
   p <- s@dimension
-  function(e, order) {
-    t <- tanh(e)
-    a <- exp(-2 * abs(e))
-    u <- 4 * a / (1 + a)^2
-    switch(order,
-      -2 * (p - 1) * t,
-      -2 * (p - 1) * u,
-      4 * (p - 1) * t * u,
-      4 * (p - 1) * u * (u - 2 * t^2))
-  }
+  function(e, order) (p - 1) * log_sech2_deriv(e, order)
 }
 
 
@@ -485,8 +518,7 @@ ar1_logdet_chain <- function(s) {
 S7::method(param_logdet, Ar1Param) <- function(s, eta, ...) {
   sc <- econ_scalars(s, eta, 0L)
   p <- s@dimension
-  z <- abs(eta[2L])
-  p * log(sc$scale[[1L]]) + (p - 1) * (2 * log(2) - 2 * z - 2 * log1p(exp(-2 * z)))
+  p * log(sc$scale[[1L]]) + (p - 1) * log_sech2(eta[2L])
 }
 
 #' @title Log-Determinant Derivatives of an AR(1) Parameter

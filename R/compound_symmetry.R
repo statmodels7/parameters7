@@ -225,42 +225,6 @@ econ_scalars <- function(s, eta, order) {
 }
 
 
-#' Derivatives of a Sum of Logarithms of Affine Functions
-#'
-#' @description
-#' Returns the derivatives of orders 1 to `order` at \eqn{r} of
-#' \eqn{\sum_t c_t \log(a_t + b_t r)}, using
-#'
-#' \deqn{\frac{\mathrm{d}^k}{\mathrm{d}r^k}\log(a + br)
-#'   = (-1)^{k-1}(k-1)!\,\frac{b^k}{(a + br)^k}.}
-#'
-#' @details
-#' The log-determinant of [autoregressive()] has this shape, one term
-#' \eqn{(p-k)\{\log(1-r_k) + \log(1+r_k)\}} per partial autocorrelation.
-#'
-#' The result is in the **correlation**; the caller chains it onto the link with
-#' [compose_order()].
-#'
-#' @param r The point, a single number.
-#' @param terms A list of numeric triples `c(coefficient, a, b)`, one per
-#'   logarithm.
-#' @param order The highest order wanted, an integer from 1 to 4.
-#'
-#' @return A list of `order` numbers, the first to the `order`-th
-#'   derivative.
-#'
-#' @seealso [ar_logdet_derivative()], which chains the result onto the link.
-#'
-#' @keywords internal
-log_affine_derivs <- function(r, terms, order) {
-  lapply(seq_len(order), function(k) {
-    sum(vapply(terms, function(t) {
-      t[1L] * (-1)^(k - 1L) * factorial(k - 1L) * t[3L]^k / (t[2L] + t[3L] * r)^k
-    }, numeric(1)))
-  })
-}
-
-
 #' Derivative Components of an Economical Parameter
 #'
 #' @description

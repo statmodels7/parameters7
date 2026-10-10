@@ -21,7 +21,7 @@ BugReports: https://github.com/statmodels7/parameters7/issues
 Depends:
     R (>= 4.1.0)
 Imports:
-    linkfunctions7,
+    linkfunctions7 (>= 0.5.2),
     numericals7,
     Rcpp,
     S7,

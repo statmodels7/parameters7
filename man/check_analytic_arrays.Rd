@@ -12,17 +12,19 @@ check_analytic_arrays(s, order)
 \item{order}{The order requested, 3 or 4, which the message names.}
 }
 \value{
-Invisibly \code{TRUE}. For a family whose \code{\link[=param_d1]{param_d1()}} or \code{\link[=param_d2]{param_d2()}}
-comes from the base class, an error that names the missing method and the
-remedy.
+Invisibly \code{TRUE}. For a family whose \code{\link[=param_d2logdet]{param_d2logdet()}} comes from
+the base class and whose \code{\link[=param_d1]{param_d1()}} or \code{\link[=param_d2]{param_d2()}} comes from the base
+class too, an error that names the missing method and the remedy.
 }
 \description{
 Signals an error when \code{\link[=param_d3logdet.matrix_parameter]{param_d3logdet.matrix_parameter()}} or
-\code{\link[=param_d4logdet.matrix_parameter]{param_d4logdet.matrix_parameter()}} is called for a family whose derivative
-arrays are themselves numerical. Both fallbacks difference \code{\link[=param_d2logdet]{param_d2logdet()}}, which is
-an exact identity \strong{given} \code{\link[=param_d1]{param_d1()}} and \code{\link[=param_d2]{param_d2()}}; where those are
-supplied the differencing is one layer, and where they are not it is two,
-which is the nesting that the toolkit avoids everywhere.
+\code{\link[=param_d4logdet.matrix_parameter]{param_d4logdet.matrix_parameter()}} is called for a family whose
+\code{\link[=param_d2logdet]{param_d2logdet()}} is itself numerical. Both fallbacks difference
+\code{\link[=param_d2logdet]{param_d2logdet()}}. A family's own \code{\link[=param_d2logdet]{param_d2logdet()}} is exact, and so is
+the base-class one \strong{given} \code{\link[=param_d1]{param_d1()}} and \code{\link[=param_d2]{param_d2()}}; in either case
+the differencing is one layer. Where the base-class \code{\link[=param_d2logdet]{param_d2logdet()}} reads
+numerical arrays it is two, which is the nesting that the toolkit avoids
+everywhere.
 }
 \details{
 With numerical arrays, the fourth order can come back larger than the
@@ -30,9 +32,8 @@ quantity that it estimates, and \code{\link[=param_is_numerical]{param_is_numeri
 order whether the arrays are analytic or not, so a consumer could not
 distinguish such a number from a usable one.
 
-Only the two arrays are read, and not \code{\link[=param_d2logdet]{param_d2logdet()}} itself, so a family
-that writes its own \code{\link[=param_d2logdet]{param_d2logdet()}} but not \code{\link[=param_d1]{param_d1()}} and \code{\link[=param_d2]{param_d2()}}
-is rejected as well.
+A family that writes its own \code{\link[=param_d2logdet]{param_d2logdet()}} passes whether or not its
+\code{\link[=param_d1]{param_d1()}} and \code{\link[=param_d2]{param_d2()}} are analytic.
 }
 \seealso{
 \code{\link[=param_is_numerical]{param_is_numerical()}}, which reports the routes read here, and

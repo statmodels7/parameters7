@@ -34,7 +34,9 @@ the third on repeats \eqn{(-0.91, 0.30)}, which are the coefficients
 \eqn{\phi = (0.91, -0.30)} with a sign.
 
 Both come from the same recursion that the derivatives use, run here without
-derivatives, since a solve needs no arrays.
+derivatives, since a solve needs no arrays. Each factor \eqn{1 - r_k^2} is
+evaluated by \code{\link[=sech2]{sech2()}} in the free value, so the innovation variances keep
+their accuracy where \eqn{r_k} rounds to \eqn{-1} or 1.
 }
 \seealso{
 \code{\link[=param_solve.AutoregressiveParam]{param_solve.AutoregressiveParam()}}, the only caller, and

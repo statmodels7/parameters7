@@ -21,7 +21,10 @@ Closed form, from the innovation variances of the Levinson-Durbin recursion:
   + \sum_{k=1}^{q} (p - k)\log(1 - r_k^{2}).}
 
 A sum of \eqn{q + 1} terms at any dimension, with no factorization and no
-determinant taken.
+determinant taken. Under the rhobit link \eqn{1 - r_k^2 = \mathrm{sech}^2
+z_k}, and each logarithm is evaluated by \code{\link[=log_sech2]{log_sech2()}} in the free value
+\eqn{z_k}, so the sum keeps its accuracy where \eqn{r_k} rounds to \eqn{-1}
+or 1.
 }
 \seealso{
 \code{\link[=param_dlogdet.AutoregressiveParam]{param_dlogdet.AutoregressiveParam()}} for its derivatives, and

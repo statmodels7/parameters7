@@ -59,9 +59,10 @@ In double precision that last statement holds only away from the edge of the
 chart. As the partial autocorrelations approach \eqn{\pm 1}, the smallest
 eigenvalue of the matrix falls to the rounding level, and with several free
 values of absolute size 6 to 10, depending on \eqn{p} and \eqn{q}, the
-computed matrix can be indefinite. The log-determinant and the derivatives
-lose accuracy in the same region, because they are formed from
-\eqn{1 - r_k^2}.
+computed matrix can be indefinite. The log-determinant, its derivatives and
+the innovation variances of the inverse use the factors \eqn{1 - r_k^2},
+which are evaluated from the free values by \code{\link[=sech2]{sech2()}} and \code{\link[=log_sech2]{log_sech2()}} and
+keep their accuracy in that region.
 }
 
 \section{The polynomial map from the partial autocorrelations}{
