@@ -15,7 +15,7 @@ A list as described in \code{\link[=param_readable]{param_readable()}}.
 }
 \description{
 Declares two quantities: the marginal variance and the correlation at lag one,
-the two things an AR(1) covariance is about. Their intervals are built on the
+which together describe an AR(1) covariance. Their intervals are built on the
 log and the inverse hyperbolic tangent, so a variance stays positive and a
 correlation stays inside \eqn{(-1, 1)}.
 

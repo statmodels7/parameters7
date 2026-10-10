@@ -8,7 +8,8 @@ diagonal_matrix(dimension, link = linkfunctions7::log_link())
 }
 \arguments{
 \item{dimension}{The side \eqn{p} of the matrix. A single positive whole
-number, finite and at least 1; anything else throws \verb{'dimension' must be a single positive integer.}}
+number, finite and at least 1; any other value signals the error
+\verb{'dimension' must be a single positive integer.}}
 
 \item{link}{A \pkg{linkfunctions7} link carrying the free scale onto the
 positive entries, \code{linkfunctions7::log_link()} by default. It must map
@@ -21,8 +22,10 @@ both, and so does a bounded link such as \code{logit_link()}, whose range
 \eqn{(0, 1)} is positive and which gives a positive definite matrix with
 entries below 1. \code{sqrt_link()}, \code{inverse_link()}, \code{inverse_sq_link()} and
 \code{power_link()} at a positive exponent satisfy only the first and are
-rejected: their predictor scale is \eqn{(0, \infty)}, so the map is even in
-\eqn{\eta} and the round trip returns \eqn{\lvert \eta \rvert}.}
+rejected: their predictor scale is \eqn{(0, \infty)}, so a negative free
+value would not be admissible. For \code{sqrt_link()} the inverse link is even
+in \eqn{\eta} and the round trip would return \eqn{\lvert \eta \rvert}; for
+the others a negative \eqn{\eta} gives a negative or undefined entry.}
 }
 \value{
 An object of class \code{\link[=DiagMatrixParam]{DiagMatrixParam()}}, with \code{n_free} equal to
@@ -38,23 +41,23 @@ assumes independence, which is \eqn{p} free values against
 \code{\link[=log_cholesky]{log_cholesky()}}'s \eqn{p(p+1)/2}, and for a set of independent variance
 components.
 
-The choice of link is yours, and it is a real choice: the derivatives the
-family reports are the link's own, so the curvature an optimizer sees on the
-free scale changes with it. \code{\link[=scalar_matrix]{scalar_matrix()}} is the same object with one free
+The link is chosen by the caller, and the choice matters: the derivatives
+that the family reports are the link's own, so the curvature that an
+optimizer sees on the free scale changes with it. \code{\link[=scalar_matrix]{scalar_matrix()}} is the same object with one free
 value shared by every entry.
 }
 \section{Where the two packages meet}{
-The Jacobian of a diagonal map is diagonal, which is exactly the contract a
-scalar link satisfies, so the \pkg{linkfunctions7} objects are reused as they
-are and their exact derivatives to fourth order come with them. Nothing here
-rederives a chain rule.
+The Jacobian of a diagonal map is diagonal, which is what a scalar link
+supplies, so the \pkg{linkfunctions7} objects are used directly and their
+exact derivatives to fourth order apply without a further chain rule.
 }
 
 \section{The free names record the link}{
 \code{free_names} is \code{log_d1}, \code{log_d2}, ... under the default, and \code{softplus_d1},
-\code{softplus_d2}, ... under a softplus link. A label names the coordinate, never
-the quantity it produces, so a consumer that flattens the free vector into
-scalars with identity links reports a number on the scale it is really on.
+\code{softplus_d2}, ... under a softplus link. A label names the coordinate and
+not the quantity that it produces, so a consumer that flattens the free
+vector into scalars with identity links reports each number on its own
+scale.
 }
 
 \section{The log-determinant, and when it is linear}{
@@ -63,9 +66,8 @@ scalars with identity links reports a number on the scale it is really on.
 a sum of functions of one free value each, so every mixed derivative of it is
 exactly zero at every order. Under the \strong{log} link \eqn{\log h(\eta) = \eta},
 so the gradient is a vector of ones and the second, third and fourth
-derivatives all vanish. Under any other link they do not: a square-root link
-at \eqn{\eta = (1, 2)} gives a second derivative of \eqn{(-2, -0.5)} on the
-diagonal.
+derivatives all vanish. Under another link they do not: a softplus link at
+\eqn{\eta = (1, 2)} gives second derivatives of \eqn{(-0.160, -0.122)}.
 }
 
 \section{Notation}{
@@ -88,13 +90,13 @@ max(abs(param_free(s, param_value(s, c(0.2, -0.3, 0.7))) -
         c(0.2, -0.3, 0.7)))
 
 # Any link carrying the whole free line onto positive entries serves, and
-# the free names say which one was used.
+# the free names record which one was used.
 r <- diagonal_matrix(2, link = linkfunctions7::softplus_link())
 r@free_names
 round(param_value(r, c(1, 2)), 4)
 
-# A link onto the whole line is refused, an entry having to be positive,
-# and so is one defined on part of the line, the map being even there.
+# A link onto the whole line is rejected, an entry having to be positive,
+# and so is one defined on part of the line.
 try(diagonal_matrix(2, link = linkfunctions7::identity_link()))
 try(diagonal_matrix(2, link = linkfunctions7::sqrt_link()))
 

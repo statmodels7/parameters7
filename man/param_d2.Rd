@@ -11,7 +11,7 @@ param_d2(s, eta, ...)
 
 \item{eta}{A numeric vector of length \code{s@n_free}, finite in every entry.}
 
-\item{...}{Passed to the method. No method in this package reads it.}
+\item{...}{Passed to the method. The methods in this package do not read it.}
 }
 \value{
 A named list of \code{choose(s@n_free + 1, 2)} entries, keyed as
@@ -30,14 +30,14 @@ covariance is parametrized this way.
 \section{Keys and their order}{
 The list is keyed by \code{\link[=param_tuple_names]{param_tuple_names()}}, which puts the \eqn{d} diagonal
 pairs first and then the \eqn{d(d-1)/2} off-diagonal ones in lexicographic
-order. Diagonal first is what a consumer filling a Hessian wants, and the
-ordering is part of the interface: \code{\link[=param_tuple_indices]{param_tuple_indices()}} returns the index
+order. The diagonal pairs come first because a Hessian is filled that way,
+and the ordering is part of the interface: \code{\link[=param_tuple_indices]{param_tuple_indices()}} returns the index
 pairs in exactly the same order, so a caller can walk the two together.
 
 Both come from one enumeration, and neither is produced by taking a key
-apart. Splitting \code{"log_L1:log_L2"} on \code{":"} looks equivalent and is not: a
-free value whose own label contains the separator splits into the wrong
-number of pieces, and the failure is silent.
+apart. Splitting \code{"log_L1:log_L2"} on \code{":"} would give the wrong number of
+pieces whenever a free name contains the separator, and no error would be
+signaled.
 }
 
 \section{Exact, or one stencil}{
@@ -48,8 +48,8 @@ once, in the other index. Where \code{\link[=param_d1]{param_d1()}} is itself nu
 \code{\link[=param_value]{param_value()}} directly: a three-point second difference where the two
 indices coincide, and one difference in each of the two components where they
 differ. A mixed derivative in two different variables is one stencil however
-it is written; the nesting the toolkit forbids is two differences in the same
-variable.
+it is written; the nesting that the package avoids is two differences in the
+same variable.
 }
 
 \section{Notation}{

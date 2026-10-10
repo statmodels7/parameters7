@@ -2,7 +2,7 @@
 % Please edit documentation in R/readable.R
 \name{param_readable}
 \alias{param_readable}
-\title{Quantities a Family Is About}
+\title{Interpretable Quantities of a Family}
 \usage{
 param_readable(s, eta, ...)
 }
@@ -11,7 +11,7 @@ param_readable(s, eta, ...)
 
 \item{eta}{A numeric vector of free values, of length \code{s@n_free}.}
 
-\item{...}{Passed to the method. No method in this package reads it.}
+\item{...}{Passed to the method. The methods in this package do not read it.}
 }
 \value{
 \code{NULL} when the family declares nothing, otherwise a list with
@@ -21,30 +21,29 @@ interpretable scale;}
 \item{\code{jacobian}}{a numeric matrix with one row per quantity and one
 column per free value, row names matching \code{value} and no column names;}
 \item{\code{transform}}{a character vector, one entry per quantity and named
-like \code{value}, naming the scale its interval is built on: one of
+like \code{value}, naming the scale on which its interval is built: one of
 \code{"identity"}, \code{"log"}, \code{"atanh"} or \code{"logit"};}
 \item{\code{label}}{a single string naming the block, for a consumer laying out
-a printed summary. The family supplies it because the family is what
-holds the reading.}
+a printed summary.}
 }
 }
 \description{
-Asks a family which interpretable quantities it stands for, and returns them
-with everything a consumer needs to report them: the values, the Jacobian of
-the map from the free vector, the scale each interval should be built on, and
-a label for the block. It exists because \strong{the free vector is what a fit
-estimates, never what a reader reads}: nobody reads the hyperbolic arc
-tangent of a partial autocorrelation, and the quantity behind it cannot be
-recovered from a printed covariance either.
+Returns the interpretable quantities that a family declares, with the
+information that a consumer needs to report them: the values, the Jacobian of
+the map from the free vector, the scale on which each interval should be
+built, and a label for the block. The free vector is the quantity that a fit
+estimates, and it is rarely the quantity that a reader wants: the hyperbolic
+arc tangent of a partial autocorrelation has no direct meaning, and the
+autoregressive coefficients cannot be recovered from a printed covariance.
 
-Use it to turn an estimate and its variance matrix into a table a reader can
-use. The base class declares nothing, so a family whose matrix is all there is
+Use it to turn an estimate and its variance matrix into a table that a reader
+can use. The base class declares nothing, so a family whose matrix is all there is
 to say returns \code{NULL} and a consumer falls back on reporting the matrix.
 }
 \section{What a consumer does with it}{
 Given the free vector's variance matrix \eqn{V}, the standard errors of the
 declared quantities are the delta method, \eqn{\sqrt{\mathrm{diag}(J V
-J^\top)}}. Each interval is then built on the scale \code{transform} names and
+J^\top)}}. Each interval is then built on the scale that \code{transform} names and
 mapped back, so a variance stays positive and a correlation stays inside
 \eqn{(-1, 1)}: on the raw scale an interval for a correlation routinely runs
 past 1.
@@ -55,9 +54,9 @@ For a family whose coordinates are separate scalar links of separate free
 values, \eqn{J} is the diagonal matrix of the inverse links' first
 derivatives, which \code{\link[=readable_diagonal]{readable_diagonal()}} assembles. For \code{\link[=simplex]{simplex()}} it is the
 softmax Jacobian. For \code{\link[=autoregressive]{autoregressive()}} the autoregressive coefficients come
-out of the Levinson-Durbin recursion the family already propagates derivative
-arrays through, so their derivatives in every free value are read off the
-first-order block instead of being computed again.
+out of the Levinson-Durbin recursion, through which the family already
+propagates derivative arrays, so their derivatives in every free value are
+read off the first-order block instead of being computed again.
 }
 
 \section{Which families declare something}{
@@ -89,7 +88,7 @@ sqrt(diag(r$jacobian \%*\% V \%*\% t(r$jacobian)))
 a <- param_readable(autoregressive(8, 2), c(0, 0.9, -0.4))
 a$value
 
-# At q = 1 they coincide: the first partial autocorrelation IS the AR(1)
+# At q = 1 they coincide: the first partial autocorrelation is the AR(1)
 # coefficient.
 b <- param_readable(autoregressive(5, 1), c(0, 0.9))
 b$value[c("pacf1", "phi1")]

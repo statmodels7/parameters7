@@ -8,13 +8,14 @@ dr_prod(dimension, correlation = NULL, link = linkfunctions7::log_link())
 }
 \arguments{
 \item{dimension}{The side \eqn{p} of the matrix, at least 2: a 1 by 1
-correlation carries nothing, and the constructor says so.}
+correlation matrix has no free value, and the constructor signals an
+error.}
 
 \item{correlation}{A \code{\link[=matrix_parameter]{matrix_parameter()}} of side \code{dimension} \strong{producing
 correlation matrices}, that is with a unit diagonal at every free vector.
-Defaults to \code{\link[=correlation_matrix]{correlation_matrix(dimension)}}, which is
-the only shipped family with that property. A block carrying a scale of its
-own, such as \code{\link[=ar1]{ar1()}}, makes the composite unidentified, the same matrix
+Defaults to \code{\link[=correlation_matrix]{correlation_matrix(dimension)}};
+\code{\link[=block_diag]{block_diag()}} and \code{\link[=kron_identity]{kron_identity()}} of \code{correlation_matrix()} blocks have
+the property as well. A block carrying a scale of its own, such as \code{\link[=ar1]{ar1()}}, makes the composite unidentified, the same matrix
 arising from a whole ray of free vectors; the constructor reads the diagonal
 at two probe free vectors and rejects such a block, which
 \code{\link[=check_unit_diagonal]{check_unit_diagonal()}} describes.}
@@ -36,17 +37,17 @@ Returns an object holding
 \eqn{D = \mathrm{diag}(d_1, \ldots, d_p)} carrying the standard deviations
 through a positive link and \eqn{R} a correlation matrix parameter.
 }
-\section{What the separation buys}{
-The quantities a reader takes off a fitted covariance are the standard
-deviations and the correlations, and here they \strong{are} the coordinates. A
-\code{\link[=log_cholesky]{log_cholesky()}} factor produces the same set of matrices with no coordinate
-meaning anything on its own. Measured at
-\eqn{\eta = (0, \log 2, \log 0.5, 1, 1.2, 0.9)}: \code{sqrt(diag(M))} is
-\eqn{(1, 2, 0.5)}, which is \code{exp(eta[1:3])}, and dividing them out returns the
-correlation block's own value exactly.
+\section{The separation of scales and correlations}{
+The quantities that a reader takes off a fitted covariance are the standard
+deviations and the correlations. Here the standard deviations are the
+inverse link of the first \eqn{p} coordinates, and the correlations are the
+value of the correlation block at the remaining ones. A \code{\link[=log_cholesky]{log_cholesky()}}
+factor produces the same set of matrices with coordinates that have no
+separate meaning. The example below reads the standard deviations off the
+diagonal and recovers the correlation block's value by dividing them out.
 }
 
-\section{Every derivative factorizes}{
+\section{Derivatives}{
 Because \eqn{\Sigma_{ij} = d_i d_j R_{ij}} and the two groups of free values
 are disjoint,
 
@@ -55,27 +56,27 @@ are disjoint,
       \bigl[\partial^{S_R} R_{ij}\bigr],}
 
 where \eqn{S_D} and \eqn{S_R} are the parts of the multiset \eqn{S} falling in
-each group. Nothing of the correlation family is rederived: its own components
-are fetched and multiplied entrywise.
+each group. The correlation family's own components are fetched and
+multiplied entrywise, with no new derivation.
 
 Both factors are \strong{sparse}, and where their supports miss each other the
 component is exactly zero. The scale factor is supported on the rows and
-columns the indices of \eqn{S_D} name, and vanishes altogether once \eqn{S_D}
-names three distinct scales; a correlation derivative is supported on the two
-entries its angle governs. So \code{log_sd1:z3.2} is zero, the first factor living
-in row and column 1 and the second on entries \eqn{(3,2)} and \eqn{(2,3)}.
-Measured at \eqn{p = 3}, the disjoint-support rule predicts every exact zero:
-1 of the 21 second-order components, 10 of 56 at third order and 37 of 126 at
-fourth.
+columns that the indices of \eqn{S_D} name, and vanishes altogether once
+\eqn{S_D} names three distinct scales; a correlation derivative in an angle
+of row \eqn{i} is supported on the entries of row and column \eqn{i} whose
+inner product involves that angle, which for \code{z3.2} are \eqn{(3,2)} and
+\eqn{(2,3)}. So \code{log_sd1:z3.2} is zero, the first factor living in row and
+column 1 and the second on entries \eqn{(3,2)} and \eqn{(2,3)}.
 }
 
 \section{The log-determinant}{
 \deqn{\log\lvert\Sigma\rvert = 2\sum_j \log d_j + \log\lvert R\rvert,}
 
 separable in the scales and separable from the correlation, so a component
-mixing two scales, or a scale with a correlation, is exactly zero: 12 of the 21
-second-order components, 43 of 56 and 108 of 126. The first derivative in a
-scale is 2 whatever the point, the scales entering on both sides.
+mixing two scales, or a scale with a correlation, is exactly zero. Under the
+default log link the first derivative in a scale is 2 at every point, the
+scales entering on both sides; for another link it is
+\eqn{2h'(\eta)/h(\eta)}.
 }
 
 \section{The correlation block must have full rank}{
@@ -99,7 +100,8 @@ s@free_names
 eta <- c(log(1), log(2), log(0.5), 1.0, 1.2, 0.9)
 M <- param_value(s, eta)
 
-# The standard deviations are the coordinates, read back off the diagonal.
+# The standard deviations are the inverse link of the first coordinates,
+# read back off the diagonal.
 rbind(from_matrix = sqrt(diag(M)), from_eta = exp(eta[1:3]))
 
 # And dividing them out leaves the correlation block's own value.
@@ -120,7 +122,7 @@ max(abs(param_free(s, M) - eta))
 }
 \seealso{
 \code{\link[=correlation_matrix]{correlation_matrix()}} for the default block, \code{\link[=log_cholesky]{log_cholesky()}} for
-the same set of matrices in coordinates that mean nothing separately, and
+the same set of matrices in coordinates without a separate meaning, and
 \code{\link[=block_diag]{block_diag()}}, \code{\link[=kron_identity]{kron_identity()}} and \code{\link[=sum_struct]{sum_struct()}} for the other
 compositions.
 }

@@ -8,16 +8,19 @@ param_null_basis(mats, tol = 1e-10)
 }
 \arguments{
 \item{mats}{A list of symmetric numeric matrices, all of the same side, or a
-single matrix, which is wrapped in a list. An empty list throws \verb{'mats' must not be empty.}; the matrices themselves are not checked for symmetry
+single matrix, which is wrapped in a list. An empty list signals the error
+\verb{'mats' must not be empty.}; the matrices themselves are not checked for symmetry
 or definiteness, the callers being the package's own constructors.}
 
 \item{tol}{The relative tolerance below which a singular value counts as
 zero: a singular value \eqn{s_j} is null when
-\eqn{s_j \le \mathrm{tol} \cdot \max_i s_i}. Defaults to \code{1e-10}. The
-default sits well below the singular values a genuine rank carries and
-well above the \eqn{10^{-16}} the zero directions of a stacked, normalized
-set of matrices reach, so the gap between the two is wide and the exact
-value is not delicate.}
+\eqn{s_j \le \mathrm{tol} \cdot \max_i s_i}. Defaults to \code{1e-10}, well above
+the \eqn{10^{-16}} that the zero directions of a stacked, normalized set of
+matrices reach. It is below the smallest non-zero singular value of a
+typical penalty, but a long, finely spaced penalty can fall under it (a
+second-difference penalty on 800 coefficients has a relative smallest
+non-zero singular value of about \eqn{8 \times 10^{-11}}), and such a
+direction is then counted as null; a smaller \code{tol} recovers it.}
 }
 \value{
 A list with two components
@@ -33,8 +36,8 @@ stack has full rank.}
 Returns the rank and an orthonormal basis of the common null space of one or
 more symmetric positive semidefinite matrices. Each matrix is scaled to unit
 maximum entry, the scaled matrices are stacked into one tall matrix, and the
-rank and the null space are read off its singular value decomposition. Every
-\code{\link[=matrix_parameter]{matrix_parameter()}} calls it once at construction to fill its \code{rank} and
+rank and the null space are read off its singular value decomposition.
+\code{\link[=scaled_matrix]{scaled_matrix()}} calls it once at construction to fill its \code{rank} and
 \code{null_basis} properties.
 }
 \section{Reading the rank off the components}{
@@ -46,16 +49,12 @@ count of small eigenvalues is not scale invariant: a component whose weight
 is small contributes eigenvalues below the tolerance, and they are then
 counted as null directions that are not there.
 
-Measured on the tensor-product penalty of two second-difference penalties
-over 4 and 8 coefficients, whose true rank is 28 out of 32. Counting the
-eigenvalues of the assembled sum above a relative tolerance of
-\eqn{10^{-10}} answers 28 while the two weights are within \eqn{10^{8}} of
-each other, and 24 once the ratio reaches \eqn{10^{10}}: four directions the
-penalty does penalize are read as null. Smoothing parameters ten orders of
-magnitude apart are an ordinary fitted model, not a pathology. The stacked
-route answers 28 at every ratio, and the basis it returns is annihilated by
-the assembled matrix to \eqn{3 \times 10^{-16}} relative even at the worst
-one.
+The examples show this on the tensor-product penalty of two
+second-difference penalties over 4 and 8 coefficients, whose rank is 28 out
+of 32: counting the eigenvalues of the assembled sum gives 24 when the two
+weights differ by a factor of \eqn{10^{10}}, while the stacked route gives 28.
+Smoothing parameters that differ by ten orders of magnitude occur in ordinary
+fitted models.
 }
 
 \section{The scaling}{
@@ -115,6 +114,6 @@ max(abs(M \%*\% nb2$null_basis)) / max(abs(M))
 }
 \seealso{
 \code{\link[=matrix_parameter]{matrix_parameter()}}, whose \code{rank} and \code{null_basis} properties this
-fills, and the two families that can be rank deficient and so are the ones
-whose answer is not trivial: \code{\link[=scaled_matrix]{scaled_matrix()}} and \code{\link[=sum_struct]{sum_struct()}}.
+fills, and \code{\link[=scaled_matrix]{scaled_matrix()}} and \code{\link[=sum_struct]{sum_struct()}}, the two families that
+accept a rank-deficient matrix of their own.
 }

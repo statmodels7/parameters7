@@ -8,7 +8,7 @@ transition_matrix(n_state)
 }
 \arguments{
 \item{n_state}{The number of states \eqn{K}, \strong{at least 2}. A single integer;
-\code{1}, a fraction, \code{NA} and a vector all throw \verb{'n_state' must be a single integer of at least 2.} A one-state chain has nothing to estimate.}
+\code{1}, a fraction, \code{NA} and a vector all signal the error \verb{'n_state' must be a single integer of at least 2.} A one-state chain has nothing to estimate.}
 }
 \value{
 An object of class \code{\link[=TransitionMatrixParam]{TransitionMatrixParam()}}, with \code{n_free} equal to
@@ -20,8 +20,10 @@ row, \code{param_name} \code{"transition_matrix"}, and \code{param_params} holdi
 Returns an object holding a \eqn{K \times K} row-stochastic matrix, the
 transition matrix of a Markov chain on \eqn{K} states, with each row an
 independent \code{\link[=simplex]{simplex()}} in the additive log-ratio chart. \eqn{K(K-1)} free
-values in all, and every free vector gives positive entries with rows summing
-to exactly 1, so a chain can be estimated without a constraint.
+values in all, and every free vector gives non-negative entries with rows
+summing to 1 up to rounding, so a chain can be estimated without a
+constraint. An entry underflows to exactly 0 when its free value is more
+than about 745 below the largest in its row.
 }
 \section{Rows, not columns}{
 The rows live on the simplex, so row \eqn{i} holds the probabilities of moving
@@ -35,21 +37,21 @@ Each row is parametrized by its own \eqn{K-1} free values and no others, so
 every derivative array is \strong{block diagonal by row}: a component pairing free
 values of two different rows is exactly the zero matrix, and a component
 inside row \eqn{i} is zero everywhere outside row \eqn{i}. The implementation
-evaluates the simplex kernels row by row and never stores those zeros.
+evaluates the simplex kernels row by row and does not compute the cross-row
+components, which are returned as matrices of zeros.
 
-Measured at \eqn{K = 3}: the second-derivative component
-\code{alr1.1:alr2.1}, spanning two rows, is 0 exactly, while \code{alr1.1:alr1.1} is
-not.
+At \eqn{K = 3}, the second-derivative component \code{alr1.1:alr2.1}, spanning two
+rows, is exactly 0, while \code{alr1.1:alr1.1} is not.
 }
 
 \section{Reading the free vector}{
-It runs row by row, and the names \verb{alr\{i\}.\{j\}} say which row and which chart
-coordinate, the row.column convention \code{\link[=log_cholesky]{log_cholesky()}} uses. The \code{alr} records
+It runs row by row, and the names \verb{alr\{i\}.\{j\}} give the row and the chart
+coordinate, in the row.column convention that \code{\link[=log_cholesky]{log_cholesky()}} uses. The \code{alr} records
 the chart, so a free value of 0.5 is not a probability of 0.5: it is a log
 ratio against the row's last state.
 }
 
-\section{What it has and has not got}{
+\section{Available methods}{
 All four derivative orders are closed form, inherited from \code{\link[=simplex]{simplex()}}'s
 cumulant recursion. There is no log-determinant, no solve and no factor: the
 value is not symmetric, and the object is a \code{\link[=parameter]{parameter()}} and never a
@@ -78,10 +80,10 @@ eta <- rnorm(s@n_free)
 m <- param_value(s, eta)
 round(m, 4)
 
-# Every row is a probability distribution, exactly.
+# Every row is a probability distribution, up to rounding.
 rowSums(m)
 
-# The round trip closes exactly.
+# The round trip closes up to rounding.
 max(abs(param_free(s, m) - eta))
 
 # The rows are independent, so a derivative in a row-1 free value is zero
@@ -93,12 +95,12 @@ d2 <- param_d2(s, eta)
 c(across_rows = max(abs(d2[["alr1.1:alr2.1"]])),
   within_row = max(abs(d2[["alr1.1:alr1.1"]])))
 
-# There is no log-determinant to ask for: the value is not symmetric.
+# There is no log-determinant: the value is not symmetric.
 try(param_logdet(s, eta))
 
 }
 \seealso{
 \code{\link[=simplex]{simplex()}}, which is one row of this and carries the derivative
 recursion, \code{\link[=param_value]{param_value()}} and \code{\link[=param_free]{param_free()}} for the map and its inverse,
-and \code{\link[=check_parameter]{check_parameter()}} for the battery a non-matrix family gets.
+and \code{\link[=check_parameter]{check_parameter()}} for the battery that a non-matrix family gets.
 }

@@ -24,10 +24,8 @@ and applied.
 }
 \details{
 The precision is \strong{banded of bandwidth \eqn{q}}, which is the content of an
-order-\eqn{q} Markov property: no partial correlation beyond the lag.
-Measured at \eqn{q = 3} and \eqn{p = 9}, all 30 entries outside the band are
-exactly 0 and 51 of the 81 entries are non-zero; against \code{solve()} on the
-assembled matrix the agreement is \eqn{7 \times 10^{-16}}.
+order-\eqn{q} Markov property: no partial correlation beyond the lag. Every
+entry outside the band is exactly 0.
 
 The bandedness is not exploited for speed here, the whole \eqn{p} by \eqn{p}
 precision being formed and multiplied. What it buys a consumer is the

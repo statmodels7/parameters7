@@ -13,7 +13,8 @@ SimplexParam(
 }
 \arguments{
 \item{param_name}{A single character string naming the family, used in the
-error messages the validators raise and in the object's \code{print} output.
+error messages that the validators raise and in the object's \code{print}
+output.
 \code{"log_cholesky"}, \code{"ar1"} and so on.}
 
 \item{n_free}{The length \eqn{d} of the free vector: a single non-negative
@@ -22,7 +23,8 @@ The validator rejects a vector, a negative value, or a length that
 disagrees with \code{free_names}.}
 
 \item{free_names}{A character vector of length \code{n_free}, one label per free
-value, in the order the free vector holds them. Fixed at construction and
+value, in the order in which the free vector holds them. Fixed at
+construction and
 part of the interface: consumers build their parameter tables from these
 labels, so the ordering is not free to change. The validator rejects a
 duplicated label and a length other than \code{n_free}.}
@@ -30,7 +32,7 @@ duplicated label and a length other than \code{n_free}.}
 \item{param_params}{A list of whatever the family needs in order to evaluate
 itself, read only by that family's own methods. \code{log_cholesky()} stores
 the row and column index of each free value here; \code{sum_struct()} stores
-its component matrices. Nothing outside the family looks inside it.}
+its component matrices. Only the methods of that family read the list.}
 }
 \value{
 An object of class \code{SimplexParam}, a subclass of \code{\link[=parameter]{parameter()}} adding
@@ -43,7 +45,7 @@ The S7 class of probability vectors on the open simplex, in the additive
 log-ratio parametrization. It inherits \code{\link[=parameter]{parameter()}} \strong{directly}, never
 \code{\link[=matrix_parameter]{matrix_parameter()}}, its value being a vector: there is no \code{dimension}, no
 \code{rank} and no \code{null_basis}, and \code{\link[=param_logdet]{param_logdet()}}, \code{\link[=param_solve]{param_solve()}}
-and \code{\link[=param_factor]{param_factor()}} have no method for it, so asking for the
+and \code{\link[=param_factor]{param_factor()}} have no method for it, so a call for the
 log-determinant of a probability vector fails at dispatch.
 
 \code{\link[=simplex]{simplex()}} builds one. The four derivative orders are all closed form.
@@ -57,12 +59,12 @@ c(parameter = S7::S7_inherits(s, parameter),
 # K - 1 free values for K categories.
 vapply(2:5, function(k) simplex(k)@n_free, integer(1))
 
-# And no log-determinant to ask for.
+# And no log-determinant.
 try(param_logdet(s, c(0, 0)))
 
 }
 \seealso{
 \code{\link[=simplex]{simplex()}}, the constructor, \code{\link[=transition_matrix]{transition_matrix()}}, which is one of
-these per row, and \code{\link[=parameter]{parameter()}} for the properties this inherits and the
-four generics it does not get.
+these per row, \code{\link[=parameter]{parameter()}} for the properties that this class inherits,
+and \code{\link[=matrix_parameter]{matrix_parameter()}} for the generics that it does not get.
 }

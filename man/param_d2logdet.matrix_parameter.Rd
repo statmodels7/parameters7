@@ -16,7 +16,7 @@ A numeric vector of \code{choose(s@n_free + 1, 2)} entries, keyed as
 \code{param_tuple_names(s)} and in that order.
 }
 \description{
-The method every \code{\link[=matrix_parameter]{matrix_parameter()}} inherits when it registers no
+The method that every \code{\link[=matrix_parameter]{matrix_parameter()}} inherits when it registers no
 \code{\link[=param_d2logdet]{param_d2logdet()}} of its own. It evaluates the identity that follows from
 differentiating \code{\link[=param_dlogdet]{param_dlogdet()}}'s trace once more, using
 \eqn{\partial_l M^{-1} = -M^{-1}(\partial_l M)M^{-1}},
@@ -24,13 +24,12 @@ differentiating \code{\link[=param_dlogdet]{param_dlogdet()}}'s trace once more,
 \deqn{\partial_{kl} \log|M| = \mathrm{tr}\!\left(M^{+} \partial_{kl} M\right)
   - \mathrm{tr}\!\left(M^{+} (\partial_k M)\, M^{+} (\partial_l M)\right),}
 
-with \eqn{M^{+}} the pseudo-inverse over the directions the declared rank
-keeps. The second trace is formed as \code{sum(t(mi \%*\% dk) * (mi \%*\% dl))}, which
+with \eqn{M^{+}} the pseudo-inverse over the directions that the declared
+rank keeps. The second trace is formed as \code{sum(t(mi \%*\% dk) * (mi \%*\% dl))}, which
 is the trace of the product without the product being multiplied out.
 
-Exact given the derivative arrays, so the accuracy is theirs. With analytic
-arrays the answer agrees with a closed form to \eqn{1 \times 10^{-14}}; with
-numerical ones, to \eqn{6 \times 10^{-8}}.
+Exact given the derivative arrays, so the accuracy is theirs: rounding with
+analytic arrays, and that of the stencils with numerical ones.
 }
 \seealso{
 \code{\link[=param_d2logdet]{param_d2logdet()}} for the generic, \code{\link[=param_d1]{param_d1()}} and \code{\link[=param_d2]{param_d2()}} for

@@ -6,13 +6,14 @@ NULL
 # supplies a closed form takes over through dispatch with no registration step.
 
 
-#' Is This the Package's Own Base Class?
+#' Test for the Package's Own Base Classes
 #'
 #' @description
-#' Asks whether an S7 class is [parameter()] or [matrix_parameter()], the two
-#' abstract classes this package registers its fallback methods on. That is how
-#' a method a subclass wrote is told apart from one it merely inherited, which is
-#' the question [param_is_numerical()] answers and [check_parameter()] acts on.
+#' Returns whether an S7 class is [parameter()] or [matrix_parameter()], the
+#' two base classes on which this package registers its fallback methods. The
+#' test distinguishes a method that a subclass wrote from one that it inherited,
+#' which is what [param_is_numerical()] reports and what [check_parameter()]
+#' acts on.
 #'
 #' @details
 #' Two comparisons, in order. Identity is tried first, since it is the usual
@@ -24,7 +25,7 @@ NULL
 #'
 #' @param cls An S7 class object, as `S7::S7_class(x)` returns or as
 #'   `attr(method, "signature")[[1]]` holds. Anything else returns `FALSE`
-#'   rather than throwing, `attr()` on a non-class giving `NULL`.
+#'   without an error, `attr()` on a non-class giving `NULL`.
 #'
 #' @return `TRUE` when `cls` is [parameter()] or [matrix_parameter()], `FALSE`
 #'   for any subclass and for anything that is not an S7 class.
@@ -49,13 +50,16 @@ is_base_param_class <- function(cls) {
 #'
 #' @description
 #' Reports, one derivative quantity at a time, whether the parameter has a
-#' method of its own or takes the numerical one registered on [parameter()] and
-#' [matrix_parameter()]. Ask it before trusting a fourth-order derivative of a
-#' family you did not write: `FALSE` everywhere means every quantity is a closed
-#' form, and `TRUE` somewhere marks a component whose accuracy is a stencil's.
+#' method of its own or takes the one registered on [parameter()] and
+#' [matrix_parameter()]. It is the test to run before relying on a fourth-order
+#' derivative of a family written elsewhere: `FALSE` everywhere means that every
+#' quantity has a method of the family's own, and `TRUE` marks a component
+#' computed by a base method, a stencil for the derivatives of the value, an
+#' eigendecomposition for the log-determinant and its first two derivatives, and
+#' a stencil on the order below for its third and fourth.
 #'
 #' @details
-#' # Why the question is worth asking
+#' # Why the answer matters
 #'
 #' Whether an independent check exists depends on the answer. A derivative
 #' computed by finite differences cannot be checked against a finite difference,
@@ -71,13 +75,14 @@ is_base_param_class <- function(cls) {
 #' performs it, and [check_parameter()] compares them against `base::solve()`
 #' either way. Listing them as numerical would suggest an approximation that is
 #' not there. [param_value()] is absent because a family that does not implement
-#' it has nothing at all, and [param_free()] because its base method throws.
+#' it has nothing at all, and [param_free()] because its base method signals an
+#' error.
 #'
-#' # Every shipped family answers FALSE
+#' # Every family in the package returns FALSE
 #'
-#' Measured over all fifteen constructors in this package, at every component:
-#' none of them uses a numerical route. The fallbacks exist for a family written
-#' elsewhere, and the example below builds one to show what a `TRUE` looks like.
+#' Every constructor in this package returns `FALSE` at every component. The
+#' fallbacks serve a family written elsewhere, and the example below builds one
+#' to show what a `TRUE` looks like.
 #'
 #' @param s An object inheriting from class [parameter()].
 #'
@@ -89,8 +94,8 @@ is_base_param_class <- function(cls) {
 #'   derivative orders alone, the log-determinant not existing there.
 #'
 #' @seealso [check_parameter()], which reports a numerical component as not
-#'   checked, and [numerical_d1()] and its higher-order siblings, the routes a
-#'   `TRUE` names.
+#'   checked, and [numerical_d1()] and its higher-order siblings, the routes that
+#'   a `TRUE` names.
 #'
 #' @examples
 #' # Every family in the package is closed form throughout.
@@ -143,13 +148,13 @@ param_is_numerical <- function(s) {
 }
 
 
-#' The Spectral Decomposition a Parameter's Quantities Are Read From
+#' The Spectral Decomposition of a Parameter's Matrix
 #'
 #' @description
 #' Returns the eigenvalues and eigenvectors of \eqn{M(\eta)}, together with a
-#' flag saying which directions carry the matrix. It is what the base-class
-#' log-determinant, the pseudo-inverse and the rank-deficient solve all read, so
-#' one decomposition serves them.
+#' flag marking the directions that carry the matrix. The base-class
+#' log-determinant and its first two derivatives read it, so one decomposition
+#' serves them.
 #'
 #' @details
 #' Which eigenvalues count as zero is settled **by position**, never by size.
@@ -159,11 +164,11 @@ param_is_numerical <- function(s) {
 #' tolerance is not scale invariant, so a family whose components differ by many
 #' orders of magnitude would be assigned a different rank at different \eqn{\eta},
 #' and a fitted model with smoothing parameters that far apart is ordinary. The
-#' object settled the question once, at construction, from the components. See
-#' [param_null_basis()] for the measurement.
+#' rank is fixed once, at construction, from the components; see
+#' [param_null_basis()].
 #'
-#' The matrix is symmetrized as `(m + t(m)) / 2` before the decomposition, so an
-#' asymmetry of rounding size does not produce complex eigenvalues.
+#' The matrix is symmetrized as `(m + t(m)) / 2` before the decomposition, so
+#' both triangles of an asymmetry of rounding size enter the eigenvalues.
 #'
 #' @param s A [matrix_parameter()] object, whose `rank` and `dimension` are read.
 #' @param eta A numeric vector of free values, of length `s@n_free`.
@@ -197,9 +202,9 @@ param_spectrum <- function(s, eta) {
 #' @description
 #' Builds the pseudo-inverse of \eqn{M(\eta)} as
 #' \eqn{\sum_{j \in \mathrm{keep}} \lambda_j^{-1} v_j v_j^\top}, over the
-#' directions [param_spectrum()]'s `keep` flag marks. It is what the
-#' rank-deficient branches of the base-class log-determinant derivatives use in
-#' place of \eqn{M^{-1}} in the trace identities.
+#' directions that the `keep` flag of [param_spectrum()] marks. The base-class
+#' log-determinant derivatives use it in place of \eqn{M^{-1}} in the trace
+#' identities, and for a full-rank family it is the ordinary inverse.
 #'
 #' @param sp The result of [param_spectrum()]: a list with `values`, `vectors`
 #'   and `keep`.
@@ -228,33 +233,37 @@ spectrum_pinv <- function(sp) {
 #' from the eigenvalues.
 #'
 #' @details
-#' The verdict comes from the spectrum, because `chol()` is not a rank test. On a matrix with an exactly zero
-#' eigenvalue the pivot that ought to be zero comes out positive or negative
-#' according to rounding, so `chol()` succeeds on some platforms and fails on
-#' others, and a branch that asks it whether a matrix is usable gets a different
-#' answer on different machines. `min(ev) <= tol * max(ev)` is a statement about
-#' the matrix; a caught error is a statement about the arithmetic.
+#' The verdict comes from the spectrum because `chol()` is not a rank test. On
+#' a matrix with an exactly zero eigenvalue the pivot that ought to be zero
+#' comes out positive or negative according to rounding, so `chol()` succeeds on
+#' some platforms and fails on others. The test `min(ev) <= tol * max(ev)` does
+#' not depend on the platform in that way.
+#'
+#' The default tolerance, \eqn{10^{-14}} (about 45 times the machine epsilon),
+#' is above the rounding level of an eigenvalue that is exactly zero and below
+#' the conditioning that [param_value()] reaches on ordinary free vectors, so a
+#' badly conditioned but positive definite value is accepted.
 #'
 #' @param m A symmetric numeric matrix. Not checked for symmetry; the callers
-#'   have already symmetrized.
+#'   pass the value of [param_value()] or a matrix already symmetrized by
+#'   [check_matrix()].
 #' @param tol The relative tolerance below which the smallest eigenvalue counts
 #'   as zero, so `m` is rejected when `min(ev) <= tol * max(ev)`. Defaults to
-#'   `1e-12`. At that default `diag(c(1, 1e-12))` returns `NULL`, the test being
-#'   an inequality, and `diag(c(1, 1e-11))` factors.
+#'   `1e-14`. At that default `diag(c(1, 1e-14))` returns `NULL`, the test being
+#'   an inequality, and `diag(c(1, 1e-13))` factors.
 #'
 #' @return The lower triangular \eqn{L} with \eqn{M = L L^\top}, or `NULL` when
-#'   `m` has no eigenvalues, has an `NA` among them, has a non-positive largest
-#'   eigenvalue, fails the relative test, or makes [base::chol()] raise after
-#'   all.
+#'   `m` is empty, has a missing or non-finite entry, has a non-positive largest
+#'   eigenvalue, fails the relative test, or makes [base::chol()] signal an
+#'   error.
 #'
 #' @seealso [param_factor()], the generic whose base method calls this, and
-#'   [param_spectrum()] for the decomposition the deficient branches use
-#'   instead.
+#'   [param_spectrum()] for the decomposition that the log-determinant uses.
 #'
 #' @keywords internal
-chol_pd <- function(m, tol = 1e-12) {
+chol_pd <- function(m, tol = 1e-14) {
+  if (!length(m) || !all(is.finite(m))) return(NULL)
   ev <- eigen(m, symmetric = TRUE, only.values = TRUE)$values
-  if (!length(ev) || anyNA(ev)) return(NULL)
   if (max(ev) <= 0 || min(ev) <= tol * max(ev)) return(NULL)
   r <- tryCatch(chol(m), error = function(e) NULL)
   if (is.null(r)) NULL else t(r)
@@ -264,22 +273,20 @@ chol_pd <- function(m, tol = 1e-12) {
 #' Finite-Difference Step for a Free Value
 #'
 #' @description
-#' Returns the step a central difference should use in one component of
-#' \eqn{\eta}, scaled by the size of that component. A one-line forward to
-#' [numericals7::fd_step()] at accuracy 2, so the step a fallback here takes and
-#' the step the stencil library documents cannot drift apart.
+#' Returns the step for a central difference in one component of \eqn{\eta},
+#' scaled by the size of that component. It forwards to
+#' [numericals7::fd_step()] at accuracy 2, so the step of a fallback here and the
+#' step that the stencil library documents cannot drift apart.
 #'
 #' @details
 #' The rule is \eqn{\varepsilon^{1/(k+2)} \max(1, |\eta_k|)} for a \eqn{k}-th
-#' derivative, which balances the truncation error against the rounding the
-#' division by \eqn{h^k} amplifies. In doubles that is \eqn{6.1 \times 10^{-6}}
+#' derivative, which balances the truncation error against the rounding that
+#' the division by \eqn{h^k} amplifies. In doubles that is \eqn{6.1 \times 10^{-6}}
 #' at first order and \eqn{1.2 \times 10^{-4}} at second, both scaling up once
 #' \eqn{|\eta_k|} passes 1.
 #'
-#' No clamping happens, and there is nothing to clamp away from. The response
-#' and parameter steps in \pkg{distributions7} have to keep a node inside a
-#' bounded support; the unconstrained scale has no boundary anywhere, so
-#' `bounds` is left at its default.
+#' The step is not clamped. The unconstrained scale has no boundary, so the
+#' `bounds` argument of [numericals7::fd_step()] is left at its default.
 #'
 #' @param eta_k The value of the component, a single number.
 #' @param order The derivative order the step is for: 1, 2, 3 or 4.
@@ -307,8 +314,7 @@ fd_step <- function(eta_k, order = 1L) {
 #' @details
 #' The sum \eqn{h^{-k}\sum_j w_j f(\eta + s_j h e_k)} is accumulated term by
 #' term, skipping the nodes whose weight is zero, so `f` is called once per
-#' non-zero weight: three times for a first or second derivative, five for a
-#' third or fourth. The accumulator starts at `NULL` and takes the shape of the
+#' non-zero weight: two, three, four and five times at orders one to four. The accumulator starts at `NULL` and takes the shape of the
 #' first term, which is why `f` may return a matrix, a vector or a scalar without
 #' this function knowing which.
 #'
@@ -358,31 +364,28 @@ fd_along <- function(f, eta, k, order = 1L, h = NULL) {
 #' \deqn{\partial_k V \approx
 #'   \frac{V(\eta + h e_k) - V(\eta - h e_k)}{2h},}
 #'
-#' at the step [fd_step()] gives for a first derivative. This is the method
+#' at the step that [fd_step()] gives for a first derivative. This is the method
 #' [param_d1()] dispatches to when a family has not written its own, and it is
 #' exported so that a family being developed can be compared against it.
 #'
 #' @details
 #' The step is \eqn{\varepsilon^{1/3}\max(1, |\eta_k|)}, about
 #' \eqn{6.1 \times 10^{-6}} near the origin, giving a truncation error of order
-#' \eqn{h^2}. Measured against the closed form of a \eqn{2 \times 2}
-#' log-Cholesky covariance, the agreement is \eqn{7 \times 10^{-11}} absolute on
-#' entries of size 3, so eleven digits or so. The example below runs that
-#' comparison.
+#' \eqn{h^2}. The example below compares the result with a closed form.
 #'
-#' The result is symmetrized for a [matrix_parameter()], as `(A + t(A)) / 2`. The
-#' derivative of a symmetric matrix is symmetric, so the halving corrects
-#' rounding and changes nothing else. `V` costs \eqn{2d} evaluations of the map.
+#' The result is not symmetrized; it is symmetric whenever [param_value()]
+#' returns a symmetric matrix, the difference of two symmetric matrices being
+#' symmetric. It costs \eqn{2d} evaluations of the map.
 #'
 #' @param s A [parameter()] object, of any branch.
 #' @param eta A numeric vector of free values, of length `s@n_free`.
 #'
 #' @return A list of `s@n_free` estimates named by `s@free_names`, each shaped
-#'   like [param_value()]'s result and symmetrized for a matrix family.
+#'   like the result of [param_value()].
 #'
-#' @seealso [param_d1()], the generic this serves, [numerical_d2()],
+#' @seealso [param_d1()], the generic that this serves, [numerical_d2()],
 #'   [numerical_d3()] and [numerical_d4()] for the higher orders, and
-#'   [param_is_numerical()] to ask whether a given family reaches this at all.
+#'   [param_is_numerical()] to find out whether a given family reaches this.
 #'
 #' @examples
 #' # A scalar matrix is exp(eta) times the identity, so the derivative is the
@@ -391,7 +394,7 @@ fd_along <- function(f, eta, k, order = 1L, h = NULL) {
 #' numerical_d1(s, 0.3)
 #' max(abs(numerical_d1(s, 0.3)[[1]] - param_value(s, 0.3)))
 #'
-#' # Against a family that writes its own: the two agree to about 1e-10.
+#' # Against a family that writes its own.
 #' q <- log_cholesky(2)
 #' eta <- c(0.2, -0.1, 0.4)
 #' max(abs(unlist(numerical_d1(q, eta)) - unlist(param_d1(q, eta))))
@@ -418,7 +421,7 @@ numerical_d1 <- function(s, eta) {
 #' dispatches to when a family has not written its own.
 #'
 #' @details
-#' # Three routes, one layer each
+#' # The three routes
 #'
 #' Writing \eqn{V(\eta)} for [param_value()] and \eqn{\partial_k V} for an
 #' analytic first derivative, the component \eqn{(k, l)} is
@@ -436,7 +439,7 @@ numerical_d1 <- function(s, eta) {
 #' and a diagonal pair the three-point second difference. All three carry a
 #' truncation error of order \eqn{h^2}.
 #'
-#' # Why none of them nests
+#' # Single-layer differences
 #'
 #' The rule the toolkit follows is that differences are never composed **in the
 #' same variable**: a difference of a difference multiplies the error of the
@@ -447,9 +450,11 @@ numerical_d1 <- function(s, eta) {
 #' stencil, so it is one layer as well. The diagonal case uses the
 #' second-difference stencil directly and never sees a first difference at all.
 #'
-#' The steps are the order-2 ones, \eqn{\varepsilon^{1/4}\max(1, |\eta_k|)},
-#' about \eqn{1.2 \times 10^{-4}} near the origin, since it is a second
-#' derivative being estimated whichever route is taken.
+#' On the analytic route the step is the order-1 one,
+#' \eqn{\varepsilon^{1/3}\max(1, |\eta_l|)}, about \eqn{6.1 \times 10^{-6}} near
+#' the origin, because a first derivative of an analytic array is taken. The two
+#' routes on [param_value()] use the order-2 step,
+#' \eqn{\varepsilon^{1/4}\max(1, |\eta_k|)}, about \eqn{1.2 \times 10^{-4}}.
 #'
 #' @param s A [parameter()] object, of any branch.
 #' @param eta A numeric vector of free values, of length `s@n_free`.
@@ -458,7 +463,7 @@ numerical_d1 <- function(s, eta) {
 #'   `param_tuple_names(s)` and in that order, each shaped like
 #'   [param_value()]'s result and symmetrized for a matrix family.
 #'
-#' @seealso [param_d2()], the generic this serves, [numerical_d1()] for the
+#' @seealso [param_d2()], the generic that this serves, [numerical_d1()] for the
 #'   order below, and [mixed_stencil()], which the third and fourth orders use.
 #'
 #' @examples
@@ -511,23 +516,21 @@ numerical_d2 <- function(s, eta) {
 #' @title Default First Derivatives
 #' @name param_d1.parameter
 #' @description
-#' The method every [parameter()] inherits when it registers no [param_d1()] of
+#' The method that every [parameter()] inherits when it registers no [param_d1()] of
 #' its own. It estimates \eqn{\partial V/\partial \eta_k} by one three-point
 #' central difference of [param_value()] in each component,
 #' \eqn{(V(\eta + h e_k) - V(\eta - h e_k)) / 2h}, at the step
 #' \eqn{\varepsilon^{1/3}\max(1, |\eta_k|)}, which is about
 #' \eqn{6.1 \times 10^{-6}} near the origin. It costs \eqn{2d} evaluations of the
-#' map and delivers about eleven digits; measured against a closed form on a
-#' \eqn{2 \times 2} covariance the gap is \eqn{7 \times 10^{-11}} on entries of
-#' size 3. No family in this package reaches it.
+#' map. The families in this package do not reach it.
 #' @param s A [parameter()] object, of any branch.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic.
 #' @param ... Unused, and accepted so the signature matches the generic's.
 #' @return A list of `s@n_free` estimates named by `s@free_names`, each shaped
-#'   like [param_value()]'s result and symmetrized for a matrix family.
-#' @seealso [numerical_d1()], which does the work and carries the stencil, and
-#'   [param_is_numerical()] to ask whether a family reaches this method.
+#'   like the result of [param_value()].
+#' @seealso [numerical_d1()], which does the work, and [param_is_numerical()]
+#'   to find out whether a family reaches this method.
 #' @keywords internal
 S7::method(param_d1, parameter) <- function(s, eta, ...) {
   numerical_d1(s, eta)
@@ -536,14 +539,13 @@ S7::method(param_d1, parameter) <- function(s, eta, ...) {
 #' @title Default Second Derivatives
 #' @name param_d2.parameter
 #' @description
-#' The method every [parameter()] inherits when it registers no [param_d2()] of
+#' The method that every [parameter()] inherits when it registers no [param_d2()] of
 #' its own. It takes exactly one difference per component, of whichever quantity
-#' the family already supplies: the analytic [param_d1()] where there is one, and
-#' [param_value()] itself where there is not, through a three-point second
-#' difference on the diagonal and a four-point mixed stencil off it. The step is
-#' the order-2 one, \eqn{\varepsilon^{1/4}\max(1, |\eta_k|)}, about
-#' \eqn{1.2 \times 10^{-4}} near the origin, and the truncation error is of order
-#' \eqn{h^2} on every route. No family in this package reaches it.
+#' the family already supplies: the analytic [param_d1()] where there is one, at
+#' the order-1 step, and [param_value()] itself where there is not, through a
+#' three-point second difference on the diagonal and a four-point mixed stencil
+#' off it, at the order-2 step. The truncation error is of order \eqn{h^2} on
+#' every route. The families in this package do not reach it.
 #' @param s A [parameter()] object, of any branch.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic.
@@ -561,21 +563,20 @@ S7::method(param_d2, parameter) <- function(s, eta, ...) {
 #' @title Default Log-Determinant
 #' @name param_logdet.matrix_parameter
 #' @description
-#' The method every [matrix_parameter()] inherits when it registers no
+#' The method that every [matrix_parameter()] inherits when it registers no
 #' [param_logdet()] of its own. It takes an eigendecomposition of
 #' [param_value()], keeps the first `s@rank` eigenvalues, and returns the sum of
 #' their logarithms: the log-determinant for a full-rank family and the log
 #' pseudo-determinant otherwise. Which eigenvalues are kept is decided by
 #' position, from the declared rank, and never from their size.
 #'
-#' Exact, not approximated, so [param_is_numerical()] reporting `TRUE` here means
-#' that the answer costs \eqn{O(p^3)} and cannot be checked against an
-#' eigendecomposition, not that it is inaccurate. Measured against a closed form
-#' on a \eqn{4 \times 4} AR(1) covariance, the agreement is
-#' \eqn{4 \times 10^{-15}}.
+#' The result is exact up to rounding, so [param_is_numerical()] reporting
+#' `TRUE` here means that the answer costs \eqn{O(p^3)} and cannot be checked
+#' against an eigendecomposition; it does not mean that the answer is
+#' inaccurate.
 #' @details
-#' A non-positive eigenvalue among the ones the rank keeps throws, naming the
-#' family and the counts: the family has declared a rank it does not have at this
+#' A non-positive eigenvalue among those that the rank keeps signals an error
+#' naming the family and the counts: the family has declared a rank it does not have at this
 #' \eqn{\eta}, so `log()` of a non-positive number would be the wrong thing to
 #' return. This is the check that catches a `param_value()` method whose matrix
 #' leaves the positive semidefinite cone.
@@ -592,8 +593,8 @@ S7::method(param_logdet, matrix_parameter) <- function(s, eta, ...) {
   v <- sp$values[sp$keep]
   if (any(v <= 0)) {
     stop(sprintf(paste0(
-      "'%s' produced %d non-positive eigenvalue(s) among the %d its rank\n",
-      "  keeps, so it is outside the set it claims to parametrize."
+      "'%s' produced %d non-positive eigenvalue(s) among the %d that its\n",
+      "  rank keeps, so it is outside the set that it parametrizes."
     ), s@param_name, sum(v <= 0), s@rank), call. = FALSE)
   }
   sum(log(v))
@@ -602,20 +603,19 @@ S7::method(param_logdet, matrix_parameter) <- function(s, eta, ...) {
 #' @title Default Log-Determinant Gradient
 #' @name param_dlogdet.matrix_parameter
 #' @description
-#' The method every [matrix_parameter()] inherits when it registers no
+#' The method that every [matrix_parameter()] inherits when it registers no
 #' [param_dlogdet()] of its own. It evaluates the trace identity
 #'
 #' \deqn{\partial_k \log|M| = \mathrm{tr}\!\left(M^{+} \partial_k M\right),}
 #'
-#' with \eqn{M^{+}} the Moore-Penrose inverse formed from the directions the
-#' declared rank keeps, which is the ordinary inverse for a full-rank family. The
+#' with \eqn{M^{+}} the Moore-Penrose inverse formed from the directions that
+#' the declared rank keeps, which is the ordinary inverse for a full-rank family. The
 #' trace is computed as `sum(mi * dk)`, the elementwise product summed, both
 #' matrices being symmetric, so no matrix product is formed.
 #'
 #' The identity is exact, so the accuracy is entirely the accuracy of
-#' [param_d1()]. With an analytic first derivative the answer agrees with a
-#' closed form to \eqn{4 \times 10^{-15}}; with a numerical one, to
-#' \eqn{2 \times 10^{-11}}.
+#' [param_d1()]: rounding with an analytic first derivative, and that of a
+#' central difference with a numerical one.
 #' @param s A [matrix_parameter()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic.
@@ -637,7 +637,7 @@ S7::method(param_dlogdet, matrix_parameter) <- function(s, eta, ...) {
 #' @title Default Log-Determinant Hessian
 #' @name param_d2logdet.matrix_parameter
 #' @description
-#' The method every [matrix_parameter()] inherits when it registers no
+#' The method that every [matrix_parameter()] inherits when it registers no
 #' [param_d2logdet()] of its own. It evaluates the identity that follows from
 #' differentiating [param_dlogdet()]'s trace once more, using
 #' \eqn{\partial_l M^{-1} = -M^{-1}(\partial_l M)M^{-1}},
@@ -645,13 +645,12 @@ S7::method(param_dlogdet, matrix_parameter) <- function(s, eta, ...) {
 #' \deqn{\partial_{kl} \log|M| = \mathrm{tr}\!\left(M^{+} \partial_{kl} M\right)
 #'   - \mathrm{tr}\!\left(M^{+} (\partial_k M)\, M^{+} (\partial_l M)\right),}
 #'
-#' with \eqn{M^{+}} the pseudo-inverse over the directions the declared rank
-#' keeps. The second trace is formed as `sum(t(mi %*% dk) * (mi %*% dl))`, which
+#' with \eqn{M^{+}} the pseudo-inverse over the directions that the declared
+#' rank keeps. The second trace is formed as `sum(t(mi %*% dk) * (mi %*% dl))`, which
 #' is the trace of the product without the product being multiplied out.
 #'
-#' Exact given the derivative arrays, so the accuracy is theirs. With analytic
-#' arrays the answer agrees with a closed form to \eqn{1 \times 10^{-14}}; with
-#' numerical ones, to \eqn{6 \times 10^{-8}}.
+#' Exact given the derivative arrays, so the accuracy is theirs: rounding with
+#' analytic arrays, and that of the stencils with numerical ones.
 #' @param s A [matrix_parameter()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic.
@@ -676,38 +675,34 @@ S7::method(param_d2logdet, matrix_parameter) <- function(s, eta, ...) {
   stats::setNames(out, param_tuple_names(s))
 }
 
-#' Refuse an Order That Would Difference a Difference
+#' Reject an Order That Would Difference a Difference
 #'
 #' @description
-#' Signals an error when the caller asks
-#' [param_d3logdet.matrix_parameter()] or
-#' [param_d4logdet.matrix_parameter()] of a family whose derivative arrays are
-#' themselves numerical. Both fallbacks difference [param_d2logdet()], which is
+#' Signals an error when [param_d3logdet.matrix_parameter()] or
+#' [param_d4logdet.matrix_parameter()] is called for a family whose derivative
+#' arrays are themselves numerical. Both fallbacks difference [param_d2logdet()], which is
 #' an exact identity **given** [param_d1()] and [param_d2()]; where those are
 #' supplied the differencing is one layer, and where they are not it is two,
-#' which is the nesting the toolkit forbids everywhere.
+#' which is the nesting that the toolkit avoids everywhere.
 #'
 #' @details
-#' The refusal is not a matter of accuracy alone. Measured on a
-#' \eqn{4 \times 4} AR(1) covariance whose family supplies [param_value()] and
-#' nothing else, order three came back \eqn{7.5 \times 10^{-3}} against a
-#' quantity of size 4.45 and order four came back **9.07** against a quantity
-#' of size 2.17, which is four times the size of what it estimates. Nothing
-#' downstream could tell such a number from a usable one:
-#' [param_is_numerical()] reports `TRUE` for the order in both regimes.
+#' With numerical arrays, the fourth order can come back larger than the
+#' quantity that it estimates, and [param_is_numerical()] reports `TRUE` for the
+#' order whether the arrays are analytic or not, so a consumer could not
+#' distinguish such a number from a usable one.
 #'
-#' Only the two arrays are read, and not [param_d2logdet()] itself. A family
-#' that writes its own second-order log-determinant out is asked for nothing
-#' further, that method being reached before this guard is.
+#' Only the two arrays are read, and not [param_d2logdet()] itself, so a family
+#' that writes its own [param_d2logdet()] but not [param_d1()] and [param_d2()]
+#' is rejected as well.
 #'
 #' @param s A [matrix_parameter()] object.
-#' @param order The order being asked for, 3 or 4, which the message names.
+#' @param order The order requested, 3 or 4, which the message names.
 #'
-#' @return Invisibly `TRUE`. A family whose [param_d1()] or [param_d2()] comes
-#'   from the base class throws instead, with both the missing method and the
-#'   remedy named.
+#' @return Invisibly `TRUE`. For a family whose [param_d1()] or [param_d2()]
+#'   comes from the base class, an error that names the missing method and the
+#'   remedy.
 #'
-#' @seealso [param_is_numerical()], which answers the question this asks, and
+#' @seealso [param_is_numerical()], which reports the routes read here, and
 #'   [param_d3logdet.matrix_parameter()] and [param_d4logdet.matrix_parameter()],
 #'   the two callers.
 #'
@@ -716,41 +711,38 @@ check_analytic_arrays <- function(s, order) {
   num <- param_is_numerical(s)
   miss <- c("param_d1()", "param_d2()")[c(num[["param_d1"]], num[["param_d2"]])]
   if (!length(miss)) return(invisible(TRUE))
-  seen <- if (order == 3L) "7.5e-03 against a quantity of size 4.45"
-          else "9.07 against a quantity of size 2.17"
   stop(sprintf(paste0(
     "param_d%dlogdet() would difference a quantity that is itself\n",
-    "  numerical. This family supplies no analytic %s, so\n",
+    "  numerical. This family has no analytic %s, so\n",
     "  param_d2logdet(), which this order differences, is already one\n",
-    "  difference deep and the two layers compound: measured on a 4 by 4\n",
-    "  AR(1) covariance the answer came back %s.\n",
+    "  difference deep, and the two layers would compound.\n",
     "  Write param_d1() and param_d2() out, or register param_d%dlogdet()."
-  ), order, paste(miss, collapse = " and "), seen, order), call. = FALSE)
+  ), order, paste(miss, collapse = " and "), order), call. = FALSE)
 }
 
 #' @title Default Solve
 #' @name param_solve.matrix_parameter
 #' @description
-#' The method every [matrix_parameter()] inherits when it registers no
+#' The method that every [matrix_parameter()] inherits when it registers no
 #' [param_solve()] of its own. It takes the Cholesky factor \eqn{L} from
 #' [param_factor()] and applies it twice,
 #' `backsolve(t(l), forwardsolve(l, b))`, which is
-#' \eqn{L^{-\top}L^{-1}B = M^{-1}B}. No inverse is formed and no linear system is
-#' solved twice.
+#' \eqn{L^{-\top}L^{-1}B = M^{-1}B}. The inverse is not formed, and each
+#' triangular system is solved once.
 #'
-#' Exact, not approximated: it agrees with `base::solve()` to the last bit on a
-#' well-conditioned matrix, and this is why [param_is_numerical()] does not list
-#' it. The generic has already rejected a rank-deficient family and one whose
+#' The result is exact up to rounding, as `base::solve()` is, which is why
+#' [param_is_numerical()] does not list it. The generic has already rejected a rank-deficient family and one whose
 #' value is not a symmetric matrix, and filled `b` with the identity when the
 #' caller left it out, so by the time this runs `b` is a matrix of the right
 #' height.
 #' @details
 #' Positive definiteness is decided inside [param_factor()], from the
 #' eigenvalues, before any factorization is attempted; see [chol_pd()] for why
-#' the verdict does not come from whether [base::chol()] raises.
+#' the verdict does not come from whether [base::chol()] signals an error.
 #'
 #' The cost is one \eqn{O(p^3)} factorization plus \eqn{O(p^2)} per column of
-#' `b`. Seven families override this with a closed-form inverse and pay neither.
+#' `b`. The families that override this method are listed under
+#' [param_solve()].
 #' @param s A [matrix_parameter()] object, of full rank.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic.
@@ -770,19 +762,18 @@ S7::method(param_solve, matrix_parameter) <- function(s, eta, b = NULL, ...) {
 #' @title Default Factor
 #' @name param_factor.matrix_parameter
 #' @description
-#' The method every [matrix_parameter()] inherits when it registers no
+#' The method that every [matrix_parameter()] inherits when it registers no
 #' [param_factor()] of its own. It evaluates [param_value()] and returns the
 #' lower triangular Cholesky factor through [chol_pd()], which decides positive
 #' definiteness from the eigenvalues before attempting the factorization. Exact,
 #' at \eqn{O(p^3)}.
 #' @details
 #' A family that declares full rank and is then not positive definite at this
-#' \eqn{\eta} throws, naming the family and saying that the verdict is spectral.
-#' That distinction matters to whoever reads the message: a caught `chol()` error
-#' would be a statement about the arithmetic, and could differ between platforms
-#' on a matrix with an exactly zero eigenvalue, while a test on the eigenvalues
-#' is a statement about the matrix. The error means the family's own
-#' [param_value()] has left the cone it claims to parametrize.
+#' \eqn{\eta} signals an error naming the family. The verdict comes from the
+#' eigenvalues and not from a caught `chol()` error, which could differ between
+#' platforms on a matrix with an exactly zero eigenvalue. The error means that
+#' the family's own [param_value()] has left the cone that the family
+#' parametrizes.
 #' @param s A [matrix_parameter()] object, of full rank.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic.
@@ -797,25 +788,24 @@ S7::method(param_factor, matrix_parameter) <- function(s, eta, ...) {
   if (is.null(l)) {
     stop(sprintf(paste0(
       "'%s' is not positive definite at this eta, although it declares full\n",
-      "  rank. The verdict is spectral, so this is a statement about the\n",
-      "  matrix rather than about a factorization that happened to fail."
+      "  rank. The test is on the eigenvalues of the matrix."
     ), s@param_name), call. = FALSE)
   }
   l
 }
 
-#' @title Rejection to Invert Without a Closed Form
+#' @title Default Inverse Map
 #' @name param_free.parameter
 #' @description
-#' The method every [parameter()] inherits when it registers no [param_free()] of
-#' its own. It always signals an error, naming the family, and it is the one
-#' generic whose base method refuses instead of computing. Nothing here is
-#' approximated, which is the point: an inverse obtained by minimizing
-#' \eqn{\lVert V(\eta) - m \rVert} would hand back a plausible \eqn{\eta} for a
-#' matrix that is nowhere in the family's set, and the caller could not tell that
-#' answer from a correct one. The inverse map is written out exactly or refused.
+#' The method that every [parameter()] inherits when it registers no [param_free()] of
+#' its own. It always signals an error naming the family; it is the one generic
+#' whose base method rejects the call instead of computing. An inverse obtained
+#' by minimizing \eqn{\lVert V(\eta) - m \rVert} would return an \eqn{\eta} even
+#' for a matrix that lies outside the family's set, and the caller could not
+#' distinguish that result from a correct one, so the inverse map is either
+#' written out exactly or rejected.
 #'
-#' All fifteen families in this package write theirs out, so this method is
+#' Every family in this package writes its inverse out, so this method is
 #' reached only by a family defined elsewhere.
 #' @param s A [parameter()] object, whose `param_name` goes into the message.
 #' @param m A value of the family's shape. Never read.
@@ -837,7 +827,7 @@ S7::method(param_free, parameter) <- function(s, m, ...) {
 #'
 #' @description
 #' Estimates the distinct third derivatives by applying one product stencil
-#' directly to [param_value()], per index tuple. A component the tuple repeats
+#' directly to [param_value()], per index tuple. A component that the tuple repeats
 #' contributes the one-dimensional stencil of the matching order, and a component
 #' appearing once contributes a two-point central factor; the product is
 #' evaluated in a single pass over the map. This is the method [param_d3()]
@@ -862,7 +852,7 @@ S7::method(param_free, parameter) <- function(s, m, ...) {
 #' the map, one naming a component twice and another once six, and one naming
 #' three distinct components eight.
 #'
-#' # Why it goes straight to the map
+#' # The stencil is applied to the map
 #'
 #' A lower-order numerical derivative is never differenced. The rounding of a
 #' difference is amplified by \eqn{h^{-k}}, so two stages multiply their errors
@@ -874,9 +864,8 @@ S7::method(param_free, parameter) <- function(s, m, ...) {
 #' # Accuracy
 #'
 #' Truncation is of order \eqn{h^2} at a step of
-#' \eqn{\varepsilon^{1/5}\max(1, |\eta_k|)}. Measured against the closed form of
-#' a \eqn{2 \times 2} log-Cholesky covariance, the agreement is
-#' \eqn{7 \times 10^{-6}} absolute on entries of size 12, so about six digits.
+#' \eqn{\varepsilon^{1/5}\max(1, |\eta_k|)}, and rounding is of order
+#' \eqn{\varepsilon / h^3}.
 #'
 #' @param s A [parameter()] object, of any branch.
 #' @param eta A numeric vector of free values, of length `s@n_free`.
@@ -885,7 +874,7 @@ S7::method(param_free, parameter) <- function(s, m, ...) {
 #'   `param_tuple_names(s, 3)` and in that order, each shaped like
 #'   [param_value()]'s result and symmetrized for a matrix family.
 #'
-#' @seealso [param_d3()], the generic this serves, [mixed_stencil()], which
+#' @seealso [param_d3()], the generic that this serves, [mixed_stencil()], which
 #'   builds the product, and [numerical_d4()] for the order above.
 #'
 #' @examples
@@ -923,9 +912,9 @@ numerical_d3 <- function(s, eta) {
 #' Estimates the distinct fourth derivatives, one product stencil per index
 #' tuple, applied directly to [param_value()]. It is the order-four analogue of
 #' [numerical_d3()] and the method [param_d4()] dispatches to when a family has
-#' not written its own. Treat it as a starting point: at this order a difference
-#' keeps about five digits, which is why every family this package ships carries
-#' a closed form instead.
+#' not written its own. At this order a difference is the least accurate of the
+#' four, which is why every family in this package carries a closed form
+#' instead.
 #'
 #' @details
 #' # The stencil
@@ -940,11 +929,9 @@ numerical_d3 <- function(s, eta) {
 #' Truncation is of order \eqn{h^2} and rounding of order
 #' \eqn{\varepsilon / h^4}, so balancing the two gives a step of
 #' \eqn{\varepsilon^{1/6}\max(1, |\eta_k|)}, about \eqn{2.5 \times 10^{-3}} near
-#' the origin, and an attainable accuracy of order \eqn{\varepsilon^{1/3}}.
-#' Measured against the closed form of a \eqn{2 \times 2} log-Cholesky
-#' covariance, the agreement is \eqn{1.2 \times 10^{-4}} absolute on entries of
-#' size 24, so five digits. That is enough to catch a transcription error in a
-#' closed form. It is not enough to fit with.
+#' the origin, and an attainable accuracy of order \eqn{\varepsilon^{1/3}}. That
+#' is enough to catch a transcription error in a closed form and not enough for
+#' use in a fit.
 #'
 #' @param s A [parameter()] object, of any branch.
 #' @param eta A numeric vector of free values, of length `s@n_free`.
@@ -953,24 +940,24 @@ numerical_d3 <- function(s, eta) {
 #'   `param_tuple_names(s, 4)` and in that order, each shaped like
 #'   [param_value()]'s result and symmetrized for a matrix family.
 #'
-#' @seealso [param_d4()], the generic this serves, [numerical_d3()] for the order
-#'   below, and [check_parameter()], which uses a stencil of this kind as the
-#'   independent reference for a closed form.
+#' @seealso [param_d4()], the generic that this serves, [numerical_d3()] for the
+#'   order below, and [check_parameter()], which uses this stencil as the
+#'   reference for a family that is not a matrix.
 #'
 #' @examples
 #' # A scalar matrix: every order is the matrix again, so the error shows.
 #' s <- scalar_matrix(2)
 #' max(abs(numerical_d4(s, 0.3)[[1]] - param_value(s, 0.3)))
 #'
-#' # Against a family that writes its own: five digits, as stated.
+#' # Against a family that writes its own.
 #' q <- log_cholesky(2)
 #' eta <- c(0.2, -0.1, 0.4)
 #' ana <- param_d4(q, eta)
 #' c(gap = max(abs(unlist(numerical_d4(q, eta)) - unlist(ana))),
 #'   scale = max(abs(unlist(ana))))
 #'
-#' # Which is still ample to catch a wrong closed form: a 1 per cent error in
-#' # one component is four hundred times the noise.
+#' # A 1 percent error in the largest entry would be about two thousand times
+#' # the gap above, so a wrong closed form is caught.
 #' 0.01 * max(abs(unlist(ana)))
 #'
 #' @export
@@ -992,18 +979,18 @@ numerical_d4 <- function(s, eta) {
 #' One Product Stencil for a Mixed Partial Derivative
 #'
 #' @description
-#' Differentiates `f` once in each component an index tuple names, using a
-#' central factor per distinct component of the order that component's
-#' multiplicity asks for. The whole tensor product is summed in one pass, so the
+#' Differentiates `f` once in each component that an index tuple names, using a
+#' central factor per distinct component, of the order given by that
+#' component's multiplicity. The whole tensor product is summed in one pass, so the
 #' result is a single stencil, never a composition of lower-order numerical
 #' derivatives.
 #'
 #' @details
 #' Each factor's nodes and weights come from [numericals7::fd_offsets()] and
-#' [numericals7::fd_weights()] at accuracy 2: two points at order one, three at
-#' order two, five at orders three and four. They are read from there instead of
-#' being written out here, because a table of stencil coefficients kept in a
-#' second place is a table that can come to disagree with the first.
+#' [numericals7::fd_weights()] at accuracy 2: three nodes at orders one and two
+#' and five at orders three and four, of which two, three, four and five carry a
+#' non-zero weight. They are read from there instead of being written out here,
+#' so that the two tables cannot disagree.
 #'
 #' The step for each factor is [fd_step()] at that component's value and at the
 #' **total** order of the tuple, so all factors of one component share a step and
@@ -1064,15 +1051,14 @@ mixed_stencil <- function(f, eta, tuple) {
 #' @title Default Third Derivatives
 #' @name param_d3.parameter
 #' @description
-#' The method every [parameter()] inherits when it registers no [param_d3()] of
+#' The method that every [parameter()] inherits when it registers no [param_d3()] of
 #' its own. It applies one product stencil per index tuple directly to
 #' [param_value()], never to a lower-order numerical derivative, with a
-#' one-dimensional factor per distinct component of the order that component's
-#' multiplicity asks for. The step is \eqn{\varepsilon^{1/5}\max(1, |\eta_k|)},
-#' about \eqn{7.4 \times 10^{-4}} near the origin, and the truncation error is of
-#' order \eqn{h^2}; measured against a closed form on a \eqn{2 \times 2}
-#' covariance the gap is \eqn{7 \times 10^{-6}} on entries of size 12. No family
-#' in this package reaches it.
+#' one-dimensional factor per distinct component, of the order given by that
+#' component's multiplicity. The step is \eqn{\varepsilon^{1/5}\max(1,
+#' |\eta_k|)}, about \eqn{7.4 \times 10^{-4}} near the origin, and the
+#' truncation error is of order \eqn{h^2}. The families in this package do not
+#' reach it.
 #' @param s A [parameter()] object, of any branch.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic.
@@ -1090,15 +1076,13 @@ S7::method(param_d3, parameter) <- function(s, eta, ...) {
 #' @title Default Fourth Derivatives
 #' @name param_d4.parameter
 #' @description
-#' The method every [parameter()] inherits when it registers no [param_d4()] of
+#' The method that every [parameter()] inherits when it registers no [param_d4()] of
 #' its own. It applies one product stencil per index tuple directly to
 #' [param_value()], as [param_d3.parameter()] does, with the multiplicities
 #' summing to four. The step is \eqn{\varepsilon^{1/6}\max(1, |\eta_k|)}, about
-#' \eqn{2.5 \times 10^{-3}} near the origin, and rounding amplified by
-#' \eqn{h^{-4}} leaves about five digits: measured against a closed form on a
-#' \eqn{2 \times 2} covariance the gap is \eqn{1.2 \times 10^{-4}} on entries of
-#' size 24. Enough to catch a wrong closed form, not enough to fit with. No
-#' family in this package reaches it.
+#' \eqn{2.5 \times 10^{-3}} near the origin, and rounding is amplified by
+#' \eqn{h^{-4}}, so the result is enough to catch a wrong closed form and not
+#' enough for use in a fit. The families in this package do not reach it.
 #' @param s A [parameter()] object, of any branch.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic.
@@ -1116,7 +1100,7 @@ S7::method(param_d4, parameter) <- function(s, eta, ...) {
 #' @title Default Third Log-Determinant Derivatives
 #' @name param_d3logdet.matrix_parameter
 #' @description
-#' The method every [matrix_parameter()] inherits when it registers no
+#' The method that every [matrix_parameter()] inherits when it registers no
 #' [param_d3logdet()] of its own. For the tuple \eqn{(k, l, m)} it takes the
 #' \eqn{(k, l)} component of [param_d2logdet()] and applies one three-point
 #' central difference in the remaining component,
@@ -1131,21 +1115,16 @@ S7::method(param_d4, parameter) <- function(s, eta, ...) {
 #' [param_tuple_indices()]'s order-2 list. It costs two evaluations of the whole
 #' second-order block per tuple.
 #' @details
-#' # How accurate it is depends on the family, not on this method
+#' # Accuracy
 #'
 #' [param_d2logdet()] is an exact identity **given** the matrix derivative
 #' arrays, so differencing it is a single numerical layer whenever
-#' [param_d1()] and [param_d2()] are analytic. Measured on a \eqn{4 \times 4}
-#' AR(1) covariance with analytic arrays, the answer agrees with the closed form
-#' to \eqn{3 \times 10^{-10}} on entries of size 4.5.
+#' [param_d1()] and [param_d2()] are analytic.
 #'
-#' Where the arrays are themselves numerical the layers would compound, and
-#' the method refuses instead of answering: the same measurement gives
-#' \eqn{8 \times 10^{-3}}, a relative error near two parts in a thousand, and
-#' nothing downstream could tell that number from the accurate one.
-#' [check_analytic_arrays()] is the guard, and a family that needs this order
-#' should write [param_d1()] and [param_d2()] out, which recovers the
-#' \eqn{10^{-10}}.
+#' Where the arrays are themselves numerical the layers would compound, and the
+#' method signals an error instead of returning a value; [check_analytic_arrays()]
+#' is the guard. A family that needs this order writes [param_d1()] and
+#' [param_d2()] out.
 #' @param s A [matrix_parameter()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic.
@@ -1178,7 +1157,7 @@ S7::method(param_d3logdet, matrix_parameter) <- function(s, eta, ...) {
 #' @title Default Fourth Log-Determinant Derivatives
 #' @name param_d4logdet.matrix_parameter
 #' @description
-#' The method every [matrix_parameter()] inherits when it registers no
+#' The method that every [matrix_parameter()] inherits when it registers no
 #' [param_d4logdet()] of its own. For the tuple \eqn{(k, l, m, n)} it takes the
 #' \eqn{(k, l)} component of [param_d2logdet()] and applies one second-order
 #' stencil in the remaining two components: the three-point second difference
@@ -1192,21 +1171,17 @@ S7::method(param_d3logdet, matrix_parameter) <- function(s, eta, ...) {
 #' \eqn{\varepsilon^{1/4}\max(1, |\eta_k|)}. It costs three or four evaluations
 #' of the whole second-order block per tuple.
 #' @details
-#' # This is the least accurate quantity the package can produce
+#' # Accuracy
 #'
-#' With analytic [param_d1()] and [param_d2()] the differencing is a single layer
-#' on an exact identity, and on a \eqn{4 \times 4} AR(1) covariance the answer
-#' agrees with the closed form to \eqn{2 \times 10^{-6}} on entries of size 2.2.
+#' With analytic [param_d1()] and [param_d2()] the differencing is a single
+#' layer on an exact identity, at the order-2 step.
 #'
 #' With only [param_value()] supplied, the numerical arrays would feed a
-#' numerical second-order block which is then differenced twice more, and the
-#' layers compound: the same measurement gives an absolute error of **9**,
-#' larger than the quantity itself. That number is not usable and the method
-#' refuses to return it, through [check_analytic_arrays()]. A family that needs
-#' a fourth derivative of its log-determinant must supply at least
-#' [param_d1()] and [param_d2()] in closed form, and preferably
-#' [param_d2logdet()] as well. [param_is_numerical()] is how a consumer finds
-#' out which case it is in.
+#' numerical second-order block that is then differenced twice more, and the
+#' error can exceed the quantity itself. The method signals an error instead,
+#' through [check_analytic_arrays()]. A family that needs a fourth derivative of
+#' its log-determinant supplies at least [param_d1()] and [param_d2()] in closed
+#' form. [param_is_numerical()] reports which components are numerical.
 #' @param s A [matrix_parameter()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic.
@@ -1215,7 +1190,7 @@ S7::method(param_d3logdet, matrix_parameter) <- function(s, eta, ...) {
 #'   `param_tuple_names(s, 4)` and in that order.
 #' @seealso [param_d4logdet()] for the generic,
 #'   [param_d3logdet.matrix_parameter()] for the order below, and
-#'   [param_is_numerical()] to ask which components are numerical.
+#'   [param_is_numerical()] to find out which components are numerical.
 #' @keywords internal
 S7::method(param_d4logdet, matrix_parameter) <- function(s, eta, ...) {
   check_analytic_arrays(s, 4L)

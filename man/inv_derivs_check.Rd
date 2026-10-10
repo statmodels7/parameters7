@@ -2,7 +2,7 @@
 % Please edit documentation in R/inv_derivs.R
 \name{inv_derivs_check}
 \alias{inv_derivs_check}
-\title{The Contract Check of the Inverse's Derivatives}
+\title{Argument Check for the Inverse's Derivatives}
 \usage{
 inv_derivs_check(s, what)
 }
@@ -15,7 +15,7 @@ inv_derivs_check(s, what)
 \code{NULL}, invisibly, or an error.
 }
 \description{
-Refuses a parameter that is not a matrix or has no inverse, naming the
-function that was called.
+Signals an error when a parameter is not a matrix or has no inverse. The
+message names the function that was called.
 }
 \keyword{internal}

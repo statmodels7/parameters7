@@ -24,7 +24,7 @@ already supplies: the analytic first derivative where there is one, and
 \code{\link[=param_value]{param_value()}} itself where there is not. This is the method \code{\link[=param_d2]{param_d2()}}
 dispatches to when a family has not written its own.
 }
-\section{Three routes, one layer each}{
+\section{The three routes}{
 Writing \eqn{V(\eta)} for \code{\link[=param_value]{param_value()}} and \eqn{\partial_k V} for an
 analytic first derivative, the component \eqn{(k, l)} is
 
@@ -42,7 +42,7 @@ and a diagonal pair the three-point second difference. All three carry a
 truncation error of order \eqn{h^2}.
 }
 
-\section{Why none of them nests}{
+\section{Single-layer differences}{
 The rule the toolkit follows is that differences are never composed \strong{in the
 same variable}: a difference of a difference multiplies the error of the
 first stage into the second, and a fourth derivative built that way is noise.
@@ -52,9 +52,11 @@ and two differences along different coordinates commute into a single product
 stencil, so it is one layer as well. The diagonal case uses the
 second-difference stencil directly and never sees a first difference at all.
 
-The steps are the order-2 ones, \eqn{\varepsilon^{1/4}\max(1, |\eta_k|)},
-about \eqn{1.2 \times 10^{-4}} near the origin, since it is a second
-derivative being estimated whichever route is taken.
+On the analytic route the step is the order-1 one,
+\eqn{\varepsilon^{1/3}\max(1, |\eta_l|)}, about \eqn{6.1 \times 10^{-6}} near
+the origin, because a first derivative of an analytic array is taken. The two
+routes on \code{\link[=param_value]{param_value()}} use the order-2 step,
+\eqn{\varepsilon^{1/4}\max(1, |\eta_k|)}, about \eqn{1.2 \times 10^{-4}}.
 }
 
 \examples{
@@ -70,6 +72,6 @@ max(abs(unlist(numerical_d2(q, eta)) - unlist(param_d2(q, eta))))
 
 }
 \seealso{
-\code{\link[=param_d2]{param_d2()}}, the generic this serves, \code{\link[=numerical_d1]{numerical_d1()}} for the
+\code{\link[=param_d2]{param_d2()}}, the generic that this serves, \code{\link[=numerical_d1]{numerical_d1()}} for the
 order below, and \code{\link[=mixed_stencil]{mixed_stencil()}}, which the third and fourth orders use.
 }

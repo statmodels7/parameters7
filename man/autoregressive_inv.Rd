@@ -26,13 +26,13 @@ an \code{\link[=autoregressive]{autoregressive()}} matrix: the precision of an a
 \code{\link[=autoregressive]{autoregressive()}}'s free vector unchanged, so its coordinates are the scale
 and the partial autocorrelations of the process whose precision this is.
 }
-\section{The value and the log-determinant are closed}{
+\section{The value and the log-determinant}{
 An autoregression of order \eqn{q} is Markov of that order, so its precision
 carries no entry beyond the \eqn{q}-th diagonal. The value comes from
 \code{\link[=param_solve.AutoregressiveParam]{param_solve.AutoregressiveParam()}}, which reads it off the prediction form
-of the process rather than factorizing, and the log-determinant is
-\code{\link[=autoregressive]{autoregressive()}}'s negated. Both are therefore \eqn{O(p)} in the entries
-that matter and exact.
+of the process instead of factorizing, and the log-determinant is
+\code{\link[=autoregressive]{autoregressive()}}'s negated. Both are exact, and neither factorizes a
+matrix of side \eqn{p}.
 }
 
 \section{The derivative arrays}{
@@ -45,25 +45,23 @@ carrying the coefficients of the best linear predictor of \eqn{y_t} from its
 predecessors, and \eqn{\tau_t = 1/v_t} the reciprocal innovation variances.
 Two facts make every order exact without a new recursion.
 
-The lower-order rows of \eqn{U} are the coefficients of the SAME family at
-that order, measured to 0, so their derivative arrays come from the compiled
+The lower-order rows of \eqn{U} are the coefficients of the same family at
+that order, so their derivative arrays come from the compiled
 Levinson-Durbin recursion of \code{\link[=ar_tables]{ar_tables()}} run once per order, and a
-component differentiating in a partial autocorrelation an order does not
-reach is exactly zero. And \eqn{\tau_t} is a PRODUCT of one factor per free
-value, \eqn{1/v_0} from the scale and \eqn{(1-r_j^2)^{-1}} from each
-correlation the prediction has reached, so a mixed derivative of it is a
+component differentiating in a partial autocorrelation that an order does
+not reach is exactly zero. And \eqn{\tau_t} is a product of one factor per
+free value, \eqn{1/v_0} from the scale and \eqn{(1-r_j^2)^{-1}} from each
+correlation that the prediction has reached, so a mixed derivative of it is a
 product of univariate derivatives and is exactly zero where it
-differentiates in a factor a row does not carry.
+differentiates in a factor that a row does not carry.
 
 What is left is the Leibniz rule over three factors, taken twice so that a
 component costs \eqn{2^m} matrix products rather than \eqn{3^m}.
 
-Measured against \code{inverse_of(autoregressive(p, q))}, which reaches the same
-numbers through the ordered-block-partition sum, at order four: \strong{11.2x} at
-\eqn{p = 6, q = 2}, 11.4x at \eqn{p = 20, q = 3} and \strong{22.8x} at
-\eqn{p = 100}, with the two agreeing to 7e-11 over six shapes and two free
-vectors each. That agreement is what licenses the written-out route, the two
-sharing no arithmetic.
+The result agrees with \code{inverse_of(autoregressive(p, q))}, which reaches the
+same values through the ordered-block-partition sum and shares no arithmetic
+with this route. At order four the written-out route is faster, increasingly
+so as \eqn{p} grows.
 }
 
 \examples{

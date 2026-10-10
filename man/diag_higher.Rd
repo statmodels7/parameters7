@@ -22,8 +22,8 @@ keyed as \code{param_tuple_names(s, order)} and in that order, each
 Assembles a whole derivative order of a diagonal family, orders three and
 four. A diagonal family is separable, so a component is the zero matrix unless
 every index of the tuple names the \strong{same} free value, and a surviving one
-carries \eqn{h'''(\eta_k)} or \eqn{h''''(\eta_k)} in the entries that value
-owns. Most of the list is therefore exactly zero: at \eqn{p = 3} only 3 of the
+carries \eqn{h'''(\eta_k)} or \eqn{h''''(\eta_k)} in the entries that the
+value owns. Most of the list is therefore exactly zero: at \eqn{p = 3} only 3 of the
 10 third-order components are non-zero.
 }
 \seealso{

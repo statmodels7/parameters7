@@ -11,7 +11,7 @@ param_d3(s, eta, ...)
 
 \item{eta}{A numeric vector of length \code{s@n_free}, finite in every entry.}
 
-\item{...}{Passed to the method. No method in this package reads it.}
+\item{...}{Passed to the method. The methods in this package do not read it.}
 }
 \value{
 A named list of \code{choose(s@n_free + 2, 3)} entries, keyed as
@@ -64,7 +64,8 @@ d3 <- param_d3(q, c(0.2, -0.1, 0.4))
 length(d3)
 max(abs(d3[["L2.1:L2.1:L2.1"]]))
 
-# It does not vanish in a diagonal free value, which enters through a log.
+# It does not vanish in a diagonal free value, which enters through an
+# exponential.
 d3[["log_L1:log_L1:log_L1"]]
 
 }

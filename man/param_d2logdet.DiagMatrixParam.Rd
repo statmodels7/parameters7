@@ -22,14 +22,12 @@ free value each, so every mixed component is exactly zero and a pure one is
 \deqn{\partial_{kk} \log|M| = m_k\left\{\frac{h''(\eta_k)}{h(\eta_k)}
   - \left(\frac{h'(\eta_k)}{h(\eta_k)}\right)^{2}\right\},}
 
-the second derivative of \eqn{\log h} times the number of entries the value
-owns.
+the second derivative of \eqn{\log h} times the number of entries that the
+value owns.
 
 Under the \strong{log} link this is identically zero, \eqn{\log h(\eta) = \eta}
-being linear, so a check of this quantity against a numerical reference on a
-default \code{diagonal_matrix()} compares two zeros and would pass whatever was
-missing. Under a square-root link at \eqn{\eta = (1, 2)} it is
-\eqn{(-2, -0.5)}, which is where the formula has content.
+being linear. Under a softplus link at \eqn{\eta = (1, 2)} the pure
+components are \eqn{(-0.160, -0.122)}.
 }
 \seealso{
 \code{\link[=param_dlogdet.DiagMatrixParam]{param_dlogdet.DiagMatrixParam()}} for the order below, and

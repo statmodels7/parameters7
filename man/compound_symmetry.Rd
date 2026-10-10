@@ -8,8 +8,8 @@ compound_symmetry(dimension, link_scale = linkfunctions7::log_link())
 }
 \arguments{
 \item{dimension}{The side \eqn{p} of the matrix, \strong{at least 2}. A one by one
-matrix has no correlation, so \code{compound_symmetry(1)} throws a message saying
-the family would carry a free value with no effect.}
+matrix has no correlation, so \code{compound_symmetry(1)} signals an error
+stating that the family would carry a free value with no effect.}
 
 \item{link_scale}{A \pkg{linkfunctions7} link carrying the first free value
 onto the positive variance, \code{linkfunctions7::log_link()} by default. It must
@@ -28,30 +28,30 @@ Returns an object holding the exchangeable covariance
 
 \deqn{M(\eta) = \sigma^2\{(1-\rho)I + \rho J\},}
 
-with \eqn{\sigma^2} positive and \eqn{\rho} the correlation every pair
-shares. Two free values at every dimension, against
-\code{\link[=log_cholesky]{log_cholesky()}}'s \eqn{p(p+1)/2}, so it is the parametrization to use when
-the measurements are exchangeable: repeated measures on a subject, items in a
-block, the covariance a random intercept induces.
+with \eqn{\sigma^2} positive and \eqn{\rho} the correlation that every pair
+shares. Two free values at every dimension, against the \eqn{p(p+1)/2} of
+\code{\link[=log_cholesky]{log_cholesky()}}, so it is the parametrization to use when the measurements
+are exchangeable: repeated measures on a subject, items in a block, the
+covariance that a random intercept induces.
 }
-\section{The correlation is bounded below as well as above}{
+\section{Bounds of the correlation}{
 The eigenvalues are \eqn{\sigma^2\{1 + (p-1)\rho\}} once and
 \eqn{\sigma^2(1-\rho)} with multiplicity \eqn{p-1}, so the matrix is positive
 definite exactly when
 
 \deqn{-\frac{1}{p-1} < \rho < 1.}
 
-The correlation therefore rides \code{linkfunctions7::bounded_link(-1/(p-1), 1)}.
-A \code{rhobit_link()} onto \eqn{(-1, 1)} would let a caller build an indefinite
-matrix at a perfectly ordinary free value: at \eqn{p = 4} a correlation of
+The correlation is therefore mapped by
+\code{linkfunctions7::bounded_link(-1/(p-1), 1)}. A \code{rhobit_link()} onto
+\eqn{(-1, 1)} would give an indefinite matrix at an ordinary free value: at \eqn{p = 4} a correlation of
 \eqn{-0.5} is inside \eqn{(-1, 1)} and outside the cone. The bound depends on
 the dimension, so two objects of different sizes carry different links.
 
-One consequence to expect: a free value of 0 is the \strong{midpoint} of that
-interval, so at \eqn{p = 4} it is a correlation of \eqn{1/3}, not of 0.
+A free value of 0 is the \strong{midpoint} of that interval, so at \eqn{p = 4} it
+gives a correlation of \eqn{1/3}.
 }
 
-\section{Two quantities that cost nothing}{
+\section{The log-determinant and the inverse}{
 From the eigenvalues,
 
 \deqn{\log|M| = p\log\sigma^2 + \log\{1 + (p-1)\rho\} + (p-1)\log(1-\rho),}
@@ -66,13 +66,14 @@ exchangeable covariance has an exchangeable precision, which leaves the family
 closed under the choice of side.
 }
 
-\section{Why the derivatives are easy}{
+\section{The derivatives}{
 The value is the scale times a pattern \strong{linear} in the correlation,
 \eqn{I + \rho(J - I)}, so a component with \eqn{a} scale indices and \eqn{b}
 correlation indices is the \eqn{a}-th derivative of the scale times the
 \eqn{b}-th derivative of the pattern. All four orders follow from the two
-links' own derivatives with no further algebra, and any component with three
-or more correlation indices reduces to the third derivative of the link alone.
+links' own derivatives with no further algebra: a component with \eqn{b}
+correlation indices carries the \eqn{b}-th derivative of the correlation's
+link times the constant matrix \eqn{J - I}.
 }
 
 \section{Notation}{
@@ -106,7 +107,7 @@ c(closed = param_logdet(s, eta),
 round(param_solve(s, eta), 4)
 max(abs(param_solve(s, eta) - solve(m)))
 
-# The round trip closes exactly.
+# The round trip closes up to rounding.
 max(abs(param_free(s, m) - eta))
 
 # A free value of 0 is the midpoint of (-1/(p-1), 1), not a correlation of 0.

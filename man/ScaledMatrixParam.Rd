@@ -21,7 +21,7 @@ ScaledMatrixParam(
 integer, agreeing with \code{length(free_names)}.}
 
 \item{free_names}{A character vector of length \code{n_free}, one label per free
-value, in the order the free vector holds them. Must be unique.}
+value, in the order in which the free vector holds them. Must be unique.}
 
 \item{param_params}{A list of whatever the family needs in order to evaluate
 itself, read only by that family's own methods.}
@@ -29,15 +29,14 @@ itself, read only by that family's own methods.}
 \item{dimension}{The side \eqn{p} of the matrix: a single integer, no
 smaller than 1. The validator rejects a vector and a value below 1.}
 
-\item{rank}{The rank of the matrix the family produces, a single integer in
+\item{rank}{The rank of the matrix that the family produces, a single integer in
 \code{0:dimension}. It is a property of the family, so a family whose value is
 positive definite at every \eqn{\eta} declares \eqn{p} here.}
 
 \item{null_basis}{A \code{dimension} by \code{dimension - rank} numeric matrix whose
 columns are an orthonormal basis of the common null space. Use
 \code{\link[=param_null_basis]{param_null_basis()}} to obtain one, or \code{matrix(numeric(0), dimension, 0)}
-for a full-rank family. The validator rejects any other shape, and
-reports both the rank and the shape when the two disagree.}
+for a full-rank family. The validator rejects any other shape.}
 }
 \value{
 An object of class \code{ScaledMatrixParam}, a subclass of
@@ -48,10 +47,11 @@ the log pseudo-determinant of \eqn{P} computed once at construction.
 }
 \description{
 The S7 class of a fixed symmetric positive semidefinite matrix \eqn{P} carried
-by a single positive scale, \eqn{M(\eta) = h(\eta) P}. It is the only family
-in the package that is routinely \strong{rank deficient}: \eqn{P} may be a
-difference penalty or a basis Gram matrix with a genuine null space, and the
-class records that rank and null basis at construction.
+by a single positive scale, \eqn{M(\eta) = h(\eta) P}. It is the family
+through which a \strong{rank-deficient} matrix usually enters the package
+(\code{\link[=sum_struct]{sum_struct()}} also accepts a deficient sum): \eqn{P} may be a difference
+penalty or a basis Gram matrix with a genuine null space, and the class
+records that rank and null basis at construction.
 
 \code{\link[=scaled_matrix]{scaled_matrix()}} builds one. With \code{link = NULL} the object holds \eqn{P}
 itself and has no free value at all, and \code{param_name} is then \code{"fixed"}
@@ -62,7 +62,8 @@ instead of \code{"scaled"}.
 r <- scaled_matrix(diag(3))
 c(S7::S7_inherits(r, ScaledMatrixParam), rank = r@rank, n_free = r@n_free)
 
-# A second-difference penalty is deficient by two, and says so.
+# A second-difference penalty is deficient by two, and the object records
+# the rank.
 q <- scaled_matrix(crossprod(diff(diag(6), differences = 2)))
 c(dimension = q@dimension, rank = q@rank, null = ncol(q@null_basis))
 
@@ -73,5 +74,5 @@ c(n_free = f@n_free, name = f@param_name)
 }
 \seealso{
 \code{\link[=scaled_matrix]{scaled_matrix()}}, the constructor, and \code{\link[=matrix_parameter]{matrix_parameter()}} for the
-properties this inherits.
+properties that this class inherits.
 }

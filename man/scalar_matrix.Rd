@@ -8,7 +8,7 @@ scalar_matrix(dimension, link = linkfunctions7::log_link())
 }
 \arguments{
 \item{dimension}{The side \eqn{p} of the matrix. A single positive whole
-number, finite and at least 1; anything else throws.}
+number, finite and at least 1; any other value signals an error.}
 
 \item{link}{A \pkg{linkfunctions7} link carrying the free value onto the
 positive scale, \code{linkfunctions7::log_link()} by default. It must map onto
@@ -26,7 +26,7 @@ empty \code{null_basis}, \code{param_name} \code{"scalar"}, and \code{param_para
 Returns an object holding the map \eqn{M = \tau I} with \eqn{\tau = h(\eta_1)}
 positive: a diagonal matrix with \strong{one} free value shared by every entry,
 whatever \eqn{p} is. It is the simplest parametrization in the package, and it
-is what a random effect with a single variance component needs.
+is the parametrization of a random effect with a single variance component.
 }
 \section{One free value, whatever the dimension}{
 \code{n_free} is 1 at every \code{dimension}, and \code{free_names} is \code{log_scale} under the
@@ -40,9 +40,8 @@ log link.
 Under the default log link this is \code{scaled_matrix(diag(dimension))}, a
 positive multiple of a fixed matrix that happens to be the identity. The two
 give the same value at the same free value. Prefer this one when the matrix is
-the identity and \code{\link[=scaled_matrix]{scaled_matrix()}} when it is not, and note that
-\code{\link[=scaled_matrix]{scaled_matrix()}} admits a rank-deficient fixed matrix while this family is
-always of full rank.
+the identity and \code{\link[=scaled_matrix]{scaled_matrix()}} when it is not; \code{\link[=scaled_matrix]{scaled_matrix()}} accepts
+a rank-deficient fixed matrix, while this family is always of full rank.
 }
 
 \section{Notation}{

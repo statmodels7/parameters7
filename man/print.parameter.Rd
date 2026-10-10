@@ -13,21 +13,22 @@ Invisibly \code{x}, so a print inside a pipe does not break it.
 }
 \description{
 Prints a one-screen summary of a parametrization: the family name, the shape
-and rank of the matrix, how many free values there are and
-what they are called, and which of the nine derived quantities come from the
-base class instead of a closed form.
+and rank of the matrix, how many free values there are and what they are
+called, and which derived quantities (nine for a matrix family, four for
+\code{\link[=simplex]{simplex()}} and \code{\link[=transition_matrix]{transition_matrix()}}) come from the base class instead of a
+closed form.
 }
 \details{
-Three things about the output are worth knowing. The matrix block is printed
-only for a \code{\link[=matrix_parameter]{matrix_parameter()}}, a \code{\link[=simplex]{simplex()}} having no dimension or rank to
-report. The free names are truncated at twelve, with a count of the rest, so a
-large unstructured covariance does not fill the screen. And the last line,
-\verb{From the base class}, is \code{\link[=param_is_numerical]{param_is_numerical()}}'s answer: \code{none} means every
-quantity is exact, and a list of generics names the ones a stencil computes.
-Every family this package ships prints \code{none}.
+The matrix block is printed only for a \code{\link[=matrix_parameter]{matrix_parameter()}}, because a
+\code{\link[=simplex]{simplex()}} has no dimension or rank to report. The free names are truncated at twelve, with a count of the rest, so a
+large unstructured covariance does not fill the screen. The last line,
+\verb{From the base class}, reports \code{\link[=param_is_numerical]{param_is_numerical()}}: \code{none} means that
+every quantity has a method of the family's own, and a list of generics names
+the ones that the base class supplies. Every family in this package prints
+\code{none}.
 
-A rank-deficient family prints its null space's dimension beside the rank,
-which is the quickest way to see that a penalty is improper.
+A rank-deficient family prints the dimension of its null space beside the
+rank, which shows at once that a penalty is improper.
 }
 \examples{
 # A full-rank family: nothing from the base class.

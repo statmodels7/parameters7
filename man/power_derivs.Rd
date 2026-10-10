@@ -16,7 +16,8 @@ power being the constant 1; at \code{m = 2} the first four are \verb{c(2r, 2, 0,
 }
 \value{
 A list of \code{order} elements, the first to the \code{order}-th
-derivative, each the shape of \code{r}.
+derivative. The elements of order at most \code{m} have the shape of \code{r}, and
+those of higher order are the scalar 0.
 }
 \description{
 Returns the derivatives of orders 1 to \code{order} of \eqn{r \mapsto r^{m}} at

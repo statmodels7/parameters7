@@ -25,7 +25,7 @@ correlation's own component of the matching order, elementwise.
 }
 \details{
 The correlation's arrays are fetched at most once per order and re-keyed by
-the sorted local index tuple, the same device \code{\link[=block_derivs_by_tuple]{block_derivs_by_tuple()}} uses
+the sorted local index tuple, the same device that \code{\link[=block_derivs_by_tuple]{block_derivs_by_tuple()}} uses
 and for the same reason: the composite's names are not the block's, but the
 sorted index tuple is a key both sides can compute.
 

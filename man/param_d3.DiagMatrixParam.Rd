@@ -22,8 +22,8 @@ the only surviving components are the pure ones, and each carries
 the exact zero matrix.
 
 \eqn{h'''} comes from \code{linkfunctions7::d3linkinv()}, so the accuracy is the
-link's; a family without a closed form here would get a product stencil good
-to about six digits instead.
+link's; a family without a closed form here gets a less accurate product
+stencil.
 }
 \seealso{
 \code{\link[=diag_higher]{diag_higher()}}, which assembles it, and

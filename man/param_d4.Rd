@@ -11,7 +11,7 @@ param_d4(s, eta, ...)
 
 \item{eta}{A numeric vector of length \code{s@n_free}, finite in every entry.}
 
-\item{...}{Passed to the method. No method in this package reads it.}
+\item{...}{Passed to the method. The methods in this package do not read it.}
 }
 \value{
 A named list of \code{choose(s@n_free + 3, 4)} entries, keyed as
@@ -24,9 +24,9 @@ Differentiates the map four times, returning the distinct components
 \deqn{\frac{\partial^{4} V(\eta)}
   {\partial\eta_k\,\partial\eta_l\,\partial\eta_m\,\partial\eta_n},}
 
-each shaped like the value. Fourth order is where the contract stops. A
-fourth-order chain rule through a link needs exactly this much, and nothing
-in the toolkit asks for a fifth.
+each shaped like the value. Fourth order is the highest order that the
+package provides, and a fourth-order chain rule through a link needs
+derivatives up to this order.
 }
 \section{Keys}{
 The derivative is symmetric in its indices, so the \eqn{\binom{d+3}{4}}
@@ -42,8 +42,8 @@ Every family here is closed form. The fallback on \code{\link[=parameter]{parame
 product stencil per quadruple, with a factor per distinct index of the width
 its multiplicity calls for, evaluated in one pass over \code{\link[=param_value]{param_value()}}. At
 fourth order the rounding of a difference grows as \eqn{\varepsilon / h^4},
-so a numerical answer here is the least accurate of the four orders; a family
-fitted in earnest is better served by writing the closed form out.
+so a numerical answer here is the least accurate of the four orders, and a
+family used for fitting should write the closed form out.
 }
 
 \section{Notation}{

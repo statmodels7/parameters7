@@ -20,8 +20,8 @@ A list with two components, \code{scale} and \code{rho}, each a list of
 value at the following indices.
 }
 \description{
-Returns the two scalars a \code{\link[=compound_symmetry]{compound_symmetry()}} or \code{\link[=ar1]{ar1()}} parameter is built
-from, each with its value and its derivatives to order \code{order} in its
+Returns the two scalars from which a \code{\link[=compound_symmetry]{compound_symmetry()}} or \code{\link[=ar1]{ar1()}}
+parameter is built, each with its value and its derivatives to order \code{order} in its
 \strong{own} free value. Each scalar depends on one free value alone, so the two
 families are separable and their derivative assembly is a product of two
 chains. A value alone is \code{order = 0}, and no derivative is evaluated then.

@@ -12,8 +12,7 @@ generic.}
 \item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A single number, finite at every free vector, the rhobit link keeping
-\eqn{1-\rho^2} strictly positive.
+A single number, finite at every free vector.
 }
 \description{
 Closed form. The determinant of the correlation pattern is
@@ -21,12 +20,14 @@ Closed form. The determinant of the correlation pattern is
 
 \deqn{\log|M| = p\log\sigma^2 + (p-1)\log(1-\rho^2).}
 
-Two logarithms and no factorization, whatever \eqn{p} is, against the base
-class's \eqn{O(p^3)} eigendecomposition. Measured at \eqn{p = 4} against the
-eigenvalues of the assembled matrix, the two agree to the printed digit.
+Two logarithms and no factorization, whatever \eqn{p} is, where the base
+method takes an \eqn{O(p^3)} eigendecomposition. With \eqn{\rho = \tanh z},
+the second term is evaluated as
+\eqn{(p-1)\{2\log 2 - 2|z| - 2\log(1 + e^{-2|z|})\}}, which does not lose
+accuracy where \eqn{\rho} rounds to \eqn{-1} or 1.
 }
 \seealso{
 \code{\link[=param_dlogdet.Ar1Param]{param_dlogdet.Ar1Param()}} for its four derivative orders, and
-\code{ar1_logdet_terms()} for the two terms.
+\code{\link[=ar1_logdet_chain]{ar1_logdet_chain()}} for the derivatives of the correlation's term.
 }
 \keyword{internal}

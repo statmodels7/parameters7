@@ -19,15 +19,15 @@ a strictly positive diagonal, and no dimnames.
 \description{
 Assembles \eqn{L} from the free vector: the diagonal is the exponential of
 the first \code{dimension} values and the rest are placed below it, at the
-positions \code{\link[=chol_positions]{chol_positions()}} recorded. Both \code{\link[=param_value]{param_value()}} and
+positions that \code{\link[=chol_positions]{chol_positions()}} recorded. Both \code{\link[=param_value]{param_value()}} and
 \code{\link[=param_factor]{param_factor()}} start here, and \code{\link[=param_factor]{param_factor()}} returns it unchanged.
 }
 \details{
 The exponential is applied by subsetting on \code{on_diagonal}, never through
 \code{ifelse()}, which evaluates both branches over the whole vector. Here that
-would only exponentiate values it then discards; the same shape in
+would only exponentiate values that it then discards; the same shape in
 \code{\link[=param_free]{param_free()}} would take a logarithm of below-diagonal entries that are free
-to be negative, and warn about the \code{NaN}s it throws away.
+to be negative, and warn about the \code{NaN}s that it discards.
 }
 \seealso{
 \code{\link[=chol_positions]{chol_positions()}} for the layout, and

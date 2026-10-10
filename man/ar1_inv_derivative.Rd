@@ -16,7 +16,7 @@ generic.}
 }
 \value{
 A named list of \code{s@dimension} square matrices, keyed and ordered as
-\code{\link[=param_tuple_names]{param_tuple_names()}} says.
+\code{\link[=param_tuple_names]{param_tuple_names()}} gives them.
 }
 \description{
 Assembles one order from the product structure \eqn{\Omega = \tau G(\rho)}:

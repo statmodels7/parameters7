@@ -9,7 +9,7 @@ NULL
 #' additive log-ratio parametrization. Its value is a matrix but **not a
 #' symmetric** one, so it inherits [parameter()] directly, never
 #' [matrix_parameter()]: there is no `rank` and no `null_basis`, and a
-#' transition matrix has no log-determinant, solve or factor to be asked for.
+#' transition matrix has no log-determinant, solve or factor.
 #'
 #' [transition_matrix()] builds one. The rows are independent in the
 #' parametrization, so every derivative array is block diagonal by row and the
@@ -23,8 +23,8 @@ NULL
 #'   `alr{i}.{j}` row by row, and `param_params` holds `n_state`.
 #'
 #' @seealso [transition_matrix()], the constructor, [simplex()], which is one
-#'   row of this, and [parameter()] for the properties this inherits and the
-#'   generics it does not get.
+#'   row of this, and [parameter()] for the properties that this class
+#'   inherits and the generics that it does not get.
 #'
 #' @examples
 #' # A matrix, but not a symmetric one, so not a matrix_parameter.
@@ -46,8 +46,10 @@ TransitionMatrixParam <- S7::new_class("TransitionMatrixParam", parent = paramet
 #' Returns an object holding a \eqn{K \times K} row-stochastic matrix, the
 #' transition matrix of a Markov chain on \eqn{K} states, with each row an
 #' independent [simplex()] in the additive log-ratio chart. \eqn{K(K-1)} free
-#' values in all, and every free vector gives positive entries with rows summing
-#' to exactly 1, so a chain can be estimated without a constraint.
+#' values in all, and every free vector gives non-negative entries with rows
+#' summing to 1 up to rounding, so a chain can be estimated without a
+#' constraint. An entry underflows to exactly 0 when its free value is more
+#' than about 745 below the largest in its row.
 #'
 #' @details
 #' # Rows, not columns
@@ -63,20 +65,20 @@ TransitionMatrixParam <- S7::new_class("TransitionMatrixParam", parent = paramet
 #' every derivative array is **block diagonal by row**: a component pairing free
 #' values of two different rows is exactly the zero matrix, and a component
 #' inside row \eqn{i} is zero everywhere outside row \eqn{i}. The implementation
-#' evaluates the simplex kernels row by row and never stores those zeros.
+#' evaluates the simplex kernels row by row and does not compute the cross-row
+#' components, which are returned as matrices of zeros.
 #'
-#' Measured at \eqn{K = 3}: the second-derivative component
-#' `alr1.1:alr2.1`, spanning two rows, is 0 exactly, while `alr1.1:alr1.1` is
-#' not.
+#' At \eqn{K = 3}, the second-derivative component `alr1.1:alr2.1`, spanning two
+#' rows, is exactly 0, while `alr1.1:alr1.1` is not.
 #'
 #' # Reading the free vector
 #'
-#' It runs row by row, and the names `alr{i}.{j}` say which row and which chart
-#' coordinate, the row.column convention [log_cholesky()] uses. The `alr` records
+#' It runs row by row, and the names `alr{i}.{j}` give the row and the chart
+#' coordinate, in the row.column convention that [log_cholesky()] uses. The `alr` records
 #' the chart, so a free value of 0.5 is not a probability of 0.5: it is a log
 #' ratio against the row's last state.
 #'
-#' # What it has and has not got
+#' # Available methods
 #'
 #' All four derivative orders are closed form, inherited from [simplex()]'s
 #' cumulant recursion. There is no log-determinant, no solve and no factor: the
@@ -93,8 +95,8 @@ TransitionMatrixParam <- S7::new_class("TransitionMatrixParam", parent = paramet
 #' is its last state.
 #'
 #' @param n_state The number of states \eqn{K}, **at least 2**. A single integer;
-#'   `1`, a fraction, `NA` and a vector all throw `'n_state' must be a single
-#'   integer of at least 2.` A one-state chain has nothing to estimate.
+#'   `1`, a fraction, `NA` and a vector all signal the error `'n_state' must be
+#'   a single integer of at least 2.` A one-state chain has nothing to estimate.
 #'
 #' @return An object of class [TransitionMatrixParam()], with `n_free` equal to
 #'   \eqn{K(K-1)}, `free_names` `alr1.1`, `alr1.2`, ..., `alr{K}.{K-1}` row by
@@ -103,7 +105,7 @@ TransitionMatrixParam <- S7::new_class("TransitionMatrixParam", parent = paramet
 #'
 #' @seealso [simplex()], which is one row of this and carries the derivative
 #'   recursion, [param_value()] and [param_free()] for the map and its inverse,
-#'   and [check_parameter()] for the battery a non-matrix family gets.
+#'   and [check_parameter()] for the battery that a non-matrix family gets.
 #'
 #' @examples
 #' # Three states: six free values, two per row.
@@ -116,10 +118,10 @@ TransitionMatrixParam <- S7::new_class("TransitionMatrixParam", parent = paramet
 #' m <- param_value(s, eta)
 #' round(m, 4)
 #'
-#' # Every row is a probability distribution, exactly.
+#' # Every row is a probability distribution, up to rounding.
 #' rowSums(m)
 #'
-#' # The round trip closes exactly.
+#' # The round trip closes up to rounding.
 #' max(abs(param_free(s, m) - eta))
 #'
 #' # The rows are independent, so a derivative in a row-1 free value is zero
@@ -131,7 +133,7 @@ TransitionMatrixParam <- S7::new_class("TransitionMatrixParam", parent = paramet
 #' c(across_rows = max(abs(d2[["alr1.1:alr2.1"]])),
 #'   within_row = max(abs(d2[["alr1.1:alr1.1"]])))
 #'
-#' # There is no log-determinant to ask for: the value is not symmetric.
+#' # There is no log-determinant: the value is not symmetric.
 #' try(param_logdet(s, eta))
 #'
 #' @export
@@ -156,9 +158,9 @@ transition_matrix <- function(n_state) {
 #' Row and Chart Coordinate of Each Free Value
 #'
 #' @description
-#' Returns, for each of the \eqn{K(K-1)} free values, the row it belongs to and
-#' its position inside that row's simplex chart, in the order the free vector
-#' uses. Every method of the family reads it to split the free vector into rows.
+#' Returns, for each of the \eqn{K(K-1)} free values, the row to which it
+#' belongs and its position inside that row's simplex chart, in the order that
+#' the free vector uses. Every method of the family reads it to split the free vector into rows.
 #'
 #' @details
 #' The free vector runs row by row, so at \eqn{K = 3} the rows are
@@ -188,15 +190,15 @@ tm_positions <- function(s) {
 #' @name param_value.TransitionMatrixParam
 #' @description
 #' Returns the transition matrix: each row is the softmax of that row's own
-#' \eqn{K-1} free values, through [simplex_point()], so each row is positive and
-#' sums to exactly 1. Nothing is tested and nothing is renormalized; the row sums
-#' are a property of the map. Rows are the distributions, so \eqn{P_{ij}} is the
+#' \eqn{K-1} free values, through [simplex_point()], so each row is non-negative
+#' and sums to 1 up to rounding. Nothing is tested and nothing is renormalized;
+#' the row sums are a property of the map. Rows are the distributions, so \eqn{P_{ij}} is the
 #' probability of moving from state \eqn{i} to state \eqn{j}.
 #' @param s A [TransitionMatrixParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic.
 #' @param ... Unused, and accepted so the signature matches the generic's.
-#' @return A \eqn{K \times K} numeric matrix with positive entries and rows
+#' @return A \eqn{K \times K} numeric matrix with non-negative entries and rows
 #'   summing to 1, with dimnames `s1`, `s2`, ... on both margins.
 #' @seealso [param_free.TransitionMatrixParam()] for the inverse, and
 #'   [simplex_point()] for the per-row arithmetic.
@@ -219,23 +221,24 @@ S7::method(param_value, TransitionMatrixParam) <- function(s, eta, ...) {
 #' @description
 #' Returns the additive log-ratio of each row, \eqn{\log(P_{ij}/P_{iK})}, exact
 #' and a true inverse of [param_value.TransitionMatrixParam()]: the round trip
-#' closes to \eqn{2 \times 10^{-16}}.
+#' closes up to rounding.
 #' @details
-#' A row is rejected when it has a non-positive entry, being then outside the
-#' **open** simplex where \eqn{\log 0} is not finite, or when it does not sum to
-#' 1, in which case it is not a probability distribution and is **not**
-#' renormalized. The message names the row.
+#' A matrix is rejected when it has a non-positive entry, being then outside
+#' the **open** simplex where \eqn{\log 0} is not finite, or when a row does not
+#' sum to 1, in which case it is not a probability distribution and is **not**
+#' renormalized. The messages state the condition that failed and do not name
+#' the row.
 #'
-#' The first rejection is the one a fit meets: [simplex_point()] saturates a large
-#' free value to an exact 0 in the reference state, so a matrix produced at the
-#' boundary cannot be inverted back.
+#' The first rejection is the one that a fit meets: a large positive free value
+#' makes [simplex_point()] return an exact 0 in the reference state, so a matrix
+#' produced at the boundary cannot be inverted back.
 #' @param s A [TransitionMatrixParam()] object.
 #' @param m A \eqn{K \times K} row-stochastic numeric matrix: strictly positive
 #'   with every row summing to 1.
 #' @param ... Unused, and accepted so the signature matches the generic's.
 #' @return A numeric vector of length `s@n_free`, named by `s@free_names`.
 #' @seealso [param_value.TransitionMatrixParam()], the map this inverts, and
-#'   [param_free.SimplexParam()], which does one row's worth.
+#'   [param_free.SimplexParam()], which does the same for one row.
 #' @keywords internal
 S7::method(param_free, TransitionMatrixParam) <- function(s, m, ...) {
   k <- s@param_params$n_state
@@ -248,7 +251,7 @@ S7::method(param_free, TransitionMatrixParam) <- function(s, m, ...) {
   if (max(abs(rowSums(m) - 1)) > 1e-8) {
     stop(paste0(
       "the rows of 'm' do not all sum to one, so it is not row stochastic.\n",
-      "  It is rejected rather than renormalized."
+      "  It is not renormalized."
     ), call. = FALSE)
   }
   out <- numeric(s@n_free)
@@ -271,9 +274,9 @@ S7::method(param_free, TransitionMatrixParam) <- function(s, m, ...) {
 #'
 #' @details
 #' The rows are parametrized independently, so [simplex_tensors()] is evaluated
-#' once per row and [simplex_components()] slices it with a `wrap` that does the
-#' embedding. Nothing of size \eqn{K^2 (K(K-1))^{\text{order}}} is built: the
-#' cross-row components are never computed, only skipped.
+#' once per row, and each slice of a row's tensor is embedded in that row of a
+#' \eqn{K \times K} matrix of zeros. The cross-row components are not computed;
+#' each is returned as a matrix of zeros.
 #'
 #' @param s A [TransitionMatrixParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`.
@@ -283,8 +286,8 @@ S7::method(param_free, TransitionMatrixParam) <- function(s, m, ...) {
 #'   matrices keyed as `param_tuple_names(s, order)` and in that order, most of
 #'   them exactly zero. Each non-zero one is supported on a single row.
 #'
-#' @seealso [simplex_tensors()] and [simplex_components()], which do the per-row
-#'   work, and [tm_positions()] for the row map.
+#' @seealso [simplex_tensors()], which does the per-row work, and
+#'   [tm_positions()] for the row map.
 #'
 #' @keywords internal
 tm_derivative <- function(s, eta, order) {
@@ -355,8 +358,8 @@ S7::method(param_d1, TransitionMatrixParam) <- function(s, eta, ...) {
 #' independently; one pairing two free values of the same row is that row's
 #' [simplex()] second derivative, embedded in that row.
 #'
-#' Measured at \eqn{K = 3}: `alr1.1:alr2.1` is 0 exactly and `alr1.1:alr1.1` is
-#' not. Of the 21 components at \eqn{K = 3}, only 9 can be non-zero.
+#' At \eqn{K = 3}, `alr1.1:alr2.1` is exactly 0 and `alr1.1:alr1.1` is not. Of
+#' the 21 components at \eqn{K = 3}, only 9 can be non-zero.
 #' @param s A [TransitionMatrixParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic.
@@ -376,8 +379,7 @@ S7::method(param_d2, TransitionMatrixParam) <- function(s, eta, ...) {
 #' @description
 #' Closed form, from [simplex()]'s cumulant recursion at third order, embedded row
 #' by row. A component whose three free values do not all belong to one row is
-#' exactly the zero matrix, so the great majority of the list is zero and is
-#' skipped instead of computed.
+#' exactly the zero matrix, so most of the list is zero and is not computed.
 #' @param s A [TransitionMatrixParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic.
@@ -395,13 +397,12 @@ S7::method(param_d3, TransitionMatrixParam) <- function(s, eta, ...) {
 #' @name param_d4.TransitionMatrixParam
 #' @description
 #' Closed form, from [simplex()]'s cumulant recursion at fourth order, embedded
-#' row by row, and the top of the contract. A component whose four free values do
-#' not all belong to one row is exactly the zero matrix.
+#' row by row. A component whose four free values do not all belong to one row
+#' is exactly the zero matrix.
 #'
-#' Exactness matters most here: a product stencil at fourth order keeps about five
-#' digits, and the list is large, so a numerical route would be both slow and
-#' poor. The row-wise structure is what keeps it affordable at all, the cross-row
-#' components never being evaluated.
+#' A product stencil at fourth order, as in [numerical_d4()], is far less
+#' accurate, and the list is large. The cross-row components are not
+#' evaluated.
 #' @param s A [TransitionMatrixParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic.

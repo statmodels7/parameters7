@@ -25,14 +25,14 @@ At order 1, a list of \code{s@n_free} symmetric matrices named by
 \code{\link[=sum_struct]{sum_struct()}} parameter. The value being linear in the weights, a component
 is \strong{exactly zero} unless every index names the same free value, and is then
 that weight's \eqn{m}-th derivative times its own fixed matrix. Nothing is
-differenced and no matrix arithmetic is done.
+differenced, and the only matrix arithmetic is a multiplication by a scalar.
 }
 \details{
 The four share \code{\link[=sum_struct_derivs]{sum_struct_derivs()}} and differ only in the order they pass.
 At \eqn{K = 2} the zeros are 1 of the 3 second-order components, 2 of 4 at
 third order and 3 of 5 at fourth. Compare
-\code{\link[=param_dlogdet.SumStructParam]{param_dlogdet.SumStructParam()}}, where nothing vanishes: the value is linear
-in the weights and its log-determinant is not.
+\code{\link[=param_dlogdet.SumStructParam]{param_dlogdet.SumStructParam()}}, where the mixed components are in general
+not zero: the value is linear in the weights and its log-determinant is not.
 }
 \seealso{
 \code{\link[=sum_struct_derivs]{sum_struct_derivs()}}, which assembles them.

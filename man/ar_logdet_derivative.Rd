@@ -23,8 +23,9 @@ term per free value, so a mixed component is exactly zero and is returned
 without arithmetic; only the \eqn{q + 1} pure components are computed.
 }
 \details{
-The scale term is \eqn{p \log \gamma_0}, whose derivatives in
-\eqn{\gamma_0} are \eqn{(-1)^{k-1}(k-1)!/\gamma_0^{k}}, and each partial
+The scale term is \eqn{p \log \gamma_0}: the derivatives of
+\eqn{\log \gamma_0} in \eqn{\gamma_0} are \eqn{(-1)^{k-1}(k-1)!/\gamma_0^{k}},
+and the factor \eqn{p} is applied afterwards. Each partial
 autocorrelation contributes \eqn{(p-k)\log(1 - r_k^2)}, whose derivatives come
 from \code{\link[=log_affine_derivs]{log_affine_derivs()}} applied to the two factors \eqn{1 - r} and
 \eqn{1 + r}. Both are then carried onto the free scale by \code{\link[=compose_order]{compose_order()}}, the

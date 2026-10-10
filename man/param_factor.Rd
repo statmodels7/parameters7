@@ -11,7 +11,7 @@ param_factor(s, eta, ...)
 
 \item{eta}{A numeric vector of length \code{s@n_free}, finite in every entry.}
 
-\item{...}{Passed to the method. No method in this package reads it.}
+\item{...}{Passed to the method. The methods in this package do not read it.}
 }
 \value{
 A \code{s@dimension} by \code{s@dimension} lower triangular numeric matrix with
@@ -22,11 +22,12 @@ Returns the lower triangular \eqn{L} with \eqn{M = L L^\top}, the Cholesky
 factor of the matrix the parametrization produces. Simulation is the usual
 reason to want it: \eqn{L z} with \eqn{z} standard normal has covariance
 \eqn{M}, so one factor draws as many vectors as needed. For
-\code{\link[=log_cholesky]{log_cholesky()}} the factor is what the parametrization holds anyway, so it
-is returned without any arithmetic.
+\code{\link[=log_cholesky]{log_cholesky()}} the factor is assembled directly from the free vector, with
+one exponential per diagonal entry and no decomposition.
 }
 \section{Rank deficiency is rejected}{
-A deficient matrix has no Cholesky factor: a triangular \eqn{L} with
+A deficient matrix has no Cholesky factor with a positive diagonal: a
+triangular \eqn{L} with
 \eqn{L L^\top = M} would need a zero on the diagonal, and the factor is then
 not unique. The generic signals an error naming the family and its rank
 before dispatching. To simulate from a deficient covariance, take an
@@ -35,8 +36,8 @@ eigendecomposition and use the eigenvectors of the non-zero eigenvalues;
 }
 
 \section{A non-matrix family has no method}{
-\code{\link[=simplex]{simplex()}} and \code{\link[=transition_matrix]{transition_matrix()}} are checked for and refused by name,
-their value not being a symmetric matrix.
+\code{\link[=simplex]{simplex()}} and \code{\link[=transition_matrix]{transition_matrix()}} are rejected with an error that names
+the family, because their value is not a symmetric matrix.
 }
 
 \section{Notation}{
@@ -62,12 +63,12 @@ set.seed(1)
 y <- t(L \%*\% matrix(rnorm(3 * 20000), 3, 20000))
 round(cov(y) - param_value(s, eta), 2)
 
-# A rank-deficient family has no factor and says so.
+# A rank-deficient family has no factor, and the call signals an error.
 try(param_factor(scaled_matrix(crossprod(diff(diag(6), differences = 2))), 0))
 
 }
 \seealso{
 \code{\link[=param_solve]{param_solve()}} for a solve through the same factor,
 \code{\link[=param_value]{param_value()}} for the matrix it factors, and \code{\link[=log_cholesky]{log_cholesky()}}, whose
-free values are the logarithms of this factor's diagonal.
+first \eqn{p} free values are the logarithms of this factor's diagonal.
 }

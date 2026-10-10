@@ -14,8 +14,8 @@ diag_multiplicity(s)
 An integer vector of length \code{s@n_free} summing to \code{s@dimension}.
 }
 \description{
-Returns \eqn{m_k}, the number of diagonal entries the \eqn{k}-th free value
-controls: 1 for every value of a \code{\link[=diagonal_matrix]{diagonal_matrix()}}, and \eqn{p} for the
+Returns \eqn{m_k}, the number of diagonal entries that the \eqn{k}-th free
+value controls: 1 for every value of a \code{\link[=diagonal_matrix]{diagonal_matrix()}}, and \eqn{p} for the
 single value of a \code{\link[=scalar_matrix]{scalar_matrix()}}. It is the multiplicity that appears in
 the log-determinant's derivatives, \eqn{\log|M|} counting a shared value once
 per entry.

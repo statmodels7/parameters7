@@ -26,7 +26,7 @@ NULL
 #'   \eqn{p}, every entry being positive.
 #'
 #' @seealso [diagonal_matrix()] and [scalar_matrix()], the two constructors, and
-#'   [matrix_parameter()] for the properties this inherits.
+#'   [matrix_parameter()] for the properties that this class inherits.
 #'
 #' @examples
 #' # One class, two constructors, told apart by `shared`.
@@ -50,25 +50,25 @@ DiagMatrixParam <- S7::new_class("DiagMatrixParam", parent = matrix_parameter)
 #' [log_cholesky()]'s \eqn{p(p+1)/2}, and for a set of independent variance
 #' components.
 #'
-#' The choice of link is yours, and it is a real choice: the derivatives the
-#' family reports are the link's own, so the curvature an optimizer sees on the
-#' free scale changes with it. [scalar_matrix()] is the same object with one free
+#' The link is chosen by the caller, and the choice matters: the derivatives
+#' that the family reports are the link's own, so the curvature that an
+#' optimizer sees on the free scale changes with it. [scalar_matrix()] is the same object with one free
 #' value shared by every entry.
 #'
 #' @details
 #' # Where the two packages meet
 #'
-#' The Jacobian of a diagonal map is diagonal, which is exactly the contract a
-#' scalar link satisfies, so the \pkg{linkfunctions7} objects are reused as they
-#' are and their exact derivatives to fourth order come with them. Nothing here
-#' rederives a chain rule.
+#' The Jacobian of a diagonal map is diagonal, which is what a scalar link
+#' supplies, so the \pkg{linkfunctions7} objects are used directly and their
+#' exact derivatives to fourth order apply without a further chain rule.
 #'
 #' # The free names record the link
 #'
 #' `free_names` is `log_d1`, `log_d2`, ... under the default, and `softplus_d1`,
-#' `softplus_d2`, ... under a softplus link. A label names the coordinate, never
-#' the quantity it produces, so a consumer that flattens the free vector into
-#' scalars with identity links reports a number on the scale it is really on.
+#' `softplus_d2`, ... under a softplus link. A label names the coordinate and
+#' not the quantity that it produces, so a consumer that flattens the free
+#' vector into scalars with identity links reports each number on its own
+#' scale.
 #'
 #' # The log-determinant, and when it is linear
 #'
@@ -77,9 +77,8 @@ DiagMatrixParam <- S7::new_class("DiagMatrixParam", parent = matrix_parameter)
 #' a sum of functions of one free value each, so every mixed derivative of it is
 #' exactly zero at every order. Under the **log** link \eqn{\log h(\eta) = \eta},
 #' so the gradient is a vector of ones and the second, third and fourth
-#' derivatives all vanish. Under any other link they do not: a square-root link
-#' at \eqn{\eta = (1, 2)} gives a second derivative of \eqn{(-2, -0.5)} on the
-#' diagonal.
+#' derivatives all vanish. Under another link they do not: a softplus link at
+#' \eqn{\eta = (1, 2)} gives second derivatives of \eqn{(-0.160, -0.122)}.
 #'
 #' @section Notation:
 #' \eqn{\eta} is the free vector, of length \eqn{d = p}, and \eqn{p} the side of
@@ -87,8 +86,8 @@ DiagMatrixParam <- S7::new_class("DiagMatrixParam", parent = matrix_parameter)
 #' positive diagonal entry, and \eqn{h'}, \eqn{h''} its derivatives in \eqn{\eta}.
 #'
 #' @param dimension The side \eqn{p} of the matrix. A single positive whole
-#'   number, finite and at least 1; anything else throws `'dimension' must be a
-#'   single positive integer.`
+#'   number, finite and at least 1; any other value signals the error
+#'   `'dimension' must be a single positive integer.`
 #' @param link A \pkg{linkfunctions7} link carrying the free scale onto the
 #'   positive entries, `linkfunctions7::log_link()` by default. It must map
 #'   **onto** the positive half line, so `identity_link()` is rejected with its
@@ -100,8 +99,10 @@ DiagMatrixParam <- S7::new_class("DiagMatrixParam", parent = matrix_parameter)
 #'   \eqn{(0, 1)} is positive and which gives a positive definite matrix with
 #'   entries below 1. `sqrt_link()`, `inverse_link()`, `inverse_sq_link()` and
 #'   `power_link()` at a positive exponent satisfy only the first and are
-#'   rejected: their predictor scale is \eqn{(0, \infty)}, so the map is even in
-#'   \eqn{\eta} and the round trip returns \eqn{\lvert \eta \rvert}.
+#'   rejected: their predictor scale is \eqn{(0, \infty)}, so a negative free
+#'   value would not be admissible. For `sqrt_link()` the inverse link is even
+#'   in \eqn{\eta} and the round trip would return \eqn{\lvert \eta \rvert}; for
+#'   the others a negative \eqn{\eta} gives a negative or undefined entry.
 #'
 #' @return An object of class [DiagMatrixParam()], with `n_free` equal to
 #'   `dimension`, `free_names` tagged by the link, `rank` equal to `dimension`,
@@ -125,13 +126,13 @@ DiagMatrixParam <- S7::new_class("DiagMatrixParam", parent = matrix_parameter)
 #'         c(0.2, -0.3, 0.7)))
 #'
 #' # Any link carrying the whole free line onto positive entries serves, and
-#' # the free names say which one was used.
+#' # the free names record which one was used.
 #' r <- diagonal_matrix(2, link = linkfunctions7::softplus_link())
 #' r@free_names
 #' round(param_value(r, c(1, 2)), 4)
 #'
-#' # A link onto the whole line is refused, an entry having to be positive,
-#' # and so is one defined on part of the line, the map being even there.
+#' # A link onto the whole line is rejected, an entry having to be positive,
+#' # and so is one defined on part of the line.
 #' try(diagonal_matrix(2, link = linkfunctions7::identity_link()))
 #' try(diagonal_matrix(2, link = linkfunctions7::sqrt_link()))
 #'
@@ -168,7 +169,7 @@ diagonal_matrix <- function(dimension, link = linkfunctions7::log_link()) {
 #' Returns an object holding the map \eqn{M = \tau I} with \eqn{\tau = h(\eta_1)}
 #' positive: a diagonal matrix with **one** free value shared by every entry,
 #' whatever \eqn{p} is. It is the simplest parametrization in the package, and it
-#' is what a random effect with a single variance component needs.
+#' is the parametrization of a random effect with a single variance component.
 #'
 #' @details
 #' # One free value, whatever the dimension
@@ -184,9 +185,8 @@ diagonal_matrix <- function(dimension, link = linkfunctions7::log_link()) {
 #' Under the default log link this is `scaled_matrix(diag(dimension))`, a
 #' positive multiple of a fixed matrix that happens to be the identity. The two
 #' give the same value at the same free value. Prefer this one when the matrix is
-#' the identity and [scaled_matrix()] when it is not, and note that
-#' [scaled_matrix()] admits a rank-deficient fixed matrix while this family is
-#' always of full rank.
+#' the identity and [scaled_matrix()] when it is not; [scaled_matrix()] accepts
+#' a rank-deficient fixed matrix, while this family is always of full rank.
 #'
 #' @section Notation:
 #' \eqn{\eta_1} is the single free value, \eqn{\tau = h(\eta_1)} the shared
@@ -194,7 +194,7 @@ diagonal_matrix <- function(dimension, link = linkfunctions7::log_link()) {
 #' inverse link.
 #'
 #' @param dimension The side \eqn{p} of the matrix. A single positive whole
-#'   number, finite and at least 1; anything else throws.
+#'   number, finite and at least 1; any other value signals an error.
 #' @param link A \pkg{linkfunctions7} link carrying the free value onto the
 #'   positive scale, `linkfunctions7::log_link()` by default. It must map onto
 #'   the positive half line, so `identity_link()` is rejected, and from the whole
@@ -247,7 +247,7 @@ scalar_matrix <- function(dimension, link = linkfunctions7::log_link()) {
 #' Reject a Link That Does Not Carry the Whole Free Line to Positive Entries
 #'
 #' @description
-#' Checks the two properties every family taking a link argument needs, and
+#' Checks the two properties that every family taking a link argument needs, and
 #' signals an error naming the bounds otherwise: that the link's declared range
 #' lies in the non-negative half line, and that it is defined on the whole real
 #' line. Called at construction by [diagonal_matrix()], [scalar_matrix()],
@@ -258,8 +258,8 @@ scalar_matrix <- function(dimension, link = linkfunctions7::log_link()) {
 #' # Onto the positive half line
 #'
 #' A diagonal entry of a positive definite matrix is positive, so a link onto
-#' the whole real line would let a caller build a matrix outside the set without
-#' anything saying so. The test is on the **lower** bound alone, `b[1] >= 0`, so
+#' the whole real line would let a caller build a matrix outside the set
+#' without an error. The test is on the **lower** bound alone, `b[1] >= 0`, so
 #' a link with a bounded range is accepted: `logit_link()`, whose range is
 #' \eqn{(0, 1)}, produces a positive definite matrix with entries below 1,
 #' which is a legitimate thing to want.
@@ -270,27 +270,24 @@ scalar_matrix <- function(dimension, link = linkfunctions7::log_link()) {
 #' that any vector in \eqn{\mathbb{R}^d} gives a valid matrix. A link defined
 #' on part of the line breaks that: `sqrt_link()`, `inverse_link()`,
 #' `inverse_sq_link()` and `power_link()` at a positive exponent all reach the
-#' positive entries from the positive predictors alone, and
-#' [linkfunctions7::linkinv()] of them is even, so `-2` and `2` give the same
-#' entry and the round trip returns \eqn{\lvert \eta \rvert}.
+#' positive entries from the positive predictors alone. For `sqrt_link()`,
+#' [linkfunctions7::linkinv()] is even, so `-2` and `2` give the same entry and
+#' the round trip returns \eqn{\lvert \eta \rvert}; for `inverse_link()` it is
+#' odd and gives a negative entry at `-2`, and for `inverse_sq_link()` and
+#' `power_link(2)` it is `NaN` there.
 #'
-#' Measured before the second test existed, with the default free-value draws:
-#' `autoregressive(5, 1)`, `ar1(5)` and `compound_symmetry(4)` under a square
-#' root link died inside [check_parameter()] with `missing value where
-#' TRUE/FALSE needed`, and `diagonal_matrix(3)` and `scalar_matrix(3)` with
-#' `system is computationally singular`, neither message naming the link. Both
-#' properties are read at construction, which is the only place they can be:
-#' at evaluation time no free value is inadmissible.
+#' Both properties are checked at construction, because at evaluation time every
+#' free value is admissible.
 #'
 #' @param link The object to check.
 #'
 #' @return Invisibly `TRUE`. An object that is not a \pkg{linkfunctions7} link
-#'   throws `'link' must be a linkfunctions7 link object.`; a link whose lower
-#'   bound is negative, or which is defined on part of the line, throws a
-#'   message quoting the offending bounds.
+#'   signals the error `'link' must be a linkfunctions7 link object.`; a link
+#'   whose lower bound is negative, or which is defined on part of the line,
+#'   signals an error quoting the offending bounds.
 #'
 #' @seealso [diagonal_matrix()] for the fullest statement of the two conditions,
-#'   and [linkfunctions7::eta_bounds()], which answers the second.
+#'   and [linkfunctions7::eta_bounds()], which the second reads.
 #'
 #' @keywords internal
 check_positive_link <- function(link) {
@@ -308,9 +305,9 @@ check_positive_link <- function(link) {
   if (!all(is.infinite(e))) {
     stop(sprintf(paste0(
       "'link' is defined on the predictors (%s, %s) and not on the whole\n",
-      "  real line. The free vector is unconstrained by design, so a map\n",
-      "  reaching only part of the line gives the same matrix at two free\n",
-      "  vectors and the round trip returns |eta|.\n",
+      "  real line. The free vector is unconstrained by design, and such a\n",
+      "  link gives a negative or undefined entry at some free vectors, or the\n",
+      "  same matrix at two of them (eta and -eta under sqrt_link()).\n",
       "  log_link() and softplus_link() are the shipped links onto the\n",
       "  positive half line from the whole of it."
     ), format(e[1]), format(e[2])), call. = FALSE)
@@ -374,9 +371,9 @@ diag_owner <- function(s) {
 #' Returns \eqn{M = \mathrm{diag}(h(\eta_1), \dots, h(\eta_p))}, the inverse link
 #' applied to each free value and placed on the diagonal. For a
 #' [scalar_matrix()] the one free value is recycled, giving \eqn{h(\eta_1) I}.
-#' Positive definiteness follows from the link, whose range
-#' [check_positive_link()] restricted to the non-negative half line at
-#' construction, so nothing is tested here.
+#' Positive definiteness follows from the link, which [check_positive_link()]
+#' required at construction to map into the non-negative half line, so nothing
+#' is tested here.
 #' @param s A [DiagMatrixParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic.
@@ -395,13 +392,14 @@ S7::method(param_value, DiagMatrixParam) <- function(s, eta, ...) {
 #' @name param_free.DiagMatrixParam
 #' @description
 #' Returns \eqn{g} applied to the diagonal of `m`, the link in the forward
-#' direction, after checking that `m` really is in the family's set. Exact, and a
-#' true inverse of [param_value.DiagMatrixParam()], the link being a bijection.
+#' direction, after checking that `m` is in the family's set. Exact, and a true
+#' inverse of [param_value.DiagMatrixParam()], the link being a bijection.
 #' @details
-#' Three rejections, each with its own message. `m` must be diagonal, tested as
+#' Four rejections, each with its own message. `m` must be diagonal, tested as
 #' `max(abs(off)) > 1e-10 * max(1, max(abs(d)))` on the off-diagonal part, so an
 #' asymmetry of rounding size passes and a real off-diagonal entry does not. Its
-#' diagonal entries must all be positive. And for a [scalar_matrix()] they must
+#' diagonal entries must all be positive and inside the open range of the link
+#' (for `logit_link()`, between 0 and 1). And for a [scalar_matrix()] they must
 #' all be **equal**, tested by `diff(range(d)) > 1e-10 * max(abs(d))`, a diagonal
 #' that varies not being a scalar multiple of the identity; only the first entry
 #' is then read.
@@ -417,12 +415,19 @@ S7::method(param_free, DiagMatrixParam) <- function(s, m, ...) {
   d <- diag(m)
   off <- m - diag(d, nrow = s@dimension)
   if (max(abs(off)) > 1e-10 * max(1, max(abs(d)))) {
-    stop("'m' is not diagonal, so it is not in the set this parameter parametrizes.",
+    stop("'m' is not diagonal, so it is not in the set that this parameter parametrizes.",
       call. = FALSE
     )
   }
   if (any(d <= 0)) {
     stop("'m' has a non-positive diagonal entry.", call. = FALSE)
+  }
+  b <- s@param_params$link@link_bounds
+  if (any(d <= b[1L] | d >= b[2L])) {
+    stop(sprintf(
+      "'m' has a diagonal entry outside the range (%s, %s) of the link.",
+      format(b[1L]), format(b[2L])
+    ), call. = FALSE)
   }
   if (s@param_params$shared) {
     if (diff(range(d)) > 1e-10 * max(abs(d))) {
@@ -446,7 +451,7 @@ S7::method(param_free, DiagMatrixParam) <- function(s, m, ...) {
 #'
 #' \deqn{\partial_k M = h'(\eta_k)\, \textstyle\sum_{i:\, o_i = k} E_{ii},}
 #'
-#' where \eqn{o_i} is the free value entry \eqn{i} belongs to. For a
+#' where \eqn{o_i} is the free value to which entry \eqn{i} belongs. For a
 #' [diagonal_matrix()] that is one entry, so \eqn{\partial_k M} is
 #' \eqn{h'(\eta_k) E_{kk}}; for a [scalar_matrix()] the one free value owns the
 #' whole diagonal and \eqn{\partial_1 M = h'(\eta_1) I}.
@@ -520,8 +525,8 @@ S7::method(param_d2, DiagMatrixParam) <- function(s, eta, ...) {
 #' @description
 #' Returns \eqn{L = \mathrm{diag}(\sqrt{h(\eta_1)}, \dots, \sqrt{h(\eta_p)})}.
 #' The Cholesky factor of a diagonal matrix is the diagonal of its square roots,
-#' so this is \eqn{p} square roots and no factorization, against the base class's
-#' \eqn{O(p^3)}.
+#' so this is \eqn{p} square roots and no factorization, against the
+#' \eqn{O(p^3)} of the base method.
 #' @param s A [DiagMatrixParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic.
@@ -530,8 +535,7 @@ S7::method(param_d2, DiagMatrixParam) <- function(s, eta, ...) {
 #'   positive diagonal, satisfying `L %*% t(L) == param_value(s, eta)`, and
 #'   carrying no dimnames.
 #' @seealso [param_factor()] for the generic and
-#'   [param_factor.matrix_parameter()] for what a family without a closed form
-#'   pays.
+#'   [param_factor.matrix_parameter()] for the base method.
 #' @keywords internal
 S7::method(param_factor, DiagMatrixParam) <- function(s, eta, ...) {
   diag(sqrt(diag_entries(s, eta)), nrow = s@dimension)
@@ -547,7 +551,10 @@ S7::method(param_factor, DiagMatrixParam) <- function(s, eta, ...) {
 #' \eqn{p} times, giving \eqn{p \log h(\eta_1)}.
 #'
 #' Under the **log** link \eqn{\log h(\eta) = \eta}, so the result is `sum(eta)`
-#' and the quantity is linear in the free vector; under any other link it is not.
+#' for a [diagonal_matrix()] and `dimension * eta` for a [scalar_matrix()], linear
+#' in the free vector as long as the link's inverse does not reach the floor
+#' that \pkg{linkfunctions7} applies to it; under another link it is not
+#' linear.
 #' @param s A [DiagMatrixParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic.
@@ -564,8 +571,8 @@ S7::method(param_logdet, DiagMatrixParam) <- function(s, eta, ...) {
 #' The Number of Diagonal Entries Each Free Value Owns
 #'
 #' @description
-#' Returns \eqn{m_k}, the number of diagonal entries the \eqn{k}-th free value
-#' controls: 1 for every value of a [diagonal_matrix()], and \eqn{p} for the
+#' Returns \eqn{m_k}, the number of diagonal entries that the \eqn{k}-th free
+#' value controls: 1 for every value of a [diagonal_matrix()], and \eqn{p} for the
 #' single value of a [scalar_matrix()]. It is the multiplicity that appears in
 #' the log-determinant's derivatives, \eqn{\log|M|} counting a shared value once
 #' per entry.
@@ -591,11 +598,11 @@ diag_multiplicity <- function(s) {
 #'
 #' \deqn{\partial_k \log|M| = m_k \frac{h'(\eta_k)}{h(\eta_k)},}
 #'
-#' with \eqn{m_k} the number of diagonal entries the \eqn{k}-th free value owns:
+#' with \eqn{m_k} the number of diagonal entries that the \eqn{k}-th free value owns:
 #' 1 for a [diagonal_matrix()], and \eqn{p} for the single value of a
 #' [scalar_matrix()], which enters the log-determinant once per entry.
 #'
-#' Under the log link \eqn{h'/h = 1}, so the answer is a vector of ones for a
+#' Under the log link \eqn{h'/h = 1}, so the result is a vector of ones for a
 #' [diagonal_matrix()] and the scalar \eqn{p} for a [scalar_matrix()].
 #' @param s A [DiagMatrixParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
@@ -622,14 +629,12 @@ S7::method(param_dlogdet, DiagMatrixParam) <- function(s, eta, ...) {
 #' \deqn{\partial_{kk} \log|M| = m_k\left\{\frac{h''(\eta_k)}{h(\eta_k)}
 #'   - \left(\frac{h'(\eta_k)}{h(\eta_k)}\right)^{2}\right\},}
 #'
-#' the second derivative of \eqn{\log h} times the number of entries the value
-#' owns.
+#' the second derivative of \eqn{\log h} times the number of entries that the
+#' value owns.
 #'
 #' Under the **log** link this is identically zero, \eqn{\log h(\eta) = \eta}
-#' being linear, so a check of this quantity against a numerical reference on a
-#' default `diagonal_matrix()` compares two zeros and would pass whatever was
-#' missing. Under a square-root link at \eqn{\eta = (1, 2)} it is
-#' \eqn{(-2, -0.5)}, which is where the formula has content.
+#' being linear. Under a softplus link at \eqn{\eta = (1, 2)} the pure
+#' components are \eqn{(-0.160, -0.122)}.
 #' @param s A [DiagMatrixParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic.
@@ -671,9 +676,9 @@ S7::method(param_d2logdet, DiagMatrixParam) <- function(s, eta, ...) {
 #'   u_4 - 4u_1u_3 - 3u_2^2 + 12u_1^2u_2 - 6u_1^4.}
 #'
 #' The division by \eqn{h} happens once, at the start, so every term is a ratio
-#' of order one, never a derivative that can be large on its own. That matters
-#' at the ends of a link's range, where \eqn{h} and \eqn{h^{(m)}} can both be
-#' extreme while the ratio is ordinary.
+#' and not a derivative that can be large on its own. This keeps the arithmetic
+#' in range at the ends of a link's range, where \eqn{h} and \eqn{h^{(m)}} can
+#' both be extreme while the ratio is moderate.
 #'
 #' Under the log link \eqn{h = e^\eta} gives \eqn{u_m = 1} for every \eqn{m}, so
 #' the first order is 1 and the second, third and fourth are exactly 0, which is
@@ -685,8 +690,9 @@ S7::method(param_d2logdet, DiagMatrixParam) <- function(s, eta, ...) {
 #'
 #' @return A numeric vector the length of `eta`.
 #'
-#' @seealso [diag_logdet_higher()], [param_d3logdet.ScaledMatrixParam()] and
-#'   [param_d4logdet.ScaledMatrixParam()], the callers, and
+#' @seealso [diag_logdet_higher()], [param_d3logdet.ScaledMatrixParam()],
+#'   [param_d4logdet.ScaledMatrixParam()] and [dr_prod_logdet_derivs()], the
+#'   callers, and
 #'   `linkfunctions7::dlinkinv()` for the link derivatives read.
 #'
 #' @keywords internal
@@ -708,8 +714,8 @@ diag_dlog <- function(link, eta, order) {
 #' Assembles a whole derivative order of a diagonal family, orders three and
 #' four. A diagonal family is separable, so a component is the zero matrix unless
 #' every index of the tuple names the **same** free value, and a surviving one
-#' carries \eqn{h'''(\eta_k)} or \eqn{h''''(\eta_k)} in the entries that value
-#' owns. Most of the list is therefore exactly zero: at \eqn{p = 3} only 3 of the
+#' carries \eqn{h'''(\eta_k)} or \eqn{h''''(\eta_k)} in the entries that the
+#' value owns. Most of the list is therefore exactly zero: at \eqn{p = 3} only 3 of the
 #' 10 third-order components are non-zero.
 #'
 #' @param s A [DiagMatrixParam()] object.
@@ -755,8 +761,8 @@ diag_higher <- function(s, eta, order) {
 #' the exact zero matrix.
 #'
 #' \eqn{h'''} comes from `linkfunctions7::d3linkinv()`, so the accuracy is the
-#' link's; a family without a closed form here would get a product stencil good
-#' to about six digits instead.
+#' link's; a family without a closed form here gets a less accurate product
+#' stencil.
 #' @param s A [DiagMatrixParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic.
@@ -779,8 +785,8 @@ S7::method(param_d3, DiagMatrixParam) <- function(s, eta, ...) {
 #' matrix.
 #'
 #' \eqn{h''''} comes from `linkfunctions7::d4linkinv()`. This is the order at
-#' which a numerical route is least usable, keeping about five digits, so the
-#' closed form matters most here.
+#' which a numerical route is least accurate, so the closed form matters most
+#' here.
 #' @param s A [DiagMatrixParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic.
@@ -835,11 +841,11 @@ diag_logdet_higher <- function(s, eta, order) {
 #' @description
 #' Closed form. The log-determinant is a sum of \eqn{\log h(\eta_k)} terms, so
 #' each pure component is the third derivative of \eqn{\log h} at that free
-#' value, times the number of entries the value owns, and every mixed component
-#' is exactly zero.
+#' value, times the number of entries that the value owns, and every mixed
+#' component is exactly zero.
 #'
 #' Under the log link the whole vector is zero, \eqn{\log h(\eta) = \eta} being
-#' linear. A link with curvature is where this order has content.
+#' linear; under a link with curvature it is not.
 #' @param s A [DiagMatrixParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic.
@@ -863,8 +869,8 @@ S7::method(param_d3logdet, DiagMatrixParam) <- function(s, eta, ...) {
 #' \eqn{u_4 - 4u_1u_3 - 3u_2^2 + 12u_1^2u_2 - 6u_1^4} with
 #' \eqn{u_m = h^{(m)}/h}, written out in [diag_dlog()].
 #'
-#' Under the log link the whole vector is zero. This is the order where a
-#' numerical route is least usable, so the closed form is worth most here.
+#' Under the log link the whole vector is zero. This is the order at which a
+#' numerical route is least accurate, so the closed form matters most here.
 #' @param s A [DiagMatrixParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic.

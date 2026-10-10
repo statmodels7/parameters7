@@ -9,9 +9,9 @@ NULL
 #' \eqn{\eta} on the unconstrained scale, returns the constrained value it
 #' produces. The shape depends on the family. A [matrix_parameter()] returns a
 #' symmetric \eqn{p \times p} matrix, [simplex()] a probability vector, and
-#' [transition_matrix()] a row-stochastic matrix. Whatever \eqn{\eta} is
-#' handed in, the value satisfies the family's constraint, so a caller never
-#' has to test the result.
+#' [transition_matrix()] a row-stochastic matrix. For every finite
+#' \eqn{\eta} the value satisfies the family's constraint, within the range of
+#' floating-point arithmetic, so a caller does not have to test the result.
 #'
 #' This is the only method a new family must write. Every derivative order is
 #' then available numerically, and for a matrix family so are the
@@ -30,10 +30,10 @@ NULL
 #'
 #' # What is exact and what is not
 #'
-#' Every family in this package writes its own [param_value()] out in closed
-#' form. None of them falls back to anything, and `param_is_numerical()`
-#' returns `FALSE` for all nine components of all fifteen. The numerical
-#' methods on [parameter()] exist for a family written elsewhere.
+#' Every family in this package writes its own [param_value()] and its
+#' derivatives out, and `param_is_numerical()` returns `FALSE` for every
+#' component of every family. The numerical methods on [parameter()] serve a
+#' family written elsewhere.
 #'
 #' @section Notation:
 #' \eqn{\eta} is the free vector, the point on the unconstrained scale, of
@@ -46,7 +46,7 @@ NULL
 #'   order of its entries is the order of `s@free_names`. Names are ignored and
 #'   stripped, so a value that arrives labeled by a link does not leak that
 #'   label into the result.
-#' @param ... Passed to the method. No method in this package reads it; it is
+#' @param ... Passed to the method. The methods in this package do not read it; it is
 #'   part of the signature so that a family written elsewhere can take further
 #'   arguments of its own.
 #'
@@ -99,34 +99,34 @@ param_value <- S7::new_generic("param_value", "s", function(s, eta, ...) {
 #' @description
 #' Inverts the map: given a value in the family's set, returns the free vector
 #' \eqn{\eta} that [param_value()] would send there. The two are a bijection
-#' onto the set, so the round trip closes to machine precision, and every one of
-#' the fifteen families in this package inverts exactly, with a worst measured
-#' error of \eqn{5 \times 10^{-16}}.
+#' onto the set, so the round trip closes up to rounding error, and every family
+#' in this package implements its inverse exactly.
 #'
 #' Use it to start an optimizer from a matrix rather than from a free vector:
 #' fit an unstructured covariance by moments, invert it, and hand the result in
 #' as a starting point.
 #'
 #' @details
-#' # Exact or refused, never approximated
+#' # Exact inverse or an error
 #'
-#' A family either writes its inverse out or signals an error. The base method
-#' on [parameter()] does the second on behalf of a family that has not written
-#' the first, naming the family in the message. An inverse found by minimizing
-#' \eqn{\lVert V(\eta) - m \rVert} would return a plausible \eqn{\eta} for a
-#' matrix that is not in the set at all, and the caller could not tell that
-#' answer from a correct one.
+#' A family either writes its inverse out or signals an error. For a family
+#' that has not written its inverse, the base method on [parameter()] signals an
+#' error that names the family. An inverse found by minimizing
+#' \eqn{\lVert V(\eta) - m \rVert} would return an \eqn{\eta} even for a matrix
+#' that is not in the set, and the caller could not distinguish that result from
+#' a correct one.
 #'
 #' # A value outside the set is rejected
 #'
 #' Every method checks `m` against the family's own constraint before
 #' inverting, and the message says what failed. `log_cholesky()` rejects a
-#' matrix that is not positive definite, with the verdict taken from the
-#' eigenvalues; `simplex()` rejects a vector that does not sum to one, and does
+#' matrix that is not positive definite; `simplex()` rejects a vector that does not sum to one, and does
 #' not renormalize it, because a silent repair would hide the caller's mistake.
-#' The shared checks are the shape and the symmetry: a matrix of the wrong side
-#' is rejected with a message naming the side required, and an asymmetry above
-#' \eqn{10^{-8}} relative is rejected while one below it is averaged away.
+#' The checks shared by the matrix families are the shape, the entries and the
+#' symmetry: a matrix of the wrong side is rejected with a message naming the
+#' side required, a missing or infinite entry is rejected, and an asymmetry
+#' above \eqn{10^{-8}} times the larger of 1 and the largest entry is rejected,
+#' while a smaller one is removed by averaging \eqn{m} with its transpose.
 #'
 #' @section Notation:
 #' \eqn{\eta} is the free vector, of length \eqn{d = } `s@n_free`, and \eqn{m}
@@ -138,7 +138,7 @@ param_value <- S7::new_generic("param_value", "s", function(s, eta, ...) {
 #'   [simplex()], a row-stochastic matrix for [transition_matrix()]. It must
 #'   satisfy the family's constraint; see **Details** for what each family
 #'   rejects.
-#' @param ... Passed to the method. No method in this package reads it.
+#' @param ... Passed to the method. The methods in this package do not read it.
 #'
 #' @return A numeric vector of length `s@n_free`, named by `s@free_names`, such
 #'   that `param_value(s, param_free(s, m))` recovers `m`.
@@ -147,7 +147,7 @@ param_value <- S7::new_generic("param_value", "s", function(s, eta, ...) {
 #'   which closes the round trip as one of its checks.
 #'
 #' @examples
-#' # The round trip closes exactly, in both directions.
+#' # The round trip closes up to rounding error.
 #' s <- log_cholesky(3)
 #' eta <- c(0.3, -0.2, 0.5, 0.1, -0.4, 0.2)
 #' param_free(s, param_value(s, eta))
@@ -209,7 +209,7 @@ param_free <- S7::new_generic("param_free", "s", function(s, m, ...) {
 #' @param s An object inheriting from class [parameter()].
 #' @param eta A numeric vector of length `s@n_free`, finite in every entry.
 #'   Checked before dispatch; see [param_value()] for the three rejections.
-#' @param ... Passed to the method. No method in this package reads it.
+#' @param ... Passed to the method. The methods in this package do not read it.
 #'
 #' @return A list of `s@n_free` derivatives, named by `s@free_names`. Each entry
 #'   has the shape of the value: a symmetric `s@dimension` by `s@dimension`
@@ -219,7 +219,7 @@ param_free <- S7::new_generic("param_free", "s", function(s, m, ...) {
 #'
 #' @seealso [param_d2()], [param_d3()] and [param_d4()] for the higher orders,
 #'   [param_dlogdet()] for the derivative of the log-determinant, and
-#'   [param_is_numerical()] to ask which route an object takes.
+#'   [param_is_numerical()] to find out which route an object takes.
 #'
 #' @examples
 #' s <- log_cholesky(2)
@@ -263,14 +263,14 @@ param_d1 <- S7::new_generic("param_d1", "s", function(s, eta, ...) {
 #'
 #' The list is keyed by [param_tuple_names()], which puts the \eqn{d} diagonal
 #' pairs first and then the \eqn{d(d-1)/2} off-diagonal ones in lexicographic
-#' order. Diagonal first is what a consumer filling a Hessian wants, and the
-#' ordering is part of the interface: [param_tuple_indices()] returns the index
+#' order. The diagonal pairs come first because a Hessian is filled that way,
+#' and the ordering is part of the interface: [param_tuple_indices()] returns the index
 #' pairs in exactly the same order, so a caller can walk the two together.
 #'
 #' Both come from one enumeration, and neither is produced by taking a key
-#' apart. Splitting `"log_L1:log_L2"` on `":"` looks equivalent and is not: a
-#' free value whose own label contains the separator splits into the wrong
-#' number of pieces, and the failure is silent.
+#' apart. Splitting `"log_L1:log_L2"` on `":"` would give the wrong number of
+#' pieces whenever a free name contains the separator, and no error would be
+#' signaled.
 #'
 #' # Exact, or one stencil
 #'
@@ -281,8 +281,8 @@ param_d1 <- S7::new_generic("param_d1", "s", function(s, eta, ...) {
 #' [param_value()] directly: a three-point second difference where the two
 #' indices coincide, and one difference in each of the two components where they
 #' differ. A mixed derivative in two different variables is one stencil however
-#' it is written; the nesting the toolkit forbids is two differences in the same
-#' variable.
+#' it is written; the nesting that the package avoids is two differences in the
+#' same variable.
 #'
 #' @section Notation:
 #' \eqn{\eta} is the free vector, of length \eqn{d = } `s@n_free`, and \eqn{V}
@@ -290,7 +290,7 @@ param_d1 <- S7::new_generic("param_d1", "s", function(s, eta, ...) {
 #'
 #' @param s An object inheriting from class [parameter()].
 #' @param eta A numeric vector of length `s@n_free`, finite in every entry.
-#' @param ... Passed to the method. No method in this package reads it.
+#' @param ... Passed to the method. The methods in this package do not read it.
 #'
 #' @return A named list of `choose(s@n_free + 1, 2)` entries, keyed as
 #'   `param_tuple_names(s)` and in that order. Each entry has the shape of the
@@ -338,10 +338,10 @@ param_d2 <- S7::new_generic("param_d2", "s", function(s, eta, ...) {
 #' the quadratic form, and every matrix family answers it, in closed form where
 #' one exists.
 #'
-#' One generic covers both cases because a consumer asks the same question of
-#' either: what normalizing constant does this matrix contribute. Which answer
-#' is the right one follows from the object's declared `rank`, so the caller
-#' does not have to branch.
+#' One generic covers both cases because the quantity needed from either is the
+#' normalizing constant that the matrix contributes. The declared `rank`
+#' determines whether the result is the log-determinant or the log
+#' pseudo-determinant, so the caller does not have to branch.
 #'
 #' @details
 #' # The sign belongs to the caller
@@ -353,21 +353,22 @@ param_d2 <- S7::new_generic("param_d2", "s", function(s, eta, ...) {
 #' A parameter does not record which side it was built for: the consumer
 #' declares that, as [inverse_of()] does when the side is fixed.
 #'
-#' # Computed from the parametrization, not from the matrix
+#' # Closed forms and the base method
 #'
 #' A closed form is usually far cheaper than a decomposition, and often simply
 #' linear. In the log-Cholesky parametrization
 #' \eqn{\log|M| = 2\sum_{i=1}^{p} \eta_i}, twice the sum of the first \eqn{p}
-#' free values, so no factorization happens at all. The [ar1()] family answers
+#' free values, so no factorization happens at all. For the [ar1()] family it is
 #' \eqn{p\,\eta_1 + (p-1)\log(1 - \rho^2)}, again in constant work whatever
 #' \eqn{p} is. The base method on [matrix_parameter()], which a family written
 #' elsewhere inherits, takes an eigendecomposition and sums the logs of the
-#' eigenvalues above a relative tolerance, at \eqn{O(p^3)}.
+#' largest \eqn{r} eigenvalues, \eqn{r} being the declared rank, at
+#' \eqn{O(p^3)}.
 #'
 #' # Rank deficiency
 #'
 #' A deficient family returns the log pseudo-determinant, and its `null_basis`
-#' says which directions were left out. That is the quantity an improper prior
+#' records which directions were left out. That is the quantity an improper prior
 #' contributes to a marginal likelihood: the penalized normal equations invert
 #' \eqn{X^\top X + \lambda P}, which is non-singular even when \eqn{P} is not,
 #' so the deficiency never has to be inverted. [param_solve()] and
@@ -380,9 +381,10 @@ param_d2 <- S7::new_generic("param_d2", "s", function(s, eta, ...) {
 #'
 #' @param s An object inheriting from class [matrix_parameter()]. A family whose
 #'   value is not a symmetric matrix has no method, and the call fails at
-#'   dispatch with `Can't find method for param_logdet(<SimplexParam>)`.
+#'   dispatch with S7's "Can't find method" error, which names the class (for
+#'   instance `parameters7::SimplexParam`).
 #' @param eta A numeric vector of length `s@n_free`, finite in every entry.
-#' @param ... Passed to the method. No method in this package reads it.
+#' @param ... Passed to the method. The methods in this package do not read it.
 #'
 #' @return A single number. `-Inf` is not returned: a full-rank family is
 #'   positive definite at every finite `eta`, and a deficient one drops its
@@ -444,8 +446,8 @@ param_logdet <- S7::new_generic("param_logdet", "s", function(s, eta, ...) {
 #' with the Moore-Penrose inverse in place of \eqn{M^{-1}} when the family is
 #' rank deficient. A closed form here is therefore never an independent claim:
 #' it has to agree with [param_d1()] through that trace, and
-#' [check_parameter()] runs both routes and compares them. The example below
-#' does the same in three lines.
+#' [check_parameter()] runs both routes and compares them, and the example below
+#' makes the same comparison.
 #'
 #' # What the answer looks like
 #'
@@ -462,7 +464,7 @@ param_logdet <- S7::new_generic("param_logdet", "s", function(s, eta, ...) {
 #'
 #' @param s An object inheriting from class [matrix_parameter()].
 #' @param eta A numeric vector of length `s@n_free`, finite in every entry.
-#' @param ... Passed to the method. No method in this package reads it.
+#' @param ... Passed to the method. The methods in this package do not read it.
 #'
 #' @return A numeric vector of length `s@n_free`, named by `s@free_names`.
 #'
@@ -517,12 +519,11 @@ param_dlogdet <- S7::new_generic("param_dlogdet", "s", function(s, eta, ...) {
 #' and with the Moore-Penrose inverse in place of \eqn{M^{-1}} when the family
 #' is rank deficient.
 #'
-#' The second trace is the term a hand-written closed form usually drops. Without
-#' it the answer would be the trace of the second derivative of the matrix, which
-#' is a different quantity, and dropping it is invisible on any family whose
-#' log-determinant happens to be linear. [check_parameter()] compares this route
-#' against [param_d2()] on every family it is given, and the example below runs
-#' the same comparison in five lines.
+#' Without the second trace the result would be the trace of the second
+#' derivative of the matrix, which is a different quantity and is not zero even
+#' for [log_cholesky()], whose log-determinant is linear. [check_parameter()]
+#' compares this method with one central difference of [param_dlogdet()], and
+#' the example below compares it with the two traces.
 #'
 #' @section Notation:
 #' \eqn{M} is the matrix [param_value()] returns and \eqn{\eta} the free vector,
@@ -530,7 +531,7 @@ param_dlogdet <- S7::new_generic("param_dlogdet", "s", function(s, eta, ...) {
 #'
 #' @param s An object inheriting from class [matrix_parameter()].
 #' @param eta A numeric vector of length `s@n_free`, finite in every entry.
-#' @param ... Passed to the method. No method in this package reads it.
+#' @param ... Passed to the method. The methods in this package do not read it.
 #'
 #' @return A named numeric vector of `choose(s@n_free + 1, 2)` entries, keyed as
 #'   `param_tuple_names(s)` and in that order: the `s@n_free` diagonal pairs
@@ -562,7 +563,7 @@ param_dlogdet <- S7::new_generic("param_dlogdet", "s", function(s, eta, ...) {
 #' param_d2logdet(s, eta)
 #'
 #' # For log_cholesky the log-determinant is linear in eta, so every second
-#' # derivative is exactly zero and the check above could not see a mistake.
+#' # derivative is exactly zero.
 #' max(abs(param_d2logdet(log_cholesky(3), rep(0.2, 6))))
 #'
 #' @export
@@ -578,10 +579,10 @@ param_d2logdet <- S7::new_generic("param_d2logdet", "s", function(s, eta, ...) {
 #' Returns \eqn{M^{-1} B} for a right-hand side \eqn{B}, computed through a
 #' factorization instead of by forming the inverse. This is what a Gaussian
 #' quadratic form needs: `crossprod(r, param_solve(s, eta, r))` is
-#' \eqn{r^\top M^{-1} r} at the cost of one triangular solve, where inverting
-#' and multiplying would cost more and be less accurate. Called with no `B` it
-#' does return the inverse, which is convenient for reading a covariance off a
-#' precision.
+#' \eqn{r^\top M^{-1} r}, which the base method computes from a Cholesky factor
+#' and two triangular solves; inverting and multiplying would cost more and be
+#' less accurate. Called with no `b` it returns the inverse, which is convenient
+#' for reading a covariance off a precision.
 #'
 #' @details
 #' # Rank deficiency is rejected
@@ -590,9 +591,8 @@ param_d2logdet <- S7::new_generic("param_d2logdet", "s", function(s, eta, ...) {
 #' a pseudo-inverse. What a consumer of an improper prior needs is the quadratic
 #' form and the log pseudo-determinant: penalized normal equations invert
 #' \eqn{X^\top X + \lambda P}, which is non-singular even where \eqn{P} is not,
-#' and the consumer assembles that matrix itself. A pseudo-inverse returned here
-#' would be a plausible matrix answering a question nobody asked, and the caller
-#' would have no way to tell.
+#' and the consumer assembles that matrix itself. A pseudo-inverse is not
+#' returned, because the caller could not distinguish it from an inverse.
 #'
 #' # A non-matrix family has no method
 #'
@@ -602,12 +602,13 @@ param_d2logdet <- S7::new_generic("param_d2logdet", "s", function(s, eta, ...) {
 #'
 #' # Cost
 #'
-#' The base method on [matrix_parameter()], which most families take, works
-#' through a Cholesky factor: \eqn{O(p^3)} once plus \eqn{O(p^2)} per column of
-#' \eqn{B}. Seven families override it with a closed-form inverse. [ar1()]
+#' The base method on [matrix_parameter()] works through a Cholesky factor:
+#' \eqn{O(p^3)} once plus \eqn{O(p^2)} per column of \eqn{B}. [log_cholesky()],
+#' [diagonal_matrix()], [scalar_matrix()], [scaled_matrix()] and
+#' [correlation_matrix()] use it, and the other families override it. [ar1()]
 #' writes its tridiagonal precision out entry by entry, [compound_symmetry()]
 #' uses Sherman-Morrison, and [block_diag()] and [kron_identity()] solve
-#' blockwise, so none of them decomposes anything of side \eqn{p}.
+#' blockwise, so these four decompose no matrix of side \eqn{p}.
 #'
 #' @section Notation:
 #' \eqn{M} is the matrix [param_value()] returns, \eqn{p} its side, and
@@ -617,9 +618,9 @@ param_d2logdet <- S7::new_generic("param_d2logdet", "s", function(s, eta, ...) {
 #' @param eta A numeric vector of length `s@n_free`, finite in every entry.
 #' @param b A numeric matrix or vector with `s@dimension` rows; a vector is
 #'   treated as a one-column matrix. Defaults to `NULL`, which stands for the
-#'   identity and returns the inverse. A wrong number of rows throws a message
-#'   naming the number required.
-#' @param ... Passed to the method. No method in this package reads it.
+#'   identity and returns the inverse. A wrong number of rows signals an error
+#'   that names the number required.
+#' @param ... Passed to the method. The methods in this package do not read it.
 #'
 #' @return A numeric matrix with `s@dimension` rows and as many columns as `b`,
 #'   so `s@dimension` by `s@dimension` when `b` is left out. A vector `b`
@@ -644,7 +645,8 @@ param_d2logdet <- S7::new_generic("param_d2logdet", "s", function(s, eta, ...) {
 #' # A vector b comes back as a one-column matrix.
 #' dim(param_solve(s, eta, r))
 #'
-#' # A rank-deficient family refuses, and says what to do instead.
+#' # A rank-deficient family is rejected, and the message says what to do
+#' # instead.
 #' r_def <- scaled_matrix(crossprod(diff(diag(6), differences = 2)))
 #' try(param_solve(r_def, 0))
 #'
@@ -684,13 +686,14 @@ param_solve <- S7::new_generic("param_solve", "s", function(s, eta, b = NULL, ..
 #' factor of the matrix the parametrization produces. Simulation is the usual
 #' reason to want it: \eqn{L z} with \eqn{z} standard normal has covariance
 #' \eqn{M}, so one factor draws as many vectors as needed. For
-#' [log_cholesky()] the factor is what the parametrization holds anyway, so it
-#' is returned without any arithmetic.
+#' [log_cholesky()] the factor is assembled directly from the free vector, with
+#' one exponential per diagonal entry and no decomposition.
 #'
 #' @details
 #' # Rank deficiency is rejected
 #'
-#' A deficient matrix has no Cholesky factor: a triangular \eqn{L} with
+#' A deficient matrix has no Cholesky factor with a positive diagonal: a
+#' triangular \eqn{L} with
 #' \eqn{L L^\top = M} would need a zero on the diagonal, and the factor is then
 #' not unique. The generic signals an error naming the family and its rank
 #' before dispatching. To simulate from a deficient covariance, take an
@@ -699,8 +702,8 @@ param_solve <- S7::new_generic("param_solve", "s", function(s, eta, b = NULL, ..
 #'
 #' # A non-matrix family has no method
 #'
-#' [simplex()] and [transition_matrix()] are checked for and refused by name,
-#' their value not being a symmetric matrix.
+#' [simplex()] and [transition_matrix()] are rejected with an error that names
+#' the family, because their value is not a symmetric matrix.
 #'
 #' @section Notation:
 #' \eqn{M} is the matrix [param_value()] returns, \eqn{p} its side, and
@@ -708,14 +711,14 @@ param_solve <- S7::new_generic("param_solve", "s", function(s, eta, b = NULL, ..
 #'
 #' @param s An object inheriting from class [matrix_parameter()], of full rank.
 #' @param eta A numeric vector of length `s@n_free`, finite in every entry.
-#' @param ... Passed to the method. No method in this package reads it.
+#' @param ... Passed to the method. The methods in this package do not read it.
 #'
 #' @return A `s@dimension` by `s@dimension` lower triangular numeric matrix with
 #'   a positive diagonal, satisfying `L %*% t(L) == param_value(s, eta)`.
 #'
 #' @seealso [param_solve()] for a solve through the same factor,
 #'   [param_value()] for the matrix it factors, and [log_cholesky()], whose
-#'   free values are the logarithms of this factor's diagonal.
+#'   first \eqn{p} free values are the logarithms of this factor's diagonal.
 #'
 #' @examples
 #' s <- log_cholesky(3)
@@ -734,7 +737,7 @@ param_solve <- S7::new_generic("param_solve", "s", function(s, eta, b = NULL, ..
 #' y <- t(L %*% matrix(rnorm(3 * 20000), 3, 20000))
 #' round(cov(y) - param_value(s, eta), 2)
 #'
-#' # A rank-deficient family has no factor and says so.
+#' # A rank-deficient family has no factor, and the call signals an error.
 #' try(param_factor(scaled_matrix(crossprod(diff(diag(6), differences = 2))), 0))
 #'
 #' @export
@@ -791,7 +794,7 @@ param_factor <- S7::new_generic("param_factor", "s", function(s, eta, ...) {
 #'
 #' @param s An object inheriting from class [parameter()].
 #' @param eta A numeric vector of length `s@n_free`, finite in every entry.
-#' @param ... Passed to the method. No method in this package reads it.
+#' @param ... Passed to the method. The methods in this package do not read it.
 #'
 #' @return A named list of `choose(s@n_free + 2, 3)` entries, keyed as
 #'   `param_tuple_names(s, 3)` and in that order. Each entry has the shape of the
@@ -815,7 +818,8 @@ param_factor <- S7::new_generic("param_factor", "s", function(s, eta, ...) {
 #' length(d3)
 #' max(abs(d3[["L2.1:L2.1:L2.1"]]))
 #'
-#' # It does not vanish in a diagonal free value, which enters through a log.
+#' # It does not vanish in a diagonal free value, which enters through an
+#' # exponential.
 #' d3[["log_L1:log_L1:log_L1"]]
 #'
 #' @export
@@ -833,9 +837,9 @@ param_d3 <- S7::new_generic("param_d3", "s", function(s, eta, ...) {
 #' \deqn{\frac{\partial^{4} V(\eta)}
 #'   {\partial\eta_k\,\partial\eta_l\,\partial\eta_m\,\partial\eta_n},}
 #'
-#' each shaped like the value. Fourth order is where the contract stops. A
-#' fourth-order chain rule through a link needs exactly this much, and nothing
-#' in the toolkit asks for a fifth.
+#' each shaped like the value. Fourth order is the highest order that the
+#' package provides, and a fourth-order chain rule through a link needs
+#' derivatives up to this order.
 #'
 #' @details
 #' # Keys
@@ -853,8 +857,8 @@ param_d3 <- S7::new_generic("param_d3", "s", function(s, eta, ...) {
 #' product stencil per quadruple, with a factor per distinct index of the width
 #' its multiplicity calls for, evaluated in one pass over [param_value()]. At
 #' fourth order the rounding of a difference grows as \eqn{\varepsilon / h^4},
-#' so a numerical answer here is the least accurate of the four orders; a family
-#' fitted in earnest is better served by writing the closed form out.
+#' so a numerical answer here is the least accurate of the four orders, and a
+#' family used for fitting should write the closed form out.
 #'
 #' @section Notation:
 #' \eqn{\eta} is the free vector, of length \eqn{d = } `s@n_free`, and \eqn{V}
@@ -862,7 +866,7 @@ param_d3 <- S7::new_generic("param_d3", "s", function(s, eta, ...) {
 #'
 #' @param s An object inheriting from class [parameter()].
 #' @param eta A numeric vector of length `s@n_free`, finite in every entry.
-#' @param ... Passed to the method. No method in this package reads it.
+#' @param ... Passed to the method. The methods in this package do not read it.
 #'
 #' @return A named list of `choose(s@n_free + 3, 4)` entries, keyed as
 #'   `param_tuple_names(s, 4)` and in that order. Each entry has the shape of
@@ -919,12 +923,11 @@ param_d4 <- S7::new_generic("param_d4", "s", function(s, eta, ...) {
 #' two rules produce. The Moore-Penrose inverse replaces \eqn{M^{-1}} for a
 #' rank-deficient family.
 #'
-#' The expansion is not transcribed anywhere. The methods differentiate the
-#' derivative arrays [param_d1()] through [param_d4()] instead, and
-#' [check_parameter()] holds the result against a numerical differentiation of
-#' the order below, which shares none of its arithmetic. A twenty-term expansion
-#' written out by hand is exactly the kind of thing that is wrong and looks
-#' right.
+#' The expansion is not written out in the package. Each family in this package
+#' computes this order without differencing, and the base method on
+#' [matrix_parameter()] takes one central difference of [param_d2logdet()]. A
+#' written-out expansion has one term per set partition of the indices, five at
+#' third order, and a transcription of it is easy to get wrong.
 #'
 #' @section Notation:
 #' \eqn{M} is the matrix [param_value()] returns and \eqn{\eta} the free vector,
@@ -933,7 +936,7 @@ param_d4 <- S7::new_generic("param_d4", "s", function(s, eta, ...) {
 #'
 #' @param s An object inheriting from class [matrix_parameter()].
 #' @param eta A numeric vector of length `s@n_free`, finite in every entry.
-#' @param ... Passed to the method. No method in this package reads it.
+#' @param ... Passed to the method. The methods in this package do not read it.
 #'
 #' @return A named numeric vector of `choose(s@n_free + 2, 3)` entries, keyed as
 #'   `param_tuple_names(s, 3)` and in that order.
@@ -948,8 +951,7 @@ param_d4 <- S7::new_generic("param_d4", "s", function(s, eta, ...) {
 #' s <- ar1(4)
 #' param_d3logdet(s, c(0.3, 0.8))
 #'
-#' # A central difference of the order below agrees, and shares no arithmetic
-#' # with the route the method takes.
+#' # A central difference of the order below agrees.
 #' h <- 1e-4
 #' e <- c(0, h)
 #' fd <- (param_d2logdet(s, c(0.3, 0.8) + e) -
@@ -971,9 +973,9 @@ param_d3logdet <- S7::new_generic("param_d3logdet", "s", function(s, eta, ...) {
 #'
 #' @description
 #' Returns the distinct fourth derivatives of the log-determinant, or of the log
-#' pseudo-determinant, keyed as `param_tuple_names(s, 4)`. This is the top of
-#' the contract: the exact Hessian of a marginal criterion reaches it, and
-#' nothing in the toolkit asks for a fifth.
+#' pseudo-determinant, keyed as `param_tuple_names(s, 4)`. This is the highest
+#' order that the package provides, and the exact Hessian of a marginal
+#' criterion reaches it.
 #'
 #' @details
 #' # Where it comes from
@@ -985,19 +987,19 @@ param_d3logdet <- S7::new_generic("param_d3logdet", "s", function(s, eta, ...) {
 #' so every term is a trace of an alternating product
 #' \eqn{M^{-1}(\partial_{I_1}M)M^{-1}(\partial_{I_2}M)\cdots}, one factor per
 #' block of a partition of the four indices. The number of terms grows with the
-#' number of partitions, which is why the expansion is differentiated rather
-#' than written out: the methods differentiate [param_d1()] through
-#' [param_d4()], and [check_parameter()] compares the result with a numerical
-#' differentiation of [param_d3logdet()].
+#' number of partitions, so the expansion is not written out: each family in
+#' this package computes this order without differencing, and the base method on
+#' [matrix_parameter()] takes one central difference of [param_d3logdet()].
 #'
-#' # Accuracy of the check
+#' # Checking this order
 #'
-#' The reference is one stencil on the analytic third order, so the comparison
-#' is limited by that stencil rather than by the closed form. A family whose
-#' log-determinant is linear in \eqn{\eta}, which includes [log_cholesky()] and
-#' [matrix_log()], returns exact zeros here, and a check against them cannot
-#' catch a mistake; [ar1()] and [compound_symmetry()] are the families where
-#' this order has something to get wrong.
+#' One central difference of [param_d3logdet()], as in the example below, is a
+#' reference for this order, and the comparison is limited by that stencil
+#' rather than by the closed form. [check_parameter()] does not run this
+#' comparison. A family whose log-determinant is linear in \eqn{\eta}, which
+#' includes [log_cholesky()] and [matrix_log()], returns exact zeros here;
+#' [ar1()], [compound_symmetry()], [correlation_matrix()] and [autoregressive()]
+#' are among the families where this order is not zero.
 #'
 #' @section Notation:
 #' \eqn{M} is the matrix [param_value()] returns and \eqn{\eta} the free vector,
@@ -1006,7 +1008,7 @@ param_d3logdet <- S7::new_generic("param_d3logdet", "s", function(s, eta, ...) {
 #'
 #' @param s An object inheriting from class [matrix_parameter()].
 #' @param eta A numeric vector of length `s@n_free`, finite in every entry.
-#' @param ... Passed to the method. No method in this package reads it.
+#' @param ... Passed to the method. The methods in this package do not read it.
 #'
 #' @return A named numeric vector of `choose(s@n_free + 3, 4)` entries, keyed as
 #'   `param_tuple_names(s, 4)` and in that order.
@@ -1062,15 +1064,13 @@ param_d4logdet <- S7::new_generic("param_d4logdet", "s", function(s, eta, ...) {
 #' \eqn{3 \times 3} unstructured covariance, order 4 has 126 components against
 #' 1296 ordered ones.
 #'
-#' # Why the keys and the tuples come from one enumeration
+#' # One enumeration for the keys and the tuples
 #'
-#' Nothing in the toolkit recovers an index by splitting a key apart. Taking
-#' `"log_L1:log_L2"` and splitting on `":"` works until a free name contains the
-#' separator itself, and then it yields the wrong number of pieces and the
-#' failure is silent. Generating the names and the indices from one enumeration
-#' cannot be fooled that way. `param_tuple_names()` calls
-#' [param_tuple_indices()] and labels what it gets, so the two agree by
-#' construction.
+#' The package never recovers an index by splitting a key apart. Splitting
+#' `"log_L1:log_L2"` on `":"` gives the wrong number of pieces when a free name
+#' contains the separator, and no error is signaled. `param_tuple_names()`
+#' calls [param_tuple_indices()] and labels what it gets, so the names and the
+#' indices agree by construction.
 #'
 #' @section Notation:
 #' \eqn{d} is the length of the free vector, `s@n_free`, and \eqn{k} the
@@ -1081,8 +1081,8 @@ param_d4logdet <- S7::new_generic("param_d4logdet", "s", function(s, eta, ...) {
 #' @param order The derivative order. `2` by default, which is the order
 #'   [param_d2()] and [param_d2logdet()] use; `3` and `4` name the components of
 #'   [param_d3()] and [param_d4()]. `1` is accepted and returns the free names
-#'   themselves. Anything else throws `'order' must be 1, 2, 3 or 4.`, the
-#'   contract stopping at fourth order.
+#'   themselves. Any other value signals the error
+#'   `'order' must be 1, 2, 3 or 4.`
 #'
 #' @return A character vector of `choose(s@n_free + order - 1, order)` names, in
 #'   the same order as the list they key. At order 2 the `s@n_free` diagonal
@@ -1105,8 +1105,8 @@ param_d4logdet <- S7::new_generic("param_d4logdet", "s", function(s, eta, ...) {
 #' vapply(1:4, function(k) length(param_tuple_names(q, k)), integer(1))
 #' choose(6 + 1:4 - 1, 1:4)
 #'
-#' # Order 2 puts the diagonal pairs first, which is how a consumer filling a
-#' # Hessian wants them.
+#' # Order 2 puts the diagonal pairs first, the order in which a Hessian is
+#' # filled.
 #' param_tuple_names(s, 2)
 #'
 #' @export
@@ -1129,11 +1129,11 @@ param_tuple_names <- function(s, order = 2L) {
 #' combinations with repetition.
 #'
 #' @details
-#' The order at orders 3 and 4 matches the enumeration \pkg{distributions7} uses
-#' for its own higher derivatives, so a consumer contracting a parameter's
-#' derivative array against a distribution's can walk the two lists together
-#' without reindexing. Both come from `numericals7::tuple_indices()`, which is
-#' the single copy of the enumeration in the toolkit.
+#' At orders 3 and 4 the tuples come in the same order as in the enumeration
+#' that \pkg{distributions7} uses for its own higher derivatives, so a consumer
+#' contracting a parameter's derivative array against a distribution's can walk
+#' the two lists together without reindexing. The tuples come from
+#' `numericals7::tuple_indices()`.
 #'
 #' @section Notation:
 #' \eqn{d} is the length of the free vector, `s@n_free`, and \eqn{k} the
@@ -1142,7 +1142,7 @@ param_tuple_names <- function(s, order = 2L) {
 #' @param s An object inheriting from class [parameter()], whose `n_free`
 #'   supplies \eqn{d}.
 #' @param order The derivative order: `1`, `2` (the default), `3` or `4`.
-#'   Anything else throws `'order' must be 1, 2, 3 or 4.`
+#'   Any other value signals the error `'order' must be 1, 2, 3 or 4.`
 #'
 #' @return A list of `choose(s@n_free + order - 1, order)` integer vectors, each
 #'   of length `order`, holding positions in `1:s@n_free` in non-decreasing
@@ -1185,13 +1185,12 @@ param_tuple_indices <- function(s, order = 2L) {
 #' The enumeration behind [param_tuple_indices()], taken over a plain count of
 #' variables instead of over a parameter object, so that anything holding
 #' derivatives over \eqn{d} variables can use it without constructing a
-#' [parameter()]. A one-line forward to `numericals7::tuple_indices()`, which is
-#' the toolkit's single copy of this enumeration. Delegating means this copy
-#' cannot come to disagree with the one a consumer is keyed by.
+#' [parameter()]. It forwards to `numericals7::tuple_indices()`, so the two
+#' enumerations cannot disagree.
 #'
 #' @param d The number of variables, a single non-negative integer.
-#' @param order The derivative order: 1, 2, 3 or 4. Anything else throws
-#'   `'order' must be 1, 2, 3 or 4.`
+#' @param order The derivative order: 1, 2, 3 or 4. Any other value signals
+#'   the error `'order' must be 1, 2, 3 or 4.`
 #'
 #' @return A list of `choose(d + order - 1, order)` integer vectors, each of
 #'   length `order`, holding positions in `1:d` in non-decreasing order within a

@@ -4,22 +4,23 @@
 \alias{chol_pd}
 \title{Cholesky Factorization, With the Rank Decided Before It}
 \usage{
-chol_pd(m, tol = 1e-12)
+chol_pd(m, tol = 1e-14)
 }
 \arguments{
 \item{m}{A symmetric numeric matrix. Not checked for symmetry; the callers
-have already symmetrized.}
+pass the value of \code{\link[=param_value]{param_value()}} or a matrix already symmetrized by
+\code{\link[=check_matrix]{check_matrix()}}.}
 
 \item{tol}{The relative tolerance below which the smallest eigenvalue counts
 as zero, so \code{m} is rejected when \code{min(ev) <= tol * max(ev)}. Defaults to
-\code{1e-12}. At that default \code{diag(c(1, 1e-12))} returns \code{NULL}, the test being
-an inequality, and \code{diag(c(1, 1e-11))} factors.}
+\code{1e-14}. At that default \code{diag(c(1, 1e-14))} returns \code{NULL}, the test being
+an inequality, and \code{diag(c(1, 1e-13))} factors.}
 }
 \value{
 The lower triangular \eqn{L} with \eqn{M = L L^\top}, or \code{NULL} when
-\code{m} has no eigenvalues, has an \code{NA} among them, has a non-positive largest
-eigenvalue, fails the relative test, or makes \code{\link[base:chol]{base::chol()}} raise after
-all.
+\code{m} is empty, has a missing or non-finite entry, has a non-positive largest
+eigenvalue, fails the relative test, or makes \code{\link[base:chol]{base::chol()}} signal an
+error.
 }
 \description{
 Returns the lower triangular Cholesky factor of a symmetric matrix, or \code{NULL}
@@ -28,16 +29,19 @@ Positive definiteness is decided \strong{before} the factorization is attempted,
 from the eigenvalues.
 }
 \details{
-The verdict comes from the spectrum, because \code{chol()} is not a rank test. On a matrix with an exactly zero
-eigenvalue the pivot that ought to be zero comes out positive or negative
-according to rounding, so \code{chol()} succeeds on some platforms and fails on
-others, and a branch that asks it whether a matrix is usable gets a different
-answer on different machines. \code{min(ev) <= tol * max(ev)} is a statement about
-the matrix; a caught error is a statement about the arithmetic.
+The verdict comes from the spectrum because \code{chol()} is not a rank test. On
+a matrix with an exactly zero eigenvalue the pivot that ought to be zero
+comes out positive or negative according to rounding, so \code{chol()} succeeds on
+some platforms and fails on others. The test \code{min(ev) <= tol * max(ev)} does
+not depend on the platform in that way.
+
+The default tolerance, \eqn{10^{-14}} (about 45 times the machine epsilon),
+is above the rounding level of an eigenvalue that is exactly zero and below
+the conditioning that \code{\link[=param_value]{param_value()}} reaches on ordinary free vectors, so a
+badly conditioned but positive definite value is accepted.
 }
 \seealso{
 \code{\link[=param_factor]{param_factor()}}, the generic whose base method calls this, and
-\code{\link[=param_spectrum]{param_spectrum()}} for the decomposition the deficient branches use
-instead.
+\code{\link[=param_spectrum]{param_spectrum()}} for the decomposition that the log-determinant uses.
 }
 \keyword{internal}

@@ -16,12 +16,11 @@ A list as described in \code{\link[=param_readable]{param_readable()}}, or \code
 when the matrix is fixed and carries no free value.
 }
 \description{
-Declares the multiplier \eqn{h(\eta)}, the one quantity a
-\code{\link[=scaled_matrix]{scaled_matrix()}} is about, with its interval on the log scale. The fixed
-matrix itself is the caller's own and needs no reporting.
+Declares the multiplier \eqn{h(\eta)}, the one quantity that describes a
+\code{\link[=scaled_matrix]{scaled_matrix()}} beyond its fixed matrix, with its interval on the log
+scale. The fixed matrix is supplied by the caller and is not reported.
 
 A parameter built with \code{link = NULL} has no free value and nothing to declare,
-so this returns \code{NULL} there, which is the same answer the base class gives and
-means the same thing.
+so this method returns \code{NULL} there, as the base method does.
 }
 \keyword{internal}

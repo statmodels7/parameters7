@@ -27,7 +27,7 @@ derivative of the scale times the \eqn{b}-th derivative of the pattern.
 
 The pattern's derivatives are the ones that need work here. An entry is
 \eqn{\rho^{|i-j|}}, a power where \code{\link[=compound_symmetry]{compound_symmetry()}}'s pattern is linear,
-so each is composed with the rhobit link to the order asked, through
+so each is composed with the rhobit link to the requested order, through
 \code{\link[=compose_order]{compose_order()}}. Each distinct lag is composed once.
 }
 \details{

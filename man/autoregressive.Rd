@@ -25,7 +25,7 @@ two conditions.}
 An object of class \code{\link[=AutoregressiveParam]{AutoregressiveParam()}}, with \code{n_free} equal to
 \eqn{q + 1}, \code{free_names} the tagged \code{log_scale}, \code{z_pacf1}, ..., \code{z_pacfq},
 \code{rank} equal to \code{dimension}, an empty \code{null_basis}, and \code{param_name}
-\code{"ar(q)"}.
+\code{"ar(<q>)"} with the order written in, for example \code{"ar(2)"}.
 }
 \description{
 Returns an object holding the covariance of \eqn{p} consecutive observations
@@ -35,8 +35,8 @@ of a stationary autoregression of order \eqn{q},
 
 parametrized by its marginal variance \eqn{\gamma_0} and its \eqn{q} partial
 autocorrelations \eqn{r_1, \dots, r_q}. That is \eqn{q + 1} free values
-\strong{whatever the dimension}: measured, \code{n_free} is 3 for an order-2 process
-observed 6 times and 3 for one observed 200 times.
+\strong{whatever the dimension}: \code{n_free} is 3 for an order-2 process, whether it
+is observed 6 times or 200 times.
 }
 \section{Why the partial autocorrelations carry the parametrization}{
 The coefficients \eqn{\phi} are stationary exactly when the roots of
@@ -45,8 +45,8 @@ that set is not a box. At \eqn{q = 2} it is the open triangle with vertices
 \eqn{(-2, -1)}, \eqn{(2, -1)} and \eqn{(0, 1)}, of area 4 inside a bounding
 box \eqn{(-2, 2) \times (-1, 1)} of area 8: \strong{exactly half the box is
 non-stationary}, and \eqn{\phi = (1.5, 0.6)}, which sits comfortably inside
-the box, has a root of modulus 0.547. So no collection of scalar links onto
-intervals can cover the region, whatever intervals are chosen.
+the box, has a root of modulus 0.547. Scalar links onto intervals therefore
+cannot cover the stationary region, for any choice of intervals.
 
 The partial autocorrelations do not have this problem. Each lies in
 \eqn{(-1, 1)} independently of the others, and the Levinson-Durbin recursion
@@ -55,15 +55,16 @@ transformation of Barndorff-Nielsen and Schou (1973) and Monahan (1984). Each
 takes a \code{\link[linkfunctions7:rhobit_link]{linkfunctions7::rhobit_link()}}, and every free vector then gives a
 stationary positive definite matrix.
 
-In double precision that last statement has a boundary, and it belongs to the
-chart, not to this family. At \eqn{\lvert \eta_k \rvert = 6} the matrix is
-strictly positive definite with an eigenvalue ratio of \eqn{5 \times
-10^{-12}}; by \eqn{\lvert \eta_k \rvert = 10} the partial autocorrelation is
-\eqn{1 - 4 \times 10^{-9}} and the smallest eigenvalue has crossed zero at the
-rounding floor, \eqn{-3 \times 10^{-17}} of the largest.
+In double precision that last statement holds only away from the edge of the
+chart. As the partial autocorrelations approach \eqn{\pm 1}, the smallest
+eigenvalue of the matrix falls to the rounding level, and with several free
+values of absolute size 6 to 10, depending on \eqn{p} and \eqn{q}, the
+computed matrix can be indefinite. The log-determinant and the derivatives
+lose accuracy in the same region, because they are formed from
+\eqn{1 - r_k^2}.
 }
 
-\section{The map is polynomial, so nothing is differenced}{
+\section{The polynomial map from the partial autocorrelations}{
 The autocorrelations follow from the same recursion. Writing
 \eqn{\phi^{(k)}} for the coefficients of the order-\eqn{k} predictor,
 
@@ -76,12 +77,11 @@ and the Yule-Walker equations at order \eqn{k} give
 whole map from the partial autocorrelations to the matrix is therefore
 \strong{polynomial}, built from sums and products alone, and its derivatives to
 fourth order come from propagating the derivative arrays through the recursion
-in compiled code, the product rule written out per order. Measured against one
-central difference of \code{\link[=param_value]{param_value()}}, the first derivatives agree to
-\eqn{5 \times 10^{-11}}, which is the difference's own accuracy.
+in compiled code, the product rule written out per order, with nothing
+differenced.
 }
 
-\section{Two quantities are closed form}{
+\section{The log-determinant and the inverse}{
 The innovation variances of the Levinson-Durbin recursion give
 
 \deqn{\log\lvert M \rvert = p\log\gamma_0
@@ -89,43 +89,31 @@ The innovation variances of the Levinson-Durbin recursion give
 
 one term per free value, so the log-determinant is \strong{separable} and every
 mixed derivative of it is exactly zero: at order 4 and \eqn{q = 2}, 12 of the
-15 components are 0 by construction. It agrees with \code{determinant()} to
-\eqn{2 \times 10^{-15}} at \eqn{p = 5} and \eqn{4 \times 10^{-14}} at
-\eqn{p = 100}, and costs a sum of \eqn{q + 1} terms at either size.
+15 components are mixed and are 0 by construction. It costs a sum of
+\eqn{q + 1} terms at any dimension.
 
 The inverse is \strong{banded of bandwidth \eqn{q}}: an autoregression of order
 \eqn{q} is Markov of that order, so its precision carries no entry beyond the
-\eqn{q}-th off-diagonal. Measured at \eqn{q = 3} and \eqn{p = 9}, every one of
-the 30 entries outside the band is exactly 0, not merely small. It is
+\eqn{q}-th off-diagonal, and every entry outside the band is exactly 0. It is
 assembled from the prediction form \eqn{M^{-1} = U^\top D^{-1} U}, with
 \eqn{U} unit lower triangular holding the predictor coefficients and \eqn{D}
 the innovation variances, so no factorization is taken.
 }
 
-\section{What a call costs}{
-Each derivative order has its own compiled kernel, \code{\link[=ar_tables]{ar_tables()}}, which
-returns that order's components alone, and the Toeplitz matrices are filled
-in compiled code. Seconds per call, over repetition loops sized by elapsed
-time:\tabular{lllll}{
-   \eqn{q} \tab \eqn{p} \tab \code{param_value} \tab \code{param_d1} \tab \code{param_d4} \cr
-   1 \tab 10 \tab 0.00005 \tab 0.00008 \tab 0.00018 \cr
-   1 \tab 200 \tab 0.00013 \tab 0.00023 \tab 0.00044 \cr
-   2 \tab 200 \tab 0.00013 \tab 0.00030 \tab 0.00125 \cr
-   4 \tab 200 \tab 0.00015 \tab 0.00043 \tab 0.01550 \cr
-}
+\section{Implementation}{
+Each derivative order has its own compiled kernel, reached through
+\code{\link[=ar_tables]{ar_tables()}}, which returns the components of that order only, and the
+Toeplitz matrices are filled in compiled code.
 }
 
 \section{Against ar1()}{
 \code{\link[=ar1]{ar1()}} is the case \eqn{q = 1} written out: there the autocorrelation is
 \eqn{\rho^{h}}, the determinant is \eqn{(1-\rho^2)^{p-1}} and the inverse is
 tridiagonal in three lines, so it keeps its own closed forms and does not go
-through the recursion. The two agree: at \eqn{p = 8} and \eqn{\rho = 0.6} the
-values differ by \eqn{1.4 \times 10^{-17}}, the log-determinants by 0, the
-inverses by \eqn{2.2 \times 10^{-16}} and the four derivative orders by
-\eqn{1.1 \times 10^{-16}} to \eqn{1.1 \times 10^{-14}}. Cost is not the reason
-to prefer one: they measure 0.00033 s and 0.00050 s for one fourth-order
-array. \code{ar1()}'s free name is \code{z_rho} where this one's is \code{z_pacf1}, and at
-\eqn{q = 1} the two are the same number.
+through the recursion. The two agree to rounding in the value, the inverse,
+the log-determinant and the four derivative orders. The free name of \code{\link[=ar1]{ar1()}}
+is \code{z_rho} where this one's is \code{z_pacf1}, and at \eqn{q = 1} the two are the
+same number.
 }
 
 \section{The name}{
@@ -171,7 +159,7 @@ max(abs(param_d2logdet(s, eta)[mixed]))
 max(abs(param_free(s, M) - eta))
 
 # The coefficients are not free values, and param_readable() reports them
-# with the Jacobian a delta method needs.
+# with the Jacobian that a delta method needs.
 param_readable(s, eta)$value
 
 }
@@ -186,5 +174,5 @@ moving average models. \emph{Biometrika} \strong{71}, 403-404.
 \seealso{
 \code{\link[=ar1]{ar1()}} for \eqn{q = 1} written out, \code{\link[=compound_symmetry]{compound_symmetry()}} for the
 other two-value family, and \code{\link[=param_readable]{param_readable()}}, which reports the
-autoregressive coefficients this parametrization does not carry.
+autoregressive coefficients that this parametrization does not carry.
 }

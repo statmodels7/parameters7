@@ -18,10 +18,9 @@ so that the log-determinant derivatives of \code{\link[=inverse_of]{inverse_of()
 shape the inner family returned them in.
 }
 \details{
-The container is part of the contract: \code{check_parameter()} subtracts the
-result of \code{\link[=param_dlogdet]{param_dlogdet()}} from a reference, which a list does not
-support, so an \code{lapply()} over a numeric vector turns a correct value into
-an error several frames away.
+The type matters: \code{check_parameter()} subtracts the result of
+\code{\link[=param_dlogdet]{param_dlogdet()}} from a reference, which a list does not support, so the
+negation of a numeric vector has to stay a numeric vector.
 }
 \seealso{
 \code{\link[=inverse_of]{inverse_of()}}, the only caller.

@@ -15,21 +15,22 @@ check_eta(s, eta)
 \code{eta}, as an unnamed numeric vector of length \code{s@n_free}.
 }
 \description{
-Checks that \code{eta} is a finite numeric vector of the length the parameter
-declares, and returns it with its names stripped. Called in the body of
-every generic before dispatch, so a parameter written outside the package
+Checks that \code{eta} is a finite numeric vector of the length that the
+parameter declares, and returns it with its names stripped. Called before
+dispatch in the body of every generic that takes \code{eta}, so a parameter
+written outside the package
 inherits the check without doing anything.
 }
 \details{
 Three conditions are checked, each with its own message. A non-numeric \code{eta}
-throws \verb{'eta' must be numeric.}; a wrong length throws a message naming both
-counts and listing the family's \code{free_names}, so a caller who has mismatched
-two parametrizations can see which is which; and any \code{NA}, \code{NaN} or infinite
-entry throws \verb{'eta' must be finite: the free scale has no boundary to reach.} The last message states the reason a non-finite free value is a
+signals \verb{'eta' must be numeric.}; a wrong length signals a message naming
+both counts and listing the family's \code{free_names}, so a caller who has
+mismatched two parametrizations can see which is which; and any \code{NA}, \code{NaN}
+or infinite entry signals \verb{'eta' must be finite: the free scale has no boundary to reach.} The last message states the reason a non-finite free value is a
 caller error: the unconstrained scale has no edge, so an infinity there is a
 runaway rather than a limit reached.
 
-Names are stripped for the reason \code{align_theta()} strips them in
+Names are stripped for the same reason that \code{align_theta()} strips them in
 \pkg{distributions7}. A value that has been through a link comes back
 carrying its own name, which means nothing on a number and would otherwise
 appear in the dimnames of the matrix built from it.

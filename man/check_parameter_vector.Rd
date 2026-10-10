@@ -9,28 +9,35 @@ check_parameter_vector(s, tol = 1e-06, verbose = TRUE)
 \arguments{
 \item{s}{A \code{\link[=parameter]{parameter()}} object that is not a \code{\link[=matrix_parameter]{matrix_parameter()}}.}
 
-\item{tol}{The relative tolerance a check has to meet.}
+\item{tol}{The relative tolerance that a check has to meet. The thresholds of the
+four derivative orders are \eqn{10^{-6}}, \eqn{10^{-5}}, \eqn{10^{-4}} and
+\eqn{5 \times 10^{-3}} at the default \code{1e-6}, and each is multiplied by
+\code{tol / 1e-6} otherwise.}
 
 \item{verbose}{Whether to print the table.}
 }
 \value{
-Invisibly, a seven-row data frame with columns \code{check}, \code{status} and
-\code{note}. Note that \code{note} is \strong{character}, holding a formatted number or the
-empty string, where \code{\link[=check_parameter]{check_parameter()}}'s matrix branch returns a numeric
-\code{statistic}.
+Invisibly, a data frame with columns \code{check}, \code{status} and \code{note},
+with seven rows for \code{\link[=simplex]{simplex()}} and \code{\link[=transition_matrix]{transition_matrix()}} and five for any
+other family. The \code{status} is \code{"OK"}, \code{"FAIL"} or, for a derivative order
+that comes from a numerical fallback, \code{"NOT CHECKED"}. The column \code{note} is
+\strong{character}, holding a formatted number, the string \code{numerical} or the
+empty string, where the matrix branch of \code{\link[=check_parameter]{check_parameter()}} returns a
+numeric \code{statistic}.
 }
 \description{
-What \code{\link[=check_parameter]{check_parameter()}} runs for a family whose value is not a symmetric
-matrix, so has no log-determinant, no solve and no factor. Seven checks: the
-inverse round trip, each of the four derivative orders against the
-single-stencil numerical construction, that the value stays on the simplex,
-and that every derivative component sums to zero over the value index.
+The checks that \code{\link[=check_parameter]{check_parameter()}} runs for a family whose value is not a
+symmetric matrix and which therefore has no log-determinant, no solve and no
+factor: the inverse round trip and each of the four derivative orders against
+the single-stencil numerical construction, and, for \code{\link[=simplex]{simplex()}} and
+\code{\link[=transition_matrix]{transition_matrix()}}, that the value stays on the simplex and that every
+derivative component sums to zero over the value index.
 }
 \details{
 The last check is an identity the set itself supplies. Differentiating
 \eqn{\sum_a \pi_a = 1} gives \eqn{\sum_a \partial \pi_a = 0}, and
 differentiating again gives the same for every higher order, so a derivative
-array that does not sum to zero is wrong whatever else it agrees with. A
+array that fails the identity is wrong, whatever other check it passes. A
 \code{\link[=transition_matrix]{transition_matrix()}} satisfies it row by row, its rows being simplexes.
 
 Three free vectors are used, drawn from \code{rnorm(s@n_free, sd = 0.8)} after
@@ -38,16 +45,11 @@ Three free vectors are used, drawn from \code{rnorm(s@n_free, sd = 0.8)} after
 exactly reproducible. The caller's own \code{.Random.seed} is saved on entry and
 restored on exit through \code{\link[=capture_seed]{capture_seed()}} and \code{\link[=restore_seed]{restore_seed()}}, so a call in
 the middle of a simulation leaves that simulation unchanged. The derivative
-comparisons
-are against
-\code{\link[=numerical_d1]{numerical_d1()}} through \code{\link[=numerical_d4]{numerical_d4()}}, which at third and fourth order are
-themselves good to about \eqn{10^{-5}}: measured on \code{\link[=simplex]{simplex()}} and
-\code{\link[=transition_matrix]{transition_matrix()}} the four orders come back at \eqn{4 \times 10^{-12}},
-\eqn{4 \times 10^{-12}}, \eqn{3 \times 10^{-7}} and \eqn{3 \times 10^{-5}},
-and the widening is the reference's.
+comparisons are against \code{\link[=numerical_d1]{numerical_d1()}} through \code{\link[=numerical_d4]{numerical_d4()}}, whose
+accuracy decreases with the order, so the thresholds widen with the order.
 }
 \seealso{
 \code{\link[=check_parameter]{check_parameter()}}, which dispatches here, and \code{\link[=simplex]{simplex()}} and
-\code{\link[=transition_matrix]{transition_matrix()}}, the two families that reach it.
+\code{\link[=transition_matrix]{transition_matrix()}}, the two families in this package that reach it.
 }
 \keyword{internal}

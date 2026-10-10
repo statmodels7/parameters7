@@ -22,8 +22,7 @@ Closed form and linear. The eigenvalues of \eqn{M = \exp(S)} are
 
 the sum of the diagonal free values. One \code{sum()} over \eqn{p} numbers: no
 eigendecomposition and no determinant, with nothing growing in \eqn{p} beyond
-the sum itself. It agrees with the eigenvalues of the assembled matrix to the
-printed digit.
+the sum itself.
 }
 \seealso{
 \code{\link[=param_dlogdet.MatrixLogParam]{param_dlogdet.MatrixLogParam()}} for its gradient, and

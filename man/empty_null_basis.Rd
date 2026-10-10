@@ -15,8 +15,9 @@ loops over the null directions does nothing without a special case.
 }
 \description{
 The empty basis a full-rank family declares. Every family whose value is
-positive definite at every free vector passes this to its
-\code{\link[=matrix_parameter]{matrix_parameter()}} constructor. The validator's shape rule, \code{dimension} by
-\code{dimension - rank}, asks for exactly this when \code{rank} is \code{dimension}.
+positive definite at every free vector passes this, or an equal empty
+matrix, to its \code{\link[=matrix_parameter]{matrix_parameter()}} constructor. The validator's shape rule,
+\code{dimension} by \code{dimension - rank}, requires exactly this when \code{rank} is
+\code{dimension}.
 }
 \keyword{internal}

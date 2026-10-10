@@ -17,24 +17,24 @@ corr_dfactor(s, tb, ks)
 }
 \value{
 A \code{s@dimension} by \code{s@dimension} lower triangular numeric matrix, or
-\code{NULL} where the derivative is identically zero.
+\code{NULL} when the multiset spans two rows.
 }
 \description{
 Returns \eqn{\partial^S L} for a multiset \eqn{S} of free-value indices, or
-\code{NULL} where that derivative is identically zero, which is most of the time.
-The empty multiset gives \eqn{L} itself.
+\code{NULL} when \eqn{S} spans two rows of \eqn{L}. The empty multiset gives
+\eqn{L} itself.
 }
 \details{
-Two rules make almost everything vanish. An entry of \eqn{L} depends only on
-the angles of \strong{its own row}, so a multiset spanning two rows gives the zero
-matrix. Within a row, an entry is a product over a prefix of the angles, so it
-gives zero unless every differentiated angle appears among its factors: a
-derivative in \eqn{\theta_{ij}} touches only the entries of row \eqn{i} from
-column \eqn{j} onwards.
+An entry of \eqn{L} depends only on the angles of \strong{its own row}, so a
+multiset spanning two rows gives \code{NULL}. Within a row, an entry is a product
+over a prefix of the angles, so it is zero unless every differentiated angle
+appears among its factors: a derivative in \eqn{\theta_{ij}} touches only the
+entries of row \eqn{i} from column \eqn{j} onwards, and the other entries of
+the returned matrix are zero.
 
-Note what this does \strong{not} say about \eqn{R}. The factor's derivative across
-two rows is zero; the derivative of \eqn{R = LL^\top} across those rows is not,
-\eqn{R_{ij}} being the inner product of two rows. See
+The factor's derivative across two rows is zero, but the derivative of
+\eqn{R = LL^\top} across those rows is not, \eqn{R_{ij}} being the inner
+product of two rows. See
 \code{\link[=correlation_matrix]{correlation_matrix()}} for the support that does hold.
 }
 \seealso{

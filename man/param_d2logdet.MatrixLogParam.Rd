@@ -20,10 +20,10 @@ Closed form, and identically zero: \eqn{\log|M| = \mathrm{tr}(S)} is linear in
 the free vector, so its second derivative vanishes at every \eqn{\eta}. The
 zeros are exact.
 
-As with \code{\link[=log_cholesky]{log_cholesky()}}, that means this family cannot exercise the order: a
-check of a log-determinant Hessian against a numerical reference passes here
-whatever is missing. \code{\link[=ar1]{ar1()}} and \code{\link[=compound_symmetry]{compound_symmetry()}} are where it has
-content.
+As with \code{\link[=log_cholesky]{log_cholesky()}}, the order is zero for this family, so a test of a
+general log-determinant Hessian has nothing to compare here. \code{\link[=ar1]{ar1()}},
+\code{\link[=compound_symmetry]{compound_symmetry()}} and \code{\link[=correlation_matrix]{correlation_matrix()}} are families where it is
+not zero.
 }
 \seealso{
 \code{\link[=param_dlogdet.MatrixLogParam]{param_dlogdet.MatrixLogParam()}} for the order below, and

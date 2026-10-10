@@ -34,10 +34,11 @@ the sum running over subsets of \emph{positions} in the tuple, which
 handles a repeated index correctly without a multiplicity bookkeeping of
 its own.
 
-The result is symmetric by construction, with no symmetrizing step: the term
-for a subset \eqn{S} and the term for its complement are transposes of each
-other, so the sum pairs off. Measured at orders 1 to 3 on a random factor, the
-asymmetry is exactly 0.
+The result is symmetric in exact arithmetic, with no symmetrizing step: the
+term for a subset \eqn{S} and the term for its complement are transposes of
+each other, so the sum pairs off. In floating point the two terms of a pair
+are added in different orders in an entry and in its transpose, so the
+asymmetry is of the size of the rounding error.
 
 The loop walks the \eqn{2^{|T|}} subsets through a bit mask, so the cost is
 \eqn{2^{\text{order}}} matrix products at worst, and far fewer in practice: a

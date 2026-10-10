@@ -20,9 +20,8 @@ are matrices and do not commute, so two orderings of the same split are two
 terms.
 }
 \details{
-Built from \code{numericals7::set_partitions()}, the toolkit's single copy of the
-unordered enumeration, by taking every permutation of each partition's
-blocks. The count is the Fubini number: 1, 3, 13, 75 for \code{k} of 1 to 4.
+Built from the unordered enumeration of \code{numericals7::set_partitions()} by
+taking every permutation of each partition's blocks. The count is the Fubini number: 1, 3, 13, 75 for \code{k} of 1 to 4.
 }
 \seealso{
 \code{\link[=inverse_of]{inverse_of()}}, the only caller.

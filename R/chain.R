@@ -24,9 +24,9 @@ NULL
 #' \deqn{(f \circ g)''' = f''' g'^3 + 3 f'' g' g'' + f' g''',}
 #' \deqn{(f \circ g)'''' = f'''' g'^4 + 6 f''' g'^2 g'' + 3 f'' g''^2
 #'   + 4 f'' g' g''' + f' g''''.}
-#' The four coefficients of the last line count the partitions of four
-#' elements into four singletons, a pair and two singletons, two pairs, a
-#' triple and a singleton, and one block.
+#' The five coefficients of the last line (1, 6, 3, 4 and 1) count the
+#' partitions of four elements into four singletons, a pair and two singletons,
+#' two pairs, a triple and a singleton, and one block.
 #'
 #' Every argument may be a vector, in which case the composition is applied
 #' elementwise and the result has the same length. That is how the families use
@@ -77,7 +77,8 @@ compose_order <- function(fd, gd, k) {
 #' @param order The highest order wanted, an integer from 0 to 4.
 #'
 #' @return A list of `order` elements, the first to the `order`-th
-#'   derivative, each the shape of `r`.
+#'   derivative. The elements of order at most `m` have the shape of `r`, and
+#'   those of higher order are the scalar 0.
 #'
 #' @seealso [compose_order()], which chains these onto a link's derivatives,
 #'   and `ar1_pattern()`, the caller.
@@ -94,10 +95,10 @@ power_derivs <- function(r, m, order) {
 #' A Link Inverse and Its Derivatives, to a Given Order
 #'
 #' @description
-#' Returns \eqn{g^{-1}(\eta)} and its derivatives of orders 1 to `order`, the
-#' seed every family composes its map from. Each order is one call of the
-#' link's own generic (`dlinkinv()` to `d4linkinv()`), and no order above
-#' `order` is evaluated.
+#' Returns \eqn{g^{-1}(\eta)} and its derivatives of orders 1 to `order`, from
+#' which the families built on a link compose their maps. Each order is one call
+#' of the link's own generic (`dlinkinv()` to `d4linkinv()`), and the orders
+#' above `order` are not evaluated.
 #'
 #' @param link A \pkg{linkfunctions7} link.
 #' @param e A numeric vector of free values.
@@ -134,10 +135,11 @@ linkinv_upto <- function(link, e, order) {
 #' handles a repeated index correctly without a multiplicity bookkeeping of
 #' its own.
 #'
-#' The result is symmetric by construction, with no symmetrizing step: the term
-#' for a subset \eqn{S} and the term for its complement are transposes of each
-#' other, so the sum pairs off. Measured at orders 1 to 3 on a random factor, the
-#' asymmetry is exactly 0.
+#' The result is symmetric in exact arithmetic, with no symmetrizing step: the
+#' term for a subset \eqn{S} and the term for its complement are transposes of
+#' each other, so the sum pairs off. In floating point the two terms of a pair
+#' are added in different orders in an entry and in its transpose, so the
+#' asymmetry is of the size of the rounding error.
 #'
 #' The loop walks the \eqn{2^{|T|}} subsets through a bit mask, so the cost is
 #' \eqn{2^{\text{order}}} matrix products at worst, and far fewer in practice: a

@@ -18,8 +18,7 @@ list for a fixed parameter.
 \description{
 Closed form: \eqn{\partial^3_\eta M = h'''(\eta)\,P}, from
 \code{linkfunctions7::d3linkinv()}. Every order is the same fixed matrix times a
-link derivative, so this family costs nothing at any order and is exact at
-all of them. Under the default log link it is the matrix again.
+link derivative, so every order costs one multiplication and is exact. Under the default log link it is the matrix again.
 }
 \seealso{
 \code{\link[=param_d4.ScaledMatrixParam]{param_d4.ScaledMatrixParam()}} for the order above.

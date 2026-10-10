@@ -33,7 +33,7 @@ innovation variances fall by a factor \eqn{1 - r_k^2} at each of the first
 the third on repeats \eqn{(-0.91, 0.30)}, which are the coefficients
 \eqn{\phi = (0.91, -0.30)} with a sign.
 
-Both come from the same recursion the derivatives use, run here without
+Both come from the same recursion that the derivatives use, run here without
 derivatives, since a solve needs no arrays.
 }
 \seealso{

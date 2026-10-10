@@ -8,7 +8,7 @@ readable_diagonal(links, eta, nm, transform, label)
 }
 \arguments{
 \item{links}{A list of \pkg{linkfunctions7} links, one per quantity, in the
-order of the free values they read. \code{links[[k]]} must be the link of
+order of the free values that they read. \code{links[[k]]} must be the link of
 \code{eta[k]}; the correspondence is positional and is not checked.}
 
 \item{eta}{A numeric vector of free values, at least as long as \code{links}.}
@@ -16,8 +16,8 @@ order of the free values they read. \code{links[[k]]} must be the link of
 \item{nm}{A character vector naming the quantities, the same length as
 \code{links}.}
 
-\item{transform}{A character vector naming the scale each interval is built
-on, the same length as \code{nm}.}
+\item{transform}{A character vector naming the scale on which each interval
+is built, the same length as \code{nm}.}
 
 \item{label}{A single string naming the block.}
 }
@@ -36,8 +36,8 @@ there is nothing else to compute.
 which is why their three methods are one call each.
 }
 \seealso{
-\code{\link[=param_readable]{param_readable()}} for the contract, and
-\code{\link[=param_readable.AutoregressiveParam]{param_readable.AutoregressiveParam()}} for the one family whose Jacobian is
-not diagonal.
+\code{\link[=param_readable]{param_readable()}} for the structure of the declaration, and
+\code{\link[=param_readable.AutoregressiveParam]{param_readable.AutoregressiveParam()}} and \code{\link[=param_readable.SimplexParam]{param_readable.SimplexParam()}}
+for the two families whose Jacobian is not diagonal.
 }
 \keyword{internal}

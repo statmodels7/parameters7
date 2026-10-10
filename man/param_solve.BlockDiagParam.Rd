@@ -24,21 +24,19 @@ as many columns as \code{b}; \code{param_factor()} a lower triangular \code{s@di
 \code{param_solve()} and \code{param_factor()} for a \code{\link[=block_diag]{block_diag()}} parameter, both of
 them blockwise: the inverse of a block-diagonal matrix is the block diagonal
 of the inverses, and the same holds of a lower triangular factor. Each block
-answers by whatever route it has, so \code{ar1()}'s tridiagonal inverse and
-\code{log_cholesky()}'s free factor both survive into the composite.
+uses its own route, so the tridiagonal inverse of \code{ar1()} and the assembled
+factor of \code{log_cholesky()} are used in the composite.
 }
 \details{
 \code{param_solve()} takes the rows of \code{b} that belong to each block and hands them
 to that block, so the whole matrix is never inverted. \code{param_factor()}
 assembles the blocks' factors on the diagonal; the result is lower triangular
-with \eqn{M = L L^\top}, which is the contract \code{\link[=param_factor]{param_factor()}} states.
-Measured against \code{solve()} and against the assembled matrix, the two agree to
-\eqn{2 \times 10^{-16}} and \eqn{4 \times 10^{-16}}.
+with \eqn{M = L L^\top}, as \code{\link[=param_factor]{param_factor()}} requires.
 
-Both are refused by the generic where any block is rank deficient, the
+Both are rejected by the generic where any block is rank deficient, the
 composite having no inverse and no Cholesky factor then.
 }
 \seealso{
-\code{\link[=param_solve]{param_solve()}} and \code{\link[=param_factor]{param_factor()}} for the two contracts.
+\code{\link[=param_solve]{param_solve()}} and \code{\link[=param_factor]{param_factor()}} for the two generics.
 }
 \keyword{internal}

@@ -21,7 +21,7 @@ SumStructParam(
 integer, agreeing with \code{length(free_names)}.}
 
 \item{free_names}{A character vector of length \code{n_free}, one label per free
-value, in the order the free vector holds them. Must be unique.}
+value, in the order in which the free vector holds them. Must be unique.}
 
 \item{param_params}{A list of whatever the family needs in order to evaluate
 itself, read only by that family's own methods.}
@@ -29,15 +29,14 @@ itself, read only by that family's own methods.}
 \item{dimension}{The side \eqn{p} of the matrix: a single integer, no
 smaller than 1. The validator rejects a vector and a value below 1.}
 
-\item{rank}{The rank of the matrix the family produces, a single integer in
+\item{rank}{The rank of the matrix that the family produces, a single integer in
 \code{0:dimension}. It is a property of the family, so a family whose value is
 positive definite at every \eqn{\eta} declares \eqn{p} here.}
 
 \item{null_basis}{A \code{dimension} by \code{dimension - rank} numeric matrix whose
 columns are an orthonormal basis of the common null space. Use
 \code{\link[=param_null_basis]{param_null_basis()}} to obtain one, or \code{matrix(numeric(0), dimension, 0)}
-for a full-rank family. The validator rejects any other shape, and
-reports both the rank and the shape when the two disagree.}
+for a full-rank family. The validator rejects any other shape.}
 }
 \value{
 An object of class \code{SumStructParam}, a subclass of
@@ -50,9 +49,8 @@ The S7 class of a matrix parameter that is a sum of \strong{fixed} symmetric
 positive semidefinite matrices, each carried by one positive free value.
 \code{\link[=sum_struct]{sum_struct()}} builds one.
 
-It is the variance-components covariance, and the one family here whose free
-values are weights rather than entries: \code{n_free} is the number of components,
-whatever the dimension.
+It is the variance-components covariance. Its free values are weights:
+\code{n_free} is the number of components, whatever the dimension.
 }
 \examples{
 # One free value per component, whatever the side of the matrices.
@@ -64,5 +62,5 @@ s@free_names
 \seealso{
 \code{\link[=sum_struct]{sum_struct()}}, the constructor, \code{\link[=scaled_matrix]{scaled_matrix()}} for the
 one-component case with the matrix fixed, and \code{\link[=matrix_parameter]{matrix_parameter()}} for the
-properties this inherits.
+properties that this class inherits.
 }

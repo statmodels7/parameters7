@@ -13,10 +13,10 @@ param_solve(s, eta, b = NULL, ...)
 
 \item{b}{A numeric matrix or vector with \code{s@dimension} rows; a vector is
 treated as a one-column matrix. Defaults to \code{NULL}, which stands for the
-identity and returns the inverse. A wrong number of rows throws a message
-naming the number required.}
+identity and returns the inverse. A wrong number of rows signals an error
+that names the number required.}
 
-\item{...}{Passed to the method. No method in this package reads it.}
+\item{...}{Passed to the method. The methods in this package do not read it.}
 }
 \value{
 A numeric matrix with \code{s@dimension} rows and as many columns as \code{b},
@@ -27,19 +27,18 @@ returns a one-column matrix, not a vector.
 Returns \eqn{M^{-1} B} for a right-hand side \eqn{B}, computed through a
 factorization instead of by forming the inverse. This is what a Gaussian
 quadratic form needs: \code{crossprod(r, param_solve(s, eta, r))} is
-\eqn{r^\top M^{-1} r} at the cost of one triangular solve, where inverting
-and multiplying would cost more and be less accurate. Called with no \code{B} it
-does return the inverse, which is convenient for reading a covariance off a
-precision.
+\eqn{r^\top M^{-1} r}, which the base method computes from a Cholesky factor
+and two triangular solves; inverting and multiplying would cost more and be
+less accurate. Called with no \code{b} it returns the inverse, which is convenient
+for reading a covariance off a precision.
 }
 \section{Rank deficiency is rejected}{
 A deficient family signals an error and names its rank, instead of returning
 a pseudo-inverse. What a consumer of an improper prior needs is the quadratic
 form and the log pseudo-determinant: penalized normal equations invert
 \eqn{X^\top X + \lambda P}, which is non-singular even where \eqn{P} is not,
-and the consumer assembles that matrix itself. A pseudo-inverse returned here
-would be a plausible matrix answering a question nobody asked, and the caller
-would have no way to tell.
+and the consumer assembles that matrix itself. A pseudo-inverse is not
+returned, because the caller could not distinguish it from an inverse.
 }
 
 \section{A non-matrix family has no method}{
@@ -49,12 +48,13 @@ the message names the family and says its value is not a symmetric matrix.
 }
 
 \section{Cost}{
-The base method on \code{\link[=matrix_parameter]{matrix_parameter()}}, which most families take, works
-through a Cholesky factor: \eqn{O(p^3)} once plus \eqn{O(p^2)} per column of
-\eqn{B}. Seven families override it with a closed-form inverse. \code{\link[=ar1]{ar1()}}
+The base method on \code{\link[=matrix_parameter]{matrix_parameter()}} works through a Cholesky factor:
+\eqn{O(p^3)} once plus \eqn{O(p^2)} per column of \eqn{B}. \code{\link[=log_cholesky]{log_cholesky()}},
+\code{\link[=diagonal_matrix]{diagonal_matrix()}}, \code{\link[=scalar_matrix]{scalar_matrix()}}, \code{\link[=scaled_matrix]{scaled_matrix()}} and
+\code{\link[=correlation_matrix]{correlation_matrix()}} use it, and the other families override it. \code{\link[=ar1]{ar1()}}
 writes its tridiagonal precision out entry by entry, \code{\link[=compound_symmetry]{compound_symmetry()}}
 uses Sherman-Morrison, and \code{\link[=block_diag]{block_diag()}} and \code{\link[=kron_identity]{kron_identity()}} solve
-blockwise, so none of them decomposes anything of side \eqn{p}.
+blockwise, so these four decompose no matrix of side \eqn{p}.
 }
 
 \section{Notation}{
@@ -78,7 +78,8 @@ c(q, drop(r \%*\% solve(param_value(s, eta)) \%*\% r))
 # A vector b comes back as a one-column matrix.
 dim(param_solve(s, eta, r))
 
-# A rank-deficient family refuses, and says what to do instead.
+# A rank-deficient family is rejected, and the message says what to do
+# instead.
 r_def <- scaled_matrix(crossprod(diff(diag(6), differences = 2)))
 try(param_solve(r_def, 0))
 

@@ -19,12 +19,15 @@ derivative orders alone, the log-determinant not existing there.
 }
 \description{
 Reports, one derivative quantity at a time, whether the parameter has a
-method of its own or takes the numerical one registered on \code{\link[=parameter]{parameter()}} and
-\code{\link[=matrix_parameter]{matrix_parameter()}}. Ask it before trusting a fourth-order derivative of a
-family you did not write: \code{FALSE} everywhere means every quantity is a closed
-form, and \code{TRUE} somewhere marks a component whose accuracy is a stencil's.
+method of its own or takes the one registered on \code{\link[=parameter]{parameter()}} and
+\code{\link[=matrix_parameter]{matrix_parameter()}}. It is the test to run before relying on a fourth-order
+derivative of a family written elsewhere: \code{FALSE} everywhere means that every
+quantity has a method of the family's own, and \code{TRUE} marks a component
+computed by a base method, a stencil for the derivatives of the value, an
+eigendecomposition for the log-determinant and its first two derivatives, and
+a stencil on the order below for its third and fourth.
 }
-\section{Why the question is worth asking}{
+\section{Why the answer matters}{
 Whether an independent check exists depends on the answer. A derivative
 computed by finite differences cannot be checked against a finite difference,
 and a log-determinant read off an eigendecomposition cannot be checked against
@@ -39,13 +42,14 @@ base-class versions are a Cholesky factorization, which is exact whoever
 performs it, and \code{\link[=check_parameter]{check_parameter()}} compares them against \code{base::solve()}
 either way. Listing them as numerical would suggest an approximation that is
 not there. \code{\link[=param_value]{param_value()}} is absent because a family that does not implement
-it has nothing at all, and \code{\link[=param_free]{param_free()}} because its base method throws.
+it has nothing at all, and \code{\link[=param_free]{param_free()}} because its base method signals an
+error.
 }
 
-\section{Every shipped family answers FALSE}{
-Measured over all fifteen constructors in this package, at every component:
-none of them uses a numerical route. The fallbacks exist for a family written
-elsewhere, and the example below builds one to show what a \code{TRUE} looks like.
+\section{Every family in the package returns FALSE}{
+Every constructor in this package returns \code{FALSE} at every component. The
+fallbacks serve a family written elsewhere, and the example below builds one
+to show what a \code{TRUE} looks like.
 }
 
 \examples{
@@ -77,6 +81,6 @@ c(numerical = param_d1(toy, 0.4)[[1]][1, 1], exact = exp(0.4))
 }
 \seealso{
 \code{\link[=check_parameter]{check_parameter()}}, which reports a numerical component as not
-checked, and \code{\link[=numerical_d1]{numerical_d1()}} and its higher-order siblings, the routes a
-\code{TRUE} names.
+checked, and \code{\link[=numerical_d1]{numerical_d1()}} and its higher-order siblings, the routes that
+a \code{TRUE} names.
 }

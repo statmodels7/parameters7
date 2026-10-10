@@ -18,7 +18,7 @@ param_inv_d2(s, eta, ...)
 
 \item{eta}{A numeric vector of length \code{s@n_free}, finite in every entry.}
 
-\item{...}{Passed to the method. No method in this package reads it.}
+\item{...}{Passed to the method. The methods in this package do not read it.}
 }
 \value{
 \code{param_inv_d1()}: a list of \code{s@n_free} matrices, named as
@@ -28,7 +28,7 @@ its own.
 }
 \description{
 \code{param_inv_d1()} returns the first derivatives of \eqn{M^{-1}} in the free
-values, and \code{param_inv_d2()} the second, where \eqn{M} is the matrix
+values, and \code{param_inv_d2()} the second, where \eqn{M} is the matrix that
 \code{\link[=param_value]{param_value()}} returns.
 }
 \details{
@@ -40,11 +40,9 @@ The default method differentiates the inverse through the derivatives of
 with \eqn{A_k} and \eqn{A_{kl}} from \code{\link[=param_d1]{param_d1()}} and \code{\link[=param_d2]{param_d2()}}.
 
 Where \eqn{M} is nearly singular along a direction that is not a coordinate
-axis, \eqn{M^{-1}} has large entries of nearly rank one and the products
-above cancel: at a log-Cholesky free value \eqn{\log L_{22} = -11.5} the
-default reads \eqn{\partial M^{-1}} with a relative error of
-\eqn{10^{-7}}, and a trace against it, of products of order \eqn{10^{10}},
-is out by a number of order one.
+axis, \eqn{M^{-1}} has large entries of nearly rank one, the products above
+cancel, and the default method loses accuracy as the condition number of
+\eqn{M} grows.
 
 The method for \code{\link[=log_cholesky]{log_cholesky()}} is exact there. With \eqn{M = L L^\top},
 \eqn{G = L^{-1}}, \eqn{B_k = G\,\partial_k L} and
@@ -52,8 +50,8 @@ The method for \code{\link[=log_cholesky]{log_cholesky()}} is exact there. With 
 \deqn{\partial_k M^{-1} = -G^\top C_k G, \qquad
   \partial_{kl} M^{-1} = G^\top\big(B_l^\top C_k + C_k B_l -
   \partial_l C_k\big) G,}
-where \eqn{\partial_l B_k = -B_l B_k + G\,\partial_{kl} L}. No product
-carries a cancellation: the entries of \eqn{G} grow as \eqn{1/L_{ii}} and
+where \eqn{\partial_l B_k = -B_l B_k + G\,\partial_{kl} L}. These products
+involve no cancellation: the entries of \eqn{G} grow as \eqn{1/L_{ii}} and
 each term is of the size of the result.
 }
 \examples{

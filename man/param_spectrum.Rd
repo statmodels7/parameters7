@@ -2,7 +2,7 @@
 % Please edit documentation in R/numerical_fallbacks.R
 \name{param_spectrum}
 \alias{param_spectrum}
-\title{The Spectral Decomposition a Parameter's Quantities Are Read From}
+\title{The Spectral Decomposition of a Parameter's Matrix}
 \usage{
 param_spectrum(s, eta)
 }
@@ -25,9 +25,9 @@ caller needing both does not evaluate the map twice.}
 }
 \description{
 Returns the eigenvalues and eigenvectors of \eqn{M(\eta)}, together with a
-flag saying which directions carry the matrix. It is what the base-class
-log-determinant, the pseudo-inverse and the rank-deficient solve all read, so
-one decomposition serves them.
+flag marking the directions that carry the matrix. The base-class
+log-determinant and its first two derivatives read it, so one decomposition
+serves them.
 }
 \details{
 Which eigenvalues count as zero is settled \strong{by position}, never by size.
@@ -37,11 +37,11 @@ from the object and is never re-derived: counting eigenvalues above a relative
 tolerance is not scale invariant, so a family whose components differ by many
 orders of magnitude would be assigned a different rank at different \eqn{\eta},
 and a fitted model with smoothing parameters that far apart is ordinary. The
-object settled the question once, at construction, from the components. See
-\code{\link[=param_null_basis]{param_null_basis()}} for the measurement.
+rank is fixed once, at construction, from the components; see
+\code{\link[=param_null_basis]{param_null_basis()}}.
 
-The matrix is symmetrized as \code{(m + t(m)) / 2} before the decomposition, so an
-asymmetry of rounding size does not produce complex eigenvalues.
+The matrix is symmetrized as \code{(m + t(m)) / 2} before the decomposition, so
+both triangles of an asymmetry of rounding size enter the eigenvalues.
 }
 \seealso{
 \code{\link[=spectrum_pinv]{spectrum_pinv()}}, which builds the Moore-Penrose inverse from this,

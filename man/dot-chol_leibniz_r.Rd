@@ -19,22 +19,18 @@ keyed as \code{param_tuple_names(s, order)}, identical to \code{\link[=chol_leib
 }
 \description{
 Computes the same components as \code{chol_leibniz_cpp}, through the dense matrix
-products of \code{\link[=leibniz_gram]{leibniz_gram()}}. It exists as the independent reference the tests
-hold that kernel against, so a change to one side that is not a change to both
-shows up as a disagreement. Not called on any production path;
+products of \code{\link[=leibniz_gram]{leibniz_gram()}}. It is the independent reference against which
+the tests check that kernel, so a change to one side that is not made to both
+shows up as a disagreement. It is not called on a production path;
 \code{\link[=chol_leibniz]{chol_leibniz()}} is.
 }
 \details{
-The two routes agree \strong{exactly}: measured at \eqn{p = 5} and order 4, over
-3060 components, the largest absolute difference is 0. That identity is
-licensed rather than hoped for, both routes summing the same Leibniz terms,
-and the compiled one skipping only additions of structural zeros.
+The two routes agree exactly, both summing the same Leibniz terms, with the
+compiled one skipping only additions of structural zeros.
 
 The compiled route is the production one because every derivative of the
 factor is a single-entry matrix, so a Leibniz term is one row, one column or
-one cell where this twin forms a full \eqn{p \times p} product. Measured:
-0.295 s against 8.89 s at \eqn{p = 8} and order 4, a factor of 30, and between
-19x and 35x over \eqn{p} of 3 to 8 and orders 2 and 4.
+one cell, where this twin forms a full \eqn{p \times p} product.
 }
 \seealso{
 \code{\link[=chol_leibniz]{chol_leibniz()}}, the compiled route this mirrors, and

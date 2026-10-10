@@ -9,16 +9,16 @@ check_param_args(dimension)
 \arguments{
 \item{dimension}{The side of the matrix. Must be a single finite number, at
 least 1, equal to its own \code{round()}. \code{0}, \code{2.5}, \code{c(1, 2)}, \code{"3"}, \code{Inf}
-and \code{NA} all throw \verb{'dimension' must be a single positive integer.}}
+and \code{NA} all signal the error \verb{'dimension' must be a single positive integer.}}
 }
 \value{
 \code{dimension}, as a single integer.
 }
 \description{
-Checks the matrix side every matrix family's constructor takes, and returns
-it coerced to integer so the caller can store it in the class's integer
-property. Called by \code{\link[=log_cholesky]{log_cholesky()}}, \code{\link[=matrix_log]{matrix_log()}}, \code{\link[=diagonal_matrix]{diagonal_matrix()}},
-\code{\link[=correlation_matrix]{correlation_matrix()}}, \code{\link[=compound_symmetry]{compound_symmetry()}}, \code{\link[=ar1]{ar1()}}, \code{\link[=autoregressive]{autoregressive()}}
-and \code{\link[=dr_prod]{dr_prod()}}.
+Checks the matrix side that every matrix family's constructor takes, and
+returns it coerced to integer so the caller can store it in the class's
+integer property. Called by \code{\link[=log_cholesky]{log_cholesky()}}, \code{\link[=matrix_log]{matrix_log()}},
+\code{\link[=diagonal_matrix]{diagonal_matrix()}}, \code{\link[=scalar_matrix]{scalar_matrix()}}, \code{\link[=correlation_matrix]{correlation_matrix()}},
+\code{\link[=compound_symmetry]{compound_symmetry()}}, \code{\link[=ar1]{ar1()}}, \code{\link[=autoregressive]{autoregressive()}} and \code{\link[=dr_prod]{dr_prod()}}.
 }
 \keyword{internal}

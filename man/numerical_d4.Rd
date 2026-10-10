@@ -20,9 +20,9 @@ A list of \code{choose(s@n_free + 3, 4)} estimates keyed as
 Estimates the distinct fourth derivatives, one product stencil per index
 tuple, applied directly to \code{\link[=param_value]{param_value()}}. It is the order-four analogue of
 \code{\link[=numerical_d3]{numerical_d3()}} and the method \code{\link[=param_d4]{param_d4()}} dispatches to when a family has
-not written its own. Treat it as a starting point: at this order a difference
-keeps about five digits, which is why every family this package ships carries
-a closed form instead.
+not written its own. At this order a difference is the least accurate of the
+four, which is why every family in this package carries a closed form
+instead.
 }
 \section{The stencil}{
 The tensor product is the one written out under \code{\link[=numerical_d3]{numerical_d3()}}, with the
@@ -35,11 +35,9 @@ one naming four distinct components sixteen.
 Truncation is of order \eqn{h^2} and rounding of order
 \eqn{\varepsilon / h^4}, so balancing the two gives a step of
 \eqn{\varepsilon^{1/6}\max(1, |\eta_k|)}, about \eqn{2.5 \times 10^{-3}} near
-the origin, and an attainable accuracy of order \eqn{\varepsilon^{1/3}}.
-Measured against the closed form of a \eqn{2 \times 2} log-Cholesky
-covariance, the agreement is \eqn{1.2 \times 10^{-4}} absolute on entries of
-size 24, so five digits. That is enough to catch a transcription error in a
-closed form. It is not enough to fit with.
+the origin, and an attainable accuracy of order \eqn{\varepsilon^{1/3}}. That
+is enough to catch a transcription error in a closed form and not enough for
+use in a fit.
 }
 
 \examples{
@@ -47,20 +45,20 @@ closed form. It is not enough to fit with.
 s <- scalar_matrix(2)
 max(abs(numerical_d4(s, 0.3)[[1]] - param_value(s, 0.3)))
 
-# Against a family that writes its own: five digits, as stated.
+# Against a family that writes its own.
 q <- log_cholesky(2)
 eta <- c(0.2, -0.1, 0.4)
 ana <- param_d4(q, eta)
 c(gap = max(abs(unlist(numerical_d4(q, eta)) - unlist(ana))),
   scale = max(abs(unlist(ana))))
 
-# Which is still ample to catch a wrong closed form: a 1 per cent error in
-# one component is four hundred times the noise.
+# A 1 percent error in the largest entry would be about two thousand times
+# the gap above, so a wrong closed form is caught.
 0.01 * max(abs(unlist(ana)))
 
 }
 \seealso{
-\code{\link[=param_d4]{param_d4()}}, the generic this serves, \code{\link[=numerical_d3]{numerical_d3()}} for the order
-below, and \code{\link[=check_parameter]{check_parameter()}}, which uses a stencil of this kind as the
-independent reference for a closed form.
+\code{\link[=param_d4]{param_d4()}}, the generic that this serves, \code{\link[=numerical_d3]{numerical_d3()}} for the
+order below, and \code{\link[=check_parameter]{check_parameter()}}, which uses this stencil as the
+reference for a family that is not a matrix.
 }

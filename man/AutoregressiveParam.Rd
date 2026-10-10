@@ -21,7 +21,7 @@ AutoregressiveParam(
 integer, agreeing with \code{length(free_names)}.}
 
 \item{free_names}{A character vector of length \code{n_free}, one label per free
-value, in the order the free vector holds them. Must be unique.}
+value, in the order in which the free vector holds them. Must be unique.}
 
 \item{param_params}{A list of whatever the family needs in order to evaluate
 itself, read only by that family's own methods.}
@@ -29,15 +29,14 @@ itself, read only by that family's own methods.}
 \item{dimension}{The side \eqn{p} of the matrix: a single integer, no
 smaller than 1. The validator rejects a vector and a value below 1.}
 
-\item{rank}{The rank of the matrix the family produces, a single integer in
+\item{rank}{The rank of the matrix that the family produces, a single integer in
 \code{0:dimension}. It is a property of the family, so a family whose value is
 positive definite at every \eqn{\eta} declares \eqn{p} here.}
 
 \item{null_basis}{A \code{dimension} by \code{dimension - rank} numeric matrix whose
 columns are an orthonormal basis of the common null space. Use
 \code{\link[=param_null_basis]{param_null_basis()}} to obtain one, or \code{matrix(numeric(0), dimension, 0)}
-for a full-rank family. The validator rejects any other shape, and
-reports both the rank and the shape when the two disagree.}
+for a full-rank family. The validator rejects any other shape.}
 }
 \value{
 An object of class \code{AutoregressiveParam}, a subclass of
@@ -51,9 +50,9 @@ stationary autoregression of order \eqn{q}, parametrized by the marginal
 variance and the \eqn{q} partial autocorrelations. \code{\link[=autoregressive]{autoregressive()}} builds
 one.
 
-It is the one family here whose free vector does not grow with the dimension:
-\code{n_free} is \eqn{q + 1} at \eqn{p = 6} and \eqn{q + 1} at \eqn{p = 200}. What
-grows with \eqn{p} is the matrix, not the parametrization.
+The free vector does not grow with the dimension: \code{n_free} is \eqn{q + 1} at
+every \eqn{p}. \code{\link[=ar1]{ar1()}} and \code{\link[=compound_symmetry]{compound_symmetry()}} have the same property, with
+two free values at every dimension.
 }
 \examples{
 # The free vector does not grow with the dimension.
@@ -66,6 +65,6 @@ autoregressive(20, order = 3)@free_names
 }
 \seealso{
 \code{\link[=autoregressive]{autoregressive()}}, the constructor, \code{\link[=ar1]{ar1()}} for the case
-\eqn{q = 1} written out, and \code{\link[=matrix_parameter]{matrix_parameter()}} for the properties this
-inherits.
+\eqn{q = 1} written out, and \code{\link[=matrix_parameter]{matrix_parameter()}} for the properties that
+this class inherits.
 }

@@ -13,19 +13,19 @@ checked by the generic.}
 }
 \value{
 A list of \code{choose(s@n_free + 3, 4)} symmetric matrices keyed as
-\code{param_tuple_names(s, 4)} and in that order, each with a zero diagonal.
+\code{param_tuple_names(s, 4)} and in that order, each with a diagonal that is
+zero up to rounding.
 }
 \description{
 Closed form, the Leibniz rule with four differentiations distributed over the
 two factors of \eqn{R = LL^\top}. This is the order at which a numerical route
-is least usable, keeping about five digits, and the spherical construction
-pays nothing for it: every factor derivative is a product of trigonometric
-tables that \code{\link[=corr_tables]{corr_tables()}} has already built.
+is least accurate, and here every factor derivative is a product of
+trigonometric tables that \code{\link[=corr_tables]{corr_tables()}} has already built.
 
 \code{\link[=corr_dfactor]{corr_dfactor()}}'s vanishing rules do most of the work. A quadruple spanning
 three rows of \eqn{L} contributes nothing at all, since a Leibniz term splits
 the four indices between two factors and each factor must stay within one row.
-The diagonal is exactly zero.
+The diagonal is zero up to rounding.
 }
 \seealso{
 \code{\link[=corr_derivative]{corr_derivative()}}, which assembles it,

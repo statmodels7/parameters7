@@ -21,12 +21,8 @@ A numeric matrix with \code{s@dimension} rows and as many columns as \code{b}.
 Solves blockwise: \eqn{M^{-1} = I_m \otimes S^{-1}}, so the rows of \code{b}
 belonging to each block are handed to the inner parameter's own
 \code{\link[=param_solve]{param_solve()}} in turn. Nothing of side \eqn{md} is factorized, and the
-method inherits whatever the inner parameter does, including a closed inverse
-where it has one.
-
-Measured at \eqn{m = 3} over a 2 x 2 log-Cholesky covariance, the result
-agrees with \code{base::solve()} on the assembled matrix to
-\eqn{3 \times 10^{-17}}.
+method uses the inner parameter's own route, including a closed inverse where
+it has one.
 
 The generic has already rejected a rank-deficient composite, which a deficient
 inner parameter produces, and filled \code{b} with the identity when the caller

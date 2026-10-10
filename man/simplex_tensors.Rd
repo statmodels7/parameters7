@@ -20,8 +20,8 @@ categories of the value and the rest over the free values.
 \description{
 The arrays \eqn{D_1[a, b]} to \eqn{D_4[a, b, c, d, e]} of derivatives of
 \eqn{\pi} in the free values, built by applying the product rule to
-\eqn{\partial_b \pi_a = \pi_a(\delta_{ab} - \pi_b)} as many times as the
-order asks. The first index runs over the \eqn{K} categories of the value,
+\eqn{\partial_b \pi_a = \pi_a(\delta_{ab} - \pi_b)} once for each order up to
+\code{order}. The first index runs over the \eqn{K} categories of the value,
 the rest over the \eqn{K - 1} free values.
 }
 \details{
@@ -30,7 +30,7 @@ cost of the fourth is \eqn{K(K-1)^4} entries and the whole set is built in one
 pass. Nothing is differenced.
 
 Every slice sums to zero over its first index, \eqn{\sum_a \pi_a} being the
-constant 1, which is the identity \code{\link[=check_parameter]{check_parameter()}} tests.
+constant 1, which is the identity that \code{\link[=check_parameter]{check_parameter()}} tests.
 }
 \seealso{
 \code{\link[=simplex_components]{simplex_components()}}, which slices these into the named lists the

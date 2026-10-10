@@ -14,18 +14,19 @@
 \code{NULL}.
 }
 \description{
-The method every \code{\link[=parameter]{parameter()}} inherits when it declares no interpretable
-quantities of its own. It returns \code{NULL}, which is a positive statement and no
-kind of gap: for \code{\link[=log_cholesky]{log_cholesky()}}, \code{\link[=matrix_log]{matrix_log()}}, \code{\link[=correlation_matrix]{correlation_matrix()}} and the
-four compositions the matrix itself is what a reader reads, and a consumer that
-gets \code{NULL} reports the matrix as it already would.
+The method that every \code{\link[=parameter]{parameter()}} inherits when it declares no interpretable
+quantities of its own. It returns \code{NULL}. For \code{\link[=log_cholesky]{log_cholesky()}},
+\code{\link[=matrix_log]{matrix_log()}}, \code{\link[=correlation_matrix]{correlation_matrix()}}, the five composition wrappers and the
+other families without a method of their own, the matrix itself is the
+quantity that a reader reads, and a consumer that receives \code{NULL} reports the
+matrix.
 
-Returning \code{NULL} instead of throwing is what a consumer needs in order to loop
-over every parameter in a model and ask each one, without knowing which kinds
-declare something.
+Because the result is \code{NULL} and not an error, a consumer can call the generic
+on every parameter in a model without knowing which families declare
+something.
 }
 \seealso{
-\code{\link[=param_readable]{param_readable()}} for the contract and the list of families that do
-declare something.
+\code{\link[=param_readable]{param_readable()}} for the structure of the declaration and the list
+of families that declare something.
 }
 \keyword{internal}

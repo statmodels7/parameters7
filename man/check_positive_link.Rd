@@ -11,12 +11,12 @@ check_positive_link(link)
 }
 \value{
 Invisibly \code{TRUE}. An object that is not a \pkg{linkfunctions7} link
-throws \verb{'link' must be a linkfunctions7 link object.}; a link whose lower
-bound is negative, or which is defined on part of the line, throws a
-message quoting the offending bounds.
+signals the error \verb{'link' must be a linkfunctions7 link object.}; a link
+whose lower bound is negative, or which is defined on part of the line,
+signals an error quoting the offending bounds.
 }
 \description{
-Checks the two properties every family taking a link argument needs, and
+Checks the two properties that every family taking a link argument needs, and
 signals an error naming the bounds otherwise: that the link's declared range
 lies in the non-negative half line, and that it is defined on the whole real
 line. Called at construction by \code{\link[=diagonal_matrix]{diagonal_matrix()}}, \code{\link[=scalar_matrix]{scalar_matrix()}},
@@ -25,8 +25,8 @@ line. Called at construction by \code{\link[=diagonal_matrix]{diagonal_matrix()}
 }
 \section{Onto the positive half line}{
 A diagonal entry of a positive definite matrix is positive, so a link onto
-the whole real line would let a caller build a matrix outside the set without
-anything saying so. The test is on the \strong{lower} bound alone, \code{b[1] >= 0}, so
+the whole real line would let a caller build a matrix outside the set
+without an error. The test is on the \strong{lower} bound alone, \code{b[1] >= 0}, so
 a link with a bounded range is accepted: \code{logit_link()}, whose range is
 \eqn{(0, 1)}, produces a positive definite matrix with entries below 1,
 which is a legitimate thing to want.
@@ -37,20 +37,18 @@ The free vector is unconstrained by design, and every family's page states
 that any vector in \eqn{\mathbb{R}^d} gives a valid matrix. A link defined
 on part of the line breaks that: \code{sqrt_link()}, \code{inverse_link()},
 \code{inverse_sq_link()} and \code{power_link()} at a positive exponent all reach the
-positive entries from the positive predictors alone, and
-\code{\link[linkfunctions7:linkinv]{linkfunctions7::linkinv()}} of them is even, so \code{-2} and \code{2} give the same
-entry and the round trip returns \eqn{\lvert \eta \rvert}.
+positive entries from the positive predictors alone. For \code{sqrt_link()},
+\code{\link[linkfunctions7:linkinv]{linkfunctions7::linkinv()}} is even, so \code{-2} and \code{2} give the same entry and
+the round trip returns \eqn{\lvert \eta \rvert}; for \code{inverse_link()} it is
+odd and gives a negative entry at \code{-2}, and for \code{inverse_sq_link()} and
+\code{power_link(2)} it is \code{NaN} there.
 
-Measured before the second test existed, with the default free-value draws:
-\code{autoregressive(5, 1)}, \code{ar1(5)} and \code{compound_symmetry(4)} under a square
-root link died inside \code{\link[=check_parameter]{check_parameter()}} with \verb{missing value where TRUE/FALSE needed}, and \code{diagonal_matrix(3)} and \code{scalar_matrix(3)} with
-\verb{system is computationally singular}, neither message naming the link. Both
-properties are read at construction, which is the only place they can be:
-at evaluation time no free value is inadmissible.
+Both properties are checked at construction, because at evaluation time every
+free value is admissible.
 }
 
 \seealso{
 \code{\link[=diagonal_matrix]{diagonal_matrix()}} for the fullest statement of the two conditions,
-and \code{\link[linkfunctions7:eta_bounds]{linkfunctions7::eta_bounds()}}, which answers the second.
+and \code{\link[linkfunctions7:eta_bounds]{linkfunctions7::eta_bounds()}}, which the second reads.
 }
 \keyword{internal}

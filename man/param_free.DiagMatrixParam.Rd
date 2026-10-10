@@ -17,14 +17,15 @@ A numeric vector of length \code{s@n_free}, named by \code{s@free_names}.
 }
 \description{
 Returns \eqn{g} applied to the diagonal of \code{m}, the link in the forward
-direction, after checking that \code{m} really is in the family's set. Exact, and a
-true inverse of \code{\link[=param_value.DiagMatrixParam]{param_value.DiagMatrixParam()}}, the link being a bijection.
+direction, after checking that \code{m} is in the family's set. Exact, and a true
+inverse of \code{\link[=param_value.DiagMatrixParam]{param_value.DiagMatrixParam()}}, the link being a bijection.
 }
 \details{
-Three rejections, each with its own message. \code{m} must be diagonal, tested as
+Four rejections, each with its own message. \code{m} must be diagonal, tested as
 \code{max(abs(off)) > 1e-10 * max(1, max(abs(d)))} on the off-diagonal part, so an
 asymmetry of rounding size passes and a real off-diagonal entry does not. Its
-diagonal entries must all be positive. And for a \code{\link[=scalar_matrix]{scalar_matrix()}} they must
+diagonal entries must all be positive and inside the open range of the link
+(for \code{logit_link()}, between 0 and 1). And for a \code{\link[=scalar_matrix]{scalar_matrix()}} they must
 all be \strong{equal}, tested by \code{diff(range(d)) > 1e-10 * max(abs(d))}, a diagonal
 that varies not being a scalar multiple of the identity; only the first entry
 is then read.

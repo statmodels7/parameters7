@@ -20,18 +20,18 @@ derivative order.}
 The stencil's value, shaped like \code{f(eta)}.
 }
 \description{
-Differentiates \code{f} once in each component an index tuple names, using a
-central factor per distinct component of the order that component's
-multiplicity asks for. The whole tensor product is summed in one pass, so the
+Differentiates \code{f} once in each component that an index tuple names, using a
+central factor per distinct component, of the order given by that
+component's multiplicity. The whole tensor product is summed in one pass, so the
 result is a single stencil, never a composition of lower-order numerical
 derivatives.
 }
 \details{
 Each factor's nodes and weights come from \code{\link[numericals7:fd_offsets]{numericals7::fd_offsets()}} and
-\code{\link[numericals7:fd_weights]{numericals7::fd_weights()}} at accuracy 2: two points at order one, three at
-order two, five at orders three and four. They are read from there instead of
-being written out here, because a table of stencil coefficients kept in a
-second place is a table that can come to disagree with the first.
+\code{\link[numericals7:fd_weights]{numericals7::fd_weights()}} at accuracy 2: three nodes at orders one and two
+and five at orders three and four, of which two, three, four and five carry a
+non-zero weight. They are read from there instead of being written out here,
+so that the two tables cannot disagree.
 
 The step for each factor is \code{\link[=fd_step]{fd_step()}} at that component's value and at the
 \strong{total} order of the tuple, so all factors of one component share a step and

@@ -18,14 +18,14 @@ A numeric vector of length 2, named by \code{s@free_names}.
 Returns the two free values behind a compound-symmetric matrix. The variance
 is the common diagonal entry and the correlation is the common off-diagonal
 entry divided by it, both read exactly and then carried onto the free scale by
-the two links. The round trip closes to \eqn{3 \times 10^{-16}}.
+the two links. The round trip closes up to rounding.
 }
 \details{
 A matrix whose diagonal is not constant, or whose off-diagonal entries are not
 all equal, is \strong{rejected} with a message naming which, and is never averaged
-into the nearest compound-symmetric matrix. A silent projection would hide the
-caller's mistake, and a caller who wants the nearest such matrix can average
-the entries and invert that.
+into the nearest compound-symmetric matrix, because a silent projection would
+hide a mistake in the caller's matrix. A caller who wants the nearest such
+matrix computes it separately and passes the result in.
 }
 \seealso{
 \code{\link[=param_value.CompoundSymmetryParam]{param_value.CompoundSymmetryParam()}}, the map this inverts.

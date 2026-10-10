@@ -11,7 +11,7 @@ param_d2logdet(s, eta, ...)
 
 \item{eta}{A numeric vector of length \code{s@n_free}, finite in every entry.}
 
-\item{...}{Passed to the method. No method in this package reads it.}
+\item{...}{Passed to the method. The methods in this package do not read it.}
 }
 \value{
 A named numeric vector of \code{choose(s@n_free + 1, 2)} entries, keyed as
@@ -35,12 +35,11 @@ once more, with \eqn{\partial_l M^{-1} = -M^{-1}(\partial_l M)M^{-1}},
 and with the Moore-Penrose inverse in place of \eqn{M^{-1}} when the family
 is rank deficient.
 
-The second trace is the term a hand-written closed form usually drops. Without
-it the answer would be the trace of the second derivative of the matrix, which
-is a different quantity, and dropping it is invisible on any family whose
-log-determinant happens to be linear. \code{\link[=check_parameter]{check_parameter()}} compares this route
-against \code{\link[=param_d2]{param_d2()}} on every family it is given, and the example below runs
-the same comparison in five lines.
+Without the second trace the result would be the trace of the second
+derivative of the matrix, which is a different quantity and is not zero even
+for \code{\link[=log_cholesky]{log_cholesky()}}, whose log-determinant is linear. \code{\link[=check_parameter]{check_parameter()}}
+compares this method with one central difference of \code{\link[=param_dlogdet]{param_dlogdet()}}, and
+the example below compares it with the two traces.
 }
 
 \section{Notation}{
@@ -70,7 +69,7 @@ vapply(seq_along(idx), function(i) sum(diag(Minv \%*\% d2[[i]])), numeric(1))
 param_d2logdet(s, eta)
 
 # For log_cholesky the log-determinant is linear in eta, so every second
-# derivative is exactly zero and the check above could not see a mistake.
+# derivative is exactly zero.
 max(abs(param_d2logdet(log_cholesky(3), rep(0.2, 6))))
 
 }

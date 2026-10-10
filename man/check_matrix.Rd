@@ -10,8 +10,9 @@ check_matrix(s, m, tol = 1e-08)
 \item{s}{A \code{\link[=parameter]{parameter()}} object, whose \code{dimension} is read.}
 
 \item{m}{The matrix supplied by the caller. A non-matrix or non-numeric \code{m}
-throws, as does a wrong shape (with a message naming the dimension
-required), an \code{NA} anywhere, and an asymmetry above \code{tol}.}
+is rejected, as is a wrong shape (with a message naming the dimension
+required), an \code{NA} or an infinite entry anywhere, and an asymmetry above
+\code{tol}.}
 
 \item{tol}{The relative tolerance for the symmetry check, a single positive
 number. Defaults to \code{1e-8}, loose enough to accept a matrix assembled from
@@ -23,14 +24,15 @@ that is genuinely not symmetric.}
 }
 \description{
 Checks that \code{m} is a square symmetric numeric matrix of the parameter's
-dimension, and returns it symmetrized. Called by every \code{\link[=param_free]{param_free()}} method
-on the matrix the caller is asking to invert.
+dimension, and returns it symmetrized. Called before dispatch in the body
+of the \code{\link[=param_free]{param_free()}} generic, on the matrix to be inverted, whenever the
+parameter inherits from \code{\link[=matrix_parameter]{matrix_parameter()}}.
 }
 \details{
 The symmetry check is relative: \code{m} is rejected when
 \eqn{\max_{ij} |m_{ij} - m_{ji}|} exceeds \code{tol * max(1, max(abs(m)))}. At the
-default a discrepancy of \eqn{10^{-4}} throws and one of \eqn{10^{-12}}
-passes. The return value is \code{(m + t(m)) / 2}, so an asymmetry small enough to
+default, for a matrix whose largest entry is at most 1, a discrepancy of
+\eqn{10^{-4}} is rejected and one of \eqn{10^{-12}} passes. The return value is \code{(m + t(m)) / 2}, so an asymmetry small enough to
 be rounding is averaged away instead of being carried into the inverse map.
 }
 \keyword{internal}

@@ -11,7 +11,7 @@ param_d3logdet(s, eta, ...)
 
 \item{eta}{A numeric vector of length \code{s@n_free}, finite in every entry.}
 
-\item{...}{Passed to the method. No method in this package reads it.}
+\item{...}{Passed to the method. The methods in this package do not read it.}
 }
 \value{
 A named numeric vector of \code{choose(s@n_free + 2, 3)} entries, keyed as
@@ -36,12 +36,11 @@ block of a partition of the index set, with the sign and the multiplicity the
 two rules produce. The Moore-Penrose inverse replaces \eqn{M^{-1}} for a
 rank-deficient family.
 
-The expansion is not transcribed anywhere. The methods differentiate the
-derivative arrays \code{\link[=param_d1]{param_d1()}} through \code{\link[=param_d4]{param_d4()}} instead, and
-\code{\link[=check_parameter]{check_parameter()}} holds the result against a numerical differentiation of
-the order below, which shares none of its arithmetic. A twenty-term expansion
-written out by hand is exactly the kind of thing that is wrong and looks
-right.
+The expansion is not written out in the package. Each family in this package
+computes this order without differencing, and the base method on
+\code{\link[=matrix_parameter]{matrix_parameter()}} takes one central difference of \code{\link[=param_d2logdet]{param_d2logdet()}}. A
+written-out expansion has one term per set partition of the indices, five at
+third order, and a transcription of it is easy to get wrong.
 }
 
 \section{Notation}{
@@ -57,8 +56,7 @@ of length \eqn{d = } \code{s@n_free}. \eqn{\partial_I M} is the derivative of
 s <- ar1(4)
 param_d3logdet(s, c(0.3, 0.8))
 
-# A central difference of the order below agrees, and shares no arithmetic
-# with the route the method takes.
+# A central difference of the order below agrees.
 h <- 1e-4
 e <- c(0, h)
 fd <- (param_d2logdet(s, c(0.3, 0.8) + e) -

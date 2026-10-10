@@ -27,12 +27,12 @@ are one call each to this function.
 }
 \details{
 The rows are parametrized independently, so \code{\link[=simplex_tensors]{simplex_tensors()}} is evaluated
-once per row and \code{\link[=simplex_components]{simplex_components()}} slices it with a \code{wrap} that does the
-embedding. Nothing of size \eqn{K^2 (K(K-1))^{\text{order}}} is built: the
-cross-row components are never computed, only skipped.
+once per row, and each slice of a row's tensor is embedded in that row of a
+\eqn{K \times K} matrix of zeros. The cross-row components are not computed;
+each is returned as a matrix of zeros.
 }
 \seealso{
-\code{\link[=simplex_tensors]{simplex_tensors()}} and \code{\link[=simplex_components]{simplex_components()}}, which do the per-row
-work, and \code{\link[=tm_positions]{tm_positions()}} for the row map.
+\code{\link[=simplex_tensors]{simplex_tensors()}}, which does the per-row work, and
+\code{\link[=tm_positions]{tm_positions()}} for the row map.
 }
 \keyword{internal}

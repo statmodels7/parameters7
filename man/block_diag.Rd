@@ -10,8 +10,8 @@ block_diag(...)
 \item{...}{One or more objects inheriting from \code{\link[=matrix_parameter]{matrix_parameter()}}, or a
 single list of them. Named arguments supply the block labels, which must be
 unique. A block that is not a \code{matrix_parameter} is rejected by position, so
-\code{block_diag(ar1(3), simplex(3))} reports that block 2 does not inherit from
-it.}
+the error of \code{block_diag(ar1(3), simplex(3))} states that block 2 does not
+inherit from it.}
 }
 \value{
 An object of class \code{\link[=BlockDiagParam]{BlockDiagParam()}}, with \code{dimension}, \code{n_free} and
@@ -28,7 +28,7 @@ It is the covariance (or precision) of several independent groups of
 coefficients whose structures differ, as a model carrying more than one
 random-effect term has.
 }
-\section{Nothing is rederived, and the reason}{
+\section{Derivatives, log-determinant and rank}{
 The free values of one block do not enter another, so
 
 \deqn{\partial_k M = \mathrm{diag}(0, \ldots, \partial_k S_b, \ldots, 0),
@@ -37,30 +37,29 @@ The free values of one block do not enter another, so
 
 and a derivative whose indices do not all belong to one block is
 \strong{identically zero}, at every order and for the log-determinant as well as
-for the value. Measured on \code{block_diag(log_cholesky(2), ar1(3))}, whose five
-free values split 3 and 2: 6 of the 15 second-order components are
-cross-block, 21 of 35 at third order and 50 of 70 at fourth, and every one of
-them is exactly 0. What is left is fetched from the block and placed in the
+for the value. For \code{block_diag(log_cholesky(2), ar1(3))}, whose five free
+values split 3 and 2, 6 of the 15 second-order components are cross-block,
+21 of 35 at third order and 50 of 70 at fourth, and every one of them is
+exactly 0. What is left is fetched from the block and placed in the
 rows and columns that block occupies.
 
 The rank is the sum of the blocks' ranks and the null basis is their block
-diagonal, both read from the components and never from an assembled matrix,
-which is the rule this package follows everywhere: a rank is a property of the
-family, and counting eigenvalues of the assembled matrix would make it a
-property of the arithmetic. A deficient block is therefore admitted, and the
-composite reports the deficiency: with a rank-one \eqn{P} of side 2,
+diagonal, both taken from the blocks and not from the eigenvalues of the
+assembled matrix, because the rank is a property of the family and an
+eigenvalue count would depend on the free vector. A deficient block is
+therefore admitted, and the composite reports the deficiency: with a rank-one \eqn{P} of side 2,
 \code{block_diag(scaled_matrix(P), ar1(3))} has rank 4 of 5 and a null basis of one
 column, \code{param_logdet()} returns the log pseudo-determinant, and
-\code{param_solve()} is refused by the generic.
+\code{param_solve()} is rejected by the generic.
 }
 
 \section{Against kron_identity()}{
 \code{\link[=kron_identity]{kron_identity()}} repeats \strong{one} block \eqn{m} times and they share a single
 free vector, so its \code{n_free} does not grow with \eqn{m}. Here the blocks are
 different objects and their free vectors are concatenated, so the composite has
-\eqn{\sum_b d_b} free values. Use this one where the groups have different
-structures, and that one where they have the same structure and the same
-parameters.
+\eqn{\sum_b d_b} free values. This composition suits groups with different
+structures, and \code{\link[=kron_identity]{kron_identity()}} suits groups with the same structure and
+the same parameters.
 }
 
 \section{Labels}{
@@ -110,6 +109,6 @@ max(abs(param_free(s, M) - eta))
 }
 \seealso{
 \code{\link[=kron_identity]{kron_identity()}} for identical blocks, \code{\link[=dr_prod]{dr_prod()}} and
-\code{\link[=sum_struct]{sum_struct()}} for the other two compositions, and \code{\link[=matrix_parameter]{matrix_parameter()}} for
-the contract every block meets.
+\code{\link[=sum_struct]{sum_struct()}} for two other compositions, and \code{\link[=matrix_parameter]{matrix_parameter()}} for the
+class from which every block inherits.
 }

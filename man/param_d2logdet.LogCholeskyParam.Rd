@@ -21,11 +21,10 @@ the free vector, so its second derivative vanishes at every \eqn{\eta}. The
 zeros are exact, so a consumer can drop the term entirely instead of
 carrying small numbers through a contraction.
 
-This is worth knowing when checking another family: a comparison of a
-log-determinant Hessian against a numerical reference can pass on
-\code{log_cholesky()} while a term is missing, both sides being zero. \code{\link[=ar1]{ar1()}} and
-\code{\link[=compound_symmetry]{compound_symmetry()}} are the families where this order has something to get
-wrong.
+A comparison of a general log-determinant Hessian against a numerical
+reference therefore compares two zeros on \code{log_cholesky()}. \code{\link[=ar1]{ar1()}},
+\code{\link[=compound_symmetry]{compound_symmetry()}} and \code{\link[=correlation_matrix]{correlation_matrix()}} are families where this
+order is not zero.
 }
 \seealso{
 \code{\link[=param_dlogdet.LogCholeskyParam]{param_dlogdet.LogCholeskyParam()}} for the order below, and

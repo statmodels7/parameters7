@@ -8,7 +8,8 @@ matrix_log(dimension)
 }
 \arguments{
 \item{dimension}{The side \eqn{p} of the matrix. A single positive whole
-number, finite and at least 1; anything else throws \verb{'dimension' must be a single positive integer.}}
+number, finite and at least 1; any other value signals the error
+\verb{'dimension' must be a single positive integer.}}
 }
 \value{
 An object of class \code{\link[=MatrixLogParam]{MatrixLogParam()}}, with \code{n_free} equal to
@@ -23,20 +24,22 @@ positive definite matrix: \eqn{M = \exp(S)} with \eqn{S} symmetric and
 triangle of \eqn{S} directly, the diagonal first and then below the diagonal
 column by column, and the exponential does the rest. Any vector in
 \eqn{\mathbb{R}^{p(p+1)/2}} gives a positive definite matrix, the exponential
-of a symmetric matrix having positive eigenvalues.
+of a symmetric matrix having positive eigenvalues, as long as no eigenvalue
+of \eqn{S} exceeds about 709.78, above which the exponential overflows in
+double precision.
 
 It parametrizes the same cone as \code{\link[=log_cholesky]{log_cholesky()}} with the same number of free
-values. Which to reach for depends on which quantities you want free; see
-\strong{Details}.
+values. The choice between the two depends on which quantities should have a
+closed form; see \strong{Details}.
 }
-\section{Two quantities cost nothing}{
+\section{The log-determinant and the inverse}{
 \deqn{\log|M| = \mathrm{tr}(S) = \sum_{i=1}^{p} \eta_i,}
 
 the sum of the diagonal free values, so the log-determinant is linear and its
 second, third and fourth derivatives are exactly zero. And the inverse is
 \eqn{M^{-1} = \exp(-S)}, evaluated through the same eigendecomposition, with
-no factorization: measured, \code{param_solve(s, eta)} and
-\code{param_value(s, -eta)} agree to \eqn{2 \times 10^{-15}}.
+no factorization, so \code{param_solve(s, eta)} and \code{param_value(s, -eta)} agree
+up to rounding.
 }
 
 \section{The derivatives, and the reason for the Opitz route}{
@@ -48,34 +51,23 @@ eigenvalues, summed over the orderings of the directions.
 
 The divided differences come from the Opitz theorem, the exponential of a
 small upper bidiagonal matrix read off its corner, in place of the recursive
-quotient, which cancels catastrophically under near-repeated eigenvalues.
-Measured at eigenvalues \eqn{0.5} and \eqn{0.5 + g}, against the exact limit
-\eqn{1.648721270700127} at \eqn{g = 0}:\tabular{lll}{
-   gap \eqn{g} \tab Opitz \tab quotient \cr
-   \eqn{10^{-3}} \tab 1.649545906191066 \tab 1.649545906190929 \cr
-   \eqn{10^{-6}} \tab 1.648722095061039 \tab 1.648722095023754 \cr
-   \eqn{10^{-9}} \tab 1.648721271524488 \tab 1.648721206226264 \cr
-}
-
-
-At a gap of \eqn{10^{-9}} the quotient has lost eight digits and the Opitz
-value has lost one. Repeated eigenvalues are not a pathology here: a
-\code{\link[=scalar_matrix]{scalar_matrix()}}-like \eqn{S}, or any \eqn{S} with a symmetry, has them
-exactly.
+quotient, which cancels catastrophically when two eigenvalues nearly
+coincide. The Opitz value stays accurate to rounding there. Repeated
+eigenvalues occur in ordinary use: an \eqn{S} proportional to the identity,
+or any \eqn{S} with a symmetry, has them exactly.
 }
 
 \section{Choosing between the two unstructured charts}{
-\code{\link[=log_cholesky]{log_cholesky()}}'s derivatives are sparse products of single-entry matrices,
-and they are far cheaper: measured at \eqn{p = 4}, one fourth-order derivative
-array costs \strong{3.4 s} here against \strong{0.003 s} there, a factor of a thousand,
-the contraction summing over \eqn{4! = 24} orderings per component at
-\eqn{p^4} entries each.
+The derivatives of \code{\link[=log_cholesky]{log_cholesky()}} are sparse products of single-entry
+matrices and are far cheaper. Here a fourth-order component sums over up to
+\eqn{4! = 24} orderings of its directions, each a contraction of
+\eqn{O(p^5)} operations.
 
-What this chart buys is the other end. Its log-determinant is linear and its
-inverse is a sign flip, where \code{\link[=log_cholesky]{log_cholesky()}}'s inverse is a triangular solve.
-Reach for it when the covariance and the precision are both wanted at once, or
-when the free values themselves should be an unconstrained symmetric matrix;
-reach for \code{\link[=log_cholesky]{log_cholesky()}} when derivatives are taken in a loop.
+This chart has a linear log-determinant and an inverse that is the map at
+\eqn{-\eta}, while the inverse of \code{\link[=log_cholesky]{log_cholesky()}} needs a triangular solve.
+It suits a model that needs the covariance and the precision together, or
+one whose free values should form an unconstrained symmetric matrix.
+\code{\link[=log_cholesky]{log_cholesky()}} suits a model that takes derivatives repeatedly.
 }
 
 \section{Notation}{
@@ -108,7 +100,7 @@ c(second = max(abs(param_d2logdet(s, eta))),
   third = max(abs(param_d3logdet(s, eta))),
   fourth = max(abs(param_d4logdet(s, eta))))
 
-# The inverse is the map at -eta: a sign flip, not a factorization.
+# The inverse is the map at -eta, computed with no factorization.
 max(abs(param_solve(s, eta) - param_value(s, -eta)))
 max(abs(param_solve(s, eta) - solve(M)))
 

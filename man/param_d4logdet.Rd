@@ -11,7 +11,7 @@ param_d4logdet(s, eta, ...)
 
 \item{eta}{A numeric vector of length \code{s@n_free}, finite in every entry.}
 
-\item{...}{Passed to the method. No method in this package reads it.}
+\item{...}{Passed to the method. The methods in this package do not read it.}
 }
 \value{
 A named numeric vector of \code{choose(s@n_free + 3, 4)} entries, keyed as
@@ -19,9 +19,9 @@ A named numeric vector of \code{choose(s@n_free + 3, 4)} entries, keyed as
 }
 \description{
 Returns the distinct fourth derivatives of the log-determinant, or of the log
-pseudo-determinant, keyed as \code{param_tuple_names(s, 4)}. This is the top of
-the contract: the exact Hessian of a marginal criterion reaches it, and
-nothing in the toolkit asks for a fifth.
+pseudo-determinant, keyed as \code{param_tuple_names(s, 4)}. This is the highest
+order that the package provides, and the exact Hessian of a marginal
+criterion reaches it.
 }
 \section{Where it comes from}{
 The same two rules as at third order. The trace is linear, and
@@ -31,19 +31,19 @@ The same two rules as at third order. The trace is linear, and
 so every term is a trace of an alternating product
 \eqn{M^{-1}(\partial_{I_1}M)M^{-1}(\partial_{I_2}M)\cdots}, one factor per
 block of a partition of the four indices. The number of terms grows with the
-number of partitions, which is why the expansion is differentiated rather
-than written out: the methods differentiate \code{\link[=param_d1]{param_d1()}} through
-\code{\link[=param_d4]{param_d4()}}, and \code{\link[=check_parameter]{check_parameter()}} compares the result with a numerical
-differentiation of \code{\link[=param_d3logdet]{param_d3logdet()}}.
+number of partitions, so the expansion is not written out: each family in
+this package computes this order without differencing, and the base method on
+\code{\link[=matrix_parameter]{matrix_parameter()}} takes one central difference of \code{\link[=param_d3logdet]{param_d3logdet()}}.
 }
 
-\section{Accuracy of the check}{
-The reference is one stencil on the analytic third order, so the comparison
-is limited by that stencil rather than by the closed form. A family whose
-log-determinant is linear in \eqn{\eta}, which includes \code{\link[=log_cholesky]{log_cholesky()}} and
-\code{\link[=matrix_log]{matrix_log()}}, returns exact zeros here, and a check against them cannot
-catch a mistake; \code{\link[=ar1]{ar1()}} and \code{\link[=compound_symmetry]{compound_symmetry()}} are the families where
-this order has something to get wrong.
+\section{Checking this order}{
+One central difference of \code{\link[=param_d3logdet]{param_d3logdet()}}, as in the example below, is a
+reference for this order, and the comparison is limited by that stencil
+rather than by the closed form. \code{\link[=check_parameter]{check_parameter()}} does not run this
+comparison. A family whose log-determinant is linear in \eqn{\eta}, which
+includes \code{\link[=log_cholesky]{log_cholesky()}} and \code{\link[=matrix_log]{matrix_log()}}, returns exact zeros here;
+\code{\link[=ar1]{ar1()}}, \code{\link[=compound_symmetry]{compound_symmetry()}}, \code{\link[=correlation_matrix]{correlation_matrix()}} and \code{\link[=autoregressive]{autoregressive()}}
+are among the families where this order is not zero.
 }
 
 \section{Notation}{

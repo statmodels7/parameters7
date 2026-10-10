@@ -31,12 +31,13 @@ several weights at once, never a univariate composition. The product over the gr
 partitions is the grid the loop walks; the partitions come from
 \code{\link[numericals7:set_partitions]{numericals7::set_partitions()}}, the one enumeration the toolkit keeps.
 
-It is the dearest quantity this family computes: at side 6 and \eqn{K = 5} the
-fourth order costs 0.013 s against 0.0007 s for the value's own fourth
-derivatives, the expansion evaluating a chain of matrix products per ordering.
-Against one stencil on the analytic order below, the four orders agree to
-\eqn{7 \times 10^{-11}}, \eqn{1 \times 10^{-11}}, \eqn{3 \times 10^{-12}} and
-\eqn{3 \times 10^{-13}}.
+Where the family is rank deficient, the derivatives are those of the log
+pseudo-determinant: the inverse in the expansion is replaced by
+\eqn{(M + ZZ^\top)^{-1} - ZZ^\top}, with \eqn{Z} the orthonormal basis of the
+declared null space, which does not move with the free vector.
+
+It is the most expensive quantity of this family, the expansion evaluating a
+chain of matrix products for each ordering.
 }
 \seealso{
 \code{\link[=sum_struct_trace_term]{sum_struct_trace_term()}} for the inner expansion, and

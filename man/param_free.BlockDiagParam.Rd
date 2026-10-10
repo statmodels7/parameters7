@@ -14,18 +14,16 @@ generic.}
 }
 \value{
 A numeric vector of length \code{s@n_free}, the blocks' free vectors
-concatenated.
+concatenated, named by \code{s@free_names}.
 }
 \description{
 Inverts each diagonal block through its own parameter and concatenates the
-results, so the composite is exact wherever its blocks are: measured on
-\code{block_diag(log_cholesky(2), ar1(3))}, the round trip closes to
-\eqn{7 \times 10^{-17}}.
+results, so the composite is as exact as its blocks are.
 }
 \details{
 A matrix whose off-diagonal blocks are not zero is rejected with
 \verb{'m' is not block diagonal in the blocks of this parameter.}, that being a
-matrix this family cannot represent; the tolerance is \eqn{10^{-8}} relative
+matrix that this family cannot represent; the tolerance is \eqn{10^{-8}} relative
 to \code{max(1, max(abs(m)))}. The blocks are inverted first, so a diagonal block
 that is outside its own family is reported by that family's message, which is
 the more specific of the two.

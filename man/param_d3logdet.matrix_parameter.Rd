@@ -16,7 +16,7 @@ A numeric vector of \code{choose(s@n_free + 2, 3)} entries, keyed as
 \code{param_tuple_names(s, 3)} and in that order.
 }
 \description{
-The method every \code{\link[=matrix_parameter]{matrix_parameter()}} inherits when it registers no
+The method that every \code{\link[=matrix_parameter]{matrix_parameter()}} inherits when it registers no
 \code{\link[=param_d3logdet]{param_d3logdet()}} of its own. For the tuple \eqn{(k, l, m)} it takes the
 \eqn{(k, l)} component of \code{\link[=param_d2logdet]{param_d2logdet()}} and applies one three-point
 central difference in the remaining component,
@@ -31,20 +31,15 @@ looked up by matching sorted indices against
 \code{\link[=param_tuple_indices]{param_tuple_indices()}}'s order-2 list. It costs two evaluations of the whole
 second-order block per tuple.
 }
-\section{How accurate it is depends on the family, not on this method}{
+\section{Accuracy}{
 \code{\link[=param_d2logdet]{param_d2logdet()}} is an exact identity \strong{given} the matrix derivative
 arrays, so differencing it is a single numerical layer whenever
-\code{\link[=param_d1]{param_d1()}} and \code{\link[=param_d2]{param_d2()}} are analytic. Measured on a \eqn{4 \times 4}
-AR(1) covariance with analytic arrays, the answer agrees with the closed form
-to \eqn{3 \times 10^{-10}} on entries of size 4.5.
+\code{\link[=param_d1]{param_d1()}} and \code{\link[=param_d2]{param_d2()}} are analytic.
 
-Where the arrays are themselves numerical the layers would compound, and
-the method refuses instead of answering: the same measurement gives
-\eqn{8 \times 10^{-3}}, a relative error near two parts in a thousand, and
-nothing downstream could tell that number from the accurate one.
-\code{\link[=check_analytic_arrays]{check_analytic_arrays()}} is the guard, and a family that needs this order
-should write \code{\link[=param_d1]{param_d1()}} and \code{\link[=param_d2]{param_d2()}} out, which recovers the
-\eqn{10^{-10}}.
+Where the arrays are themselves numerical the layers would compound, and the
+method signals an error instead of returning a value; \code{\link[=check_analytic_arrays]{check_analytic_arrays()}}
+is the guard. A family that needs this order writes \code{\link[=param_d1]{param_d1()}} and
+\code{\link[=param_d2]{param_d2()}} out.
 }
 
 \seealso{

@@ -9,7 +9,7 @@ NULL
 #' log-ratio parametrization. It inherits [parameter()] **directly**, never
 #' [matrix_parameter()], its value being a vector: there is no `dimension`, no
 #' `rank` and no `null_basis`, and [param_logdet()], [param_solve()]
-#' and [param_factor()] have no method for it, so asking for the
+#' and [param_factor()] have no method for it, so a call for the
 #' log-determinant of a probability vector fails at dispatch.
 #'
 #' [simplex()] builds one. The four derivative orders are all closed form.
@@ -22,8 +22,8 @@ NULL
 #'   `n_cat`.
 #'
 #' @seealso [simplex()], the constructor, [transition_matrix()], which is one of
-#'   these per row, and [parameter()] for the properties this inherits and the
-#'   four generics it does not get.
+#'   these per row, [parameter()] for the properties that this class inherits,
+#'   and [matrix_parameter()] for the generics that it does not get.
 #'
 #' @examples
 #' # A probability vector is not a matrix, so it inherits parameter() alone.
@@ -34,7 +34,7 @@ NULL
 #' # K - 1 free values for K categories.
 #' vapply(2:5, function(k) simplex(k)@n_free, integer(1))
 #'
-#' # And no log-determinant to ask for.
+#' # And no log-determinant.
 #' try(param_logdet(s, c(0, 0)))
 #'
 #' @export
@@ -51,10 +51,10 @@ SimplexParam <- S7::new_class("SimplexParam", parent = parameter)
 #' \deqn{\pi_a = \frac{e^{\eta_a}}{1 + \sum_b e^{\eta_b}}, \qquad
 #'       \pi_K = \frac{1}{1 + \sum_b e^{\eta_b}}.}
 #'
-#' Every free vector gives positive entries summing to exactly 1, so a mixture
-#' weight, a categorical probability or a latent-state distribution can be
-#' estimated without a constraint. This is the first family here whose value is
-#' **not a matrix**; see [SimplexParam()] for what that costs.
+#' Every free vector gives non-negative entries that sum to 1 up to rounding, so
+#' a mixture weight, a categorical probability or a latent-state distribution
+#' can be estimated without a constraint. The value is **not a matrix**; see
+#' [SimplexParam()] for the consequences.
 #'
 #' @details
 #' # The derivatives close over the value
@@ -66,33 +66,32 @@ SimplexParam <- S7::new_class("SimplexParam", parent = parameter)
 #'
 #' \deqn{\partial_b \pi_a = \pi_a(\delta_{ab} - \pi_b).}
 #'
-#' At first order that is the covariance matrix of a categorical indicator, which
-#' is why the tensors are the same objects a multinomial score already carries.
-#' All four orders are closed form and no stencil is used.
+#' At first order that is the covariance matrix of a categorical indicator, the
+#' same array that appears in the score of a multinomial model. All four orders
+#' are closed form and no stencil is used.
 #'
-#' # An identity worth checking against
+#' # The derivatives sum to zero
 #'
 #' \eqn{\sum_a \pi_a = 1} at every \eqn{\eta}, so differentiating it gives
 #' \eqn{\sum_a \partial \pi_a = 0}, and the same at every higher order. Every
-#' derivative component therefore sums to zero over the value index. Measured
-#' over all four orders the worst sum is \eqn{1.7 \times 10^{-17}}, and
-#' [check_parameter()] runs exactly this check: a derivative array that does not
-#' sum to zero is wrong whatever else it agrees with.
+#' derivative component therefore sums to zero over the value index, up to
+#' rounding, and [check_parameter()] tests this identity: a derivative array
+#' that fails it is wrong, whatever other check it passes.
 #'
 #' # Large free values saturate instead of overflowing
 #'
 #' [simplex_point()] applies the log-sum-exp shift, so a free value of 800 gives
-#' \eqn{\pi_1 = 1} and \eqn{\pi_K = 0} with the vector still summing to exactly 1,
-#' where the naive expression would divide `Inf` by `Inf`. Note that the value
-#' then sits on the **boundary** of the simplex, so [param_free()] cannot invert
-#' it: \eqn{\log(0)} is not finite.
+#' \eqn{\pi_1 = 1} and \eqn{\pi_K = 0} with the vector summing to exactly 1,
+#' where the naive expression would divide `Inf` by `Inf`. The value then lies
+#' on the **boundary** of the simplex, so [param_free()] cannot invert it:
+#' \eqn{\log(0)} is not finite.
 #'
 #' # Why not stick-breaking
 #'
 #' The other common chart chains through \eqn{K - 1} nested logistic maps, so its
 #' derivatives compose that many times and are not symmetric in the categories.
-#' The additive log-ratio's close over \eqn{\pi} in one rule, and every category
-#' but the reference enters the same way.
+#' The derivatives of the additive log-ratio close over \eqn{\pi} in one rule,
+#' and every category but the reference enters the same way.
 #'
 #' @section Notation:
 #' \eqn{K} is the number of categories, \eqn{\eta \in \mathbb{R}^{K-1}} the free
@@ -100,8 +99,8 @@ SimplexParam <- S7::new_class("SimplexParam", parent = parameter)
 #' delta. The reference category is the last, \eqn{K}.
 #'
 #' @param n_cat The number of categories \eqn{K}, **at least 2**. A single
-#'   integer; `1`, a fraction, `NA` and a vector all throw `'n_cat' must be a
-#'   single integer of at least 2.` A one-category simplex is the constant 1 and
+#'   integer; `1`, a fraction, `NA` and a vector all signal the error `'n_cat'
+#'   must be a single integer of at least 2.` A one-category simplex is the constant 1 and
 #'   has nothing to estimate.
 #'
 #' @return An object of class [SimplexParam()], with `n_free` equal to
@@ -116,8 +115,8 @@ SimplexParam <- S7::new_class("SimplexParam", parent = parameter)
 #'
 #' @seealso [transition_matrix()], which is one of these per row,
 #'   [param_value()] and [param_free()] for the map and its inverse, and
-#'   [check_parameter()], whose seven-check battery is what a non-matrix family
-#'   gets.
+#'   [check_parameter()], whose battery for a family that is not a matrix runs
+#'   here.
 #'
 #' @examples
 #' # Four categories, three free values.
@@ -132,7 +131,7 @@ SimplexParam <- S7::new_class("SimplexParam", parent = parameter)
 #' all.equal(unname(pi),
 #'           c(exp(eta), 1) / (1 + sum(exp(eta))))
 #'
-#' # The round trip closes exactly.
+#' # The round trip closes up to rounding.
 #' max(abs(param_free(s, pi) - eta))
 #'
 #' # The first derivative is the covariance of a categorical indicator.
@@ -178,11 +177,11 @@ simplex <- function(n_cat) {
 #'
 #' @details
 #' The naive expression \eqn{e^{\eta_a}/(1 + \sum_b e^{\eta_b})} is `Inf/Inf` from
-#' about \eqn{\eta = 710}. With the shift, a free value of 800 returns
-#' \eqn{\pi_1 = 1} and \eqn{\pi_K = 0} with the vector summing to exactly 1, and
-#' at 500 it returns \eqn{\pi_K = 7 \times 10^{-218}}, still representable. The
-#' value is then on the boundary of the simplex, which [param_free()] cannot
-#' invert.
+#' about \eqn{\eta = 710}. With the shift, a free value of 500 returns
+#' \eqn{\pi_K = 7 \times 10^{-218}}, still representable, and a free value of
+#' 800 returns \eqn{\pi_1 = 1} and \eqn{\pi_K = 0} with the vector summing to
+#' exactly 1. That value is on the boundary of the simplex, which
+#' [param_free()] cannot invert.
 #'
 #' @param eta A numeric vector of length \eqn{K - 1}. Not checked; the callers
 #'   have been through the generic.
@@ -191,8 +190,8 @@ simplex <- function(n_cat) {
 #'   1, and no names. The names `p1` ... `pK` are applied by
 #'   [param_value.SimplexParam()].
 #'
-#' @seealso [param_value.SimplexParam()] and
-#'   [param_value.TransitionMatrixParam()], the two callers, and
+#' @seealso [param_value.SimplexParam()], [param_value.TransitionMatrixParam()]
+#'   and the derivative methods of both families, which call it, and
 #'   [simplex_tensors()] for the derivatives of the same map.
 #'
 #' @keywords internal
@@ -209,8 +208,8 @@ simplex_point <- function(eta) {
 #' @description
 #' The arrays \eqn{D_1[a, b]} to \eqn{D_4[a, b, c, d, e]} of derivatives of
 #' \eqn{\pi} in the free values, built by applying the product rule to
-#' \eqn{\partial_b \pi_a = \pi_a(\delta_{ab} - \pi_b)} as many times as the
-#' order asks. The first index runs over the \eqn{K} categories of the value,
+#' \eqn{\partial_b \pi_a = \pi_a(\delta_{ab} - \pi_b)} once for each order up to
+#' `order`. The first index runs over the \eqn{K} categories of the value,
 #' the rest over the \eqn{K - 1} free values.
 #'
 #' @details
@@ -219,7 +218,7 @@ simplex_point <- function(eta) {
 #' pass. Nothing is differenced.
 #'
 #' Every slice sums to zero over its first index, \eqn{\sum_a \pi_a} being the
-#' constant 1, which is the identity [check_parameter()] tests.
+#' constant 1, which is the identity that [check_parameter()] tests.
 #'
 #' @param pi_full The value, a vector of length \eqn{K} summing to 1, as
 #'   [simplex_point()] returns it.
@@ -308,31 +307,30 @@ simplex_tensors <- function(pi_full, order = 4L) {
 #' Extract Named Components From Softmax Tensors
 #'
 #' @description
-#' Slices the tensors of [simplex_tensors()] into the named list a derivative
-#' generic returns, one entry per distinct index tuple, keyed as
+#' Slices the tensors of [simplex_tensors()] into the named list that a
+#' derivative generic returns, one entry per distinct index tuple, keyed as
 #' `param_tuple_names(s, order)`.
 #'
 #' @details
-#' The `wrap` argument is how [transition_matrix()] reuses this. A simplex
-#' component is a vector of length \eqn{K} and is returned as it stands; a
-#' transition matrix's is that vector placed into one row of a \eqn{K \times K}
-#' matrix of zeros, and the caller passes the function that does the placing.
+#' The `wrap` argument is a function applied to each slice before it is
+#' stored, `identity` by default. A simplex component is a vector of length
+#' \eqn{K} and is returned as it stands. [transition_matrix()] does not call
+#' this function: its derivative method slices the tensors itself and places
+#' each slice in one row of a \eqn{K \times K} matrix of zeros.
 #'
-#' @param s The parameter the tuples belong to, a [SimplexParam()] or, through
-#'   `wrap`, one row's worth of a [TransitionMatrixParam()].
+#' @param s The [SimplexParam()] to which the tuples belong.
 #' @param tens The tensor list from [simplex_tensors()].
 #' @param order The order to extract: 1, 2, 3 or 4. `tens` must carry at least
 #'   this order.
-#' @param wrap A function applied to each raw slice before it is stored.
-#'   `identity` by default, which is the simplex's own case;
-#'   [transition_matrix()] passes a function embedding the slice in a row.
+#' @param wrap A function applied to each raw slice before it is stored,
+#'   `identity` by default. Every caller in the package uses the default.
 #'
 #' @return A named list of `choose(s@n_free + order - 1, order)` entries, keyed
 #'   as `param_tuple_names(s, order)` and in that order, each entry `wrap()`'s
 #'   result.
 #'
-#' @seealso [simplex_tensors()] for the arrays sliced, and [tm_derivative()] for
-#'   the `wrap` that embeds a row.
+#' @seealso [simplex_tensors()] for the arrays sliced, and [tm_derivative()],
+#'   which slices the same arrays row by row for a transition matrix.
 #'
 #' @keywords internal
 simplex_components <- function(s, tens, order, wrap = identity) {
@@ -359,8 +357,8 @@ simplex_components <- function(s, tens, order, wrap = identity) {
 #' @description
 #' Returns the probability vector \eqn{\pi}, the softmax of the free vector with
 #' the reference category's implicit 0 appended, named `p1` ... `pK`. The entries
-#' are positive and sum to exactly 1 at every free vector, so nothing is tested
-#' and nothing is renormalized. Computed through [simplex_point()]'s log-sum-exp
+#' are non-negative and sum to 1 up to rounding at every free vector, so nothing
+#' is tested and nothing is renormalized. Computed through [simplex_point()]'s log-sum-exp
 #' shift, so a large free value saturates instead of overflowing.
 #' @param s A [SimplexParam()] object, whose `param_params$n_cat` is read.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
@@ -380,18 +378,18 @@ S7::method(param_value, SimplexParam) <- function(s, eta, ...) {
 #' @name param_free.SimplexParam
 #' @description
 #' Returns the additive log-ratio, \eqn{\eta_a = \log(\pi_a/\pi_K)}, exact and a
-#' true inverse of [param_value.SimplexParam()]: the round trip closes to
-#' \eqn{2 \times 10^{-16}}.
+#' true inverse of [param_value.SimplexParam()], up to rounding.
 #' @details
-#' Two rejections, both with their own message. A vector with a non-positive
-#' entry is outside the **open** simplex, and \eqn{\log 0} is not finite; a
-#' vector that does not sum to 1 is not a probability vector, and it is **not
-#' renormalized**, a silent repair being the kind of thing that hides a caller's
-#' defect for a long time.
+#' Three rejections, each with its own message. An argument that is not a
+#' numeric vector of length \eqn{K} is rejected. A vector with a non-positive or
+#' missing entry is outside the **open** simplex, and \eqn{\log 0} is not
+#' finite. A vector that does not sum to 1 is not a probability vector, and it
+#' is **not renormalized**, because a silent repair would hide an error in the
+#' caller.
 #'
-#' The first rejection is the one a fit runs into. [simplex_point()] saturates a
-#' large free value to an exact 0 in the reference category, so a value produced
-#' at the boundary cannot be inverted back.
+#' The second rejection is the one that a fit meets: a large positive free
+#' value makes [simplex_point()] return an exact 0 in the reference category, so
+#' a value produced at the boundary cannot be inverted back.
 #' @param s A [SimplexParam()] object.
 #' @param m A probability vector of length \eqn{K}: strictly positive and summing
 #'   to 1.
@@ -411,9 +409,8 @@ S7::method(param_free, SimplexParam) <- function(s, m, ...) {
   }
   if (abs(sum(m) - 1) > 1e-8) {
     stop(paste0(
-      "'m' does not sum to one, so it is not on the simplex. It is rejected\n",
-      "  rather than renormalized, because a silent repair would mask the\n",
-      "  caller's defect."
+      "'m' does not sum to one, so it is not on the simplex. It is not\n",
+      "  renormalized."
     ), call. = FALSE)
   }
   stats::setNames(log(m[seq_len(k - 1L)] / m[k]), s@free_names)
@@ -427,8 +424,8 @@ S7::method(param_free, SimplexParam) <- function(s, m, ...) {
 #'
 #' \deqn{\partial_b \pi_a = \pi_a(\delta_{ab} - \pi_b),}
 #'
-#' which is the covariance structure of a categorical indicator: the same array a
-#' multinomial score already carries. Every component sums to zero over the
+#' which is the covariance structure of a categorical indicator, the same array
+#' that appears in the score of a multinomial model. Every component sums to zero over the
 #' category index, \eqn{\sum_a \pi_a} being the constant 1.
 #' @param s A [SimplexParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
@@ -477,7 +474,7 @@ S7::method(param_d2, SimplexParam) <- function(s, eta, ...) {
 #' @description
 #' Closed form, the same product rule applied a third time, which is the cumulant
 #' recursion of a categorical indicator at third order. Exact, where a family
-#' without a closed form would get a product stencil good to about six digits.
+#' without a closed form gets a less accurate product stencil.
 #' Every component sums to zero over the category index.
 #' @param s A [SimplexParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
@@ -497,11 +494,10 @@ S7::method(param_d3, SimplexParam) <- function(s, eta, ...) {
 #' @title Fourth Derivatives of a Simplex Parameter
 #' @name param_d4.SimplexParam
 #' @description
-#' Closed form, the cumulant recursion at fourth order, which is where the
-#' contract stops. Exact, and that matters most here: a product stencil at fourth
-#' order keeps about five digits, and this array is what a fourth-order chain rule
-#' through a link reads. Every component sums to zero over the category index,
-#' measured at \eqn{1.7 \times 10^{-17}}.
+#' Closed form, the cumulant recursion at fourth order, the highest order that
+#' the package provides. A product stencil at fourth order is the least accurate
+#' of the four, and a fourth-order chain rule through a link uses this array.
+#' Every component sums to zero over the category index, up to rounding.
 #'
 #' The array holds \eqn{K(K-1)^4} entries, so it is the largest object the family
 #' builds; at \eqn{K = 4} that is 324.

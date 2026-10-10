@@ -14,23 +14,26 @@ mlog_contract(tb, dirs)
 is the derivative order.}
 }
 \value{
-A symmetric numeric matrix of the side \code{tb$q} has, with no dimnames.
+A symmetric numeric matrix with the side of \code{tb$q}, in the
+eigenbasis of \eqn{S} and with no dimnames.
 }
 \description{
 Contracts the rotated directions of one index tuple against the
-divided-difference table of the matching order, sums over \strong{every ordering}
-of the directions, and rotates the result back by \eqn{Q}.
+divided-difference table of the matching order and sums over the orderings
+of the directions. The result is in the eigenbasis of \eqn{S}; the caller
+rotates it back by \eqn{Q}.
 }
 \details{
-The sum runs over every ordering, never over the distinct ones, so a tuple
-with repeated indices is counted with its multiplicity and needs no correction
-afterwards. That is where a hand-written version of this goes wrong: summing
-the distinct orderings and forgetting the \eqn{\prod_j m_j!} factor gives a
-result that is too small by exactly that factor, which looks plausible.
+The multilinear form sums over all orderings of the directions. The loop
+runs over the distinct orderings, which \code{\link[=combinat_perms]{combinat_perms()}} returns, and the
+sum is multiplied by \eqn{\prod_j m_j!}, where the \eqn{m_j} are the
+multiplicities of the repeated indices, because each distinct ordering
+occurs that many times among all of them. Without that factor the result
+would be too small by exactly that factor.
 
 The cost is the reason this family's higher orders are expensive: at order 4
-there are 24 orderings per component, each an \eqn{O(p^4)} contraction. See
-\code{\link[=matrix_log]{matrix_log()}} for the measurement.
+a component with four different indices has 24 orderings, each a contraction
+of \eqn{O(p^5)} operations.
 }
 \seealso{
 \code{\link[=mlog_tables]{mlog_tables()}} for the input, \code{\link[=combinat_perms]{combinat_perms()}} for the orderings,

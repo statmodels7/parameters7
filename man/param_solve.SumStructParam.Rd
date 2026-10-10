@@ -18,27 +18,25 @@ by the generic. \code{param_factor()} takes no \code{b}.}
 \value{
 \code{param_solve()} returns a numeric matrix with \code{s@dimension} rows and
 as many columns as \code{b}; \code{param_factor()} a lower triangular \code{s@dimension} by
-\code{s@dimension} matrix. Both are bare, where the value and the derivative
-arrays carry \code{v1}, \code{v2}, ...: this is the one family whose two answers are
-built from its own value rather than from its structure, so they are
-unnamed explicitly to match the twelve families that never label them.
+\code{s@dimension} matrix. Both carry no dimnames, while the value and the
+derivative arrays carry \code{v1}, \code{v2}, ...; the names of the value are removed
+because this family computes both results from its own value.
 }
 \description{
 \code{param_solve()} and \code{param_factor()} for a \code{\link[=sum_struct]{sum_struct()}} parameter. Both come
 from the assembled matrix, by \code{solve()} and by a transposed \code{chol()}: a sum of
-fixed matrices has no structure a solve could exploit, where \code{\link[=ar1]{ar1()}} has a
-tridiagonal inverse and \code{\link[=log_cholesky]{log_cholesky()}} holds its factor already.
+fixed matrices has no structure that a solve could exploit, where \code{\link[=ar1]{ar1()}} has
+a tridiagonal inverse and \code{\link[=log_cholesky]{log_cholesky()}} assembles its factor directly.
 }
 \details{
-\code{param_solve()} therefore agrees with \code{solve()} on the assembled matrix
-exactly, being the same call; the factor is \code{t(chol(M))}, lower triangular
-with \eqn{M = L L^\top} as \code{\link[=param_factor]{param_factor()}} requires, and reproduces the matrix
-to \eqn{4 \times 10^{-16}}.
+\code{param_solve()} is the call \code{solve()} on the assembled matrix; the factor is
+\code{t(chol(M))}, lower triangular with \eqn{M = L L^\top} as \code{\link[=param_factor]{param_factor()}}
+requires.
 
-Both are refused by the generic where the family is rank deficient, a singular
-matrix having neither an inverse nor a Cholesky factor.
+Both are rejected by the generic where the family is rank deficient, a
+singular matrix having neither an inverse nor a Cholesky factor.
 }
 \seealso{
-\code{\link[=param_solve]{param_solve()}} and \code{\link[=param_factor]{param_factor()}} for the two contracts.
+\code{\link[=param_solve]{param_solve()}} and \code{\link[=param_factor]{param_factor()}} for the two generics.
 }
 \keyword{internal}

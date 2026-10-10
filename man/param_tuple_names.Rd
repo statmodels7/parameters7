@@ -13,8 +13,8 @@ supply the labels and whose \code{n_free} supplies \eqn{d}.}
 \item{order}{The derivative order. \code{2} by default, which is the order
 \code{\link[=param_d2]{param_d2()}} and \code{\link[=param_d2logdet]{param_d2logdet()}} use; \code{3} and \code{4} name the components of
 \code{\link[=param_d3]{param_d3()}} and \code{\link[=param_d4]{param_d4()}}. \code{1} is accepted and returns the free names
-themselves. Anything else throws \verb{'order' must be 1, 2, 3 or 4.}, the
-contract stopping at fourth order.}
+themselves. Any other value signals the error
+\verb{'order' must be 1, 2, 3 or 4.}}
 }
 \value{
 A character vector of \code{choose(s@n_free + order - 1, order)} names, in
@@ -42,14 +42,12 @@ and of every derivative list of that order. For \eqn{d = 6}, which is a
 1296 ordered ones.
 }
 
-\section{Why the keys and the tuples come from one enumeration}{
-Nothing in the toolkit recovers an index by splitting a key apart. Taking
-\code{"log_L1:log_L2"} and splitting on \code{":"} works until a free name contains the
-separator itself, and then it yields the wrong number of pieces and the
-failure is silent. Generating the names and the indices from one enumeration
-cannot be fooled that way. \code{param_tuple_names()} calls
-\code{\link[=param_tuple_indices]{param_tuple_indices()}} and labels what it gets, so the two agree by
-construction.
+\section{One enumeration for the keys and the tuples}{
+The package never recovers an index by splitting a key apart. Splitting
+\code{"log_L1:log_L2"} on \code{":"} gives the wrong number of pieces when a free name
+contains the separator, and no error is signaled. \code{param_tuple_names()}
+calls \code{\link[=param_tuple_indices]{param_tuple_indices()}} and labels what it gets, so the names and the
+indices agree by construction.
 }
 
 \section{Notation}{
@@ -71,8 +69,8 @@ q <- log_cholesky(3)
 vapply(1:4, function(k) length(param_tuple_names(q, k)), integer(1))
 choose(6 + 1:4 - 1, 1:4)
 
-# Order 2 puts the diagonal pairs first, which is how a consumer filling a
-# Hessian wants them.
+# Order 2 puts the diagonal pairs first, the order in which a Hessian is
+# filled.
 param_tuple_names(s, 2)
 
 }

@@ -7,8 +7,8 @@
 dr_scale_factor(sd, tuple)
 }
 \arguments{
-\item{sd}{A 5 by \eqn{p} matrix of inverse-link derivatives, as returned by
-\code{\link[=dr_scale_derivs]{dr_scale_derivs()}}.}
+\item{sd}{An \code{order + 1} by \eqn{p} matrix of inverse-link derivatives, as
+returned by \code{\link[=dr_scale_derivs]{dr_scale_derivs()}}.}
 
 \item{tuple}{An integer vector of scale indices, possibly empty and possibly
 with repeats. Its length is the number of scale indices in the component,
@@ -21,14 +21,14 @@ A symmetric \eqn{p} by \eqn{p} numeric matrix.
 Evaluates \eqn{\partial^{S_D}(d_i d_j)} for every pair \eqn{(i, j)} at once,
 given the multiset \eqn{S_D} of scale indices. It is zero wherever \eqn{S_D}
 contains an index naming neither \eqn{i} nor \eqn{j}, so the result is
-\strong{supported on the rows and columns those indices name}, and that sparsity is
-half of why the composition costs so little.
+\strong{supported on the rows and columns that those indices name}, which keeps
+the cost of the composition low.
 }
 \details{
 Three cases, and the arithmetic differs in each:
 \itemize{
-\item \strong{no indices.} The factor is \eqn{d_i d_j}, an outer product, and that is
-the case a component differentiating the correlation alone falls into.
+\item \strong{no indices.} The factor is \eqn{d_i d_j}, an outer product, the case of
+a component that differentiates the correlation alone.
 \item \strong{one distinct index \eqn{k}, with multiplicity \eqn{m}.} Off the diagonal
 the entry carries one factor of \eqn{d_k}, so it is
 \eqn{d_k^{(m)} d_j}; on the diagonal it carries two, so it is the Leibniz

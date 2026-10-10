@@ -18,7 +18,7 @@ A list of \code{choose(s@n_free + 2, 3)} estimates keyed as
 }
 \description{
 Estimates the distinct third derivatives by applying one product stencil
-directly to \code{\link[=param_value]{param_value()}}, per index tuple. A component the tuple repeats
+directly to \code{\link[=param_value]{param_value()}}, per index tuple. A component that the tuple repeats
 contributes the one-dimensional stencil of the matching order, and a component
 appearing once contributes a two-point central factor; the product is
 evaluated in a single pass over the map. This is the method \code{\link[=param_d3]{param_d3()}}
@@ -42,7 +42,7 @@ the map, one naming a component twice and another once six, and one naming
 three distinct components eight.
 }
 
-\section{Why it goes straight to the map}{
+\section{The stencil is applied to the map}{
 A lower-order numerical derivative is never differenced. The rounding of a
 difference is amplified by \eqn{h^{-k}}, so two stages multiply their errors
 and a third derivative built from a first and then a second is far worse than
@@ -53,9 +53,8 @@ more evaluations of the map.
 
 \section{Accuracy}{
 Truncation is of order \eqn{h^2} at a step of
-\eqn{\varepsilon^{1/5}\max(1, |\eta_k|)}. Measured against the closed form of
-a \eqn{2 \times 2} log-Cholesky covariance, the agreement is
-\eqn{7 \times 10^{-6}} absolute on entries of size 12, so about six digits.
+\eqn{\varepsilon^{1/5}\max(1, |\eta_k|)}, and rounding is of order
+\eqn{\varepsilon / h^3}.
 }
 
 \examples{
@@ -73,6 +72,6 @@ c(gap = max(abs(unlist(numerical_d3(q, eta)) - unlist(ana))),
 
 }
 \seealso{
-\code{\link[=param_d3]{param_d3()}}, the generic this serves, \code{\link[=mixed_stencil]{mixed_stencil()}}, which
+\code{\link[=param_d3]{param_d3()}}, the generic that this serves, \code{\link[=mixed_stencil]{mixed_stencil()}}, which
 builds the product, and \code{\link[=numerical_d4]{numerical_d4()}} for the order above.
 }

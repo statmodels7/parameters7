@@ -20,8 +20,8 @@ derivatives in the free value at the following indices.
 }
 \description{
 Returns, for every angle, the value and the derivatives to order \code{order}
-\strong{in the free value} of both \eqn{\sin\theta} and \eqn{\cos\theta}. These tables are
-the whole derivative machinery of the family: an entry of \eqn{L} is a product
+\strong{in the free value} of both \eqn{\sin\theta} and \eqn{\cos\theta}. All the
+derivatives of the family are built from these tables: an entry of \eqn{L} is a product
 of such factors, so differentiating it replaces each factor by the derivative
 of the matching order, and nothing else has to be derived.
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/dr_prod.R
 \name{check_unit_diagonal}
 \alias{check_unit_diagonal}
-\title{Refuse a Correlation Block That Carries a Scale}
+\title{Reject a Correlation Block That Carries a Scale}
 \usage{
 check_unit_diagonal(correlation)
 }
@@ -11,33 +11,31 @@ check_unit_diagonal(correlation)
 checked for its class, its side and its rank.}
 }
 \value{
-Invisibly \code{TRUE}. A block whose diagonal departs from 1 at either
-probe throws, with the family named and the worst entry quoted. A probe the
-family cannot evaluate is skipped rather than reported, the constructor
-having no standing to decide what a foreign chart admits.
+Invisibly \code{TRUE}. For a block whose diagonal departs from 1 at
+either probe, an error that names the family and quotes the worst entry. A
+probe at which the family cannot be evaluated is skipped.
 }
 \description{
 Reads the diagonal of \code{correlation}'s own value at two probe free vectors and
-signals an error unless every entry is 1. This is the property
-\eqn{\Sigma = D R D} rests on: the standard deviations are read off
+signals an error unless every entry is 1. This is the property on which
+\eqn{\Sigma = D R D} rests: the standard deviations are read off
 \eqn{D}, so a block with a scale of its own describes the same matrix from a
 whole ray of free vectors and the composite has one free value too many.
 }
-\section{Why the probes are not the zero vector}{
+\section{The probe free vectors}{
 A scale-carrying family is almost always written on a log link, so at a zero
-free vector its scale is \eqn{\exp(0) = 1} and its diagonal is exactly the
-one this looks for. Measured over the six shipped families of side four, a
-zero probe passes all five that should be rejected -- \code{\link[=ar1]{ar1()}},
-\code{\link[=compound_symmetry]{compound_symmetry()}}, \code{\link[=autoregressive]{autoregressive()}}, \code{\link[=log_cholesky]{log_cholesky()}} and
-\code{\link[=matrix_log]{matrix_log()}} -- while any non-zero probe catches every one of them, the
-worst diagonal entry departing from 1 by between 0.35 and 8.27. The probes
-are therefore \verb{0.3, 0.4, ...} and a constant \code{-0.4}, and they are fixed
-rather than drawn, so a rejection is reproducible.
+free vector its scale is \eqn{\exp(0) = 1} and its diagonal is 1. A zero
+probe would therefore accept the scale-carrying families of the package
+(\code{\link[=ar1]{ar1()}}, \code{\link[=compound_symmetry]{compound_symmetry()}}, \code{\link[=autoregressive]{autoregressive()}}, \code{\link[=log_cholesky]{log_cholesky()}},
+\code{\link[=matrix_log]{matrix_log()}}, \code{\link[=diagonal_matrix]{diagonal_matrix()}}, \code{\link[=scalar_matrix]{scalar_matrix()}}, \code{\link[=scaled_matrix]{scaled_matrix()}} and
+\code{\link[=sum_struct]{sum_struct()}}), while the non-zero probes reject each of them. The probes
+are \verb{0.3, 0.4, ...} and a constant \code{-0.4}, fixed and not drawn, so a
+rejection is reproducible.
 
-Two probes cannot prove a property that is quantified over the whole free
-space, and this does not claim to. What it catches is a family that carries a
-scale, which is the way the requirement is broken in practice; a family
-contrived to have a unit diagonal at exactly these two points passes.
+Two probes cannot prove a property that holds over the whole free space. The
+check catches a family that carries a scale, which is the usual way in which
+the requirement is broken; a family constructed to have a unit diagonal at
+exactly these two points passes.
 \code{check_parameter()}'s round trip is what reports the ray itself.
 }
 

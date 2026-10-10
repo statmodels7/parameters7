@@ -14,7 +14,8 @@ checked by the generic.}
 \value{
 A \code{s@dimension} by \code{s@dimension} lower triangular numeric matrix with
 a positive diagonal and unit row norms, satisfying
-\code{L \%*\% t(L) == param_value(s, eta)}, and carrying no dimnames.
+\code{L \%*\% t(L) == param_value(s, eta)} up to rounding, and carrying no
+dimnames.
 }
 \description{
 Returns \eqn{L} by assembling it from the angles, so no factorization is

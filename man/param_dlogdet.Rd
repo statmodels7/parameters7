@@ -11,7 +11,7 @@ param_dlogdet(s, eta, ...)
 
 \item{eta}{A numeric vector of length \code{s@n_free}, finite in every entry.}
 
-\item{...}{Passed to the method. No method in this package reads it.}
+\item{...}{Passed to the method. The methods in this package do not read it.}
 }
 \value{
 A numeric vector of length \code{s@n_free}, named by \code{s@free_names}.
@@ -28,8 +28,8 @@ quadratic form plus this, so it is needed at every iteration of a fit.
 with the Moore-Penrose inverse in place of \eqn{M^{-1}} when the family is
 rank deficient. A closed form here is therefore never an independent claim:
 it has to agree with \code{\link[=param_d1]{param_d1()}} through that trace, and
-\code{\link[=check_parameter]{check_parameter()}} runs both routes and compares them. The example below
-does the same in three lines.
+\code{\link[=check_parameter]{check_parameter()}} runs both routes and compares them, and the example below
+makes the same comparison.
 }
 
 \section{What the answer looks like}{

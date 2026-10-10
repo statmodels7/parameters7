@@ -19,12 +19,11 @@ carrying no dimnames.
 \description{
 Returns \eqn{L = \mathrm{diag}(\sqrt{h(\eta_1)}, \dots, \sqrt{h(\eta_p)})}.
 The Cholesky factor of a diagonal matrix is the diagonal of its square roots,
-so this is \eqn{p} square roots and no factorization, against the base class's
-\eqn{O(p^3)}.
+so this is \eqn{p} square roots and no factorization, against the
+\eqn{O(p^3)} of the base method.
 }
 \seealso{
 \code{\link[=param_factor]{param_factor()}} for the generic and
-\code{\link[=param_factor.matrix_parameter]{param_factor.matrix_parameter()}} for what a family without a closed form
-pays.
+\code{\link[=param_factor.matrix_parameter]{param_factor.matrix_parameter()}} for the base method.
 }
 \keyword{internal}

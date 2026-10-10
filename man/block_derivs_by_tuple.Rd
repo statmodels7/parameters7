@@ -7,7 +7,8 @@
 block_derivs_by_tuple(block, eta, order)
 }
 \arguments{
-\item{block}{A \code{\link[=matrix_parameter]{matrix_parameter()}}, one block of the composite.}
+\item{block}{A \code{\link[=matrix_parameter]{matrix_parameter()}}: one block of the composite, or the
+inner family of an \code{\link[=inverse_of]{inverse_of()}} parameter.}
 
 \item{eta}{The block's own stretch of the free vector, of length
 \code{block@n_free}.}
@@ -32,6 +33,6 @@ symmetric in its indices and the two enumerations need not order a tuple the
 same way.
 }
 \seealso{
-\code{\link[=block_diag_derivs]{block_diag_derivs()}}, the only caller.
+\code{\link[=block_diag_derivs]{block_diag_derivs()}} and \code{\link[=inverse_derivs]{inverse_derivs()}}, the two callers.
 }
 \keyword{internal}

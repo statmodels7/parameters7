@@ -33,8 +33,7 @@ same stencils as the rest of the toolkit.
 \details{
 The sum \eqn{h^{-k}\sum_j w_j f(\eta + s_j h e_k)} is accumulated term by
 term, skipping the nodes whose weight is zero, so \code{f} is called once per
-non-zero weight: three times for a first or second derivative, five for a
-third or fourth. The accumulator starts at \code{NULL} and takes the shape of the
+non-zero weight: two, three, four and five times at orders one to four. The accumulator starts at \code{NULL} and takes the shape of the
 first term, which is why \code{f} may return a matrix, a vector or a scalar without
 this function knowing which.
 

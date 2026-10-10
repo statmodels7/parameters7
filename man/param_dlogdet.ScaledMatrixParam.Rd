@@ -17,13 +17,13 @@ empty for a fixed parameter.
 }
 \description{
 Closed form: \eqn{r\, h'(\eta)/h(\eta)}, which under the default log link is
-the \strong{rank itself}, at every scale. That is the fact a penalty rests on: it
-is the term that makes the smoothing parameter estimable, the stationary point
+the \strong{rank itself}, at every scale. A penalty depends on this term, which
+makes the smoothing parameter estimable, the stationary point
 of \eqn{\tfrac{\lambda}{2}\beta^\top P\beta - \tfrac{r}{2}\log\lambda} being
 \eqn{\lambda = r/(\beta^\top P \beta)}.
 
-The constant \eqn{\log|P|_+} contributes nothing, so a deficient family
-answers with its rank, never with its dimension.
+The constant \eqn{\log|P|_+} contributes nothing, so for a deficient matrix
+the result is the rank and not the dimension.
 }
 \seealso{
 \code{\link[=scaled_matrix]{scaled_matrix()}} for the estimability argument in full, and

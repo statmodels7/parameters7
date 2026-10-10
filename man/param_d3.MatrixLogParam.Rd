@@ -17,12 +17,13 @@ A list of \code{choose(s@n_free + 2, 3)} symmetric matrices keyed as
 }
 \description{
 Chains of three rotated directions contracted against four-point divided
-differences, summed over the six orderings. Exact, where a numerical route at
-this order keeps about six digits.
+differences, summed over the orderings of the three directions. Exact, with
+no differencing.
 
-The cost grows quickly: six orderings per component, each an \eqn{O(p^4)}
-contraction, and \eqn{\binom{d+2}{3}} components. See \code{\link[=matrix_log]{matrix_log()}} for the
-comparison with \code{\link[=log_cholesky]{log_cholesky()}}, whose derivatives are sparse products.
+The cost grows quickly: up to six orderings per component, each an
+\eqn{O(p^4)} contraction, and \eqn{\binom{d+2}{3}} components. See
+\code{\link[=matrix_log]{matrix_log()}} for the comparison with \code{\link[=log_cholesky]{log_cholesky()}}, whose derivatives
+are sparse products.
 }
 \seealso{
 \code{\link[=mlog_higher]{mlog_higher()}}, which assembles it, and

@@ -17,27 +17,28 @@ estimate.}
 A list of numeric vectors, each of length \code{s@n_free}.
 }
 \description{
-Builds the set of free vectors \code{\link[=check_parameter]{check_parameter()}} runs its battery at: the
+Builds the set of free vectors at which \code{\link[=check_parameter]{check_parameter()}} runs its battery: the
 origin, two constant vectors at \eqn{\pm 0.5}, \code{n} drawn uniformly from
 \eqn{(-1.5, 1.5)}, and one evenly spread from \eqn{-2} to \eqn{2}. Every
-check reports the worst discrepancy over the whole set, so a family that is
-right at the origin and wrong away from it is caught.
+check except the shapes check, which reads the origin, reports the worst
+discrepancy over the whole set, so a family that is right at the origin and
+wrong away from it is caught.
 }
 \details{
-The spread of the last vector is deliberately moderate. The free scale is
-unbounded, so no \eqn{\eta} is inadmissible, but the matrix built from widely
-separated free values can be singular in double precision: spreading a
-log-Cholesky parameter over twenty-eight units of log gives a condition number
-around \eqn{10^{28}}, and a comparison that fails there says something about
-the arithmetic and nothing about the parametrization.
+The spread of the last vector is deliberately moderate. Every \eqn{\eta} is
+admissible on the unbounded free scale, but the matrix built from widely
+separated free values can be numerically singular in double precision
+(spreading the free values of a log-Cholesky parameter over 28 units gives a
+condition number above \eqn{10^{24}}), and a comparison at such a point
+measures the rounding of the arithmetic and not the parametrization.
 
-The scaling a rank-deficient family has to survive is a property of its
+The scaling that a rank-deficient family has to withstand is a property of its
 components, the same at every point, so it is tested where it arises, against
 the declared null space, instead of by driving every family off the edge of
 double precision.
 
-The \code{n} random vectors are drawn from whatever random stream is current. No
-seed is set here: \code{\link[=check_parameter]{check_parameter()}}, the only caller, fixes one before
+The \code{n} random vectors are drawn from whatever random stream is current. This
+function sets no seed: \code{\link[=check_parameter]{check_parameter()}}, the only caller, fixes one before
 calling and restores the caller's own on exit, so the report is reproducible
 and the caller's stream is left as it was found.
 }

@@ -12,7 +12,7 @@ param_d1(s, eta, ...)
 \item{eta}{A numeric vector of length \code{s@n_free}, finite in every entry.
 Checked before dispatch; see \code{\link[=param_value]{param_value()}} for the three rejections.}
 
-\item{...}{Passed to the method. No method in this package reads it.}
+\item{...}{Passed to the method. The methods in this package do not read it.}
 }
 \value{
 A list of \code{s@n_free} derivatives, named by \code{s@free_names}. Each entry
@@ -75,5 +75,5 @@ all.equal(param_d1(r, 1.3)[[1]], param_value(r, 1.3))
 \seealso{
 \code{\link[=param_d2]{param_d2()}}, \code{\link[=param_d3]{param_d3()}} and \code{\link[=param_d4]{param_d4()}} for the higher orders,
 \code{\link[=param_dlogdet]{param_dlogdet()}} for the derivative of the log-determinant, and
-\code{\link[=param_is_numerical]{param_is_numerical()}} to ask which route an object takes.
+\code{\link[=param_is_numerical]{param_is_numerical()}} to find out which route an object takes.
 }

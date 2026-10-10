@@ -16,7 +16,7 @@ A \code{s@dimension} by \code{s@dimension} lower triangular numeric matrix with
 a positive diagonal, satisfying \code{L \%*\% t(L) == param_value(s, eta)}.
 }
 \description{
-The method every \code{\link[=matrix_parameter]{matrix_parameter()}} inherits when it registers no
+The method that every \code{\link[=matrix_parameter]{matrix_parameter()}} inherits when it registers no
 \code{\link[=param_factor]{param_factor()}} of its own. It evaluates \code{\link[=param_value]{param_value()}} and returns the
 lower triangular Cholesky factor through \code{\link[=chol_pd]{chol_pd()}}, which decides positive
 definiteness from the eigenvalues before attempting the factorization. Exact,
@@ -24,12 +24,11 @@ at \eqn{O(p^3)}.
 }
 \details{
 A family that declares full rank and is then not positive definite at this
-\eqn{\eta} throws, naming the family and saying that the verdict is spectral.
-That distinction matters to whoever reads the message: a caught \code{chol()} error
-would be a statement about the arithmetic, and could differ between platforms
-on a matrix with an exactly zero eigenvalue, while a test on the eigenvalues
-is a statement about the matrix. The error means the family's own
-\code{\link[=param_value]{param_value()}} has left the cone it claims to parametrize.
+\eqn{\eta} signals an error naming the family. The verdict comes from the
+eigenvalues and not from a caught \code{chol()} error, which could differ between
+platforms on a matrix with an exactly zero eigenvalue. The error means that
+the family's own \code{\link[=param_value]{param_value()}} has left the cone that the family
+parametrizes.
 }
 \seealso{
 \code{\link[=param_factor]{param_factor()}} for the generic, which rejects a rank-deficient

@@ -17,9 +17,9 @@ A symmetric numeric matrix of the same side as \code{sp$vectors}. When
 \description{
 Builds the pseudo-inverse of \eqn{M(\eta)} as
 \eqn{\sum_{j \in \mathrm{keep}} \lambda_j^{-1} v_j v_j^\top}, over the
-directions \code{\link[=param_spectrum]{param_spectrum()}}'s \code{keep} flag marks. It is what the
-rank-deficient branches of the base-class log-determinant derivatives use in
-place of \eqn{M^{-1}} in the trace identities.
+directions that the \code{keep} flag of \code{\link[=param_spectrum]{param_spectrum()}} marks. The base-class
+log-determinant derivatives use it in place of \eqn{M^{-1}} in the trace
+identities, and for a full-rank family it is the ordinary inverse.
 }
 \seealso{
 \code{\link[=param_spectrum]{param_spectrum()}} for the input, and \code{\link[=param_solve]{param_solve()}}, which rejects

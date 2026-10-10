@@ -15,7 +15,7 @@ order of its entries is the order of \code{s@free_names}. Names are ignored and
 stripped, so a value that arrives labeled by a link does not leak that
 label into the result.}
 
-\item{...}{Passed to the method. No method in this package reads it; it is
+\item{...}{Passed to the method. The methods in this package do not read it; it is
 part of the signature so that a family written elsewhere can take further
 arguments of its own.}
 }
@@ -36,9 +36,9 @@ Evaluates the map a parametrization stands for: given a free vector
 \eqn{\eta} on the unconstrained scale, returns the constrained value it
 produces. The shape depends on the family. A \code{\link[=matrix_parameter]{matrix_parameter()}} returns a
 symmetric \eqn{p \times p} matrix, \code{\link[=simplex]{simplex()}} a probability vector, and
-\code{\link[=transition_matrix]{transition_matrix()}} a row-stochastic matrix. Whatever \eqn{\eta} is
-handed in, the value satisfies the family's constraint, so a caller never
-has to test the result.
+\code{\link[=transition_matrix]{transition_matrix()}} a row-stochastic matrix. For every finite
+\eqn{\eta} the value satisfies the family's constraint, within the range of
+floating-point arithmetic, so a caller does not have to test the result.
 
 This is the only method a new family must write. Every derivative order is
 then available numerically, and for a matrix family so are the
@@ -55,10 +55,10 @@ edge to reach.
 }
 
 \section{What is exact and what is not}{
-Every family in this package writes its own \code{\link[=param_value]{param_value()}} out in closed
-form. None of them falls back to anything, and \code{param_is_numerical()}
-returns \code{FALSE} for all nine components of all fifteen. The numerical
-methods on \code{\link[=parameter]{parameter()}} exist for a family written elsewhere.
+Every family in this package writes its own \code{\link[=param_value]{param_value()}} and its
+derivatives out, and \code{param_is_numerical()} returns \code{FALSE} for every
+component of every family. The numerical methods on \code{\link[=parameter]{parameter()}} serve a
+family written elsewhere.
 }
 
 \section{Notation}{

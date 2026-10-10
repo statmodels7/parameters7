@@ -19,8 +19,8 @@ dimnames and no constraint on its entries.
 \description{
 Fills the lower triangle of \eqn{S} with the free values, in the order
 \code{param_params$positions} records, and mirrors it to the upper triangle. No
-transformation is applied: the free values \strong{are} the entries of \eqn{S},
-which is where this chart parts company with \code{\link[=log_cholesky]{log_cholesky()}}'s.
+transformation is applied: the free values \strong{are} the entries of \eqn{S}.
+In \code{\link[=log_cholesky]{log_cholesky()}}, by contrast, the diagonal free values are logarithms.
 }
 \seealso{
 \code{\link[=mlog_basis]{mlog_basis()}} for its derivative in one free value, and

@@ -18,7 +18,7 @@ A numeric vector of length \code{s@n_free}, named by \code{s@free_names}.
 Closed form: \eqn{m} times the inner parameter's gradient. A shared free value
 moves every block, so the gradient is multiplied rather than copied: at
 \eqn{m = 3} over a 2 x 2 log-Cholesky covariance it is \code{c(6, 6, 0)} where the
-inner parameter answers \code{c(2, 2, 0)}.
+inner parameter returns \code{c(2, 2, 0)}.
 }
 \seealso{
 \code{\link[=param_logdet.KronIdentityParam]{param_logdet.KronIdentityParam()}} for the quantity differentiated.

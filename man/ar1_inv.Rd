@@ -66,9 +66,10 @@ rule. Each is then chained onto the free value through the correlation's
 link.
 
 This is what the family adds over \code{inverse_of(ar1(p))}, which reaches the
-same numbers through the ordered-block-partition sum: there a fourth-order
-component is 75 products of five matrices, here it is one elementwise
-product. The two agree to machine precision, which is what a test asserts.
+same numbers through the ordered-block-partition sum. There a fourth-order
+component is a sum of 75 products, one for each ordered set partition of its
+four positions, each of three to nine matrices; here it is one elementwise
+product. The two routes agree to rounding.
 }
 
 \section{The log-determinant}{

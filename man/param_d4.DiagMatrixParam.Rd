@@ -22,8 +22,8 @@ survive; every tuple naming two different free values is the exact zero
 matrix.
 
 \eqn{h''''} comes from \code{linkfunctions7::d4linkinv()}. This is the order at
-which a numerical route is least usable, keeping about five digits, so the
-closed form matters most here.
+which a numerical route is least accurate, so the closed form matters most
+here.
 }
 \seealso{
 \code{\link[=diag_higher]{diag_higher()}}, which assembles it, \code{\link[=param_d3.DiagMatrixParam]{param_d3.DiagMatrixParam()}} for

@@ -2,24 +2,25 @@
 % Please edit documentation in R/numerical_fallbacks.R
 \name{is_base_param_class}
 \alias{is_base_param_class}
-\title{Is This the Package's Own Base Class?}
+\title{Test for the Package's Own Base Classes}
 \usage{
 is_base_param_class(cls)
 }
 \arguments{
 \item{cls}{An S7 class object, as \code{S7::S7_class(x)} returns or as
 \code{attr(method, "signature")[[1]]} holds. Anything else returns \code{FALSE}
-rather than throwing, \code{attr()} on a non-class giving \code{NULL}.}
+without an error, \code{attr()} on a non-class giving \code{NULL}.}
 }
 \value{
 \code{TRUE} when \code{cls} is \code{\link[=parameter]{parameter()}} or \code{\link[=matrix_parameter]{matrix_parameter()}}, \code{FALSE}
 for any subclass and for anything that is not an S7 class.
 }
 \description{
-Asks whether an S7 class is \code{\link[=parameter]{parameter()}} or \code{\link[=matrix_parameter]{matrix_parameter()}}, the two
-abstract classes this package registers its fallback methods on. That is how
-a method a subclass wrote is told apart from one it merely inherited, which is
-the question \code{\link[=param_is_numerical]{param_is_numerical()}} answers and \code{\link[=check_parameter]{check_parameter()}} acts on.
+Returns whether an S7 class is \code{\link[=parameter]{parameter()}} or \code{\link[=matrix_parameter]{matrix_parameter()}}, the
+two base classes on which this package registers its fallback methods. The
+test distinguishes a method that a subclass wrote from one that it inherited,
+which is what \code{\link[=param_is_numerical]{param_is_numerical()}} reports and what \code{\link[=check_parameter]{check_parameter()}}
+acts on.
 }
 \details{
 Two comparisons, in order. Identity is tried first, since it is the usual

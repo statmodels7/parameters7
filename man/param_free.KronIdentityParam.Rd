@@ -21,9 +21,8 @@ inner parameter there, and then checks the whole matrix against the
 replication that free vector implies. A matrix whose blocks are not identical,
 or whose first block is outside the inner family, is rejected.
 
-The rejection is complete because the whole rebuild is compared, not the
-blocks pairwise: the first block might invert cleanly while the fourth is
-something else entirely.
+The whole rebuild is compared with \code{m}, and not the blocks pairwise, because
+the first block may invert cleanly while another block differs.
 }
 \seealso{
 \code{\link[=param_value.KronIdentityParam]{param_value.KronIdentityParam()}}, the map this inverts.

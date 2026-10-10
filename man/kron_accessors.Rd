@@ -16,14 +16,14 @@
 the diagonal blocks and zeros elsewhere.
 }
 \description{
-The three one-line accessors every \code{\link[=KronIdentityParam]{KronIdentityParam()}} method uses.
+The three one-line accessors that the \code{\link[=KronIdentityParam]{KronIdentityParam()}} methods use.
 \code{.kron_inner()} returns the per-block parameter, \code{.kron_m()} the number of
 blocks, and \code{.kron_lift()} places a \code{d} by \code{d} matrix into \code{m} identical
 diagonal blocks as \code{kronecker(diag(m), x)}.
 }
 \details{
-They exist so that the twelve methods below read as one line each and the
-storage of \code{param_params} appears in one place. \code{.kron_lift()} is the whole
+They keep the methods below short and the storage of \code{param_params} in one
+place. \code{.kron_lift()} is the whole
 arithmetic of the composition: the value, every derivative component and the
 factor are the inner quantity passed through it.
 

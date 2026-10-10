@@ -21,12 +21,13 @@ in the \eqn{p(p-1)/2} below-diagonal ones, the log-determinant being
 \eqn{\sum_i \eta_i}. The value does not depend on \code{eta}, which is read only
 for its length.
 
-Note the 1 where \code{\link[=log_cholesky]{log_cholesky()}} answers 2: there the diagonal free value is
-\eqn{\log L_{ii}} and \eqn{|M| = |L|^2}, here it is an eigenvalue of the
-logarithm and enters once.
+The gradient is 1 where that of \code{\link[=log_cholesky]{log_cholesky()}} is 2: there the diagonal
+free value is \eqn{\log L_{ii}} and \eqn{|M| = |L|^2}, while here it is a
+diagonal entry of \eqn{S}, and \eqn{\log|M| = \mathrm{tr}(S)} contains it
+once.
 }
 \seealso{
 \code{\link[=param_logdet.MatrixLogParam]{param_logdet.MatrixLogParam()}} for the quantity differentiated, and
-\code{\link[=param_dlogdet.LogCholeskyParam]{param_dlogdet.LogCholeskyParam()}}, which answers 2.
+\code{\link[=param_dlogdet.LogCholeskyParam]{param_dlogdet.LogCholeskyParam()}}, which returns 2.
 }
 \keyword{internal}

@@ -18,8 +18,8 @@ non-negative entries summing to 1.
 \description{
 Returns the probability vector \eqn{\pi}, the softmax of the free vector with
 the reference category's implicit 0 appended, named \code{p1} ... \code{pK}. The entries
-are positive and sum to exactly 1 at every free vector, so nothing is tested
-and nothing is renormalized. Computed through \code{\link[=simplex_point]{simplex_point()}}'s log-sum-exp
+are non-negative and sum to 1 up to rounding at every free vector, so nothing
+is tested and nothing is renormalized. Computed through \code{\link[=simplex_point]{simplex_point()}}'s log-sum-exp
 shift, so a large free value saturates instead of overflowing.
 }
 \seealso{

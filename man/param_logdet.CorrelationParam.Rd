@@ -21,8 +21,7 @@ Closed form. The factor is triangular with \eqn{L_{ii} = \prod_{k<i}
 \deqn{\log|R| = 2 \sum_{i,k} \log \sin\theta_{ik},}
 
 one term per free value. It is \code{2 * sum(log(sines))}: no factorization, no
-determinant, no eigendecomposition. Measured against the eigenvalues of the
-assembled matrix at \eqn{p = 3}, the two agree to the printed digit.
+determinant, no eigendecomposition.
 
 It is always negative or zero, a correlation matrix having determinant at most
 1, with 0 reached only at the identity.

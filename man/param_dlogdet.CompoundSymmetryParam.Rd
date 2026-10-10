@@ -29,18 +29,20 @@ and the pure ones are the two chains taken separately.
 \details{
 The scale's chain is \eqn{p} times the derivatives of \eqn{\log h}, which
 under the default log link is \eqn{p} at first order and 0 above it. The
-correlation's is \code{\link[=log_affine_derivs]{log_affine_derivs()}} on the two terms of
-\code{\link[=cs_logdet_terms]{cs_logdet_terms()}}, chained onto the bounded link.
+correlation's is \code{\link[=cs_logdet_chain]{cs_logdet_chain()}}, the derivatives of \eqn{q} in the second
+free value written in closed form in the logistic function of that value, so
+that they stay accurate where the correlation rounds to one of its bounds.
 
 The four methods return vectors of \code{order + 1} entries, keyed by the tuple
 names of their own order. At \eqn{p = 4} and \eqn{\eta = (\log 2, 0.8)} the
 second order is \eqn{(0, -0.856, 0)} over \code{log_scale:log_scale},
-\code{logit_rho:logit_rho} and \code{log_scale:logit_rho}: the first zero from the log
-link and the last from the separability.
+\code{logit_rho:logit_rho} and \code{log_scale:logit_rho}: the first zero comes from
+the log link and the last from the separability.
 
 Unlike \code{\link[=log_cholesky]{log_cholesky()}}, where the whole log-determinant is linear, the
-correlation's chain is non-zero at all four orders, so this family is one of
-the two where a check of the higher orders has content.
+correlation's chain is non-zero at all four orders, so a check of the higher
+orders compares non-zero numbers for this family, as for \code{\link[=ar1]{ar1()}},
+\code{\link[=autoregressive]{autoregressive()}} and \code{\link[=correlation_matrix]{correlation_matrix()}}.
 }
 \seealso{
 \code{\link[=param_logdet.CompoundSymmetryParam]{param_logdet.CompoundSymmetryParam()}} for the quantity

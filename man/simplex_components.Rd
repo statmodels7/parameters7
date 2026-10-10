@@ -7,17 +7,15 @@
 simplex_components(s, tens, order, wrap = identity)
 }
 \arguments{
-\item{s}{The parameter the tuples belong to, a \code{\link[=SimplexParam]{SimplexParam()}} or, through
-\code{wrap}, one row's worth of a \code{\link[=TransitionMatrixParam]{TransitionMatrixParam()}}.}
+\item{s}{The \code{\link[=SimplexParam]{SimplexParam()}} to which the tuples belong.}
 
 \item{tens}{The tensor list from \code{\link[=simplex_tensors]{simplex_tensors()}}.}
 
 \item{order}{The order to extract: 1, 2, 3 or 4. \code{tens} must carry at least
 this order.}
 
-\item{wrap}{A function applied to each raw slice before it is stored.
-\code{identity} by default, which is the simplex's own case;
-\code{\link[=transition_matrix]{transition_matrix()}} passes a function embedding the slice in a row.}
+\item{wrap}{A function applied to each raw slice before it is stored,
+\code{identity} by default. Every caller in the package uses the default.}
 }
 \value{
 A named list of \code{choose(s@n_free + order - 1, order)} entries, keyed
@@ -25,18 +23,19 @@ as \code{param_tuple_names(s, order)} and in that order, each entry \code{wrap()
 result.
 }
 \description{
-Slices the tensors of \code{\link[=simplex_tensors]{simplex_tensors()}} into the named list a derivative
-generic returns, one entry per distinct index tuple, keyed as
+Slices the tensors of \code{\link[=simplex_tensors]{simplex_tensors()}} into the named list that a
+derivative generic returns, one entry per distinct index tuple, keyed as
 \code{param_tuple_names(s, order)}.
 }
 \details{
-The \code{wrap} argument is how \code{\link[=transition_matrix]{transition_matrix()}} reuses this. A simplex
-component is a vector of length \eqn{K} and is returned as it stands; a
-transition matrix's is that vector placed into one row of a \eqn{K \times K}
-matrix of zeros, and the caller passes the function that does the placing.
+The \code{wrap} argument is a function applied to each slice before it is
+stored, \code{identity} by default. A simplex component is a vector of length
+\eqn{K} and is returned as it stands. \code{\link[=transition_matrix]{transition_matrix()}} does not call
+this function: its derivative method slices the tensors itself and places
+each slice in one row of a \eqn{K \times K} matrix of zeros.
 }
 \seealso{
-\code{\link[=simplex_tensors]{simplex_tensors()}} for the arrays sliced, and \code{\link[=tm_derivative]{tm_derivative()}} for
-the \code{wrap} that embeds a row.
+\code{\link[=simplex_tensors]{simplex_tensors()}} for the arrays sliced, and \code{\link[=tm_derivative]{tm_derivative()}},
+which slices the same arrays row by row for a transition matrix.
 }
 \keyword{internal}

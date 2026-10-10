@@ -8,10 +8,10 @@ scaled_matrix(p, link = linkfunctions7::log_link(), tol = 1e-10)
 }
 \arguments{
 \item{p}{A symmetric positive semidefinite numeric matrix. It must be square,
-free of \code{NA}, and symmetric to \eqn{10^{-8}} relative, and it is symmetrized
-before use. A matrix whose largest eigenvalue is not positive throws \verb{'p' must be positive semidefinite and not identically zero.}, and one whose
-smallest eigenvalue is below \code{-tol * max(ev)} throws a message quoting both
-eigenvalues.}
+free of \code{NA}, and symmetric to \eqn{10^{-8}} times the larger of 1 and its
+largest entry, and it is symmetrized before use. A matrix whose largest
+eigenvalue is not positive signals the error \verb{'p' must be positive semidefinite and not identically zero.}, and one whose smallest eigenvalue
+is below \code{-tol * max(ev)} signals an error quoting both eigenvalues.}
 
 \item{link}{A \pkg{linkfunctions7} link carrying the free value onto the
 positive scale, \code{linkfunctions7::log_link()} by default. It must map onto
@@ -39,13 +39,14 @@ one positive scale. With \code{link = NULL} it holds \eqn{P} alone and has no fr
 value.
 
 This is the commonest penalty in semiparametric regression, and it is the
-reason the package admits rank-deficient matrices at all. \eqn{P} may be the
+reason why the package accepts rank-deficient matrices. \eqn{P} may be the
 Gram matrix of a basis derivative, a difference penalty
 \eqn{\Delta^\top \Delta}, a neighborhood matrix, or the identity, which makes
 the object a ridge.
 }
-\section{Everything is a constant times a function of the scale}{
-Nothing here needs deriving. With the default log link, where
+\section{Derivatives and log-determinant}{
+Every quantity is a constant times a function of the scale. With the default
+log link, where
 \eqn{h(\eta) = e^{\eta}} and \eqn{\lambda = h(\eta)},
 
 \deqn{\partial_\eta M = M, \qquad \partial^2_\eta M = M,}
@@ -58,26 +59,26 @@ with \eqn{r} the rank and \eqn{\log|P|_+} the log pseudo-determinant of
 derivatives carry that link's own, through \code{\link[=diag_dlog]{diag_dlog()}}.
 }
 
-\section{Why the derivative of the log pseudo-determinant matters}{
-It equals the rank, and that is what leaves the scale estimable. Write a
+\section{The derivative of the log pseudo-determinant}{
+Under the log link it equals the rank, which makes the scale estimable. Write a
 penalty as a negative log prior,
 
 \deqn{\tfrac{\lambda}{2}\beta^\top P \beta - \tfrac{r}{2}\log\lambda,}
 
 and the stationary point is \eqn{\lambda = r / (\beta^\top P \beta)}. Drop the
 second term and the derivative keeps one sign, sending the scale to zero. That
-second term is the normalizing constant of the prior, which is why this
-package keeps it.
+second term is the normalizing constant of the prior, and \code{\link[=param_logdet]{param_logdet()}}
+includes it.
 }
 
-\section{Rank deficiency is admitted, and what it means}{
+\section{Rank deficiency}{
 A deficient \eqn{P} makes the corresponding Gaussian improper, so it is a
 legitimate \strong{penalty} without being a legitimate density. Both readings of a
 multivariate Gaussian need full rank: a singular covariance is degenerate on a
-subspace, and a singular precision does not normalize. The object still
-answers \code{\link[=param_logdet]{param_logdet()}}, with the pseudo-determinant, and \code{\link[=param_solve]{param_solve()}} and
-\code{\link[=param_factor]{param_factor()}} reject it, a consumer of an improper prior needing the
-quadratic form and the pseudo-determinant instead of an inverse.
+subspace, and a singular precision does not normalize. \code{\link[=param_logdet]{param_logdet()}}
+returns the pseudo-determinant, while \code{\link[=param_solve]{param_solve()}} and \code{\link[=param_factor]{param_factor()}}
+reject the object, because a consumer of an improper prior needs the
+quadratic form and the pseudo-determinant and not an inverse.
 }
 
 \section{Notation}{
@@ -113,7 +114,7 @@ bPb <- drop(crossprod(b, crossprod(d) \%*\% b))
 obj <- function(lam) lam / 2 * bPb - s@rank / 2 * log(lam)
 c(closed_form = s@rank / bPb, numeric = optimize(obj, c(1e-6, 100))$minimum)
 
-# A deficient family has no inverse and says so.
+# A deficient family has no inverse, and the call signals an error.
 try(param_solve(s, 0))
 
 # With no link the matrix is fully known and there is nothing to estimate.

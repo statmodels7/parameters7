@@ -22,17 +22,19 @@ variance's share at one lag, and it multiplies every entry of an inverse
 AR(1) and every diagonal of an inverse AR(\eqn{q}).
 }
 \details{
-Written by partial fractions,
-\eqn{w = \tfrac{1}{2}\{(1-\rho)^{-1} + (1+\rho)^{-1}\}}, every order is an
-exact expression rather than a repeated quotient rule,
+Since \eqn{w = \tfrac{1}{2}\{(1-\rho)^{-1} + (1+\rho)^{-1}\}} by partial
+fractions, every order has an exact expression, with no repeated quotient
+rule,
 
 \deqn{w^{(k)} = \frac{k!}{2}\left\{(1-\rho)^{-(k+1)}
   + (-1)^k (1+\rho)^{-(k+1)}\right\},}
 
 and it is finite throughout \eqn{|\rho| < 1}, which the correlation's link
-guarantees. The result is then chained onto the free value.
+guarantees in exact arithmetic. The result is then chained onto the free
+value.
 }
 \seealso{
-\code{\link[=ar1_inv]{ar1_inv()}} and \code{\link[=autoregressive_inv]{autoregressive_inv()}}, which share it.
+\code{\link[=autoregressive_inv]{autoregressive_inv()}}, whose factors call it, and \code{\link[=ar1_inv]{ar1_inv()}},
+whose pattern uses the same expression written in \eqn{\rho}.
 }
 \keyword{internal}

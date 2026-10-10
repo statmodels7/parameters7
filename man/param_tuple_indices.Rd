@@ -11,7 +11,7 @@ param_tuple_indices(s, order = 2L)
 supplies \eqn{d}.}
 
 \item{order}{The derivative order: \code{1}, \code{2} (the default), \code{3} or \code{4}.
-Anything else throws \verb{'order' must be 1, 2, 3 or 4.}}
+Any other value signals the error \verb{'order' must be 1, 2, 3 or 4.}}
 }
 \value{
 A list of \code{choose(s@n_free + order - 1, order)} integer vectors, each
@@ -28,11 +28,11 @@ a Hessian is filled; at orders 3 and 4 the tuples are the lexicographic
 combinations with repetition.
 }
 \details{
-The order at orders 3 and 4 matches the enumeration \pkg{distributions7} uses
-for its own higher derivatives, so a consumer contracting a parameter's
-derivative array against a distribution's can walk the two lists together
-without reindexing. Both come from \code{numericals7::tuple_indices()}, which is
-the single copy of the enumeration in the toolkit.
+At orders 3 and 4 the tuples come in the same order as in the enumeration
+that \pkg{distributions7} uses for its own higher derivatives, so a consumer
+contracting a parameter's derivative array against a distribution's can walk
+the two lists together without reindexing. The tuples come from
+\code{numericals7::tuple_indices()}.
 }
 \section{Notation}{
 

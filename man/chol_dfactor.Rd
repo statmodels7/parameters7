@@ -22,8 +22,8 @@ derivative is identically zero.
 }
 \description{
 Returns \eqn{\partial^S L} for a multiset \eqn{S} of free-value indices, or
-\code{NULL} where that derivative is identically zero. Almost all of them are, and
-that is what keeps the Leibniz sum of \code{\link[=chol_leibniz]{chol_leibniz()}} short.
+\code{NULL} where that derivative is identically zero. Almost all of them are,
+which keeps the Leibniz sum of \code{\link[=chol_leibniz]{chol_leibniz()}} short.
 }
 \details{
 Three cases exhaust it. An empty \eqn{S} gives \eqn{L} itself. A single index

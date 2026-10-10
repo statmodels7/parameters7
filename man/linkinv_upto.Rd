@@ -18,10 +18,10 @@ A list of \code{order + 1} elements: the value, then the derivatives in
 order, each the shape of \code{e}.
 }
 \description{
-Returns \eqn{g^{-1}(\eta)} and its derivatives of orders 1 to \code{order}, the
-seed every family composes its map from. Each order is one call of the
-link's own generic (\code{dlinkinv()} to \code{d4linkinv()}), and no order above
-\code{order} is evaluated.
+Returns \eqn{g^{-1}(\eta)} and its derivatives of orders 1 to \code{order}, from
+which the families built on a link compose their maps. Each order is one call
+of the link's own generic (\code{dlinkinv()} to \code{d4linkinv()}), and the orders
+above \code{order} are not evaluated.
 }
 \seealso{
 \code{\link[=compose_order]{compose_order()}}, which composes onto these.

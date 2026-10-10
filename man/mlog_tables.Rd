@@ -21,14 +21,15 @@ divided-difference tables \code{dd2} up to \verb{dd<order+1>}.
 \description{
 Everything the derivative contractions need: the eigendecomposition of
 \eqn{S}, the rotated basis directions, and the divided-difference tables
-of the orders asked for, computed once per free vector.
+of the requested orders, computed once per free vector.
 }
 \details{
 Everything here depends on \eqn{\eta} alone, never on the index tuple, so it
 is computed once and every component of the order reads it. The rotated
-directions are \eqn{Q^\top E_k Q} for each basis direction \eqn{E_k}, and the
-tables hold one divided difference per combination of eigenvalues with
-repetition, up to \code{order + 1} points.
+directions are \eqn{Q^\top E_k Q} for each basis direction \eqn{E_k}. The
+table of \eqn{m} points is an array with one divided difference for each
+ordered \eqn{m}-tuple of eigenvalue indices, \eqn{p^m} entries in all, for
+\eqn{m} up to \code{order + 1}.
 }
 \seealso{
 \code{\link[=dd_exp]{dd_exp()}} for the entries of the tables, and \code{\link[=mlog_contract]{mlog_contract()}},

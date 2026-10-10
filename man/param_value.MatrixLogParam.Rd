@@ -19,7 +19,8 @@ matrix with dimnames \code{v1}, \code{v2}, ...
 Returns \eqn{M = \exp(S)}, through the eigendecomposition of \eqn{S}:
 \eqn{Q \exp(\Lambda) Q^\top}, the exponential applied to the eigenvalues.
 Positive definiteness needs no checking, every \eqn{e^{\lambda}} being
-positive whatever \eqn{S} is. The cost is one \eqn{O(p^3)}
+positive whatever \eqn{S} is, up to the overflow of the exponential for an
+eigenvalue above about 709.78. The cost is one \eqn{O(p^3)}
 eigendecomposition.
 }
 \seealso{

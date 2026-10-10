@@ -21,8 +21,8 @@ with \eqn{r} the rank, so every derivative is \eqn{r} times the matching
 derivative of \eqn{\log h}, and the constant contributes nothing. With one
 free value there is one component.
 
-Under the default log link \eqn{\log h(\eta) = \eta}, so the answer is exactly
-zero and this family cannot exercise the order; a link with curvature can.
+Under the default log link \eqn{\log h(\eta) = \eta}, so the result is
+exactly zero; under a link with curvature it is not.
 }
 \seealso{
 \code{\link[=diag_dlog]{diag_dlog()}}, which supplies the derivative of \eqn{\log h}, and

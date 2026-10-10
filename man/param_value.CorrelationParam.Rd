@@ -17,10 +17,11 @@ positive definite, unit diagonal, dimnames \code{v1}, \code{v2}, ...
 }
 \description{
 Returns \eqn{R = LL^\top}, with \eqn{L} assembled from the angles: row \eqn{i}
-is a unit vector in spherical coordinates, so the diagonal of \eqn{R} is
-exactly 1 and its off-diagonal entries are correlations. Nothing is tested and
-nothing is corrected; the unit diagonal and the positive definiteness are
-properties of the construction. The cost is one \eqn{O(p^3)} product.
+is a unit vector in spherical coordinates, so the diagonal of \eqn{R} is 1
+and its off-diagonal entries are correlations. The diagonal is then set to
+exactly 1, which removes the rounding of the telescoping sum; the positive
+definiteness follows from the construction and is not tested. The cost is one
+\eqn{O(p^3)} product.
 }
 \seealso{
 \code{\link[=param_free.CorrelationParam]{param_free.CorrelationParam()}} for the inverse, and

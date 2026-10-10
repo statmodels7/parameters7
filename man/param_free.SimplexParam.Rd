@@ -16,19 +16,19 @@ A numeric vector of length \code{s@n_free}, named by \code{s@free_names}.
 }
 \description{
 Returns the additive log-ratio, \eqn{\eta_a = \log(\pi_a/\pi_K)}, exact and a
-true inverse of \code{\link[=param_value.SimplexParam]{param_value.SimplexParam()}}: the round trip closes to
-\eqn{2 \times 10^{-16}}.
+true inverse of \code{\link[=param_value.SimplexParam]{param_value.SimplexParam()}}, up to rounding.
 }
 \details{
-Two rejections, both with their own message. A vector with a non-positive
-entry is outside the \strong{open} simplex, and \eqn{\log 0} is not finite; a
-vector that does not sum to 1 is not a probability vector, and it is \strong{not
-renormalized}, a silent repair being the kind of thing that hides a caller's
-defect for a long time.
+Three rejections, each with its own message. An argument that is not a
+numeric vector of length \eqn{K} is rejected. A vector with a non-positive or
+missing entry is outside the \strong{open} simplex, and \eqn{\log 0} is not
+finite. A vector that does not sum to 1 is not a probability vector, and it
+is \strong{not renormalized}, because a silent repair would hide an error in the
+caller.
 
-The first rejection is the one a fit runs into. \code{\link[=simplex_point]{simplex_point()}} saturates a
-large free value to an exact 0 in the reference category, so a value produced
-at the boundary cannot be inverted back.
+The second rejection is the one that a fit meets: a large positive free
+value makes \code{\link[=simplex_point]{simplex_point()}} return an exact 0 in the reference category, so
+a value produced at the boundary cannot be inverted back.
 }
 \seealso{
 \code{\link[=param_value.SimplexParam]{param_value.SimplexParam()}}, the map this inverts.

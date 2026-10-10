@@ -8,7 +8,7 @@ simplex(n_cat)
 }
 \arguments{
 \item{n_cat}{The number of categories \eqn{K}, \strong{at least 2}. A single
-integer; \code{1}, a fraction, \code{NA} and a vector all throw \verb{'n_cat' must be a single integer of at least 2.} A one-category simplex is the constant 1 and
+integer; \code{1}, a fraction, \code{NA} and a vector all signal the error \verb{'n_cat' must be a single integer of at least 2.} A one-category simplex is the constant 1 and
 has nothing to estimate.}
 }
 \value{
@@ -26,10 +26,10 @@ values, with the last category as reference,
 \deqn{\pi_a = \frac{e^{\eta_a}}{1 + \sum_b e^{\eta_b}}, \qquad
       \pi_K = \frac{1}{1 + \sum_b e^{\eta_b}}.}
 
-Every free vector gives positive entries summing to exactly 1, so a mixture
-weight, a categorical probability or a latent-state distribution can be
-estimated without a constraint. This is the first family here whose value is
-\strong{not a matrix}; see \code{\link[=SimplexParam]{SimplexParam()}} for what that costs.
+Every free vector gives non-negative entries that sum to 1 up to rounding, so
+a mixture weight, a categorical probability or a latent-state distribution
+can be estimated without a constraint. The value is \strong{not a matrix}; see
+\code{\link[=SimplexParam]{SimplexParam()}} for the consequences.
 }
 \section{The derivatives close over the value}{
 With \eqn{Z = 1 + \sum_b e^{\eta_b}}, each \eqn{\pi_a} for \eqn{a < K} is a
@@ -39,33 +39,32 @@ applied repeatedly:
 
 \deqn{\partial_b \pi_a = \pi_a(\delta_{ab} - \pi_b).}
 
-At first order that is the covariance matrix of a categorical indicator, which
-is why the tensors are the same objects a multinomial score already carries.
-All four orders are closed form and no stencil is used.
+At first order that is the covariance matrix of a categorical indicator, the
+same array that appears in the score of a multinomial model. All four orders
+are closed form and no stencil is used.
 }
 
-\section{An identity worth checking against}{
+\section{The derivatives sum to zero}{
 \eqn{\sum_a \pi_a = 1} at every \eqn{\eta}, so differentiating it gives
 \eqn{\sum_a \partial \pi_a = 0}, and the same at every higher order. Every
-derivative component therefore sums to zero over the value index. Measured
-over all four orders the worst sum is \eqn{1.7 \times 10^{-17}}, and
-\code{\link[=check_parameter]{check_parameter()}} runs exactly this check: a derivative array that does not
-sum to zero is wrong whatever else it agrees with.
+derivative component therefore sums to zero over the value index, up to
+rounding, and \code{\link[=check_parameter]{check_parameter()}} tests this identity: a derivative array
+that fails it is wrong, whatever other check it passes.
 }
 
 \section{Large free values saturate instead of overflowing}{
 \code{\link[=simplex_point]{simplex_point()}} applies the log-sum-exp shift, so a free value of 800 gives
-\eqn{\pi_1 = 1} and \eqn{\pi_K = 0} with the vector still summing to exactly 1,
-where the naive expression would divide \code{Inf} by \code{Inf}. Note that the value
-then sits on the \strong{boundary} of the simplex, so \code{\link[=param_free]{param_free()}} cannot invert
-it: \eqn{\log(0)} is not finite.
+\eqn{\pi_1 = 1} and \eqn{\pi_K = 0} with the vector summing to exactly 1,
+where the naive expression would divide \code{Inf} by \code{Inf}. The value then lies
+on the \strong{boundary} of the simplex, so \code{\link[=param_free]{param_free()}} cannot invert it:
+\eqn{\log(0)} is not finite.
 }
 
 \section{Why not stick-breaking}{
 The other common chart chains through \eqn{K - 1} nested logistic maps, so its
 derivatives compose that many times and are not symmetric in the categories.
-The additive log-ratio's close over \eqn{\pi} in one rule, and every category
-but the reference enters the same way.
+The derivatives of the additive log-ratio close over \eqn{\pi} in one rule,
+and every category but the reference enters the same way.
 }
 
 \section{Notation}{
@@ -88,7 +87,7 @@ sum(pi)
 all.equal(unname(pi),
           c(exp(eta), 1) / (1 + sum(exp(eta))))
 
-# The round trip closes exactly.
+# The round trip closes up to rounding.
 max(abs(param_free(s, pi) - eta))
 
 # The first derivative is the covariance of a categorical indicator.
@@ -116,6 +115,6 @@ Chapman and Hall, London. The additive log-ratio chart is chapter 6.
 \seealso{
 \code{\link[=transition_matrix]{transition_matrix()}}, which is one of these per row,
 \code{\link[=param_value]{param_value()}} and \code{\link[=param_free]{param_free()}} for the map and its inverse, and
-\code{\link[=check_parameter]{check_parameter()}}, whose seven-check battery is what a non-matrix family
-gets.
+\code{\link[=check_parameter]{check_parameter()}}, whose battery for a family that is not a matrix runs
+here.
 }

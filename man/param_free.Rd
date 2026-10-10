@@ -15,7 +15,7 @@ param_free(s, m, ...)
 satisfy the family's constraint; see \strong{Details} for what each family
 rejects.}
 
-\item{...}{Passed to the method. No method in this package reads it.}
+\item{...}{Passed to the method. The methods in this package do not read it.}
 }
 \value{
 A numeric vector of length \code{s@n_free}, named by \code{s@free_names}, such
@@ -24,32 +24,32 @@ that \code{param_value(s, param_free(s, m))} recovers \code{m}.
 \description{
 Inverts the map: given a value in the family's set, returns the free vector
 \eqn{\eta} that \code{\link[=param_value]{param_value()}} would send there. The two are a bijection
-onto the set, so the round trip closes to machine precision, and every one of
-the fifteen families in this package inverts exactly, with a worst measured
-error of \eqn{5 \times 10^{-16}}.
+onto the set, so the round trip closes up to rounding error, and every family
+in this package implements its inverse exactly.
 
 Use it to start an optimizer from a matrix rather than from a free vector:
 fit an unstructured covariance by moments, invert it, and hand the result in
 as a starting point.
 }
-\section{Exact or refused, never approximated}{
-A family either writes its inverse out or signals an error. The base method
-on \code{\link[=parameter]{parameter()}} does the second on behalf of a family that has not written
-the first, naming the family in the message. An inverse found by minimizing
-\eqn{\lVert V(\eta) - m \rVert} would return a plausible \eqn{\eta} for a
-matrix that is not in the set at all, and the caller could not tell that
-answer from a correct one.
+\section{Exact inverse or an error}{
+A family either writes its inverse out or signals an error. For a family
+that has not written its inverse, the base method on \code{\link[=parameter]{parameter()}} signals an
+error that names the family. An inverse found by minimizing
+\eqn{\lVert V(\eta) - m \rVert} would return an \eqn{\eta} even for a matrix
+that is not in the set, and the caller could not distinguish that result from
+a correct one.
 }
 
 \section{A value outside the set is rejected}{
 Every method checks \code{m} against the family's own constraint before
 inverting, and the message says what failed. \code{log_cholesky()} rejects a
-matrix that is not positive definite, with the verdict taken from the
-eigenvalues; \code{simplex()} rejects a vector that does not sum to one, and does
+matrix that is not positive definite; \code{simplex()} rejects a vector that does not sum to one, and does
 not renormalize it, because a silent repair would hide the caller's mistake.
-The shared checks are the shape and the symmetry: a matrix of the wrong side
-is rejected with a message naming the side required, and an asymmetry above
-\eqn{10^{-8}} relative is rejected while one below it is averaged away.
+The checks shared by the matrix families are the shape, the entries and the
+symmetry: a matrix of the wrong side is rejected with a message naming the
+side required, a missing or infinite entry is rejected, and an asymmetry
+above \eqn{10^{-8}} times the larger of 1 and the largest entry is rejected,
+while a smaller one is removed by averaging \eqn{m} with its transpose.
 }
 
 \section{Notation}{
@@ -59,7 +59,7 @@ the value on the constrained scale.
 }
 
 \examples{
-# The round trip closes exactly, in both directions.
+# The round trip closes up to rounding error.
 s <- log_cholesky(3)
 eta <- c(0.3, -0.2, 0.5, 0.1, -0.4, 0.2)
 param_free(s, param_value(s, eta))

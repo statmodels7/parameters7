@@ -24,10 +24,10 @@ respect to the free entries of the symmetric matrix \eqn{S}.
 }
 \details{
 The Frechet derivatives of the exponential contract chains of directions
-against divided differences of \eqn{\exp} in the eigenvalues, and the sum
-runs over every ordering of the directions, never over the distinct ones, so
-a tuple with repeated indices is counted with its multiplicity instead of
-being corrected for afterwards. The divided differences come from
+against divided differences of \eqn{\exp} in the eigenvalues. The sum over
+all orderings of the directions is computed as the sum over the distinct
+orderings, weighted by the multiplicity factor of a tuple with repeated
+indices (see \code{\link[=mlog_contract]{mlog_contract()}}). The divided differences come from
 the Opitz representation, an exponential of a small bidiagonal matrix read
 off its corner, which stays exact where the quotient recursion cancels
 catastrophically under near-repeated eigenvalues.

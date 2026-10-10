@@ -15,20 +15,19 @@ checked by the generic.}
 A numeric vector of length \code{s@n_free}, named by \code{s@free_names}.
 }
 \description{
-The method every \code{\link[=matrix_parameter]{matrix_parameter()}} inherits when it registers no
+The method that every \code{\link[=matrix_parameter]{matrix_parameter()}} inherits when it registers no
 \code{\link[=param_dlogdet]{param_dlogdet()}} of its own. It evaluates the trace identity
 
 \deqn{\partial_k \log|M| = \mathrm{tr}\!\left(M^{+} \partial_k M\right),}
 
-with \eqn{M^{+}} the Moore-Penrose inverse formed from the directions the
-declared rank keeps, which is the ordinary inverse for a full-rank family. The
+with \eqn{M^{+}} the Moore-Penrose inverse formed from the directions that
+the declared rank keeps, which is the ordinary inverse for a full-rank family. The
 trace is computed as \code{sum(mi * dk)}, the elementwise product summed, both
 matrices being symmetric, so no matrix product is formed.
 
 The identity is exact, so the accuracy is entirely the accuracy of
-\code{\link[=param_d1]{param_d1()}}. With an analytic first derivative the answer agrees with a
-closed form to \eqn{4 \times 10^{-15}}; with a numerical one, to
-\eqn{2 \times 10^{-11}}.
+\code{\link[=param_d1]{param_d1()}}: rounding with an analytic first derivative, and that of a
+central difference with a numerical one.
 }
 \seealso{
 \code{\link[=param_dlogdet]{param_dlogdet()}} for the generic, \code{\link[=param_d1]{param_d1()}} for the derivative

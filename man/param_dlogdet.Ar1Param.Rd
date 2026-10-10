@@ -29,17 +29,19 @@ exactly zero and the pure ones are the two chains taken separately.
 \details{
 The scale's chain is \eqn{p} times the derivatives of \eqn{\log h}, which under
 the default log link is \eqn{p} at first order and 0 above it. The
-correlation's is \code{\link[=log_affine_derivs]{log_affine_derivs()}} on the two terms of
-\code{ar1_logdet_terms()}, chained onto the rhobit link.
+correlation's is \code{\link[=ar1_logdet_chain]{ar1_logdet_chain()}}, the derivatives in the free value
+written in closed form in \eqn{\tanh z} and \eqn{\mathrm{sech}^2 z}, so that
+they stay accurate where \eqn{\rho} rounds to \eqn{-1} or 1.
 
 The four methods return vectors of \code{order + 1} entries, keyed by the tuple
 names of their own order. At \eqn{p = 4} and \eqn{\rho = 0.6} the second order
 is \eqn{(0, -3.84, 0)} over \code{log_scale:log_scale}, \code{z_rho:z_rho} and
 \code{log_scale:z_rho}.
 
-Together with \code{\link[=compound_symmetry]{compound_symmetry()}}, this is one of the two families where the
-higher log-determinant orders are non-zero, so a check of them has content
-here where on \code{\link[=log_cholesky]{log_cholesky()}} it would compare two zeros.
+The higher log-determinant orders are not zero here, as for
+\code{\link[=compound_symmetry]{compound_symmetry()}}, \code{\link[=autoregressive]{autoregressive()}} and \code{\link[=correlation_matrix]{correlation_matrix()}}, so a
+check of them compares non-zero numbers, where on \code{\link[=log_cholesky]{log_cholesky()}} it would
+compare two zeros.
 }
 \seealso{
 \code{\link[=param_logdet.Ar1Param]{param_logdet.Ar1Param()}} for the quantity differentiated,

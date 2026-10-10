@@ -7,12 +7,11 @@ NULL
 #' @description
 #' The S7 class of unstructured symmetric positive definite matrices in the
 #' log-Cholesky parametrization, \eqn{M = L L^\top} with \eqn{L} lower triangular
-#' and positive on the diagonal. It is the class the methods of that family
-#' dispatch on: given only [param_value()], everything else here is closed form,
-#' including all four derivative orders and all four orders of the
-#' log-determinant.
+#' and positive on the diagonal. The methods of the family dispatch on this
+#' class, and each of them is closed form, including all four derivative orders
+#' and all four orders of the log-determinant.
 #'
-#' Call [log_cholesky()] to build one. The class constructor takes the eight
+#' Call [log_cholesky()] to build one. The class constructor takes the seven
 #' properties directly and does no work; using it means computing `free_names`,
 #' `rank` and `param_params` by hand.
 #'
@@ -25,7 +24,7 @@ NULL
 #'   `param_params`, whose only entry is `positions`.
 #'
 #' @seealso [log_cholesky()], the constructor, and [matrix_parameter()] for the
-#'   properties this inherits.
+#'   properties that this class inherits.
 #'
 #' @examples
 #' # The class is what dispatch keys on.
@@ -33,8 +32,7 @@ NULL
 #' c(S7::S7_inherits(s, LogCholeskyParam),
 #'   S7::S7_inherits(s, matrix_parameter))
 #'
-#' # Belonging to it is what gives the family its closed forms: nothing here
-#' # is obtained by finite differences.
+#' # The family has closed forms throughout, with no finite differences.
 #' any(param_is_numerical(s))
 #'
 #' @export
@@ -45,7 +43,7 @@ LogCholeskyParam <- S7::new_class("LogCholeskyParam", parent = matrix_parameter)
 #'
 #' @description
 #' Returns the row and column of each free value of a log-Cholesky parameter, in
-#' the order the free vector uses: the \eqn{p} diagonal entries first, then the
+#' the order that the free vector uses: the \eqn{p} diagonal entries first, then the
 #' strictly below-diagonal entries column by column. Everything in the family
 #' reads it, so the ordering is decided once here and nowhere else.
 #'
@@ -89,8 +87,7 @@ chol_positions <- function(p) {
 #' Estimating a covariance matrix directly is awkward. An optimizer moving
 #' freely through \eqn{p(p+1)/2} numbers will eventually propose a matrix that is
 #' not positive definite, and the likelihood is undefined there. This function
-#' removes the problem instead of policing it: it returns an object holding the
-#' log-Cholesky map, which sends an unconstrained vector to \eqn{M = L L^\top}
+#' returns an object holding the log-Cholesky map, which sends an unconstrained vector to \eqn{M = L L^\top}
 #' with \eqn{L} lower triangular and positive on the diagonal. Every vector in
 #' \eqn{\mathbb{R}^{p(p+1)/2}} gives a valid matrix, so the optimizer never has
 #' to be told about the constraint.
@@ -99,15 +96,15 @@ chol_positions <- function(p) {
 #' of Pinheiro and Bates (1996).
 #'
 #' @details
-#' # Why the map is safe
+#' # Positive definiteness of the map
 #'
 #' \deqn{M = L L^\top, \qquad L_{ii} = \exp(\eta_i) > 0}
 #'
 #' The exponential keeps the diagonal of \eqn{L} positive, and a triangular
 #' matrix with a positive diagonal has full rank, so \eqn{L L^\top} is positive
-#' definite at every finite \eqn{\eta}. The map is smooth in both directions and
-#' one to one, the Cholesky factor with a positive diagonal being unique, so
-#' there is no boundary on the free scale to run into.
+#' definite at every finite \eqn{\eta}, within the range of floating-point
+#' arithmetic. The map is smooth in both directions and one to one, the
+#' Cholesky factor with a positive diagonal being unique.
 #'
 #' The logarithm on the diagonal belongs to the parametrization and is not a
 #' swappable link, which is why it appears in the free names. Use
@@ -125,7 +122,7 @@ chol_positions <- function(p) {
 #' The ordering is part of the interface: `free_names` follows it and downstream
 #' parameter tables are built from those names. Treat it as fixed.
 #'
-#' # The log-determinant comes free
+#' # The log-determinant
 #'
 #' A likelihood involving \eqn{M} almost always needs \eqn{\log|M|}, and here it
 #' is twice the sum of the first \eqn{p} free values:
@@ -136,7 +133,7 @@ chol_positions <- function(p) {
 #' elsewhere, and the second, third and fourth derivatives are exactly zero. All
 #' four are returned without any factorization being taken.
 #'
-#' # When to use something else
+#' # Other families
 #'
 #' This is the parametrization for an unstructured matrix, where
 #' \eqn{p(p+1)/2} free values is the price of assuming nothing. A structured
@@ -155,7 +152,7 @@ chol_positions <- function(p) {
 #'
 #' @param dimension The side \eqn{p} of the matrix. A single positive whole
 #'   number, finite and at least 1. `0`, `2.5`, `c(1, 2)`, `"3"`, `Inf` and `NA`
-#'   all throw `'dimension' must be a single positive integer.`
+#'   all signal the error `'dimension' must be a single positive integer.`
 #'
 #' @return An object of class [LogCholeskyParam()], with properties
 #'   \describe{
@@ -197,11 +194,11 @@ chol_positions <- function(p) {
 #' round(M, 4)
 #' eigen(M, only.values = TRUE)$values
 #'
-#' # Even absurd values stay in the cone, which is the point.
+#' # Large free values also give a positive definite matrix.
 #' eigen(param_value(s, c(-8, 9, -7, 100, -100, 50)),
 #'       only.values = TRUE)$values > 0
 #'
-#' # The inverse map recovers the free vector exactly.
+#' # The inverse map recovers the free vector up to rounding.
 #' max(abs(param_free(s, M) - eta))
 #'
 #' # log|M| is linear in eta: twice the sum of the first p entries.
@@ -215,7 +212,7 @@ chol_positions <- function(p) {
 #'   third = max(abs(param_d3logdet(s, eta))),
 #'   fourth = max(abs(param_d4logdet(s, eta))))
 #'
-#' # The factor is what the parametrization holds, so it costs nothing.
+#' # The factor is assembled from the free vector, with no factorization.
 #' L <- param_factor(s, eta)
 #' round(L, 4)
 #' all.equal(diag(L), exp(eta[1:3]))
@@ -245,15 +242,15 @@ log_cholesky <- function(dimension) {
 #' @description
 #' Assembles \eqn{L} from the free vector: the diagonal is the exponential of
 #' the first `dimension` values and the rest are placed below it, at the
-#' positions [chol_positions()] recorded. Both [param_value()] and
+#' positions that [chol_positions()] recorded. Both [param_value()] and
 #' [param_factor()] start here, and [param_factor()] returns it unchanged.
 #'
 #' @details
 #' The exponential is applied by subsetting on `on_diagonal`, never through
 #' `ifelse()`, which evaluates both branches over the whole vector. Here that
-#' would only exponentiate values it then discards; the same shape in
+#' would only exponentiate values that it then discards; the same shape in
 #' [param_free()] would take a logarithm of below-diagonal entries that are free
-#' to be negative, and warn about the `NaN`s it throws away.
+#' to be negative, and warn about the `NaN`s that it discards.
 #'
 #' @param s A [LogCholeskyParam()] object, whose `dimension` and
 #'   `param_params$positions` are read.
@@ -309,10 +306,10 @@ S7::method(param_value, LogCholeskyParam) <- function(s, eta, ...) {
 #' @title Factor of a Log-Cholesky Parameter
 #' @name param_factor.LogCholeskyParam
 #' @description
-#' Returns \eqn{L} by assembling it from the free vector, which is all this
-#' family's parametrization is: no factorization is taken, because the factor is
-#' what \eqn{\eta} holds. It is the only family here whose factor is free, and it
-#' is \eqn{O(p^2)} against the base class's \eqn{O(p^3)} Cholesky.
+#' Returns \eqn{L} by assembling it from the free vector: no factorization is
+#' taken, because the free vector holds the factor. The assembly is
+#' \eqn{O(p^2)}, against the \eqn{O(p^3)} Cholesky factorization of the base
+#' method.
 #'
 #' The diagonal is `exp(eta[1:p])` and the entries below it are the remaining
 #' free values, so a caller who wants a standard deviation off the factor can
@@ -325,7 +322,7 @@ S7::method(param_value, LogCholeskyParam) <- function(s, eta, ...) {
 #'   a positive diagonal, satisfying `L %*% t(L) == param_value(s, eta)` exactly,
 #'   and carrying no dimnames.
 #' @seealso [chol_assemble()], which does the assembly, and
-#'   [param_factor.matrix_parameter()] for what every other family pays.
+#'   [param_factor.matrix_parameter()] for the base method.
 #' @keywords internal
 S7::method(param_factor, LogCholeskyParam) <- function(s, eta, ...) {
   chol_assemble(s, eta)
@@ -336,25 +333,25 @@ S7::method(param_factor, LogCholeskyParam) <- function(s, eta, ...) {
 #' @name param_free.LogCholeskyParam
 #' @description
 #' Returns the free vector behind a matrix: the Cholesky factor of `m`, read off
-#' at the positions [chol_positions()] records, with the diagonal logged. Exact,
-#' and a true inverse of [param_value.LogCholeskyParam()] because the triangular
-#' factor with a positive diagonal is unique. Measured, the round trip closes to
-#' \eqn{7 \times 10^{-17}}.
+#' at the positions that [chol_positions()] records, with the diagonal logged.
+#' Exact, and a true inverse of [param_value.LogCholeskyParam()] because the
+#' triangular factor with a positive diagonal is unique; the round trip closes
+#' up to rounding.
 #' @details
 #' `m` is rejected when it is not positive definite, with the verdict taken from
-#' the eigenvalues through [chol_pd()] and the message saying so. That
-#' distinction matters: a caught [base::chol()] error would be a statement about
-#' the arithmetic and can differ between platforms on a matrix with an exactly
-#' zero eigenvalue, while a test on the spectrum is a statement about the matrix.
+#' the eigenvalues through [chol_pd()], at a relative tolerance of
+#' \eqn{10^{-14}}. A test on the spectrum gives the same answer on every
+#' platform, while a caught [base::chol()] error can differ between platforms on
+#' a matrix with an exactly zero eigenvalue.
 #'
 #' The logarithm is applied by subsetting on `on_diagonal`. Through `ifelse()` it
 #' would be evaluated over the whole vector, including the below-diagonal entries
-#' that are free to be negative, which produces `NaN`s and a warning about values
-#' the function then discards.
+#' that are free to be negative, which produces `NaN`s and a warning about
+#' values that the function then discards.
 #' @param s A [LogCholeskyParam()] object.
 #' @param m A symmetric positive definite `s@dimension` by `s@dimension` numeric
 #'   matrix, already checked for shape and symmetry by the generic. A matrix that
-#'   is not positive definite throws.
+#'   is not positive definite is rejected.
 #' @param ... Unused, and accepted so the signature matches the generic's.
 #' @return A numeric vector of length `s@n_free`, named by `s@free_names`.
 #' @seealso [param_value.LogCholeskyParam()], the map this inverts, and
@@ -364,8 +361,8 @@ S7::method(param_free, LogCholeskyParam) <- function(s, m, ...) {
   l <- chol_pd(m)
   if (is.null(l)) {
     stop(paste0(
-      "'m' is not positive definite, so it is not in the set log_cholesky()\n",
-      "  parametrizes. The verdict is spectral, not a failed factorization."
+      "'m' is not positive definite, so it is not in the set that\n",
+      "  log_cholesky() parametrizes."
     ), call. = FALSE)
   }
   pos <- s@param_params$positions
@@ -421,8 +418,7 @@ S7::method(param_d1, LogCholeskyParam) <- function(s, eta, ...) {
 #' derivative touching one of those drops the outer terms and leaves the two
 #' cross products.
 #'
-#' One consequence is worth knowing when reading a result: \eqn{M} is quadratic
-#' in each below-diagonal free value, so the component keyed by that value twice
+#' \eqn{M} is quadratic in each below-diagonal free value, so the component keyed by that value twice
 #' is a constant in \eqn{\eta}, and every third and fourth derivative repeating
 #' it is exactly zero.
 #' @param s A [LogCholeskyParam()] object.
@@ -473,7 +469,7 @@ S7::method(param_logdet, LogCholeskyParam) <- function(s, eta, ...) {
 #' Closed form and constant: 2 in each of the \eqn{p} diagonal directions and 0
 #' in the \eqn{p(p-1)/2} below-diagonal ones, since \eqn{\log|M|} is
 #' \eqn{2\sum_i \eta_i} and does not involve the rest of \eqn{\eta} at all. The
-#' value does not depend on `eta`, which is read only for its length.
+#' value does not depend on `eta`, which the method does not read.
 #' @param s A [LogCholeskyParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic. Its values do not enter the result.
@@ -499,11 +495,10 @@ S7::method(param_dlogdet, LogCholeskyParam) <- function(s, eta, ...) {
 #' zeros are exact, so a consumer can drop the term entirely instead of
 #' carrying small numbers through a contraction.
 #'
-#' This is worth knowing when checking another family: a comparison of a
-#' log-determinant Hessian against a numerical reference can pass on
-#' `log_cholesky()` while a term is missing, both sides being zero. [ar1()] and
-#' [compound_symmetry()] are the families where this order has something to get
-#' wrong.
+#' A comparison of a general log-determinant Hessian against a numerical
+#' reference therefore compares two zeros on `log_cholesky()`. [ar1()],
+#' [compound_symmetry()] and [correlation_matrix()] are families where this
+#' order is not zero.
 #' @param s A [LogCholeskyParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic. Its values do not enter the result.
@@ -523,8 +518,8 @@ S7::method(param_d2logdet, LogCholeskyParam) <- function(s, eta, ...) {
 #'
 #' @description
 #' Returns \eqn{\partial^S L} for a multiset \eqn{S} of free-value indices, or
-#' `NULL` where that derivative is identically zero. Almost all of them are, and
-#' that is what keeps the Leibniz sum of [chol_leibniz()] short.
+#' `NULL` where that derivative is identically zero. Almost all of them are,
+#' which keeps the Leibniz sum of [chol_leibniz()] short.
 #'
 #' @details
 #' Three cases exhaust it. An empty \eqn{S} gives \eqn{L} itself. A single index
@@ -582,10 +577,9 @@ chol_dfactor <- function(s, l, ks) {
 #' this family are one call each to this function.
 #'
 #' @details
-#' Measured against [.chol_leibniz_r()], the dense R twin, on the same free
-#' vector: **30x** at \eqn{p = 8} and order 4 (0.295 s against 8.89 s over 82251
-#' components), 30x at \eqn{p = 8} order 2, 35x at \eqn{p = 5} order 4 and 19x at
-#' \eqn{p = 3} order 2. The two agree **exactly**, to 0, at \eqn{p = 5} order 4.
+#' [.chol_leibniz_r()], the dense R twin, forms full matrix products and returns
+#' the same components; the compiled route is faster, by a factor that grows
+#' with \eqn{p} and with the order.
 #'
 #' @param s A [LogCholeskyParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`.
@@ -595,7 +589,7 @@ chol_dfactor <- function(s, l, ks) {
 #'   keyed as `param_tuple_names(s, order)` and in that order, each
 #'   `s@dimension` by `s@dimension` with dimnames `v1`, `v2`, ...
 #'
-#' @seealso [.chol_leibniz_r()], the R twin the tests hold it against,
+#' @seealso [.chol_leibniz_r()], the R twin against which the tests check it,
 #'   [chol_dfactor()] for the factor's derivatives, and [leibniz_gram()].
 #'
 #' @keywords internal
@@ -613,22 +607,18 @@ chol_leibniz <- function(s, eta, order) {
 #'
 #' @description
 #' Computes the same components as `chol_leibniz_cpp`, through the dense matrix
-#' products of [leibniz_gram()]. It exists as the independent reference the tests
-#' hold that kernel against, so a change to one side that is not a change to both
-#' shows up as a disagreement. Not called on any production path;
+#' products of [leibniz_gram()]. It is the independent reference against which
+#' the tests check that kernel, so a change to one side that is not made to both
+#' shows up as a disagreement. It is not called on a production path;
 #' [chol_leibniz()] is.
 #'
 #' @details
-#' The two routes agree **exactly**: measured at \eqn{p = 5} and order 4, over
-#' 3060 components, the largest absolute difference is 0. That identity is
-#' licensed rather than hoped for, both routes summing the same Leibniz terms,
-#' and the compiled one skipping only additions of structural zeros.
+#' The two routes agree exactly, both summing the same Leibniz terms, with the
+#' compiled one skipping only additions of structural zeros.
 #'
 #' The compiled route is the production one because every derivative of the
 #' factor is a single-entry matrix, so a Leibniz term is one row, one column or
-#' one cell where this twin forms a full \eqn{p \times p} product. Measured:
-#' 0.295 s against 8.89 s at \eqn{p = 8} and order 4, a factor of 30, and between
-#' 19x and 35x over \eqn{p} of 3 to 8 and orders 2 and 4.
+#' one cell, where this twin forms a full \eqn{p \times p} product.
 #'
 #' @param s A [LogCholeskyParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`.
@@ -659,8 +649,8 @@ chol_leibniz <- function(s, eta, order) {
 #' differentiated more than once survives only where the repetitions name the
 #' same diagonal free value, every derivative of \eqn{e^{\eta_k}} being itself.
 #'
-#' Two consequences a reader will meet in the output. A component repeating a
-#' below-diagonal free value three times is exactly zero, \eqn{M} being quadratic
+#' Two consequences follow. A component repeating a below-diagonal free value
+#' three times is exactly zero, \eqn{M} being quadratic
 #' in it. A component repeating a diagonal value three times is not, that value
 #' entering through an exponential.
 #' @param s A [LogCholeskyParam()] object.
@@ -686,9 +676,10 @@ S7::method(param_d3, LogCholeskyParam) <- function(s, eta, ...) {
 #' the \eqn{2^4} ways to split a quadruple between the factors almost all
 #' contribute nothing.
 #'
-#' Exact at this order, which is where the contract stops: a fourth-order chain
-#' rule through a link needs this much. Nothing is differenced, so the accuracy
-#' is machine precision, against the \eqn{10^{-4}} a stencil would give.
+#' Exact at this order, the highest that the package provides, and a
+#' fourth-order chain rule through a link needs it. Nothing is differenced, so
+#' the accuracy is that of rounding, where a stencil at this order is accurate
+#' to about five digits.
 #'
 #' A component repeating a below-diagonal free value three or more times is
 #' exactly zero, \eqn{M} being quadratic in each of those.
@@ -700,8 +691,8 @@ S7::method(param_d3, LogCholeskyParam) <- function(s, eta, ...) {
 #'   `param_tuple_names(s, 4)` and in that order. At \eqn{p = 3} that is 126
 #'   components, at \eqn{p = 8} it is 82251.
 #' @seealso [chol_leibniz()], which assembles it, [param_d3.LogCholeskyParam()]
-#'   for the order below, and [numerical_d4()] for what a family without a closed
-#'   form gets instead.
+#'   for the order below, and [numerical_d4()] for the route of a family without
+#'   a closed form.
 #' @keywords internal
 S7::method(param_d4, LogCholeskyParam) <- function(s, eta, ...) {
   chol_leibniz(s, eta, 4L)
@@ -715,10 +706,10 @@ S7::method(param_d4, LogCholeskyParam) <- function(s, eta, ...) {
 #' \eqn{\eta}. The zeros are exact, so a consumer can drop the term instead of
 #' carrying small numbers through a contraction.
 #'
-#' It also means this family cannot exercise the order: a check of a
-#' log-determinant's third derivative against a numerical reference passes here
-#' whatever is missing, both sides being zero. [ar1()] and [compound_symmetry()]
-#' are where this order has content.
+#' A comparison of a general third log-determinant derivative against a
+#' numerical reference therefore compares two zeros on this family. [ar1()],
+#' [compound_symmetry()] and [correlation_matrix()] are families where this
+#' order is not zero.
 #' @param s A [LogCholeskyParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic. Its values do not enter the result.
@@ -740,10 +731,9 @@ S7::method(param_d3logdet, LogCholeskyParam) <- function(s, eta, ...) {
 #' third order: \eqn{\log|M| = 2\sum_i \eta_i} is linear in the free vector. The
 #' zeros are exact.
 #'
-#' This is the order at which a numerical fallback is least usable, so a family
-#' whose log-determinant is not linear gains most from a closed form here. See
-#' [param_d4logdet.matrix_parameter()] for the measured accuracy of the
-#' alternative.
+#' This is the order at which a numerical fallback is least accurate, so a
+#' family whose log-determinant is not linear gains most from a closed form
+#' here. See [param_d4logdet.matrix_parameter()] for the fallback.
 #' @param s A [LogCholeskyParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic. Its values do not enter the result.

@@ -26,18 +26,13 @@ Returns the derivatives of orders 1 to \code{order} at \eqn{r} of
   = (-1)^{k-1}(k-1)!\,\frac{b^k}{(a + br)^k}.}
 }
 \details{
-Both two-value families have a log-determinant of this shape: compound
-symmetry from its two distinct eigenvalues,
-\eqn{\log\{1+(p-1)\rho\} + (p-1)\log(1-\rho)}, and AR(1) from
-\eqn{|R| = (1-\rho^2)^{p-1}}, which factors as
-\eqn{(p-1)\{\log(1+\rho) + \log(1-\rho)\}}. Writing the derivatives once here
-keeps them from being transcribed twice, which is where a sign would be lost.
+The log-determinant of \code{\link[=autoregressive]{autoregressive()}} has this shape, one term
+\eqn{(p-k)\{\log(1-r_k) + \log(1+r_k)\}} per partial autocorrelation.
 
-The result is in the \strong{correlation}, not in the free value; the caller chains
-it onto the link with \code{\link[=compose_order]{compose_order()}}.
+The result is in the \strong{correlation}; the caller chains it onto the link with
+\code{\link[=compose_order]{compose_order()}}.
 }
 \seealso{
-\code{\link[=cs_logdet_terms]{cs_logdet_terms()}} and \code{\link[=ar1_logdet_terms]{ar1_logdet_terms()}} for the two term lists,
-and \code{\link[=econ_logdet_derivative]{econ_logdet_derivative()}}, which chains the result onto the link.
+\code{\link[=ar_logdet_derivative]{ar_logdet_derivative()}}, which chains the result onto the link.
 }
 \keyword{internal}

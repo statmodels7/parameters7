@@ -22,12 +22,11 @@ Exact, and tridiagonal. The precision of an AR(1) covariance is
 \eqn{\{\sigma^2(1-\rho^2)\}^{-1}} times the matrix with 1 at the two corners
 of the diagonal, \eqn{1+\rho^2} elsewhere on it, and \eqn{-\rho} on the two
 first off-diagonals. Every other entry is exactly zero, an AR(1) process being
-Markov, so the inverse is written down and no factorization is performed: the
-cost is \eqn{O(p)} entries against the base class's \eqn{O(p^3)} Cholesky.
-
-Measured at \eqn{p = 4} and \eqn{\rho = 0.6}: the entries beyond the first
-off-diagonal are 0 exactly, and the whole matrix agrees with \code{base::solve()} on
-the assembled covariance to \eqn{1 \times 10^{-16}}.
+Markov, so the inverse is written down and no factorization is performed. The
+matrix is assembled densely and multiplied by \code{b}, at \eqn{O(p^2)} per column
+of \code{b}. The factor \eqn{1 - \rho^2} is evaluated from the free value \eqn{z}
+as \eqn{\mathrm{sech}^2 z = 4e^{-2|z|}/(1 + e^{-2|z|})^2}, so the inverse stays
+accurate where \eqn{\rho} rounds to \eqn{-1} or 1.
 }
 \seealso{
 \code{\link[=ar1]{ar1()}}, which explains why the tridiagonal precision is not itself

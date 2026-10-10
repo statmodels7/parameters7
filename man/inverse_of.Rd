@@ -13,12 +13,13 @@ rank.}
 \value{
 An object of class \code{\link[=InverseParam]{InverseParam()}}, with \code{dimension}, \code{rank},
 \code{n_free} and \code{free_names} the inner family's, \code{null_basis} a \code{dimension}
-by 0 matrix, and \code{param_name} \code{"inverse_of(inner)"}.
+by 0 matrix, and \code{param_name} \code{"inverse_of(<inner>)"} with the inner
+family's name written in, for example \code{"inverse_of(ar1)"}.
 }
 \description{
 Returns the family \eqn{N(\eta) = S(\eta)^{-1}} for a matrix family \eqn{S}:
-the same free vector, the inverted value. It is the composition that says
-"the other side" to a consumer that fixes one, as
+the same free vector, the inverted value. It gives the other side of the
+pair (covariance or precision) to a consumer that fixes one of them, as
 \code{\link[penalties7:structured_penalty]{penalties7::structured_penalty()}} fixes the precision.
 }
 \section{What it is for}{
@@ -27,14 +28,15 @@ is closed under inversion, which \code{\link[=log_cholesky]{log_cholesky()}}, \c
 \code{\link[=diagonal_matrix]{diagonal_matrix()}}, \code{\link[=scalar_matrix]{scalar_matrix()}}, \code{\link[=compound_symmetry]{compound_symmetry()}} and
 \code{\link[=dr_prod]{dr_prod()}} are and \code{\link[=correlation_matrix]{correlation_matrix()}}, \code{\link[=ar1]{ar1()}} and \code{\link[=autoregressive]{autoregressive()}}
 are not. For a family that is not closed the two sides are different models,
-and this wrapper is how the one the family does not name is written:
+and this wrapper writes the side that the family does not name:
 \code{inverse_of(correlation_matrix(3))} is the matrix whose inverse is a
-correlation matrix, which no chart of the package produces directly.
+correlation matrix, which the other charts of the package do not produce
+directly.
 
-Where the inverse has a structure worth exploiting the package writes it out
-instead: \code{\link[=ar1_inv]{ar1_inv()}} and \code{\link[=autoregressive_inv]{autoregressive_inv()}} give the same values as
-\code{inverse_of(ar1())} and \code{inverse_of(autoregressive())} and reach them in
-\eqn{O(p)} entries rather than through a factorization.
+Where the inverse has a structure that a closed form can use, the package
+writes it out instead: \code{\link[=ar1_inv]{ar1_inv()}} and \code{\link[=autoregressive_inv]{autoregressive_inv()}} give the same
+values as \code{inverse_of(ar1())} and \code{inverse_of(autoregressive())} and reach
+them without a factorization.
 }
 
 \section{The derivatives}{
@@ -52,7 +54,11 @@ elsewhere in the toolkit. The number of terms is the Fubini number of the
 order: 1, 3, 13 and 75.
 
 Every factor is the inner family's own closed form, so nothing is
-differenced: the arithmetic is exact wherever the inner family's is.
+differenced. The products are formed in floating point, however, and the
+partition sum loses accuracy roughly as the square of the condition number
+of the inner matrix. For an inner \code{\link[=log_cholesky]{log_cholesky()}} family, the first
+two orders are computed by \code{\link[=param_inv_d1]{param_inv_d1()}} and \code{\link[=param_inv_d2]{param_inv_d2()}}, which are
+exact, and the sum is used only for orders three and four.
 }
 
 \section{The log-determinant}{
@@ -75,7 +81,7 @@ ordered partition of it into non-empty blocks.
 }
 
 \examples{
-# The inverse of an AR(1) correlation is tridiagonal, so the family whose
+# The inverse of an AR(1) covariance is tridiagonal, so the family whose
 # value is that inverse is a different model from ar1() itself.
 s <- inverse_of(ar1(5))
 eta <- c(log(2), atanh(0.6))

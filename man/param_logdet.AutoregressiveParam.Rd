@@ -21,9 +21,7 @@ Closed form, from the innovation variances of the Levinson-Durbin recursion:
   + \sum_{k=1}^{q} (p - k)\log(1 - r_k^{2}).}
 
 A sum of \eqn{q + 1} terms at any dimension, with no factorization and no
-determinant taken. Measured against \code{determinant()}, the gap is
-\eqn{2 \times 10^{-15}} at \eqn{p = 5} and \eqn{4 \times 10^{-14}} at
-\eqn{p = 100}.
+determinant taken.
 }
 \seealso{
 \code{\link[=param_dlogdet.AutoregressiveParam]{param_dlogdet.AutoregressiveParam()}} for its derivatives, and

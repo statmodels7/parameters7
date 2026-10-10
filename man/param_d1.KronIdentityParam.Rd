@@ -13,14 +13,15 @@ already checked by the generic.}
 }
 \value{
 A list of \code{s@n_free} symmetric matrices named by \code{s@free_names}, each
-\code{s@dimension} by \code{s@dimension}, block diagonal and labeled \code{v1}, \code{v2}, ..., \code{vp} on both margins.
+\code{s@dimension} by \code{s@dimension}, block diagonal and labeled \code{v1}, \code{v2}, ...,
+\code{v(md)} on both margins.
 }
 \description{
 Closed form: \eqn{\partial_k M = I_m \otimes \partial_k S}, the inner
 parameter's first derivatives lifted one at a time. Exact whenever the inner
-parameter's are, and numerical whenever they are not, so
-\code{\link[=param_is_numerical]{param_is_numerical()}} on the composite reports the inner parameter's own
-answer.
+parameter's are, and numerical whenever they are not. \code{\link[=param_is_numerical]{param_is_numerical()}}
+does not propagate this: it reports \code{FALSE} for every quantity of the
+composite, which has methods of its own.
 }
 \seealso{
 \code{\link[=param_d2.KronIdentityParam]{param_d2.KronIdentityParam()}} for the order above.

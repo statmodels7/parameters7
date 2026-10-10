@@ -28,7 +28,7 @@ The factor is triangular, so \eqn{\lvert R \rvert = \prod_i L_{ii}^2} and
 \deqn{\log\lvert R \rvert = 2 \sum_{i,k} \log \sin\theta_{ik},}
 a sum with one term per free value. The log-determinant is therefore
 separable, every mixed derivative is exactly zero, and each pure one is the
-logarithm composed with the sine table \code{\link[=corr_tables]{corr_tables()}} already
+logarithm composed with the sine table that \code{\link[=corr_tables]{corr_tables()}} already
 holds.
 
 The four coefficients \eqn{2(-1)^{j-1}(j-1)!/\sin^j\theta} are the

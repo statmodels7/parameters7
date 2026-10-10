@@ -18,7 +18,7 @@ list for a fixed parameter.
 \description{
 Closed form: \eqn{\partial^4_\eta M = h''''(\eta)\,P}, from
 \code{linkfunctions7::d4linkinv()}. Exact, where a family without a closed form
-would get a product stencil good to about five digits at this order.
+gets a product stencil that is least accurate at this order.
 }
 \seealso{
 \code{\link[=param_d3.ScaledMatrixParam]{param_d3.ScaledMatrixParam()}} for the order below, and

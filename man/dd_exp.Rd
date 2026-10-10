@@ -23,19 +23,10 @@ Exact under repeated arguments, where the recursive quotient
 zero, and accurate under nearly repeated ones, where it cancels.
 }
 \details{
-Measured at \eqn{\lambda = (0.5,\, 0.5 + g)}, against the exact limit
-\eqn{e^{0.5} = 1.648721270700127} reached at \eqn{g = 0}:\tabular{lll}{
-   gap \eqn{g} \tab Opitz \tab quotient \cr
-   \eqn{10^{-3}} \tab 1.649545906191066 \tab 1.649545906190929 \cr
-   \eqn{10^{-6}} \tab 1.648722095061039 \tab 1.648722095023754 \cr
-   \eqn{10^{-9}} \tab 1.648721271524488 \tab 1.648721206226264 \cr
-}
-
-
-The quotient has lost eight digits at a gap of \eqn{10^{-9}} and the Opitz
-value one. Near-repeated eigenvalues are ordinary here: any \eqn{S} with a
-symmetry has them, and an exactly repeated pair is what a scalar multiple of
-the identity gives.
+When two arguments nearly coincide, the quotient loses accuracy as the gap
+shrinks, while the Opitz value stays accurate to rounding. Near-repeated
+eigenvalues are ordinary here: any \eqn{S} with a symmetry has them, and a
+scalar multiple of the identity has an exactly repeated pair.
 }
 \seealso{
 \code{\link[=mlog_expm_small]{mlog_expm_small()}}, which does the exponential, and

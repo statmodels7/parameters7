@@ -24,8 +24,8 @@ At order 1, a list of \code{s@n_free} symmetric matrices named by
 \code{param_d1()}, \code{param_d2()}, \code{param_d3()} and \code{param_d4()} for a
 \code{\link[=block_diag]{block_diag()}} parameter: each block's own derivatives, placed in the rows and
 columns that block occupies, and \strong{exactly zero} for a tuple spanning two
-blocks. Nothing is rederived and nothing is differenced, so the composite is
-as exact as its blocks are.
+blocks. The blocks' derivatives are used as they are, with no differencing,
+so the composite is as exact as its blocks are.
 }
 \details{
 The four share \code{\link[=block_diag_derivs]{block_diag_derivs()}} and differ only in the order they pass.

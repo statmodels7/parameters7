@@ -22,7 +22,7 @@ Closed form: \eqn{r} times the fourth derivative of \eqn{\log h}, which
 \eqn{u_m = h^{(m)}/h}. The constant \eqn{\log|P|_+} contributes nothing.
 
 Exactly zero under the default log link, the quantity being linear in the free
-value. This is the order at which a numerical route is least usable, so a
+value. This is the order at which a numerical route is least accurate, so a
 family with a curved link gains most from the closed form here.
 }
 \seealso{

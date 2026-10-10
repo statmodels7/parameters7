@@ -21,7 +21,7 @@ LogCholeskyParam(
 integer, agreeing with \code{length(free_names)}.}
 
 \item{free_names}{A character vector of length \code{n_free}, one label per free
-value, in the order the free vector holds them. Must be unique.}
+value, in the order in which the free vector holds them. Must be unique.}
 
 \item{param_params}{A list of whatever the family needs in order to evaluate
 itself, read only by that family's own methods.}
@@ -29,15 +29,14 @@ itself, read only by that family's own methods.}
 \item{dimension}{The side \eqn{p} of the matrix: a single integer, no
 smaller than 1. The validator rejects a vector and a value below 1.}
 
-\item{rank}{The rank of the matrix the family produces, a single integer in
+\item{rank}{The rank of the matrix that the family produces, a single integer in
 \code{0:dimension}. It is a property of the family, so a family whose value is
 positive definite at every \eqn{\eta} declares \eqn{p} here.}
 
 \item{null_basis}{A \code{dimension} by \code{dimension - rank} numeric matrix whose
 columns are an orthonormal basis of the common null space. Use
 \code{\link[=param_null_basis]{param_null_basis()}} to obtain one, or \code{matrix(numeric(0), dimension, 0)}
-for a full-rank family. The validator rejects any other shape, and
-reports both the rank and the shape when the two disagree.}
+for a full-rank family. The validator rejects any other shape.}
 }
 \value{
 An object of class \code{LogCholeskyParam}, a subclass of
@@ -49,12 +48,11 @@ An object of class \code{LogCholeskyParam}, a subclass of
 \description{
 The S7 class of unstructured symmetric positive definite matrices in the
 log-Cholesky parametrization, \eqn{M = L L^\top} with \eqn{L} lower triangular
-and positive on the diagonal. It is the class the methods of that family
-dispatch on: given only \code{\link[=param_value]{param_value()}}, everything else here is closed form,
-including all four derivative orders and all four orders of the
-log-determinant.
+and positive on the diagonal. The methods of the family dispatch on this
+class, and each of them is closed form, including all four derivative orders
+and all four orders of the log-determinant.
 
-Call \code{\link[=log_cholesky]{log_cholesky()}} to build one. The class constructor takes the eight
+Call \code{\link[=log_cholesky]{log_cholesky()}} to build one. The class constructor takes the seven
 properties directly and does no work; using it means computing \code{free_names},
 \code{rank} and \code{param_params} by hand.
 }
@@ -64,12 +62,11 @@ s <- log_cholesky(2)
 c(S7::S7_inherits(s, LogCholeskyParam),
   S7::S7_inherits(s, matrix_parameter))
 
-# Belonging to it is what gives the family its closed forms: nothing here
-# is obtained by finite differences.
+# The family has closed forms throughout, with no finite differences.
 any(param_is_numerical(s))
 
 }
 \seealso{
 \code{\link[=log_cholesky]{log_cholesky()}}, the constructor, and \code{\link[=matrix_parameter]{matrix_parameter()}} for the
-properties this inherits.
+properties that this class inherits.
 }

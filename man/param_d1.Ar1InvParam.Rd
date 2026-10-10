@@ -16,13 +16,13 @@ generic.}
 }
 \value{
 A named list of \code{s@dimension} square matrices, keyed as
-\code{\link[=param_tuple_names]{param_tuple_names()}} says.
+\code{\link[=param_tuple_names]{param_tuple_names()}} gives them.
 }
 \description{
 The four orders of \eqn{\partial\Omega} for \eqn{\Omega} the precision of an
-AR(1), written out from the product structure rather than assembled by the
-ordered-block-partition sum \code{\link[=inverse_of]{inverse_of()}} uses. The two routes agree to
-machine precision.
+AR(1), written out from the product structure instead of assembled by the
+ordered-block-partition sum that \code{\link[=inverse_of]{inverse_of()}} uses. The two routes agree
+to rounding.
 }
 \seealso{
 \code{\link[=ar1_inv]{ar1_inv()}} for the formulas.

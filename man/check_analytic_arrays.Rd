@@ -2,44 +2,40 @@
 % Please edit documentation in R/numerical_fallbacks.R
 \name{check_analytic_arrays}
 \alias{check_analytic_arrays}
-\title{Refuse an Order That Would Difference a Difference}
+\title{Reject an Order That Would Difference a Difference}
 \usage{
 check_analytic_arrays(s, order)
 }
 \arguments{
 \item{s}{A \code{\link[=matrix_parameter]{matrix_parameter()}} object.}
 
-\item{order}{The order being asked for, 3 or 4, which the message names.}
+\item{order}{The order requested, 3 or 4, which the message names.}
 }
 \value{
-Invisibly \code{TRUE}. A family whose \code{\link[=param_d1]{param_d1()}} or \code{\link[=param_d2]{param_d2()}} comes
-from the base class throws instead, with both the missing method and the
-remedy named.
+Invisibly \code{TRUE}. For a family whose \code{\link[=param_d1]{param_d1()}} or \code{\link[=param_d2]{param_d2()}}
+comes from the base class, an error that names the missing method and the
+remedy.
 }
 \description{
-Signals an error when the caller asks
-\code{\link[=param_d3logdet.matrix_parameter]{param_d3logdet.matrix_parameter()}} or
-\code{\link[=param_d4logdet.matrix_parameter]{param_d4logdet.matrix_parameter()}} of a family whose derivative arrays are
-themselves numerical. Both fallbacks difference \code{\link[=param_d2logdet]{param_d2logdet()}}, which is
+Signals an error when \code{\link[=param_d3logdet.matrix_parameter]{param_d3logdet.matrix_parameter()}} or
+\code{\link[=param_d4logdet.matrix_parameter]{param_d4logdet.matrix_parameter()}} is called for a family whose derivative
+arrays are themselves numerical. Both fallbacks difference \code{\link[=param_d2logdet]{param_d2logdet()}}, which is
 an exact identity \strong{given} \code{\link[=param_d1]{param_d1()}} and \code{\link[=param_d2]{param_d2()}}; where those are
 supplied the differencing is one layer, and where they are not it is two,
-which is the nesting the toolkit forbids everywhere.
+which is the nesting that the toolkit avoids everywhere.
 }
 \details{
-The refusal is not a matter of accuracy alone. Measured on a
-\eqn{4 \times 4} AR(1) covariance whose family supplies \code{\link[=param_value]{param_value()}} and
-nothing else, order three came back \eqn{7.5 \times 10^{-3}} against a
-quantity of size 4.45 and order four came back \strong{9.07} against a quantity
-of size 2.17, which is four times the size of what it estimates. Nothing
-downstream could tell such a number from a usable one:
-\code{\link[=param_is_numerical]{param_is_numerical()}} reports \code{TRUE} for the order in both regimes.
+With numerical arrays, the fourth order can come back larger than the
+quantity that it estimates, and \code{\link[=param_is_numerical]{param_is_numerical()}} reports \code{TRUE} for the
+order whether the arrays are analytic or not, so a consumer could not
+distinguish such a number from a usable one.
 
-Only the two arrays are read, and not \code{\link[=param_d2logdet]{param_d2logdet()}} itself. A family
-that writes its own second-order log-determinant out is asked for nothing
-further, that method being reached before this guard is.
+Only the two arrays are read, and not \code{\link[=param_d2logdet]{param_d2logdet()}} itself, so a family
+that writes its own \code{\link[=param_d2logdet]{param_d2logdet()}} but not \code{\link[=param_d1]{param_d1()}} and \code{\link[=param_d2]{param_d2()}}
+is rejected as well.
 }
 \seealso{
-\code{\link[=param_is_numerical]{param_is_numerical()}}, which answers the question this asks, and
+\code{\link[=param_is_numerical]{param_is_numerical()}}, which reports the routes read here, and
 \code{\link[=param_d3logdet.matrix_parameter]{param_d3logdet.matrix_parameter()}} and \code{\link[=param_d4logdet.matrix_parameter]{param_d4logdet.matrix_parameter()}},
 the two callers.
 }

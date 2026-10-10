@@ -17,20 +17,21 @@ A numeric vector of length \code{s@n_free}, named by \code{s@free_names}.
 \description{
 Returns the additive log-ratio of each row, \eqn{\log(P_{ij}/P_{iK})}, exact
 and a true inverse of \code{\link[=param_value.TransitionMatrixParam]{param_value.TransitionMatrixParam()}}: the round trip
-closes to \eqn{2 \times 10^{-16}}.
+closes up to rounding.
 }
 \details{
-A row is rejected when it has a non-positive entry, being then outside the
-\strong{open} simplex where \eqn{\log 0} is not finite, or when it does not sum to
-1, in which case it is not a probability distribution and is \strong{not}
-renormalized. The message names the row.
+A matrix is rejected when it has a non-positive entry, being then outside
+the \strong{open} simplex where \eqn{\log 0} is not finite, or when a row does not
+sum to 1, in which case it is not a probability distribution and is \strong{not}
+renormalized. The messages state the condition that failed and do not name
+the row.
 
-The first rejection is the one a fit meets: \code{\link[=simplex_point]{simplex_point()}} saturates a large
-free value to an exact 0 in the reference state, so a matrix produced at the
-boundary cannot be inverted back.
+The first rejection is the one that a fit meets: a large positive free value
+makes \code{\link[=simplex_point]{simplex_point()}} return an exact 0 in the reference state, so a matrix
+produced at the boundary cannot be inverted back.
 }
 \seealso{
 \code{\link[=param_value.TransitionMatrixParam]{param_value.TransitionMatrixParam()}}, the map this inverts, and
-\code{\link[=param_free.SimplexParam]{param_free.SimplexParam()}}, which does one row's worth.
+\code{\link[=param_free.SimplexParam]{param_free.SimplexParam()}}, which does the same for one row.
 }
 \keyword{internal}

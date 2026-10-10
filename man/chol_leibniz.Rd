@@ -30,13 +30,12 @@ The four methods \code{\link[=param_d1]{param_d1()}}, \code{\link[=param_d2]{par
 this family are one call each to this function.
 }
 \details{
-Measured against \code{\link[=.chol_leibniz_r]{.chol_leibniz_r()}}, the dense R twin, on the same free
-vector: \strong{30x} at \eqn{p = 8} and order 4 (0.295 s against 8.89 s over 82251
-components), 30x at \eqn{p = 8} order 2, 35x at \eqn{p = 5} order 4 and 19x at
-\eqn{p = 3} order 2. The two agree \strong{exactly}, to 0, at \eqn{p = 5} order 4.
+\code{\link[=.chol_leibniz_r]{.chol_leibniz_r()}}, the dense R twin, forms full matrix products and returns
+the same components; the compiled route is faster, by a factor that grows
+with \eqn{p} and with the order.
 }
 \seealso{
-\code{\link[=.chol_leibniz_r]{.chol_leibniz_r()}}, the R twin the tests hold it against,
+\code{\link[=.chol_leibniz_r]{.chol_leibniz_r()}}, the R twin against which the tests check it,
 \code{\link[=chol_dfactor]{chol_dfactor()}} for the factor's derivatives, and \code{\link[=leibniz_gram]{leibniz_gram()}}.
 }
 \keyword{internal}

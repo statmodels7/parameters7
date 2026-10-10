@@ -8,13 +8,15 @@ kron_identity(structure, m)
 }
 \arguments{
 \item{structure}{An object inheriting from \code{\link[=matrix_parameter]{matrix_parameter()}}, the per-block
-parameter. A family that is not a matrix, such as \code{\link[=simplex]{simplex()}}, throws
-\verb{'structure' must inherit from 'matrix_parameter'.} The inner parameter may
+parameter. A family that is not a matrix, such as \code{\link[=simplex]{simplex()}}, signals the
+error \verb{'structure' must inherit from 'matrix_parameter'.} The inner parameter may
 itself be rank deficient.}
 
-\item{m}{The number of blocks, a single integer of at least 1. \code{0}, a
-fraction, \code{NA} and a vector all throw \verb{'m' must be a single integer of at least 1.} At \code{m = 1} the result equals the inner parameter's value exactly,
-which makes it safe to call in a loop over group counts.}
+\item{m}{The number of blocks, a single numeric integer value from 1 to
+\code{.Machine$integer.max}. \code{0}, a fraction, \code{NA}, an infinite or larger value,
+a vector, and a logical or character value all signal the error \verb{'m' must be a single integer of at least 1.} At \code{m = 1} the result equals the inner
+parameter's value exactly, so the function can be called in a loop over
+group counts.}
 }
 \value{
 An object of class \code{\link[=KronIdentityParam]{KronIdentityParam()}}, with \code{dimension} equal to
@@ -29,40 +31,41 @@ matrix parameter \eqn{S} of side \eqn{d}: a block-diagonal matrix of side
 free vector.
 
 This is the covariance, or precision, of \eqn{m} independent groups whose
-within-group structure is common, which is the shape a grouped random-effect
-term needs: \eqn{S} is the per-group matrix over the coefficients of one group.
+within-group structure is common, which is the shape that a grouped
+random-effect term needs: \eqn{S} is the per-group matrix over the coefficients of one group.
 Because the blocks share their free values, \code{n_free} is the inner
 parameter's however many groups there are, so a random slope over a thousand
 subjects still estimates three numbers.
 }
-\section{Every quantity is a linear lift}{
+\section{Linear lifts of the inner quantities}{
 \deqn{\partial_k M = I_m \otimes \partial_k S, \qquad
       \log|M|_{+} = m \log|S|_{+}, \qquad
       M^{-1} = I_m \otimes S^{-1}.}
 
-Nothing is rederived and nothing of side \eqn{md} is decomposed: the rank is
-\eqn{m} times the inner rank, the null basis is the inner one replicated
+No matrix of side \eqn{md} is decomposed, and no new derivation is needed:
+the rank is \eqn{m} times the inner rank, the null basis is the inner one replicated
 blockwise, and \code{\link[=param_solve]{param_solve()}} loops over the blocks solving the inner
 parameter \eqn{m} times.
 
-The multiplier on the log-determinant is worth expecting. At \eqn{m = 3} over a
-2 x 2 log-Cholesky covariance, \code{param_dlogdet()} answers \code{c(6, 6, 0)} where
-the inner parameter answers \code{c(2, 2, 0)}: a step in a shared free value moves
-every block.
+The log-determinant carries the multiplier \eqn{m}. At \eqn{m = 3} over a
+2 x 2 log-Cholesky covariance, \code{param_dlogdet()} returns \code{c(6, 6, 0)} where
+the inner parameter returns \code{c(2, 2, 0)}, because a change in a shared free
+value changes every block.
 }
 
-\section{A deficient inner parameter stays deficient}{
+\section{Rank deficiency}{
 The rank is exactly \eqn{m} times the inner rank, so replicating a
 \code{\link[=scaled_matrix]{scaled_matrix()}} on a difference penalty over 2 blocks gives an 8 x 8 matrix
 of rank 4, and \code{\link[=param_solve]{param_solve()}} rejects it as the inner one would. The
-replicated null basis is annihilated to \eqn{10^{-15}}.
+replicated null basis is annihilated up to rounding.
 }
 
 \section{The dimension labels}{
 \code{kronecker()} drops the inner parameter's labels, so the value and the four
 derivative orders are relabeled \code{v1}, \code{v2}, ..., \code{v(md)} over the composite
-side. The factor \code{\link[=param_factor.KronIdentityParam]{param_factor.KronIdentityParam()}} returns is left bare,
-as several of the primitive families' are. See \code{\link[=name_dims]{name_dims()}}.
+side. The factor that \code{\link[=param_factor.KronIdentityParam]{param_factor.KronIdentityParam()}} returns carries no
+dimnames, as the factors of several other families do not. See
+\code{\link[=name_dims]{name_dims()}}.
 }
 
 \section{Notation}{
@@ -100,6 +103,6 @@ max(abs(param_value(r, 0.3) \%*\% r@null_basis))
 }
 \seealso{
 \code{\link[=block_diag]{block_diag()}} for blocks that differ and each carry their own free
-values, \code{\link[=dr_prod]{dr_prod()}} and \code{\link[=sum_struct]{sum_struct()}} for the other two compositions, and
+values, \code{\link[=dr_prod]{dr_prod()}} and \code{\link[=sum_struct]{sum_struct()}} for two other compositions, and
 \code{\link[=log_cholesky]{log_cholesky()}} or \code{\link[=ar1]{ar1()}} for the usual inner parameters.
 }

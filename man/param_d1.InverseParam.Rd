@@ -16,14 +16,16 @@ generic.}
 }
 \value{
 A named list of \code{s@dimension} square matrices, keyed as
-\code{\link[=param_tuple_names]{param_tuple_names()}} says.
+\code{\link[=param_tuple_names]{param_tuple_names()}} gives them.
 }
 \description{
 The four orders of \eqn{\partial N} for \eqn{N = S^{-1}}, each the ordered
-set-partition sum \code{\link[=inverse_of]{inverse_of()}} writes out. Every factor comes from the
-inner family's own arrays, so a closed form there stays closed here.
+set-partition sum that \code{\link[=inverse_of]{inverse_of()}} writes out. Every factor comes from the
+inner family's own arrays, so a closed form there stays closed here. For a
+\code{\link[=log_cholesky]{log_cholesky()}} inner family, orders one and two are read from
+\code{\link[=param_inv_d1]{param_inv_d1()}} and \code{\link[=param_inv_d2]{param_inv_d2()}}.
 }
 \seealso{
-\code{\link[=inverse_of]{inverse_of()}} for the formula and \code{\link[=param_d1]{param_d1()}} for the contract.
+\code{\link[=inverse_of]{inverse_of()}} for the formula and \code{\link[=param_d1]{param_d1()}} for the generic.
 }
 \keyword{internal}

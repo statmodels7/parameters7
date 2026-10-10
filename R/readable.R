@@ -12,19 +12,19 @@ NULL
 # interval should be built on.
 
 
-#' Quantities a Family Is About
+#' Interpretable Quantities of a Family
 #'
 #' @description
-#' Asks a family which interpretable quantities it stands for, and returns them
-#' with everything a consumer needs to report them: the values, the Jacobian of
-#' the map from the free vector, the scale each interval should be built on, and
-#' a label for the block. It exists because **the free vector is what a fit
-#' estimates, never what a reader reads**: nobody reads the hyperbolic arc
-#' tangent of a partial autocorrelation, and the quantity behind it cannot be
-#' recovered from a printed covariance either.
+#' Returns the interpretable quantities that a family declares, with the
+#' information that a consumer needs to report them: the values, the Jacobian of
+#' the map from the free vector, the scale on which each interval should be
+#' built, and a label for the block. The free vector is the quantity that a fit
+#' estimates, and it is rarely the quantity that a reader wants: the hyperbolic
+#' arc tangent of a partial autocorrelation has no direct meaning, and the
+#' autoregressive coefficients cannot be recovered from a printed covariance.
 #'
-#' Use it to turn an estimate and its variance matrix into a table a reader can
-#' use. The base class declares nothing, so a family whose matrix is all there is
+#' Use it to turn an estimate and its variance matrix into a table that a reader
+#' can use. The base class declares nothing, so a family whose matrix is all there is
 #' to say returns `NULL` and a consumer falls back on reporting the matrix.
 #'
 #' @details
@@ -32,7 +32,7 @@ NULL
 #'
 #' Given the free vector's variance matrix \eqn{V}, the standard errors of the
 #' declared quantities are the delta method, \eqn{\sqrt{\mathrm{diag}(J V
-#' J^\top)}}. Each interval is then built on the scale `transform` names and
+#' J^\top)}}. Each interval is then built on the scale that `transform` names and
 #' mapped back, so a variance stays positive and a correlation stays inside
 #' \eqn{(-1, 1)}: on the raw scale an interval for a correlation routinely runs
 #' past 1.
@@ -43,9 +43,9 @@ NULL
 #' values, \eqn{J} is the diagonal matrix of the inverse links' first
 #' derivatives, which [readable_diagonal()] assembles. For [simplex()] it is the
 #' softmax Jacobian. For [autoregressive()] the autoregressive coefficients come
-#' out of the Levinson-Durbin recursion the family already propagates derivative
-#' arrays through, so their derivatives in every free value are read off the
-#' first-order block instead of being computed again.
+#' out of the Levinson-Durbin recursion, through which the family already
+#' propagates derivative arrays, so their derivatives in every free value are
+#' read off the first-order block instead of being computed again.
 #'
 #' # Which families declare something
 #'
@@ -60,7 +60,7 @@ NULL
 #'
 #' @param s A [parameter()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`.
-#' @param ... Passed to the method. No method in this package reads it.
+#' @param ... Passed to the method. The methods in this package do not read it.
 #'
 #' @return `NULL` when the family declares nothing, otherwise a list with
 #'   \describe{
@@ -69,11 +69,10 @@ NULL
 #'     \item{`jacobian`}{a numeric matrix with one row per quantity and one
 #'       column per free value, row names matching `value` and no column names;}
 #'     \item{`transform`}{a character vector, one entry per quantity and named
-#'       like `value`, naming the scale its interval is built on: one of
+#'       like `value`, naming the scale on which its interval is built: one of
 #'       `"identity"`, `"log"`, `"atanh"` or `"logit"`;}
 #'     \item{`label`}{a single string naming the block, for a consumer laying out
-#'       a printed summary. The family supplies it because the family is what
-#'       holds the reading.}
+#'       a printed summary.}
 #'   }
 #'
 #' @seealso [param_value()] for the matrix itself, [autoregressive()] for the
@@ -98,7 +97,7 @@ NULL
 #' a <- param_readable(autoregressive(8, 2), c(0, 0.9, -0.4))
 #' a$value
 #'
-#' # At q = 1 they coincide: the first partial autocorrelation IS the AR(1)
+#' # At q = 1 they coincide: the first partial autocorrelation is the AR(1)
 #' # coefficient.
 #' b <- param_readable(autoregressive(5, 1), c(0, 0.9))
 #' b$value[c("pacf1", "phi1")]
@@ -115,15 +114,16 @@ param_readable <- S7::new_generic("param_readable", "s",
 #' No Declared Quantities
 #'
 #' @description
-#' The method every [parameter()] inherits when it declares no interpretable
-#' quantities of its own. It returns `NULL`, which is a positive statement and no
-#' kind of gap: for [log_cholesky()], [matrix_log()], [correlation_matrix()] and the
-#' four compositions the matrix itself is what a reader reads, and a consumer that
-#' gets `NULL` reports the matrix as it already would.
+#' The method that every [parameter()] inherits when it declares no interpretable
+#' quantities of its own. It returns `NULL`. For [log_cholesky()],
+#' [matrix_log()], [correlation_matrix()], the five composition wrappers and the
+#' other families without a method of their own, the matrix itself is the
+#' quantity that a reader reads, and a consumer that receives `NULL` reports the
+#' matrix.
 #'
-#' Returning `NULL` instead of throwing is what a consumer needs in order to loop
-#' over every parameter in a model and ask each one, without knowing which kinds
-#' declare something.
+#' Because the result is `NULL` and not an error, a consumer can call the generic
+#' on every parameter in a model without knowing which families declare
+#' something.
 #'
 #' @param s A [parameter()] object. Not read.
 #' @param eta A numeric vector of free values. Not read.
@@ -131,8 +131,8 @@ param_readable <- S7::new_generic("param_readable", "s",
 #'
 #' @return `NULL`.
 #'
-#' @seealso [param_readable()] for the contract and the list of families that do
-#'   declare something.
+#' @seealso [param_readable()] for the structure of the declaration and the list
+#'   of families that declare something.
 #'
 #' @name param_readable.parameter
 #' @keywords internal
@@ -151,22 +151,22 @@ S7::method(param_readable, parameter) <- function(s, eta, ...) NULL
 #' which is why their three methods are one call each.
 #'
 #' @param links A list of \pkg{linkfunctions7} links, one per quantity, in the
-#'   order of the free values they read. `links[[k]]` must be the link of
+#'   order of the free values that they read. `links[[k]]` must be the link of
 #'   `eta[k]`; the correspondence is positional and is not checked.
 #' @param eta A numeric vector of free values, at least as long as `links`.
 #' @param nm A character vector naming the quantities, the same length as
 #'   `links`.
-#' @param transform A character vector naming the scale each interval is built
-#'   on, the same length as `nm`.
+#' @param transform A character vector naming the scale on which each interval
+#'   is built, the same length as `nm`.
 #' @param label A single string naming the block.
 #'
 #' @return A list with `value`, `jacobian`, `transform` and `label`, as
 #'   [param_readable()] describes. The Jacobian is `length(nm)` by `length(eta)`
 #'   with `nm` as its row names, and is diagonal.
 #'
-#' @seealso [param_readable()] for the contract, and
-#'   [param_readable.AutoregressiveParam()] for the one family whose Jacobian is
-#'   not diagonal.
+#' @seealso [param_readable()] for the structure of the declaration, and
+#'   [param_readable.AutoregressiveParam()] and [param_readable.SimplexParam()]
+#'   for the two families whose Jacobian is not diagonal.
 #'
 #' @keywords internal
 readable_diagonal <- function(links, eta, nm, transform, label) {
@@ -186,7 +186,7 @@ readable_diagonal <- function(links, eta, nm, transform, label) {
 #'
 #' @description
 #' Declares two quantities: the marginal variance and the correlation at lag one,
-#' the two things an AR(1) covariance is about. Their intervals are built on the
+#' which together describe an AR(1) covariance. Their intervals are built on the
 #' log and the inverse hyperbolic tangent, so a variance stays positive and a
 #' correlation stays inside \eqn{(-1, 1)}.
 #'
@@ -212,15 +212,15 @@ S7::method(param_readable, Ar1Param) <- function(s, eta, ...) {
 #' The Scale and the Common Correlation of a Compound Symmetry
 #'
 #' @description
-#' Declares two quantities: the marginal variance and the correlation every pair
-#' shares. The Jacobian is diagonal, through [readable_diagonal()], each quantity
+#' Declares two quantities: the marginal variance and the correlation that every
+#' pair shares. The Jacobian is diagonal, through [readable_diagonal()], each quantity
 #' being one link of one free value.
 #'
-#' The correlation's interval is built on the inverse hyperbolic tangent, which is
-#' worth knowing here: the family's own link is bounded at \eqn{-1/(p-1)} and
-#' never at \eqn{-1}, so an interval built this way can reach below the bound the
-#' parametrization enforces. It respects \eqn{(-1, 1)}, which is the interval a
-#' reader of a correlation expects.
+#' The correlation's interval is built on the inverse hyperbolic tangent. The
+#' family's own link is bounded below by \eqn{-1/(p-1)}, which is above \eqn{-1}
+#' for \eqn{p > 2}, so an interval built on this scale can extend below the
+#' bound that the parametrization enforces; it stays inside \eqn{(-1, 1)}, the
+#' range of a correlation.
 #'
 #' @param s A [CompoundSymmetryParam()] object, whose two links are read.
 #' @param eta A numeric vector of two free values.
@@ -241,13 +241,12 @@ S7::method(param_readable, CompoundSymmetryParam) <- function(s, eta, ...) {
 #' The Scale of a Fixed Matrix
 #'
 #' @description
-#' Declares the multiplier \eqn{h(\eta)}, the one quantity a
-#' [scaled_matrix()] is about, with its interval on the log scale. The fixed
-#' matrix itself is the caller's own and needs no reporting.
+#' Declares the multiplier \eqn{h(\eta)}, the one quantity that describes a
+#' [scaled_matrix()] beyond its fixed matrix, with its interval on the log
+#' scale. The fixed matrix is supplied by the caller and is not reported.
 #'
 #' A parameter built with `link = NULL` has no free value and nothing to declare,
-#' so this returns `NULL` there, which is the same answer the base class gives and
-#' means the same thing.
+#' so this method returns `NULL` there, as the base method does.
 #'
 #' @param s A [ScaledMatrixParam()] object, whose `param_params$link` is read.
 #' @param eta A numeric vector of at most one free value; `numeric(0)` for a
@@ -277,8 +276,8 @@ S7::method(param_readable, ScaledMatrixParam) <- function(s, eta, ...) {
 #' \eqn{\partial p_i/\partial\eta_j = p_i(\delta_{ij} - p_j)}, with the reference
 #' category's row contributing \eqn{-p_K p_j}. It is \eqn{K} by \eqn{K-1}: one
 #' more quantity than there are free values, since the reference probability is
-#' determined by the others. Its **columns** sum to zero, \eqn{\sum_i p_i} being
-#' the constant 1, measured at \eqn{7 \times 10^{-18}}.
+#' determined by the others. Its **columns** sum to zero up to rounding,
+#' \eqn{\sum_i p_i} being the constant 1.
 #'
 #' Every interval is built on the logit scale, so it stays inside \eqn{(0, 1)}.
 #'
@@ -311,28 +310,29 @@ S7::method(param_readable, SimplexParam) <- function(s, eta, ...) {
 #' @description
 #' Declares three groups: the marginal variance, the \eqn{q} partial
 #' autocorrelations that parametrize the family, and the \eqn{q} autoregressive
-#' coefficients they produce. It is the only family in the package that declares
-#' more quantities than it has free values, and the reason is the third group.
+#' coefficients that they produce. It declares more quantities than it has free
+#' values, as [simplex()] does; for this family the reason is the third group.
 #'
 #' @details
 #' # Why the coefficients are declared
 #'
 #' \eqn{\phi_1, \dots, \phi_q} are what an autoregression is reported in, and they
 #' appear nowhere in the covariance the fit prints, nor among the free values,
-#' which are partial autocorrelations. Reporting a coordinate in their place gives
-#' a reader the wrong number under the right name: at \eqn{q = 2} with free values
+#' which are partial autocorrelations. A partial autocorrelation reported in
+#' place of a coefficient is a different number: at \eqn{q = 2} with free values
 #' \eqn{(0, 0.9, -0.4)} the coefficients are \eqn{(0.988, -0.380)} while the
 #' partial autocorrelations are \eqn{(0.716, -0.380)}, so \eqn{\phi_1} and
 #' \eqn{\rho_1} differ in the first decimal. At \eqn{q = 1} they coincide exactly,
-#' the first partial autocorrelation being the AR(1) coefficient, which is why the
-#' distinction is invisible until \eqn{q} passes 1.
+#' the first partial autocorrelation being the AR(1) coefficient, so the two
+#' differ only for \eqn{q > 1}.
 #'
 #' # The Jacobian is not diagonal
 #'
 #' A coefficient reads the **whole** chart, so its row of the Jacobian is dense in
 #' the partial autocorrelation columns. Those derivatives come out of the
-#' Levinson-Durbin recursion the family already propagates derivative arrays
-#' through, so they are read off the first-order block instead of recomputed.
+#' Levinson-Durbin recursion, through which the family already propagates
+#' derivative arrays, so they are read off the first-order block instead of
+#' recomputed.
 #' The variance's row is a single entry, and each partial autocorrelation's is the
 #' link's own derivative.
 #'
@@ -340,10 +340,10 @@ S7::method(param_readable, SimplexParam) <- function(s, eta, ...) {
 #'
 #' The stationary region in the coefficients is not a box: it is bounded by the
 #' roots of \eqn{1 - \phi_1 z - \cdots - \phi_q z^q} lying outside the unit
-#' circle, which no scalar transformation of a single coefficient expresses. An
-#' interval that respected the constraint would not be an interval, so the
-#' identity scale is the honest choice and a reported coefficient interval may
-#' extend outside the stationary region. The partial autocorrelations, whose chart
+#' circle, a condition that a scalar transformation of a single coefficient
+#' cannot express. A set that respected the constraint would not be an
+#' interval, so the identity scale is used and a reported coefficient interval
+#' may extend outside the stationary region. The partial autocorrelations, whose chart
 #' **is** a box, get `"atanh"` and stay inside it.
 #'
 #' @param s An [AutoregressiveParam()] object.

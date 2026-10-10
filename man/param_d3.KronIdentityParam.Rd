@@ -13,8 +13,8 @@ already checked by the generic.}
 }
 \value{
 A list of \code{choose(s@n_free + 2, 3)} symmetric matrices keyed as
-\code{param_tuple_names(s, 3)} and in that order, each block diagonal with no
-dimnames.
+\code{param_tuple_names(s, 3)} and in that order, each block diagonal and
+labeled \code{v1}, \code{v2}, ..., \code{v(md)} on both margins.
 }
 \description{
 Closed form: the inner parameter's third derivatives, each lifted into \eqn{m}

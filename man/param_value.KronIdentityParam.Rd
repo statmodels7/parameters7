@@ -13,11 +13,12 @@ already checked by the generic.}
 }
 \value{
 A \code{s@dimension} by \code{s@dimension} symmetric numeric matrix, block
-diagonal with \code{m} identical blocks, and labeled \code{v1}, \code{v2}, ..., \code{vp} on both margins.
+diagonal with \code{m} identical blocks, and labeled \code{v1}, \code{v2}, ..., \code{v(md)} on
+both margins.
 Positive definite exactly when the inner parameter is.
 }
 \description{
-#' Returns \eqn{I_m \otimes S(\eta)}, the inner parameter's matrix placed into
+Returns \eqn{I_m \otimes S(\eta)}, the inner parameter's matrix placed into
 \eqn{m} identical diagonal blocks. One \code{kronecker()} call and no arithmetic of
 its own: the value is the inner value lifted.
 
@@ -25,6 +26,7 @@ its own: the value is the inner value lifted.
 over the composite side, \code{v1}, \code{v2}, ..., \code{v(md)}.
 }
 \seealso{
-\code{\link[=param_free.KronIdentityParam]{param_free.KronIdentityParam()}} for the inverse and \code{\link[=kron_identity]{kron_identity()}} for the construction.
+\code{\link[=param_free.KronIdentityParam]{param_free.KronIdentityParam()}} for the inverse and
+\code{\link[=kron_identity]{kron_identity()}} for the construction.
 }
 \keyword{internal}

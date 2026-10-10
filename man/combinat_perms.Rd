@@ -10,14 +10,15 @@ combinat_perms(x)
 \item{x}{An integer vector, of length 1 to 4 in every call the package makes.}
 }
 \value{
-A list of \code{factorial(length(x))} integer vectors.
+A list of the distinct orderings of \code{x}, each an integer vector:
+\code{factorial(length(x))} of them when the entries of \code{x} are all different,
+and fewer when some repeat.
 }
 \description{
-Returns every permutation of an index tuple as a list, including the ones that
-coincide when the tuple has repeats: \code{combinat_perms(c(1, 1))} gives two
-elements and never one. The multiplicity is deliberate: it is what leaves
-\code{\link[=mlog_contract]{mlog_contract()}}'s sum over orderings correct for a repeated tuple without a
-correction factor.
+Returns the distinct permutations of an index tuple as a list. When the tuple
+has repeated entries, permutations that coincide appear once, so
+\code{combinat_perms(c(1, 1))} gives one element. \code{\link[=mlog_contract]{mlog_contract()}} restores the
+multiplicity with the product of the factorials of the repeat counts.
 }
 \seealso{
 \code{\link[=mlog_contract]{mlog_contract()}}, the only caller.

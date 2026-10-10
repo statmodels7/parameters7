@@ -20,7 +20,7 @@ Closed form, and it is the link's own derivative placed on a diagonal:
 
 \deqn{\partial_k M = h'(\eta_k)\, \textstyle\sum_{i:\, o_i = k} E_{ii},}
 
-where \eqn{o_i} is the free value entry \eqn{i} belongs to. For a
+where \eqn{o_i} is the free value to which entry \eqn{i} belongs. For a
 \code{\link[=diagonal_matrix]{diagonal_matrix()}} that is one entry, so \eqn{\partial_k M} is
 \eqn{h'(\eta_k) E_{kk}}; for a \code{\link[=scalar_matrix]{scalar_matrix()}} the one free value owns the
 whole diagonal and \eqn{\partial_1 M = h'(\eta_1) I}.

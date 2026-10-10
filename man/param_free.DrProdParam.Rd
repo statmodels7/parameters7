@@ -13,13 +13,13 @@ already checked for shape and symmetry by the generic.}
 }
 \value{
 A numeric vector of length \code{s@n_free}: the linked standard deviations
-followed by the correlation block's own free vector.
+followed by the correlation block's own free vector, named by
+\code{s@free_names}.
 }
 \description{
 Reads the standard deviations off the diagonal as \eqn{\sqrt{\Sigma_{jj}}},
 divides them out, and hands the resulting correlation matrix to the
-correlation block. Exact wherever the block is: measured at \eqn{p = 3} with
-the default block, the round trip closes to \eqn{7 \times 10^{-16}}.
+correlation block, so the round trip is as exact as the block's.
 }
 \details{
 A matrix with a non-positive diagonal entry is rejected with
@@ -27,10 +27,10 @@ A matrix with a non-positive diagonal entry is rejected with
 reported by the correlation block's own message, which is the more specific
 of the two.
 
-This is where a \code{correlation} block that carries a scale of its own shows: the
-division always leaves a unit diagonal, so such a block is handed a matrix its
-own scale cannot be recovered from, and the round trip fails without any
-error being signaled. See \code{\link[=dr_prod]{dr_prod()}} on that requirement.
+The division always leaves a unit diagonal, so a block that carried a scale
+of its own would receive a matrix from which its scale cannot be recovered,
+and the round trip would fail without an error. \code{\link[=dr_prod]{dr_prod()}} rejects such a
+block at construction.
 }
 \seealso{
 \code{\link[=param_value.DrProdParam]{param_value.DrProdParam()}}, the map this inverts.

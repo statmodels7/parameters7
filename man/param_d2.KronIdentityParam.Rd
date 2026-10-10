@@ -13,8 +13,8 @@ already checked by the generic.}
 }
 \value{
 A list of \code{choose(s@n_free + 1, 2)} symmetric matrices keyed as
-\code{param_tuple_names(s)} and in that order, each block diagonal with no
-dimnames.
+\code{param_tuple_names(s)} and in that order, each block diagonal and labeled
+\code{v1}, \code{v2}, ..., \code{v(md)} on both margins.
 }
 \description{
 Closed form: \eqn{\partial_{kl} M = I_m \otimes \partial_{kl} S}. The blocks
@@ -22,6 +22,7 @@ share their free values, so there is no cross-block component to compute and
 the list is exactly the inner parameter's, lifted.
 }
 \seealso{
-\code{\link[=param_d1.KronIdentityParam]{param_d1.KronIdentityParam()}} and \code{\link[=param_d3.KronIdentityParam]{param_d3.KronIdentityParam()}} for the neighboring orders.
+\code{\link[=param_d1.KronIdentityParam]{param_d1.KronIdentityParam()}} and \code{\link[=param_d3.KronIdentityParam]{param_d3.KronIdentityParam()}} for
+the neighboring orders.
 }
 \keyword{internal}

@@ -13,7 +13,8 @@ TransitionMatrixParam(
 }
 \arguments{
 \item{param_name}{A single character string naming the family, used in the
-error messages the validators raise and in the object's \code{print} output.
+error messages that the validators raise and in the object's \code{print}
+output.
 \code{"log_cholesky"}, \code{"ar1"} and so on.}
 
 \item{n_free}{The length \eqn{d} of the free vector: a single non-negative
@@ -22,7 +23,8 @@ The validator rejects a vector, a negative value, or a length that
 disagrees with \code{free_names}.}
 
 \item{free_names}{A character vector of length \code{n_free}, one label per free
-value, in the order the free vector holds them. Fixed at construction and
+value, in the order in which the free vector holds them. Fixed at
+construction and
 part of the interface: consumers build their parameter tables from these
 labels, so the ordering is not free to change. The validator rejects a
 duplicated label and a length other than \code{n_free}.}
@@ -30,7 +32,7 @@ duplicated label and a length other than \code{n_free}.}
 \item{param_params}{A list of whatever the family needs in order to evaluate
 itself, read only by that family's own methods. \code{log_cholesky()} stores
 the row and column index of each free value here; \code{sum_struct()} stores
-its component matrices. Nothing outside the family looks inside it.}
+its component matrices. Only the methods of that family read the list.}
 }
 \value{
 An object of class \code{TransitionMatrixParam}, a subclass of
@@ -43,7 +45,7 @@ The S7 class of row-stochastic matrices, each row on the open simplex in the
 additive log-ratio parametrization. Its value is a matrix but \strong{not a
 symmetric} one, so it inherits \code{\link[=parameter]{parameter()}} directly, never
 \code{\link[=matrix_parameter]{matrix_parameter()}}: there is no \code{rank} and no \code{null_basis}, and a
-transition matrix has no log-determinant, solve or factor to be asked for.
+transition matrix has no log-determinant, solve or factor.
 
 \code{\link[=transition_matrix]{transition_matrix()}} builds one. The rows are independent in the
 parametrization, so every derivative array is block diagonal by row and the
@@ -62,6 +64,6 @@ rbind(K = 2:5, n_free = vapply(2:5, function(k)
 }
 \seealso{
 \code{\link[=transition_matrix]{transition_matrix()}}, the constructor, \code{\link[=simplex]{simplex()}}, which is one
-row of this, and \code{\link[=parameter]{parameter()}} for the properties this inherits and the
-generics it does not get.
+row of this, and \code{\link[=parameter]{parameter()}} for the properties that this class
+inherits and the generics that it does not get.
 }

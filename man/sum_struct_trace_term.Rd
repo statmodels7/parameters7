@@ -7,8 +7,9 @@
 sum_struct_trace_term(minv, comp, t)
 }
 \arguments{
-\item{minv}{The inverse of the assembled matrix, computed once by the caller
-and reused for every component of the order.}
+\item{minv}{The inverse of the assembled matrix, or its pseudo-inverse on the
+complement of the null space where the family is rank deficient, computed
+once by the caller and reused for every component of the order.}
 
 \item{comp}{The list of fixed components.}
 
@@ -29,8 +30,8 @@ permutation leaves the trace unchanged, so fixing one position counts each
 distinct cycle once. The orderings come from \code{\link[=multiset_orderings]{multiset_orderings()}} and are
 counted with multiplicity, which see.
 
-This is a derivative in the \strong{weights}, not in the free values;
-\code{\link[=sum_struct_logdet_derivs]{sum_struct_logdet_derivs()}} carries it onto the free scale.
+This is a derivative in the \strong{weights}; \code{\link[=sum_struct_logdet_derivs]{sum_struct_logdet_derivs()}}
+carries it onto the free scale.
 }
 \seealso{
 \code{\link[=sum_struct_logdet_derivs]{sum_struct_logdet_derivs()}}, the only caller, and \code{\link[=sum_struct]{sum_struct()}} for

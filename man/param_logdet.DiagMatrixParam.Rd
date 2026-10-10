@@ -21,7 +21,10 @@ log-determinant exactly. For a \code{\link[=scalar_matrix]{scalar_matrix()}} the
 \eqn{p} times, giving \eqn{p \log h(\eta_1)}.
 
 Under the \strong{log} link \eqn{\log h(\eta) = \eta}, so the result is \code{sum(eta)}
-and the quantity is linear in the free vector; under any other link it is not.
+for a \code{\link[=diagonal_matrix]{diagonal_matrix()}} and \code{dimension * eta} for a \code{\link[=scalar_matrix]{scalar_matrix()}}, linear
+in the free vector as long as the link's inverse does not reach the floor
+that \pkg{linkfunctions7} applies to it; under another link it is not
+linear.
 }
 \seealso{
 \code{\link[=param_dlogdet.DiagMatrixParam]{param_dlogdet.DiagMatrixParam()}} for its gradient, and \code{\link[=diag_dlog]{diag_dlog()}}

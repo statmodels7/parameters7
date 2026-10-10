@@ -16,7 +16,7 @@ generic.}
 }
 \value{
 A named list of \code{s@dimension} square matrices, keyed and ordered as
-\code{\link[=param_tuple_names]{param_tuple_names()}} says.
+\code{\link[=param_tuple_names]{param_tuple_names()}} gives them.
 }
 \description{
 Assembles one order of \eqn{\partial\Omega} for
@@ -30,7 +30,7 @@ Writing \eqn{N = \mathrm{diag}(\tau)U}, the inner Leibniz gives
 \partial_{T \setminus R} U}, and the outer one
 \eqn{\partial_I \Omega = \sum_{S \subseteq I} (\partial_S U)^\top
 \partial_{I \setminus S} N}. Both sums run over subsets of the index
-POSITIONS, which is what makes a repeated index count with its multiplicity.
+positions, which is what makes a repeated index count with its multiplicity.
 Every \eqn{\partial_S N} is built once and read by every component that
 needs it.
 }

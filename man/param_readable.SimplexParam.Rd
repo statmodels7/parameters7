@@ -22,8 +22,8 @@ The Jacobian is the softmax map's,
 \eqn{\partial p_i/\partial\eta_j = p_i(\delta_{ij} - p_j)}, with the reference
 category's row contributing \eqn{-p_K p_j}. It is \eqn{K} by \eqn{K-1}: one
 more quantity than there are free values, since the reference probability is
-determined by the others. Its \strong{columns} sum to zero, \eqn{\sum_i p_i} being
-the constant 1, measured at \eqn{7 \times 10^{-18}}.
+determined by the others. Its \strong{columns} sum to zero up to rounding,
+\eqn{\sum_i p_i} being the constant 1.
 
 Every interval is built on the logit scale, so it stays inside \eqn{(0, 1)}.
 }

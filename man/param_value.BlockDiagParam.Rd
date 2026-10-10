@@ -18,11 +18,11 @@ diagonal and labeled \code{v1}, \code{v2}, ..., \code{vp} on both margins.
 \description{
 Evaluates each block at its own stretch of the free vector and writes it into
 the rows and columns that block occupies, leaving the off-diagonal blocks at
-the zeros the matrix was created with. Each block is exactly what its own
-family returns, to the bit.
+the zeros with which the matrix was created. Each block is identical to what
+its own family returns.
 
-The value is labeled \code{v1}, \code{v2}, ..., \code{vp} on both margins, the convention \code{\link[=name_dims]{name_dims()}}
-states and every family in the package follows.
+The value is labeled \code{v1}, \code{v2}, ..., \code{vp} on both margins, the convention
+that \code{\link[=name_dims]{name_dims()}} states.
 }
 \seealso{
 \code{\link[=param_free.BlockDiagParam]{param_free.BlockDiagParam()}} for the inverse, and \code{\link[=block_diag]{block_diag()}} for

@@ -21,12 +21,19 @@ Closed form, from the two distinct eigenvalues
 
 \deqn{\log|M| = p\log\sigma^2 + \log\{1+(p-1)\rho\} + (p-1)\log(1-\rho).}
 
-Three logarithms and no factorization, whatever \eqn{p} is, against the base
-class's \eqn{O(p^3)} eigendecomposition. Measured at \eqn{p = 4} against the
-eigenvalues of the assembled matrix, the two agree to the printed digit.
+Three logarithms and no factorization, whatever \eqn{p} is, where the base
+method takes an \eqn{O(p^3)} eigendecomposition.
+
+The two correlation logarithms are evaluated from the second free value, as
+\eqn{\log p + \log\omega} and \eqn{\log(p/(p-1)) + \log(1-\omega)} with
+\eqn{\omega} the logistic function of that value, through
+\code{plogis(., log.p = TRUE)}, and not from the rounded correlation. The value is
+then accurate at every free value, including those where the correlation
+rounds to one of its bounds.
 }
 \seealso{
 \code{\link[=param_dlogdet.CompoundSymmetryParam]{param_dlogdet.CompoundSymmetryParam()}} for its four derivative
-orders, and \code{\link[=cs_logdet_terms]{cs_logdet_terms()}} for the two terms.
+orders, and \code{\link[=cs_logdet_chain]{cs_logdet_chain()}} for the derivatives of the correlation's
+term.
 }
 \keyword{internal}

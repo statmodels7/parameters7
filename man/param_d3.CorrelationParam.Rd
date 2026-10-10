@@ -13,18 +13,19 @@ checked by the generic.}
 }
 \value{
 A list of \code{choose(s@n_free + 2, 3)} symmetric matrices keyed as
-\code{param_tuple_names(s, 3)} and in that order, each with a zero diagonal.
+\code{param_tuple_names(s, 3)} and in that order, each with a diagonal that is
+zero up to rounding.
 }
 \description{
 Closed form, the same Leibniz rule on \eqn{R = LL^\top} with the three
 differentiations distributed over the two factors. Each \eqn{\partial^S L}
 comes from \code{\link[=corr_dfactor]{corr_dfactor()}}, which returns \code{NULL} whenever \eqn{S} spans two
-rows of \eqn{L} or reaches past the columns an entry involves, so most terms
-of the sum are skipped instead of computed and discarded.
+rows of \eqn{L}, so those terms of the sum are skipped instead of computed
+and discarded.
 
 The angles reach the free scale through a bounded link, so the chain to third
-order is \code{\link[=compose_order]{compose_order()}}'s and the accuracy is the link's; nothing is differenced.
-The diagonal is exactly zero.
+order is \code{\link[=compose_order]{compose_order()}}'s and the accuracy is the link's; nothing is
+differenced. The diagonal is zero up to rounding.
 }
 \seealso{
 \code{\link[=corr_derivative]{corr_derivative()}}, which assembles it, and

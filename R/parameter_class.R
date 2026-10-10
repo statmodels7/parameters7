@@ -1,27 +1,27 @@
-#' The Abstract Class of a Constrained Parameter
+#' The Base Class of a Constrained Parameter
 #'
 #' @description
 #' A parameter is a map from an unconstrained vector
 #' \eqn{\eta \in \mathbb{R}^{d}} onto a quantity that lives in a constrained
 #' set: a symmetric positive definite matrix, a probability vector, a
-#' stochastic matrix. `parameter` is the abstract S7 class that map belongs
-#' to. It records how many free values the map consumes, what each of them is
+#' stochastic matrix. `parameter` is the base S7 class of every such map. It
+#' records how many free values the map consumes, what each of them is
 #' called, and whatever the family needs in order to evaluate itself. Because
 #' the domain is the whole of \eqn{\mathbb{R}^{d}}, an optimizer may move
 #' \eqn{\eta} anywhere and every point it visits still maps to a valid value,
 #' so no constraint has to be policed during a fit.
 #'
-#' The class is abstract and is not meant to be instantiated. Call a
+#' The class is not meant to be instantiated directly. Call a
 #' constructor: [log_cholesky()] for an unstructured covariance, [ar1()] or
 #' [compound_symmetry()] for a structured one, [simplex()] for a probability
 #' vector, [transition_matrix()] for a Markov chain.
 #'
 #' @details
-#' # A parameter owns its dimension
+#' # The dimension is fixed at construction
 #'
 #' `log_cholesky(3)` and `log_cholesky(4)` are different objects, holding
 #' \eqn{d = 6} and \eqn{d = 10} free values. Fixing the size at construction
-#' means `n_free` and `free_names` can be answered before any data exist, and
+#' means that `n_free` and `free_names` are known before any data exist, and
 #' both are needed then: a model builds its parameter table from the names
 #' while it is still assembling the design.
 #'
@@ -32,18 +32,19 @@
 #' stencil applied to the map itself. A closed form registered later replaces
 #' the inherited numerical method through dispatch, and no caller changes.
 #'
-#' Four generics are not inherited here:
+#' The inverse map and the matrix quantities are not supplied in this way:
 #'
-#' - [param_free()], the inverse map, has a base method that throws and names
-#'   the family. An inverse found by optimization would hand back a plausible
-#'   \eqn{\eta} for a value that is outside the set the family parametrizes, so
-#'   the inverse is either written out exactly or refused.
-#' - [param_logdet()], [param_solve()] and [param_factor()] are registered on
-#'   [matrix_parameter()], not on this class. A probability vector has no
-#'   log-determinant, and asking for one fails at dispatch instead of returning
-#'   a number.
+#' - [param_free()], the inverse map, has a base method on this class that
+#'   signals an error naming the family. An inverse found by optimization would
+#'   return an \eqn{\eta} even for a value that lies outside the set that the
+#'   family parametrizes, so the inverse is either written out exactly or
+#'   rejected.
+#' - [param_logdet()] and its four derivative generics, [param_solve()] and
+#'   [param_factor()] have methods on [matrix_parameter()] only. A probability
+#'   vector has no log-determinant, so a call for one fails at dispatch instead
+#'   of returning a number.
 #'
-#' # Free names label the coordinate, not the quantity
+#' # Free names
 #'
 #' The families here follow one convention. Where a link carries a constrained
 #' quantity onto the free scale, the label records that link: a variance
@@ -51,8 +52,8 @@
 #' coordinate is already unrestricted the label is the plain name of the
 #' quantity, as the below-diagonal entries `"L2.1"` of a Cholesky factor are.
 #'
-#' The distinction matters outside the family. A consumer flattens the free
-#' vector into scalar parameters carrying identity links, so a label promising
+#' A consumer outside the family flattens the free vector into scalar
+#' parameters carrying identity links, so a label promising
 #' a bounded quantity would report a number that is not on that scale: a free
 #' value of 1.4 called `rho` reads as a correlation of 1.4, while called
 #' `z_rho` it reads as the correlation \eqn{\tanh(1.4) = 0.885}.
@@ -65,21 +66,23 @@
 #' matrix a matrix family produces.
 #'
 #' @param param_name A single character string naming the family, used in the
-#'   error messages the validators raise and in the object's `print` output.
+#'   error messages that the validators raise and in the object's `print`
+#'   output.
 #'   `"log_cholesky"`, `"ar1"` and so on.
 #' @param n_free The length \eqn{d} of the free vector: a single non-negative
 #'   integer. Zero is legal and describes a family with nothing to estimate.
 #'   The validator rejects a vector, a negative value, or a length that
 #'   disagrees with `free_names`.
 #' @param free_names A character vector of length `n_free`, one label per free
-#'   value, in the order the free vector holds them. Fixed at construction and
+#'   value, in the order in which the free vector holds them. Fixed at
+#'   construction and
 #'   part of the interface: consumers build their parameter tables from these
 #'   labels, so the ordering is not free to change. The validator rejects a
 #'   duplicated label and a length other than `n_free`.
 #' @param param_params A list of whatever the family needs in order to evaluate
 #'   itself, read only by that family's own methods. `log_cholesky()` stores
 #'   the row and column index of each free value here; `sum_struct()` stores
-#'   its component matrices. Nothing outside the family looks inside it.
+#'   its component matrices. Only the methods of that family read the list.
 #'
 #' @return An object of class `parameter`, with properties
 #'   \describe{
@@ -88,29 +91,30 @@
 #'     \item{`free_names`}{character of length `n_free`.}
 #'     \item{`param_params`}{list, the family's own data.}
 #'   }
-#'   The class is abstract, so a useful object comes from a constructor such as
-#'   [log_cholesky()] and carries that constructor's subclass. A matrix family
+#'   A useful object comes from a constructor such as [log_cholesky()] and
+#'   carries that constructor's subclass. A matrix family
 #'   returns a [matrix_parameter()], which adds `dimension`, `rank` and
 #'   `null_basis`.
 #'
 #' @seealso [matrix_parameter()] for the symmetric matrix branch.
 #'   [param_value()] and [param_free()] for the map and its inverse,
 #'   [param_d1()] for the derivative arrays, [param_readable()] for the
-#'   quantities a family reports, and [check_parameter()] to verify a
+#'   quantities that a family reports, and [check_parameter()] to verify a
 #'   parametrization written from scratch.
 #'
 #'   The constructors: [log_cholesky()], [matrix_log()], [diagonal_matrix()],
 #'   [scalar_matrix()], [scaled_matrix()], [correlation_matrix()],
-#'   [compound_symmetry()], [ar1()], [autoregressive()], [simplex()],
-#'   [transition_matrix()], and the compositions [kron_identity()],
-#'   [block_diag()], [dr_prod()] and [sum_struct()].
+#'   [compound_symmetry()], [ar1()], [autoregressive()], [ar1_inv()],
+#'   [autoregressive_inv()], [simplex()], [transition_matrix()], and the
+#'   compositions [kron_identity()], [block_diag()], [dr_prod()],
+#'   [sum_struct()] and [inverse_of()].
 #'
 #' @examples
 #' # Every parametrization in the package is a `parameter`.
 #' s <- log_cholesky(3)
 #' S7::S7_inherits(s, parameter)
 #'
-#' # The four properties the class itself holds.
+#' # The four properties that the class itself holds.
 #' s@param_name
 #' s@n_free
 #' s@free_names
@@ -121,7 +125,7 @@
 #' rbind(p = 2:5, n_free = d, `p(p+1)/2` = (2:5) * (3:6) / 2)
 #'
 #' # A family whose value is not a symmetric matrix inherits `parameter`
-#' # directly, so it has no log-determinant to be asked for.
+#' # directly, so it has no log-determinant.
 #' q <- simplex(3)
 #' c(parameter = S7::S7_inherits(q, parameter),
 #'   matrix_parameter = S7::S7_inherits(q, matrix_parameter))
@@ -144,10 +148,10 @@ parameter <- S7::new_class(
   ),
   validator = function(self) {
     errors <- character()
-    if (length(self@n_free) != 1L || self@n_free < 0L) {
+    n_ok <- length(self@n_free) == 1L && !is.na(self@n_free) && self@n_free >= 0L
+    if (!n_ok) {
       errors <- c(errors, "@n_free must be a single non-negative integer")
-    }
-    if (length(self@free_names) != self@n_free) {
+    } else if (length(self@free_names) != self@n_free) {
       errors <- c(errors, "@free_names must have one entry per free value")
     }
     if (anyDuplicated(self@free_names)) {
@@ -158,21 +162,24 @@ parameter <- S7::new_class(
 )
 
 
-#' The Abstract Class of a Symmetric Matrix Parameter
+#' The Base Class of a Symmetric Matrix Parameter
 #'
 #' @description
 #' Extends [parameter()] to the branch whose value is a symmetric positive
 #' semidefinite \eqn{p \times p} matrix. Beyond the map itself, such a family
-#' can answer the four things a Gaussian likelihood asks of a covariance or a
-#' precision: the log-determinant, a solve against a right-hand side, a factor,
-#' and the rank and null space when the matrix is singular. Those four generics
-#' are registered here, so a subclass supplying only [param_value()] inherits
-#' all of them.
+#' supplies what a Gaussian likelihood needs from a covariance or a precision:
+#' the log-determinant and its derivatives, a solve against a right-hand side
+#' and a factor, whose generics have base methods registered on this class, so
+#' that a subclass supplying only [param_value()] inherits all of them; and the
+#' rank and the null space of a singular matrix, which are properties set at
+#' construction.
 #'
-#' The class is abstract. Every matrix family in the package returns a subclass
-#' of it: [log_cholesky()], [matrix_log()], [diagonal_matrix()],
+#' Every matrix family in the package returns a subclass of it:
+#' [log_cholesky()], [matrix_log()], [diagonal_matrix()], [scalar_matrix()],
 #' [correlation_matrix()], [compound_symmetry()], [ar1()], [autoregressive()],
-#' [scaled_matrix()] and the four compositions.
+#' [ar1_inv()], [autoregressive_inv()], [scaled_matrix()] and the five
+#' compositions [kron_identity()], [block_diag()], [dr_prod()], [sum_struct()]
+#' and [inverse_of()].
 #'
 #' @details
 #' # Rank and null space are fixed at construction
@@ -184,42 +191,42 @@ parameter <- S7::new_class(
 #' exact, and it is also the only stable way to obtain them: counting the small
 #' eigenvalues of an assembled matrix is not scale invariant, and reads a
 #' component whose weight is small as a null direction. [param_null_basis()]
-#' computes them from the components and carries the measurement.
+#' computes them from the components, and its examples show the comparison.
 #'
 #' Most families here are full rank, so `rank` is \eqn{p} and `null_basis` has
-#' zero columns. [scaled_matrix()] admits a deficient fixed matrix, and
-#' [sum_struct()] a deficient sum, and both then report the deficiency.
+#' zero columns. [scaled_matrix()] admits a deficient fixed matrix and
+#' [sum_struct()] a deficient sum, and [block_diag()] and [kron_identity()]
+#' carry the deficiency of a deficient block; each then reports it.
 #'
 #' # What a non-matrix family does instead
 #'
 #' [simplex()] and [transition_matrix()] inherit [parameter()] directly. They
 #' hold no `dimension`, `rank` or `null_basis`, and [param_logdet()] has no
-#' method for them, so asking for the log-determinant of a probability vector
-#' fails at dispatch. The absence is structural.
+#' method for them, so a call for the log-determinant of a probability vector
+#' fails at dispatch.
 #'
 #' @section Notation:
 #' \eqn{\eta} is the free vector, the point on the unconstrained scale, and
 #' \eqn{d} its length. \eqn{p} is the side of the matrix. \eqn{M} is the matrix
-#' the map produces, \eqn{\Sigma} when it is read as a covariance and
+#' that the map produces, \eqn{\Sigma} when it is read as a covariance and
 #' \eqn{\Omega} when it is read as a precision.
 #'
 #' @param param_name A single character string naming the family.
 #' @param n_free The length \eqn{d} of the free vector: a single non-negative
 #'   integer, agreeing with `length(free_names)`.
 #' @param free_names A character vector of length `n_free`, one label per free
-#'   value, in the order the free vector holds them. Must be unique.
+#'   value, in the order in which the free vector holds them. Must be unique.
 #' @param param_params A list of whatever the family needs in order to evaluate
 #'   itself, read only by that family's own methods.
 #' @param dimension The side \eqn{p} of the matrix: a single integer, no
 #'   smaller than 1. The validator rejects a vector and a value below 1.
-#' @param rank The rank of the matrix the family produces, a single integer in
+#' @param rank The rank of the matrix that the family produces, a single integer in
 #'   `0:dimension`. It is a property of the family, so a family whose value is
 #'   positive definite at every \eqn{\eta} declares \eqn{p} here.
 #' @param null_basis A `dimension` by `dimension - rank` numeric matrix whose
 #'   columns are an orthonormal basis of the common null space. Use
 #'   [param_null_basis()] to obtain one, or `matrix(numeric(0), dimension, 0)`
-#'   for a full-rank family. The validator rejects any other shape, and
-#'   reports both the rank and the shape when the two disagree.
+#'   for a full-rank family. The validator rejects any other shape.
 #' @return An object of class `matrix_parameter`, which is a [parameter()] with
 #'   three further properties
 #'   \describe{
@@ -228,13 +235,13 @@ parameter <- S7::new_class(
 #'     \item{`null_basis`}{a `dimension` by `dimension - rank` matrix with
 #'       orthonormal columns.}
 #'   }
-#'   plus the four it inherits, `param_name`, `n_free`, `free_names` and
-#'   `param_params`. The class is abstract, so a useful object comes from a
-#'   constructor such as [log_cholesky()].
+#'   plus the four that it inherits, `param_name`, `n_free`, `free_names` and
+#'   `param_params`. A useful object comes from a constructor such as
+#'   [log_cholesky()].
 #'
 #' @seealso [parameter()] for the base class and the naming convention for free
 #'   values. [param_logdet()], [param_solve()], [param_factor()] and
-#'   [param_null_basis()] for the four quantities this branch adds.
+#'   [param_null_basis()] for the quantities that this branch adds.
 #'
 #' @examples
 #' # A matrix family is both a `parameter` and a `matrix_parameter`.
@@ -242,7 +249,7 @@ parameter <- S7::new_class(
 #' c(parameter = S7::S7_inherits(s, parameter),
 #'   matrix_parameter = S7::S7_inherits(s, matrix_parameter))
 #'
-#' # The three properties this branch adds.
+#' # The three properties that this branch adds.
 #' c(dimension = s@dimension, rank = s@rank, null_columns = ncol(s@null_basis))
 #'
 #' # Belonging to this branch is what gives the family a log-determinant, and
@@ -268,15 +275,20 @@ matrix_parameter <- S7::new_class(
   ),
   validator = function(self) {
     errors <- character()
-    if (length(self@dimension) != 1L || self@dimension < 1L) {
+    dim_ok <- length(self@dimension) == 1L && !is.na(self@dimension) &&
+      self@dimension >= 1L
+    if (!dim_ok) {
       errors <- c(errors, "@dimension must be a single positive integer")
     }
-    if (length(self@rank) != 1L || self@rank < 0L || self@rank > self@dimension) {
+    rank_ok <- length(self@rank) == 1L && !is.na(self@rank) &&
+      self@rank >= 0L && (!dim_ok || self@rank <= self@dimension)
+    if (!rank_ok) {
       errors <- c(errors, "@rank must be a single integer in 0:dimension")
     }
     if (!is.matrix(self@null_basis)) {
       errors <- c(errors, "@null_basis must be a matrix")
-    } else if (!identical(dim(self@null_basis), c(self@dimension, self@dimension - self@rank))) {
+    } else if (dim_ok && rank_ok &&
+      !identical(dim(self@null_basis), c(self@dimension, self@dimension - self@rank))) {
       errors <- c(errors, "@null_basis must be dimension by (dimension - rank)")
     }
     if (length(errors)) errors else NULL
@@ -287,15 +299,16 @@ matrix_parameter <- S7::new_class(
 #' Validate the Argument Shared by Every Matrix Constructor
 #'
 #' @description
-#' Checks the matrix side every matrix family's constructor takes, and returns
-#' it coerced to integer so the caller can store it in the class's integer
-#' property. Called by [log_cholesky()], [matrix_log()], [diagonal_matrix()],
-#' [correlation_matrix()], [compound_symmetry()], [ar1()], [autoregressive()]
-#' and [dr_prod()].
+#' Checks the matrix side that every matrix family's constructor takes, and
+#' returns it coerced to integer so the caller can store it in the class's
+#' integer property. Called by [log_cholesky()], [matrix_log()],
+#' [diagonal_matrix()], [scalar_matrix()], [correlation_matrix()],
+#' [compound_symmetry()], [ar1()], [autoregressive()] and [dr_prod()].
 #'
 #' @param dimension The side of the matrix. Must be a single finite number, at
 #'   least 1, equal to its own `round()`. `0`, `2.5`, `c(1, 2)`, `"3"`, `Inf`
-#'   and `NA` all throw `'dimension' must be a single positive integer.`
+#'   and `NA` all signal the error `'dimension' must be a single positive
+#'   integer.`
 #'
 #' @return `dimension`, as a single integer.
 #'
@@ -312,22 +325,23 @@ check_param_args <- function(dimension) {
 #' Validate a Free Vector Against a Parameter
 #'
 #' @description
-#' Checks that `eta` is a finite numeric vector of the length the parameter
-#' declares, and returns it with its names stripped. Called in the body of
-#' every generic before dispatch, so a parameter written outside the package
+#' Checks that `eta` is a finite numeric vector of the length that the
+#' parameter declares, and returns it with its names stripped. Called before
+#' dispatch in the body of every generic that takes `eta`, so a parameter
+#' written outside the package
 #' inherits the check without doing anything.
 #'
 #' @details
 #' Three conditions are checked, each with its own message. A non-numeric `eta`
-#' throws `'eta' must be numeric.`; a wrong length throws a message naming both
-#' counts and listing the family's `free_names`, so a caller who has mismatched
-#' two parametrizations can see which is which; and any `NA`, `NaN` or infinite
-#' entry throws `'eta' must be finite: the free scale has no boundary to
-#' reach.` The last message states the reason a non-finite free value is a
+#' signals `'eta' must be numeric.`; a wrong length signals a message naming
+#' both counts and listing the family's `free_names`, so a caller who has
+#' mismatched two parametrizations can see which is which; and any `NA`, `NaN`
+#' or infinite entry signals `'eta' must be finite: the free scale has no
+#' boundary to reach.` The last message states the reason a non-finite free value is a
 #' caller error: the unconstrained scale has no edge, so an infinity there is a
 #' runaway rather than a limit reached.
 #'
-#' Names are stripped for the reason `align_theta()` strips them in
+#' Names are stripped for the same reason that `align_theta()` strips them in
 #' \pkg{distributions7}. A value that has been through a link comes back
 #' carrying its own name, which means nothing on a number and would otherwise
 #' appear in the dimnames of the matrix built from it.
@@ -362,20 +376,22 @@ check_eta <- function(s, eta) {
 #'
 #' @description
 #' Checks that `m` is a square symmetric numeric matrix of the parameter's
-#' dimension, and returns it symmetrized. Called by every [param_free()] method
-#' on the matrix the caller is asking to invert.
+#' dimension, and returns it symmetrized. Called before dispatch in the body
+#' of the [param_free()] generic, on the matrix to be inverted, whenever the
+#' parameter inherits from [matrix_parameter()].
 #'
 #' @details
 #' The symmetry check is relative: `m` is rejected when
 #' \eqn{\max_{ij} |m_{ij} - m_{ji}|} exceeds `tol * max(1, max(abs(m)))`. At the
-#' default a discrepancy of \eqn{10^{-4}} throws and one of \eqn{10^{-12}}
-#' passes. The return value is `(m + t(m)) / 2`, so an asymmetry small enough to
+#' default, for a matrix whose largest entry is at most 1, a discrepancy of
+#' \eqn{10^{-4}} is rejected and one of \eqn{10^{-12}} passes. The return value is `(m + t(m)) / 2`, so an asymmetry small enough to
 #' be rounding is averaged away instead of being carried into the inverse map.
 #'
 #' @param s A [parameter()] object, whose `dimension` is read.
 #' @param m The matrix supplied by the caller. A non-matrix or non-numeric `m`
-#'   throws, as does a wrong shape (with a message naming the dimension
-#'   required), an `NA` anywhere, and an asymmetry above `tol`.
+#'   is rejected, as is a wrong shape (with a message naming the dimension
+#'   required), an `NA` or an infinite entry anywhere, and an asymmetry above
+#'   `tol`.
 #' @param tol The relative tolerance for the symmetry check, a single positive
 #'   number. Defaults to `1e-8`, loose enough to accept a matrix assembled from
 #'   a Cholesky factor or a Kronecker product and tight enough to reject one
@@ -394,6 +410,11 @@ check_matrix <- function(s, m, tol = 1e-8) {
     ), call. = FALSE)
   }
   if (anyNA(m)) stop("'m' must not contain missing values.", call. = FALSE)
+  if (any(!is.finite(m))) {
+    stop("'m' must be finite: infinite entries are not in the set.",
+      call. = FALSE
+    )
+  }
   asym <- max(abs(m - t(m)))
   if (asym > tol * max(1, max(abs(m)))) {
     stop("'m' must be symmetric.", call. = FALSE)
@@ -405,7 +426,7 @@ check_matrix <- function(s, m, tol = 1e-8) {
 #' Name the Rows and Columns of a Parameter's Matrix
 #'
 #' @description
-#' Applies the dimension labels every matrix a parameter produces carries:
+#' Applies the dimension labels that every matrix produced by a parameter carries:
 #' `"v1"`, `"v2"`, ..., `"vp"` on both margins, `p` being the parameter's
 #' `dimension`. One convention across the families, so a consumer can read a
 #' printed covariance without knowing which parametrization built it.
@@ -439,8 +460,8 @@ name_dims <- function(m, s) {
 #' Returns the rank and an orthonormal basis of the common null space of one or
 #' more symmetric positive semidefinite matrices. Each matrix is scaled to unit
 #' maximum entry, the scaled matrices are stacked into one tall matrix, and the
-#' rank and the null space are read off its singular value decomposition. Every
-#' [matrix_parameter()] calls it once at construction to fill its `rank` and
+#' rank and the null space are read off its singular value decomposition.
+#' [scaled_matrix()] calls it once at construction to fill its `rank` and
 #' `null_basis` properties.
 #'
 #' @details
@@ -454,16 +475,12 @@ name_dims <- function(m, s) {
 #' is small contributes eigenvalues below the tolerance, and they are then
 #' counted as null directions that are not there.
 #'
-#' Measured on the tensor-product penalty of two second-difference penalties
-#' over 4 and 8 coefficients, whose true rank is 28 out of 32. Counting the
-#' eigenvalues of the assembled sum above a relative tolerance of
-#' \eqn{10^{-10}} answers 28 while the two weights are within \eqn{10^{8}} of
-#' each other, and 24 once the ratio reaches \eqn{10^{10}}: four directions the
-#' penalty does penalize are read as null. Smoothing parameters ten orders of
-#' magnitude apart are an ordinary fitted model, not a pathology. The stacked
-#' route answers 28 at every ratio, and the basis it returns is annihilated by
-#' the assembled matrix to \eqn{3 \times 10^{-16}} relative even at the worst
-#' one.
+#' The examples show this on the tensor-product penalty of two
+#' second-difference penalties over 4 and 8 coefficients, whose rank is 28 out
+#' of 32: counting the eigenvalues of the assembled sum gives 24 when the two
+#' weights differ by a factor of \eqn{10^{10}}, while the stacked route gives 28.
+#' Smoothing parameters that differ by ten orders of magnitude occur in ordinary
+#' fitted models.
 #'
 #' # The scaling
 #'
@@ -484,16 +501,18 @@ name_dims <- function(m, s) {
 #' M\}}, and the **rank** is \eqn{p} minus the dimension of that space.
 #'
 #' @param mats A list of symmetric numeric matrices, all of the same side, or a
-#'   single matrix, which is wrapped in a list. An empty list throws `'mats'
-#'   must not be empty.`; the matrices themselves are not checked for symmetry
+#'   single matrix, which is wrapped in a list. An empty list signals the error
+#'   `'mats' must not be empty.`; the matrices themselves are not checked for symmetry
 #'   or definiteness, the callers being the package's own constructors.
 #' @param tol The relative tolerance below which a singular value counts as
 #'   zero: a singular value \eqn{s_j} is null when
-#'   \eqn{s_j \le \mathrm{tol} \cdot \max_i s_i}. Defaults to `1e-10`. The
-#'   default sits well below the singular values a genuine rank carries and
-#'   well above the \eqn{10^{-16}} the zero directions of a stacked, normalized
-#'   set of matrices reach, so the gap between the two is wide and the exact
-#'   value is not delicate.
+#'   \eqn{s_j \le \mathrm{tol} \cdot \max_i s_i}. Defaults to `1e-10`, well above
+#'   the \eqn{10^{-16}} that the zero directions of a stacked, normalized set of
+#'   matrices reach. It is below the smallest non-zero singular value of a
+#'   typical penalty, but a long, finely spaced penalty can fall under it (a
+#'   second-difference penalty on 800 coefficients has a relative smallest
+#'   non-zero singular value of about \eqn{8 \times 10^{-11}}), and such a
+#'   direction is then counted as null; a smaller `tol` recovers it.
 #'
 #' @return A list with two components
 #'   \describe{
@@ -505,8 +524,8 @@ name_dims <- function(m, s) {
 #'   }
 #'
 #' @seealso [matrix_parameter()], whose `rank` and `null_basis` properties this
-#'   fills, and the two families that can be rank deficient and so are the ones
-#'   whose answer is not trivial: [scaled_matrix()] and [sum_struct()].
+#'   fills, and [scaled_matrix()] and [sum_struct()], the two families that
+#'   accept a rank-deficient matrix of their own.
 #'
 #' @examples
 #' # A second-difference penalty on six coefficients has rank 4, its null space
@@ -567,9 +586,10 @@ param_null_basis <- function(mats, tol = 1e-10) {
 #'
 #' @description
 #' The empty basis a full-rank family declares. Every family whose value is
-#' positive definite at every free vector passes this to its
-#' [matrix_parameter()] constructor. The validator's shape rule, `dimension` by
-#' `dimension - rank`, asks for exactly this when `rank` is `dimension`.
+#' positive definite at every free vector passes this, or an equal empty
+#' matrix, to its [matrix_parameter()] constructor. The validator's shape rule,
+#' `dimension` by `dimension - rank`, requires exactly this when `rank` is
+#' `dimension`.
 #'
 #' @param dimension The side of the matrix, a single integer.
 #'

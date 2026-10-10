@@ -6,7 +6,7 @@ NULL
 #'
 #' @description
 #' `param_inv_d1()` returns the first derivatives of \eqn{M^{-1}} in the free
-#' values, and `param_inv_d2()` the second, where \eqn{M} is the matrix
+#' values, and `param_inv_d2()` the second, where \eqn{M} is the matrix that
 #' [param_value()] returns.
 #'
 #' @details
@@ -18,11 +18,9 @@ NULL
 #' with \eqn{A_k} and \eqn{A_{kl}} from [param_d1()] and [param_d2()].
 #'
 #' Where \eqn{M} is nearly singular along a direction that is not a coordinate
-#' axis, \eqn{M^{-1}} has large entries of nearly rank one and the products
-#' above cancel: at a log-Cholesky free value \eqn{\log L_{22} = -11.5} the
-#' default reads \eqn{\partial M^{-1}} with a relative error of
-#' \eqn{10^{-7}}, and a trace against it, of products of order \eqn{10^{10}},
-#' is out by a number of order one.
+#' axis, \eqn{M^{-1}} has large entries of nearly rank one, the products above
+#' cancel, and the default method loses accuracy as the condition number of
+#' \eqn{M} grows.
 #'
 #' The method for [log_cholesky()] is exact there. With \eqn{M = L L^\top},
 #' \eqn{G = L^{-1}}, \eqn{B_k = G\,\partial_k L} and
@@ -30,13 +28,13 @@ NULL
 #' \deqn{\partial_k M^{-1} = -G^\top C_k G, \qquad
 #'   \partial_{kl} M^{-1} = G^\top\big(B_l^\top C_k + C_k B_l -
 #'   \partial_l C_k\big) G,}
-#' where \eqn{\partial_l B_k = -B_l B_k + G\,\partial_{kl} L}. No product
-#' carries a cancellation: the entries of \eqn{G} grow as \eqn{1/L_{ii}} and
+#' where \eqn{\partial_l B_k = -B_l B_k + G\,\partial_{kl} L}. These products
+#' involve no cancellation: the entries of \eqn{G} grow as \eqn{1/L_{ii}} and
 #' each term is of the size of the result.
 #'
 #' @param s An object inheriting from class [matrix_parameter()], of full rank.
 #' @param eta A numeric vector of length `s@n_free`, finite in every entry.
-#' @param ... Passed to the method. No method in this package reads it.
+#' @param ... Passed to the method. The methods in this package do not read it.
 #'
 #' @return `param_inv_d1()`: a list of `s@n_free` matrices, named as
 #'   [param_d1()] names its own. `param_inv_d2()`: a list with one matrix per
@@ -74,11 +72,11 @@ param_inv_d2 <- S7::new_generic("param_inv_d2", "s", function(s, eta, ...) {
 })
 
 
-#' The Contract Check of the Inverse's Derivatives
+#' Argument Check for the Inverse's Derivatives
 #'
 #' @description
-#' Refuses a parameter that is not a matrix or has no inverse, naming the
-#' function that was called.
+#' Signals an error when a parameter is not a matrix or has no inverse. The
+#' message names the function that was called.
 #'
 #' @param s A parameter.
 #' @param what The name of the function, for the message.

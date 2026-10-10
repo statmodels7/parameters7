@@ -24,16 +24,17 @@ Together they let a function draw from a fixed seed, so that its report is
 the same on two runs, without leaving the caller's stream changed.
 }
 \details{
-A validator wants both properties and they pull against each other. Drawing
-from the caller's stream makes the worst error reported move between runs;
-calling \code{set.seed()} fixes that and replaces whatever state the caller had,
-so a call inside a simulation silently changes the simulation. Saving the
-state on entry and restoring it with \code{\link[base:on.exit]{base::on.exit()}} gives the fixed draw
-and leaves the caller alone.
+A validator should report the same numbers on every run and should leave the
+caller's random stream unchanged, and the two requirements conflict. Drawing
+from the caller's stream makes the worst error reported vary between runs;
+calling \code{set.seed()} removes that variation but replaces the state of the
+caller's stream, so a call inside a simulation changes the simulation. Saving
+the state on entry and restoring it with \code{\link[base:on.exit]{base::on.exit()}} gives the fixed
+draw and leaves the caller's stream as it was.
 
 \code{restore_seed(NULL)} removes \code{.Random.seed} again, which is the right answer
-when the caller had never drawn a random number: leaving the seed the
-validator set behind would be the leak this exists to prevent.
+when the caller had never drawn a random number, so the seed that the
+validator set is not left behind.
 }
 \examples{
 # the property the pair exists for, through the public interface: a

@@ -25,11 +25,12 @@ correlation's own where every index is a correlation coordinate, and 0
 otherwise.
 }
 \details{
-Two separabilities at once, and it is worth keeping them apart: the scales
-separate from each other, so a component naming two different scales is zero,
-and the correlation separates from the scales, so a mixed component is zero.
-What survives is \eqn{2\,\partial^m \log d_k} on the diagonal of the scale
-block, through \code{\link[=diag_dlog]{diag_dlog()}}, and whatever the correlation family answers.
+Two separabilities hold at once. The scales separate from each other, so a
+component naming two different scales is zero, and the correlation separates
+from the scales, so a component mixing a scale with a correlation coordinate
+is zero. What survives is \eqn{2\,\partial^m \log d_k} on the diagonal of the
+scale block, through \code{\link[=diag_dlog]{diag_dlog()}}, and the correlation family's own
+derivatives.
 }
 \seealso{
 \code{\link[=diag_dlog]{diag_dlog()}} for the scale terms, and

@@ -21,8 +21,8 @@ Closed form, and mostly zero. A component pairing free values from two
 independently; one pairing two free values of the same row is that row's
 \code{\link[=simplex]{simplex()}} second derivative, embedded in that row.
 
-Measured at \eqn{K = 3}: \code{alr1.1:alr2.1} is 0 exactly and \code{alr1.1:alr1.1} is
-not. Of the 21 components at \eqn{K = 3}, only 9 can be non-zero.
+At \eqn{K = 3}, \code{alr1.1:alr2.1} is exactly 0 and \code{alr1.1:alr1.1} is not. Of
+the 21 components at \eqn{K = 3}, only 9 can be non-zero.
 }
 \seealso{
 \code{\link[=tm_derivative]{tm_derivative()}}, which assembles it, and

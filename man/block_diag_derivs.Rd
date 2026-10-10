@@ -19,7 +19,8 @@ keyed as \code{param_tuple_names(s, order)} and in that order, each
 \code{s@dimension} by \code{s@dimension} and labeled \code{v1}, \code{v2}, ..., \code{vp} on both margins.
 }
 \description{
-Places each block's own component in the rows and columns that block occupies,
+Places each block's own component in the rows and columns that the block
+occupies,
 and returns a zero matrix for a tuple whose indices are not all owned by one
 block.
 }

@@ -30,8 +30,8 @@ indices is
   = \frac{\mathrm{d}^a \sigma^2}{\mathrm{d}\eta_1^a}
     \cdot \frac{\mathrm{d}^b P}{\mathrm{d}\eta_2^b},}
 
-one derivative of each chain. Only the counts \eqn{a} and \eqn{b} matter, so a
-tuple is fully described by them and no order is a special case.
+one derivative of each chain. A tuple enters only through the counts \eqn{a}
+and \eqn{b}, and every order uses the same formula.
 }
 \details{
 The four methods return lists of \code{order + 1} matrices, keyed by the tuple names
@@ -47,8 +47,8 @@ The lists are this short because there are two free values: at \eqn{d = 2} the
 count \eqn{\binom{d+k-1}{k}} is \eqn{k+1}.
 
 Every component with at least one correlation index has a zero diagonal, the
-diagonal of \eqn{P} being the constant 1; and any component whose correlation
-indices number two or more carries only the link's own higher derivative,
+diagonal of \eqn{P} being the constant 1; and a component with \eqn{b}
+correlation indices carries the \eqn{b}-th derivative of the link alone,
 \eqn{P} being linear in \eqn{\rho}.
 }
 \seealso{

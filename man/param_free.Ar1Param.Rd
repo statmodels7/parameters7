@@ -19,15 +19,15 @@ A numeric vector of length 2, named by \code{s@free_names}.
 \description{
 Returns the two free values behind an AR(1) matrix. The variance is the common
 diagonal entry and the correlation is the first off-diagonal entry divided by
-it, both read exactly; the \strong{rest} of the matrix is then checked against the
-pattern those two imply, entry by entry. Measured, the round trip closes to 0.
+it, both read exactly; the remaining entries of the matrix are then compared
+with the pattern that those two values imply.
 }
 \details{
 A matrix that does not match the implied pattern is rejected and is never
-fitted to the nearest AR(1) matrix. That check is what distinguishes this from
-reading two numbers and hoping: a Toeplitz matrix whose lag-2 entry is not
-\eqn{\sigma^2\rho^2} is not in the family, and a caller who wants a projection
-can fit one and invert that instead.
+projected onto the nearest AR(1) matrix. A Toeplitz matrix whose lag-2 entry
+is not \eqn{\sigma^2\rho^2} is not in the family; a caller who wants the
+nearest AR(1) matrix computes that projection separately and passes the
+result to this method.
 }
 \seealso{
 \code{\link[=param_value.Ar1Param]{param_value.Ar1Param()}}, the map this inverts.

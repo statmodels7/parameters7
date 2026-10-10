@@ -25,17 +25,15 @@ dimnames, keyed as \code{param_tuple_names(s, order)} and in that order:
 \code{\link[=autoregressive]{autoregressive()}} parameter, closed form at every order. The map from the
 partial autocorrelations to the matrix is polynomial, so the derivative arrays
 propagated through the Levinson-Durbin recursion give each derivative exactly
-and nothing is differenced. Measured against one central difference of
-\code{\link[=param_value]{param_value()}}, the first derivatives agree to \eqn{5 \times 10^{-11}}, which
-is the difference's own accuracy.
+and nothing is differenced.
 
 Every component is Toeplitz, the structure being a property of the family and
 fixed as the point moves.
 }
 \details{
 The four share \code{\link[=ar_derivative]{ar_derivative()}} and differ only in the order they pass.
-Each order runs its own kernel, which returns that order's components
-alone; see \code{\link[=autoregressive]{autoregressive()}} for the cost.
+Each order runs its own kernel, which returns the components of that order
+only.
 }
 \seealso{
 \code{\link[=ar_derivative]{ar_derivative()}}, which assembles them, and

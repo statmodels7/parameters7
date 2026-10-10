@@ -18,16 +18,17 @@ A numeric vector of length \code{s@n_free}, named by \code{s@free_names}.
 \description{
 Reads the marginal variance off the common diagonal entry and the partial
 autocorrelations off the Levinson-Durbin recursion run forwards on the
-autocorrelations. Exact where \code{m} is in the set: measured at \eqn{p = 6},
-\eqn{q = 2}, the round trip closes to \eqn{1.1 \times 10^{-16}}.
+autocorrelations. The inverse is exact on the set that this family
+describes.
 }
 \details{
-Four things are rejected rather than approximated, each with a message of its
-own, because the set this family describes is much smaller than the set of
-symmetric positive definite matrices and a caller who lands outside it has a
-model error, not a rounding one:
+The following are rejected, each with a message of its own, because the set
+that this family describes is much smaller than the set of symmetric positive
+definite matrices, and a matrix outside it indicates a model error and not a
+rounding error:
 \itemize{
 \item a diagonal that is not constant, which is not stationary;
+\item a non-positive diagonal;
 \item a matrix that is not Toeplitz, which is rejected instead of being averaged
 along its diagonals;
 \item an implied partial autocorrelation at or beyond \eqn{\pm 1}, or a vanishing

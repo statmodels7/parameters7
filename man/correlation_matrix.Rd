@@ -9,7 +9,8 @@ correlation_matrix(dimension)
 \arguments{
 \item{dimension}{The side \eqn{p} of the matrix. A single positive whole
 number, finite and at least 1; \eqn{p = 1} gives a constant with no free
-values, as \strong{Details} describes. Anything else throws \verb{'dimension' must be a single positive integer.}}
+values, as \strong{Details} describes. Any other value signals the error
+\verb{'dimension' must be a single positive integer.}}
 }
 \value{
 An object of class \code{\link[=CorrelationParam]{CorrelationParam()}}, with \code{n_free} equal to
@@ -19,8 +20,8 @@ and \code{param_params} holding \code{row}, \code{col} and \code{link}.
 }
 \description{
 Returns an object holding the spherical parametrization of a correlation
-matrix: symmetric, positive definite, and with a unit diagonal that holds
-exactly, with no correction applied afterwards. Each row of the Cholesky
+matrix: symmetric, positive definite, and with a unit diagonal. Each row of
+the Cholesky
 factor is a point on the unit sphere written in angular coordinates, and each
 angle is carried onto the whole real line by a bounded link, so any free
 vector in \eqn{\mathbb{R}^{p(p-1)/2}} gives a valid correlation matrix.
@@ -41,23 +42,24 @@ unit vector and \eqn{R = LL^\top} has a unit diagonal by construction. It is
 positive definite at every value of the angles, \eqn{L} being triangular with
 a positive diagonal. The angles reach the free scale through
 \code{linkfunctions7::bounded_link(lwr = 0, upr = pi)}, so there is nothing to
-constrain and no boundary to run into.
+constrain on the free scale; in double precision the boundary is reached at
+large free values (see below). \code{\link[=param_value]{param_value()}} sets the diagonal to exactly 1
+to remove the rounding of the telescoping sum.
 }
 
-\section{How the derivatives behave, and a claim that does not hold}{
-Derivatives come from the same Leibniz rule the log-Cholesky family uses,
+\section{Derivatives}{
+Derivatives come from the same Leibniz rule that the log-Cholesky family uses,
 \eqn{R} being a Gram product again; what changes is the factor, whose entries
 are products of sines and cosines of angles that each depend on one free
 value.
 
 The rows of \eqn{L} are independent, so a derivative of the \strong{factor} in free
-values from two different rows is zero. That is \strong{not} true of \eqn{R}: its
-entry \eqn{(i, j)} is the inner product of rows \eqn{i} and \eqn{j} of
-\eqn{L}, so a second derivative across those two rows need not vanish. What
-does hold is that such a component is supported on exactly the entries
-\eqn{(i, j)} and \eqn{(j, i)}, and is zero even there when the two angles
-differentiated sit beyond the columns the two rows share. A structural claim
-about a product is not a claim about its factors.
+values from two different rows is zero. The same does not hold for \eqn{R}:
+its entry \eqn{(i, j)} is the inner product of rows \eqn{i} and \eqn{j} of
+\eqn{L}, so a second derivative across those two rows need not vanish. Such a
+component is supported on the entries \eqn{(i, j)} and \eqn{(j, i)}, and is
+zero even there when the two angles differentiated lie beyond the columns
+that the two rows share.
 }
 
 \section{The log-determinant is separable}{
@@ -72,20 +74,19 @@ computed.
 }
 
 \section{Reading the free vector}{
-It runs row by row, and the names \verb{z\{i\}.\{j\}} say which row and which angle,
-the row.column convention \code{\link[=log_cholesky]{log_cholesky()}} uses. The \code{z} records the link, so
+It runs row by row, and the names \verb{z\{i\}.\{j\}} give the row and the angle, in
+the row.column convention that \code{\link[=log_cholesky]{log_cholesky()}} uses. The \code{z} records the link, so
 a free value of 0.4 is not an angle of 0.4; the angle is
 \code{bounded_link(0, pi)}'s inverse of it. The ordering is part of the interface.
 }
 
-\section{Where double precision gives out}{
-Measured at \eqn{p = 3} with every free value equal: at 5 the smallest
-eigenvalue is \eqn{3 \times 10^{-8}} and at 10 it is \eqn{-2 \times 10^{-16}},
-the matrix having reached its boundary in double precision with a correlation
-of \eqn{-1} to every printed digit. The parametrization is exact; what gives
-out is the representation of a correlation one ulp from the edge. A fit that
-walks a free value past about \eqn{\pm 8} is reporting a boundary, and
-\code{\link[=check_parameter]{check_parameter()}} sweeps to \eqn{\pm 2} for that reason.
+\section{The boundary in double precision}{
+As the free values grow, the angles approach 0 or \eqn{\pi} and a
+correlation approaches \eqn{\pm 1}. At \eqn{p = 3} with every free value equal
+to 10 the matrix is singular in double precision, with a correlation equal to
+\eqn{-1} to every printed digit. A free value beyond about \eqn{\pm 8} in a
+fit therefore indicates a correlation at the boundary, and
+\code{\link[=check_parameter]{check_parameter()}} sweeps only to \eqn{\pm 2}.
 }
 
 \section{p = 1 is a constant}{
@@ -95,8 +96,8 @@ at the only free vector there is, \code{numeric(0)}, \code{\link[=param_d1]{para
 return empty lists, and \code{\link[=param_logdet]{param_logdet()}} is 0. \code{\link[=check_parameter]{check_parameter()}} passes,
 reporting its two log-determinant derivative rows as \verb{NOT CHECKED}, there
 being no free value to differentiate in. The family therefore degenerates to
-a constant rather than refusing, so it stays composable inside
-\code{\link[=block_diag]{block_diag()}}; it carries no information of its own.
+a constant instead of signaling an error, so it can still be composed
+inside \code{\link[=block_diag]{block_diag()}}; it carries no information of its own.
 }
 
 \section{Notation}{
@@ -121,10 +122,11 @@ round(r, 4)
 diag(r)
 eigen(r, only.values = TRUE)$values > 0
 
-# The round trip closes exactly.
+# The round trip closes up to rounding.
 max(abs(param_free(s, r) - eta))
 
-# Absurd free values stay in the set, which is the point.
+# Large free values still give a unit diagonal, although the matrix is then
+# close to singular (see Details).
 m <- param_value(s, c(-30, 40, -20))
 c(min_diag = min(diag(m)), max_abs_corr = max(abs(m[upper.tri(m)])))
 
@@ -146,6 +148,6 @@ Mathematics} \strong{18}, 55-73.
 \seealso{
 \code{\link[=dr_prod]{dr_prod()}} to combine this with a diagonal of standard deviations
 into a covariance, \code{\link[=log_cholesky]{log_cholesky()}} for an unstructured matrix,
-\code{\link[=compound_symmetry]{compound_symmetry()}} and \code{\link[=ar1]{ar1()}} for structured correlations with two free
+\code{\link[=compound_symmetry]{compound_symmetry()}} and \code{\link[=ar1]{ar1()}} for structured covariances with two free
 values, and \code{\link[=param_value]{param_value()}} for the map.
 }

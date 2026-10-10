@@ -18,16 +18,15 @@ vector and defaulted to the identity by the generic.}
 A numeric matrix with \code{s@dimension} rows and as many columns as \code{b}.
 }
 \description{
-The method every \code{\link[=matrix_parameter]{matrix_parameter()}} inherits when it registers no
+The method that every \code{\link[=matrix_parameter]{matrix_parameter()}} inherits when it registers no
 \code{\link[=param_solve]{param_solve()}} of its own. It takes the Cholesky factor \eqn{L} from
 \code{\link[=param_factor]{param_factor()}} and applies it twice,
 \code{backsolve(t(l), forwardsolve(l, b))}, which is
-\eqn{L^{-\top}L^{-1}B = M^{-1}B}. No inverse is formed and no linear system is
-solved twice.
+\eqn{L^{-\top}L^{-1}B = M^{-1}B}. The inverse is not formed, and each
+triangular system is solved once.
 
-Exact, not approximated: it agrees with \code{base::solve()} to the last bit on a
-well-conditioned matrix, and this is why \code{\link[=param_is_numerical]{param_is_numerical()}} does not list
-it. The generic has already rejected a rank-deficient family and one whose
+The result is exact up to rounding, as \code{base::solve()} is, which is why
+\code{\link[=param_is_numerical]{param_is_numerical()}} does not list it. The generic has already rejected a rank-deficient family and one whose
 value is not a symmetric matrix, and filled \code{b} with the identity when the
 caller left it out, so by the time this runs \code{b} is a matrix of the right
 height.
@@ -35,10 +34,11 @@ height.
 \details{
 Positive definiteness is decided inside \code{\link[=param_factor]{param_factor()}}, from the
 eigenvalues, before any factorization is attempted; see \code{\link[=chol_pd]{chol_pd()}} for why
-the verdict does not come from whether \code{\link[base:chol]{base::chol()}} raises.
+the verdict does not come from whether \code{\link[base:chol]{base::chol()}} signals an error.
 
 The cost is one \eqn{O(p^3)} factorization plus \eqn{O(p^2)} per column of
-\code{b}. Seven families override this with a closed-form inverse and pay neither.
+\code{b}. The families that override this method are listed under
+\code{\link[=param_solve]{param_solve()}}.
 }
 \seealso{
 \code{\link[=param_solve]{param_solve()}} for the generic and the argument handling,

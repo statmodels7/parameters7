@@ -22,13 +22,14 @@ is best determined. Exact, and a true inverse of
 \code{\link[=param_value.ScaledMatrixParam]{param_value.ScaledMatrixParam()}}.
 }
 \details{
-Three rejections. The ratio must be positive, or \code{m} is not a positive
+Four rejections. The ratio must be positive, or \code{m} is not a positive
 multiple. \code{m} must then agree with \code{h * p} to \eqn{10^{-8}} relative
 everywhere, or it is not a multiple of \eqn{P} at all: the ratio at one entry
 is not enough, since any matrix has \emph{some} ratio there. And for a fixed
 parameter, built with \code{link = NULL}, the multiple must be 1 to \eqn{10^{-8}},
 the object having no free value to absorb anything else; the result is then
-\code{numeric(0)}.
+\code{numeric(0)}. Otherwise the multiple must lie inside the open range of the
+link.
 }
 \seealso{
 \code{\link[=param_value.ScaledMatrixParam]{param_value.ScaledMatrixParam()}}, the map this inverts.

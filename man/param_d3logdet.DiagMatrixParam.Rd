@@ -18,11 +18,11 @@ A numeric vector of \code{choose(s@n_free + 2, 3)} entries, keyed as
 \description{
 Closed form. The log-determinant is a sum of \eqn{\log h(\eta_k)} terms, so
 each pure component is the third derivative of \eqn{\log h} at that free
-value, times the number of entries the value owns, and every mixed component
-is exactly zero.
+value, times the number of entries that the value owns, and every mixed
+component is exactly zero.
 
 Under the log link the whole vector is zero, \eqn{\log h(\eta) = \eta} being
-linear. A link with curvature is where this order has content.
+linear; under a link with curvature it is not.
 }
 \seealso{
 \code{\link[=diag_logdet_higher]{diag_logdet_higher()}}, which assembles it, and \code{\link[=diag_dlog]{diag_dlog()}} for the

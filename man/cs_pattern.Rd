@@ -15,16 +15,17 @@ correlation and its derivatives.}
 }
 \value{
 A list of \code{s@dimension} by \code{s@dimension} matrices, one more than the
-derivatives \code{sc} carries: the pattern at index 1 and its derivatives at
+number of derivatives that \code{sc} carries: the pattern at index 1 and its derivatives at
 the following indices. Each derivative has a zero diagonal, the diagonal
 of the pattern being the constant 1.
 }
 \description{
 Returns \eqn{P(\rho) = I + \rho(J - I)}, the correlation pattern of a
 compound-symmetric matrix, together with its derivatives in the second free
-value to the order the scalars carry. The pattern is \strong{linear} in the correlation, so every derivative
-is the matching derivative of \eqn{\rho} times the constant matrix
-\eqn{J - I}, and no order needs its own algebra.
+value to the order that the scalars carry. The pattern is \strong{linear} in the
+correlation, so every derivative is the matching derivative of \eqn{\rho}
+times the constant matrix \eqn{J - I}, and every order uses the same
+formula.
 }
 \seealso{
 \code{\link[=econ_derivative]{econ_derivative()}}, the caller, and \code{ar1_pattern()}, the AR(1)

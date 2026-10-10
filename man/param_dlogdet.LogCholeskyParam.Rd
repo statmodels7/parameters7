@@ -19,7 +19,7 @@ holding 2 and 0.
 Closed form and constant: 2 in each of the \eqn{p} diagonal directions and 0
 in the \eqn{p(p-1)/2} below-diagonal ones, since \eqn{\log|M|} is
 \eqn{2\sum_i \eta_i} and does not involve the rest of \eqn{\eta} at all. The
-value does not depend on \code{eta}, which is read only for its length.
+value does not depend on \code{eta}, which the method does not read.
 }
 \seealso{
 \code{\link[=param_logdet.LogCholeskyParam]{param_logdet.LogCholeskyParam()}} for the quantity differentiated,

@@ -18,8 +18,9 @@ matrix with dimnames \code{v1}, \code{v2}, ...
 \description{
 Returns \eqn{M_{ij} = \sigma^2 \rho^{|i-j|}}: the common variance on the
 diagonal and a covariance falling geometrically with the lag. Positive
-definiteness holds at every free vector, the rhobit link keeping
-\eqn{|\rho| < 1}, so nothing is tested here.
+definiteness holds at every free vector in exact arithmetic, the rhobit link
+keeping \eqn{|\rho| < 1}, so nothing is tested here; in double precision
+\eqn{\rho} rounds to \eqn{-1} or 1 from \eqn{|\eta_2|} of about 19.
 }
 \seealso{
 \code{\link[=param_free.Ar1Param]{param_free.Ar1Param()}} for the inverse map,

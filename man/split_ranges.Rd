@@ -13,8 +13,8 @@ split_ranges(widths)
 A list of integer vectors, one per width, in order.
 }
 \description{
-Turns the widths \eqn{n_1, \ldots, n_B} into the ranges they occupy when laid
-end to end. It is called twice at construction, once for the blocks' rows in
+Turns the widths \eqn{n_1, \ldots, n_B} into the ranges that they occupy when
+laid end to end. It is called twice at construction, once for the blocks' rows in
 the matrix and once for their stretches of the free vector.
 }
 \details{

@@ -15,22 +15,20 @@ fd_step(eta_k, order = 1L)
 A single positive number.
 }
 \description{
-Returns the step a central difference should use in one component of
-\eqn{\eta}, scaled by the size of that component. A one-line forward to
-\code{\link[numericals7:fd_step]{numericals7::fd_step()}} at accuracy 2, so the step a fallback here takes and
-the step the stencil library documents cannot drift apart.
+Returns the step for a central difference in one component of \eqn{\eta},
+scaled by the size of that component. It forwards to
+\code{\link[numericals7:fd_step]{numericals7::fd_step()}} at accuracy 2, so the step of a fallback here and the
+step that the stencil library documents cannot drift apart.
 }
 \details{
 The rule is \eqn{\varepsilon^{1/(k+2)} \max(1, |\eta_k|)} for a \eqn{k}-th
-derivative, which balances the truncation error against the rounding the
-division by \eqn{h^k} amplifies. In doubles that is \eqn{6.1 \times 10^{-6}}
+derivative, which balances the truncation error against the rounding that
+the division by \eqn{h^k} amplifies. In doubles that is \eqn{6.1 \times 10^{-6}}
 at first order and \eqn{1.2 \times 10^{-4}} at second, both scaling up once
 \eqn{|\eta_k|} passes 1.
 
-No clamping happens, and there is nothing to clamp away from. The response
-and parameter steps in \pkg{distributions7} have to keep a node inside a
-bounded support; the unconstrained scale has no boundary anywhere, so
-\code{bounds} is left at its default.
+The step is not clamped. The unconstrained scale has no boundary, so the
+\code{bounds} argument of \code{\link[numericals7:fd_step]{numericals7::fd_step()}} is left at its default.
 }
 \seealso{
 \code{\link[numericals7:fd_step]{numericals7::fd_step()}} for the rule, and \code{\link[=fd_along]{fd_along()}}, which

@@ -8,8 +8,8 @@ ar1(dimension, link_scale = linkfunctions7::log_link())
 }
 \arguments{
 \item{dimension}{The side \eqn{p} of the matrix, \strong{at least 2}. A one by one
-matrix has no correlation, so \code{ar1(1)} throws a message saying the family
-would carry a free value with no effect.}
+matrix has no correlation, so \code{ar1(1)} signals an error stating that the
+family would carry a free value with no effect.}
 
 \item{link_scale}{A \pkg{linkfunctions7} link carrying the first free value
 onto the positive variance, \code{linkfunctions7::log_link()} by default. It must
@@ -36,15 +36,18 @@ strong an assumption.
 }
 \section{The correlation is unrestricted}{
 Unlike \code{\link[=compound_symmetry]{compound_symmetry()}}, the bound is \eqn{|\rho| < 1} at every
-dimension, so the correlation rides \code{linkfunctions7::rhobit_link()}, the
+dimension, so the correlation is mapped by \code{linkfunctions7::rhobit_link()}, the
 inverse hyperbolic tangent, and every free value gives a positive definite
-matrix. A free value of 0 is a correlation of 0 here, where in
+matrix in exact arithmetic. In double precision the correlation rounds to
+\eqn{-1} or 1 from \eqn{|\eta_2|} of about 19, and the matrix is then
+singular to rounding; the log-determinant, its derivatives and the inverse
+are evaluated from \eqn{\eta_2} and stay accurate there. A free value of 0 is a correlation of 0 here, where in
 \code{\link[=compound_symmetry]{compound_symmetry()}} it is the midpoint of a dimension-dependent interval.
 }
 
 \section{The inverse is tridiagonal}{
-This is the property the family is used for. An AR(1) process is Markov, so
-its precision has no entries beyond the first off-diagonal:
+An AR(1) process is Markov, so its precision has no entries beyond the first
+off-diagonal:
 
 \deqn{M^{-1} = \frac{1}{\sigma^2(1-\rho^2)}
   \begin{pmatrix}
@@ -54,14 +57,15 @@ its precision has no entries beyond the first off-diagonal:
      & & -\rho & 1
   \end{pmatrix}.}
 
-\code{\link[=param_solve]{param_solve()}} returns it from that form, so no factorization is performed
-and the cost is \eqn{O(p)} entries against the base class's \eqn{O(p^3)}.
+\code{\link[=param_solve]{param_solve()}} builds it from that form, so no factorization is performed;
+the matrix is assembled densely and multiplied by \code{b}, at \eqn{O(p^2)} per
+column of \code{b}.
 
-Note what this does \strong{not} say: the precision is tridiagonal without being
-AR(1). Its own correlation at lag 1 is not constant along the diagonal
-(measured at \eqn{p = 4}, \eqn{\rho = 0.6}: \eqn{-0.514} at the ends and
-\eqn{-0.441} in the middle), and its lag-2 correlation is 0 where an AR(1)
-would have \eqn{\rho^2}. So an AR(1) covariance and an AR(1) precision are
+The precision is tridiagonal but is not itself an AR(1) matrix. Its lag-1
+correlation is not constant along the diagonal (at \eqn{p = 4} and
+\eqn{\rho = 0.6} it is \eqn{-0.514} at the ends and \eqn{-0.441} in the
+middle), and its lag-2 correlation is 0, where an AR(1) matrix has
+\eqn{\rho^2}. An AR(1) covariance and an AR(1) precision therefore define
 different models. This family is the AR(1) pattern itself, whichever side a
 consumer puts it on; \code{\link[=ar1_inv]{ar1_inv()}} is the family whose value is the matrix
 above, so that the AR(1) process is the one written on the other side.
@@ -76,8 +80,9 @@ a sum of a function of one free value and a function of the other. Every
 mixed derivative of it is exactly zero, and no determinant is computed.
 }
 
-\section{Why the derivatives are harder than compound symmetry's}{
-The pattern is \strong{not} linear in the correlation. An entry is \eqn{\rho^{m}}
+\section{Derivatives of the pattern}{
+Unlike the pattern of \code{\link[=compound_symmetry]{compound_symmetry()}}, this pattern is not linear in
+the correlation. An entry is \eqn{\rho^{m}}
 for the lag \eqn{m}, so its derivatives in the free value are a power composed
 with the link, taken to fourth order by \code{\link[=compose_order]{compose_order()}}. Each distinct lag is
 composed once and written into every entry that carries it, the matrix having

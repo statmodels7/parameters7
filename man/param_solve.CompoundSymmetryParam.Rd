@@ -25,9 +25,12 @@ Exact, by Sherman-Morrison. The inverse of
   \left[I - \frac{\rho}{1 + (p-1)\rho}J\right],}
 
 compound symmetric again, so the inverse is written down and no factorization
-is performed: the cost is \eqn{O(p^2)} for the product against \code{b}, against
-the base class's \eqn{O(p^3)} Cholesky. Measured against \code{base::solve()} on the
-assembled matrix, the two agree to \eqn{2 \times 10^{-16}}.
+is performed: the cost is \eqn{O(p^2)} per column of \code{b}, against the
+\eqn{O(p^3)} Cholesky factorization of the base method. The factors
+\eqn{1 + (p-1)\rho} and \eqn{1 - \rho} are evaluated from the second free
+value, as \eqn{p\omega} and \eqn{p(1-\omega)/(p-1)} with \eqn{\omega} the
+logistic function of that value, so the inverse stays accurate where the
+correlation rounds to one of its bounds.
 
 An exchangeable covariance has an exchangeable precision, so the family is
 closed under the choice of side.

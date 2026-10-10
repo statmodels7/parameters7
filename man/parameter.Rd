@@ -2,7 +2,7 @@
 % Please edit documentation in R/parameter_class.R
 \name{parameter}
 \alias{parameter}
-\title{The Abstract Class of a Constrained Parameter}
+\title{The Base Class of a Constrained Parameter}
 \usage{
 parameter(
   param_name = character(0),
@@ -13,7 +13,8 @@ parameter(
 }
 \arguments{
 \item{param_name}{A single character string naming the family, used in the
-error messages the validators raise and in the object's \code{print} output.
+error messages that the validators raise and in the object's \code{print}
+output.
 \code{"log_cholesky"}, \code{"ar1"} and so on.}
 
 \item{n_free}{The length \eqn{d} of the free vector: a single non-negative
@@ -22,7 +23,8 @@ The validator rejects a vector, a negative value, or a length that
 disagrees with \code{free_names}.}
 
 \item{free_names}{A character vector of length \code{n_free}, one label per free
-value, in the order the free vector holds them. Fixed at construction and
+value, in the order in which the free vector holds them. Fixed at
+construction and
 part of the interface: consumers build their parameter tables from these
 labels, so the ordering is not free to change. The validator rejects a
 duplicated label and a length other than \code{n_free}.}
@@ -30,7 +32,7 @@ duplicated label and a length other than \code{n_free}.}
 \item{param_params}{A list of whatever the family needs in order to evaluate
 itself, read only by that family's own methods. \code{log_cholesky()} stores
 the row and column index of each free value here; \code{sum_struct()} stores
-its component matrices. Nothing outside the family looks inside it.}
+its component matrices. Only the methods of that family read the list.}
 }
 \value{
 An object of class \code{parameter}, with properties
@@ -40,8 +42,8 @@ An object of class \code{parameter}, with properties
 \item{\code{free_names}}{character of length \code{n_free}.}
 \item{\code{param_params}}{list, the family's own data.}
 }
-The class is abstract, so a useful object comes from a constructor such as
-\code{\link[=log_cholesky]{log_cholesky()}} and carries that constructor's subclass. A matrix family
+A useful object comes from a constructor such as \code{\link[=log_cholesky]{log_cholesky()}} and
+carries that constructor's subclass. A matrix family
 returns a \code{\link[=matrix_parameter]{matrix_parameter()}}, which adds \code{dimension}, \code{rank} and
 \code{null_basis}.
 }
@@ -49,22 +51,22 @@ returns a \code{\link[=matrix_parameter]{matrix_parameter()}}, which adds \code{
 A parameter is a map from an unconstrained vector
 \eqn{\eta \in \mathbb{R}^{d}} onto a quantity that lives in a constrained
 set: a symmetric positive definite matrix, a probability vector, a
-stochastic matrix. \code{parameter} is the abstract S7 class that map belongs
-to. It records how many free values the map consumes, what each of them is
+stochastic matrix. \code{parameter} is the base S7 class of every such map. It
+records how many free values the map consumes, what each of them is
 called, and whatever the family needs in order to evaluate itself. Because
 the domain is the whole of \eqn{\mathbb{R}^{d}}, an optimizer may move
 \eqn{\eta} anywhere and every point it visits still maps to a valid value,
 so no constraint has to be policed during a fit.
 
-The class is abstract and is not meant to be instantiated. Call a
+The class is not meant to be instantiated directly. Call a
 constructor: \code{\link[=log_cholesky]{log_cholesky()}} for an unstructured covariance, \code{\link[=ar1]{ar1()}} or
 \code{\link[=compound_symmetry]{compound_symmetry()}} for a structured one, \code{\link[=simplex]{simplex()}} for a probability
 vector, \code{\link[=transition_matrix]{transition_matrix()}} for a Markov chain.
 }
-\section{A parameter owns its dimension}{
+\section{The dimension is fixed at construction}{
 \code{log_cholesky(3)} and \code{log_cholesky(4)} are different objects, holding
 \eqn{d = 6} and \eqn{d = 10} free values. Fixing the size at construction
-means \code{n_free} and \code{free_names} can be answered before any data exist, and
+means that \code{n_free} and \code{free_names} are known before any data exist, and
 both are needed then: a model builds its parameter table from the names
 while it is still assembling the design.
 }
@@ -75,28 +77,29 @@ while it is still assembling the design.
 stencil applied to the map itself. A closed form registered later replaces
 the inherited numerical method through dispatch, and no caller changes.
 
-Four generics are not inherited here:
+The inverse map and the matrix quantities are not supplied in this way:
 \itemize{
-\item \code{\link[=param_free]{param_free()}}, the inverse map, has a base method that throws and names
-the family. An inverse found by optimization would hand back a plausible
-\eqn{\eta} for a value that is outside the set the family parametrizes, so
-the inverse is either written out exactly or refused.
-\item \code{\link[=param_logdet]{param_logdet()}}, \code{\link[=param_solve]{param_solve()}} and \code{\link[=param_factor]{param_factor()}} are registered on
-\code{\link[=matrix_parameter]{matrix_parameter()}}, not on this class. A probability vector has no
-log-determinant, and asking for one fails at dispatch instead of returning
-a number.
+\item \code{\link[=param_free]{param_free()}}, the inverse map, has a base method on this class that
+signals an error naming the family. An inverse found by optimization would
+return an \eqn{\eta} even for a value that lies outside the set that the
+family parametrizes, so the inverse is either written out exactly or
+rejected.
+\item \code{\link[=param_logdet]{param_logdet()}} and its four derivative generics, \code{\link[=param_solve]{param_solve()}} and
+\code{\link[=param_factor]{param_factor()}} have methods on \code{\link[=matrix_parameter]{matrix_parameter()}} only. A probability
+vector has no log-determinant, so a call for one fails at dispatch instead
+of returning a number.
 }
 }
 
-\section{Free names label the coordinate, not the quantity}{
+\section{Free names}{
 The families here follow one convention. Where a link carries a constrained
 quantity onto the free scale, the label records that link: a variance
 appears as \code{"log_scale"} and a correlation as \code{"z_rho"}. Where the
 coordinate is already unrestricted the label is the plain name of the
 quantity, as the below-diagonal entries \code{"L2.1"} of a Cholesky factor are.
 
-The distinction matters outside the family. A consumer flattens the free
-vector into scalar parameters carrying identity links, so a label promising
+A consumer outside the family flattens the free vector into scalar
+parameters carrying identity links, so a label promising
 a bounded quantity would report a number that is not on that scale: a free
 value of 1.4 called \code{rho} reads as a correlation of 1.4, while called
 \code{z_rho} it reads as the correlation \eqn{\tanh(1.4) = 0.885}.
@@ -116,7 +119,7 @@ matrix a matrix family produces.
 s <- log_cholesky(3)
 S7::S7_inherits(s, parameter)
 
-# The four properties the class itself holds.
+# The four properties that the class itself holds.
 s@param_name
 s@n_free
 s@free_names
@@ -127,7 +130,7 @@ d <- vapply(2:5, function(p) log_cholesky(p)@n_free, integer(1))
 rbind(p = 2:5, n_free = d, `p(p+1)/2` = (2:5) * (3:6) / 2)
 
 # A family whose value is not a symmetric matrix inherits `parameter`
-# directly, so it has no log-determinant to be asked for.
+# directly, so it has no log-determinant.
 q <- simplex(3)
 c(parameter = S7::S7_inherits(q, parameter),
   matrix_parameter = S7::S7_inherits(q, matrix_parameter))
@@ -144,12 +147,13 @@ tanh(1.4)
 \code{\link[=matrix_parameter]{matrix_parameter()}} for the symmetric matrix branch.
 \code{\link[=param_value]{param_value()}} and \code{\link[=param_free]{param_free()}} for the map and its inverse,
 \code{\link[=param_d1]{param_d1()}} for the derivative arrays, \code{\link[=param_readable]{param_readable()}} for the
-quantities a family reports, and \code{\link[=check_parameter]{check_parameter()}} to verify a
+quantities that a family reports, and \code{\link[=check_parameter]{check_parameter()}} to verify a
 parametrization written from scratch.
 
 The constructors: \code{\link[=log_cholesky]{log_cholesky()}}, \code{\link[=matrix_log]{matrix_log()}}, \code{\link[=diagonal_matrix]{diagonal_matrix()}},
 \code{\link[=scalar_matrix]{scalar_matrix()}}, \code{\link[=scaled_matrix]{scaled_matrix()}}, \code{\link[=correlation_matrix]{correlation_matrix()}},
-\code{\link[=compound_symmetry]{compound_symmetry()}}, \code{\link[=ar1]{ar1()}}, \code{\link[=autoregressive]{autoregressive()}}, \code{\link[=simplex]{simplex()}},
-\code{\link[=transition_matrix]{transition_matrix()}}, and the compositions \code{\link[=kron_identity]{kron_identity()}},
-\code{\link[=block_diag]{block_diag()}}, \code{\link[=dr_prod]{dr_prod()}} and \code{\link[=sum_struct]{sum_struct()}}.
+\code{\link[=compound_symmetry]{compound_symmetry()}}, \code{\link[=ar1]{ar1()}}, \code{\link[=autoregressive]{autoregressive()}}, \code{\link[=ar1_inv]{ar1_inv()}},
+\code{\link[=autoregressive_inv]{autoregressive_inv()}}, \code{\link[=simplex]{simplex()}}, \code{\link[=transition_matrix]{transition_matrix()}}, and the
+compositions \code{\link[=kron_identity]{kron_identity()}}, \code{\link[=block_diag]{block_diag()}}, \code{\link[=dr_prod]{dr_prod()}},
+\code{\link[=sum_struct]{sum_struct()}} and \code{\link[=inverse_of]{inverse_of()}}.
 }

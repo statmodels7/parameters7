@@ -16,7 +16,7 @@ econ_derivative(s, eta, order, pattern)
 \item{pattern}{A function of the parameter and the scalars of
 \code{\link[=econ_scalars]{econ_scalars()}}, returning a list of matrices: the pattern
 \eqn{P(\rho)} and its derivatives in the second free value, to the order
-the scalars carry. See \code{\link[=cs_pattern]{cs_pattern()}} and \code{ar1_pattern()}.}
+that the scalars carry. See \code{\link[=cs_pattern]{cs_pattern()}} and \code{ar1_pattern()}.}
 }
 \value{
 A list of \code{choose(order + 1, order)}, that is \code{order + 1}, symmetric
@@ -33,9 +33,8 @@ to this function, differing only in the \code{pattern} passed.
 The value is a \strong{product} of a function of the first free value and a
 function of the second, so a component with \eqn{a} scale indices and \eqn{b}
 correlation indices is the \eqn{a}-th derivative of the scale times the
-\eqn{b}-th derivative of the pattern. Nothing is approximated and no order is
-special: only the counts \eqn{a} and \eqn{b} matter, and a tuple is fully
-described by them.
+\eqn{b}-th derivative of the pattern. Every derivative is exact, and a tuple
+enters only through the counts \eqn{a} and \eqn{b}.
 }
 \seealso{
 \code{\link[=econ_scalars]{econ_scalars()}} for the two chains, \code{\link[=cs_pattern]{cs_pattern()}} for one of the

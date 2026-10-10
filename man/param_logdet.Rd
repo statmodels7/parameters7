@@ -9,11 +9,12 @@ param_logdet(s, eta, ...)
 \arguments{
 \item{s}{An object inheriting from class \code{\link[=matrix_parameter]{matrix_parameter()}}. A family whose
 value is not a symmetric matrix has no method, and the call fails at
-dispatch with \verb{Can't find method for param_logdet(<SimplexParam>)}.}
+dispatch with S7's "Can't find method" error, which names the class (for
+instance \code{parameters7::SimplexParam}).}
 
 \item{eta}{A numeric vector of length \code{s@n_free}, finite in every entry.}
 
-\item{...}{Passed to the method. No method in this package reads it.}
+\item{...}{Passed to the method. The methods in this package do not read it.}
 }
 \value{
 A single number. \code{-Inf} is not returned: a full-rank family is
@@ -27,10 +28,10 @@ rank-deficient one. This is the quantity a Gaussian likelihood needs beside
 the quadratic form, and every matrix family answers it, in closed form where
 one exists.
 
-One generic covers both cases because a consumer asks the same question of
-either: what normalizing constant does this matrix contribute. Which answer
-is the right one follows from the object's declared \code{rank}, so the caller
-does not have to branch.
+One generic covers both cases because the quantity needed from either is the
+normalizing constant that the matrix contributes. The declared \code{rank}
+determines whether the result is the log-determinant or the log
+pseudo-determinant, so the caller does not have to branch.
 }
 \section{The sign belongs to the caller}{
 A Gaussian log-density written in the covariance carries
@@ -41,20 +42,21 @@ A parameter does not record which side it was built for: the consumer
 declares that, as \code{\link[=inverse_of]{inverse_of()}} does when the side is fixed.
 }
 
-\section{Computed from the parametrization, not from the matrix}{
+\section{Closed forms and the base method}{
 A closed form is usually far cheaper than a decomposition, and often simply
 linear. In the log-Cholesky parametrization
 \eqn{\log|M| = 2\sum_{i=1}^{p} \eta_i}, twice the sum of the first \eqn{p}
-free values, so no factorization happens at all. The \code{\link[=ar1]{ar1()}} family answers
+free values, so no factorization happens at all. For the \code{\link[=ar1]{ar1()}} family it is
 \eqn{p\,\eta_1 + (p-1)\log(1 - \rho^2)}, again in constant work whatever
 \eqn{p} is. The base method on \code{\link[=matrix_parameter]{matrix_parameter()}}, which a family written
 elsewhere inherits, takes an eigendecomposition and sums the logs of the
-eigenvalues above a relative tolerance, at \eqn{O(p^3)}.
+largest \eqn{r} eigenvalues, \eqn{r} being the declared rank, at
+\eqn{O(p^3)}.
 }
 
 \section{Rank deficiency}{
 A deficient family returns the log pseudo-determinant, and its \code{null_basis}
-says which directions were left out. That is the quantity an improper prior
+records which directions were left out. That is the quantity an improper prior
 contributes to a marginal likelihood: the penalized normal equations invert
 \eqn{X^\top X + \lambda P}, which is non-singular even when \eqn{P} is not,
 so the deficiency never has to be inverted. \code{\link[=param_solve]{param_solve()}} and

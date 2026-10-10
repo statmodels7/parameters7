@@ -13,9 +13,9 @@ econ_logdet_derivative(s, eta, order, terms)
 
 \item{order}{The derivative order: 1, 2, 3 or 4.}
 
-\item{terms}{The affine-logarithm terms of \eqn{q}, as
-\code{\link[=cs_logdet_terms]{cs_logdet_terms()}} or \code{ar1_logdet_terms()} returns them; see
-\code{\link[=log_affine_derivs]{log_affine_derivs()}}.}
+\item{terms}{A function of the second free value and the order that returns
+the order-th derivative of \eqn{q} in that free value, as
+\code{\link[=cs_logdet_chain]{cs_logdet_chain()}} and \code{\link[=ar1_logdet_chain]{ar1_logdet_chain()}} do.}
 }
 \value{
 A numeric vector of \code{order + 1} entries, keyed as
@@ -39,8 +39,8 @@ derivatives vanish too and only the correlation's chain survives above first
 order.
 }
 \seealso{
-\code{\link[=log_affine_derivs]{log_affine_derivs()}} for the correlation's chain, \code{\link[=econ_scalars]{econ_scalars()}}
-for the two links' derivatives, and \code{\link[=econ_derivative]{econ_derivative()}}, its counterpart for
-the matrix itself.
+\code{\link[=cs_logdet_chain]{cs_logdet_chain()}} and \code{\link[=ar1_logdet_chain]{ar1_logdet_chain()}} for the correlation's
+chain, \code{\link[=econ_scalars]{econ_scalars()}} for the scale's link derivatives, and
+\code{\link[=econ_derivative]{econ_derivative()}}, its counterpart for the matrix itself.
 }
 \keyword{internal}

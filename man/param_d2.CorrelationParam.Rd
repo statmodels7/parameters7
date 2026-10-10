@@ -13,7 +13,8 @@ checked by the generic.}
 }
 \value{
 A list of \code{choose(s@n_free + 1, 2)} symmetric matrices keyed as
-\code{param_tuple_names(s)} and in that order, each with a zero diagonal.
+\code{param_tuple_names(s)} and in that order, each with a diagonal that is
+zero up to rounding.
 }
 \description{
 Closed form, by the Leibniz rule on \eqn{R = LL^\top} taken twice,
@@ -24,12 +25,11 @@ Closed form, by the Leibniz rule on \eqn{R = LL^\top} taken twice,
 with each \eqn{\partial^S L} from \code{\link[=corr_dfactor]{corr_dfactor()}} and zero wherever the
 multiset \eqn{S} spans two rows of \eqn{L}.
 
-What survives is worth knowing before reading a result. A component in two
-angles from \strong{different} rows \eqn{i} and \eqn{j} does not vanish: the two
+A component in two angles from \strong{different} rows \eqn{i} and \eqn{j} does not vanish: the two
 outer terms drop, but \eqn{L_k L_l^\top + L_l L_k^\top} is supported on
-exactly the entries \eqn{(i, j)} and \eqn{(j, i)}. It is zero even there when
-the two angles sit beyond the columns the two rows share. The diagonal is
-exactly zero at every order.
+the entries \eqn{(i, j)} and \eqn{(j, i)}. It is zero even there when the
+two angles lie beyond the columns that the two rows share. The diagonal is
+zero up to rounding at every order.
 }
 \seealso{
 \code{\link[=corr_derivative]{corr_derivative()}}, which assembles it, \code{\link[=corr_dfactor]{corr_dfactor()}} for the

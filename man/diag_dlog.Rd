@@ -30,17 +30,18 @@ Faa di Bruno's formula for the logarithm, written out. With
   u_4 - 4u_1u_3 - 3u_2^2 + 12u_1^2u_2 - 6u_1^4.}
 
 The division by \eqn{h} happens once, at the start, so every term is a ratio
-of order one, never a derivative that can be large on its own. That matters
-at the ends of a link's range, where \eqn{h} and \eqn{h^{(m)}} can both be
-extreme while the ratio is ordinary.
+and not a derivative that can be large on its own. This keeps the arithmetic
+in range at the ends of a link's range, where \eqn{h} and \eqn{h^{(m)}} can
+both be extreme while the ratio is moderate.
 
 Under the log link \eqn{h = e^\eta} gives \eqn{u_m = 1} for every \eqn{m}, so
 the first order is 1 and the second, third and fourth are exactly 0, which is
 why a default \code{diagonal_matrix()} reports a linear log-determinant.
 }
 \seealso{
-\code{\link[=diag_logdet_higher]{diag_logdet_higher()}}, \code{\link[=param_d3logdet.ScaledMatrixParam]{param_d3logdet.ScaledMatrixParam()}} and
-\code{\link[=param_d4logdet.ScaledMatrixParam]{param_d4logdet.ScaledMatrixParam()}}, the callers, and
+\code{\link[=diag_logdet_higher]{diag_logdet_higher()}}, \code{\link[=param_d3logdet.ScaledMatrixParam]{param_d3logdet.ScaledMatrixParam()}},
+\code{\link[=param_d4logdet.ScaledMatrixParam]{param_d4logdet.ScaledMatrixParam()}} and \code{\link[=dr_prod_logdet_derivs]{dr_prod_logdet_derivs()}}, the
+callers, and
 \code{linkfunctions7::dlinkinv()} for the link derivatives read.
 }
 \keyword{internal}

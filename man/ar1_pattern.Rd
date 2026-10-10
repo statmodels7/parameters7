@@ -14,13 +14,13 @@ correlation and its derivatives in the free value.}
 }
 \value{
 A list of \code{s@dimension} by \code{s@dimension} matrices, one more than the
-derivatives \code{sc} carries: the pattern at index 1 and its derivatives at
+number of derivatives that \code{sc} carries: the pattern at index 1 and its derivatives at
 the following indices, each derivative with a zero diagonal.
 }
 \description{
 Returns \eqn{P(\rho)_{ij} = \rho^{|i-j|}}, the correlation pattern of an AR(1)
 matrix, together with its derivatives in the second free value to the
-order the scalars carry. Each
+order that the scalars carry. Each
 entry is a \strong{power} of the correlation, so unlike \code{\link[=cs_pattern]{cs_pattern()}}'s the
 pattern is not linear and each order needs a genuine chain: \code{\link[=compose_order]{compose_order()}}
 composes \eqn{\rho \mapsto \rho^m} with the link's own derivatives, one

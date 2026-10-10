@@ -21,7 +21,7 @@ keyed as \code{param_tuple_names(s, order)} and in that order, each
 \description{
 Assembles one derivative order from the kernel of that order: one Toeplitz
 matrix per index tuple, filled in compiled code from the column of
-autocovariance derivatives \code{\link[=ar_tables]{ar_tables()}} returns for it. The four methods
+autocovariance derivatives that \code{\link[=ar_tables]{ar_tables()}} returns for it. The four methods
 differ only in the order they pass.
 }
 \seealso{

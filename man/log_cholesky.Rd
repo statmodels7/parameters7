@@ -9,7 +9,7 @@ log_cholesky(dimension)
 \arguments{
 \item{dimension}{The side \eqn{p} of the matrix. A single positive whole
 number, finite and at least 1. \code{0}, \code{2.5}, \code{c(1, 2)}, \code{"3"}, \code{Inf} and \code{NA}
-all throw \verb{'dimension' must be a single positive integer.}}
+all signal the error \verb{'dimension' must be a single positive integer.}}
 }
 \value{
 An object of class \code{\link[=LogCholeskyParam]{LogCholeskyParam()}}, with properties
@@ -30,8 +30,7 @@ column and diagonal flag of each free value.}
 Estimating a covariance matrix directly is awkward. An optimizer moving
 freely through \eqn{p(p+1)/2} numbers will eventually propose a matrix that is
 not positive definite, and the likelihood is undefined there. This function
-removes the problem instead of policing it: it returns an object holding the
-log-Cholesky map, which sends an unconstrained vector to \eqn{M = L L^\top}
+returns an object holding the log-Cholesky map, which sends an unconstrained vector to \eqn{M = L L^\top}
 with \eqn{L} lower triangular and positive on the diagonal. Every vector in
 \eqn{\mathbb{R}^{p(p+1)/2}} gives a valid matrix, so the optimizer never has
 to be told about the constraint.
@@ -39,14 +38,14 @@ to be told about the constraint.
 Reach for it when nothing is known about the matrix. It is the parametrization
 of Pinheiro and Bates (1996).
 }
-\section{Why the map is safe}{
+\section{Positive definiteness of the map}{
 \deqn{M = L L^\top, \qquad L_{ii} = \exp(\eta_i) > 0}
 
 The exponential keeps the diagonal of \eqn{L} positive, and a triangular
 matrix with a positive diagonal has full rank, so \eqn{L L^\top} is positive
-definite at every finite \eqn{\eta}. The map is smooth in both directions and
-one to one, the Cholesky factor with a positive diagonal being unique, so
-there is no boundary on the free scale to run into.
+definite at every finite \eqn{\eta}, within the range of floating-point
+arithmetic. The map is smooth in both directions and one to one, the
+Cholesky factor with a positive diagonal being unique.
 
 The logarithm on the diagonal belongs to the parametrization and is not a
 swappable link, which is why it appears in the free names. Use
@@ -65,7 +64,7 @@ The ordering is part of the interface: \code{free_names} follows it and downstre
 parameter tables are built from those names. Treat it as fixed.
 }
 
-\section{The log-determinant comes free}{
+\section{The log-determinant}{
 A likelihood involving \eqn{M} almost always needs \eqn{\log|M|}, and here it
 is twice the sum of the first \eqn{p} free values:
 
@@ -76,7 +75,7 @@ elsewhere, and the second, third and fourth derivatives are exactly zero. All
 four are returned without any factorization being taken.
 }
 
-\section{When to use something else}{
+\section{Other families}{
 This is the parametrization for an unstructured matrix, where
 \eqn{p(p+1)/2} free values is the price of assuming nothing. A structured
 family estimates fewer and imposes its structure exactly: \code{\link[=diagonal_matrix]{diagonal_matrix()}}
@@ -108,11 +107,11 @@ M <- param_value(s, eta)
 round(M, 4)
 eigen(M, only.values = TRUE)$values
 
-# Even absurd values stay in the cone, which is the point.
+# Large free values also give a positive definite matrix.
 eigen(param_value(s, c(-8, 9, -7, 100, -100, 50)),
       only.values = TRUE)$values > 0
 
-# The inverse map recovers the free vector exactly.
+# The inverse map recovers the free vector up to rounding.
 max(abs(param_free(s, M) - eta))
 
 # log|M| is linear in eta: twice the sum of the first p entries.
@@ -126,7 +125,7 @@ c(second = max(abs(param_d2logdet(s, eta))),
   third = max(abs(param_d3logdet(s, eta))),
   fourth = max(abs(param_d4logdet(s, eta))))
 
-# The factor is what the parametrization holds, so it costs nothing.
+# The factor is assembled from the free vector, with no factorization.
 L <- param_factor(s, eta)
 round(L, 4)
 all.equal(diag(L), exp(eta[1:3]))

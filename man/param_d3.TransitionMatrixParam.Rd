@@ -18,8 +18,7 @@ A list of \code{choose(s@n_free + 2, 3)} \eqn{K \times K} matrices keyed as
 \description{
 Closed form, from \code{\link[=simplex]{simplex()}}'s cumulant recursion at third order, embedded row
 by row. A component whose three free values do not all belong to one row is
-exactly the zero matrix, so the great majority of the list is zero and is
-skipped instead of computed.
+exactly the zero matrix, so most of the list is zero and is not computed.
 }
 \seealso{
 \code{\link[=tm_derivative]{tm_derivative()}}, which assembles it, and

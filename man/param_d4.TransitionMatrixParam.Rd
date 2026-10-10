@@ -18,13 +18,12 @@ components, of which 15 can be non-zero.
 }
 \description{
 Closed form, from \code{\link[=simplex]{simplex()}}'s cumulant recursion at fourth order, embedded
-row by row, and the top of the contract. A component whose four free values do
-not all belong to one row is exactly the zero matrix.
+row by row. A component whose four free values do not all belong to one row
+is exactly the zero matrix.
 
-Exactness matters most here: a product stencil at fourth order keeps about five
-digits, and the list is large, so a numerical route would be both slow and
-poor. The row-wise structure is what keeps it affordable at all, the cross-row
-components never being evaluated.
+A product stencil at fourth order, as in \code{\link[=numerical_d4]{numerical_d4()}}, is far less
+accurate, and the list is large. The cross-row components are not
+evaluated.
 }
 \seealso{
 \code{\link[=tm_derivative]{tm_derivative()}}, which assembles it,

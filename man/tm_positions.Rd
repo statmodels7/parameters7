@@ -15,9 +15,9 @@ A list with two integer vectors of length \code{s@n_free}: \code{row}, with
 values in \code{1:K}, and \code{coord}, with values in \code{1:(K-1)}.
 }
 \description{
-Returns, for each of the \eqn{K(K-1)} free values, the row it belongs to and
-its position inside that row's simplex chart, in the order the free vector
-uses. Every method of the family reads it to split the free vector into rows.
+Returns, for each of the \eqn{K(K-1)} free values, the row to which it
+belongs and its position inside that row's simplex chart, in the order that
+the free vector uses. Every method of the family reads it to split the free vector into rows.
 }
 \details{
 The free vector runs row by row, so at \eqn{K = 3} the rows are

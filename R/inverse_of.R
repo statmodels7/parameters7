@@ -6,7 +6,8 @@ NULL
 #' @description
 #' The S7 class of the family whose value is the inverse of another family's.
 #' [inverse_of()] builds one. It carries the inner family's free vector
-#' unchanged, so its coordinates are read as those of the matrix it inverts.
+#' unchanged, so its coordinates are read as those of the matrix that it
+#' inverts.
 #'
 #' @inheritParams matrix_parameter
 #'
@@ -35,8 +36,8 @@ InverseParam <- S7::new_class("InverseParam", parent = matrix_parameter)
 #'
 #' @description
 #' Returns the family \eqn{N(\eta) = S(\eta)^{-1}} for a matrix family \eqn{S}:
-#' the same free vector, the inverted value. It is the composition that says
-#' "the other side" to a consumer that fixes one, as
+#' the same free vector, the inverted value. It gives the other side of the
+#' pair (covariance or precision) to a consumer that fixes one of them, as
 #' [penalties7::structured_penalty()] fixes the precision.
 #'
 #' @details
@@ -47,14 +48,15 @@ InverseParam <- S7::new_class("InverseParam", parent = matrix_parameter)
 #' [diagonal_matrix()], [scalar_matrix()], [compound_symmetry()] and
 #' [dr_prod()] are and [correlation_matrix()], [ar1()] and [autoregressive()]
 #' are not. For a family that is not closed the two sides are different models,
-#' and this wrapper is how the one the family does not name is written:
+#' and this wrapper writes the side that the family does not name:
 #' `inverse_of(correlation_matrix(3))` is the matrix whose inverse is a
-#' correlation matrix, which no chart of the package produces directly.
+#' correlation matrix, which the other charts of the package do not produce
+#' directly.
 #'
-#' Where the inverse has a structure worth exploiting the package writes it out
-#' instead: [ar1_inv()] and [autoregressive_inv()] give the same values as
-#' `inverse_of(ar1())` and `inverse_of(autoregressive())` and reach them in
-#' \eqn{O(p)} entries rather than through a factorization.
+#' Where the inverse has a structure that a closed form can use, the package
+#' writes it out instead: [ar1_inv()] and [autoregressive_inv()] give the same
+#' values as `inverse_of(ar1())` and `inverse_of(autoregressive())` and reach
+#' them without a factorization.
 #'
 #' # The derivatives
 #'
@@ -72,7 +74,11 @@ InverseParam <- S7::new_class("InverseParam", parent = matrix_parameter)
 #' order: 1, 3, 13 and 75.
 #'
 #' Every factor is the inner family's own closed form, so nothing is
-#' differenced: the arithmetic is exact wherever the inner family's is.
+#' differenced. The products are formed in floating point, however, and the
+#' partition sum loses accuracy roughly as the square of the condition number
+#' of the inner matrix. For an inner [log_cholesky()] family, the first
+#' two orders are computed by [param_inv_d1()] and [param_inv_d2()], which are
+#' exact, and the sum is used only for orders three and four.
 #'
 #' # The log-determinant
 #'
@@ -96,7 +102,8 @@ InverseParam <- S7::new_class("InverseParam", parent = matrix_parameter)
 #'
 #' @return An object of class [InverseParam()], with `dimension`, `rank`,
 #'   `n_free` and `free_names` the inner family's, `null_basis` a `dimension`
-#'   by 0 matrix, and `param_name` `"inverse_of(inner)"`.
+#'   by 0 matrix, and `param_name` `"inverse_of(<inner>)"` with the inner
+#'   family's name written in, for example `"inverse_of(ar1)"`.
 #'
 #' @seealso [ar1_inv()] and [autoregressive_inv()] for the two written-out
 #'   inverses, [block_diag()], [kron_identity()], [dr_prod()] and
@@ -104,7 +111,7 @@ InverseParam <- S7::new_class("InverseParam", parent = matrix_parameter)
 #'   family with a closed inverse implements and which this reads.
 #'
 #' @examples
-#' # The inverse of an AR(1) correlation is tridiagonal, so the family whose
+#' # The inverse of an AR(1) covariance is tridiagonal, so the family whose
 #' # value is that inverse is a different model from ar1() itself.
 #' s <- inverse_of(ar1(5))
 #' eta <- c(log(2), atanh(0.6))
@@ -133,8 +140,7 @@ inverse_of <- function(structure) {
     stop(sprintf(paste0(
       "'%s' has rank %d of %d, so it has no inverse and there is no family to\n",
       "  build. A rank-deficient structure describes a matrix that is singular\n",
-      "  at every free value, and inverting it is not a reparametrization but\n",
-      "  an operation that does not exist."
+      "  at every free value, so its inverse does not exist."
     ), structure@param_name, structure@rank, structure@dimension),
     call. = FALSE)
   }
@@ -174,9 +180,8 @@ inverse_of <- function(structure) {
 #' terms.
 #'
 #' @details
-#' Built from `numericals7::set_partitions()`, the toolkit's single copy of the
-#' unordered enumeration, by taking every permutation of each partition's
-#' blocks. The count is the Fubini number: 1, 3, 13, 75 for `k` of 1 to 4.
+#' Built from the unordered enumeration of `numericals7::set_partitions()` by
+#' taking every permutation of each partition's blocks. The count is the Fubini number: 1, 3, 13, 75 for `k` of 1 to 4.
 #'
 #' @param k A single positive integer, at most 4 in this package's use.
 #'
@@ -211,7 +216,7 @@ ordered_set_partitions <- function(k) {
 #'
 #' @description
 #' The ordered-block-partition sum of [inverse_of()], run over the enumeration
-#' the class is keyed by.
+#' by which the class is keyed.
 #'
 #' @details
 #' The inner family's derivative arrays of every order up to `order` are
@@ -224,7 +229,7 @@ ordered_set_partitions <- function(k) {
 #' @param order The derivative order, 1 to 4.
 #'
 #' @return A named list of `s@dimension` square matrices, keyed and ordered as
-#'   [param_tuple_names()] says.
+#'   [param_tuple_names()] gives them.
 #'
 #' @seealso [inverse_of()] for the formula.
 #'
@@ -288,17 +293,23 @@ S7::method(param_free, InverseParam) <- function(s, m, ...) {
 #' @name param_d1.InverseParam
 #' @description
 #' The four orders of \eqn{\partial N} for \eqn{N = S^{-1}}, each the ordered
-#' set-partition sum [inverse_of()] writes out. Every factor comes from the
-#' inner family's own arrays, so a closed form there stays closed here.
+#' set-partition sum that [inverse_of()] writes out. Every factor comes from the
+#' inner family's own arrays, so a closed form there stays closed here. For a
+#' [log_cholesky()] inner family, orders one and two are read from
+#' [param_inv_d1()] and [param_inv_d2()].
 #' @param s An [InverseParam()] object.
 #' @param eta A numeric vector of length `s@n_free`, already checked by the
 #'   generic.
 #' @param ... Unused, and accepted so the signature matches the generic's.
 #' @return A named list of `s@dimension` square matrices, keyed as
-#'   [param_tuple_names()] says.
-#' @seealso [inverse_of()] for the formula and [param_d1()] for the contract.
+#'   [param_tuple_names()] gives them.
+#' @seealso [inverse_of()] for the formula and [param_d1()] for the generic.
 #' @keywords internal
 S7::method(param_d1, InverseParam) <- function(s, eta, ...) {
+  inner <- .inv_inner(s)
+  if (S7::S7_inherits(inner, LogCholeskyParam)) {
+    return(lapply(param_inv_d1(inner, eta), name_dims, s = s))
+  }
   inverse_derivs(s, eta, 1L)
 }
 
@@ -306,6 +317,10 @@ S7::method(param_d1, InverseParam) <- function(s, eta, ...) {
 #' @name param_d2.InverseParam
 #' @keywords internal
 S7::method(param_d2, InverseParam) <- function(s, eta, ...) {
+  inner <- .inv_inner(s)
+  if (S7::S7_inherits(inner, LogCholeskyParam)) {
+    return(lapply(param_inv_d2(inner, eta), name_dims, s = s))
+  }
   inverse_derivs(s, eta, 2L)
 }
 
@@ -379,10 +394,9 @@ S7::method(param_d4logdet, InverseParam) <- function(s, eta, ...) {
 #' shape the inner family returned them in.
 #'
 #' @details
-#' The container is part of the contract: `check_parameter()` subtracts the
-#' result of [param_dlogdet()] from a reference, which a list does not
-#' support, so an `lapply()` over a numeric vector turns a correct value into
-#' an error several frames away.
+#' The type matters: `check_parameter()` subtracts the result of
+#' [param_dlogdet()] from a reference, which a list does not support, so the
+#' negation of a numeric vector has to stay a numeric vector.
 #'
 #' @param x A numeric vector or a list of numbers.
 #'

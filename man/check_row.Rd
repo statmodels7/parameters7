@@ -22,7 +22,7 @@ shape and name check.}
 A one-row data frame with columns \code{check}, \code{status} and \code{statistic}.
 }
 \description{
-Builds one row of the table \code{\link[=check_parameter]{check_parameter()}} accumulates and returns.
+Builds one row of the table that \code{\link[=check_parameter]{check_parameter()}} accumulates and returns.
 Strings are kept as strings, so the assembled table's \code{check} and \code{status}
 columns come out character.
 }

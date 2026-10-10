@@ -20,8 +20,8 @@ Closed form:
 
 \deqn{\partial_b \pi_a = \pi_a(\delta_{ab} - \pi_b),}
 
-which is the covariance structure of a categorical indicator: the same array a
-multinomial score already carries. Every component sums to zero over the
+which is the covariance structure of a categorical indicator, the same array
+that appears in the score of a multinomial model. Every component sums to zero over the
 category index, \eqn{\sum_a \pi_a} being the constant 1.
 }
 \seealso{

@@ -18,7 +18,7 @@ derivative arrays.}
 arrived with are replaced.
 }
 \description{
-Applies the dimension labels every matrix a parameter produces carries:
+Applies the dimension labels that every matrix produced by a parameter carries:
 \code{"v1"}, \code{"v2"}, ..., \code{"vp"} on both margins, \code{p} being the parameter's
 \code{dimension}. One convention across the families, so a consumer can read a
 printed covariance without knowing which parametrization built it.

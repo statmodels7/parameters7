@@ -5,7 +5,7 @@ NULL
 #' One Row of a Diagnostic Table
 #'
 #' @description
-#' Builds one row of the table [check_parameter()] accumulates and returns.
+#' Builds one row of the table that [check_parameter()] accumulates and returns.
 #' Strings are kept as strings, so the assembled table's `check` and `status`
 #' columns come out character.
 #'
@@ -40,16 +40,17 @@ check_row <- function(name, status, statistic = NA_real_) {
 #' the same on two runs, without leaving the caller's stream changed.
 #'
 #' @details
-#' A validator wants both properties and they pull against each other. Drawing
-#' from the caller's stream makes the worst error reported move between runs;
-#' calling `set.seed()` fixes that and replaces whatever state the caller had,
-#' so a call inside a simulation silently changes the simulation. Saving the
-#' state on entry and restoring it with [base::on.exit()] gives the fixed draw
-#' and leaves the caller alone.
+#' A validator should report the same numbers on every run and should leave the
+#' caller's random stream unchanged, and the two requirements conflict. Drawing
+#' from the caller's stream makes the worst error reported vary between runs;
+#' calling `set.seed()` removes that variation but replaces the state of the
+#' caller's stream, so a call inside a simulation changes the simulation. Saving
+#' the state on entry and restoring it with [base::on.exit()] gives the fixed
+#' draw and leaves the caller's stream as it was.
 #'
 #' `restore_seed(NULL)` removes `.Random.seed` again, which is the right answer
-#' when the caller had never drawn a random number: leaving the seed the
-#' validator set behind would be the leak this exists to prevent.
+#' when the caller had never drawn a random number, so the seed that the
+#' validator set is not left behind.
 #'
 #' @param old The value [capture_seed()] returned, or `NULL`.
 #'
@@ -92,27 +93,28 @@ restore_seed <- function(old) {
 #' Free Vectors to Sweep a Parameter Over
 #'
 #' @description
-#' Builds the set of free vectors [check_parameter()] runs its battery at: the
+#' Builds the set of free vectors at which [check_parameter()] runs its battery: the
 #' origin, two constant vectors at \eqn{\pm 0.5}, `n` drawn uniformly from
 #' \eqn{(-1.5, 1.5)}, and one evenly spread from \eqn{-2} to \eqn{2}. Every
-#' check reports the worst discrepancy over the whole set, so a family that is
-#' right at the origin and wrong away from it is caught.
+#' check except the shapes check, which reads the origin, reports the worst
+#' discrepancy over the whole set, so a family that is right at the origin and
+#' wrong away from it is caught.
 #'
 #' @details
-#' The spread of the last vector is deliberately moderate. The free scale is
-#' unbounded, so no \eqn{\eta} is inadmissible, but the matrix built from widely
-#' separated free values can be singular in double precision: spreading a
-#' log-Cholesky parameter over twenty-eight units of log gives a condition number
-#' around \eqn{10^{28}}, and a comparison that fails there says something about
-#' the arithmetic and nothing about the parametrization.
+#' The spread of the last vector is deliberately moderate. Every \eqn{\eta} is
+#' admissible on the unbounded free scale, but the matrix built from widely
+#' separated free values can be numerically singular in double precision
+#' (spreading the free values of a log-Cholesky parameter over 28 units gives a
+#' condition number above \eqn{10^{24}}), and a comparison at such a point
+#' measures the rounding of the arithmetic and not the parametrization.
 #'
-#' The scaling a rank-deficient family has to survive is a property of its
+#' The scaling that a rank-deficient family has to withstand is a property of its
 #' components, the same at every point, so it is tested where it arises, against
 #' the declared null space, instead of by driving every family off the edge of
 #' double precision.
 #'
-#' The `n` random vectors are drawn from whatever random stream is current. No
-#' seed is set here: [check_parameter()], the only caller, fixes one before
+#' The `n` random vectors are drawn from whatever random stream is current. This
+#' function sets no seed: [check_parameter()], the only caller, fixes one before
 #' calling and restores the caller's own on exit, so the report is reproducible
 #' and the caller's stream is left as it was found.
 #'
@@ -140,53 +142,58 @@ sweep_etas <- function(s, n = 4L) {
 #'
 #' @description
 #' Runs a battery of numerical checks on a parametrization, each against a route
-#' the implementation does not itself take, and reports what passed, what failed
-#' and what could not be checked. Write a family of your own, call this on it,
-#' and read the table: a `FAIL` names the quantity whose closed form is wrong,
-#' and the statistic beside it is the relative size of the disagreement.
+#' that the implementation does not itself take, and reports what passed, what
+#' failed and what could not be checked. For a family written by the user, a
+#' `FAIL` in the table names the quantity whose closed form is wrong, and the
+#' statistic beside it is the relative size of the disagreement.
 #'
-#' It is also the validator the package holds itself to. Measured over all
-#' fifteen constructors: thirteen matrix families pass all nine checks and the
-#' two that are not matrices pass all seven, with nothing skipped anywhere.
+#' The families of this package pass every check that applies to them. A
+#' rank-deficient family has no solve to check, and a family without free
+#' values has no log-determinant gradient or Hessian; those rows are reported as
+#' NOT CHECKED.
 #'
 #' @details
-#' # Not checked is a third verdict
+#' # The NOT CHECKED status
 #'
 #' A quantity that comes from a numerical fallback is reported as **NOT
 #' CHECKED**, never as passed. Comparing a finite difference against a finite
 #' difference is the same arithmetic twice, and it agrees however wrong the
 #' parametrization is. [param_is_numerical()] is what decides, and a family
 #' supplying only [param_value()] therefore comes back with six of the nine rows
-#' skipped: it has nothing an independent route could contradict.
+#' not checked, because nothing in it can be compared with an independent
+#' route.
 #'
-#' # The nine checks, and the route each is held against
+#' # The nine checks and their references
 #'
-#' 1. **membership**: the matrix is symmetric and positive semidefinite, a
+#' 1. **membership**: the matrix is symmetric to within `tol` (relative to
+#'    the larger of 1 and its largest entry) and positive semidefinite, a
 #'    full-rank family has a strictly positive smallest eigenvalue, and a
 #'    rank-deficient one annihilates its declared null space. The last is tested
-#'    through the null basis, never by counting eigenvalues, a count of small
-#'    eigenvalues not being scale invariant.
+#'    through the null basis and not by counting eigenvalues, since a count of
+#'    small eigenvalues is not scale invariant.
 #' 2. **round trip**: [param_free()] recovers the free vector from the matrix,
 #'    where the family implements an inverse.
 #' 3. **first derivatives** against one central difference of [param_value()].
 #' 4. **second derivatives** against one central difference of the analytic
 #'    first derivatives.
-#' 5. **log-determinant** against the sum of the logs of the eigenvalues the
-#'    declared rank keeps.
+#' 5. **log-determinant** against the sum of the logs of the eigenvalues that
+#'    the declared rank keeps.
 #' 6. **logdet gradient** against \eqn{\mathrm{tr}(M^{+} \partial_k M)}, with
 #'    the pseudo-inverse formed from an eigendecomposition instead of from
 #'    [param_solve()], so the two routes share no arithmetic.
 #' 7. **logdet hessian** against one central difference of the analytic
 #'    gradient.
 #' 8. **solve and factor** against `base::solve()`, where the family is of full
-#'    rank; skipped for a deficient one, which has no inverse.
+#'    rank; for a deficient one, which has no inverse, the row is named `solve`
+#'    and reported as NOT CHECKED.
 #' 9. **shapes and names**: the declared dimension, the lengths and the names
 #'    match what the methods return. Structural, so it carries no statistic.
 #'
-#' Each check reports the worst discrepancy over the free vectors [sweep_etas()]
-#' supplies, four of which are drawn at random.
+#' Each check except the shapes check reports the worst discrepancy over every
+#' free vector that [sweep_etas()] supplies, four of which are drawn at random;
+#' the shapes check reads the origin.
 #'
-#' # Neither branch touches the caller's random stream
+#' # The caller's random stream
 #'
 #' Both batteries draw from a fixed seed, so two calls on the same family report
 #' the same statistics, and both put back the `.Random.seed` they found on
@@ -196,23 +203,26 @@ sweep_etas <- function(s, n = 4L) {
 #' [capture_seed()] and [restore_seed()], through [base::on.exit()], so it
 #' happens even when a check signals.
 #'
-#' # A family that is not a matrix gets a different battery
+#' # The battery for a family that is not a matrix
 #'
-#' [simplex()] and [transition_matrix()] have no log-determinant, no solve and
-#' no factor, so seven other checks run instead: the inverse round trip, the four
-#' derivative orders against the single-stencil construction, that the value
-#' stays on the simplex, and that every derivative component sums to zero over
-#' the value index. **The returned table has different columns in that case**;
-#' see **Value**.
+#' A family whose value is not a symmetric matrix has no log-determinant, no
+#' solve and no factor, so other checks run instead: the inverse round trip and
+#' the four derivative orders against the single-stencil construction, and, for
+#' [simplex()] and [transition_matrix()], that the value stays on the simplex
+#' and that every derivative component sums to zero over the value index. A derivative order that comes from a numerical fallback is
+#' reported as **NOT CHECKED** there too. **The returned table has different
+#' columns in that case**; see **Value**.
 #'
-#' @param s An object inheriting from class [parameter()]. Anything else throws
-#'   `'s' must inherit from class 'parameter'.`
-#' @param tol The relative tolerance a check has to meet, defaulting to `1e-6`.
-#'   The comparisons are relative to the larger of 1 and the size of the
+#' @param s An object inheriting from class [parameter()]. Any other value
+#'   signals the error `'s' must inherit from class 'parameter'.`
+#' @param tol The relative tolerance that a check has to meet, defaulting to
+#'   `1e-6`. The comparisons are relative to the larger of 1 and the size of the
 #'   reference, so the tolerance is dimensionless. `1e-6` is loose enough for the
-#'   third and fourth derivative comparisons, which rest on stencils good to
-#'   about \eqn{10^{-5}}, and tight enough to catch an error of one part in a
-#'   thousand.
+#'   first and second derivative comparisons, which rest on central differences,
+#'   and tight enough to catch an error of one part in a thousand. For a family that is not a matrix, the thresholds of the four
+#'   derivative orders are \eqn{10^{-6}}, \eqn{10^{-5}}, \eqn{10^{-4}} and
+#'   \eqn{5 \times 10^{-3}} at the default, and each is multiplied by
+#'   `tol / 1e-6` otherwise.
 #' @param verbose Whether to print the table, `TRUE` by default. The value is
 #'   returned either way.
 #'
@@ -224,13 +234,14 @@ sweep_etas <- function(s, n = 4L) {
 #'     \item{`statistic`}{numeric, the worst relative discrepancy, `NA` for a
 #'       check that was skipped or has no number.}
 #'   }
-#'   For a family that is not a matrix it has seven rows and the columns
-#'   `check`, `status` and `note`, the last being **character** and holding a
-#'   formatted number or the empty string. Test the `status` column, which is
-#'   common to both.
+#'   For a family that is not a matrix it has the columns `check`, `status` and
+#'   `note`, the last being **character** and holding a formatted number, the
+#'   string `numerical` or the empty string, with seven rows for [simplex()] and
+#'   [transition_matrix()] and five for any other such family. The `status`
+#'   column is common to both.
 #'
 #' @seealso [param_is_numerical()], which decides what is checkable, and
-#'   [param_null_basis()] for the null space check 1 uses.
+#'   [param_null_basis()] for the null space that check 1 uses.
 #'
 #' @examples
 #' set.seed(1)
@@ -251,7 +262,7 @@ sweep_etas <- function(s, n = 4L) {
 #' names(v)
 #' nrow(v)
 #'
-#' # What a real defect looks like. This first derivative is 5 per cent wrong.
+#' # A real defect: this first derivative is 5 percent wrong.
 #' Wrong <- S7::new_class("Wrong", parent = matrix_parameter)
 #' S7::method(param_value, Wrong) <- function(s, eta, ...) {
 #'   m <- diag(rep(exp(eta[1]), 2))
@@ -293,6 +304,7 @@ check_parameter <- function(s, tol = 1e-6, verbose = TRUE) {
     if (!identical(dim(m), c(s@dimension, s@dimension))) { bad <- TRUE; break }
     asym <- max(abs(m - t(m))) / max(1, max(abs(m)))
     worst <- max(worst, asym)
+    if (!(asym <= tol)) bad <- TRUE
     ev <- eigen((m + t(m)) / 2, symmetric = TRUE, only.values = TRUE)$values
     if (s@rank == s@dimension) {
       if (min(ev) <= 0) bad <- TRUE
@@ -335,7 +347,7 @@ check_parameter <- function(s, tol = 1e-6, verbose = TRUE) {
     out[[length(out) + 1L]] <- check_row("first derivatives", "NOT CHECKED")
   } else {
     err <- 0
-    for (eta in etas[seq_len(min(3L, length(etas)))]) {
+    for (eta in etas) {
       a <- param_d1(s, eta)
       b <- numerical_d1(s, eta)
       for (k in seq_along(a)) err <- max(err, rel(a[[k]], b[[k]]))
@@ -350,7 +362,7 @@ check_parameter <- function(s, tol = 1e-6, verbose = TRUE) {
     out[[length(out) + 1L]] <- check_row("second derivatives", "NOT CHECKED")
   } else {
     err <- 0
-    for (eta in etas[seq_len(min(3L, length(etas)))]) {
+    for (eta in etas) {
       a <- param_d2(s, eta)
       b <- numerical_d2(s, eta)
       for (k in seq_along(a)) err <- max(err, rel(a[[k]], b[[k]]))
@@ -398,7 +410,7 @@ check_parameter <- function(s, tol = 1e-6, verbose = TRUE) {
   } else {
     err <- 0
     idx <- param_tuple_indices(s)
-    for (eta in etas[seq_len(min(3L, length(etas)))]) {
+    for (eta in etas) {
       a <- param_d2logdet(s, eta)
       for (i in seq_along(idx)) {
         k <- idx[[i]][1L]
@@ -489,17 +501,18 @@ check_parameter <- function(s, tol = 1e-6, verbose = TRUE) {
 #' The Reduced Battery for a Parameter That Is Not a Matrix
 #'
 #' @description
-#' What [check_parameter()] runs for a family whose value is not a symmetric
-#' matrix, so has no log-determinant, no solve and no factor. Seven checks: the
-#' inverse round trip, each of the four derivative orders against the
-#' single-stencil numerical construction, that the value stays on the simplex,
-#' and that every derivative component sums to zero over the value index.
+#' The checks that [check_parameter()] runs for a family whose value is not a
+#' symmetric matrix and which therefore has no log-determinant, no solve and no
+#' factor: the inverse round trip and each of the four derivative orders against
+#' the single-stencil numerical construction, and, for [simplex()] and
+#' [transition_matrix()], that the value stays on the simplex and that every
+#' derivative component sums to zero over the value index.
 #'
 #' @details
 #' The last check is an identity the set itself supplies. Differentiating
 #' \eqn{\sum_a \pi_a = 1} gives \eqn{\sum_a \partial \pi_a = 0}, and
 #' differentiating again gives the same for every higher order, so a derivative
-#' array that does not sum to zero is wrong whatever else it agrees with. A
+#' array that fails the identity is wrong, whatever other check it passes. A
 #' [transition_matrix()] satisfies it row by row, its rows being simplexes.
 #'
 #' Three free vectors are used, drawn from `rnorm(s@n_free, sd = 0.8)` after
@@ -507,25 +520,26 @@ check_parameter <- function(s, tol = 1e-6, verbose = TRUE) {
 #' exactly reproducible. The caller's own `.Random.seed` is saved on entry and
 #' restored on exit through [capture_seed()] and [restore_seed()], so a call in
 #' the middle of a simulation leaves that simulation unchanged. The derivative
-#' comparisons
-#' are against
-#' [numerical_d1()] through [numerical_d4()], which at third and fourth order are
-#' themselves good to about \eqn{10^{-5}}: measured on [simplex()] and
-#' [transition_matrix()] the four orders come back at \eqn{4 \times 10^{-12}},
-#' \eqn{4 \times 10^{-12}}, \eqn{3 \times 10^{-7}} and \eqn{3 \times 10^{-5}},
-#' and the widening is the reference's.
+#' comparisons are against [numerical_d1()] through [numerical_d4()], whose
+#' accuracy decreases with the order, so the thresholds widen with the order.
 #'
 #' @param s A [parameter()] object that is not a [matrix_parameter()].
-#' @param tol The relative tolerance a check has to meet.
+#' @param tol The relative tolerance that a check has to meet. The thresholds of the
+#'   four derivative orders are \eqn{10^{-6}}, \eqn{10^{-5}}, \eqn{10^{-4}} and
+#'   \eqn{5 \times 10^{-3}} at the default `1e-6`, and each is multiplied by
+#'   `tol / 1e-6` otherwise.
 #' @param verbose Whether to print the table.
 #'
-#' @return Invisibly, a seven-row data frame with columns `check`, `status` and
-#'   `note`. Note that `note` is **character**, holding a formatted number or the
-#'   empty string, where [check_parameter()]'s matrix branch returns a numeric
-#'   `statistic`.
+#' @return Invisibly, a data frame with columns `check`, `status` and `note`,
+#'   with seven rows for [simplex()] and [transition_matrix()] and five for any
+#'   other family. The `status` is `"OK"`, `"FAIL"` or, for a derivative order
+#'   that comes from a numerical fallback, `"NOT CHECKED"`. The column `note` is
+#'   **character**, holding a formatted number, the string `numerical` or the
+#'   empty string, where the matrix branch of [check_parameter()] returns a
+#'   numeric `statistic`.
 #'
 #' @seealso [check_parameter()], which dispatches here, and [simplex()] and
-#'   [transition_matrix()], the two families that reach it.
+#'   [transition_matrix()], the two families in this package that reach it.
 #'
 #' @keywords internal
 check_parameter_vector <- function(s, tol = 1e-6, verbose = TRUE) {
@@ -540,9 +554,10 @@ check_parameter_vector <- function(s, tol = 1e-6, verbose = TRUE) {
   rel <- function(a, b) max(abs(a - b)) / max(1, max(abs(b)))
   num <- param_is_numerical(s)
   rows <- list()
-  add <- function(name, ok, note = "") {
+  add <- function(name, ok, note = "", status = NULL) {
+    if (is.null(status)) status <- if (isTRUE(ok)) "OK" else "FAIL"
     rows[[length(rows) + 1L]] <<- data.frame(
-      check = name, status = if (isTRUE(ok)) "OK" else "FAIL", note = note
+      check = name, status = status, note = note
     )
   }
 
@@ -557,11 +572,11 @@ check_parameter_vector <- function(s, tol = 1e-6, verbose = TRUE) {
   # derivative orders against the single-stencil construction
   refs <- list(numerical_d1, numerical_d2, numerical_d3, numerical_d4)
   funs <- list(param_d1, param_d2, param_d3, param_d4)
-  tols <- c(1e-6, 1e-5, 1e-4, 5e-3)
+  tols <- c(1e-6, 1e-5, 1e-4, 5e-3) * (tol / 1e-6)
   for (o in 1:4) {
     nm <- paste0("param_d", o)
     if (num[[nm]]) {
-      add(nm, TRUE, "numerical")
+      add(nm, NA, "numerical", status = "NOT CHECKED")
       next
     }
     worst <- 0

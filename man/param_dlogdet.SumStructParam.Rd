@@ -27,14 +27,15 @@ Jacobian.
 }
 \details{
 The four share \code{\link[=sum_struct_logdet_derivs]{sum_struct_logdet_derivs()}} and differ only in the order they
-pass. \strong{Nothing vanishes here}, unlike the value's own derivatives: at two
-variance components the mixed second derivative is \eqn{-0.245} against
-\eqn{0.245} for each pure one, the same size. The log-determinant of a sum is
-not a sum, which is why this family needs an expansion where \code{\link[=block_diag]{block_diag()}}
-and \code{\link[=dr_prod]{dr_prod()}} need none.
+pass. Where the family is rank deficient they differentiate the log
+pseudo-determinant that \code{\link[=param_logdet]{param_logdet()}} returns. Unlike the value's own
+derivatives, the mixed components are in general not zero: for the two
+variance components of the example in \code{\link[=sum_struct]{sum_struct()}} the mixed second
+derivative is \eqn{-0.245} against \eqn{0.245} for each pure one. The
+log-determinant of a sum is not a sum, which is why this family needs an
+expansion where \code{\link[=block_diag]{block_diag()}} and \code{\link[=dr_prod]{dr_prod()}} need none.
 
-It is the dearest quantity the family computes; \code{\link[=sum_struct]{sum_struct()}} carries the
-timings and the accuracy against a stencil.
+It is the most expensive quantity of the family.
 }
 \seealso{
 \code{\link[=sum_struct_logdet_derivs]{sum_struct_logdet_derivs()}}, which assembles them, and

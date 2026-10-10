@@ -15,22 +15,21 @@ checked by the generic.}
 A single number.
 }
 \description{
-The method every \code{\link[=matrix_parameter]{matrix_parameter()}} inherits when it registers no
+The method that every \code{\link[=matrix_parameter]{matrix_parameter()}} inherits when it registers no
 \code{\link[=param_logdet]{param_logdet()}} of its own. It takes an eigendecomposition of
 \code{\link[=param_value]{param_value()}}, keeps the first \code{s@rank} eigenvalues, and returns the sum of
 their logarithms: the log-determinant for a full-rank family and the log
 pseudo-determinant otherwise. Which eigenvalues are kept is decided by
 position, from the declared rank, and never from their size.
 
-Exact, not approximated, so \code{\link[=param_is_numerical]{param_is_numerical()}} reporting \code{TRUE} here means
-that the answer costs \eqn{O(p^3)} and cannot be checked against an
-eigendecomposition, not that it is inaccurate. Measured against a closed form
-on a \eqn{4 \times 4} AR(1) covariance, the agreement is
-\eqn{4 \times 10^{-15}}.
+The result is exact up to rounding, so \code{\link[=param_is_numerical]{param_is_numerical()}} reporting
+\code{TRUE} here means that the answer costs \eqn{O(p^3)} and cannot be checked
+against an eigendecomposition; it does not mean that the answer is
+inaccurate.
 }
 \details{
-A non-positive eigenvalue among the ones the rank keeps throws, naming the
-family and the counts: the family has declared a rank it does not have at this
+A non-positive eigenvalue among those that the rank keeps signals an error
+naming the family and the counts: the family has declared a rank it does not have at this
 \eqn{\eta}, so \code{log()} of a non-positive number would be the wrong thing to
 return. This is the check that catches a \code{param_value()} method whose matrix
 leaves the positive semidefinite cone.

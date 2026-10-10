@@ -19,14 +19,13 @@ Returns the matrix logarithm of \code{m}, read off its eigendecomposition as
 \eqn{Q \log(\Lambda) Q^\top} and then read out of the lower triangle. Exact
 and a true inverse of \code{\link[=param_value.MatrixLogParam]{param_value.MatrixLogParam()}}, the matrix logarithm of
 a symmetric positive definite matrix being unique among symmetric matrices.
-Measured, the round trip closes to \eqn{2 \times 10^{-15}}, a little looser
-than \code{\link[=log_cholesky]{log_cholesky()}}'s \eqn{7 \times 10^{-17}} because two
-eigendecompositions stand between the two ends.
+The round trip passes through two eigendecompositions, one in each
+direction.
 }
 \details{
 A matrix that is not positive definite is rejected: the logarithm of a
 non-positive eigenvalue is not a real number, so there is no free vector to
-return. The verdict is spectral, as it is everywhere in this package.
+return. The test is on the eigenvalues of \code{m}.
 }
 \seealso{
 \code{\link[=param_value.MatrixLogParam]{param_value.MatrixLogParam()}}, the map this inverts.

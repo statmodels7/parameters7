@@ -14,14 +14,14 @@
 A list as described in \code{\link[=param_readable]{param_readable()}}.
 }
 \description{
-Declares two quantities: the marginal variance and the correlation every pair
-shares. The Jacobian is diagonal, through \code{\link[=readable_diagonal]{readable_diagonal()}}, each quantity
+Declares two quantities: the marginal variance and the correlation that every
+pair shares. The Jacobian is diagonal, through \code{\link[=readable_diagonal]{readable_diagonal()}}, each quantity
 being one link of one free value.
 
-The correlation's interval is built on the inverse hyperbolic tangent, which is
-worth knowing here: the family's own link is bounded at \eqn{-1/(p-1)} and
-never at \eqn{-1}, so an interval built this way can reach below the bound the
-parametrization enforces. It respects \eqn{(-1, 1)}, which is the interval a
-reader of a correlation expects.
+The correlation's interval is built on the inverse hyperbolic tangent. The
+family's own link is bounded below by \eqn{-1/(p-1)}, which is above \eqn{-1}
+for \eqn{p > 2}, so an interval built on this scale can extend below the
+bound that the parametrization enforces; it stays inside \eqn{(-1, 1)}, the
+range of a correlation.
 }
 \keyword{internal}

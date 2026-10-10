@@ -17,16 +17,14 @@ A list of \code{choose(s@n_free + 3, 4)} symmetric matrices keyed as
 }
 \description{
 Chains of four rotated directions contracted against five-point divided
-differences, summed over the twenty-four orderings. Exact, and the most
-expensive quantity the package computes: measured at \eqn{p = 4} one call
-costs \strong{3.4 s}, against 0.003 s for \code{\link[=log_cholesky]{log_cholesky()}}'s fourth derivatives on
-the same matrix size.
+differences, summed over the orderings of the four directions, up to
+twenty-four per component. Exact, and much more expensive than the fourth
+derivatives of \code{\link[=log_cholesky]{log_cholesky()}} on a matrix of the same size.
 
-That factor of a thousand is the trade this chart makes, and it is worth
-knowing before putting a \code{matrix_log()} inside a loop that takes fourth
-derivatives. It buys a linear log-determinant and an inverse that is a sign
-flip; if those are not what the model needs, \code{\link[=log_cholesky]{log_cholesky()}} parametrizes the
-same cone.
+The cost is the price of a linear log-determinant and of an inverse equal to
+the map at \eqn{-\eta}. When fourth derivatives are taken repeatedly and those
+two properties are not needed, \code{\link[=log_cholesky]{log_cholesky()}} parametrizes the same cone at
+a much lower cost.
 }
 \seealso{
 \code{\link[=mlog_higher]{mlog_higher()}}, which assembles it, \code{\link[=param_d3.MatrixLogParam]{param_d3.MatrixLogParam()}} for

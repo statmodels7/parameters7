@@ -8,9 +8,10 @@ NULL
 #' \eqn{D} of positive scales and a correlation matrix \eqn{R}. [dr_prod()]
 #' builds one.
 #'
-#' Its free values are the standard deviations and the correlation's own
-#' coordinates, so the quantities a reader takes off a fitted covariance are the
-#' coordinates themselves.
+#' Its free values are the linked standard deviations followed by the
+#' correlation's own coordinates, so the standard deviations and the
+#' correlations of a fitted covariance are read directly off the free vector,
+#' through the link and the correlation block.
 #'
 #' @inheritParams matrix_parameter
 #'
@@ -20,7 +21,7 @@ NULL
 #'   `rank` is \eqn{p}, this family admitting no deficiency.
 #'
 #' @seealso [dr_prod()], the constructor, [correlation_matrix()] for the default
-#'   block, and [matrix_parameter()] for the properties this inherits.
+#'   block, and [matrix_parameter()] for the properties that this class inherits.
 #'
 #' @examples
 #' # The scales come first and the correlation's coordinates follow.
@@ -43,17 +44,17 @@ DrProdParam <- S7::new_class("DrProdParam", parent = matrix_parameter)
 #' through a positive link and \eqn{R} a correlation matrix parameter.
 #'
 #' @details
-#' # What the separation buys
+#' # The separation of scales and correlations
 #'
-#' The quantities a reader takes off a fitted covariance are the standard
-#' deviations and the correlations, and here they **are** the coordinates. A
-#' [log_cholesky()] factor produces the same set of matrices with no coordinate
-#' meaning anything on its own. Measured at
-#' \eqn{\eta = (0, \log 2, \log 0.5, 1, 1.2, 0.9)}: `sqrt(diag(M))` is
-#' \eqn{(1, 2, 0.5)}, which is `exp(eta[1:3])`, and dividing them out returns the
-#' correlation block's own value exactly.
+#' The quantities that a reader takes off a fitted covariance are the standard
+#' deviations and the correlations. Here the standard deviations are the
+#' inverse link of the first \eqn{p} coordinates, and the correlations are the
+#' value of the correlation block at the remaining ones. A [log_cholesky()]
+#' factor produces the same set of matrices with coordinates that have no
+#' separate meaning. The example below reads the standard deviations off the
+#' diagonal and recovers the correlation block's value by dividing them out.
 #'
-#' # Every derivative factorizes
+#' # Derivatives
 #'
 #' Because \eqn{\Sigma_{ij} = d_i d_j R_{ij}} and the two groups of free values
 #' are disjoint,
@@ -63,27 +64,27 @@ DrProdParam <- S7::new_class("DrProdParam", parent = matrix_parameter)
 #'       \bigl[\partial^{S_R} R_{ij}\bigr],}
 #'
 #' where \eqn{S_D} and \eqn{S_R} are the parts of the multiset \eqn{S} falling in
-#' each group. Nothing of the correlation family is rederived: its own components
-#' are fetched and multiplied entrywise.
+#' each group. The correlation family's own components are fetched and
+#' multiplied entrywise, with no new derivation.
 #'
 #' Both factors are **sparse**, and where their supports miss each other the
 #' component is exactly zero. The scale factor is supported on the rows and
-#' columns the indices of \eqn{S_D} name, and vanishes altogether once \eqn{S_D}
-#' names three distinct scales; a correlation derivative is supported on the two
-#' entries its angle governs. So `log_sd1:z3.2` is zero, the first factor living
-#' in row and column 1 and the second on entries \eqn{(3,2)} and \eqn{(2,3)}.
-#' Measured at \eqn{p = 3}, the disjoint-support rule predicts every exact zero:
-#' 1 of the 21 second-order components, 10 of 56 at third order and 37 of 126 at
-#' fourth.
+#' columns that the indices of \eqn{S_D} name, and vanishes altogether once
+#' \eqn{S_D} names three distinct scales; a correlation derivative in an angle
+#' of row \eqn{i} is supported on the entries of row and column \eqn{i} whose
+#' inner product involves that angle, which for `z3.2` are \eqn{(3,2)} and
+#' \eqn{(2,3)}. So `log_sd1:z3.2` is zero, the first factor living in row and
+#' column 1 and the second on entries \eqn{(3,2)} and \eqn{(2,3)}.
 #'
 #' # The log-determinant
 #'
 #' \deqn{\log\lvert\Sigma\rvert = 2\sum_j \log d_j + \log\lvert R\rvert,}
 #'
 #' separable in the scales and separable from the correlation, so a component
-#' mixing two scales, or a scale with a correlation, is exactly zero: 12 of the 21
-#' second-order components, 43 of 56 and 108 of 126. The first derivative in a
-#' scale is 2 whatever the point, the scales entering on both sides.
+#' mixing two scales, or a scale with a correlation, is exactly zero. Under the
+#' default log link the first derivative in a scale is 2 at every point, the
+#' scales entering on both sides; for another link it is
+#' \eqn{2h'(\eta)/h(\eta)}.
 #'
 #' # The correlation block must have full rank
 #'
@@ -98,12 +99,13 @@ DrProdParam <- S7::new_class("DrProdParam", parent = matrix_parameter)
 #' and \eqn{\eta_R} the two stretches of the free vector.
 #'
 #' @param dimension The side \eqn{p} of the matrix, at least 2: a 1 by 1
-#'   correlation carries nothing, and the constructor says so.
+#'   correlation matrix has no free value, and the constructor signals an
+#'   error.
 #' @param correlation A [matrix_parameter()] of side `dimension` **producing
 #'   correlation matrices**, that is with a unit diagonal at every free vector.
-#'   Defaults to [`correlation_matrix(dimension)`][correlation_matrix], which is
-#'   the only shipped family with that property. A block carrying a scale of its
-#'   own, such as [ar1()], makes the composite unidentified, the same matrix
+#'   Defaults to [`correlation_matrix(dimension)`][correlation_matrix];
+#'   [block_diag()] and [kron_identity()] of `correlation_matrix()` blocks have
+#'   the property as well. A block carrying a scale of its own, such as [ar1()], makes the composite unidentified, the same matrix
 #'   arising from a whole ray of free vectors; the constructor reads the diagonal
 #'   at two probe free vectors and rejects such a block, which
 #'   [check_unit_diagonal()] describes.
@@ -118,7 +120,7 @@ DrProdParam <- S7::new_class("DrProdParam", parent = matrix_parameter)
 #'   `null_basis`.
 #'
 #' @seealso [correlation_matrix()] for the default block, [log_cholesky()] for
-#'   the same set of matrices in coordinates that mean nothing separately, and
+#'   the same set of matrices in coordinates without a separate meaning, and
 #'   [block_diag()], [kron_identity()] and [sum_struct()] for the other
 #'   compositions.
 #'
@@ -129,7 +131,8 @@ DrProdParam <- S7::new_class("DrProdParam", parent = matrix_parameter)
 #' eta <- c(log(1), log(2), log(0.5), 1.0, 1.2, 0.9)
 #' M <- param_value(s, eta)
 #'
-#' # The standard deviations are the coordinates, read back off the diagonal.
+#' # The standard deviations are the inverse link of the first coordinates,
+#' # read back off the diagonal.
 #' rbind(from_matrix = sqrt(diag(M)), from_eta = exp(eta[1:3]))
 #'
 #' # And dividing them out leaves the correlation block's own value.
@@ -190,41 +193,39 @@ dr_prod <- function(dimension, correlation = NULL,
 }
 .dr_eta_cor <- function(s, eta) eta[-seq_len(.dr(s)$p)]
 
-#' Refuse a Correlation Block That Carries a Scale
+#' Reject a Correlation Block That Carries a Scale
 #'
 #' @description
 #' Reads the diagonal of `correlation`'s own value at two probe free vectors and
-#' signals an error unless every entry is 1. This is the property
-#' \eqn{\Sigma = D R D} rests on: the standard deviations are read off
+#' signals an error unless every entry is 1. This is the property on which
+#' \eqn{\Sigma = D R D} rests: the standard deviations are read off
 #' \eqn{D}, so a block with a scale of its own describes the same matrix from a
 #' whole ray of free vectors and the composite has one free value too many.
 #'
 #' @details
-#' # Why the probes are not the zero vector
+#' # The probe free vectors
 #'
 #' A scale-carrying family is almost always written on a log link, so at a zero
-#' free vector its scale is \eqn{\exp(0) = 1} and its diagonal is exactly the
-#' one this looks for. Measured over the six shipped families of side four, a
-#' zero probe passes all five that should be rejected -- [ar1()],
-#' [compound_symmetry()], [autoregressive()], [log_cholesky()] and
-#' [matrix_log()] -- while any non-zero probe catches every one of them, the
-#' worst diagonal entry departing from 1 by between 0.35 and 8.27. The probes
-#' are therefore `0.3, 0.4, ...` and a constant `-0.4`, and they are fixed
-#' rather than drawn, so a rejection is reproducible.
+#' free vector its scale is \eqn{\exp(0) = 1} and its diagonal is 1. A zero
+#' probe would therefore accept the scale-carrying families of the package
+#' ([ar1()], [compound_symmetry()], [autoregressive()], [log_cholesky()],
+#' [matrix_log()], [diagonal_matrix()], [scalar_matrix()], [scaled_matrix()] and
+#' [sum_struct()]), while the non-zero probes reject each of them. The probes
+#' are `0.3, 0.4, ...` and a constant `-0.4`, fixed and not drawn, so a
+#' rejection is reproducible.
 #'
-#' Two probes cannot prove a property that is quantified over the whole free
-#' space, and this does not claim to. What it catches is a family that carries a
-#' scale, which is the way the requirement is broken in practice; a family
-#' contrived to have a unit diagonal at exactly these two points passes.
+#' Two probes cannot prove a property that holds over the whole free space. The
+#' check catches a family that carries a scale, which is the usual way in which
+#' the requirement is broken; a family constructed to have a unit diagonal at
+#' exactly these two points passes.
 #' `check_parameter()`'s round trip is what reports the ray itself.
 #'
 #' @param correlation The [matrix_parameter()] handed to [dr_prod()], already
 #'   checked for its class, its side and its rank.
 #'
-#' @return Invisibly `TRUE`. A block whose diagonal departs from 1 at either
-#'   probe throws, with the family named and the worst entry quoted. A probe the
-#'   family cannot evaluate is skipped rather than reported, the constructor
-#'   having no standing to decide what a foreign chart admits.
+#' @return Invisibly `TRUE`. For a block whose diagonal departs from 1 at
+#'   either probe, an error that names the family and quotes the worst entry. A
+#'   probe at which the family cannot be evaluated is skipped.
 #'
 #' @seealso [dr_prod()], the caller, and [correlation_matrix()], the shipped
 #'   family with the property.
@@ -292,14 +293,14 @@ dr_scale_derivs <- function(s, eta, order) {
 #' Evaluates \eqn{\partial^{S_D}(d_i d_j)} for every pair \eqn{(i, j)} at once,
 #' given the multiset \eqn{S_D} of scale indices. It is zero wherever \eqn{S_D}
 #' contains an index naming neither \eqn{i} nor \eqn{j}, so the result is
-#' **supported on the rows and columns those indices name**, and that sparsity is
-#' half of why the composition costs so little.
+#' **supported on the rows and columns that those indices name**, which keeps
+#' the cost of the composition low.
 #'
 #' @details
 #' Three cases, and the arithmetic differs in each:
 #'
-#' - **no indices.** The factor is \eqn{d_i d_j}, an outer product, and that is
-#'   the case a component differentiating the correlation alone falls into.
+#' - **no indices.** The factor is \eqn{d_i d_j}, an outer product, the case of
+#'   a component that differentiates the correlation alone.
 #' - **one distinct index \eqn{k}, with multiplicity \eqn{m}.** Off the diagonal
 #'   the entry carries one factor of \eqn{d_k}, so it is
 #'   \eqn{d_k^{(m)} d_j}; on the diagonal it carries two, so it is the Leibniz
@@ -312,8 +313,8 @@ dr_scale_derivs <- function(s, eta, order) {
 #' \eqn{\Sigma} carries at most two scales, so a third differentiation in a new
 #' scale annihilates it.
 #'
-#' @param sd A 5 by \eqn{p} matrix of inverse-link derivatives, as returned by
-#'   [dr_scale_derivs()].
+#' @param sd An `order + 1` by \eqn{p} matrix of inverse-link derivatives, as
+#'   returned by [dr_scale_derivs()].
 #' @param tuple An integer vector of scale indices, possibly empty and possibly
 #'   with repeats. Its length is the number of scale indices in the component,
 #'   which is at most the derivative order.
@@ -359,7 +360,7 @@ dr_scale_factor <- function(sd, tuple) {
 #'
 #' @details
 #' The correlation's arrays are fetched at most once per order and re-keyed by
-#' the sorted local index tuple, the same device [block_derivs_by_tuple()] uses
+#' the sorted local index tuple, the same device that [block_derivs_by_tuple()] uses
 #' and for the same reason: the composite's names are not the block's, but the
 #' sorted index tuple is a key both sides can compute.
 #'
@@ -421,11 +422,12 @@ dr_prod_derivs <- function(s, eta, order) {
 #' otherwise.
 #'
 #' @details
-#' Two separabilities at once, and it is worth keeping them apart: the scales
-#' separate from each other, so a component naming two different scales is zero,
-#' and the correlation separates from the scales, so a mixed component is zero.
-#' What survives is \eqn{2\,\partial^m \log d_k} on the diagonal of the scale
-#' block, through [diag_dlog()], and whatever the correlation family answers.
+#' Two separabilities hold at once. The scales separate from each other, so a
+#' component naming two different scales is zero, and the correlation separates
+#' from the scales, so a component mixing a scale with a correlation coordinate
+#' is zero. What survives is \eqn{2\,\partial^m \log d_k} on the diagonal of the
+#' scale block, through [diag_dlog()], and the correlation family's own
+#' derivatives.
 #'
 #' @param s A [DrProdParam()] object.
 #' @param eta A numeric vector of length `s@n_free`.
@@ -470,12 +472,12 @@ dr_prod_logdet_derivs <- function(s, eta, order) {
 #' @name param_value.DrProdParam
 #' @description
 #' Forms \eqn{D R D} as `outer(d, d) * R`, the elementwise product being what two
-#' diagonal multiplications amount to. The correlation block is asked for its own
-#' value at its own stretch of the free vector, so the composite is exactly what
-#' that family returns, rescaled.
+#' diagonal multiplications amount to. The correlation block is evaluated at its
+#' own stretch of the free vector, so the composite is the value of that family,
+#' rescaled.
 #'
-#' The value is labeled `v1`, `v2`, ..., `vp` on both margins, the convention [name_dims()]
-#' states and every family in the package follows.
+#' The value is labeled `v1`, `v2`, ..., `vp` on both margins, the convention
+#' that [name_dims()] states.
 #' @param s A [DrProdParam()] object.
 #' @param eta A numeric vector of length `s@n_free`, already checked by the
 #'   generic.
@@ -495,24 +497,24 @@ S7::method(param_value, DrProdParam) <- function(s, eta, ...) {
 #' @description
 #' Reads the standard deviations off the diagonal as \eqn{\sqrt{\Sigma_{jj}}},
 #' divides them out, and hands the resulting correlation matrix to the
-#' correlation block. Exact wherever the block is: measured at \eqn{p = 3} with
-#' the default block, the round trip closes to \eqn{7 \times 10^{-16}}.
+#' correlation block, so the round trip is as exact as the block's.
 #' @details
 #' A matrix with a non-positive diagonal entry is rejected with
 #' `'m' must have a positive diagonal.`; anything else outside the family is
 #' reported by the correlation block's own message, which is the more specific
 #' of the two.
 #'
-#' This is where a `correlation` block that carries a scale of its own shows: the
-#' division always leaves a unit diagonal, so such a block is handed a matrix its
-#' own scale cannot be recovered from, and the round trip fails without any
-#' error being signaled. See [dr_prod()] on that requirement.
+#' The division always leaves a unit diagonal, so a block that carried a scale
+#' of its own would receive a matrix from which its scale cannot be recovered,
+#' and the round trip would fail without an error. [dr_prod()] rejects such a
+#' block at construction.
 #' @param s A [DrProdParam()] object.
 #' @param m A symmetric positive definite `s@dimension` by `s@dimension` matrix,
 #'   already checked for shape and symmetry by the generic.
 #' @param ... Unused, and accepted so the signature matches the generic's.
 #' @return A numeric vector of length `s@n_free`: the linked standard deviations
-#'   followed by the correlation block's own free vector.
+#'   followed by the correlation block's own free vector, named by
+#'   `s@free_names`.
 #' @seealso [param_value.DrProdParam()], the map this inverts.
 #' @keywords internal
 S7::method(param_free, DrProdParam) <- function(s, m, ...) {
@@ -522,8 +524,10 @@ S7::method(param_free, DrProdParam) <- function(s, m, ...) {
   }
   d <- sqrt(dg)
   r <- m / outer(d, d)
-  c(linkfunctions7::linkfun(.dr(s)$link, d),
-    param_free(.dr(s)$cor, r))
+  stats::setNames(
+    c(linkfunctions7::linkfun(.dr(s)$link, d), param_free(.dr(s)$cor, r)),
+    s@free_names
+  )
 }
 
 #' @title Derivatives of a Scales-Times-Correlation Parameter
@@ -532,13 +536,11 @@ S7::method(param_free, DrProdParam) <- function(s, m, ...) {
 #' `param_d1()`, `param_d2()`, `param_d3()` and `param_d4()` for a [dr_prod()]
 #' parameter. Each component is the scale factor times the correlation's own
 #' component, elementwise, the two groups of free values being disjoint, so
-#' nothing of the correlation family is rederived and nothing is differenced.
+#' the correlation family's own components are used and nothing is differenced.
 #' @details
 #' The four share [dr_prod_derivs()] and differ only in the order they pass. Both
 #' factors are sparse, and where their supports miss each other the component is
-#' exactly zero: measured at \eqn{p = 3} that is 1 of the 21 second-order
-#' components, 10 of 56 at third order and 37 of 126 at fourth. See [dr_prod()]
-#' for the rule.
+#' exactly zero; see [dr_prod()] for the rule.
 #' @param s A [DrProdParam()] object.
 #' @param eta A numeric vector of length `s@n_free`, already checked by the
 #'   generic.
@@ -601,14 +603,12 @@ S7::method(param_logdet, DrProdParam) <- function(s, eta, ...) {
 #' `param_dlogdet()`, `param_d2logdet()`, `param_d3logdet()` and
 #' `param_d4logdet()` for a [dr_prod()] parameter. The log-determinant is
 #' separable in the scales and separable from the correlation, so a component
-#' mixing two scales, or a scale with a correlation, is exactly zero: measured at
-#' \eqn{p = 3}, 12 of the 21 second-order components, 43 of 56 at third order and
-#' 108 of 126 at fourth.
+#' mixing two scales, or a scale with a correlation, is exactly zero.
 #' @details
 #' The four share [dr_prod_logdet_derivs()] and differ only in the order they
-#' pass. At first order the scale entries are 2 whatever the point, the scales
-#' entering \eqn{\log\lvert\Sigma\rvert} through \eqn{2\log d_j} and the log link
-#' canceling its own derivative.
+#' pass. Under the default log link the first-order scale entries are 2 at every
+#' point, the scales entering \eqn{\log\lvert\Sigma\rvert} through
+#' \eqn{2\log d_j} and the log link canceling its own derivative.
 #' @param s A [DrProdParam()] object.
 #' @param eta A numeric vector of length `s@n_free`, already checked by the
 #'   generic.
@@ -654,14 +654,11 @@ S7::method(param_d4logdet, DrProdParam) <- function(s, eta, ...) {
 #' forms \eqn{\Sigma} and neither factorizes it.
 #' @details
 #' The scaling is done by dividing and multiplying rows, which for a diagonal
-#' matrix is what the products amount to. Measured at \eqn{p = 3} with the
-#' default block, the solve agrees with `solve()` on the assembled matrix to
-#' \eqn{7 \times 10^{-15}} and `tcrossprod(param_factor(s, eta))` with the matrix
-#' to \eqn{4 \times 10^{-16}}. The factor is lower triangular, as
+#' matrix is what the products amount to. The factor is lower triangular, as
 #' [param_factor()] requires, because scaling the rows of a lower triangular
 #' matrix leaves it lower triangular.
 #'
-#' Neither is ever refused for rank: this family admits no deficient correlation
+#' Neither is rejected for rank: this family admits no deficient correlation
 #' block, so it is always of full rank.
 #' @param s A [DrProdParam()] object.
 #' @param eta A numeric vector of length `s@n_free`, already checked by the
@@ -672,7 +669,7 @@ S7::method(param_d4logdet, DrProdParam) <- function(s, eta, ...) {
 #' @return `param_solve()` returns a numeric matrix with `s@dimension` rows and
 #'   as many columns as `b`; `param_factor()` a lower triangular `s@dimension` by
 #'   `s@dimension` matrix.
-#' @seealso [param_solve()] and [param_factor()] for the two contracts.
+#' @seealso [param_solve()] and [param_factor()] for the two generics.
 #' @keywords internal
 S7::method(param_solve, DrProdParam) <- function(s, eta, b = NULL, ...) {
   d <- .dr_scales(s, eta)

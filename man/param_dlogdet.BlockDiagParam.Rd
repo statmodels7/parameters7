@@ -28,10 +28,11 @@ log-determinant is a sum over the blocks.
 \details{
 The four share \code{\link[=block_diag_logdet_derivs]{block_diag_logdet_derivs()}} and differ only in the order they
 pass. The first order names its result by \code{s@free_names}, one value per free
-value; the orders above it are keyed by tuple, as the contract requires.
+value; the orders above it are keyed by tuple, as \code{\link[=param_tuple_names]{param_tuple_names()}}
+defines.
 
-A block's \strong{own} mixed components are not zero, this separability being over
-blocks, never over free values. Compare \code{\link[=ar1]{ar1()}}, where it is over free values
+A block's \strong{own} mixed components are in general not zero, this
+separability being over blocks and not over free values. Compare \code{\link[=ar1]{ar1()}}, where it is over free values
 and every mixed component vanishes.
 }
 \seealso{

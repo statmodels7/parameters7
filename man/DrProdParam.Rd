@@ -21,7 +21,7 @@ DrProdParam(
 integer, agreeing with \code{length(free_names)}.}
 
 \item{free_names}{A character vector of length \code{n_free}, one label per free
-value, in the order the free vector holds them. Must be unique.}
+value, in the order in which the free vector holds them. Must be unique.}
 
 \item{param_params}{A list of whatever the family needs in order to evaluate
 itself, read only by that family's own methods.}
@@ -29,15 +29,14 @@ itself, read only by that family's own methods.}
 \item{dimension}{The side \eqn{p} of the matrix: a single integer, no
 smaller than 1. The validator rejects a vector and a value below 1.}
 
-\item{rank}{The rank of the matrix the family produces, a single integer in
+\item{rank}{The rank of the matrix that the family produces, a single integer in
 \code{0:dimension}. It is a property of the family, so a family whose value is
 positive definite at every \eqn{\eta} declares \eqn{p} here.}
 
 \item{null_basis}{A \code{dimension} by \code{dimension - rank} numeric matrix whose
 columns are an orthonormal basis of the common null space. Use
 \code{\link[=param_null_basis]{param_null_basis()}} to obtain one, or \code{matrix(numeric(0), dimension, 0)}
-for a full-rank family. The validator rejects any other shape, and
-reports both the rank and the shape when the two disagree.}
+for a full-rank family. The validator rejects any other shape.}
 }
 \value{
 An object of class \code{DrProdParam}, a subclass of \code{\link[=matrix_parameter]{matrix_parameter()}}
@@ -50,9 +49,10 @@ The S7 class of a covariance written as \eqn{D R D}, for a diagonal matrix
 \eqn{D} of positive scales and a correlation matrix \eqn{R}. \code{\link[=dr_prod]{dr_prod()}}
 builds one.
 
-Its free values are the standard deviations and the correlation's own
-coordinates, so the quantities a reader takes off a fitted covariance are the
-coordinates themselves.
+Its free values are the linked standard deviations followed by the
+correlation's own coordinates, so the standard deviations and the
+correlations of a fitted covariance are read directly off the free vector,
+through the link and the correlation block.
 }
 \examples{
 # The scales come first and the correlation's coordinates follow.
@@ -65,5 +65,5 @@ c(p = 4, n_free = dr_prod(4)@n_free)
 }
 \seealso{
 \code{\link[=dr_prod]{dr_prod()}}, the constructor, \code{\link[=correlation_matrix]{correlation_matrix()}} for the default
-block, and \code{\link[=matrix_parameter]{matrix_parameter()}} for the properties this inherits.
+block, and \code{\link[=matrix_parameter]{matrix_parameter()}} for the properties that this class inherits.
 }

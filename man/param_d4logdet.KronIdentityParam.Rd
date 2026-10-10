@@ -17,8 +17,7 @@ A numeric vector of \code{choose(s@n_free + 3, 4)} entries, keyed as
 }
 \description{
 Closed form: \eqn{m} times the inner parameter's fourth-order vector. Exact
-where the inner parameter's is, so the composition never introduces the
-accuracy loss a fallback at this order would.
+where the inner parameter's is, so the composition adds no loss of accuracy.
 }
 \seealso{
 \code{\link[=param_d3logdet.KronIdentityParam]{param_d3logdet.KronIdentityParam()}} for the order below.

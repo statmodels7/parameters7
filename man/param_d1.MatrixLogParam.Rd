@@ -22,14 +22,11 @@ entrywise by the two-point divided differences
 \eqn{e[\lambda_i, \lambda_j]}, and rotate back. Exact, with no
 differencing.
 
-Note that \eqn{\partial_k M} is \strong{not} \eqn{E_k \exp(S)}: the exponential of a
-matrix does not commute with an arbitrary direction, which is why the
-weighting by divided differences appears at all. Where the eigenvalues are
-equal the weight is \eqn{e^{\lambda}} and the formula reduces to the scalar
-one, which \code{\link[=dd_exp]{dd_exp()}}'s Opitz route delivers exactly.
-
-Measured against a central difference of \code{\link[=param_value]{param_value()}} at \eqn{p = 3}, the
-agreement is \eqn{1.5 \times 10^{-10}}, which is the difference's own accuracy.
+The derivative \eqn{\partial_k M} differs from \eqn{E_k \exp(S)}, because the
+exponential of a matrix does not commute with an arbitrary direction; the
+weighting by divided differences accounts for this. Where the eigenvalues
+are equal the weight is \eqn{e^{\lambda}} and the formula reduces to the
+scalar one, which the Opitz route of \code{\link[=dd_exp]{dd_exp()}} delivers exactly.
 }
 \seealso{
 \code{\link[=mlog_contract]{mlog_contract()}}, which does the contraction, \code{\link[=dd_exp]{dd_exp()}} for the

@@ -13,7 +13,8 @@ checked by the generic.}
 }
 \value{
 A list of \code{s@n_free} symmetric matrices named by \code{s@free_names}, each
-\code{s@dimension} by \code{s@dimension} with a zero diagonal.
+\code{s@dimension} by \code{s@dimension} with a diagonal that is zero up to
+rounding.
 }
 \description{
 Closed form, by the Leibniz rule on \eqn{R = LL^\top},
@@ -24,8 +25,8 @@ with the factor's derivative \eqn{L_k} built from the trigonometric tables of
 the angles: differentiating an entry of \eqn{L} replaces one sine or cosine
 factor by its own derivative in the free value.
 
-The diagonal of every component is \strong{exactly zero}, the diagonal of \eqn{R}
-being the constant 1. Angle \eqn{\theta_{ij}} belongs to row \eqn{i}, so
+The diagonal of every component is zero up to rounding, the diagonal of
+\eqn{R} being the constant 1. Angle \eqn{\theta_{ij}} belongs to row \eqn{i}, so
 \eqn{\partial_k L} is supported on that row alone, though
 \eqn{\partial_k R} is not.
 }

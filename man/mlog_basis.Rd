@@ -20,8 +20,8 @@ two non-zero entries, all of them 1.
 Returns \eqn{\partial S / \partial \eta_k}, which is a constant matrix,
 \eqn{S} being linear in the free vector: a single 1 on the diagonal for a
 diagonal free value, and a symmetric pair of 1s below and above the diagonal
-for the rest. These are the directions the Frechet derivatives contract
-against.
+for the rest. These are the directions against which the Frechet
+derivatives contract.
 
 Because they do not depend on \eqn{\eta}, the whole nonlinearity of the family
 sits in the exponential, and all four derivative orders are contractions of

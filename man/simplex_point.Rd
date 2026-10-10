@@ -23,15 +23,15 @@ free value saturates instead of overflowing.
 }
 \details{
 The naive expression \eqn{e^{\eta_a}/(1 + \sum_b e^{\eta_b})} is \code{Inf/Inf} from
-about \eqn{\eta = 710}. With the shift, a free value of 800 returns
-\eqn{\pi_1 = 1} and \eqn{\pi_K = 0} with the vector summing to exactly 1, and
-at 500 it returns \eqn{\pi_K = 7 \times 10^{-218}}, still representable. The
-value is then on the boundary of the simplex, which \code{\link[=param_free]{param_free()}} cannot
-invert.
+about \eqn{\eta = 710}. With the shift, a free value of 500 returns
+\eqn{\pi_K = 7 \times 10^{-218}}, still representable, and a free value of
+800 returns \eqn{\pi_1 = 1} and \eqn{\pi_K = 0} with the vector summing to
+exactly 1. That value is on the boundary of the simplex, which
+\code{\link[=param_free]{param_free()}} cannot invert.
 }
 \seealso{
-\code{\link[=param_value.SimplexParam]{param_value.SimplexParam()}} and
-\code{\link[=param_value.TransitionMatrixParam]{param_value.TransitionMatrixParam()}}, the two callers, and
+\code{\link[=param_value.SimplexParam]{param_value.SimplexParam()}}, \code{\link[=param_value.TransitionMatrixParam]{param_value.TransitionMatrixParam()}}
+and the derivative methods of both families, which call it, and
 \code{\link[=simplex_tensors]{simplex_tensors()}} for the derivatives of the same map.
 }
 \keyword{internal}

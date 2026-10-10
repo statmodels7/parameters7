@@ -19,12 +19,12 @@ matrix with dimnames \code{v1}, \code{v2}, ...
 Returns the Toeplitz matrix \eqn{\gamma_0 \rho_{\lvert i-j \rvert}}, the
 autocorrelations coming from the Levinson-Durbin recursion of \code{\link[=ar_tables]{ar_tables()}}
 and the marginal variance from the scale link. Positive definite at every free
-vector, the partial autocorrelations being inside \eqn{(-1, 1)} by
-construction.
+vector in exact arithmetic, the partial autocorrelations being inside
+\eqn{(-1, 1)} by construction; see \code{\link[=autoregressive]{autoregressive()}} for the edge of the
+chart in double precision.
 
 The cost is the recursion, which is linear in \eqn{p}, and the filling of
-the matrix: 0.00005 s at \eqn{q = 1, p = 10} and 0.00013 s at
-\eqn{q = 1, p = 200}.
+the matrix.
 }
 \seealso{
 \code{\link[=param_free.AutoregressiveParam]{param_free.AutoregressiveParam()}} for the inverse, and

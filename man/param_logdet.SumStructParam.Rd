@@ -17,20 +17,15 @@ A single number.
 \description{
 The log-determinant of the assembled matrix where the family has full rank,
 and its log \strong{pseudo}-determinant, the sum over the \code{s@rank} largest
-eigenvalues, where it does not. A sum of fixed matrices has no structure a
-closed form could exploit, so this is the one family here that assembles and
-decomposes.
+eigenvalues, where it does not. A sum of fixed matrices has no structure that
+a closed form could exploit, so this method assembles the matrix and
+decomposes it.
 }
 \details{
 Which branch is taken is decided by \code{s@rank}, fixed at construction from the
 components' shared null space, and never by counting eigenvalues at the point:
-that count falls as the weights spread apart, which \code{\link[=sum_struct]{sum_struct()}} measures.
-So the number of eigenvalues summed does not move as a fit walks the free
-vector.
-
-Measured on \code{sum_struct(list(matrix(1, 3, 3)))}, of rank 1, at a weight of 2:
-the pseudo-determinant is \eqn{\log 6}, its one non-zero eigenvalue, to the
-printed digit.
+that count falls as the weights spread apart (see \code{\link[=sum_struct]{sum_struct()}}). So the
+number of eigenvalues summed does not move as a fit walks the free vector.
 }
 \seealso{
 \code{\link[=param_dlogdet.SumStructParam]{param_dlogdet.SumStructParam()}} for its derivatives, and

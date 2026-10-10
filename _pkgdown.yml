@@ -6,9 +6,9 @@ template:
 reference:
 - title: Families
   desc: >
-    The parametrizations. Each maps an unconstrained vector to a matrix in its
-    own constrained set. Which side of a model a matrix parametrizes is the
-    consumer's to say, not the parametrization's.
+    The parametrizations. Each maps an unconstrained vector onto its own
+    constrained set: symmetric matrices, probability vectors or row-stochastic
+    matrices. The consumer decides on which side of a model a matrix is used.
   contents:
   - log_cholesky
   - matrix_log
@@ -43,8 +43,8 @@ reference:
 
 - title: Derivatives
   desc: >
-    Exact to fourth order, on the unconstrained scale, which is what joint
-    estimation over the coefficients and the constrained parameters consumes.
+    Exact to fourth order, on the unconstrained scale, as joint estimation over
+    the coefficients and the constrained parameters requires.
   contents:
   - param_d1
   - param_d2
@@ -53,7 +53,7 @@ reference:
   - param_tuple_names
   - param_tuple_indices
 
-- title: What a likelihood asks of the matrix
+- title: Log-determinant and solves
   desc: >
     The log-determinant, or the log pseudo-determinant when the family is rank
     deficient, and the solves, computed through a factor instead of through an
@@ -69,11 +69,12 @@ reference:
   - param_inv_d2
   - param_factor
 
-- title: What a reader reads
+- title: Interpretable quantities
   desc: >
-    The quantities a family is about, with the Jacobian of the map from the
-    free vector and the scale each interval belongs on, so that a consumer can
-    report them by the delta method rather than reporting coordinates.
+    The quantities that a family declares, with the Jacobian of the map from
+    the free vector and the scale on which each interval is built, so that a
+    consumer can report them by the delta method instead of reporting
+    coordinates.
   contents:
   - param_readable
 
@@ -81,7 +82,7 @@ reference:
   desc: >
     A rank read off an assembled matrix is not scale invariant, so it is
     computed once from the components and membership is tested against the null
-    space it implies.
+    space that it implies.
   contents:
   - param_null_basis
 
@@ -122,16 +123,16 @@ reference:
 
 - title: Base-class defaults
   desc: >
-    The methods registered on the abstract class, which every parameter
-    inherits unless it registers something more specific.
+    The methods registered on the base classes, which every parameter inherits
+    unless it registers a method of its own.
   contents:
   - ends_with(".parameter")
   - ends_with(".matrix_parameter")
 
 - title: Internals
   desc: >
-    The machinery the exported functions are built from. None of it is
-    exported, and none is needed to use the package; it is documented so that
-    the derivations can be followed from the code that implements them.
+    The internal functions from which the exported ones are built. They are
+    not exported and are not needed to use the package; they are documented so
+    that the derivations can be followed from the code that implements them.
   contents:
   - has_keyword("internal")

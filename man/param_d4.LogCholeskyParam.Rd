@@ -24,16 +24,17 @@ multiset, a single index, or a repetition of one diagonal free value, so of
 the \eqn{2^4} ways to split a quadruple between the factors almost all
 contribute nothing.
 
-Exact at this order, which is where the contract stops: a fourth-order chain
-rule through a link needs this much. Nothing is differenced, so the accuracy
-is machine precision, against the \eqn{10^{-4}} a stencil would give.
+Exact at this order, the highest that the package provides, and a
+fourth-order chain rule through a link needs it. Nothing is differenced, so
+the accuracy is that of rounding, where a stencil at this order is accurate
+to about five digits.
 
 A component repeating a below-diagonal free value three or more times is
 exactly zero, \eqn{M} being quadratic in each of those.
 }
 \seealso{
 \code{\link[=chol_leibniz]{chol_leibniz()}}, which assembles it, \code{\link[=param_d3.LogCholeskyParam]{param_d3.LogCholeskyParam()}}
-for the order below, and \code{\link[=numerical_d4]{numerical_d4()}} for what a family without a closed
-form gets instead.
+for the order below, and \code{\link[=numerical_d4]{numerical_d4()}} for the route of a family without
+a closed form.
 }
 \keyword{internal}

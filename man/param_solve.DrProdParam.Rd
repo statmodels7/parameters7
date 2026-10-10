@@ -29,17 +29,14 @@ forms \eqn{\Sigma} and neither factorizes it.
 }
 \details{
 The scaling is done by dividing and multiplying rows, which for a diagonal
-matrix is what the products amount to. Measured at \eqn{p = 3} with the
-default block, the solve agrees with \code{solve()} on the assembled matrix to
-\eqn{7 \times 10^{-15}} and \code{tcrossprod(param_factor(s, eta))} with the matrix
-to \eqn{4 \times 10^{-16}}. The factor is lower triangular, as
+matrix is what the products amount to. The factor is lower triangular, as
 \code{\link[=param_factor]{param_factor()}} requires, because scaling the rows of a lower triangular
 matrix leaves it lower triangular.
 
-Neither is ever refused for rank: this family admits no deficient correlation
+Neither is rejected for rank: this family admits no deficient correlation
 block, so it is always of full rank.
 }
 \seealso{
-\code{\link[=param_solve]{param_solve()}} and \code{\link[=param_factor]{param_factor()}} for the two contracts.
+\code{\link[=param_solve]{param_solve()}} and \code{\link[=param_factor]{param_factor()}} for the two generics.
 }
 \keyword{internal}

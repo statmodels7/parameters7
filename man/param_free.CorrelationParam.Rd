@@ -20,20 +20,21 @@ Returns the angles behind a correlation matrix, read off its Cholesky factor
 and carried onto the free scale by the link. Exact:
 \eqn{\theta_{i1} = \arccos L_{i1}}, and each subsequent angle divides out the
 sines already recovered before taking an arc cosine. A true inverse of
-\code{\link[=param_value.CorrelationParam]{param_value.CorrelationParam()}}, the round trip closing to
-\eqn{2 \times 10^{-16}}.
+\code{\link[=param_value.CorrelationParam]{param_value.CorrelationParam()}}: the round trip closes up to rounding for
+angles of moderate size, and its error grows with the free values.
 }
 \details{
 Three rejections. \code{m} must have a unit diagonal, or it is not a correlation
-matrix. It must be positive definite, tested spectrally through \code{\link[=chol_pd]{chol_pd()}}.
-And its factor must not reach an angle of exactly 0 or \eqn{\pi}, where the
-link has no finite value: that happens at a correlation of \eqn{\pm 1}, which
-is on the boundary of the set without being in it.
+matrix. It must be positive definite, tested on the eigenvalues through
+\code{\link[=chol_pd]{chol_pd()}}. And in each row of its factor, the product of the sines of the
+angles already recovered must not fall below \eqn{10^{-12}}: that happens as
+a correlation approaches \eqn{\pm 1} and an angle approaches 0 or \eqn{\pi},
+where the link has no finite value.
 
-The last case is worth knowing before it is met. The parametrization reaches a
-correlation of \eqn{-1} to every printed digit at a free value near 10, and
-the matrix is then singular in double precision, so a matrix produced by a fit
-that ran to its boundary cannot be inverted back.
+The parametrization reaches a correlation of \eqn{-1} to every printed digit
+at a free value near 10, and the matrix is then singular in double
+precision, so a matrix produced by a fit that ran to its boundary cannot be
+inverted back.
 }
 \seealso{
 \code{\link[=param_value.CorrelationParam]{param_value.CorrelationParam()}}, the map this inverts, and

@@ -21,10 +21,10 @@ the free vector, so every derivative above the first vanishes at every
 \eqn{\eta}. The zeros are exact, so a consumer can drop the term instead of
 carrying small numbers through a contraction.
 
-It also means this family cannot exercise the order: a check of a
-log-determinant's third derivative against a numerical reference passes here
-whatever is missing, both sides being zero. \code{\link[=ar1]{ar1()}} and \code{\link[=compound_symmetry]{compound_symmetry()}}
-are where this order has content.
+A comparison of a general third log-determinant derivative against a
+numerical reference therefore compares two zeros on this family. \code{\link[=ar1]{ar1()}},
+\code{\link[=compound_symmetry]{compound_symmetry()}} and \code{\link[=correlation_matrix]{correlation_matrix()}} are families where this
+order is not zero.
 }
 \seealso{
 \code{\link[=param_d2logdet.LogCholeskyParam]{param_d2logdet.LogCholeskyParam()}} for the order below, and

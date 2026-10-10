@@ -17,14 +17,13 @@ A list with \code{cd} and \code{sub}, both as \code{\link[=ar_inv_codes]{ar_inv_
 }
 \description{
 The index tuples of an order, the codes of every sub-multiset they carry,
-and the codes of the sub-multisets of THOSE, which the inner Leibniz sums
-over. None of it depends on the free vector.
+and the codes of the sub-multisets of those, over which the inner Leibniz
+rule sums. None of it depends on the free vector.
 }
 \details{
-Memoized in an environment held on the object, because it is a function of
-the order and the number of free values alone and was 59 per cent of a
-fourth derivative when rebuilt at every call. The cache is pure -- the same
-order always gives the same structure -- so sharing it across the copies S7
+Memoized in an environment held on the object, because it depends on the
+order and the number of free values alone. The cache is pure (the same order
+always gives the same structure), so sharing it across the copies that S7
 makes of the object is safe.
 }
 \seealso{

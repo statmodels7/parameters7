@@ -22,8 +22,8 @@ combination of positive semidefinite matrices being one; positive \strong{defini
 only where the components' null spaces meet at the origin, which is the
 condition \code{rank} records.
 
-The value is labeled \code{v1}, \code{v2}, ..., \code{vp} on both margins, the convention \code{\link[=name_dims]{name_dims()}}
-states and every family in the package follows.
+The value is labeled \code{v1}, \code{v2}, ..., \code{vp} on both margins, the convention
+that \code{\link[=name_dims]{name_dims()}} states.
 }
 \seealso{
 \code{\link[=param_free.SumStructParam]{param_free.SumStructParam()}} for the inverse, and \code{\link[=sum_struct]{sum_struct()}} for
