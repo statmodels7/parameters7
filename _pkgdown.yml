@@ -67,6 +67,8 @@ reference:
   - param_solve
   - param_inv_d1
   - param_inv_d2
+  - param_inv_d3
+  - param_inv_d4
   - param_factor
 
 - title: Interpretable quantities

@@ -1,3 +1,14 @@
+# parameters7 0.24.0
+
+* `param_inv_d3()` and `param_inv_d4()` return the third and fourth
+  derivatives of the inverse. The method for `log_cholesky()` differentiates
+  `L G = I` and `G'G` by the Leibniz rule and is exact where the covariance
+  is nearly singular; the default is the ordered-partition sum of
+  `inverse_of()`. At `log L22 = -11.5` the sum is off by orders of magnitude
+  and the exact method agrees with a symbolic reference to 1e-12.
+* `inverse_of()` of a `log_cholesky()` family takes its third and fourth
+  derivatives from them.
+
 # parameters7 0.23.0
 
 * `inverse_of()` of a `log_cholesky()` family takes its first and second

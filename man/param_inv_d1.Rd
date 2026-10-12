@@ -3,15 +3,25 @@
 \name{param_inv_d1}
 \alias{param_inv_d1}
 \alias{param_inv_d2}
+\alias{param_inv_d3}
+\alias{param_inv_d4}
 \alias{param_inv_d1.matrix_parameter}
 \alias{param_inv_d2.matrix_parameter}
+\alias{param_inv_d3.matrix_parameter}
+\alias{param_inv_d4.matrix_parameter}
 \alias{param_inv_d1.LogCholeskyParam}
 \alias{param_inv_d2.LogCholeskyParam}
+\alias{param_inv_d3.LogCholeskyParam}
+\alias{param_inv_d4.LogCholeskyParam}
 \title{Derivatives of the Inverse of a Matrix Parameter}
 \usage{
 param_inv_d1(s, eta, ...)
 
 param_inv_d2(s, eta, ...)
+
+param_inv_d3(s, eta, ...)
+
+param_inv_d4(s, eta, ...)
 }
 \arguments{
 \item{s}{An object inheriting from class \code{\link[=matrix_parameter]{matrix_parameter()}}, of full rank.}
@@ -22,14 +32,15 @@ param_inv_d2(s, eta, ...)
 }
 \value{
 \code{param_inv_d1()}: a list of \code{s@n_free} matrices, named as
-\code{\link[=param_d1]{param_d1()}} names its own. \code{param_inv_d2()}: a list with one matrix per
-pair in \code{\link[=param_tuple_indices]{param_tuple_indices()}} at order 2, named as \code{\link[=param_d2]{param_d2()}} names
-its own.
+\code{\link[=param_d1]{param_d1()}} names its own. \code{param_inv_d2()}, \code{param_inv_d3()} and
+\code{param_inv_d4()}: a list with one matrix per tuple in
+\code{\link[=param_tuple_indices]{param_tuple_indices()}} at that order, named as \code{\link[=param_d2]{param_d2()}},
+\code{\link[=param_d3]{param_d3()}} and \code{\link[=param_d4]{param_d4()}} name their own.
 }
 \description{
-\code{param_inv_d1()} returns the first derivatives of \eqn{M^{-1}} in the free
-values, and \code{param_inv_d2()} the second, where \eqn{M} is the matrix that
-\code{\link[=param_value]{param_value()}} returns.
+\code{param_inv_d1()}, \code{param_inv_d2()}, \code{param_inv_d3()} and \code{param_inv_d4()}
+return the derivatives of first to fourth order of \eqn{M^{-1}} in the free
+values, where \eqn{M} is the matrix that \code{\link[=param_value]{param_value()}} returns.
 }
 \details{
 The default method differentiates the inverse through the derivatives of
@@ -37,12 +48,14 @@ The default method differentiates the inverse through the derivatives of
 \deqn{\partial_k M^{-1} = -M^{-1} A_k M^{-1}, \qquad
   \partial_{kl} M^{-1} = M^{-1}(A_l M^{-1} A_k + A_k M^{-1} A_l - A_{kl})
   M^{-1},}
-with \eqn{A_k} and \eqn{A_{kl}} from \code{\link[=param_d1]{param_d1()}} and \code{\link[=param_d2]{param_d2()}}.
+with \eqn{A_k} and \eqn{A_{kl}} from \code{\link[=param_d1]{param_d1()}} and \code{\link[=param_d2]{param_d2()}}. At third
+and fourth order it uses the sum over the ordered set partitions that
+\code{\link[=inverse_of]{inverse_of()}} writes out, with the arrays of \code{\link[=param_d3]{param_d3()}} and \code{\link[=param_d4]{param_d4()}}.
 
 Where \eqn{M} is nearly singular along a direction that is not a coordinate
 axis, \eqn{M^{-1}} has large entries of nearly rank one, the products above
 cancel, and the default method loses accuracy as the condition number of
-\eqn{M} grows.
+\eqn{M} grows, roughly as its square at the higher orders.
 
 The method for \code{\link[=log_cholesky]{log_cholesky()}} is exact there. With \eqn{M = L L^\top},
 \eqn{G = L^{-1}}, \eqn{B_k = G\,\partial_k L} and
@@ -53,6 +66,17 @@ The method for \code{\link[=log_cholesky]{log_cholesky()}} is exact there. With 
 where \eqn{\partial_l B_k = -B_l B_k + G\,\partial_{kl} L}. These products
 involve no cancellation: the entries of \eqn{G} grow as \eqn{1/L_{ii}} and
 each term is of the size of the result.
+
+At third and fourth order the same method differentiates \eqn{L G = I} and
+\eqn{M^{-1} = G^\top G} by the Leibniz rule. For a multiset \eqn{S} of free
+values,
+\deqn{\partial_S G = -G \sum_{\emptyset \ne U \subseteq S}
+  (\partial_U L)(\partial_{S \setminus U} G), \qquad
+  \partial_S M^{-1} = \sum_{U \subseteq S}
+  (\partial_U G)^\top (\partial_{S \setminus U} G),}
+the subsets being taken over the positions of \eqn{S}. Every factor is
+triangular and every derivative of \eqn{L} has a single non-zero entry, so
+these products do not cancel either.
 }
 \examples{
 s <- log_cholesky(2)
@@ -65,9 +89,16 @@ num <- (param_solve(s, eta + c(0, 0, h)) - param_solve(s, eta - c(0, 0, h))) /
 max(abs(d[[3]] - num)) / max(abs(num))
 names(param_inv_d2(s, eta))
 
+# At third order the default route has lost the component that the exact
+# one keeps: the inverse is quadratic in L2.1, so this one is zero.
+sandwich <- S7::method(param_inv_d3, matrix_parameter)(s, eta)
+c(exact = param_inv_d3(s, eta)[["L2.1:L2.1:L2.1"]][2, 2],
+  sandwich = sandwich[["L2.1:L2.1:L2.1"]][2, 2])
+
 }
 \seealso{
-\code{\link[=param_solve]{param_solve()}} for the inverse itself, \code{\link[=param_d1]{param_d1()}} and
-\code{\link[=param_d2]{param_d2()}} for the derivatives of \eqn{M}.
+\code{\link[=param_solve]{param_solve()}} for the inverse itself, \code{\link[=param_d1]{param_d1()}} to
+\code{\link[=param_d4]{param_d4()}} for the derivatives of \eqn{M}, and \code{\link[=inverse_of]{inverse_of()}} for the
+family whose value is the inverse.
 }
 \keyword{internal}

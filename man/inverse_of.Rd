@@ -56,9 +56,9 @@ order: 1, 3, 13 and 75.
 Every factor is the inner family's own closed form, so nothing is
 differenced. The products are formed in floating point, however, and the
 partition sum loses accuracy roughly as the square of the condition number
-of the inner matrix. For an inner \code{\link[=log_cholesky]{log_cholesky()}} family, the first
-two orders are computed by \code{\link[=param_inv_d1]{param_inv_d1()}} and \code{\link[=param_inv_d2]{param_inv_d2()}}, which are
-exact, and the sum is used only for orders three and four.
+of the inner matrix. For an inner \code{\link[=log_cholesky]{log_cholesky()}} family, the four orders
+are computed by \code{\link[=param_inv_d1]{param_inv_d1()}}, \code{\link[=param_inv_d2]{param_inv_d2()}}, \code{\link[=param_inv_d3]{param_inv_d3()}} and
+\code{\link[=param_inv_d4]{param_inv_d4()}}, which are exact, and the sum is not used.
 }
 
 \section{The log-determinant}{

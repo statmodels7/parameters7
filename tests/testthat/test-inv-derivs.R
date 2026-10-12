@@ -75,3 +75,69 @@ test_that("a parameter with no inverse is rejected by name", {
   s <- scaled_matrix(diag(c(1, 0)))
   expect_error(param_inv_d1(s, 0), "rank deficient")
 })
+
+test_that("the third and fourth orders agree with the partition sum at ordinary values", {
+  for (p in 2:3) {
+    s <- log_cholesky(p)
+    set.seed(10 + p)
+    eta <- rnorm(s@n_free, 0, 0.4)
+    for (k in 3:4) {
+      e <- if (k == 3) param_inv_d3(s, eta) else param_inv_d4(s, eta)
+      d <- S7::method(if (k == 3) param_inv_d3 else param_inv_d4,
+                      matrix_parameter)(s, eta)
+      expect_identical(names(e), param_tuple_names(s, k))
+      expect_identical(names(d), param_tuple_names(s, k))
+      for (i in seq_along(e)) {
+        expect_lt(max(abs(e[[i]] - d[[i]])), 1e-12 * max(1, max(abs(d[[i]]))))
+      }
+    }
+  }
+})
+
+test_that("the third and fourth orders are exact where the covariance is nearly singular", {
+  s <- log_cholesky(2)
+  eta <- c(-0.5, -11.5, 0.07)
+  # Sigma^{-1} in closed form for L = [[e^a, 0], [c, e^b]], differentiated
+  # symbolically by D(): no arithmetic shared with either method.
+  ex <- list(
+    i11 = quote((c^2 + exp(2 * b)) / (exp(2 * a) * exp(2 * b))),
+    i21 = quote(-(c * exp(a)) / (exp(2 * a) * exp(2 * b))),
+    i22 = quote(exp(2 * a) / (exp(2 * a) * exp(2 * b))))
+  vars <- c("a", "b", "c")
+  env <- list(a = eta[1], b = eta[2], c = eta[3])
+  sym <- function(tup) {
+    v <- vapply(ex, function(e) {
+      for (j in tup) e <- D(e, vars[j])
+      eval(e, env)
+    }, numeric(1))
+    matrix(c(v[1], v[2], v[2], v[3]), 2)
+  }
+  for (k in 3:4) {
+    e <- if (k == 3) param_inv_d3(s, eta) else param_inv_d4(s, eta)
+    d <- S7::method(if (k == 3) param_inv_d3 else param_inv_d4,
+                    matrix_parameter)(s, eta)
+    idx <- param_tuple_indices(s, k)
+    scale <- max(vapply(idx, function(tp) max(abs(sym(tp))), numeric(1)))
+    for (i in seq_along(idx)) {
+      expect_lt(max(abs(e[[i]] - sym(idx[[i]]))) / scale, 1e-12)
+    }
+    # the negative control: the partition sum is off by orders of magnitude
+    worst <- max(vapply(seq_along(idx), function(i)
+      max(abs(d[[i]] - sym(idx[[i]]))), numeric(1))) / scale
+    expect_gt(worst, 1e-3)
+  }
+})
+
+test_that("inverse_of() over a log-Cholesky family reads the exact higher orders", {
+  s <- log_cholesky(2)
+  io <- inverse_of(s)
+  eta <- c(-0.5, -11.5, 0.07)
+  expect_equal(unname(lapply(param_d3(io, eta), unclass)),
+               unname(lapply(param_inv_d3(s, eta), unname)), tolerance = 0,
+               ignore_attr = TRUE)
+  expect_equal(unname(lapply(param_d4(io, eta), unclass)),
+               unname(lapply(param_inv_d4(s, eta), unname)), tolerance = 0,
+               ignore_attr = TRUE)
+  expect_error(param_inv_d3(simplex(3), c(0, 0)), "not a symmetric matrix")
+  expect_error(param_inv_d4(simplex(3), c(0, 0)), "not a symmetric matrix")
+})

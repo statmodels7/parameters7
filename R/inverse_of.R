@@ -76,9 +76,9 @@ InverseParam <- S7::new_class("InverseParam", parent = matrix_parameter)
 #' Every factor is the inner family's own closed form, so nothing is
 #' differenced. The products are formed in floating point, however, and the
 #' partition sum loses accuracy roughly as the square of the condition number
-#' of the inner matrix. For an inner [log_cholesky()] family, the first
-#' two orders are computed by [param_inv_d1()] and [param_inv_d2()], which are
-#' exact, and the sum is used only for orders three and four.
+#' of the inner matrix. For an inner [log_cholesky()] family, the four orders
+#' are computed by [param_inv_d1()], [param_inv_d2()], [param_inv_d3()] and
+#' [param_inv_d4()], which are exact, and the sum is not used.
 #'
 #' # The log-determinant
 #'
@@ -235,28 +235,57 @@ ordered_set_partitions <- function(k) {
 #'
 #' @keywords internal
 inverse_derivs <- function(s, eta, order) {
-  inner <- .inv_inner(s)
-  N <- unclass(param_value(s, eta))
+  out <- inv_partition_sum(.inv_inner(s), eta, order)
+  stats::setNames(lapply(out, name_dims, s = s),
+                  param_tuple_names(s, order))
+}
+
+
+#' The Ordered-Partition Sum for the Derivatives of an Inverse
+#'
+#' @description
+#' Computes the derivatives of one order of \eqn{N = M^{-1}} from the
+#' derivatives of \eqn{M}, as the sum over the ordered set partitions of the
+#' index tuple of \eqn{(-1)^q N A_{B_1} N \cdots A_{B_q} N}. It is the default
+#' route of [param_inv_d3()] and [param_inv_d4()], and the route of
+#' [inverse_of()] over a family that has no exact method.
+#'
+#' @details
+#' The derivative arrays of \eqn{M} of every order up to `order` are fetched
+#' once and keyed by their sorted index tuple, so that a block appearing in many
+#' partitions is read and not recomputed.
+#'
+#' @param inner An object inheriting from [matrix_parameter()], of full rank.
+#' @param eta A numeric vector of length `inner@n_free`, already checked.
+#' @param order The derivative order, 1 to 4.
+#'
+#' @return An unnamed list of `inner@dimension` square matrices without
+#'   dimnames, ordered as `param_tuple_indices(inner, order)`.
+#'
+#' @seealso [ordered_set_partitions()] for the enumeration and [chol_inv_dk()]
+#'   for the exact route of a log-Cholesky parameter.
+#'
+#' @keywords internal
+inv_partition_sum <- function(inner, eta, order) {
+  N <- unname(unclass(param_solve(inner, eta)))
   # every order up to `order`, keyed by sorted index tuple: a partition block
   # of size m asks for the inner family's order-m component
   tabs <- lapply(seq_len(order), function(m) block_derivs_by_tuple(inner, eta, m))
   parts <- ordered_set_partitions(order)
-  idx <- param_tuple_indices(s, order)
-  out <- lapply(idx, function(t) {
-    acc <- matrix(0, s@dimension, s@dimension)
+  idx <- param_tuple_indices(inner, order)
+  lapply(idx, function(t) {
+    acc <- matrix(0, inner@dimension, inner@dimension)
     for (pt in parts) {
       q <- length(pt)
       term <- N
       for (B in pt) {
         key <- paste(sort(t[B]), collapse = ",")
-        term <- term %*% unclass(tabs[[length(B)]][[key]]) %*% N
+        term <- term %*% unname(unclass(tabs[[length(B)]][[key]])) %*% N
       }
       acc <- acc + if (q %% 2L == 0L) term else -term
     }
     acc
   })
-  stats::setNames(lapply(out, name_dims, s = s),
-                  param_tuple_names(s, order))
 }
 
 
@@ -295,8 +324,8 @@ S7::method(param_free, InverseParam) <- function(s, m, ...) {
 #' The four orders of \eqn{\partial N} for \eqn{N = S^{-1}}, each the ordered
 #' set-partition sum that [inverse_of()] writes out. Every factor comes from the
 #' inner family's own arrays, so a closed form there stays closed here. For a
-#' [log_cholesky()] inner family, orders one and two are read from
-#' [param_inv_d1()] and [param_inv_d2()].
+#' [log_cholesky()] inner family, the four orders are read from
+#' [param_inv_d1()], [param_inv_d2()], [param_inv_d3()] and [param_inv_d4()].
 #' @param s An [InverseParam()] object.
 #' @param eta A numeric vector of length `s@n_free`, already checked by the
 #'   generic.
@@ -328,6 +357,10 @@ S7::method(param_d2, InverseParam) <- function(s, eta, ...) {
 #' @name param_d3.InverseParam
 #' @keywords internal
 S7::method(param_d3, InverseParam) <- function(s, eta, ...) {
+  inner <- .inv_inner(s)
+  if (S7::S7_inherits(inner, LogCholeskyParam)) {
+    return(lapply(param_inv_d3(inner, eta), name_dims, s = s))
+  }
   inverse_derivs(s, eta, 3L)
 }
 
@@ -335,6 +368,10 @@ S7::method(param_d3, InverseParam) <- function(s, eta, ...) {
 #' @name param_d4.InverseParam
 #' @keywords internal
 S7::method(param_d4, InverseParam) <- function(s, eta, ...) {
+  inner <- .inv_inner(s)
+  if (S7::S7_inherits(inner, LogCholeskyParam)) {
+    return(lapply(param_inv_d4(inner, eta), name_dims, s = s))
+  }
   inverse_derivs(s, eta, 4L)
 }
 

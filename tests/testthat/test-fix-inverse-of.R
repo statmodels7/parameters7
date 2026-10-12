@@ -42,10 +42,17 @@ test_that("the dimension-one log_cholesky inverse keeps its derivative structure
   expect_equal(param_d2(io, eta), inverse_derivs(io, eta, 2L), tolerance = 1e-10)
 })
 
-test_that("orders three and four of inverse_of(log_cholesky()) are unchanged", {
+test_that("orders three and four of inverse_of(log_cholesky()) keep their structure", {
+  # They come from param_inv_d3() and param_inv_d4() since 0.24.0; at an
+  # ordinary point they agree with the partition sum to rounding.
   s <- log_cholesky(2)
   io <- inverse_of(s)
   eta <- c(0.1, -0.4, 0.5)
-  expect_identical(param_d3(io, eta), inverse_derivs(io, eta, 3L))
-  expect_identical(param_d4(io, eta), inverse_derivs(io, eta, 4L))
+  for (order in 3:4) {
+    fast <- if (order == 3L) param_d3(io, eta) else param_d4(io, eta)
+    slow <- inverse_derivs(io, eta, order)
+    expect_identical(names(fast), names(slow))
+    expect_identical(lapply(fast, dimnames), lapply(slow, dimnames))
+    expect_equal(fast, slow, tolerance = 1e-12)
+  }
 })
