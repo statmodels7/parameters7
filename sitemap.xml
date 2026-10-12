@@ -54,6 +54,7 @@
 <url><loc>https://statmodels7.github.io/parameters7/reference/check_unit_diagonal.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/chol_assemble.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/chol_dfactor.html</loc></url>
+<url><loc>https://statmodels7.github.io/parameters7/reference/chol_inv_dk.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/chol_inv_pieces.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/chol_leibniz.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/chol_pd.html</loc></url>
@@ -93,6 +94,7 @@
 <url><loc>https://statmodels7.github.io/parameters7/reference/fd_step.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/index.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/inv_derivs_check.html</loc></url>
+<url><loc>https://statmodels7.github.io/parameters7/reference/inv_partition_sum.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/inverse_derivs.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/inverse_of.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/is_base_param_class.html</loc></url>

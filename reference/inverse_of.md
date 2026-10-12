@@ -78,11 +78,13 @@ differenced. The products are formed in floating point, however, and the
 partition sum loses accuracy roughly as the square of the condition
 number of the inner matrix. For an inner
 [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
-family, the first two orders are computed by
-[`param_inv_d1()`](https://statmodels7.github.io/parameters7/reference/param_inv_d1.md)
-and
+family, the four orders are computed by
+[`param_inv_d1()`](https://statmodels7.github.io/parameters7/reference/param_inv_d1.md),
 [`param_inv_d2()`](https://statmodels7.github.io/parameters7/reference/param_inv_d1.md),
-which are exact, and the sum is used only for orders three and four.
+[`param_inv_d3()`](https://statmodels7.github.io/parameters7/reference/param_inv_d1.md)
+and
+[`param_inv_d4()`](https://statmodels7.github.io/parameters7/reference/param_inv_d1.md),
+which are exact, and the sum is not used.
 
 ## The log-determinant
 
@@ -149,5 +151,5 @@ max(abs(param_d1(s, eta)[[1]] - (-N %*% A[[1]] %*% N)))
 
 # The free vector is the inner family's, so the round trip closes on it.
 max(abs(param_free(s, param_value(s, eta)) - eta))
-#> [1] 3.330669e-16
+#> [1] 5.551115e-16
 ```

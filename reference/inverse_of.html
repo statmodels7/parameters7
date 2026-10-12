@@ -13,7 +13,7 @@ penalties7::structured_penalty() fixes the precision."><meta property="og:image"
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.24.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -101,9 +101,9 @@ order: 1, 3, 13 and 75.</p>
 <p>Every factor is the inner family's own closed form, so nothing is
 differenced. The products are formed in floating point, however, and the
 partition sum loses accuracy roughly as the square of the condition number
-of the inner matrix. For an inner <code><a href="log_cholesky.html">log_cholesky()</a></code> family, the first
-two orders are computed by <code><a href="param_inv_d1.html">param_inv_d1()</a></code> and <code><a href="param_inv_d1.html">param_inv_d2()</a></code>, which are
-exact, and the sum is used only for orders three and four.</p>
+of the inner matrix. For an inner <code><a href="log_cholesky.html">log_cholesky()</a></code> family, the four orders
+are computed by <code><a href="param_inv_d1.html">param_inv_d1()</a></code>, <code><a href="param_inv_d1.html">param_inv_d2()</a></code>, <code><a href="param_inv_d1.html">param_inv_d3()</a></code> and
+<code><a href="param_inv_d1.html">param_inv_d4()</a></code>, which are exact, and the sum is not used.</p>
     </div>
     <div class="section level2">
     <h2 id="the-log-determinant">The log-determinant<a class="anchor" aria-label="anchor" href="#the-log-determinant"></a></h2>
@@ -164,7 +164,7 @@ family with a closed inverse implements and which this reads.</p></div>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># The free vector is the inner family's, so the round trip closes on it.</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="param_free.html">param_free</a></span><span class="op">(</span><span class="va">s</span>, <span class="fu"><a href="param_value.html">param_value</a></span><span class="op">(</span><span class="va">s</span>, <span class="va">eta</span><span class="op">)</span><span class="op">)</span> <span class="op">-</span> <span class="va">eta</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3.330669e-16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 5.551115e-16</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.23.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.24.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,6 +35,13 @@
       <small>Source: <a href="https://github.com/statmodels7/parameters7/blob/master/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.24.0" id="parameters7-0240">parameters7 0.24.0<a class="anchor" aria-label="anchor" href="#parameters7-0240"></a></h2>
+<ul><li>
+<code><a href="../reference/param_inv_d1.html">param_inv_d3()</a></code> and <code><a href="../reference/param_inv_d1.html">param_inv_d4()</a></code> return the third and fourth derivatives of the inverse. The method for <code><a href="../reference/log_cholesky.html">log_cholesky()</a></code> differentiates <code>L G = I</code> and <code>G'G</code> by the Leibniz rule and is exact where the covariance is nearly singular; the default is the ordered-partition sum of <code><a href="../reference/inverse_of.html">inverse_of()</a></code>. At <code>log L22 = -11.5</code> the sum is off by orders of magnitude and the exact method agrees with a symbolic reference to 1e-12.</li>
+<li>
+<code><a href="../reference/inverse_of.html">inverse_of()</a></code> of a <code><a href="../reference/log_cholesky.html">log_cholesky()</a></code> family takes its third and fourth derivatives from them.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.23.0" id="parameters7-0230">parameters7 0.23.0<a class="anchor" aria-label="anchor" href="#parameters7-0230"></a></h2>
 <ul><li><p><code><a href="../reference/inverse_of.html">inverse_of()</a></code> of a <code><a href="../reference/log_cholesky.html">log_cholesky()</a></code> family takes its first and second derivatives from <code><a href="../reference/param_inv_d1.html">param_inv_d1()</a></code> and <code><a href="../reference/param_inv_d1.html">param_inv_d2()</a></code>, which are exact where the ordered-block-partition sum cancels. At <code>log L22 = -11.5</code> of a two-dimensional chart the sum gave the second derivative with a relative error of 4112 (wrong sign) and the first with 7.2e-7; both now agree with <code><a href="../reference/param_inv_d1.html">param_inv_d1()</a></code> and <code><a href="../reference/param_inv_d1.html">param_inv_d2()</a></code> exactly. Orders three and four, and every other inner family, still use the partition sum.</p></li>

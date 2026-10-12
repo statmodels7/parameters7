@@ -6,10 +6,12 @@ set-partition sum that
 writes out. Every factor comes from the inner family's own arrays, so a
 closed form there stays closed here. For a
 [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
-inner family, orders one and two are read from
-[`param_inv_d1()`](https://statmodels7.github.io/parameters7/reference/param_inv_d1.md)
+inner family, the four orders are read from
+[`param_inv_d1()`](https://statmodels7.github.io/parameters7/reference/param_inv_d1.md),
+[`param_inv_d2()`](https://statmodels7.github.io/parameters7/reference/param_inv_d1.md),
+[`param_inv_d3()`](https://statmodels7.github.io/parameters7/reference/param_inv_d1.md)
 and
-[`param_inv_d2()`](https://statmodels7.github.io/parameters7/reference/param_inv_d1.md).
+[`param_inv_d4()`](https://statmodels7.github.io/parameters7/reference/param_inv_d1.md).
 
 ## Arguments
 

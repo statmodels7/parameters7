@@ -103,6 +103,8 @@ through an explicit inverse.
   : Solve Through a Parameter's Matrix
 - [`param_inv_d1()`](https://statmodels7.github.io/parameters7/reference/param_inv_d1.md)
   [`param_inv_d2()`](https://statmodels7.github.io/parameters7/reference/param_inv_d1.md)
+  [`param_inv_d3()`](https://statmodels7.github.io/parameters7/reference/param_inv_d1.md)
+  [`param_inv_d4()`](https://statmodels7.github.io/parameters7/reference/param_inv_d1.md)
   : Derivatives of the Inverse of a Matrix Parameter
 - [`param_factor()`](https://statmodels7.github.io/parameters7/reference/param_factor.md)
   : A Factor of a Parameter's Matrix
@@ -242,6 +244,8 @@ them.
   : The Cholesky Factor Behind a Free Vector
 - [`chol_dfactor()`](https://statmodels7.github.io/parameters7/reference/chol_dfactor.md)
   : The Factor of a Log-Cholesky Parameter, and Its Derivatives
+- [`chol_inv_dk()`](https://statmodels7.github.io/parameters7/reference/chol_inv_dk.md)
+  : Higher Derivatives of a Log-Cholesky Inverse
 - [`chol_inv_pieces()`](https://statmodels7.github.io/parameters7/reference/chol_inv_pieces.md)
   : The Pieces Behind a Log-Cholesky Inverse's Derivatives
 - [`chol_leibniz()`](https://statmodels7.github.io/parameters7/reference/chol_leibniz.md)
@@ -310,6 +314,8 @@ them.
   : Finite-Difference Step for a Free Value
 - [`inv_derivs_check()`](https://statmodels7.github.io/parameters7/reference/inv_derivs_check.md)
   : Argument Check for the Inverse's Derivatives
+- [`inv_partition_sum()`](https://statmodels7.github.io/parameters7/reference/inv_partition_sum.md)
+  : The Ordered-Partition Sum for the Derivatives of an Inverse
 - [`inverse_derivs()`](https://statmodels7.github.io/parameters7/reference/inverse_derivs.md)
   : Derivatives of an Inverse Parameter of a Given Order
 - [`is_base_param_class()`](https://statmodels7.github.io/parameters7/reference/is_base_param_class.md)
@@ -586,6 +592,8 @@ them.
   : Default Inverse Map
 - [`param_inv_d1()`](https://statmodels7.github.io/parameters7/reference/param_inv_d1.md)
   [`param_inv_d2()`](https://statmodels7.github.io/parameters7/reference/param_inv_d1.md)
+  [`param_inv_d3()`](https://statmodels7.github.io/parameters7/reference/param_inv_d1.md)
+  [`param_inv_d4()`](https://statmodels7.github.io/parameters7/reference/param_inv_d1.md)
   : Derivatives of the Inverse of a Matrix Parameter
 - [`param_logdet.Ar1Param`](https://statmodels7.github.io/parameters7/reference/param_logdet.Ar1Param.md)
   : Log-Determinant of an AR(1) Parameter

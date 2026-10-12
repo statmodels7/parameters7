@@ -1,7 +1,8 @@
 # Derivatives of the Inverse of a Matrix Parameter
 
-`param_inv_d1()` returns the first derivatives of \\M^{-1}\\ in the free
-values, and `param_inv_d2()` the second, where \\M\\ is the matrix that
+`param_inv_d1()`, `param_inv_d2()`, `param_inv_d3()` and
+`param_inv_d4()` return the derivatives of first to fourth order of
+\\M^{-1}\\ in the free values, where \\M\\ is the matrix that
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
 returns.
 
@@ -11,6 +12,10 @@ returns.
 param_inv_d1(s, eta, ...)
 
 param_inv_d2(s, eta, ...)
+
+param_inv_d3(s, eta, ...)
+
+param_inv_d4(s, eta, ...)
 ```
 
 ## Arguments
@@ -33,11 +38,15 @@ param_inv_d2(s, eta, ...)
 
 `param_inv_d1()`: a list of `s@n_free` matrices, named as
 [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md)
-names its own. `param_inv_d2()`: a list with one matrix per pair in
+names its own. `param_inv_d2()`, `param_inv_d3()` and `param_inv_d4()`:
+a list with one matrix per tuple in
 [`param_tuple_indices()`](https://statmodels7.github.io/parameters7/reference/param_tuple_indices.md)
-at order 2, named as
-[`param_d2()`](https://statmodels7.github.io/parameters7/reference/param_d2.md)
-names its own.
+at that order, named as
+[`param_d2()`](https://statmodels7.github.io/parameters7/reference/param_d2.md),
+[`param_d3()`](https://statmodels7.github.io/parameters7/reference/param_d3.md)
+and
+[`param_d4()`](https://statmodels7.github.io/parameters7/reference/param_d4.md)
+name their own.
 
 ## Details
 
@@ -48,11 +57,19 @@ A\_{kl}) M^{-1},\$\$ with \\A_k\\ and \\A\_{kl}\\ from
 [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md)
 and
 [`param_d2()`](https://statmodels7.github.io/parameters7/reference/param_d2.md).
+At third and fourth order it uses the sum over the ordered set
+partitions that
+[`inverse_of()`](https://statmodels7.github.io/parameters7/reference/inverse_of.md)
+writes out, with the arrays of
+[`param_d3()`](https://statmodels7.github.io/parameters7/reference/param_d3.md)
+and
+[`param_d4()`](https://statmodels7.github.io/parameters7/reference/param_d4.md).
 
 Where \\M\\ is nearly singular along a direction that is not a
 coordinate axis, \\M^{-1}\\ has large entries of nearly rank one, the
 products above cancel, and the default method loses accuracy as the
-condition number of \\M\\ grows.
+condition number of \\M\\ grows, roughly as its square at the higher
+orders.
 
 The method for
 [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
@@ -64,14 +81,25 @@ G\\\partial\_{kl} L\\. These products involve no cancellation: the
 entries of \\G\\ grow as \\1/L\_{ii}\\ and each term is of the size of
 the result.
 
+At third and fourth order the same method differentiates \\L G = I\\ and
+\\M^{-1} = G^\top G\\ by the Leibniz rule. For a multiset \\S\\ of free
+values, \$\$\partial_S G = -G \sum\_{\emptyset \ne U \subseteq S}
+(\partial_U L)(\partial\_{S \setminus U} G), \qquad \partial_S M^{-1} =
+\sum\_{U \subseteq S} (\partial_U G)^\top (\partial\_{S \setminus U}
+G),\$\$ the subsets being taken over the positions of \\S\\. Every
+factor is triangular and every derivative of \\L\\ has a single non-zero
+entry, so these products do not cancel either.
+
 ## See also
 
 [`param_solve()`](https://statmodels7.github.io/parameters7/reference/param_solve.md)
 for the inverse itself,
 [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md)
-and
-[`param_d2()`](https://statmodels7.github.io/parameters7/reference/param_d2.md)
-for the derivatives of \\M\\.
+to
+[`param_d4()`](https://statmodels7.github.io/parameters7/reference/param_d4.md)
+for the derivatives of \\M\\, and
+[`inverse_of()`](https://statmodels7.github.io/parameters7/reference/inverse_of.md)
+for the family whose value is the inverse.
 
 ## Examples
 
@@ -88,4 +116,12 @@ max(abs(d[[3]] - num)) / max(abs(num))
 names(param_inv_d2(s, eta))
 #> [1] "log_L1:log_L1" "log_L2:log_L2" "L2.1:L2.1"     "log_L1:log_L2"
 #> [5] "log_L1:L2.1"   "log_L2:L2.1"  
+
+# At third order the default route has lost the component that the exact
+# one keeps: the inverse is quadratic in L2.1, so this one is zero.
+sandwich <- S7::method(param_inv_d3, matrix_parameter)(s, eta)
+c(exact = param_inv_d3(s, eta)[["L2.1:L2.1:L2.1"]][2, 2],
+  sandwich = sandwich[["L2.1:L2.1:L2.1"]][2, 2])
+#>       exact    sandwich 
+#> 0.00000e+00 1.18532e+14 
 ```
