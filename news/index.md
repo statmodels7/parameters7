@@ -1,5 +1,57 @@
 # Changelog
 
+## parameters7 0.25.0
+
+- The numerical fallbacks are computed by
+  [`numericals7::fd_tensor()`](https://statmodels7.github.io/numericals7/reference/fd_tensor.html)
+  (numericals7 0.23.0 is now required), at fourth-order accuracy by
+  default.
+  [`numerical_d1()`](https://statmodels7.github.io/parameters7/reference/numerical_d1.md)
+  to
+  [`numerical_d4()`](https://statmodels7.github.io/parameters7/reference/numerical_d4.md)
+  take an `accuracy` argument.
+- [`numerical_d3()`](https://statmodels7.github.io/parameters7/reference/numerical_d3.md)
+  and
+  [`numerical_d4()`](https://statmodels7.github.io/parameters7/reference/numerical_d4.md)
+  difference the highest analytic derivative below their order (the
+  second for the third, the third for the fourth) and the value only
+  where there is none, as
+  [`numerical_d2()`](https://statmodels7.github.io/parameters7/reference/numerical_d2.md)
+  already did with the first. Over sixteen structures the error against
+  the closed forms moves from at most 4.6e-6 and 1.4e-4 to at most
+  5.0e-12 and 9.1e-12.
+  [`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)
+  therefore compares each order with a difference of the order below.
+- A composite family
+  ([`block_diag()`](https://statmodels7.github.io/parameters7/reference/block_diag.md),
+  [`kron_identity()`](https://statmodels7.github.io/parameters7/reference/kron_identity.md),
+  [`inverse_of()`](https://statmodels7.github.io/parameters7/reference/inverse_of.md),
+  [`sum_struct()`](https://statmodels7.github.io/parameters7/reference/sum_struct.md))
+  counts a derivative as analytic only where the parameters it holds
+  have it in closed form, so a block that is itself a fallback is never
+  differenced again.
+- The default third and fourth log-determinant derivatives are one
+  tensor stencil on the highest analytic log-determinant derivative
+  below them, at fourth-order accuracy. A family without analytic
+  [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md)
+  and
+  [`param_d2()`](https://statmodels7.github.io/parameters7/reference/param_d2.md)
+  gets them from
+  [`param_logdet()`](https://statmodels7.github.io/parameters7/reference/param_logdet.md),
+  which is exact, where it signalled an error: on a value-only family
+  the error against the exact derivatives is at most 3.5e-7 at order
+  three and 7.9e-6 at order four. `check_analytic_arrays()` is removed.
+- Every numerical derivative carries the names or dimnames of
+  [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md).
+  [`numerical_d2()`](https://statmodels7.github.io/parameters7/reference/numerical_d2.md)
+  on an analytic first derivative took that derivative’s attributes,
+  which
+  [`simplex()`](https://statmodels7.github.io/parameters7/reference/simplex.md)
+  leaves unnamed.
+- At accuracy 2 the first three orders from the value, the second order
+  from an analytic first and the third log-determinant order reproduce
+  the previous values exactly.
+
 ## parameters7 0.24.0
 
 - [`param_inv_d3()`](https://statmodels7.github.io/parameters7/reference/param_inv_d1.md)
@@ -451,14 +503,11 @@
 ## parameters7 0.11.0
 
 - The numerical fallbacks take their stencils from numericals7:
-  [`mixed_stencil()`](https://statmodels7.github.io/parameters7/reference/mixed_stencil.md)
-  reads the offsets and weights from `fd_weights()` in place of a
-  transcribed table,
+  `mixed_stencil()` reads the offsets and weights from `fd_weights()` in
+  place of a transcribed table,
   [`fd_step()`](https://statmodels7.github.io/parameters7/reference/fd_step.md)
-  forwards to numericals7, and
-  [`fd_along()`](https://statmodels7.github.io/parameters7/reference/fd_along.md)
-  assembles every difference along a free value. Every number is
-  unchanged.
+  forwards to numericals7, and `fd_along()` assembles every difference
+  along a free value. Every number is unchanged.
 
 ## parameters7 0.10.0
 

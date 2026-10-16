@@ -49,10 +49,14 @@ multiplicity the two rules produce. The Moore-Penrose inverse replaces
 The expansion is not written out in the package. Each family in this
 package computes this order without differencing, and the base method on
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
-takes one central difference of
-[`param_d2logdet()`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.md).
-A written-out expansion has one term per set partition of the indices,
-five at third order, and a transcription of it is easy to get wrong.
+applies one tensor stencil to the highest analytic log-determinant
+derivative below the third,
+[`param_d2logdet()`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.md)
+where the arrays are analytic and
+[`param_logdet()`](https://statmodels7.github.io/parameters7/reference/param_logdet.md)
+where none is. A written-out expansion has one term per set partition of
+the indices, five at third order, and a transcription of it is easy to
+get wrong.
 
 ## Notation
 

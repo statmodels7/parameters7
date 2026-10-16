@@ -3,8 +3,8 @@
 Returns the step for a central difference in one component of \\\eta\\,
 scaled by the size of that component. It forwards to
 [`numericals7::fd_step()`](https://statmodels7.github.io/numericals7/reference/fd_step.html)
-at accuracy 2, so the step of a fallback here and the step that the
-stencil library documents cannot drift apart.
+at accuracy 2, so the step of a difference written here and the step
+that the stencil library documents cannot drift apart.
 
 ## Usage
 
@@ -43,5 +43,5 @@ is left at its default.
 
 [`numericals7::fd_step()`](https://statmodels7.github.io/numericals7/reference/fd_step.html)
 for the rule, and
-[`fd_along()`](https://statmodels7.github.io/parameters7/reference/fd_along.md),
-which applies a stencil at this step.
+[`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md),
+which uses it for its log-determinant reference.

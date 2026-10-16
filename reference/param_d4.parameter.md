@@ -4,15 +4,15 @@ The method that every
 [`parameter()`](https://statmodels7.github.io/parameters7/reference/parameter.md)
 inherits when it registers no
 [`param_d4()`](https://statmodels7.github.io/parameters7/reference/param_d4.md)
-of its own. It applies one product stencil per index tuple directly to
-[`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md),
-as
+of its own. It applies one tensor-product stencil per index tuple,
+through
+[`numerical_d4()`](https://statmodels7.github.io/parameters7/reference/numerical_d4.md)
+at its default accuracy 4, as
 [`param_d3.parameter()`](https://statmodels7.github.io/parameters7/reference/param_d3.parameter.md)
-does, with the multiplicities summing to four. The step is
-\\\varepsilon^{1/6}\max(1, \|\eta_k\|)\\, about \\2.5 \times 10^{-3}\\
-near the origin, and rounding is amplified by \\h^{-4}\\, so the result
-is enough to catch a wrong closed form and not enough for use in a fit.
-The families in this package do not reach it.
+does, with the multiplicities summing to four. From
+[`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
+alone the result is enough to catch a wrong closed form and not enough
+for use in a fit. The families in this package do not reach it.
 
 ## Arguments
 

@@ -4,22 +4,16 @@ The method that every
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
 inherits when it registers no
 [`param_d3logdet()`](https://statmodels7.github.io/parameters7/reference/param_d3logdet.md)
-of its own. For the tuple \\(k, l, m)\\ it takes the \\(k, l)\\
-component of
+of its own. Each component is one tensor-product central difference,
+through
+[`param_tensor()`](https://statmodels7.github.io/parameters7/reference/param_tensor.md)
+at accuracy 4, of the highest analytic log-determinant derivative below
+the third, as
+[`param_analytic()`](https://statmodels7.github.io/parameters7/reference/param_analytic.md)
+reads it: for the tuple \\(k, l, m)\\, one first difference of the \\(k,
+l)\\ component of
 [`param_d2logdet()`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.md)
-and applies one three-point central difference in the remaining
-component,
-
-\$\$\partial\_{klm} \log\|M\| \approx
-\frac{\partial\_{kl}\log\|M\|\\(\eta + h e_m) -
-\partial\_{kl}\log\|M\|\\(\eta - h e_m)}{2h},\$\$
-
-at the order-1 step \\\varepsilon^{1/3}\max(1, \|\eta_m\|)\\. Since the
-tuple is sorted, the differenced component is the largest index, and the
-pair is looked up by matching sorted indices against
-[`param_tuple_indices()`](https://statmodels7.github.io/parameters7/reference/param_tuple_indices.md)'s
-order-2 list. It costs two evaluations of the whole second-order block
-per tuple.
+along \\\eta_m\\, at the step \\\varepsilon^{1/5}\max(1, \|\eta_m\|)\\.
 
 ## Arguments
 
@@ -46,27 +40,23 @@ A numeric vector of `choose(s@n_free + 2, 3)` entries, keyed as
 ## Accuracy
 
 [`param_d2logdet()`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.md)
-is an exact identity **given** the matrix derivative arrays, so
-differencing it is a single numerical layer whenever
+is an exact identity **given** the matrix derivative arrays, so it is
+differenced where
 [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md)
 and
 [`param_d2()`](https://statmodels7.github.io/parameters7/reference/param_d2.md)
-are analytic.
-
-A family's own
+are analytic or where the family writes it out, and the error is of
+order \\10^{-11}\\. Where the base-class
 [`param_d2logdet()`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.md)
-is exact, and differencing it is a single layer too. Where the
-base-class
-[`param_d2logdet()`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.md)
-reads numerical arrays the layers would compound, and the method signals
-an error instead of returning a value;
-[`check_analytic_arrays()`](https://statmodels7.github.io/parameters7/reference/check_analytic_arrays.md)
-is the guard. A family that needs this order writes
+would read numerical arrays it is not used: the stencil is applied to
+[`param_dlogdet()`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.md)
+where
 [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md)
-and
-[`param_d2()`](https://statmodels7.github.io/parameters7/reference/param_d2.md)
-out, or its own
-[`param_d2logdet()`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.md).
+is analytic, and otherwise to
+[`param_logdet()`](https://statmodels7.github.io/parameters7/reference/param_logdet.md),
+which is exact, as a third difference. A numerical quantity is therefore
+never differenced again, and the third difference of the log-determinant
+is accurate to about \\10^{-7}\\.
 
 ## See also
 

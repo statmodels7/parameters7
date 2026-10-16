@@ -243,7 +243,7 @@ res
 #>                check      status    statistic
 #> 1         membership          OK 0.000000e+00
 #> 2         round trip NOT CHECKED           NA
-#> 3  first derivatives          OK 3.878954e-11
+#> 3  first derivatives          OK 4.205558e-13
 #> 4 second derivatives NOT CHECKED           NA
 #> 5    log-determinant          OK 3.188277e-16
 #> 6    logdet gradient NOT CHECKED           NA

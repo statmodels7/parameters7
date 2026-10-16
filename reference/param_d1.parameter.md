@@ -4,13 +4,14 @@ The method that every
 [`parameter()`](https://statmodels7.github.io/parameters7/reference/parameter.md)
 inherits when it registers no
 [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md)
-of its own. It estimates \\\partial V/\partial \eta_k\\ by one
-three-point central difference of
+of its own. It estimates \\\partial V/\partial \eta_k\\ by one central
+difference of
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
-in each component, \\(V(\eta + h e_k) - V(\eta - h e_k)) / 2h\\, at the
-step \\\varepsilon^{1/3}\max(1, \|\eta_k\|)\\, which is about \\6.1
-\times 10^{-6}\\ near the origin. It costs \\2d\\ evaluations of the
-map. The families in this package do not reach it.
+in each component, through
+[`numerical_d1()`](https://statmodels7.github.io/parameters7/reference/numerical_d1.md)
+at its default accuracy 4: the five-point rule at the step
+\\\varepsilon^{1/5}\max(1, \|\eta_k\|)\\, at a cost of \\4d\\
+evaluations of the map. The families in this package do not reach it.
 
 ## Arguments
 

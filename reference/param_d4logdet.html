@@ -13,7 +13,7 @@ criterion reaches it."><meta property="og:image" content="https://statmodels7.gi
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.24.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -84,7 +84,8 @@ criterion reaches it.</p>
 block of a partition of the four indices. The number of terms grows with the
 number of partitions, so the expansion is not written out: each family in
 this package computes this order without differencing, and the base method on
-<code><a href="matrix_parameter.html">matrix_parameter()</a></code> takes one central difference of <code><a href="param_d3logdet.html">param_d3logdet()</a></code>.</p>
+<code><a href="matrix_parameter.html">matrix_parameter()</a></code> applies one tensor stencil to the highest analytic
+log-determinant derivative below the fourth.</p>
     </div>
     <div class="section level2">
     <h2 id="checking-this-order">Checking this order<a class="anchor" aria-label="anchor" href="#checking-this-order"></a></h2>

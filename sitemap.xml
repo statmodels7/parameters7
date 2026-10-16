@@ -43,7 +43,6 @@
 <url><loc>https://statmodels7.github.io/parameters7/reference/block_diag_derivs.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/block_diag_logdet_derivs.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/capture_seed.html</loc></url>
-<url><loc>https://statmodels7.github.io/parameters7/reference/check_analytic_arrays.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/check_eta.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/check_matrix.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/check_param_args.html</loc></url>
@@ -90,7 +89,6 @@
 <url><loc>https://statmodels7.github.io/parameters7/reference/econ_logdet_derivative.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/econ_scalars.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/empty_null_basis.html</loc></url>
-<url><loc>https://statmodels7.github.io/parameters7/reference/fd_along.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/fd_step.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/index.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/inv_derivs_check.html</loc></url>
@@ -106,7 +104,6 @@
 <url><loc>https://statmodels7.github.io/parameters7/reference/log_cholesky.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/matrix_log.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/matrix_parameter.html</loc></url>
-<url><loc>https://statmodels7.github.io/parameters7/reference/mixed_stencil.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/mlog_basis.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/mlog_contract.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/mlog_expm_small.html</loc></url>
@@ -121,6 +118,8 @@
 <url><loc>https://statmodels7.github.io/parameters7/reference/numerical_d3.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/numerical_d4.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/ordered_set_partitions.html</loc></url>
+<url><loc>https://statmodels7.github.io/parameters7/reference/param_analytic.html</loc></url>
+<url><loc>https://statmodels7.github.io/parameters7/reference/param_children.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_d1.Ar1InvParam.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_d1.Ar1Param.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_d1.AutoregressiveInvParam.html</loc></url>
@@ -264,6 +263,7 @@
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_solve.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_solve.matrix_parameter.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_spectrum.html</loc></url>
+<url><loc>https://statmodels7.github.io/parameters7/reference/param_tensor.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_tuple_indices.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_tuple_names.html</loc></url>
 <url><loc>https://statmodels7.github.io/parameters7/reference/param_value.Ar1Param.html</loc></url>

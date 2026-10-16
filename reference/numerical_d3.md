@@ -1,19 +1,21 @@
 # Numerical Third Derivatives of a Parameter's Value
 
-Estimates the distinct third derivatives by applying one product stencil
-directly to
-[`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md),
-per index tuple. A component that the tuple repeats contributes the
-one-dimensional stencil of the matching order, and a component appearing
-once contributes a two-point central factor; the product is evaluated in
-a single pass over the map. This is the method
+Estimates the distinct third derivatives, one tensor-product stencil per
+index tuple, through
+[`param_tensor()`](https://statmodels7.github.io/parameters7/reference/param_tensor.md).
+The stencil is applied to the highest analytic derivative below the
+third that the family supplies, as
+[`param_analytic()`](https://statmodels7.github.io/parameters7/reference/param_analytic.md)
+reads it, and to
+[`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
+where there is none. This is the method
 [`param_d3()`](https://statmodels7.github.io/parameters7/reference/param_d3.md)
 dispatches to when a family has not written its own.
 
 ## Usage
 
 ``` r
-numerical_d3(s, eta)
+numerical_d3(s, eta, accuracy = 4L)
 ```
 
 ## Arguments
@@ -28,6 +30,11 @@ numerical_d3(s, eta)
 
   A numeric vector of free values, of length `s@n_free`.
 
+- accuracy:
+
+  The order of accuracy of the central rules, a positive even whole
+  number.
+
 ## Value
 
 A list of `choose(s@n_free + 2, 3)` estimates keyed as
@@ -37,43 +44,44 @@ result and symmetrized for a matrix family.
 
 ## The stencil
 
-Let the tuple's distinct components be \\c_1, \dots, c_r\\ with
-multiplicities \\m_1, \dots, m_r\\ summing to three, and let
-\\(o^{(m)}\_i, w^{(m)}\_i)\\ be the offsets and weights of the central
-stencil for an \\m\\-th derivative in one variable. The estimate is
-their tensor product,
+Let the tuple be \\\alpha\\ and the analytic quantity differenced be the
+derivative \\\beta \le \alpha\\, taken from the components that the
+tuple repeats most. The residual \\\alpha - \beta\\ has multiplicities
+\\m_1, \dots, m_r\\ in the components \\c_1, \dots, c_r\\, and with
+\\(o^{(m)}\_i, w^{(m)}\_i)\\ the offsets and weights of the central
+stencil for an \\m\\-th derivative in one variable the estimate is their
+tensor product,
 
-\$\$\partial\_{c_1}^{m_1} \cdots \partial\_{c_r}^{m_r} V \approx
-\frac{1}{\prod\_{j} h_j^{m_j}} \sum\_{i_1, \dots, i_r}
-\left(\prod\_{j=1}^{r} w^{(m_j)}\_{i_j}\right) V\Bigl(\eta +
-\textstyle\sum\_{j=1}^{r} o^{(m_j)}\_{i_j} h_j e\_{c_j}\Bigr),\$\$
+\$\$\partial^\alpha V \approx \frac{1}{\prod\_{j} h_j^{m_j}} \sum\_{i_1,
+\dots, i_r} \left(\prod\_{j=1}^{r} w^{(m_j)}\_{i_j}\right)
+\partial^\beta V\Bigl(\eta + \textstyle\sum\_{j=1}^{r} o^{(m_j)}\_{i_j}
+h_j e\_{c_j}\Bigr),\$\$
 
-evaluated at one point per combination of nodes, with the zero-weight
-nodes skipped. A tuple naming one component three times costs four
-evaluations of the map, one naming a component twice and another once
-six, and one naming three distinct components eight.
+with the zero-weight nodes skipped and every point shared by several
+tuples evaluated once. With an analytic
+[`param_d2()`](https://statmodels7.github.io/parameters7/reference/param_d2.md)
+each tuple is one first difference of a second derivative.
 
-## The stencil is applied to the map
+## The stencil is never applied to a difference
 
 A lower-order numerical derivative is never differenced. The rounding of
 a difference is amplified by \\h^{-k}\\, so two stages multiply their
-errors and a third derivative built from a first and then a second is
-far worse than one stencil of the order wanted. Going to
-[`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
-directly keeps the rounding at a single layer whatever the family
-implements, at the price of more evaluations of the map.
+errors. The quantity differenced is either the map or an analytic
+derivative, so the rounding stays at a single layer whatever the family
+implements.
 
 ## Accuracy
 
-Truncation is of order \\h^2\\ at a step of \\\varepsilon^{1/5}\max(1,
-\|\eta_k\|)\\, and rounding is of order \\\varepsilon / h^3\\.
+Truncation is of order \\h^a\\ at a step of \\\varepsilon^{1/(r +
+a)}\max(1, \|\eta_k\|)\\, with \\r\\ the order of the difference and
+\\a\\ the accuracy, and rounding is of order \\\varepsilon / h^r\\.
 
 ## See also
 
 [`param_d3()`](https://statmodels7.github.io/parameters7/reference/param_d3.md),
 the generic that this serves,
-[`mixed_stencil()`](https://statmodels7.github.io/parameters7/reference/mixed_stencil.md),
-which builds the product, and
+[`param_tensor()`](https://statmodels7.github.io/parameters7/reference/param_tensor.md),
+which builds the stencils, and
 [`numerical_d4()`](https://statmodels7.github.io/parameters7/reference/numerical_d4.md)
 for the order above.
 
@@ -89,7 +97,7 @@ numerical_d3(s, 0.3)
 #> v2 0.000000 1.349859
 #> 
 max(abs(numerical_d3(s, 0.3)[[1]] - param_value(s, 0.3)))
-#> [1] 2.835123e-07
+#> [1] 1.063594e-13
 
 # Against a family that writes its own third derivatives.
 q <- log_cholesky(2)
@@ -98,5 +106,5 @@ ana <- param_d3(q, eta)
 c(gap = max(abs(unlist(numerical_d3(q, eta)) - unlist(ana))),
   scale = max(abs(unlist(ana))))
 #>          gap        scale 
-#> 7.352547e-06 1.193460e+01 
+#> 2.835066e-12 1.193460e+01 
 ```

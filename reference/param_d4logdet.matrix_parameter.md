@@ -4,20 +4,17 @@ The method that every
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
 inherits when it registers no
 [`param_d4logdet()`](https://statmodels7.github.io/parameters7/reference/param_d4logdet.md)
-of its own. For the tuple \\(k, l, m, n)\\ it takes the \\(k, l)\\
-component of
+of its own. Each component is one tensor-product central difference,
+through
+[`param_tensor()`](https://statmodels7.github.io/parameters7/reference/param_tensor.md)
+at accuracy 4, of the highest analytic log-determinant derivative below
+the fourth: one first difference of
+[`param_d3logdet()`](https://statmodels7.github.io/parameters7/reference/param_d3logdet.md)
+where the family registers it, and otherwise, for the tuple \\(k, l, m,
+n)\\, one second-order stencil of the \\(k, l)\\ component of
 [`param_d2logdet()`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.md)
-and applies one second-order stencil in the remaining two components:
-the three-point second difference where \\m = n\\, and the four-point
-mixed stencil
-
-\$\$\frac{g(\eta + h_m e_m + h_n e_n) - g(\eta + h_m e_m - h_n e_n) -
-g(\eta - h_m e_m + h_n e_n) + g(\eta - h_m e_m - h_n e_n)} {4 h_m
-h_n}\$\$
-
-where they differ, both at the order-2 step \\\varepsilon^{1/4}\max(1,
-\|\eta_k\|)\\. It costs three or four evaluations of the whole
-second-order block per tuple.
+in the remaining two components, the second difference where \\m = n\\
+and the product of two first differences where they differ.
 
 ## Arguments
 
@@ -49,17 +46,18 @@ and
 [`param_d2()`](https://statmodels7.github.io/parameters7/reference/param_d2.md),
 or with a family's own
 [`param_d2logdet()`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.md),
-the differencing is a single layer on an exact quantity, at the order-2
-step.
+the differencing is a single layer on an exact quantity, accurate to
+about \\10^{-9}\\.
 
 With only
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
-supplied, the numerical arrays would feed a numerical second-order block
-that is then differenced twice more, and the error can exceed the
-quantity itself. The method signals an error instead, through
-[`check_analytic_arrays()`](https://statmodels7.github.io/parameters7/reference/check_analytic_arrays.md).
-A family that needs a fourth derivative of its log-determinant supplies
-at least
+supplied, the base-class
+[`param_d2logdet()`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.md)
+would read numerical arrays and is not used: the stencil is a fourth
+difference of
+[`param_logdet()`](https://statmodels7.github.io/parameters7/reference/param_logdet.md),
+which is exact, accurate to about \\10^{-6}\\. A family that needs this
+order to more digits supplies
 [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md)
 and
 [`param_d2()`](https://statmodels7.github.io/parameters7/reference/param_d2.md)

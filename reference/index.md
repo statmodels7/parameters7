@@ -223,8 +223,6 @@ them.
 - [`capture_seed()`](https://statmodels7.github.io/parameters7/reference/capture_seed.md)
   [`restore_seed()`](https://statmodels7.github.io/parameters7/reference/capture_seed.md)
   : Capture and Restore the Caller's Random Stream
-- [`check_analytic_arrays()`](https://statmodels7.github.io/parameters7/reference/check_analytic_arrays.md)
-  : Reject an Order That Would Difference a Difference
 - [`check_eta()`](https://statmodels7.github.io/parameters7/reference/check_eta.md)
   : Validate a Free Vector Against a Parameter
 - [`check_matrix()`](https://statmodels7.github.io/parameters7/reference/check_matrix.md)
@@ -308,8 +306,6 @@ them.
   : The Scale and the Correlation of an Economical Parameter
 - [`empty_null_basis()`](https://statmodels7.github.io/parameters7/reference/empty_null_basis.md)
   : No Null Space
-- [`fd_along()`](https://statmodels7.github.io/parameters7/reference/fd_along.md)
-  : One Stencil Along One Free Value
 - [`fd_step()`](https://statmodels7.github.io/parameters7/reference/fd_step.md)
   : Finite-Difference Step for a Free Value
 - [`inv_derivs_check()`](https://statmodels7.github.io/parameters7/reference/inv_derivs_check.md)
@@ -328,8 +324,6 @@ them.
   : A Short Name for a Link
 - [`linkinv_upto()`](https://statmodels7.github.io/parameters7/reference/linkinv_upto.md)
   : A Link Inverse and Its Derivatives, to a Given Order
-- [`mixed_stencil()`](https://statmodels7.github.io/parameters7/reference/mixed_stencil.md)
-  : One Product Stencil for a Mixed Partial Derivative
 - [`mlog_basis()`](https://statmodels7.github.io/parameters7/reference/mlog_basis.md)
   : The Basis Direction of One Free Value
 - [`mlog_contract()`](https://statmodels7.github.io/parameters7/reference/mlog_contract.md)
@@ -350,6 +344,10 @@ them.
   : Negate Without Changing the Container
 - [`ordered_set_partitions()`](https://statmodels7.github.io/parameters7/reference/ordered_set_partitions.md)
   : Ordered Set Partitions of the First k Positions
+- [`param_analytic()`](https://statmodels7.github.io/parameters7/reference/param_analytic.md)
+  : Which Derivatives of a Parameter Are Analytic
+- [`param_children()`](https://statmodels7.github.io/parameters7/reference/param_children.md)
+  : The Parameters Held Inside a Parameter
 - [`param_d1.Ar1InvParam`](https://statmodels7.github.io/parameters7/reference/param_d1.Ar1InvParam.md)
   [`param_d2.Ar1InvParam`](https://statmodels7.github.io/parameters7/reference/param_d1.Ar1InvParam.md)
   [`param_d3.Ar1InvParam`](https://statmodels7.github.io/parameters7/reference/param_d1.Ar1InvParam.md)
@@ -665,6 +663,8 @@ them.
   : Default Solve
 - [`param_spectrum()`](https://statmodels7.github.io/parameters7/reference/param_spectrum.md)
   : The Spectral Decomposition of a Parameter's Matrix
+- [`param_tensor()`](https://statmodels7.github.io/parameters7/reference/param_tensor.md)
+  : Derivatives of a Parameter by One Tensor Stencil per Component
 - [`param_value.Ar1Param`](https://statmodels7.github.io/parameters7/reference/param_value.Ar1Param.md)
   : Value of an AR(1) Parameter
 - [`param_value.AutoregressiveParam`](https://statmodels7.github.io/parameters7/reference/param_value.AutoregressiveParam.md)

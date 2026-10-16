@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.24.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,6 +35,16 @@
       <small>Source: <a href="https://github.com/statmodels7/parameters7/blob/master/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.25.0" id="parameters7-0250">parameters7 0.25.0<a class="anchor" aria-label="anchor" href="#parameters7-0250"></a></h2>
+<ul><li>The numerical fallbacks are computed by <code><a href="https://statmodels7.github.io/numericals7/reference/fd_tensor.html" class="external-link">numericals7::fd_tensor()</a></code> (numericals7 0.23.0 is now required), at fourth-order accuracy by default. <code><a href="../reference/numerical_d1.html">numerical_d1()</a></code> to <code><a href="../reference/numerical_d4.html">numerical_d4()</a></code> take an <code>accuracy</code> argument.</li>
+<li>
+<code><a href="../reference/numerical_d3.html">numerical_d3()</a></code> and <code><a href="../reference/numerical_d4.html">numerical_d4()</a></code> difference the highest analytic derivative below their order (the second for the third, the third for the fourth) and the value only where there is none, as <code><a href="../reference/numerical_d2.html">numerical_d2()</a></code> already did with the first. Over sixteen structures the error against the closed forms moves from at most 4.6e-6 and 1.4e-4 to at most 5.0e-12 and 9.1e-12. <code><a href="../reference/check_parameter.html">check_parameter()</a></code> therefore compares each order with a difference of the order below.</li>
+<li>A composite family (<code><a href="../reference/block_diag.html">block_diag()</a></code>, <code><a href="../reference/kron_identity.html">kron_identity()</a></code>, <code><a href="../reference/inverse_of.html">inverse_of()</a></code>, <code><a href="../reference/sum_struct.html">sum_struct()</a></code>) counts a derivative as analytic only where the parameters it holds have it in closed form, so a block that is itself a fallback is never differenced again.</li>
+<li>The default third and fourth log-determinant derivatives are one tensor stencil on the highest analytic log-determinant derivative below them, at fourth-order accuracy. A family without analytic <code><a href="../reference/param_d1.html">param_d1()</a></code> and <code><a href="../reference/param_d2.html">param_d2()</a></code> gets them from <code><a href="../reference/param_logdet.html">param_logdet()</a></code>, which is exact, where it signalled an error: on a value-only family the error against the exact derivatives is at most 3.5e-7 at order three and 7.9e-6 at order four. <code>check_analytic_arrays()</code> is removed.</li>
+<li>Every numerical derivative carries the names or dimnames of <code><a href="../reference/param_value.html">param_value()</a></code>. <code><a href="../reference/numerical_d2.html">numerical_d2()</a></code> on an analytic first derivative took that derivative’s attributes, which <code><a href="../reference/simplex.html">simplex()</a></code> leaves unnamed.</li>
+<li>At accuracy 2 the first three orders from the value, the second order from an analytic first and the third log-determinant order reproduce the previous values exactly.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.24.0" id="parameters7-0240">parameters7 0.24.0<a class="anchor" aria-label="anchor" href="#parameters7-0240"></a></h2>
 <ul><li>
@@ -122,7 +132,7 @@
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.11.0" id="parameters7-0110">parameters7 0.11.0<a class="anchor" aria-label="anchor" href="#parameters7-0110"></a></h2>
-<ul><li>The numerical fallbacks take their stencils from numericals7: <code><a href="../reference/mixed_stencil.html">mixed_stencil()</a></code> reads the offsets and weights from <code>fd_weights()</code> in place of a transcribed table, <code><a href="../reference/fd_step.html">fd_step()</a></code> forwards to numericals7, and <code><a href="../reference/fd_along.html">fd_along()</a></code> assembles every difference along a free value. Every number is unchanged.</li>
+<ul><li>The numerical fallbacks take their stencils from numericals7: <code>mixed_stencil()</code> reads the offsets and weights from <code>fd_weights()</code> in place of a transcribed table, <code><a href="../reference/fd_step.html">fd_step()</a></code> forwards to numericals7, and <code>fd_along()</code> assembles every difference along a free value. Every number is unchanged.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.10.0" id="parameters7-0100">parameters7 0.10.0<a class="anchor" aria-label="anchor" href="#parameters7-0100"></a></h2>

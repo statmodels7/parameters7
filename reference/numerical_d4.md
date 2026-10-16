@@ -1,20 +1,21 @@
 # Numerical Fourth Derivatives of a Parameter's Value
 
-Estimates the distinct fourth derivatives, one product stencil per index
-tuple, applied directly to
-[`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md).
-It is the order-four analogue of
+Estimates the distinct fourth derivatives, one tensor-product stencil
+per index tuple, through
+[`param_tensor()`](https://statmodels7.github.io/parameters7/reference/param_tensor.md),
+applied to the highest analytic derivative below the fourth that the
+family supplies and to
+[`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
+where there is none. It is the order-four analogue of
 [`numerical_d3()`](https://statmodels7.github.io/parameters7/reference/numerical_d3.md)
 and the method
 [`param_d4()`](https://statmodels7.github.io/parameters7/reference/param_d4.md)
-dispatches to when a family has not written its own. At this order a
-difference is the least accurate of the four, which is why every family
-in this package carries a closed form instead.
+dispatches to when a family has not written its own.
 
 ## Usage
 
 ``` r
-numerical_d4(s, eta)
+numerical_d4(s, eta, accuracy = 4L)
 ```
 
 ## Arguments
@@ -29,6 +30,11 @@ numerical_d4(s, eta)
 
   A numeric vector of free values, of length `s@n_free`.
 
+- accuracy:
+
+  The order of accuracy of the central rules, a positive even whole
+  number.
+
 ## Value
 
 A list of `choose(s@n_free + 3, 4)` estimates keyed as
@@ -36,22 +42,19 @@ A list of `choose(s@n_free + 3, 4)` estimates keyed as
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)'s
 result and symmetrized for a matrix family.
 
-## The stencil
+## Details
 
 The tensor product is the one written out under
-[`numerical_d3()`](https://statmodels7.github.io/parameters7/reference/numerical_d3.md),
-with the multiplicities summing to four. A tuple naming one component
-four times costs five evaluations of the map, one naming two components
-twice each nine, and one naming four distinct components sixteen.
-
-## Accuracy
-
-Truncation is of order \\h^2\\ and rounding of order \\\varepsilon /
-h^4\\, so balancing the two gives a step of \\\varepsilon^{1/6}\max(1,
-\|\eta_k\|)\\, about \\2.5 \times 10^{-3}\\ near the origin, and an
-attainable accuracy of order \\\varepsilon^{1/3}\\. That is enough to
-catch a transcription error in a closed form and not enough for use in a
-fit.
+[`numerical_d3()`](https://statmodels7.github.io/parameters7/reference/numerical_d3.md).
+With an analytic
+[`param_d3()`](https://statmodels7.github.io/parameters7/reference/param_d3.md)
+each tuple is one first difference of a third derivative, and the result
+is accurate to about \\10^{-12}\\. From
+[`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
+alone the difference is of order four: rounding is then of order
+\\\varepsilon / h^4\\, and the attainable accuracy at the default
+accuracy 4 is of order \\\varepsilon^{1/2}\\, enough to catch a
+transcription error in a closed form.
 
 ## See also
 
@@ -69,7 +72,7 @@ matrix.
 # A scalar matrix: every order is the matrix again, so the error shows.
 s <- scalar_matrix(2)
 max(abs(numerical_d4(s, 0.3)[[1]] - param_value(s, 0.3)))
-#> [1] 4.126531e-05
+#> [1] 1.063594e-13
 
 # Against a family that writes its own.
 q <- log_cholesky(2)
@@ -78,10 +81,5 @@ ana <- param_d4(q, eta)
 c(gap = max(abs(unlist(numerical_d4(q, eta)) - unlist(ana))),
   scale = max(abs(unlist(ana))))
 #>          gap        scale 
-#> 1.164773e-04 2.386920e+01 
-
-# A 1 percent error in the largest entry would be about two thousand times
-# the gap above, so a wrong closed form is caught.
-0.01 * max(abs(unlist(ana)))
-#> [1] 0.238692
+#> 4.469314e-12 2.386920e+01 
 ```

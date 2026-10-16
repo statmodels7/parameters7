@@ -15,7 +15,7 @@ the third derivative is what the movement contracts against."><meta property="og
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.24.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,7 +90,9 @@ two rules produce. The Moore-Penrose inverse replaces \(M^{-1}\) for a
 rank-deficient family.</p>
 <p>The expansion is not written out in the package. Each family in this package
 computes this order without differencing, and the base method on
-<code><a href="matrix_parameter.html">matrix_parameter()</a></code> takes one central difference of <code><a href="param_d2logdet.html">param_d2logdet()</a></code>. A
+<code><a href="matrix_parameter.html">matrix_parameter()</a></code> applies one tensor stencil to the highest analytic
+log-determinant derivative below the third, <code><a href="param_d2logdet.html">param_d2logdet()</a></code> where the
+arrays are analytic and <code><a href="param_logdet.html">param_logdet()</a></code> where none is. A
 written-out expansion has one term per set partition of the indices, five at
 third order, and a transcription of it is easy to get wrong.</p>
     </div>

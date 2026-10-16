@@ -44,8 +44,8 @@ with the number of partitions, so the expansion is not written out: each
 family in this package computes this order without differencing, and the
 base method on
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
-takes one central difference of
-[`param_d3logdet()`](https://statmodels7.github.io/parameters7/reference/param_d3logdet.md).
+applies one tensor stencil to the highest analytic log-determinant
+derivative below the fourth.
 
 ## Checking this order
 

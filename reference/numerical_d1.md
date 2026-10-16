@@ -1,16 +1,11 @@
 # Numerical First Derivatives of a Parameter's Matrix
 
 Estimates \\\partial V / \partial \eta_k\\ for every free value by one
-three-point central difference of
+central difference of
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
-in each component,
-
-\$\$\partial_k V \approx \frac{V(\eta + h e_k) - V(\eta - h
-e_k)}{2h},\$\$
-
-at the step that
-[`fd_step()`](https://statmodels7.github.io/parameters7/reference/fd_step.md)
-gives for a first derivative. This is the method
+in each component, through
+[`param_tensor()`](https://statmodels7.github.io/parameters7/reference/param_tensor.md).
+This is the method
 [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md)
 dispatches to when a family has not written its own, and it is exported
 so that a family being developed can be compared against it.
@@ -18,7 +13,7 @@ so that a family being developed can be compared against it.
 ## Usage
 
 ``` r
-numerical_d1(s, eta)
+numerical_d1(s, eta, accuracy = 4L)
 ```
 
 ## Arguments
@@ -33,6 +28,11 @@ numerical_d1(s, eta)
 
   A numeric vector of free values, of length `s@n_free`.
 
+- accuracy:
+
+  The order of accuracy of the central rule, a positive even whole
+  number.
+
 ## Value
 
 A list of `s@n_free` estimates named by `s@free_names`, each shaped like
@@ -42,14 +42,17 @@ and symmetrized for a matrix family.
 
 ## Details
 
-The step is \\\varepsilon^{1/3}\max(1, \|\eta_k\|)\\, about \\6.1 \times
-10^{-6}\\ near the origin, giving a truncation error of order \\h^2\\.
-The example below compares the result with a closed form.
+At the default accuracy 4 the difference is the five-point rule
+\\(V(\eta - 2h e_k) - 8V(\eta - h e_k) + 8V(\eta + h e_k) - V(\eta + 2h
+e_k)) / 12h\\, at the step \\\varepsilon^{1/5}\max(1, \|\eta_k\|)\\,
+about \\7.4 \times 10^{-4}\\ near the origin, with a truncation error of
+order \\h^4\\. It costs \\4d\\ evaluations of the map; `accuracy = 2`
+gives the three-point rule and \\2d\\.
 
 For a matrix family each estimate is symmetrized as `(m + t(m)) / 2`, as
 the higher orders are, so that an asymmetry of rounding size in
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
-does not reach the derivative. It costs \\2d\\ evaluations of the map.
+does not reach the derivative.
 
 ## See also
 
@@ -76,11 +79,11 @@ numerical_d1(s, 0.3)
 #> v2 0.000000 1.349859
 #> 
 max(abs(numerical_d1(s, 0.3)[[1]] - param_value(s, 0.3)))
-#> [1] 7.642331e-12
+#> [1] 1.063594e-13
 
 # Against a family that writes its own.
 q <- log_cholesky(2)
 eta <- c(0.2, -0.1, 0.4)
 max(abs(unlist(numerical_d1(q, eta)) - unlist(param_d1(q, eta))))
-#> [1] 6.8753e-11
+#> [1] 7.087664e-13
 ```
