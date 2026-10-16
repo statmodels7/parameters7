@@ -18,12 +18,11 @@ A list of \code{choose(s@n_free + 3, 4)} estimates keyed as
 }
 \description{
 The method that every \code{\link[=parameter]{parameter()}} inherits when it registers no \code{\link[=param_d4]{param_d4()}} of
-its own. It applies one product stencil per index tuple directly to
-\code{\link[=param_value]{param_value()}}, as \code{\link[=param_d3.parameter]{param_d3.parameter()}} does, with the multiplicities
-summing to four. The step is \eqn{\varepsilon^{1/6}\max(1, |\eta_k|)}, about
-\eqn{2.5 \times 10^{-3}} near the origin, and rounding is amplified by
-\eqn{h^{-4}}, so the result is enough to catch a wrong closed form and not
-enough for use in a fit. The families in this package do not reach it.
+its own. It applies one tensor-product stencil per index tuple, through
+\code{\link[=numerical_d4]{numerical_d4()}} at its default accuracy 4, as \code{\link[=param_d3.parameter]{param_d3.parameter()}} does,
+with the multiplicities summing to four. From \code{\link[=param_value]{param_value()}} alone the
+result is enough to catch a wrong closed form and not enough for use in a
+fit. The families in this package do not reach it.
 }
 \seealso{
 \code{\link[=numerical_d4]{numerical_d4()}}, which does the work, and \code{\link[=param_d3.parameter]{param_d3.parameter()}} for

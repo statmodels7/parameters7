@@ -18,15 +18,14 @@ A list of \code{choose(s@n_free + 1, 2)} estimates keyed as
 }
 \description{
 The method that every \code{\link[=parameter]{parameter()}} inherits when it registers no \code{\link[=param_d2]{param_d2()}} of
-its own. It takes exactly one difference per component, of whichever quantity
-the family already supplies: the analytic \code{\link[=param_d1]{param_d1()}} where there is one, at
-the order-1 step, and \code{\link[=param_value]{param_value()}} itself where there is not, through a
-three-point second difference on the diagonal and a four-point mixed stencil
-off it, at the order-2 step. The truncation error is of order \eqn{h^2} on
-every route. The families in this package do not reach it.
+its own. It takes exactly one difference per component, through
+\code{\link[=numerical_d2]{numerical_d2()}} at its default accuracy 4, of whichever quantity the family
+already supplies: the analytic \code{\link[=param_d1]{param_d1()}} where there is one, and
+\code{\link[=param_value]{param_value()}} itself where there is not. The truncation error is of order
+\eqn{h^4} on every route. The families in this package do not reach it.
 }
 \seealso{
-\code{\link[=numerical_d2]{numerical_d2()}}, which does the work and writes the three routes
-out, and \code{\link[=param_d1.parameter]{param_d1.parameter()}} for the order below.
+\code{\link[=numerical_d2]{numerical_d2()}}, which does the work and describes the two
+routes, and \code{\link[=param_d1.parameter]{param_d1.parameter()}} for the order below.
 }
 \keyword{internal}

@@ -4,12 +4,15 @@
 \alias{numerical_d1}
 \title{Numerical First Derivatives of a Parameter's Matrix}
 \usage{
-numerical_d1(s, eta)
+numerical_d1(s, eta, accuracy = 4L)
 }
 \arguments{
 \item{s}{A \code{\link[=parameter]{parameter()}} object, of any branch.}
 
 \item{eta}{A numeric vector of free values, of length \code{s@n_free}.}
+
+\item{accuracy}{The order of accuracy of the central rule, a positive even
+whole number.}
 }
 \value{
 A list of \code{s@n_free} estimates named by \code{s@free_names}, each shaped
@@ -17,24 +20,23 @@ like the result of \code{\link[=param_value]{param_value()}} and symmetrized for
 }
 \description{
 Estimates \eqn{\partial V / \partial \eta_k} for every free value by one
-three-point central difference of \code{\link[=param_value]{param_value()}} in each component,
-
-\deqn{\partial_k V \approx
-  \frac{V(\eta + h e_k) - V(\eta - h e_k)}{2h},}
-
-at the step that \code{\link[=fd_step]{fd_step()}} gives for a first derivative. This is the method
-\code{\link[=param_d1]{param_d1()}} dispatches to when a family has not written its own, and it is
-exported so that a family being developed can be compared against it.
+central difference of \code{\link[=param_value]{param_value()}} in each component, through
+\code{\link[=param_tensor]{param_tensor()}}. This is the method \code{\link[=param_d1]{param_d1()}} dispatches to when a family
+has not written its own, and it is exported so that a family being developed
+can be compared against it.
 }
 \details{
-The step is \eqn{\varepsilon^{1/3}\max(1, |\eta_k|)}, about
-\eqn{6.1 \times 10^{-6}} near the origin, giving a truncation error of order
-\eqn{h^2}. The example below compares the result with a closed form.
+At the default accuracy 4 the difference is the five-point rule
+\eqn{(V(\eta - 2h e_k) - 8V(\eta - h e_k) + 8V(\eta + h e_k)
+- V(\eta + 2h e_k)) / 12h}, at the step
+\eqn{\varepsilon^{1/5}\max(1, |\eta_k|)}, about \eqn{7.4 \times 10^{-4}}
+near the origin, with a truncation error of order \eqn{h^4}. It costs
+\eqn{4d} evaluations of the map; \code{accuracy = 2} gives the three-point rule
+and \eqn{2d}.
 
 For a matrix family each estimate is symmetrized as \code{(m + t(m)) / 2}, as
 the higher orders are, so that an asymmetry of rounding size in
-\code{\link[=param_value]{param_value()}} does not reach the derivative. It costs \eqn{2d}
-evaluations of the map.
+\code{\link[=param_value]{param_value()}} does not reach the derivative.
 }
 \examples{
 # A scalar matrix is exp(eta) times the identity, so the derivative is the

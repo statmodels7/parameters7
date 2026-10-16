@@ -17,12 +17,11 @@ like the result of \code{\link[=param_value]{param_value()}} and symmetrized for
 }
 \description{
 The method that every \code{\link[=parameter]{parameter()}} inherits when it registers no \code{\link[=param_d1]{param_d1()}} of
-its own. It estimates \eqn{\partial V/\partial \eta_k} by one three-point
-central difference of \code{\link[=param_value]{param_value()}} in each component,
-\eqn{(V(\eta + h e_k) - V(\eta - h e_k)) / 2h}, at the step
-\eqn{\varepsilon^{1/3}\max(1, |\eta_k|)}, which is about
-\eqn{6.1 \times 10^{-6}} near the origin. It costs \eqn{2d} evaluations of the
-map. The families in this package do not reach it.
+its own. It estimates \eqn{\partial V/\partial \eta_k} by one central
+difference of \code{\link[=param_value]{param_value()}} in each component, through \code{\link[=numerical_d1]{numerical_d1()}}
+at its default accuracy 4: the five-point rule at the step
+\eqn{\varepsilon^{1/5}\max(1, |\eta_k|)}, at a cost of \eqn{4d}
+evaluations of the map. The families in this package do not reach it.
 }
 \seealso{
 \code{\link[=numerical_d1]{numerical_d1()}}, which does the work, and \code{\link[=param_is_numerical]{param_is_numerical()}}

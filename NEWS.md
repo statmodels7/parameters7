@@ -1,3 +1,33 @@
+# parameters7 0.25.0
+
+* The numerical fallbacks are computed by `numericals7::fd_tensor()`
+  (numericals7 0.23.0 is now required), at fourth-order accuracy by default.
+  `numerical_d1()` to `numerical_d4()` take an `accuracy` argument.
+* `numerical_d3()` and `numerical_d4()` difference the highest analytic
+  derivative below their order (the second for the third, the third for the
+  fourth) and the value only where there is none, as `numerical_d2()`
+  already did with the first. Over sixteen structures the error against the
+  closed forms moves from at most 4.6e-6 and 1.4e-4 to at most 5.0e-12 and
+  9.1e-12. `check_parameter()` therefore compares each order with a
+  difference of the order below.
+* A composite family (`block_diag()`, `kron_identity()`, `inverse_of()`,
+  `sum_struct()`) counts a derivative as analytic only where the parameters
+  it holds have it in closed form, so a block that is itself a fallback is
+  never differenced again.
+* The default third and fourth log-determinant derivatives are one tensor
+  stencil on the highest analytic log-determinant derivative below them, at
+  fourth-order accuracy. A family without analytic `param_d1()` and
+  `param_d2()` gets them from `param_logdet()`, which is exact, where it
+  signalled an error: on a value-only family the error against the exact
+  derivatives is at most 3.5e-7 at order three and 7.9e-6 at order four.
+  `check_analytic_arrays()` is removed.
+* Every numerical derivative carries the names or dimnames of
+  `param_value()`. `numerical_d2()` on an analytic first derivative took
+  that derivative's attributes, which `simplex()` leaves unnamed.
+* At accuracy 2 the first three orders from the value, the second order
+  from an analytic first and the third log-determinant order reproduce the
+  previous values exactly.
+
 # parameters7 0.24.0
 
 * `param_inv_d3()` and `param_inv_d4()` return the third and fourth

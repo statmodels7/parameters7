@@ -18,13 +18,11 @@ A list of \code{choose(s@n_free + 2, 3)} estimates keyed as
 }
 \description{
 The method that every \code{\link[=parameter]{parameter()}} inherits when it registers no \code{\link[=param_d3]{param_d3()}} of
-its own. It applies one product stencil per index tuple directly to
-\code{\link[=param_value]{param_value()}}, never to a lower-order numerical derivative, with a
-one-dimensional factor per distinct component, of the order given by that
-component's multiplicity. The step is \eqn{\varepsilon^{1/5}\max(1,
-|\eta_k|)}, about \eqn{7.4 \times 10^{-4}} near the origin, and the
-truncation error is of order \eqn{h^2}. The families in this package do not
-reach it.
+its own. It applies one tensor-product stencil per index tuple, through
+\code{\link[=numerical_d3]{numerical_d3()}} at its default accuracy 4, to the highest analytic
+derivative below the third and to \code{\link[=param_value]{param_value()}} where there is none,
+never to a lower-order numerical derivative. The families in this package
+do not reach it.
 }
 \seealso{
 \code{\link[=numerical_d3]{numerical_d3()}}, which does the work and writes the stencil out, and

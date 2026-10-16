@@ -4,12 +4,15 @@
 \alias{numerical_d4}
 \title{Numerical Fourth Derivatives of a Parameter's Value}
 \usage{
-numerical_d4(s, eta)
+numerical_d4(s, eta, accuracy = 4L)
 }
 \arguments{
 \item{s}{A \code{\link[=parameter]{parameter()}} object, of any branch.}
 
 \item{eta}{A numeric vector of free values, of length \code{s@n_free}.}
+
+\item{accuracy}{The order of accuracy of the central rules, a positive even
+whole number.}
 }
 \value{
 A list of \code{choose(s@n_free + 3, 4)} estimates keyed as
@@ -17,29 +20,21 @@ A list of \code{choose(s@n_free + 3, 4)} estimates keyed as
 \code{\link[=param_value]{param_value()}}'s result and symmetrized for a matrix family.
 }
 \description{
-Estimates the distinct fourth derivatives, one product stencil per index
-tuple, applied directly to \code{\link[=param_value]{param_value()}}. It is the order-four analogue of
-\code{\link[=numerical_d3]{numerical_d3()}} and the method \code{\link[=param_d4]{param_d4()}} dispatches to when a family has
-not written its own. At this order a difference is the least accurate of the
-four, which is why every family in this package carries a closed form
-instead.
+Estimates the distinct fourth derivatives, one tensor-product stencil per
+index tuple, through \code{\link[=param_tensor]{param_tensor()}}, applied to the highest analytic
+derivative below the fourth that the family supplies and to \code{\link[=param_value]{param_value()}}
+where there is none. It is the order-four analogue of \code{\link[=numerical_d3]{numerical_d3()}} and
+the method \code{\link[=param_d4]{param_d4()}} dispatches to when a family has not written its own.
 }
-\section{The stencil}{
-The tensor product is the one written out under \code{\link[=numerical_d3]{numerical_d3()}}, with the
-multiplicities summing to four. A tuple naming one component four times costs
-five evaluations of the map, one naming two components twice each nine, and
-one naming four distinct components sixteen.
+\details{
+The tensor product is the one written out under \code{\link[=numerical_d3]{numerical_d3()}}. With an
+analytic \code{\link[=param_d3]{param_d3()}} each tuple is one first difference of a third
+derivative, and the result is accurate to about \eqn{10^{-12}}. From
+\code{\link[=param_value]{param_value()}} alone the difference is of order four: rounding is then of
+order \eqn{\varepsilon / h^4}, and the attainable accuracy at the default
+accuracy 4 is of order \eqn{\varepsilon^{1/2}}, enough to catch a
+transcription error in a closed form.
 }
-
-\section{Accuracy}{
-Truncation is of order \eqn{h^2} and rounding of order
-\eqn{\varepsilon / h^4}, so balancing the two gives a step of
-\eqn{\varepsilon^{1/6}\max(1, |\eta_k|)}, about \eqn{2.5 \times 10^{-3}} near
-the origin, and an attainable accuracy of order \eqn{\varepsilon^{1/3}}. That
-is enough to catch a transcription error in a closed form and not enough for
-use in a fit.
-}
-
 \examples{
 # A scalar matrix: every order is the matrix again, so the error shows.
 s <- scalar_matrix(2)
@@ -51,10 +46,6 @@ eta <- c(0.2, -0.1, 0.4)
 ana <- param_d4(q, eta)
 c(gap = max(abs(unlist(numerical_d4(q, eta)) - unlist(ana))),
   scale = max(abs(unlist(ana))))
-
-# A 1 percent error in the largest entry would be about two thousand times
-# the gap above, so a wrong closed form is caught.
-0.01 * max(abs(unlist(ana)))
 
 }
 \seealso{

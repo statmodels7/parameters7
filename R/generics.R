@@ -925,7 +925,9 @@ param_d4 <- S7::new_generic("param_d4", "s", function(s, eta, ...) {
 #'
 #' The expansion is not written out in the package. Each family in this package
 #' computes this order without differencing, and the base method on
-#' [matrix_parameter()] takes one central difference of [param_d2logdet()]. A
+#' [matrix_parameter()] applies one tensor stencil to the highest analytic
+#' log-determinant derivative below the third, [param_d2logdet()] where the
+#' arrays are analytic and [param_logdet()] where none is. A
 #' written-out expansion has one term per set partition of the indices, five at
 #' third order, and a transcription of it is easy to get wrong.
 #'
@@ -989,7 +991,8 @@ param_d3logdet <- S7::new_generic("param_d3logdet", "s", function(s, eta, ...) {
 #' block of a partition of the four indices. The number of terms grows with the
 #' number of partitions, so the expansion is not written out: each family in
 #' this package computes this order without differencing, and the base method on
-#' [matrix_parameter()] takes one central difference of [param_d3logdet()].
+#' [matrix_parameter()] applies one tensor stencil to the highest analytic
+#' log-determinant derivative below the fourth.
 #'
 #' # Checking this order
 #'

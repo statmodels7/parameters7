@@ -33,7 +33,8 @@ so every term is a trace of an alternating product
 block of a partition of the four indices. The number of terms grows with the
 number of partitions, so the expansion is not written out: each family in
 this package computes this order without differencing, and the base method on
-\code{\link[=matrix_parameter]{matrix_parameter()}} takes one central difference of \code{\link[=param_d3logdet]{param_d3logdet()}}.
+\code{\link[=matrix_parameter]{matrix_parameter()}} applies one tensor stencil to the highest analytic
+log-determinant derivative below the fourth.
 }
 
 \section{Checking this order}{

@@ -17,31 +17,23 @@ A numeric vector of \code{choose(s@n_free + 2, 3)} entries, keyed as
 }
 \description{
 The method that every \code{\link[=matrix_parameter]{matrix_parameter()}} inherits when it registers no
-\code{\link[=param_d3logdet]{param_d3logdet()}} of its own. For the tuple \eqn{(k, l, m)} it takes the
-\eqn{(k, l)} component of \code{\link[=param_d2logdet]{param_d2logdet()}} and applies one three-point
-central difference in the remaining component,
-
-\deqn{\partial_{klm} \log|M| \approx
-  \frac{\partial_{kl}\log|M|\,(\eta + h e_m)
-      - \partial_{kl}\log|M|\,(\eta - h e_m)}{2h},}
-
-at the order-1 step \eqn{\varepsilon^{1/3}\max(1, |\eta_m|)}. Since the tuple
-is sorted, the differenced component is the largest index, and the pair is
-looked up by matching sorted indices against
-\code{\link[=param_tuple_indices]{param_tuple_indices()}}'s order-2 list. It costs two evaluations of the whole
-second-order block per tuple.
+\code{\link[=param_d3logdet]{param_d3logdet()}} of its own. Each component is one tensor-product central
+difference, through \code{\link[=param_tensor]{param_tensor()}} at accuracy 4, of the highest analytic
+log-determinant derivative below the third, as \code{\link[=param_analytic]{param_analytic()}} reads
+it: for the tuple \eqn{(k, l, m)}, one first difference of the
+\eqn{(k, l)} component of \code{\link[=param_d2logdet]{param_d2logdet()}} along \eqn{\eta_m}, at the
+step \eqn{\varepsilon^{1/5}\max(1, |\eta_m|)}.
 }
 \section{Accuracy}{
 \code{\link[=param_d2logdet]{param_d2logdet()}} is an exact identity \strong{given} the matrix derivative
-arrays, so differencing it is a single numerical layer whenever
-\code{\link[=param_d1]{param_d1()}} and \code{\link[=param_d2]{param_d2()}} are analytic.
-
-A family's own \code{\link[=param_d2logdet]{param_d2logdet()}} is exact, and differencing it is a single
-layer too. Where the base-class \code{\link[=param_d2logdet]{param_d2logdet()}} reads numerical arrays
-the layers would compound, and the method signals an error instead of
-returning a value; \code{\link[=check_analytic_arrays]{check_analytic_arrays()}} is the guard. A family that
-needs this order writes \code{\link[=param_d1]{param_d1()}} and \code{\link[=param_d2]{param_d2()}} out, or its own
-\code{\link[=param_d2logdet]{param_d2logdet()}}.
+arrays, so it is differenced where \code{\link[=param_d1]{param_d1()}} and \code{\link[=param_d2]{param_d2()}} are
+analytic or where the family writes it out, and the error is of order
+\eqn{10^{-11}}. Where the base-class \code{\link[=param_d2logdet]{param_d2logdet()}} would read
+numerical arrays it is not used: the stencil is applied to
+\code{\link[=param_dlogdet]{param_dlogdet()}} where \code{\link[=param_d1]{param_d1()}} is analytic, and otherwise to
+\code{\link[=param_logdet]{param_logdet()}}, which is exact, as a third difference. A numerical
+quantity is therefore never differenced again, and the third difference of
+the log-determinant is accurate to about \eqn{10^{-7}}.
 }
 
 \seealso{

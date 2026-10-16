@@ -275,8 +275,8 @@ chol_pd <- function(m, tol = 1e-14) {
 #' @description
 #' Returns the step for a central difference in one component of \eqn{\eta},
 #' scaled by the size of that component. It forwards to
-#' [numericals7::fd_step()] at accuracy 2, so the step of a fallback here and the
-#' step that the stencil library documents cannot drift apart.
+#' [numericals7::fd_step()] at accuracy 2, so the step of a difference written
+#' here and the step that the stencil library documents cannot drift apart.
 #'
 #' @details
 #' The rule is \eqn{\varepsilon^{1/(k+2)} \max(1, |\eta_k|)} for a \eqn{k}-th
@@ -293,8 +293,8 @@ chol_pd <- function(m, tol = 1e-14) {
 #'
 #' @return A single positive number.
 #'
-#' @seealso [numericals7::fd_step()] for the rule, and [fd_along()], which
-#'   applies a stencil at this step.
+#' @seealso [numericals7::fd_step()] for the rule, and [check_parameter()],
+#'   which uses it for its log-determinant reference.
 #'
 #' @keywords internal
 fd_step <- function(eta_k, order = 1L) {
@@ -302,56 +302,149 @@ fd_step <- function(eta_k, order = 1L) {
 }
 
 
-#' One Stencil Along One Free Value
+#' Which Derivatives of a Parameter Are Analytic
 #'
 #' @description
-#' Applies one central stencil to a function of the free vector, along a single
-#' component of it, and returns the derivative in whatever shape `f` produces.
-#' The nodes and weights come from [numericals7::fd_offsets()] and
-#' [numericals7::fd_weights()] at accuracy 2, so a difference taken here uses the
-#' same stencils as the rest of the toolkit.
+#' Returns, for each derivative generic that [param_is_numerical()] reports,
+#' `TRUE` where the quantity is computed in closed form. It differs from
+#' `!param_is_numerical(s)` in two ways. The base-class [param_dlogdet()] and
+#' [param_d2logdet()] are identities in the derivative arrays, so they count
+#' as analytic where [param_d1()], and [param_d2()] for the second, are. And a
+#' composite family, which registers methods of its own that are built from
+#' the parameters held in its `param_params`, counts a quantity as analytic
+#' only where every such parameter's quantity is analytic too.
 #'
-#' @details
-#' The sum \eqn{h^{-k}\sum_j w_j f(\eta + s_j h e_k)} is accumulated term by
-#' term, skipping the nodes whose weight is zero, so `f` is called once per
-#' non-zero weight: two, three, four and five times at orders one to four. The accumulator starts at `NULL` and takes the shape of the
-#' first term, which is why `f` may return a matrix, a vector or a scalar without
-#' this function knowing which.
+#' @param s A [parameter()] object.
 #'
-#' [numericals7::fd_derivative()] cannot serve here. Its `f` maps a vector of
-#' points to the values at those points, and what is differentiated here maps a
-#' whole free vector to a matrix, so the nodes have to be placed along one
-#' coordinate by hand.
+#' @return A named logical vector with the names of [param_is_numerical()].
 #'
-#' @param f A function of the free vector, returning anything that supports `+`
-#'   and scalar multiplication.
-#' @param eta The free vector, numeric.
-#' @param k The component to differentiate along: a position in `1:length(eta)`.
-#' @param order The derivative order: 1, 2, 3 or 4.
-#' @param h The step. `NULL`, the default, takes [fd_step()] at `eta[k]` and this
-#'   order. Pass a value when several stencils have to share one step, as a mixed
-#'   derivative does.
-#'
-#' @return Whatever `f` returns, differentiated `order` times in component `k`.
-#'
-#' @seealso [numericals7::fd_weights()] for the weights, [fd_step()] for the
-#'   step, and [mixed_stencil()], which composes factors across several
-#'   components.
+#' @seealso [param_tensor()], which declares the analytic quantities to the
+#'   stencil, and [param_children()].
 #'
 #' @keywords internal
-fd_along <- function(f, eta, k, order = 1L, h = NULL) {
-  s <- numericals7::fd_offsets(order, accuracy = 2L)$central
-  w <- numericals7::fd_weights(s, order)
-  if (is.null(h)) h <- fd_step(eta[k], order)
-  acc <- NULL
-  for (j in seq_along(s)) {
-    if (w[j] == 0) next
-    e <- eta
-    e[k] <- eta[k] + s[j] * h
-    v <- w[j] * f(e)
-    acc <- if (is.null(acc)) v else acc + v
+param_analytic <- function(s) {
+  a <- !param_is_numerical(s)
+  if ("param_d2logdet" %in% names(a)) {
+    if (!a[["param_dlogdet"]]) a[["param_dlogdet"]] <- a[["param_d1"]]
+    if (!a[["param_d2logdet"]]) {
+      a[["param_d2logdet"]] <- a[["param_d1"]] && a[["param_d2"]]
+    }
   }
-  acc / h^order
+  for (k in param_children(s)) {
+    ak <- param_analytic(k)
+    common <- intersect(names(a), names(ak))
+    a[common] <- a[common] & ak[common]
+  }
+  a
+}
+
+
+#' The Parameters Held Inside a Parameter
+#'
+#' @description
+#' Returns the [parameter()] objects found in `s@param_params`, at any depth
+#' of nesting in lists: the blocks of a [block_diag()], the inner parameter of
+#' a [kron_identity()] or an [inverse_of()], the terms of a [sum_struct()].
+#'
+#' @param s A [parameter()] object.
+#'
+#' @return A list of [parameter()] objects, empty for a family that holds
+#'   none.
+#'
+#' @seealso [param_analytic()], which reads them.
+#'
+#' @keywords internal
+param_children <- function(s) {
+  walk <- function(x) {
+    if (S7::S7_inherits(x, parameter)) return(list(x))
+    if (is.list(x)) return(unlist(lapply(x, walk), recursive = FALSE))
+    list()
+  }
+  walk(s@param_params)
+}
+
+
+#' Derivatives of a Parameter by One Tensor Stencil per Component
+#'
+#' @description
+#' Computes the derivatives of order `order` of [param_value()] or, with
+#' `what = "logdet"`, of [param_logdet()], through
+#' [numericals7::fd_tensor()]. The analytic derivatives of lower order, as
+#' [param_analytic()] reads them, are declared to it, so each component is one
+#' tensor-product central difference of the highest analytic quantity below
+#' it, and of the value itself where there is none.
+#'
+#' @details
+#' The coordinates are the free values. The value is flattened to a vector,
+#' and each component is returned with the attributes of [param_value()]'s
+#' result and, for a [matrix_parameter()], symmetrized as `(m + t(m)) / 2`.
+#' The step of a component whose difference is of order \eqn{r} is
+#' \eqn{\varepsilon^{1/(r + a)}\max(1, |\eta_k|)}, with \eqn{a} the accuracy;
+#' the unconstrained scale has no bounds.
+#'
+#' @param s A [parameter()] object.
+#' @param eta A numeric vector of free values, of length `s@n_free`.
+#' @param order The derivative order, 1 to 4.
+#' @param what `"value"` or `"logdet"`.
+#' @param accuracy The order of accuracy of the one-dimensional stencils.
+#'
+#' @return For `"value"`, a list of estimates keyed as
+#'   `param_tuple_names(s, order)` and in that order, each shaped like
+#'   [param_value()]'s result. For `"logdet"`, a named numeric vector in the
+#'   same order.
+#'
+#' @seealso [numerical_d1()] to [numerical_d4()],
+#'   [param_d3logdet.matrix_parameter()] and
+#'   [param_d4logdet.matrix_parameter()], which call this.
+#'
+#' @keywords internal
+param_tensor <- function(s, eta, order, what = c("value", "logdet"),
+                         accuracy = 4L) {
+  what <- match.arg(what)
+  nms <- param_tuple_names(s, order)
+  if (!length(nms)) {
+    if (what == "logdet") return(stats::setNames(numeric(0), character(0)))
+    return(stats::setNames(vector("list", 0L), character(0)))
+  }
+  a <- param_analytic(s)
+  x <- stats::setNames(as.list(eta), paste0("e", seq_len(s@n_free)))
+  free <- function(x) unlist(x, use.names = FALSE)
+  if (what == "value") {
+    shape <- param_value(s, eta)
+    f <- function(x) as.vector(param_value(s, free(x)))
+    gens <- list(param_d1 = param_d1, param_d2 = param_d2, param_d3 = param_d3)
+    wrap <- function(g) {
+      force(g)
+      function(x) lapply(g(s, free(x)), as.vector)
+    }
+  } else {
+    f <- function(x) param_logdet(s, free(x))
+    gens <- list(param_dlogdet = param_dlogdet, param_d2logdet = param_d2logdet,
+                 param_d3logdet = param_d3logdet)
+    wrap <- function(g) {
+      force(g)
+      function(x) as.list(unname(g(s, free(x))))
+    }
+  }
+  known <- list()
+  for (k in seq_len(min(order - 1L, 3L))) {
+    if (a[[names(gens)[k]]]) {
+      known[[length(known) + 1L]] <- numericals7::fd_known(wrap(gens[[k]]),
+                                                           order = k)
+    }
+  }
+  got <- numericals7::fd_tensor(f, x, order = order, known = known,
+                                accuracy = accuracy)
+  if (what == "logdet") {
+    return(stats::setNames(vapply(got, function(v) v[1L], numeric(1)), nms))
+  }
+  sym <- S7::S7_inherits(s, matrix_parameter)
+  out <- lapply(got, function(v) {
+    m <- shape
+    m[] <- v
+    if (sym) (m + t(m)) / 2 else m
+  })
+  stats::setNames(out, nms)
 }
 
 
@@ -359,27 +452,28 @@ fd_along <- function(f, eta, k, order = 1L, h = NULL) {
 #'
 #' @description
 #' Estimates \eqn{\partial V / \partial \eta_k} for every free value by one
-#' three-point central difference of [param_value()] in each component,
-#'
-#' \deqn{\partial_k V \approx
-#'   \frac{V(\eta + h e_k) - V(\eta - h e_k)}{2h},}
-#'
-#' at the step that [fd_step()] gives for a first derivative. This is the method
-#' [param_d1()] dispatches to when a family has not written its own, and it is
-#' exported so that a family being developed can be compared against it.
+#' central difference of [param_value()] in each component, through
+#' [param_tensor()]. This is the method [param_d1()] dispatches to when a family
+#' has not written its own, and it is exported so that a family being developed
+#' can be compared against it.
 #'
 #' @details
-#' The step is \eqn{\varepsilon^{1/3}\max(1, |\eta_k|)}, about
-#' \eqn{6.1 \times 10^{-6}} near the origin, giving a truncation error of order
-#' \eqn{h^2}. The example below compares the result with a closed form.
+#' At the default accuracy 4 the difference is the five-point rule
+#' \eqn{(V(\eta - 2h e_k) - 8V(\eta - h e_k) + 8V(\eta + h e_k)
+#' - V(\eta + 2h e_k)) / 12h}, at the step
+#' \eqn{\varepsilon^{1/5}\max(1, |\eta_k|)}, about \eqn{7.4 \times 10^{-4}}
+#' near the origin, with a truncation error of order \eqn{h^4}. It costs
+#' \eqn{4d} evaluations of the map; `accuracy = 2` gives the three-point rule
+#' and \eqn{2d}.
 #'
 #' For a matrix family each estimate is symmetrized as `(m + t(m)) / 2`, as
 #' the higher orders are, so that an asymmetry of rounding size in
-#' [param_value()] does not reach the derivative. It costs \eqn{2d}
-#' evaluations of the map.
+#' [param_value()] does not reach the derivative.
 #'
 #' @param s A [parameter()] object, of any branch.
 #' @param eta A numeric vector of free values, of length `s@n_free`.
+#' @param accuracy The order of accuracy of the central rule, a positive even
+#'   whole number.
 #'
 #' @return A list of `s@n_free` estimates named by `s@free_names`, each shaped
 #'   like the result of [param_value()] and symmetrized for a matrix family.
@@ -401,16 +495,8 @@ fd_along <- function(f, eta, k, order = 1L, h = NULL) {
 #' max(abs(unlist(numerical_d1(q, eta)) - unlist(param_d1(q, eta))))
 #'
 #' @export
-numerical_d1 <- function(s, eta) {
-  out <- vector("list", s@n_free)
-  names(out) <- s@free_names
-  for (k in seq_len(s@n_free)) {
-    out[[k]] <- fd_along(function(e) param_value(s, e), eta, k, 1L)
-    if (S7::S7_inherits(s, matrix_parameter)) {
-      out[[k]] <- (out[[k]] + t(out[[k]])) / 2
-    }
-  }
-  out
+numerical_d1 <- function(s, eta, accuracy = 4L) {
+  param_tensor(s, eta, 1L, accuracy = accuracy)
 }
 
 
@@ -419,56 +505,38 @@ numerical_d1 <- function(s, eta) {
 #' @description
 #' Estimates the \eqn{d(d+1)/2} distinct second derivatives
 #' \eqn{\partial^2 V / \partial \eta_k \partial \eta_l}, taking exactly one
-#' difference for each. Which quantity is differenced depends on what the family
-#' already supplies: the analytic first derivative where there is one, and
-#' [param_value()] itself where there is not. This is the method [param_d2()]
-#' dispatches to when a family has not written its own.
+#' difference for each, through [param_tensor()]. Which quantity is differenced
+#' depends on what the family already supplies: the analytic first derivative
+#' where there is one, and [param_value()] itself where there is not. This is
+#' the method [param_d2()] dispatches to when a family has not written its own.
 #'
 #' @details
-#' # The three routes
+#' # The two routes
 #'
-#' Writing \eqn{V(\eta)} for [param_value()] and \eqn{\partial_k V} for an
-#' analytic first derivative, the component \eqn{(k, l)} is
+#' Where [param_d1()] is analytic, the component \eqn{(k, l)} is one central
+#' difference of \eqn{\partial_k V} along \eqn{\eta_l}. Where it is not, a
+#' diagonal component is the central second difference of [param_value()] and
+#' an off-diagonal one the tensor product of two first differences, in
+#' \eqn{\eta_k} and \eqn{\eta_l}. Differences are never composed in the same
+#' variable, and two differences along different coordinates form one product
+#' stencil, so every route is one layer.
 #'
-#' \deqn{\partial_{kl} V \approx
-#'   \frac{\partial_k V(\eta + h e_l) - \partial_k V(\eta - h e_l)}{2h}}
-#'
-#' whenever [param_d1()] is analytic. Where it is not, an off-diagonal pair takes
-#' the four-point mixed stencil
-#'
-#' \deqn{\partial_{kl} V \approx \frac{V(\eta + h_k e_k + h_l e_l)
-#'   - V(\eta + h_k e_k - h_l e_l) - V(\eta - h_k e_k + h_l e_l)
-#'   + V(\eta - h_k e_k - h_l e_l)}{4 h_k h_l},}
-#'
-#' and a diagonal pair the three-point second difference. All three carry a
-#' truncation error of order \eqn{h^2}.
-#'
-#' # Single-layer differences
-#'
-#' The rule the toolkit follows is that differences are never composed **in the
-#' same variable**: a difference of a difference multiplies the error of the
-#' first stage into the second, and a fourth derivative built that way is noise.
-#' Differencing an analytic first derivative is one layer, since only one stage
-#' is numerical. The four-point stencil differences two *different* components,
-#' and two differences along different coordinates commute into a single product
-#' stencil, so it is one layer as well. The diagonal case uses the
-#' second-difference stencil directly and never sees a first difference at all.
-#'
-#' On the analytic route the step is the order-1 one,
-#' \eqn{\varepsilon^{1/3}\max(1, |\eta_l|)}, about \eqn{6.1 \times 10^{-6}} near
-#' the origin, because a first derivative of an analytic array is taken. The two
-#' routes on [param_value()] use the order-2 step,
-#' \eqn{\varepsilon^{1/4}\max(1, |\eta_k|)}, about \eqn{1.2 \times 10^{-4}}.
+#' The step of a difference of order \eqn{r} is
+#' \eqn{\varepsilon^{1/(r + a)}\max(1, |\eta_k|)}, with \eqn{a} the accuracy:
+#' \eqn{r = 1} on the analytic route and \eqn{r = 2} on the value. The
+#' truncation error is of order \eqn{h^a}.
 #'
 #' @param s A [parameter()] object, of any branch.
 #' @param eta A numeric vector of free values, of length `s@n_free`.
+#' @param accuracy The order of accuracy of the central rules, a positive even
+#'   whole number.
 #'
 #' @return A list of `choose(s@n_free + 1, 2)` estimates keyed as
 #'   `param_tuple_names(s)` and in that order, each shaped like
 #'   [param_value()]'s result and symmetrized for a matrix family.
 #'
 #' @seealso [param_d2()], the generic that this serves, [numerical_d1()] for the
-#'   order below, and [mixed_stencil()], which the third and fourth orders use.
+#'   order below, and [param_tensor()], which builds the stencils.
 #'
 #' @examples
 #' # A scalar matrix: every order is the matrix again, so the error shows.
@@ -482,38 +550,8 @@ numerical_d1 <- function(s, eta) {
 #' max(abs(unlist(numerical_d2(q, eta)) - unlist(param_d2(q, eta))))
 #'
 #' @export
-numerical_d2 <- function(s, eta) {
-  idx <- param_tuple_indices(s)
-  out <- vector("list", length(idx))
-  names(out) <- param_tuple_names(s)
-  if (!length(idx)) return(out)
-
-  analytic <- !param_is_numerical(s)[["param_d1"]]
-
-  for (i in seq_along(idx)) {
-    k <- idx[[i]][1L]
-    l <- idx[[i]][2L]
-    if (analytic) {
-      # One layer on the analytic first derivative in the other component.
-      out[[i]] <- fd_along(function(e) param_d1(s, e)[[k]], eta, l, 1L)
-    } else if (k == l) {
-      out[[i]] <- fd_along(function(e) param_value(s, e), eta, k, 2L)
-    } else {
-      # Two stencils in two DIFFERENT components, which is one mixed stencil
-      # and not a difference of a difference: nesting is forbidden along one
-      # variable and is what a mixed derivative is along two. The steps are
-      # the order-2 ones, as a second derivative asks for.
-      hk <- fd_step(eta[k], 2L)
-      hl <- fd_step(eta[l], 2L)
-      out[[i]] <- fd_along(function(e) {
-        fd_along(function(e2) param_value(s, e2), e, l, 1L, h = hl)
-      }, eta, k, 1L, h = hk)
-    }
-    if (S7::S7_inherits(s, matrix_parameter)) {
-      out[[i]] <- (out[[i]] + t(out[[i]])) / 2
-    }
-  }
-  out
+numerical_d2 <- function(s, eta, accuracy = 4L) {
+  param_tensor(s, eta, 2L, accuracy = accuracy)
 }
 
 
@@ -521,12 +559,11 @@ numerical_d2 <- function(s, eta) {
 #' @name param_d1.parameter
 #' @description
 #' The method that every [parameter()] inherits when it registers no [param_d1()] of
-#' its own. It estimates \eqn{\partial V/\partial \eta_k} by one three-point
-#' central difference of [param_value()] in each component,
-#' \eqn{(V(\eta + h e_k) - V(\eta - h e_k)) / 2h}, at the step
-#' \eqn{\varepsilon^{1/3}\max(1, |\eta_k|)}, which is about
-#' \eqn{6.1 \times 10^{-6}} near the origin. It costs \eqn{2d} evaluations of the
-#' map. The families in this package do not reach it.
+#' its own. It estimates \eqn{\partial V/\partial \eta_k} by one central
+#' difference of [param_value()] in each component, through [numerical_d1()]
+#' at its default accuracy 4: the five-point rule at the step
+#' \eqn{\varepsilon^{1/5}\max(1, |\eta_k|)}, at a cost of \eqn{4d}
+#' evaluations of the map. The families in this package do not reach it.
 #' @param s A [parameter()] object, of any branch.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic.
@@ -544,12 +581,11 @@ S7::method(param_d1, parameter) <- function(s, eta, ...) {
 #' @name param_d2.parameter
 #' @description
 #' The method that every [parameter()] inherits when it registers no [param_d2()] of
-#' its own. It takes exactly one difference per component, of whichever quantity
-#' the family already supplies: the analytic [param_d1()] where there is one, at
-#' the order-1 step, and [param_value()] itself where there is not, through a
-#' three-point second difference on the diagonal and a four-point mixed stencil
-#' off it, at the order-2 step. The truncation error is of order \eqn{h^2} on
-#' every route. The families in this package do not reach it.
+#' its own. It takes exactly one difference per component, through
+#' [numerical_d2()] at its default accuracy 4, of whichever quantity the family
+#' already supplies: the analytic [param_d1()] where there is one, and
+#' [param_value()] itself where there is not. The truncation error is of order
+#' \eqn{h^4} on every route. The families in this package do not reach it.
 #' @param s A [parameter()] object, of any branch.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic.
@@ -557,8 +593,8 @@ S7::method(param_d1, parameter) <- function(s, eta, ...) {
 #' @return A list of `choose(s@n_free + 1, 2)` estimates keyed as
 #'   `param_tuple_names(s)` and in that order, each shaped like
 #'   [param_value()]'s result and symmetrized for a matrix family.
-#' @seealso [numerical_d2()], which does the work and writes the three routes
-#'   out, and [param_d1.parameter()] for the order below.
+#' @seealso [numerical_d2()], which does the work and describes the two
+#'   routes, and [param_d1.parameter()] for the order below.
 #' @keywords internal
 S7::method(param_d2, parameter) <- function(s, eta, ...) {
   numerical_d2(s, eta)
@@ -679,54 +715,6 @@ S7::method(param_d2logdet, matrix_parameter) <- function(s, eta, ...) {
   stats::setNames(out, param_tuple_names(s))
 }
 
-#' Reject an Order That Would Difference a Difference
-#'
-#' @description
-#' Signals an error when [param_d3logdet.matrix_parameter()] or
-#' [param_d4logdet.matrix_parameter()] is called for a family whose
-#' [param_d2logdet()] is itself numerical. Both fallbacks difference
-#' [param_d2logdet()]. A family's own [param_d2logdet()] is exact, and so is
-#' the base-class one **given** [param_d1()] and [param_d2()]; in either case
-#' the differencing is one layer. Where the base-class [param_d2logdet()] reads
-#' numerical arrays it is two, which is the nesting that the toolkit avoids
-#' everywhere.
-#'
-#' @details
-#' With numerical arrays, the fourth order can come back larger than the
-#' quantity that it estimates, and [param_is_numerical()] reports `TRUE` for the
-#' order whether the arrays are analytic or not, so a consumer could not
-#' distinguish such a number from a usable one.
-#'
-#' A family that writes its own [param_d2logdet()] passes whether or not its
-#' [param_d1()] and [param_d2()] are analytic.
-#'
-#' @param s A [matrix_parameter()] object.
-#' @param order The order requested, 3 or 4, which the message names.
-#'
-#' @return Invisibly `TRUE`. For a family whose [param_d2logdet()] comes from
-#'   the base class and whose [param_d1()] or [param_d2()] comes from the base
-#'   class too, an error that names the missing method and the remedy.
-#'
-#' @seealso [param_is_numerical()], which reports the routes read here, and
-#'   [param_d3logdet.matrix_parameter()] and [param_d4logdet.matrix_parameter()],
-#'   the two callers.
-#'
-#' @keywords internal
-check_analytic_arrays <- function(s, order) {
-  num <- param_is_numerical(s)
-  if (!num[["param_d2logdet"]]) return(invisible(TRUE))
-  miss <- c("param_d1()", "param_d2()")[c(num[["param_d1"]], num[["param_d2"]])]
-  if (!length(miss)) return(invisible(TRUE))
-  stop(sprintf(paste0(
-    "param_d%dlogdet() would difference a quantity that is itself\n",
-    "  numerical. This family has no analytic %s, so\n",
-    "  param_d2logdet(), which this order differences, is already one\n",
-    "  difference deep, and the two layers would compound.\n",
-    "  Write param_d1() and param_d2() out, or register param_d2logdet()\n",
-    "  or param_d%dlogdet()."
-  ), order, paste(miss, collapse = " and "), order), call. = FALSE)
-}
-
 #' @title Default Solve
 #' @name param_solve.matrix_parameter
 #' @description
@@ -833,56 +821,60 @@ S7::method(param_free, parameter) <- function(s, m, ...) {
 #' Numerical Third Derivatives of a Parameter's Value
 #'
 #' @description
-#' Estimates the distinct third derivatives by applying one product stencil
-#' directly to [param_value()], per index tuple. A component that the tuple repeats
-#' contributes the one-dimensional stencil of the matching order, and a component
-#' appearing once contributes a two-point central factor; the product is
-#' evaluated in a single pass over the map. This is the method [param_d3()]
-#' dispatches to when a family has not written its own.
+#' Estimates the distinct third derivatives, one tensor-product stencil per
+#' index tuple, through [param_tensor()]. The stencil is applied to the
+#' highest analytic derivative below the third that the family supplies, as
+#' [param_analytic()] reads it, and to [param_value()] where there is none.
+#' This is the method [param_d3()] dispatches to when a family has not written
+#' its own.
 #'
 #' @details
 #' # The stencil
 #'
-#' Let the tuple's distinct components be \eqn{c_1, \dots, c_r} with
-#' multiplicities \eqn{m_1, \dots, m_r} summing to three, and let
-#' \eqn{(o^{(m)}_i, w^{(m)}_i)} be the offsets and weights of the central stencil
-#' for an \eqn{m}-th derivative in one variable. The estimate is their tensor
+#' Let the tuple be \eqn{\alpha} and the analytic quantity differenced be the
+#' derivative \eqn{\beta \le \alpha}, taken from the components that the tuple
+#' repeats most. The residual \eqn{\alpha - \beta} has multiplicities
+#' \eqn{m_1, \dots, m_r} in the components \eqn{c_1, \dots, c_r}, and with
+#' \eqn{(o^{(m)}_i, w^{(m)}_i)} the offsets and weights of the central stencil
+#' for an \eqn{m}-th derivative in one variable the estimate is their tensor
 #' product,
 #'
-#' \deqn{\partial_{c_1}^{m_1} \cdots \partial_{c_r}^{m_r} V \approx
+#' \deqn{\partial^\alpha V \approx
 #'   \frac{1}{\prod_{j} h_j^{m_j}}
 #'   \sum_{i_1, \dots, i_r} \left(\prod_{j=1}^{r} w^{(m_j)}_{i_j}\right)
-#'   V\Bigl(\eta + \textstyle\sum_{j=1}^{r} o^{(m_j)}_{i_j} h_j e_{c_j}\Bigr),}
+#'   \partial^\beta V\Bigl(\eta + \textstyle\sum_{j=1}^{r} o^{(m_j)}_{i_j} h_j
+#'   e_{c_j}\Bigr),}
 #'
-#' evaluated at one point per combination of nodes, with the zero-weight nodes
-#' skipped. A tuple naming one component three times costs four evaluations of
-#' the map, one naming a component twice and another once six, and one naming
-#' three distinct components eight.
+#' with the zero-weight nodes skipped and every point shared by several tuples
+#' evaluated once. With an analytic [param_d2()] each tuple is one first
+#' difference of a second derivative.
 #'
-#' # The stencil is applied to the map
+#' # The stencil is never applied to a difference
 #'
 #' A lower-order numerical derivative is never differenced. The rounding of a
-#' difference is amplified by \eqn{h^{-k}}, so two stages multiply their errors
-#' and a third derivative built from a first and then a second is far worse than
-#' one stencil of the order wanted. Going to [param_value()] directly keeps the
-#' rounding at a single layer whatever the family implements, at the price of
-#' more evaluations of the map.
+#' difference is amplified by \eqn{h^{-k}}, so two stages multiply their
+#' errors. The quantity differenced is either the map or an analytic
+#' derivative, so the rounding stays at a single layer whatever the family
+#' implements.
 #'
 #' # Accuracy
 #'
-#' Truncation is of order \eqn{h^2} at a step of
-#' \eqn{\varepsilon^{1/5}\max(1, |\eta_k|)}, and rounding is of order
-#' \eqn{\varepsilon / h^3}.
+#' Truncation is of order \eqn{h^a} at a step of
+#' \eqn{\varepsilon^{1/(r + a)}\max(1, |\eta_k|)}, with \eqn{r} the order of
+#' the difference and \eqn{a} the accuracy, and rounding is of order
+#' \eqn{\varepsilon / h^r}.
 #'
 #' @param s A [parameter()] object, of any branch.
 #' @param eta A numeric vector of free values, of length `s@n_free`.
+#' @param accuracy The order of accuracy of the central rules, a positive even
+#'   whole number.
 #'
 #' @return A list of `choose(s@n_free + 2, 3)` estimates keyed as
 #'   `param_tuple_names(s, 3)` and in that order, each shaped like
 #'   [param_value()]'s result and symmetrized for a matrix family.
 #'
-#' @seealso [param_d3()], the generic that this serves, [mixed_stencil()], which
-#'   builds the product, and [numerical_d4()] for the order above.
+#' @seealso [param_d3()], the generic that this serves, [param_tensor()], which
+#'   builds the stencils, and [numerical_d4()] for the order above.
 #'
 #' @examples
 #' # A scalar matrix: every order is the matrix again, so the error shows.
@@ -898,50 +890,33 @@ S7::method(param_free, parameter) <- function(s, m, ...) {
 #'   scale = max(abs(unlist(ana))))
 #'
 #' @export
-numerical_d3 <- function(s, eta) {
-  idx <- param_tuple_indices(s, 3L)
-  out <- vector("list", length(idx))
-  names(out) <- param_tuple_names(s, 3L)
-  f <- function(e) param_value(s, e)
-  for (i in seq_along(idx)) {
-    out[[i]] <- mixed_stencil(f, eta, idx[[i]])
-    if (S7::S7_inherits(s, matrix_parameter)) {
-      out[[i]] <- (out[[i]] + t(out[[i]])) / 2
-    }
-  }
-  out
+numerical_d3 <- function(s, eta, accuracy = 4L) {
+  param_tensor(s, eta, 3L, accuracy = accuracy)
 }
 
 
 #' Numerical Fourth Derivatives of a Parameter's Value
 #'
 #' @description
-#' Estimates the distinct fourth derivatives, one product stencil per index
-#' tuple, applied directly to [param_value()]. It is the order-four analogue of
-#' [numerical_d3()] and the method [param_d4()] dispatches to when a family has
-#' not written its own. At this order a difference is the least accurate of the
-#' four, which is why every family in this package carries a closed form
-#' instead.
+#' Estimates the distinct fourth derivatives, one tensor-product stencil per
+#' index tuple, through [param_tensor()], applied to the highest analytic
+#' derivative below the fourth that the family supplies and to [param_value()]
+#' where there is none. It is the order-four analogue of [numerical_d3()] and
+#' the method [param_d4()] dispatches to when a family has not written its own.
 #'
 #' @details
-#' # The stencil
-#'
-#' The tensor product is the one written out under [numerical_d3()], with the
-#' multiplicities summing to four. A tuple naming one component four times costs
-#' five evaluations of the map, one naming two components twice each nine, and
-#' one naming four distinct components sixteen.
-#'
-#' # Accuracy
-#'
-#' Truncation is of order \eqn{h^2} and rounding of order
-#' \eqn{\varepsilon / h^4}, so balancing the two gives a step of
-#' \eqn{\varepsilon^{1/6}\max(1, |\eta_k|)}, about \eqn{2.5 \times 10^{-3}} near
-#' the origin, and an attainable accuracy of order \eqn{\varepsilon^{1/3}}. That
-#' is enough to catch a transcription error in a closed form and not enough for
-#' use in a fit.
+#' The tensor product is the one written out under [numerical_d3()]. With an
+#' analytic [param_d3()] each tuple is one first difference of a third
+#' derivative, and the result is accurate to about \eqn{10^{-12}}. From
+#' [param_value()] alone the difference is of order four: rounding is then of
+#' order \eqn{\varepsilon / h^4}, and the attainable accuracy at the default
+#' accuracy 4 is of order \eqn{\varepsilon^{1/2}}, enough to catch a
+#' transcription error in a closed form.
 #'
 #' @param s A [parameter()] object, of any branch.
 #' @param eta A numeric vector of free values, of length `s@n_free`.
+#' @param accuracy The order of accuracy of the central rules, a positive even
+#'   whole number.
 #'
 #' @return A list of `choose(s@n_free + 3, 4)` estimates keyed as
 #'   `param_tuple_names(s, 4)` and in that order, each shaped like
@@ -963,95 +938,9 @@ numerical_d3 <- function(s, eta) {
 #' c(gap = max(abs(unlist(numerical_d4(q, eta)) - unlist(ana))),
 #'   scale = max(abs(unlist(ana))))
 #'
-#' # A 1 percent error in the largest entry would be about two thousand times
-#' # the gap above, so a wrong closed form is caught.
-#' 0.01 * max(abs(unlist(ana)))
-#'
 #' @export
-numerical_d4 <- function(s, eta) {
-  idx <- param_tuple_indices(s, 4L)
-  out <- vector("list", length(idx))
-  names(out) <- param_tuple_names(s, 4L)
-  f <- function(e) param_value(s, e)
-  for (i in seq_along(idx)) {
-    out[[i]] <- mixed_stencil(f, eta, idx[[i]])
-    if (S7::S7_inherits(s, matrix_parameter)) {
-      out[[i]] <- (out[[i]] + t(out[[i]])) / 2
-    }
-  }
-  out
-}
-
-
-#' One Product Stencil for a Mixed Partial Derivative
-#'
-#' @description
-#' Differentiates `f` once in each component that an index tuple names, using a
-#' central factor per distinct component, of the order given by that
-#' component's multiplicity. The whole tensor product is summed in one pass, so the
-#' result is a single stencil, never a composition of lower-order numerical
-#' derivatives.
-#'
-#' @details
-#' Each factor's nodes and weights come from [numericals7::fd_offsets()] and
-#' [numericals7::fd_weights()] at accuracy 2: three nodes at orders one and two
-#' and five at orders three and four, of which two, three, four and five carry a
-#' non-zero weight. They are read from there instead of being written out here,
-#' so that the two tables cannot disagree.
-#'
-#' The step for each factor is [fd_step()] at that component's value and at the
-#' **total** order of the tuple, so all factors of one component share a step and
-#' the division at the end is by \eqn{\prod_j h_j^{m_j}}. Nodes whose weight is
-#' zero are skipped, so a repeated-index factor costs one evaluation fewer than
-#' its node count suggests.
-#'
-#' @param f A function of the free vector, returning anything that supports `+`
-#'   and scalar multiplication.
-#' @param eta The point, a numeric vector.
-#' @param tuple An integer vector of component indices, possibly with
-#'   repetitions, as [param_tuple_indices()] returns. Its length is the
-#'   derivative order.
-#'
-#' @return The stencil's value, shaped like `f(eta)`.
-#'
-#' @seealso [numericals7::fd_weights()] for the weights, [fd_along()] for the
-#'   single-component case, and [numerical_d3()] and [numerical_d4()], the two
-#'   callers.
-#'
-#' @keywords internal
-mixed_stencil <- function(f, eta, tuple) {
-  counts <- table(tuple)
-  ks <- as.integer(names(counts))
-  ms <- as.integer(counts)
-  hs <- vapply(seq_along(ks), function(j) {
-    fd_step(eta[ks[j]], sum(ms))
-  }, numeric(1))
-
-  one_dim <- function(m) {
-    s <- numericals7::fd_offsets(m, accuracy = 2L)$central
-    w <- numericals7::fd_weights(s, m)
-    keep <- w != 0
-    list(offsets = s[keep], weights = w[keep], power = m)
-  }
-  facs <- lapply(ms, one_dim)
-
-  combos <- expand.grid(lapply(facs, function(fc) seq_along(fc$offsets)))
-  acc <- NULL
-  for (r in seq_len(nrow(combos))) {
-    e <- eta
-    w <- 1
-    for (j in seq_along(ks)) {
-      pick <- combos[r, j]
-      e[ks[j]] <- e[ks[j]] + facs[[j]]$offsets[pick] * hs[j]
-      w <- w * facs[[j]]$weights[pick]
-    }
-    term <- w * f(e)
-    acc <- if (is.null(acc)) term else acc + term
-  }
-  denom <- prod(vapply(seq_along(ks), function(j) {
-    hs[j]^facs[[j]]$power
-  }, numeric(1)))
-  acc / denom
+numerical_d4 <- function(s, eta, accuracy = 4L) {
+  param_tensor(s, eta, 4L, accuracy = accuracy)
 }
 
 
@@ -1059,13 +948,11 @@ mixed_stencil <- function(f, eta, tuple) {
 #' @name param_d3.parameter
 #' @description
 #' The method that every [parameter()] inherits when it registers no [param_d3()] of
-#' its own. It applies one product stencil per index tuple directly to
-#' [param_value()], never to a lower-order numerical derivative, with a
-#' one-dimensional factor per distinct component, of the order given by that
-#' component's multiplicity. The step is \eqn{\varepsilon^{1/5}\max(1,
-#' |\eta_k|)}, about \eqn{7.4 \times 10^{-4}} near the origin, and the
-#' truncation error is of order \eqn{h^2}. The families in this package do not
-#' reach it.
+#' its own. It applies one tensor-product stencil per index tuple, through
+#' [numerical_d3()] at its default accuracy 4, to the highest analytic
+#' derivative below the third and to [param_value()] where there is none,
+#' never to a lower-order numerical derivative. The families in this package
+#' do not reach it.
 #' @param s A [parameter()] object, of any branch.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic.
@@ -1084,12 +971,11 @@ S7::method(param_d3, parameter) <- function(s, eta, ...) {
 #' @name param_d4.parameter
 #' @description
 #' The method that every [parameter()] inherits when it registers no [param_d4()] of
-#' its own. It applies one product stencil per index tuple directly to
-#' [param_value()], as [param_d3.parameter()] does, with the multiplicities
-#' summing to four. The step is \eqn{\varepsilon^{1/6}\max(1, |\eta_k|)}, about
-#' \eqn{2.5 \times 10^{-3}} near the origin, and rounding is amplified by
-#' \eqn{h^{-4}}, so the result is enough to catch a wrong closed form and not
-#' enough for use in a fit. The families in this package do not reach it.
+#' its own. It applies one tensor-product stencil per index tuple, through
+#' [numerical_d4()] at its default accuracy 4, as [param_d3.parameter()] does,
+#' with the multiplicities summing to four. From [param_value()] alone the
+#' result is enough to catch a wrong closed form and not enough for use in a
+#' fit. The families in this package do not reach it.
 #' @param s A [parameter()] object, of any branch.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic.
@@ -1108,32 +994,24 @@ S7::method(param_d4, parameter) <- function(s, eta, ...) {
 #' @name param_d3logdet.matrix_parameter
 #' @description
 #' The method that every [matrix_parameter()] inherits when it registers no
-#' [param_d3logdet()] of its own. For the tuple \eqn{(k, l, m)} it takes the
-#' \eqn{(k, l)} component of [param_d2logdet()] and applies one three-point
-#' central difference in the remaining component,
-#'
-#' \deqn{\partial_{klm} \log|M| \approx
-#'   \frac{\partial_{kl}\log|M|\,(\eta + h e_m)
-#'       - \partial_{kl}\log|M|\,(\eta - h e_m)}{2h},}
-#'
-#' at the order-1 step \eqn{\varepsilon^{1/3}\max(1, |\eta_m|)}. Since the tuple
-#' is sorted, the differenced component is the largest index, and the pair is
-#' looked up by matching sorted indices against
-#' [param_tuple_indices()]'s order-2 list. It costs two evaluations of the whole
-#' second-order block per tuple.
+#' [param_d3logdet()] of its own. Each component is one tensor-product central
+#' difference, through [param_tensor()] at accuracy 4, of the highest analytic
+#' log-determinant derivative below the third, as [param_analytic()] reads
+#' it: for the tuple \eqn{(k, l, m)}, one first difference of the
+#' \eqn{(k, l)} component of [param_d2logdet()] along \eqn{\eta_m}, at the
+#' step \eqn{\varepsilon^{1/5}\max(1, |\eta_m|)}.
 #' @details
 #' # Accuracy
 #'
 #' [param_d2logdet()] is an exact identity **given** the matrix derivative
-#' arrays, so differencing it is a single numerical layer whenever
-#' [param_d1()] and [param_d2()] are analytic.
-#'
-#' A family's own [param_d2logdet()] is exact, and differencing it is a single
-#' layer too. Where the base-class [param_d2logdet()] reads numerical arrays
-#' the layers would compound, and the method signals an error instead of
-#' returning a value; [check_analytic_arrays()] is the guard. A family that
-#' needs this order writes [param_d1()] and [param_d2()] out, or its own
-#' [param_d2logdet()].
+#' arrays, so it is differenced where [param_d1()] and [param_d2()] are
+#' analytic or where the family writes it out, and the error is of order
+#' \eqn{10^{-11}}. Where the base-class [param_d2logdet()] would read
+#' numerical arrays it is not used: the stencil is applied to
+#' [param_dlogdet()] where [param_d1()] is analytic, and otherwise to
+#' [param_logdet()], which is exact, as a third difference. A numerical
+#' quantity is therefore never differenced again, and the third difference of
+#' the log-determinant is accurate to about \eqn{10^{-7}}.
 #' @param s A [matrix_parameter()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic.
@@ -1145,53 +1023,34 @@ S7::method(param_d4, parameter) <- function(s, eta, ...) {
 #'   above.
 #' @keywords internal
 S7::method(param_d3logdet, matrix_parameter) <- function(s, eta, ...) {
-  check_analytic_arrays(s, 3L)
-  idx3 <- param_tuple_indices(s, 3L)
-  idx2 <- param_tuple_indices(s, 2L)
-  key2 <- vapply(idx2, function(t) paste(sort(t), collapse = ","), character(1))
-  out <- vapply(seq_along(idx3), function(i) {
-    t3 <- idx3[[i]]
-    k <- t3[3L]
-    pos <- match(paste(sort(t3[1:2]), collapse = ","), key2)
-    h <- fd_step(eta[k], 1L)
-    up <- eta
-    dn <- eta
-    up[k] <- eta[k] + h
-    dn[k] <- eta[k] - h
-    (param_d2logdet(s, up)[[pos]] - param_d2logdet(s, dn)[[pos]]) / (2 * h)
-  }, numeric(1))
-  stats::setNames(out, param_tuple_names(s, 3L))
+  param_tensor(s, eta, 3L, what = "logdet")
 }
 
 #' @title Default Fourth Log-Determinant Derivatives
 #' @name param_d4logdet.matrix_parameter
 #' @description
 #' The method that every [matrix_parameter()] inherits when it registers no
-#' [param_d4logdet()] of its own. For the tuple \eqn{(k, l, m, n)} it takes the
-#' \eqn{(k, l)} component of [param_d2logdet()] and applies one second-order
-#' stencil in the remaining two components: the three-point second difference
-#' where \eqn{m = n}, and the four-point mixed stencil
-#'
-#' \deqn{\frac{g(\eta + h_m e_m + h_n e_n) - g(\eta + h_m e_m - h_n e_n)
-#'   - g(\eta - h_m e_m + h_n e_n) + g(\eta - h_m e_m - h_n e_n)}
-#'   {4 h_m h_n}}
-#'
-#' where they differ, both at the order-2 step
-#' \eqn{\varepsilon^{1/4}\max(1, |\eta_k|)}. It costs three or four evaluations
-#' of the whole second-order block per tuple.
+#' [param_d4logdet()] of its own. Each component is one tensor-product central
+#' difference, through [param_tensor()] at accuracy 4, of the highest analytic
+#' log-determinant derivative below the fourth: one first difference of
+#' [param_d3logdet()] where the family registers it, and otherwise, for the
+#' tuple \eqn{(k, l, m, n)}, one second-order stencil of the \eqn{(k, l)}
+#' component of [param_d2logdet()] in the remaining two components, the
+#' second difference where \eqn{m = n} and the product of two first
+#' differences where they differ.
 #' @details
 #' # Accuracy
 #'
 #' With analytic [param_d1()] and [param_d2()], or with a family's own
 #' [param_d2logdet()], the differencing is a single layer on an exact
-#' quantity, at the order-2 step.
+#' quantity, accurate to about \eqn{10^{-9}}.
 #'
-#' With only [param_value()] supplied, the numerical arrays would feed a
-#' numerical second-order block that is then differenced twice more, and the
-#' error can exceed the quantity itself. The method signals an error instead,
-#' through [check_analytic_arrays()]. A family that needs a fourth derivative of
-#' its log-determinant supplies at least [param_d1()] and [param_d2()] in closed
-#' form, or its own [param_d2logdet()]. [param_is_numerical()] reports which components are numerical.
+#' With only [param_value()] supplied, the base-class [param_d2logdet()] would
+#' read numerical arrays and is not used: the stencil is a fourth difference
+#' of [param_logdet()], which is exact, accurate to about \eqn{10^{-6}}. A
+#' family that needs this order to more digits supplies [param_d1()] and
+#' [param_d2()] in closed form, or its own [param_d2logdet()].
+#' [param_is_numerical()] reports which components are numerical.
 #' @param s A [matrix_parameter()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic.
@@ -1203,33 +1062,5 @@ S7::method(param_d3logdet, matrix_parameter) <- function(s, eta, ...) {
 #'   [param_is_numerical()] to find out which components are numerical.
 #' @keywords internal
 S7::method(param_d4logdet, matrix_parameter) <- function(s, eta, ...) {
-  check_analytic_arrays(s, 4L)
-  idx4 <- param_tuple_indices(s, 4L)
-  idx2 <- param_tuple_indices(s, 2L)
-  key2 <- vapply(idx2, function(t) paste(sort(t), collapse = ","), character(1))
-  out <- vapply(seq_along(idx4), function(i) {
-    t4 <- idx4[[i]]
-    pos <- match(paste(sort(t4[1:2]), collapse = ","), key2)
-    k <- t4[3L]
-    l <- t4[4L]
-    g <- function(e) param_d2logdet(s, e)[[pos]]
-    if (k == l) {
-      h <- fd_step(eta[k], 2L)
-      up <- eta
-      dn <- eta
-      up[k] <- eta[k] + h
-      dn[k] <- eta[k] - h
-      (g(up) - 2 * g(eta) + g(dn)) / h^2
-    } else {
-      hk <- fd_step(eta[k], 2L)
-      hl <- fd_step(eta[l], 2L)
-      pp <- pm <- mp <- mm <- eta
-      pp[k] <- pp[k] + hk; pp[l] <- pp[l] + hl
-      pm[k] <- pm[k] + hk; pm[l] <- pm[l] - hl
-      mp[k] <- mp[k] - hk; mp[l] <- mp[l] + hl
-      mm[k] <- mm[k] - hk; mm[l] <- mm[l] - hl
-      (g(pp) - g(pm) - g(mp) + g(mm)) / (4 * hk * hl)
-    }
-  }, numeric(1))
-  stats::setNames(out, param_tuple_names(s, 4L))
+  param_tensor(s, eta, 4L, what = "logdet")
 }

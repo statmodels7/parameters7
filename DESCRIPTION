@@ -1,6 +1,6 @@
 Package: parameters7
 Title: An S7 Framework for Constrained Parameters
-Version: 0.24.0
+Version: 0.25.0
 Authors@R:
     person("Giovanni", "Tinervia", , "giovannitinervia9@gmail.com", role = c("aut", "cre"))
 Description: Parametrizations of constrained parameter spaces as objects. A
@@ -22,7 +22,7 @@ Depends:
     R (>= 4.1.0)
 Imports:
     linkfunctions7 (>= 0.5.2),
-    numericals7,
+    numericals7 (>= 0.23.0),
     Rcpp,
     S7,
     stats

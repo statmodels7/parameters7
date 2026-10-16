@@ -147,11 +147,12 @@ test_that("a parameter defined by its map alone is complete", {
   expect_equal(param_d1(b, eta)[[2L]], d_rho, tolerance = 1e-6)
 })
 
-test_that("the bargain stops at order two for a log-determinant", {
+test_that("a log-determinant without analytic arrays is differenced from its value", {
   # param_d2logdet() is exact GIVEN the arrays, so differencing it is one
   # numerical layer where they are analytic and two where they are not. The
   # two-layer answer is not merely inaccurate: measured on a 4 by 4 AR(1)
-  # covariance it came back 9.07 against a quantity of size 2.17.
+  # covariance it came back 9.07 against a quantity of size 2.17. Without the
+  # arrays the higher orders are therefore one stencil on param_logdet().
   Layers <- S7::new_class("Layers", parent = matrix_parameter, package = NULL)
   gen <- param_value
   S7::method(gen, Layers) <- function(s, eta, ...) {
@@ -166,11 +167,15 @@ test_that("the bargain stops at order two for a log-determinant", {
   )
   eta <- c(0.2, 0.6)
 
-  expect_error(param_d3logdet(b, eta), "would difference a quantity")
-  expect_error(param_d4logdet(b, eta), "param_d1\\(\\) and param_d2\\(\\)")
+  # log|M| = 4 eta1 - 6 log cosh(eta2): only the eta2 derivatives survive
+  t2 <- tanh(eta[2L])
+  c2 <- 1 - t2^2
+  d3 <- param_d3logdet(b, eta)
+  d4 <- param_d4logdet(b, eta)
+  expect_equal(unname(d3), c(0, 0, 0, 12 * c2 * t2), tolerance = 1e-6)
+  expect_equal(unname(d4), c(0, 0, 0, 0, 12 * (c2^2 - 2 * c2 * t2^2)),
+               tolerance = 1e-5)
 
-  # one layer is still answered, which is what makes the refusal a rule about
-  # nesting rather than about numerical routes
   expect_true(is.finite(param_logdet(b, eta)))
   expect_length(param_dlogdet(b, eta), 2L)
   expect_length(param_d2logdet(b, eta), 3L)

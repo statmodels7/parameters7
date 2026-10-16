@@ -38,7 +38,9 @@ rank-deficient family.
 
 The expansion is not written out in the package. Each family in this package
 computes this order without differencing, and the base method on
-\code{\link[=matrix_parameter]{matrix_parameter()}} takes one central difference of \code{\link[=param_d2logdet]{param_d2logdet()}}. A
+\code{\link[=matrix_parameter]{matrix_parameter()}} applies one tensor stencil to the highest analytic
+log-determinant derivative below the third, \code{\link[=param_d2logdet]{param_d2logdet()}} where the
+arrays are analytic and \code{\link[=param_logdet]{param_logdet()}} where none is. A
 written-out expansion has one term per set partition of the indices, five at
 third order, and a transcription of it is easy to get wrong.
 }

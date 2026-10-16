@@ -17,30 +17,26 @@ A numeric vector of \code{choose(s@n_free + 3, 4)} entries, keyed as
 }
 \description{
 The method that every \code{\link[=matrix_parameter]{matrix_parameter()}} inherits when it registers no
-\code{\link[=param_d4logdet]{param_d4logdet()}} of its own. For the tuple \eqn{(k, l, m, n)} it takes the
-\eqn{(k, l)} component of \code{\link[=param_d2logdet]{param_d2logdet()}} and applies one second-order
-stencil in the remaining two components: the three-point second difference
-where \eqn{m = n}, and the four-point mixed stencil
-
-\deqn{\frac{g(\eta + h_m e_m + h_n e_n) - g(\eta + h_m e_m - h_n e_n)
-  - g(\eta - h_m e_m + h_n e_n) + g(\eta - h_m e_m - h_n e_n)}
-  {4 h_m h_n}}
-
-where they differ, both at the order-2 step
-\eqn{\varepsilon^{1/4}\max(1, |\eta_k|)}. It costs three or four evaluations
-of the whole second-order block per tuple.
+\code{\link[=param_d4logdet]{param_d4logdet()}} of its own. Each component is one tensor-product central
+difference, through \code{\link[=param_tensor]{param_tensor()}} at accuracy 4, of the highest analytic
+log-determinant derivative below the fourth: one first difference of
+\code{\link[=param_d3logdet]{param_d3logdet()}} where the family registers it, and otherwise, for the
+tuple \eqn{(k, l, m, n)}, one second-order stencil of the \eqn{(k, l)}
+component of \code{\link[=param_d2logdet]{param_d2logdet()}} in the remaining two components, the
+second difference where \eqn{m = n} and the product of two first
+differences where they differ.
 }
 \section{Accuracy}{
 With analytic \code{\link[=param_d1]{param_d1()}} and \code{\link[=param_d2]{param_d2()}}, or with a family's own
 \code{\link[=param_d2logdet]{param_d2logdet()}}, the differencing is a single layer on an exact
-quantity, at the order-2 step.
+quantity, accurate to about \eqn{10^{-9}}.
 
-With only \code{\link[=param_value]{param_value()}} supplied, the numerical arrays would feed a
-numerical second-order block that is then differenced twice more, and the
-error can exceed the quantity itself. The method signals an error instead,
-through \code{\link[=check_analytic_arrays]{check_analytic_arrays()}}. A family that needs a fourth derivative of
-its log-determinant supplies at least \code{\link[=param_d1]{param_d1()}} and \code{\link[=param_d2]{param_d2()}} in closed
-form, or its own \code{\link[=param_d2logdet]{param_d2logdet()}}. \code{\link[=param_is_numerical]{param_is_numerical()}} reports which components are numerical.
+With only \code{\link[=param_value]{param_value()}} supplied, the base-class \code{\link[=param_d2logdet]{param_d2logdet()}} would
+read numerical arrays and is not used: the stencil is a fourth difference
+of \code{\link[=param_logdet]{param_logdet()}}, which is exact, accurate to about \eqn{10^{-6}}. A
+family that needs this order to more digits supplies \code{\link[=param_d1]{param_d1()}} and
+\code{\link[=param_d2]{param_d2()}} in closed form, or its own \code{\link[=param_d2logdet]{param_d2logdet()}}.
+\code{\link[=param_is_numerical]{param_is_numerical()}} reports which components are numerical.
 }
 
 \seealso{

@@ -17,8 +17,8 @@ A single positive number.
 \description{
 Returns the step for a central difference in one component of \eqn{\eta},
 scaled by the size of that component. It forwards to
-\code{\link[numericals7:fd_step]{numericals7::fd_step()}} at accuracy 2, so the step of a fallback here and the
-step that the stencil library documents cannot drift apart.
+\code{\link[numericals7:fd_step]{numericals7::fd_step()}} at accuracy 2, so the step of a difference written
+here and the step that the stencil library documents cannot drift apart.
 }
 \details{
 The rule is \eqn{\varepsilon^{1/(k+2)} \max(1, |\eta_k|)} for a \eqn{k}-th
@@ -31,7 +31,7 @@ The step is not clamped. The unconstrained scale has no boundary, so the
 \code{bounds} argument of \code{\link[numericals7:fd_step]{numericals7::fd_step()}} is left at its default.
 }
 \seealso{
-\code{\link[numericals7:fd_step]{numericals7::fd_step()}} for the rule, and \code{\link[=fd_along]{fd_along()}}, which
-applies a stencil at this step.
+\code{\link[numericals7:fd_step]{numericals7::fd_step()}} for the rule, and \code{\link[=check_parameter]{check_parameter()}},
+which uses it for its log-determinant reference.
 }
 \keyword{internal}

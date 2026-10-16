@@ -4,12 +4,15 @@
 \alias{numerical_d3}
 \title{Numerical Third Derivatives of a Parameter's Value}
 \usage{
-numerical_d3(s, eta)
+numerical_d3(s, eta, accuracy = 4L)
 }
 \arguments{
 \item{s}{A \code{\link[=parameter]{parameter()}} object, of any branch.}
 
 \item{eta}{A numeric vector of free values, of length \code{s@n_free}.}
+
+\item{accuracy}{The order of accuracy of the central rules, a positive even
+whole number.}
 }
 \value{
 A list of \code{choose(s@n_free + 2, 3)} estimates keyed as
@@ -17,44 +20,46 @@ A list of \code{choose(s@n_free + 2, 3)} estimates keyed as
 \code{\link[=param_value]{param_value()}}'s result and symmetrized for a matrix family.
 }
 \description{
-Estimates the distinct third derivatives by applying one product stencil
-directly to \code{\link[=param_value]{param_value()}}, per index tuple. A component that the tuple repeats
-contributes the one-dimensional stencil of the matching order, and a component
-appearing once contributes a two-point central factor; the product is
-evaluated in a single pass over the map. This is the method \code{\link[=param_d3]{param_d3()}}
-dispatches to when a family has not written its own.
+Estimates the distinct third derivatives, one tensor-product stencil per
+index tuple, through \code{\link[=param_tensor]{param_tensor()}}. The stencil is applied to the
+highest analytic derivative below the third that the family supplies, as
+\code{\link[=param_analytic]{param_analytic()}} reads it, and to \code{\link[=param_value]{param_value()}} where there is none.
+This is the method \code{\link[=param_d3]{param_d3()}} dispatches to when a family has not written
+its own.
 }
 \section{The stencil}{
-Let the tuple's distinct components be \eqn{c_1, \dots, c_r} with
-multiplicities \eqn{m_1, \dots, m_r} summing to three, and let
-\eqn{(o^{(m)}_i, w^{(m)}_i)} be the offsets and weights of the central stencil
-for an \eqn{m}-th derivative in one variable. The estimate is their tensor
+Let the tuple be \eqn{\alpha} and the analytic quantity differenced be the
+derivative \eqn{\beta \le \alpha}, taken from the components that the tuple
+repeats most. The residual \eqn{\alpha - \beta} has multiplicities
+\eqn{m_1, \dots, m_r} in the components \eqn{c_1, \dots, c_r}, and with
+\eqn{(o^{(m)}_i, w^{(m)}_i)} the offsets and weights of the central stencil
+for an \eqn{m}-th derivative in one variable the estimate is their tensor
 product,
 
-\deqn{\partial_{c_1}^{m_1} \cdots \partial_{c_r}^{m_r} V \approx
+\deqn{\partial^\alpha V \approx
   \frac{1}{\prod_{j} h_j^{m_j}}
   \sum_{i_1, \dots, i_r} \left(\prod_{j=1}^{r} w^{(m_j)}_{i_j}\right)
-  V\Bigl(\eta + \textstyle\sum_{j=1}^{r} o^{(m_j)}_{i_j} h_j e_{c_j}\Bigr),}
+  \partial^\beta V\Bigl(\eta + \textstyle\sum_{j=1}^{r} o^{(m_j)}_{i_j} h_j
+  e_{c_j}\Bigr),}
 
-evaluated at one point per combination of nodes, with the zero-weight nodes
-skipped. A tuple naming one component three times costs four evaluations of
-the map, one naming a component twice and another once six, and one naming
-three distinct components eight.
+with the zero-weight nodes skipped and every point shared by several tuples
+evaluated once. With an analytic \code{\link[=param_d2]{param_d2()}} each tuple is one first
+difference of a second derivative.
 }
 
-\section{The stencil is applied to the map}{
+\section{The stencil is never applied to a difference}{
 A lower-order numerical derivative is never differenced. The rounding of a
-difference is amplified by \eqn{h^{-k}}, so two stages multiply their errors
-and a third derivative built from a first and then a second is far worse than
-one stencil of the order wanted. Going to \code{\link[=param_value]{param_value()}} directly keeps the
-rounding at a single layer whatever the family implements, at the price of
-more evaluations of the map.
+difference is amplified by \eqn{h^{-k}}, so two stages multiply their
+errors. The quantity differenced is either the map or an analytic
+derivative, so the rounding stays at a single layer whatever the family
+implements.
 }
 
 \section{Accuracy}{
-Truncation is of order \eqn{h^2} at a step of
-\eqn{\varepsilon^{1/5}\max(1, |\eta_k|)}, and rounding is of order
-\eqn{\varepsilon / h^3}.
+Truncation is of order \eqn{h^a} at a step of
+\eqn{\varepsilon^{1/(r + a)}\max(1, |\eta_k|)}, with \eqn{r} the order of
+the difference and \eqn{a} the accuracy, and rounding is of order
+\eqn{\varepsilon / h^r}.
 }
 
 \examples{
@@ -72,6 +77,6 @@ c(gap = max(abs(unlist(numerical_d3(q, eta)) - unlist(ana))),
 
 }
 \seealso{
-\code{\link[=param_d3]{param_d3()}}, the generic that this serves, \code{\link[=mixed_stencil]{mixed_stencil()}}, which
-builds the product, and \code{\link[=numerical_d4]{numerical_d4()}} for the order above.
+\code{\link[=param_d3]{param_d3()}}, the generic that this serves, \code{\link[=param_tensor]{param_tensor()}}, which
+builds the stencils, and \code{\link[=numerical_d4]{numerical_d4()}} for the order above.
 }

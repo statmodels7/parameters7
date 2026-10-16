@@ -4,12 +4,15 @@
 \alias{numerical_d2}
 \title{Numerical Second Derivatives of a Parameter's Matrix}
 \usage{
-numerical_d2(s, eta)
+numerical_d2(s, eta, accuracy = 4L)
 }
 \arguments{
 \item{s}{A \code{\link[=parameter]{parameter()}} object, of any branch.}
 
 \item{eta}{A numeric vector of free values, of length \code{s@n_free}.}
+
+\item{accuracy}{The order of accuracy of the central rules, a positive even
+whole number.}
 }
 \value{
 A list of \code{choose(s@n_free + 1, 2)} estimates keyed as
@@ -19,44 +22,24 @@ A list of \code{choose(s@n_free + 1, 2)} estimates keyed as
 \description{
 Estimates the \eqn{d(d+1)/2} distinct second derivatives
 \eqn{\partial^2 V / \partial \eta_k \partial \eta_l}, taking exactly one
-difference for each. Which quantity is differenced depends on what the family
-already supplies: the analytic first derivative where there is one, and
-\code{\link[=param_value]{param_value()}} itself where there is not. This is the method \code{\link[=param_d2]{param_d2()}}
-dispatches to when a family has not written its own.
+difference for each, through \code{\link[=param_tensor]{param_tensor()}}. Which quantity is differenced
+depends on what the family already supplies: the analytic first derivative
+where there is one, and \code{\link[=param_value]{param_value()}} itself where there is not. This is
+the method \code{\link[=param_d2]{param_d2()}} dispatches to when a family has not written its own.
 }
-\section{The three routes}{
-Writing \eqn{V(\eta)} for \code{\link[=param_value]{param_value()}} and \eqn{\partial_k V} for an
-analytic first derivative, the component \eqn{(k, l)} is
+\section{The two routes}{
+Where \code{\link[=param_d1]{param_d1()}} is analytic, the component \eqn{(k, l)} is one central
+difference of \eqn{\partial_k V} along \eqn{\eta_l}. Where it is not, a
+diagonal component is the central second difference of \code{\link[=param_value]{param_value()}} and
+an off-diagonal one the tensor product of two first differences, in
+\eqn{\eta_k} and \eqn{\eta_l}. Differences are never composed in the same
+variable, and two differences along different coordinates form one product
+stencil, so every route is one layer.
 
-\deqn{\partial_{kl} V \approx
-  \frac{\partial_k V(\eta + h e_l) - \partial_k V(\eta - h e_l)}{2h}}
-
-whenever \code{\link[=param_d1]{param_d1()}} is analytic. Where it is not, an off-diagonal pair takes
-the four-point mixed stencil
-
-\deqn{\partial_{kl} V \approx \frac{V(\eta + h_k e_k + h_l e_l)
-  - V(\eta + h_k e_k - h_l e_l) - V(\eta - h_k e_k + h_l e_l)
-  + V(\eta - h_k e_k - h_l e_l)}{4 h_k h_l},}
-
-and a diagonal pair the three-point second difference. All three carry a
-truncation error of order \eqn{h^2}.
-}
-
-\section{Single-layer differences}{
-The rule the toolkit follows is that differences are never composed \strong{in the
-same variable}: a difference of a difference multiplies the error of the
-first stage into the second, and a fourth derivative built that way is noise.
-Differencing an analytic first derivative is one layer, since only one stage
-is numerical. The four-point stencil differences two \emph{different} components,
-and two differences along different coordinates commute into a single product
-stencil, so it is one layer as well. The diagonal case uses the
-second-difference stencil directly and never sees a first difference at all.
-
-On the analytic route the step is the order-1 one,
-\eqn{\varepsilon^{1/3}\max(1, |\eta_l|)}, about \eqn{6.1 \times 10^{-6}} near
-the origin, because a first derivative of an analytic array is taken. The two
-routes on \code{\link[=param_value]{param_value()}} use the order-2 step,
-\eqn{\varepsilon^{1/4}\max(1, |\eta_k|)}, about \eqn{1.2 \times 10^{-4}}.
+The step of a difference of order \eqn{r} is
+\eqn{\varepsilon^{1/(r + a)}\max(1, |\eta_k|)}, with \eqn{a} the accuracy:
+\eqn{r = 1} on the analytic route and \eqn{r = 2} on the value. The
+truncation error is of order \eqn{h^a}.
 }
 
 \examples{
@@ -73,5 +56,5 @@ max(abs(unlist(numerical_d2(q, eta)) - unlist(param_d2(q, eta))))
 }
 \seealso{
 \code{\link[=param_d2]{param_d2()}}, the generic that this serves, \code{\link[=numerical_d1]{numerical_d1()}} for the
-order below, and \code{\link[=mixed_stencil]{mixed_stencil()}}, which the third and fourth orders use.
+order below, and \code{\link[=param_tensor]{param_tensor()}}, which builds the stencils.
 }
