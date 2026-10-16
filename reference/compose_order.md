@@ -1,9 +1,9 @@
 # Compose Two Scalar Maps, One Order
 
-The derivative of order `k` of \\f(g(x))\\, from the derivatives of
-\\f\\ at \\g(x)\\ and of \\g\\ at \\x\\ up to that order. Each order is
-its own formula and forms nothing above it; a caller that needs several
-orders calls it once per order.
+Returns the derivative of order `k` of \\f(g(x))\\, from the derivatives
+of \\f\\ at \\g(x)\\ and of \\g\\ at \\x\\ up to that order. Each order
+is its own formula and forms nothing above it; a caller that needs
+several orders calls it once per order.
 
 ## Usage
 
@@ -16,9 +16,9 @@ compose_order(fd, gd, k)
 - fd:
 
   A list or vector of the derivatives of the outer map at \\g(x)\\, in
-  order, at least `k` of them. Read with `[[`, so a list, a numeric
-  vector or a list of numeric vectors all serve. The **value** of \\f\\
-  is not needed and is not read.
+  order, at least `k` of them. The function reads the argument with
+  `[[`, so a list, a numeric vector or a list of numeric vectors all
+  serve. The value of \\f\\ is not needed and is not read.
 
 - gd:
 
@@ -31,20 +31,20 @@ compose_order(fd, gd, k)
 
 ## Value
 
-The derivative of order `k` of the composition, the shape the arithmetic
-on `fd` and `gd` produces: a single number where both are scalar, a
-vector where either is, a matrix where either is.
+The derivative of order `k` of the composition, with the shape that the
+arithmetic on `fd` and `gd` produces: a single number where both are
+scalar, a vector where either is, a matrix where either is.
 
 ## Details
 
-Faa di Bruno's formula, whose coefficients are the numbers of set
-partitions of a given shape: \$\$(f \circ g)' = f' g',\$\$ \$\$(f \circ
-g)'' = f'' g'^2 + f' g'',\$\$ \$\$(f \circ g)''' = f''' g'^3 + 3 f'' g'
-g'' + f' g''',\$\$ \$\$(f \circ g)'''' = f'''' g'^4 + 6 f''' g'^2 g'' +
-3 f'' g''^2 + 4 f'' g' g''' + f' g''''.\$\$ The five coefficients of the
-last line (1, 6, 3, 4 and 1) count the partitions of four elements into
-four singletons, a pair and two singletons, two pairs, a triple and a
-singleton, and one block.
+The derivatives follow Faa di Bruno's formula, whose coefficients are
+the numbers of set partitions of a given shape: \$\$(f \circ g)' = f'
+g',\$\$ \$\$(f \circ g)'' = f'' g'^2 + f' g'',\$\$ \$\$(f \circ g)''' =
+f''' g'^3 + 3 f'' g' g'' + f' g''',\$\$ \$\$(f \circ g)'''' = f''''
+g'^4 + 6 f''' g'^2 g'' + 3 f'' g''^2 + 4 f'' g' g''' + f' g''''.\$\$ The
+five coefficients of the last line (1, 6, 3, 4 and 1) count the
+partitions of four elements into four singletons, a pair and two
+singletons, two pairs, a triple and a singleton, and one block.
 
 Every argument may be a vector, in which case the composition is applied
 elementwise and the result has the same length. That is how the families

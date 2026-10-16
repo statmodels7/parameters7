@@ -34,13 +34,13 @@ A single number.
 
 ## Details
 
-Holding the first index is what leaves the orderings cyclic: a cyclic
+Holding the first index leaves the orderings cyclic: a cyclic
 permutation leaves the trace unchanged, so fixing one position counts
 each distinct cycle once. The orderings come from
 [`multiset_orderings()`](https://statmodels7.github.io/parameters7/reference/multiset_orderings.md)
 and are counted with multiplicity, which see.
 
-This is a derivative in the **weights**;
+This is a derivative in the weights;
 [`sum_struct_logdet_derivs()`](https://statmodels7.github.io/parameters7/reference/sum_struct_logdet_derivs.md)
 carries it onto the free scale.
 

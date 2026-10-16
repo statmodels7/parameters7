@@ -6,7 +6,7 @@ Assembles the derivative components of orders two to four of
 mixed component is exactly zero and a pure one is the matching
 derivative from
 [`diag_dlog()`](https://statmodels7.github.io/parameters7/reference/diag_dlog.md),
-counted once per entry the free value owns.
+counted once per entry that the free value owns.
 
 ## Usage
 
@@ -34,8 +34,8 @@ diag_logdet_higher(s, eta, order)
 
 A numeric vector of `choose(s@n_free + order - 1, order)` entries, keyed
 as `param_tuple_names(s, order)` and in that order. Under the log link
-it is all zeros at every order above 1, \\\log h(\eta) = \eta\\ being
-linear.
+it is all zeros at every order above 1, because \\\log h(\eta) = \eta\\
+is linear.
 
 ## See also
 

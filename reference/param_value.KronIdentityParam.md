@@ -30,7 +30,8 @@ parameter's labels, so the result is relabeled over the composite side,
 
 A `s@dimension` by `s@dimension` symmetric numeric matrix, block
 diagonal with `m` identical blocks, and labeled `v1`, `v2`, ..., `v(md)`
-on both margins. Positive definite exactly when the inner parameter is.
+on both margins. The matrix is positive definite exactly when the inner
+parameter is.
 
 ## See also
 

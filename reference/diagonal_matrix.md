@@ -1,9 +1,9 @@
 # Construct a Diagonal Parameter
 
 Returns an object holding the map \\M = \mathrm{diag}(h(\eta_1), \dots,
-h(\eta_p))\\, a diagonal matrix whose \\p\\ entries are positive, each
-carried from one free value by a scalar link. Use it for a covariance
-that assumes independence, which is \\p\\ free values against
+h(\eta_p))\\, a diagonal matrix whose \\p\\ entries are positive and are
+each obtained from one free value by a scalar link. Use it for a
+covariance that assumes independence, which is \\p\\ free values against
 [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)'s
 \\p(p+1)/2\\, and for a set of independent variance components.
 
@@ -23,8 +23,8 @@ diagonal_matrix(dimension, link = linkfunctions7::log_link())
 
 - dimension:
 
-  The side \\p\\ of the matrix. A single positive whole number, finite
-  and at least 1; any other value signals the error
+  The side \\p\\ of the matrix. It must be a single positive whole
+  number, finite and at least 1; any other value signals the error
   `'dimension' must be a single positive integer.`
 
 - link:
@@ -32,10 +32,9 @@ diagonal_matrix(dimension, link = linkfunctions7::log_link())
   A linkfunctions7 link carrying the free scale onto the positive
   entries,
   [`linkfunctions7::log_link()`](https://statmodels7.github.io/linkfunctions7/reference/log_link.html)
-  by default. It must map **onto** the positive half line, so
-  `identity_link()` is rejected with its bounds in the message, and
-  **from** the whole real line, since the free vector is unconstrained
-  by design.
+  by default. It must map onto the positive half line, so
+  `identity_link()` is rejected with its bounds in the message, and from
+  the whole real line, since the free vector is unconstrained by design.
   [`check_positive_link()`](https://statmodels7.github.io/parameters7/reference/check_positive_link.md)
   enforces both at construction, reading the link's own lower bound for
   the first and
@@ -59,10 +58,10 @@ with `n_free` equal to `dimension`, `free_names` tagged by the link,
 `rank` equal to `dimension`, an empty `null_basis`, `param_name`
 `"diag"`, and `param_params` holding `link` and `shared = FALSE`.
 
-## Where the two packages meet
+## The links of linkfunctions7
 
-The Jacobian of a diagonal map is diagonal, which is what a scalar link
-supplies, so the linkfunctions7 objects are used directly and their
+The Jacobian of a diagonal map is diagonal, and a scalar link supplies
+exactly this, so the linkfunctions7 objects are used directly and their
 exact derivatives to fourth order apply without a further chain rule.
 
 ## The free names record the link
@@ -78,8 +77,8 @@ number on its own scale.
 \$\$\log\|M\| = \sum\_{i=1}^{p} \log h(\eta_i),\$\$
 
 a sum of functions of one free value each, so every mixed derivative of
-it is exactly zero at every order. Under the **log** link \\\log h(\eta)
-= \eta\\, so the gradient is a vector of ones and the second, third and
+it is exactly zero at every order. Under the log link \\\log h(\eta) =
+\eta\\, so the gradient is a vector of ones and the second, third and
 fourth derivatives all vanish. Under another link they do not: a
 softplus link at \\\eta = (1, 2)\\ gives second derivatives of
 \\(-0.160, -0.122)\\.
@@ -105,7 +104,7 @@ for the map.
 ## Examples
 
 ``` r
-# Three independent variances, on the log scale by default.
+# The three independent variances are on the log scale by default.
 s <- diagonal_matrix(3)
 s@free_names
 #> [1] "log_d1" "log_d2" "log_d3"
@@ -133,8 +132,8 @@ round(param_value(r, c(1, 2)), 4)
 #> v1 1.3133 0.0000
 #> v2 0.0000 2.1269
 
-# A link onto the whole line is rejected, an entry having to be positive,
-# and so is one defined on part of the line.
+# A link onto the whole line is rejected because an entry must be positive,
+# and so is a link defined on part of the line.
 try(diagonal_matrix(2, link = linkfunctions7::identity_link()))
 #> Error : 'link' maps onto (-Inf, Inf), which is not inside the positive half
 #>   line. A diagonal entry of a positive definite matrix is positive.

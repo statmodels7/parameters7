@@ -15,7 +15,7 @@ the cost of the composition low."><meta property="og:image" content="https://sta
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,7 +48,7 @@ the cost of the composition low."><meta property="og:image" content="https://sta
     <p>Evaluates \(\partial^{S_D}(d_i d_j)\) for every pair \((i, j)\) at once,
 given the multiset \(S_D\) of scale indices. It is zero wherever \(S_D\)
 contains an index naming neither \(i\) nor \(j\), so the result is
-<strong>supported on the rows and columns that those indices name</strong>, which keeps
+supported on the rows and columns that those indices name, which keeps
 the cost of the composition low.</p>
     </div>
 
@@ -78,14 +78,14 @@ which is at most the derivative order.</p></dd>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Three cases, and the arithmetic differs in each:</p><ul><li><p><strong>no indices.</strong> The factor is \(d_i d_j\), an outer product, the case of
-a component that differentiates the correlation alone.</p></li>
-<li><p><strong>one distinct index \(k\), with multiplicity \(m\).</strong> Off the diagonal
+    <p>Three cases, and the arithmetic differs in each:</p><ul><li><p>No indices. The factor is \(d_i d_j\), an outer product, the case of
+a component that differentiates only the correlation.</p></li>
+<li><p>One distinct index \(k\), with multiplicity \(m\). Off the diagonal
 the entry carries one factor of \(d_k\), so it is
 \(d_k^{(m)} d_j\); on the diagonal it carries two, so it is the Leibniz
 expansion \(\sum_r \binom{m}{r} d_k^{(r)} d_k^{(m-r)}\) of
 \(\partial^m d_k^2\).</p></li>
-<li><p><strong>two distinct indices \(i\) and \(j\).</strong> Only the entries \((i,j)\)
+<li><p>Two distinct indices \(i\) and \(j\). Only the entries \((i,j)\)
 and \((j,i)\) survive, each \(d_i^{(m_i)} d_j^{(m_j)}\).</p></li>
 </ul><p>Three or more distinct indices give the zero matrix: an entry of
 \(\Sigma\) carries at most two scales, so a third differentiation in a new
@@ -94,7 +94,7 @@ scale annihilates it.</p>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="dr_prod_derivs.html">dr_prod_derivs()</a></code>, the only caller, and <code><a href="dr_prod.html">dr_prod()</a></code> for the
-factorization this is half of.</p></div>
+factorization of which this is half.</p></div>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

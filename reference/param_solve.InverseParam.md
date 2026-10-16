@@ -1,8 +1,8 @@
 # Solve and Factor of an Inverse Parameter
 
 [`param_solve()`](https://statmodels7.github.io/parameters7/reference/param_solve.md)
-is the inner family's **value**, no inversion being needed: the inverse
-of \\S^{-1}\\ is \\S\\.
+is the inner family's value, because the inverse of \\S^{-1}\\ is \\S\\
+and the method therefore does not invert a matrix.
 [`param_factor()`](https://statmodels7.github.io/parameters7/reference/param_factor.md)
 is the lower triangular \\L\\ with \\LL^\top\\ the value, which is the
 package's convention and the transpose of what

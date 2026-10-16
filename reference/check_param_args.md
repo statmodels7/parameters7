@@ -2,7 +2,7 @@
 
 Checks the matrix side that every matrix family's constructor takes, and
 returns it coerced to integer so the caller can store it in the class's
-integer property. Called by
+integer property. The function is called by
 [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md),
 [`matrix_log()`](https://statmodels7.github.io/parameters7/reference/matrix_log.md),
 [`diagonal_matrix()`](https://statmodels7.github.io/parameters7/reference/diagonal_matrix.md),

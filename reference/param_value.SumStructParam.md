@@ -1,10 +1,11 @@
 # Value of a Sum of Fixed Matrices
 
-The weighted sum \\\sum_k c_k(\eta_k) P_k\\, accumulated in place over
-the components. Positive semidefinite at every free vector, a
-non-negative combination of positive semidefinite matrices being one;
-positive **definite** only where the components' null spaces meet at the
-origin, which is the condition `rank` records.
+Returns the weighted sum \\\sum_k c_k(\eta_k) P_k\\, accumulated in
+place over the components. The matrix is positive semidefinite at every
+free vector, because a non-negative combination of positive semidefinite
+matrices is positive semidefinite, and it is positive definite only
+where the components' null spaces meet at the origin, which is the
+condition that `rank` records.
 
 The value is labeled `v1`, `v2`, ..., `vp` on both margins, the
 convention that

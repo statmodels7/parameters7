@@ -1,7 +1,7 @@
 # Third and Fourth Derivatives of a Matrix Exponential
 
-The derivative components of orders three and four of \\M = e^{S}\\ with
-respect to the free entries of the symmetric matrix \\S\\.
+Computes the derivative components of orders three and four of \\M =
+e^{S}\\ with respect to the free entries of the symmetric matrix \\S\\.
 
 ## Usage
 
@@ -51,4 +51,4 @@ which computes one component,
 [`mlog_tables()`](https://statmodels7.github.io/parameters7/reference/mlog_tables.md)
 for the shared tables, and
 [`matrix_log()`](https://statmodels7.github.io/parameters7/reference/matrix_log.md)
-for the cost this order carries.
+for the cost that this order carries.

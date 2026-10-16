@@ -1,6 +1,6 @@
 # Derivatives of an AR(1) Parameter
 
-Closed form at all four orders. One page covers
+The derivatives have closed form at all four orders. One page covers
 [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md),
 [`param_d2()`](https://statmodels7.github.io/parameters7/reference/param_d2.md),
 [`param_d3()`](https://statmodels7.github.io/parameters7/reference/param_d3.md)
@@ -11,7 +11,7 @@ orders: \\M = \sigma^2 P(\rho)\\, so a component with \\a\\ scale
 indices and \\b\\ correlation indices is the \\a\\-th derivative of the
 scale times the \\b\\-th derivative of the pattern.
 
-The pattern's derivatives are the ones that need work here. An entry is
+The pattern's derivatives need work here. An entry is
 \\\rho^{\|i-j\|}\\, a power where
 [`compound_symmetry()`](https://statmodels7.github.io/parameters7/reference/compound_symmetry.md)'s
 pattern is linear, so each is composed with the rhobit link to the
@@ -38,7 +38,7 @@ Each distinct lag is composed once.
 ## Value
 
 A named list of `order + 1` symmetric `s@dimension` by `s@dimension`
-matrices; see **Details** for the keying of each order.
+matrices; see Details for the keying of each order.
 
 ## Details
 
@@ -58,7 +58,7 @@ tuple names of their own order:
   5 entries, `param_tuple_names(s, 4)`.
 
 Every component with at least one correlation index has a zero diagonal,
-the lag-0 entries of the pattern being the constant 1.
+because the lag-0 entries of the pattern are the constant 1.
 
 ## See also
 

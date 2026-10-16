@@ -1,7 +1,7 @@
 # The Inverse of a Matrix Parameter
 
-The S7 class of the family whose value is the inverse of another
-family's.
+`InverseParam` is the S7 class of the family whose value is the inverse
+of another family's.
 [`inverse_of()`](https://statmodels7.github.io/parameters7/reference/inverse_of.md)
 builds one. It carries the inner family's free vector unchanged, so its
 coordinates are read as those of the matrix that it inverts.

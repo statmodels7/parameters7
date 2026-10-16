@@ -1,9 +1,9 @@
 # Matrix Logarithm Parameter
 
-The S7 class of unstructured symmetric positive definite matrices in the
-matrix logarithm parametrization, \\M = \exp(S)\\ with \\S\\ symmetric
-and its lower triangle read straight off the free vector. It is a second
-chart onto the cone that
+`MatrixLogParam` is the S7 class of unstructured symmetric positive
+definite matrices in the matrix logarithm parametrization, \\M =
+\exp(S)\\ with \\S\\ symmetric and its lower triangle read straight off
+the free vector. It is a second chart onto the cone that
 [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
 parametrizes, with different quantities in closed form.
 
@@ -86,13 +86,14 @@ for the properties that this class inherits.
 ## Examples
 
 ``` r
-# The same cone as log_cholesky(), the same number of free values.
+# This chart parametrizes the same cone as log_cholesky(), with the same
+# number of free values.
 s <- matrix_log(3)
 c(matrix_log = s@n_free, log_cholesky = log_cholesky(3)@n_free)
 #>   matrix_log log_cholesky 
 #>            6            6 
 
-# But different free names: no entry is transformed here.
+# The free names differ, because the entries of S are not transformed here.
 rbind(matrix_log = s@free_names, log_cholesky = log_cholesky(3)@free_names)
 #>              [,1]     [,2]     [,3]     [,4]   [,5]   [,6]  
 #> matrix_log   "S1"     "S2"     "S3"     "S2.1" "S3.1" "S3.2"

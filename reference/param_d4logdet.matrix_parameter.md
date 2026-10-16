@@ -1,6 +1,6 @@
 # Default Fourth Log-Determinant Derivatives
 
-The method that every
+This is the method that every
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
 inherits when it registers no
 [`param_d4logdet()`](https://statmodels7.github.io/parameters7/reference/param_d4logdet.md)
@@ -46,12 +46,12 @@ and
 [`param_d2()`](https://statmodels7.github.io/parameters7/reference/param_d2.md),
 or with a family's own
 [`param_d2logdet()`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.md),
-the differencing is a single layer on an exact quantity, accurate to
-about \\10^{-9}\\.
+the method applies the difference in a single layer to an exact
+quantity, and the result is accurate to about \\10^{-9}\\.
 
-With only
+When only
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
-supplied, the base-class
+is supplied, the base-class
 [`param_d2logdet()`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.md)
 would read numerical arrays and is not used: the stencil is a fourth
 difference of

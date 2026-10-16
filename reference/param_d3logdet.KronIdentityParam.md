@@ -1,6 +1,7 @@
 # Third Log-Determinant Derivatives of a Block Replication
 
-Closed form: \\m\\ times the inner parameter's third-order vector.
+The third-order vector has closed form and equals \\m\\ times the inner
+parameter's third-order vector.
 
 ## Arguments
 

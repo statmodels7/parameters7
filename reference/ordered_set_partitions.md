@@ -1,9 +1,9 @@
 # Ordered Set Partitions of the First k Positions
 
-Every way of splitting `1:k` into non-empty blocks **and ordering the
-blocks**, which is what the derivative of an inverse sums over: the
-factors are matrices and do not commute, so two orderings of the same
-split are two terms.
+Returns every way of splitting `1:k` into non-empty blocks and ordering
+the blocks, which is the set over which the derivative of an inverse
+sums. The factors are matrices and do not commute, so two orderings of
+the same split are two terms.
 
 ## Usage
 
@@ -24,7 +24,7 @@ partition.
 
 ## Details
 
-Built from the unordered enumeration of
+The enumeration is built from the unordered enumeration of
 [`numericals7::set_partitions()`](https://statmodels7.github.io/numericals7/reference/set_partitions.html)
 by taking every permutation of each partition's blocks. The count is the
 Fubini number: 1, 3, 13, 75 for `k` of 1 to 4.

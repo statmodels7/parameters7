@@ -23,7 +23,7 @@ NOT CHECKED."><meta property="og:image" content="https://statmodels7.github.io/p
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -109,47 +109,48 @@ check that was skipped or has no number.</p></dd>
 
 
 </dl><p>For a family that is not a matrix it has the columns <code>check</code>, <code>status</code> and
-<code>note</code>, the last being <strong>character</strong> and holding a formatted number, the
-string <code>numerical</code> or the empty string, with seven rows for <code><a href="simplex.html">simplex()</a></code> and
-<code><a href="transition_matrix.html">transition_matrix()</a></code> and five for any other such family. The <code>status</code>
-column is common to both.</p>
+<code>note</code>, where <code>note</code> is character and holds a formatted number, the
+string <code>numerical</code> or the empty string, and the table has seven rows for
+<code><a href="simplex.html">simplex()</a></code> and <code><a href="transition_matrix.html">transition_matrix()</a></code> and five for any other such family.
+The <code>status</code> column is common to both.</p>
     </div>
     <div class="section level2">
     <h2 id="the-not-checked-status">The NOT CHECKED status<a class="anchor" aria-label="anchor" href="#the-not-checked-status"></a></h2>
-    <p>A quantity that comes from a numerical fallback is reported as <strong>NOT
-CHECKED</strong>, never as passed. Comparing a finite difference against a finite
+    <p>A quantity that comes from a numerical fallback is reported as NOT
+CHECKED, never as passed. Comparing a finite difference against a finite
 difference is the same arithmetic twice, and it agrees however wrong the
-parametrization is. <code><a href="param_is_numerical.html">param_is_numerical()</a></code> is what decides, and a family
-supplying only <code><a href="param_value.html">param_value()</a></code> therefore comes back with six of the nine rows
-not checked, because nothing in it can be compared with an independent
-route.</p>
+parametrization is. The function <code><a href="param_is_numerical.html">param_is_numerical()</a></code> determines which
+quantities come from a fallback, and a family that supplies only
+<code><a href="param_value.html">param_value()</a></code> therefore comes back with six of the nine rows not checked,
+because its quantities cannot be compared with an independent route.</p>
     </div>
     <div class="section level2">
     <h2 id="the-nine-checks-and-their-references">The nine checks and their references<a class="anchor" aria-label="anchor" href="#the-nine-checks-and-their-references"></a></h2>
 
-<ol><li><p><strong>membership</strong>: the matrix is symmetric to within <code>tol</code> (relative to
+<ol><li><p>membership: the matrix is symmetric to within <code>tol</code> (relative to
 the larger of 1 and its largest entry) and positive semidefinite, a
 full-rank family has a strictly positive smallest eigenvalue, and a
 rank-deficient one annihilates its declared null space. The last is tested
 through the null basis and not by counting eigenvalues, since a count of
 small eigenvalues is not scale invariant.</p></li>
-<li><p><strong>round trip</strong>: <code><a href="param_free.html">param_free()</a></code> recovers the free vector from the matrix,
+<li><p>round trip: <code><a href="param_free.html">param_free()</a></code> recovers the free vector from the matrix,
 where the family implements an inverse.</p></li>
-<li><p><strong>first derivatives</strong> against one central difference of <code><a href="param_value.html">param_value()</a></code>.</p></li>
-<li><p><strong>second derivatives</strong> against one central difference of the analytic
+<li><p>first derivatives against one central difference of <code><a href="param_value.html">param_value()</a></code>.</p></li>
+<li><p>second derivatives against one central difference of the analytic
 first derivatives.</p></li>
-<li><p><strong>log-determinant</strong> against the sum of the logs of the eigenvalues that
+<li><p>log-determinant against the sum of the logs of the eigenvalues that
 the declared rank keeps.</p></li>
-<li><p><strong>logdet gradient</strong> against \(\mathrm{tr}(M^{+} \partial_k M)\), with
-the pseudo-inverse formed from an eigendecomposition instead of from
+<li><p>logdet gradient against \(\mathrm{tr}(M^{+} \partial_k M)\), where
+the pseudo-inverse is formed from an eigendecomposition instead of from
 <code><a href="param_solve.html">param_solve()</a></code>, so the two routes share no arithmetic.</p></li>
-<li><p><strong>logdet hessian</strong> against one central difference of the analytic
+<li><p>logdet hessian against one central difference of the analytic
 gradient.</p></li>
-<li><p><strong>solve and factor</strong> against <code><a href="https://rdrr.io/r/base/solve.html" class="external-link">base::solve()</a></code>, where the family is of full
+<li><p>solve and factor against <code><a href="https://rdrr.io/r/base/solve.html" class="external-link">base::solve()</a></code>, where the family is of full
 rank; for a deficient one, which has no inverse, the row is named <code>solve</code>
 and reported as NOT CHECKED.</p></li>
-<li><p><strong>shapes and names</strong>: the declared dimension, the lengths and the names
-match what the methods return. Structural, so it carries no statistic.</p></li>
+<li><p>shapes and names: the declared dimension, the lengths and the names
+match what the methods return. This check is structural, so it carries no
+statistic.</p></li>
 </ol><p>Each check except the shapes check reports the worst discrepancy over every
 free vector that <code><a href="sweep_etas.html">sweep_etas()</a></code> supplies, four of which are drawn at random;
 the shapes check reads the origin.</p>
@@ -157,7 +158,7 @@ the shapes check reads the origin.</p>
     <div class="section level2">
     <h2 id="the-caller-s-random-stream">The caller's random stream<a class="anchor" aria-label="anchor" href="#the-caller-s-random-stream"></a></h2>
     <p>Both batteries draw from a fixed seed, so two calls on the same family report
-the same statistics, and both put back the <code>.Random.seed</code> they found on
+the same statistics, and both put back the <code>.Random.seed</code> that they found on
 entry, so a call in the middle of a simulation leaves that simulation
 unchanged. The matrix branch seeds once before <code><a href="sweep_etas.html">sweep_etas()</a></code>; the branch for
 a family that is not a matrix seeds each of its three draws. Restoring is
@@ -170,13 +171,14 @@ happens even when a check signals.</p>
 solve and no factor, so other checks run instead: the inverse round trip and
 the four derivative orders against the single-stencil construction, and, for
 <code><a href="simplex.html">simplex()</a></code> and <code><a href="transition_matrix.html">transition_matrix()</a></code>, that the value stays on the simplex
-and that every derivative component sums to zero over the value index. A derivative order that comes from a numerical fallback is
-reported as <strong>NOT CHECKED</strong> there too. <strong>The returned table has different
-columns in that case</strong>; see <strong>Value</strong>.</p>
+and that every derivative component sums to zero over the value index. A
+derivative order that comes from a numerical fallback is reported as NOT
+CHECKED there too. The returned table has different columns in that case;
+see Value.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="param_is_numerical.html">param_is_numerical()</a></code>, which decides what is checkable, and
+    <div class="dont-index"><p><code><a href="param_is_numerical.html">param_is_numerical()</a></code>, which determines what is checkable, and
 <code><a href="param_null_basis.html">param_null_basis()</a></code> for the null space that check 1 uses.</p></div>
     </div>
 
@@ -184,7 +186,7 @@ columns in that case</strong>; see <strong>Value</strong>.</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># A family that passes everything.</span></span></span>
+<span class="r-in"><span><span class="co"># This family passes every check.</span></span></span>
 <span class="r-in"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu">check_parameter</span><span class="op">(</span><span class="fu"><a href="log_cholesky.html">log_cholesky</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Parameter: log_cholesky   (3 x 3, rank 3, 6 free)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   [OK         ] membership           0.00e+00</span>
@@ -200,8 +202,9 @@ columns in that case</strong>; see <strong>Value</strong>.</p>
 <span class="r-in"><span><span class="va">r</span><span class="op">$</span><span class="va">status</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "OK" "OK" "OK" "OK" "OK" "OK" "OK" "OK" "OK"</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># A rank-deficient penalty passes the same battery, with the solve skipped:</span></span></span>
-<span class="r-in"><span><span class="co"># it has no inverse, and the null-space check replaces the definiteness one.</span></span></span>
+<span class="r-in"><span><span class="co"># A rank-deficient penalty passes the same battery, and the solve is</span></span></span>
+<span class="r-in"><span><span class="co"># skipped: it has no inverse, and the null-space check replaces the</span></span></span>
+<span class="r-in"><span><span class="co"># definiteness one.</span></span></span>
 <span class="r-in"><span><span class="va">P</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/crossprod.html" class="external-link">crossprod</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="fl">6</span><span class="op">)</span>, differences <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu">check_parameter</span><span class="op">(</span><span class="fu"><a href="scaled_matrix.html">scaled_matrix</a></span><span class="op">(</span><span class="va">P</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Parameter: scaled   (6 x 6, rank 4, 1 free)</span>
@@ -219,7 +222,7 @@ columns in that case</strong>; see <strong>Value</strong>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   check      status statistic</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 8 solve NOT CHECKED        NA</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># A family that is not a matrix gets the seven-row battery and a `note`</span></span></span>
+<span class="r-in"><span><span class="co"># For a family that is not a matrix, the result has seven rows and a `note`</span></span></span>
 <span class="r-in"><span><span class="co"># column in place of `statistic`.</span></span></span>
 <span class="r-in"><span><span class="va">v</span> <span class="op">&lt;-</span> <span class="fu">check_parameter</span><span class="op">(</span><span class="fu"><a href="simplex.html">simplex</a></span><span class="op">(</span><span class="fl">4</span><span class="op">)</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">v</span><span class="op">)</span></span></span>

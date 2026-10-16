@@ -5,10 +5,11 @@ central difference of
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
 in each component, through
 [`param_tensor()`](https://statmodels7.github.io/parameters7/reference/param_tensor.md).
-This is the method
+The generic
 [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md)
-dispatches to when a family has not written its own, and it is exported
-so that a family being developed can be compared against it.
+dispatches to this method when a family has not written its own, and the
+method is exported so that a family that is under development can be
+compared against it.
 
 ## Usage
 
@@ -35,10 +36,10 @@ numerical_d1(s, eta, accuracy = 4L)
 
 ## Value
 
-A list of `s@n_free` estimates named by `s@free_names`, each shaped like
-the result of
+A list of `s@n_free` estimates named by `s@free_names`, each of which
+has the shape of the result of
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
-and symmetrized for a matrix family.
+and is symmetrized for a matrix family.
 
 ## Details
 
@@ -81,7 +82,7 @@ numerical_d1(s, 0.3)
 max(abs(numerical_d1(s, 0.3)[[1]] - param_value(s, 0.3)))
 #> [1] 1.063594e-13
 
-# Against a family that writes its own.
+# The estimates are compared with those of a family that writes its own.
 q <- log_cholesky(2)
 eta <- c(0.2, -0.1, 0.4)
 max(abs(unlist(numerical_d1(q, eta)) - unlist(param_d1(q, eta))))

@@ -1,11 +1,10 @@
 # Validate a Matrix Handed Back to a Parameter
 
 Checks that `m` is a square symmetric numeric matrix of the parameter's
-dimension, and returns it symmetrized. Called before dispatch in the
-body of the
+dimension, and returns it symmetrized. The
 [`param_free()`](https://statmodels7.github.io/parameters7/reference/param_free.md)
-generic, on the matrix to be inverted, whenever the parameter inherits
-from
+generic calls it before dispatch, in its body, on the matrix to be
+inverted, whenever the parameter inherits from
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md).
 
 ## Usage

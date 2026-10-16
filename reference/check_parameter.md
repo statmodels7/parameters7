@@ -64,8 +64,8 @@ it has nine rows and the columns
   skipped or has no number.
 
 For a family that is not a matrix it has the columns `check`, `status`
-and `note`, the last being **character** and holding a formatted number,
-the string `numerical` or the empty string, with seven rows for
+and `note`, where `note` is character and holds a formatted number, the
+string `numerical` or the empty string, and the table has seven rows for
 [`simplex()`](https://statmodels7.github.io/parameters7/reference/simplex.md)
 and
 [`transition_matrix()`](https://statmodels7.github.io/parameters7/reference/transition_matrix.md)
@@ -74,56 +74,57 @@ both.
 
 ## The NOT CHECKED status
 
-A quantity that comes from a numerical fallback is reported as **NOT
-CHECKED**, never as passed. Comparing a finite difference against a
-finite difference is the same arithmetic twice, and it agrees however
-wrong the parametrization is.
+A quantity that comes from a numerical fallback is reported as NOT
+CHECKED, never as passed. Comparing a finite difference against a finite
+difference is the same arithmetic twice, and it agrees however wrong the
+parametrization is. The function
 [`param_is_numerical()`](https://statmodels7.github.io/parameters7/reference/param_is_numerical.md)
-is what decides, and a family supplying only
+determines which quantities come from a fallback, and a family that
+supplies only
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
-therefore comes back with six of the nine rows not checked, because
-nothing in it can be compared with an independent route.
+therefore comes back with six of the nine rows not checked, because its
+quantities cannot be compared with an independent route.
 
 ## The nine checks and their references
 
-1.  **membership**: the matrix is symmetric to within `tol` (relative to
-    the larger of 1 and its largest entry) and positive semidefinite, a
+1.  membership: the matrix is symmetric to within `tol` (relative to the
+    larger of 1 and its largest entry) and positive semidefinite, a
     full-rank family has a strictly positive smallest eigenvalue, and a
     rank-deficient one annihilates its declared null space. The last is
     tested through the null basis and not by counting eigenvalues, since
     a count of small eigenvalues is not scale invariant.
 
-2.  **round trip**:
+2.  round trip:
     [`param_free()`](https://statmodels7.github.io/parameters7/reference/param_free.md)
     recovers the free vector from the matrix, where the family
     implements an inverse.
 
-3.  **first derivatives** against one central difference of
+3.  first derivatives against one central difference of
     [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md).
 
-4.  **second derivatives** against one central difference of the
-    analytic first derivatives.
+4.  second derivatives against one central difference of the analytic
+    first derivatives.
 
-5.  **log-determinant** against the sum of the logs of the eigenvalues
-    that the declared rank keeps.
+5.  log-determinant against the sum of the logs of the eigenvalues that
+    the declared rank keeps.
 
-6.  **logdet gradient** against \\\mathrm{tr}(M^{+} \partial_k M)\\,
-    with the pseudo-inverse formed from an eigendecomposition instead of
+6.  logdet gradient against \\\mathrm{tr}(M^{+} \partial_k M)\\, where
+    the pseudo-inverse is formed from an eigendecomposition instead of
     from
     [`param_solve()`](https://statmodels7.github.io/parameters7/reference/param_solve.md),
     so the two routes share no arithmetic.
 
-7.  **logdet hessian** against one central difference of the analytic
+7.  logdet hessian against one central difference of the analytic
     gradient.
 
-8.  **solve and factor** against
+8.  solve and factor against
     [`base::solve()`](https://rdrr.io/r/base/solve.html), where the
     family is of full rank; for a deficient one, which has no inverse,
     the row is named `solve` and reported as NOT CHECKED.
 
-9.  **shapes and names**: the declared dimension, the lengths and the
-    names match what the methods return. Structural, so it carries no
-    statistic.
+9.  shapes and names: the declared dimension, the lengths and the names
+    match what the methods return. This check is structural, so it
+    carries no statistic.
 
 Each check except the shapes check reports the worst discrepancy over
 every free vector that
@@ -134,8 +135,8 @@ origin.
 ## The caller's random stream
 
 Both batteries draw from a fixed seed, so two calls on the same family
-report the same statistics, and both put back the `.Random.seed` they
-found on entry, so a call in the middle of a simulation leaves that
+report the same statistics, and both put back the `.Random.seed` that
+they found on entry, so a call in the middle of a simulation leaves that
 simulation unchanged. The matrix branch seeds once before
 [`sweep_etas()`](https://statmodels7.github.io/parameters7/reference/sweep_etas.md);
 the branch for a family that is not a matrix seeds each of its three
@@ -157,13 +158,13 @@ and
 [`transition_matrix()`](https://statmodels7.github.io/parameters7/reference/transition_matrix.md),
 that the value stays on the simplex and that every derivative component
 sums to zero over the value index. A derivative order that comes from a
-numerical fallback is reported as **NOT CHECKED** there too. **The
-returned table has different columns in that case**; see **Value**.
+numerical fallback is reported as NOT CHECKED there too. The returned
+table has different columns in that case; see Value.
 
 ## See also
 
 [`param_is_numerical()`](https://statmodels7.github.io/parameters7/reference/param_is_numerical.md),
-which decides what is checkable, and
+which determines what is checkable, and
 [`param_null_basis()`](https://statmodels7.github.io/parameters7/reference/param_null_basis.md)
 for the null space that check 1 uses.
 
@@ -172,7 +173,7 @@ for the null space that check 1 uses.
 ``` r
 set.seed(1)
 
-# A family that passes everything.
+# This family passes every check.
 r <- check_parameter(log_cholesky(3))
 #> Parameter: log_cholesky   (3 x 3, rank 3, 6 free)
 #>   [OK         ] membership           0.00e+00
@@ -188,8 +189,9 @@ r <- check_parameter(log_cholesky(3))
 r$status
 #> [1] "OK" "OK" "OK" "OK" "OK" "OK" "OK" "OK" "OK"
 
-# A rank-deficient penalty passes the same battery, with the solve skipped:
-# it has no inverse, and the null-space check replaces the definiteness one.
+# A rank-deficient penalty passes the same battery, and the solve is
+# skipped: it has no inverse, and the null-space check replaces the
+# definiteness one.
 P <- crossprod(diff(diag(6), differences = 2))
 d <- check_parameter(scaled_matrix(P))
 #> Parameter: scaled   (6 x 6, rank 4, 1 free)
@@ -207,7 +209,7 @@ d[d$status != "OK", ]
 #>   check      status statistic
 #> 8 solve NOT CHECKED        NA
 
-# A family that is not a matrix gets the seven-row battery and a `note`
+# For a family that is not a matrix, the result has seven rows and a `note`
 # column in place of `statistic`.
 v <- check_parameter(simplex(4), verbose = FALSE)
 names(v)

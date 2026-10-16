@@ -1,6 +1,6 @@
 # Log-Determinant Gradient of a Diagonal Parameter
 
-Closed form,
+Computes the gradient in closed form,
 
 \$\$\partial_k \log\|M\| = m_k \frac{h'(\eta_k)}{h(\eta_k)},\$\$
 

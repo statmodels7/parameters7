@@ -27,16 +27,17 @@ ar_inv_codes(idx, n)
 
 A list with `pow`, the base-five weights; `codes`, one integer vector
 per tuple holding the code of `t[take]` for every subset of positions in
-the order the bits enumerate them; `comp`, the matching codes of the
-complements; and `all`, every distinct code with `cnt`, the count vector
-that each stands for.
+the order in which the bits enumerate them; `comp`, the matching codes
+of the complements; and `all`, every distinct code with `cnt`, the count
+vector represented by each.
 
 ## Details
 
 A count vector needs neither a string key nor a sort:
 [`tabulate()`](https://rdrr.io/r/base/tabulate.html) builds it in one
 call, and the code indexes a list directly. Five is a safe base because
-a derivative order here is at most four, so no count can reach it.
+a derivative order here is at most four, so every count stays below
+five.
 
 ## See also
 

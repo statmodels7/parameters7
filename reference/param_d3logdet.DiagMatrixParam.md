@@ -1,12 +1,13 @@
 # Third Log-Determinant Derivatives of a Diagonal Parameter
 
-Closed form. The log-determinant is a sum of \\\log h(\eta_k)\\ terms,
-so each pure component is the third derivative of \\\log h\\ at that
-free value, times the number of entries that the value owns, and every
-mixed component is exactly zero.
+Computes the third log-determinant derivatives in closed form. The
+log-determinant is a sum of \\\log h(\eta_k)\\ terms, so each pure
+component is the third derivative of \\\log h\\ at that free value,
+times the number of entries that the value owns, and every mixed
+component is exactly zero.
 
-Under the log link the whole vector is zero, \\\log h(\eta) = \eta\\
-being linear; under a link with curvature it is not.
+Under the log link the whole vector is zero, because \\\log h(\eta) =
+\eta\\ is linear; under a link with curvature it is not.
 
 ## Arguments
 

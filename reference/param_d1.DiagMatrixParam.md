@@ -1,6 +1,7 @@
 # First Derivatives of a Diagonal Parameter
 
-Closed form, and it is the link's own derivative placed on a diagonal:
+Computes each first derivative in closed form as the link's own
+derivative placed on a diagonal:
 
 \$\$\partial_k M = h'(\eta_k)\\ \textstyle\sum\_{i:\\ o_i = k}
 E\_{ii},\$\$
@@ -14,7 +15,8 @@ h'(\eta_1) I\\.
 
 \\h'\\ comes from
 [`linkfunctions7::dlinkinv()`](https://statmodels7.github.io/linkfunctions7/reference/dlinkinv.html),
-so its accuracy is the link's and nothing is differenced.
+so its accuracy is the link's, and the derivative is computed without
+differencing.
 
 ## Arguments
 

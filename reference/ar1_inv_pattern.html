@@ -11,7 +11,7 @@ order that the scalars carry."><meta property="og:image" content="https://statmo
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,7 +64,7 @@ order that the scalars carry.</p>
 
 
 <dt id="arg-order">order<a class="anchor" aria-label="anchor" href="#arg-order"></a></dt>
-<dd><p>The highest derivative order wanted, from 0 to 4.</p></dd>
+<dd><p>The highest derivative order to compute, from 0 to 4.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -79,8 +79,9 @@ pattern and its derivatives in the second free value.</p>
 they are \(\cosh^2 z\), \(\cosh 2z\) and \(-\tfrac{1}{2}\sinh 2z\),
 so one sequence of derivatives of \(w\) in \(z\), from
 <code><a href="cosh2_derivs.html">cosh2_derivs()</a></code>, serves all three: the second is \(2w^{(k)}\) above
-order zero and the third is \(-\tfrac{1}{2}w^{(k+1)}\). Nothing is
-chained through the link and no difference \(1 - \rho^2\) is formed.</p>
+order zero and the third is \(-\tfrac{1}{2}w^{(k+1)}\). The derivatives are
+not chained through the link, and the difference \(1 - \rho^2\) is not
+formed.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

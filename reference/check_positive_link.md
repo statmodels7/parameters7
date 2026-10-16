@@ -3,7 +3,7 @@
 Checks the two properties that every family taking a link argument
 needs, and signals an error naming the bounds otherwise: that the link's
 declared range lies in the non-negative half line, and that it is
-defined on the whole real line. Called at construction by
+defined on the whole real line. It is called at construction by
 [`diagonal_matrix()`](https://statmodels7.github.io/parameters7/reference/diagonal_matrix.md),
 [`scalar_matrix()`](https://statmodels7.github.io/parameters7/reference/scalar_matrix.md),
 [`scaled_matrix()`](https://statmodels7.github.io/parameters7/reference/scaled_matrix.md),
@@ -37,7 +37,7 @@ signals an error quoting the offending bounds.
 
 A diagonal entry of a positive definite matrix is positive, so a link
 onto the whole real line would let a caller build a matrix outside the
-set without an error. The test is on the **lower** bound alone,
+set without an error. The test applies only to the lower bound,
 `b[1] >= 0`, so a link with a bounded range is accepted: `logit_link()`,
 whose range is \\(0, 1)\\, produces a positive definite matrix with
 entries below 1, which is a legitimate thing to want.
@@ -48,8 +48,8 @@ The free vector is unconstrained by design, and every family's page
 states that any vector in \\\mathbb{R}^d\\ gives a valid matrix. A link
 defined on part of the line breaks that: `sqrt_link()`,
 `inverse_link()`, `inverse_sq_link()` and `power_link()` at a positive
-exponent all reach the positive entries from the positive predictors
-alone. For `sqrt_link()`,
+exponent all reach the positive entries only from the positive
+predictors. For `sqrt_link()`,
 [`linkfunctions7::linkinv()`](https://statmodels7.github.io/linkfunctions7/reference/linkinv.html)
 is even, so `-2` and `2` give the same entry and the round trip returns
 \\\lvert \eta \rvert\\; for `inverse_link()` it is odd and gives a

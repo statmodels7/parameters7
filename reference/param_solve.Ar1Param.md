@@ -1,15 +1,15 @@
 # Solve of an AR(1) Parameter
 
-Exact, and tridiagonal. The precision of an AR(1) covariance is
-\\\\\sigma^2(1-\rho^2)\\^{-1}\\ times the matrix with 1 at the two
-corners of the diagonal, \\1+\rho^2\\ elsewhere on it, and \\-\rho\\ on
-the two first off-diagonals. Every other entry is exactly zero, an AR(1)
-process being Markov, so the inverse is written down and no
-factorization is performed. The matrix is assembled densely and
-multiplied by `b`, at \\O(p^2)\\ per column of `b`. The factor \\1 -
-\rho^2\\ is evaluated from the free value \\z\\ as \\\mathrm{sech}^2 z =
-4e^{-2\|z\|}/(1 + e^{-2\|z\|})^2\\, so the inverse stays accurate where
-\\\rho\\ rounds to \\-1\\ or 1.
+The method is exact, and the inverse is tridiagonal. The precision of an
+AR(1) covariance is \\\\\sigma^2(1-\rho^2)\\^{-1}\\ times the matrix
+with 1 at the two corners of the diagonal, \\1+\rho^2\\ elsewhere on it,
+and \\-\rho\\ on the two first off-diagonals. Every other entry is
+exactly zero because an AR(1) process is Markov, so the method writes
+down the inverse and does not factorize the matrix. The matrix is
+assembled densely and multiplied by `b`, at \\O(p^2)\\ per column of
+`b`. The factor \\1 - \rho^2\\ is evaluated from the free value \\z\\ as
+\\\mathrm{sech}^2 z = 4e^{-2\|z\|}/(1 + e^{-2\|z\|})^2\\, so the inverse
+stays accurate where \\\rho\\ rounds to \\-1\\ or 1.
 
 ## Arguments
 
@@ -39,6 +39,6 @@ A numeric matrix with `s@dimension` rows and as many columns as `b`.
 ## See also
 
 [`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md),
-which explains why the tridiagonal precision is not itself AR(1), and
+for the reason why the tridiagonal precision is not itself AR(1), and
 [`param_solve.matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/param_solve.matrix_parameter.md)
-for the factorization this avoids.
+for the factorization that this method avoids.

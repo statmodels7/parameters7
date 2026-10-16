@@ -18,7 +18,7 @@ restore_seed(old)
 
 - old:
 
-  The value `capture_seed()` returned, or `NULL`.
+  The value that `capture_seed()` returned, or `NULL`.
 
 ## Value
 
@@ -45,8 +45,9 @@ the validator set is not left behind.
 ## Examples
 
 ``` r
-# the property the pair exists for, through the public interface: a
-# validator call leaves the caller's stream exactly as it found it
+# The pair exists to give the following property, which is tested through
+# the public interface: a validator call leaves the caller's stream exactly
+# as it found it.
 set.seed(42)
 want <- rnorm(1)
 set.seed(42)

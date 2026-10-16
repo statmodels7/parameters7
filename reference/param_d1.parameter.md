@@ -1,6 +1,6 @@
 # Default First Derivatives
 
-The method that every
+This is the method that every
 [`parameter()`](https://statmodels7.github.io/parameters7/reference/parameter.md)
 inherits when it registers no
 [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md)
@@ -32,10 +32,10 @@ evaluations of the map. The families in this package do not reach it.
 
 ## Value
 
-A list of `s@n_free` estimates named by `s@free_names`, each shaped like
-the result of
+A list of `s@n_free` estimates named by `s@free_names`, each of which
+has the shape of the result of
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
-and symmetrized for a matrix family.
+and is symmetrized for a matrix family.
 
 ## See also
 

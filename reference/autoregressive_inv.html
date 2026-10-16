@@ -15,7 +15,7 @@ and the partial autocorrelations of the process whose precision this is."><meta 
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,7 +47,7 @@ and the partial autocorrelations of the process whose precision this is."><meta 
     <div class="ref-description section level2">
     <p>Returns the family whose value is \(\Sigma(\eta)^{-1}\) for \(\Sigma\)
 an <code><a href="autoregressive.html">autoregressive()</a></code> matrix: the precision of an autoregression of order
-\(q\), <strong>banded of bandwidth \(q\)</strong>. It carries
+\(q\), banded of bandwidth \(q\). It carries
 <code><a href="autoregressive.html">autoregressive()</a></code>'s free vector unchanged, so its coordinates are the scale
 and the partial autocorrelations of the process whose precision this is.</p>
     </div>
@@ -86,17 +86,18 @@ and the partial autocorrelations of the process whose precision this is.</p>
 carries no entry beyond the \(q\)-th diagonal. The value comes from
 <code><a href="param_solve.AutoregressiveParam.html">param_solve.AutoregressiveParam()</a></code>, which reads it off the prediction form
 of the process instead of factorizing, and the log-determinant is
-<code><a href="autoregressive.html">autoregressive()</a></code>'s negated. Both are exact, and neither factorizes a
-matrix of side \(p\).</p>
+<code><a href="autoregressive.html">autoregressive()</a></code>'s negated. Both are exact and avoid factorizing a matrix
+of side \(p\).</p>
     </div>
     <div class="section level2">
     <h2 id="the-derivative-arrays">The derivative arrays<a class="anchor" aria-label="anchor" href="#the-derivative-arrays"></a></h2>
-    <p>Written out, from the same prediction form the value comes from:</p>
+    <p>The derivatives are written out from the same prediction form from which
+the value comes:</p>
 <p>$$\Omega = U^\top \mathrm{diag}(\tau)\, U,$$</p>
-<p>with \(U\) unit lower triangular of bandwidth \(q\), row \(t\)
-carrying the coefficients of the best linear predictor of \(y_t\) from its
+<p>with \(U\) unit lower triangular of bandwidth \(q\), whose row \(t\)
+holds the coefficients of the best linear predictor of \(y_t\) from its
 predecessors, and \(\tau_t = 1/v_t\) the reciprocal innovation variances.
-Two facts make every order exact without a new recursion.</p>
+Every order is exact without a new recursion, because of two facts.</p>
 <p>The lower-order rows of \(U\) are the coefficients of the same family at
 that order, so their derivative arrays come from the compiled
 Levinson-Durbin recursion of <code><a href="ar_tables.html">ar_tables()</a></code> run once per order, and a
@@ -106,8 +107,8 @@ free value, \(1/v_0\) from the scale and \((1-r_j^2)^{-1}\) from each
 correlation that the prediction has reached, so a mixed derivative of it is a
 product of univariate derivatives and is exactly zero where it
 differentiates in a factor that a row does not carry.</p>
-<p>What is left is the Leibniz rule over three factors, taken twice so that a
-component costs \(2^m\) matrix products rather than \(3^m\).</p>
+<p>After these two facts, the remaining step is the Leibniz rule over three
+factors, applied twice so that a component costs \(2^m\) matrix products rather than \(3^m\).</p>
 <p>The result agrees with <code>inverse_of(autoregressive(p, q))</code>, which reaches the
 same values through the ordered-block-partition sum and shares no arithmetic
 with this route. At order four the written-out route is faster, increasingly
@@ -115,9 +116,9 @@ so as \(p\) grows.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="autoregressive.html">autoregressive()</a></code> for the family this inverts, <code><a href="ar1_inv.html">ar1_inv()</a></code> for the
-order-one case, and <code><a href="inverse_of.html">inverse_of()</a></code> for the general composition both of
-them specialize.</p></div>
+    <div class="dont-index"><p><code><a href="autoregressive.html">autoregressive()</a></code> for the family that this inverts, <code><a href="ar1_inv.html">ar1_inv()</a></code>
+for the order-one case, and <code><a href="inverse_of.html">inverse_of()</a></code> for the general composition that
+both of them specialize.</p></div>
     </div>
 
     <div class="section level2">
@@ -130,7 +131,7 @@ them specialize.</p></div>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="param_value.html">param_value</a></span><span class="op">(</span><span class="va">s</span>, <span class="va">eta</span><span class="op">)</span><span class="op">[</span><span class="va">lag</span> <span class="op">&gt;</span> <span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># And it is the inverse of the autoregression it names.</span></span></span>
+<span class="r-in"><span><span class="co"># And it is the inverse of the autoregression that it names.</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="param_value.html">param_value</a></span><span class="op">(</span><span class="va">s</span>, <span class="va">eta</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="fu"><a href="param_value.html">param_value</a></span><span class="op">(</span><span class="fu"><a href="autoregressive.html">autoregressive</a></span><span class="op">(</span><span class="fl">6</span>, <span class="fl">2</span><span class="op">)</span>, <span class="va">eta</span><span class="op">)</span> <span class="op">-</span></span></span>
 <span class="r-in"><span>        <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="fl">6</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2.356654e-16</span>

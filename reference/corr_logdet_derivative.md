@@ -3,10 +3,10 @@
 Assembles one derivative order of the log-determinant from the per-angle
 chains of
 [`corr_logdet_chains()`](https://statmodels7.github.io/parameters7/reference/corr_logdet_chains.md).
-Every mixed component is exactly zero, the log-determinant being a sum
-with one term per free value, and each pure one is that angle's chain at
-the matching order. The four log-determinant derivative methods of the
-family are one call each to this function.
+Every mixed component is exactly zero, because the log-determinant is a
+sum with one term per free value, and each pure one is that angle's
+chain at the matching order. The four log-determinant derivative methods
+of the family are one call each to this function.
 
 ## Usage
 

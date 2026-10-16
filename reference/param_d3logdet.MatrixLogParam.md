@@ -1,6 +1,7 @@
 # Third Log-Determinant Derivatives of a Matrix Logarithm Parameter
 
-Closed form, and identically zero, the trace being linear in the free
+Returns the third derivatives of the log-determinant, which are
+identically zero in closed form because the trace is linear in the free
 vector. The zeros are exact, so a consumer can drop the term instead of
 carrying small numbers through a contraction.
 

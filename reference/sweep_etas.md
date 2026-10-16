@@ -1,4 +1,4 @@
-# Free Vectors to Sweep a Parameter Over
+# Free Vectors for Sweeping a Parameter
 
 Builds the set of free vectors at which
 [`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)

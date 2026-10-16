@@ -1,8 +1,8 @@
 # Log-Determinant of an Inverse Parameter
 
 \\\log\lvert S^{-1}\rvert = -\log\lvert S\rvert\\, so the value and
-every derivative order are the inner family's negated. No determinant of
-the inverted matrix is computed.
+every derivative order are the inner family's negated. The determinant
+of the inverted matrix is not computed.
 
 ## Arguments
 

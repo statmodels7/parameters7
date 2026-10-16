@@ -1,9 +1,9 @@
 # The Precision of an Autoregression of Order q
 
-The S7 class of the family whose value is the **inverse** of an
+This is the S7 class of the family whose value is the inverse of an
 [`autoregressive()`](https://statmodels7.github.io/parameters7/reference/autoregressive.md)
-matrix: banded of bandwidth \\q\\, the precision of an autoregression of
-that order.
+matrix. That matrix is banded of bandwidth \\q\\ and is the precision of
+an autoregression of that order.
 [`autoregressive_inv()`](https://statmodels7.github.io/parameters7/reference/autoregressive_inv.md)
 builds one.
 

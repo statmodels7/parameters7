@@ -1,9 +1,10 @@
 # Third Derivatives of a Simplex Parameter
 
-Closed form, the same product rule applied a third time, which is the
-cumulant recursion of a categorical indicator at third order. Exact,
-where a family without a closed form gets a less accurate product
-stencil. Every component sums to zero over the category index.
+Computes the third derivatives in closed form, by applying the same
+product rule a third time, which is the cumulant recursion of a
+categorical indicator at third order. The result is exact, whereas a
+family without a closed form uses a less accurate product stencil. Every
+component sums to zero over the category index.
 
 ## Arguments
 
@@ -25,7 +26,8 @@ stencil. Every component sums to zero over the category index.
 ## Value
 
 A list of `choose(s@n_free + 2, 3)` numeric vectors of length \\K\\,
-keyed as `param_tuple_names(s, 3)` and in that order, each summing to 0.
+keyed as `param_tuple_names(s, 3)` and in that order. Each vector sums
+to 0.
 
 ## See also
 

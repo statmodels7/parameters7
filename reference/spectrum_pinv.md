@@ -25,7 +25,8 @@ spectrum_pinv(sp)
 ## Value
 
 A symmetric numeric matrix of the same side as `sp$vectors`. When `keep`
-is all `FALSE`, which happens only at rank 0, the zero matrix.
+is all `FALSE`, which happens only at rank 0, the result is the zero
+matrix.
 
 ## See also
 

@@ -23,14 +23,14 @@ the results, so the composite is as exact as its blocks are.
 
 ## Value
 
-A numeric vector of length `s@n_free`, the blocks' free vectors
-concatenated, named by `s@free_names`.
+A numeric vector of length `s@n_free` that holds the blocks' free
+vectors concatenated and is named by `s@free_names`.
 
 ## Details
 
 A matrix whose off-diagonal blocks are not zero is rejected with
-`'m' is not block diagonal in the blocks of this parameter.`, that being
-a matrix that this family cannot represent; the tolerance is \\10^{-8}\\
+`'m' is not block diagonal in the blocks of this parameter.`, because
+this family cannot represent such a matrix; the tolerance is \\10^{-8}\\
 relative to `max(1, max(abs(m)))`. The blocks are inverted first, so a
 diagonal block that is outside its own family is reported by that
 family's message, which is the more specific of the two.
@@ -38,4 +38,4 @@ family's message, which is the more specific of the two.
 ## See also
 
 [`param_value.BlockDiagParam()`](https://statmodels7.github.io/parameters7/reference/param_value.BlockDiagParam.md),
-the map this inverts.
+the map that this method inverts.

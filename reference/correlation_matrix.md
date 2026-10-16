@@ -7,8 +7,8 @@ coordinates, and each angle is carried onto the whole real line by a
 bounded link, so any free vector in \\\mathbb{R}^{p(p-1)/2}\\ gives a
 valid correlation matrix.
 
-Use it when the correlations are what the model is about and a scale
-belongs elsewhere: a copula, an LKJ prior, or the correlation half of a
+Use it when the model concerns the correlations and a scale belongs
+elsewhere: a copula, an LKJ prior, or the correlation half of a
 covariance built with
 [`dr_prod()`](https://statmodels7.github.io/parameters7/reference/dr_prod.md).
 
@@ -22,9 +22,9 @@ correlation_matrix(dimension)
 
 - dimension:
 
-  The side \\p\\ of the matrix. A single positive whole number, finite
-  and at least 1; \\p = 1\\ gives a constant with no free values, as
-  **Details** describes. Any other value signals the error
+  The side \\p\\ of the matrix. It must be a single positive whole
+  number, finite and at least 1; \\p = 1\\ gives a constant with no free
+  values, as described under Details. Any other value signals the error
   `'dimension' must be a single positive integer.`
 
 ## Value
@@ -46,7 +46,7 @@ Row \\i\\ of \\L\\ is built from \\i-1\\ angles \\\theta\_{i1}, \dots,
 
 The squared entries of a row telescope to one, so every row of \\L\\ is
 a unit vector and \\R = LL^\top\\ has a unit diagonal by construction.
-It is positive definite at every value of the angles, \\L\\ being
+It is positive definite at every value of the angles, because \\L\\ is
 triangular with a positive diagonal. The angles reach the free scale
 through `linkfunctions7::bounded_link(lwr = 0, upr = pi)`, so there is
 nothing to constrain on the free scale; in double precision the boundary
@@ -58,12 +58,12 @@ sum.
 ## Derivatives
 
 Derivatives come from the same Leibniz rule that the log-Cholesky family
-uses, \\R\\ being a Gram product again; what changes is the factor,
-whose entries are products of sines and cosines of angles that each
-depend on one free value.
+uses, because \\R\\ is again a Gram product. Here the entries of the
+factor are products of sines and cosines of angles, and each angle
+depends on one free value.
 
-The rows of \\L\\ are independent, so a derivative of the **factor** in
-free values from two different rows is zero. The same does not hold for
+The rows of \\L\\ are independent, so a derivative of the factor in free
+values from two different rows is zero. The same does not hold for
 \\R\\: its entry \\(i, j)\\ is the inner product of rows \\i\\ and \\j\\
 of \\L\\, so a second derivative across those two rows need not vanish.
 Such a component is supported on the entries \\(i, j)\\ and \\(j, i)\\,
@@ -78,8 +78,8 @@ The factor is triangular, so \\\|R\| = \prod_i L\_{ii}^2\\ and
 
 one term per free value. Every mixed derivative of the log-determinant
 is therefore exactly zero at every order, and each pure one is a
-logarithm composed with that angle's sine. No factorization and no
-determinant is computed.
+logarithm composed with that angle's sine. The computation involves
+neither a factorization nor a determinant.
 
 ## Reading the free vector
 
@@ -93,11 +93,10 @@ is part of the interface.
 ## The boundary in double precision
 
 As the free values grow, the angles approach 0 or \\\pi\\ and a
-correlation approaches \\\pm 1\\. At \\p = 3\\ with every free value
-equal to 10 the matrix is singular in double precision, with a
-correlation equal to \\-1\\ to every printed digit. A free value beyond
-about \\\pm 8\\ in a fit therefore indicates a correlation at the
-boundary, and
+correlation approaches \\\pm 1\\. At \\p = 3\\, if every free value
+equals 10, the matrix is singular in double precision, and a correlation
+equals \\-1\\ to every printed digit. A free value beyond about \\\pm
+8\\ in a fit therefore indicates a correlation at the boundary, and
 [`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)
 sweeps only to \\\pm 2\\.
 
@@ -106,8 +105,8 @@ sweeps only to \\\pm 2\\.
 A \\1 \times 1\\ correlation matrix has no angles, so `n_free` is 0 and
 `free_names` is empty.
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
-returns the \\1 \times 1\\ identity at the only free vector there is,
-`numeric(0)`,
+returns the \\1 \times 1\\ identity at `numeric(0)`, which is the only
+free vector,
 [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md)
 and
 [`param_d2()`](https://statmodels7.github.io/parameters7/reference/param_d2.md)
@@ -116,9 +115,9 @@ return empty lists, and
 is 0.
 [`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)
 passes, reporting its two log-determinant derivative rows as
-`NOT CHECKED`, there being no free value to differentiate in. The family
-therefore degenerates to a constant instead of signaling an error, so it
-can still be composed inside
+`NOT CHECKED`, because there is no free value in which to differentiate.
+The family therefore degenerates to a constant instead of signaling an
+error, so it can still be composed inside
 [`block_diag()`](https://statmodels7.github.io/parameters7/reference/block_diag.md);
 it carries no information of its own.
 
@@ -127,7 +126,7 @@ it carries no information of its own.
 \\\eta\\ is the free vector, of length \\d = p(p-1)/2\\, and \\p\\ the
 side of the matrix. \\\theta\_{ij} \in (0, \pi)\\ is the \\j\\-th angle
 of row \\i\\, \\L\\ the lower triangular factor and \\R = LL^\top\\ the
-correlation matrix. Note that \\\theta\\ is an angle here and a
+correlation matrix. The symbol \\\theta\\ denotes an angle here and a
 distribution parameter elsewhere in the toolkit.
 
 ## References
@@ -153,7 +152,7 @@ for the map.
 ## Examples
 
 ``` r
-# Three angles for a 3 x 3 correlation matrix, named by row and column.
+# The three angles of a 3 x 3 correlation matrix are named by row and column.
 s <- correlation_matrix(3)
 s@free_names
 #> [1] "z2.1" "z3.1" "z3.2"

@@ -45,7 +45,8 @@ param_tensor(s, eta, order, what = c("value", "logdet"), accuracy = 4L)
 ## Value
 
 For `"value"`, a list of estimates keyed as
-`param_tuple_names(s, order)` and in that order, each shaped like
+`param_tuple_names(s, order)` and in that order, each of which has the
+shape of
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)'s
 result. For `"logdet"`, a named numeric vector in the same order.
 

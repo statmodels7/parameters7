@@ -3,7 +3,7 @@
 [`param_solve()`](https://statmodels7.github.io/parameters7/reference/param_solve.md)
 and
 [`param_factor()`](https://statmodels7.github.io/parameters7/reference/param_factor.md)
-for a
+are the solve and the factor methods for a
 [`sum_struct()`](https://statmodels7.github.io/parameters7/reference/sum_struct.md)
 parameter. Both come from the assembled matrix, by
 [`solve()`](https://rdrr.io/r/base/solve.html) and by a transposed
@@ -57,8 +57,8 @@ assembled matrix; the factor is `t(chol(M))`, lower triangular with \\M
 [`param_factor()`](https://statmodels7.github.io/parameters7/reference/param_factor.md)
 requires.
 
-Both are rejected by the generic where the family is rank deficient, a
-singular matrix having neither an inverse nor a Cholesky factor.
+Both are rejected by the generic where the family is rank deficient,
+because a singular matrix has neither an inverse nor a Cholesky factor.
 
 ## See also
 

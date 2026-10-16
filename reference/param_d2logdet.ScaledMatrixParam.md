@@ -1,9 +1,10 @@
 # Log-Determinant Hessian of a Scaled Parameter
 
-Closed form: \\r\\h''/h - (h'/h)^2\\\\, the rank times the second
-derivative of \\\log h\\. Under the default log link it is exactly zero,
-the log pseudo-determinant being \\r\eta + \log\|P\|\_+\\ and so linear
-in the free value. Under a link with curvature it is not.
+The Hessian has closed form, \\r\\h''/h - (h'/h)^2\\\\, which is the
+rank times the second derivative of \\\log h\\. Under the default log
+link it is exactly zero, because the log pseudo-determinant is \\r\eta +
+\log\|P\|\_+\\ and so is linear in the free value. Under a link with
+curvature it is not.
 
 ## Arguments
 

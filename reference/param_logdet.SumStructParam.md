@@ -1,7 +1,7 @@
 # Log-Determinant of a Sum of Fixed Matrices
 
-The log-determinant of the assembled matrix where the family has full
-rank, and its log **pseudo**-determinant, the sum over the `s@rank`
+Returns the log-determinant of the assembled matrix where the family has
+full rank, and its log pseudo-determinant, the sum over the `s@rank`
 largest eigenvalues, where it does not. A sum of fixed matrices has no
 structure that a closed form could exploit, so this method assembles the
 matrix and decomposes it.
@@ -28,9 +28,9 @@ A single number.
 
 ## Details
 
-Which branch is taken is decided by `s@rank`, fixed at construction from
-the components' shared null space, and never by counting eigenvalues at
-the point: that count falls as the weights spread apart (see
+The branch depends on `s@rank`, which is fixed at construction from the
+components' shared null space, and not on a count of eigenvalues at the
+point, because that count falls as the weights spread apart (see
 [`sum_struct()`](https://statmodels7.github.io/parameters7/reference/sum_struct.md)).
 So the number of eigenvalues summed does not move as a fit walks the
 free vector.

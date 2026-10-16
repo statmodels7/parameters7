@@ -2,8 +2,9 @@
 
 Returns the two free values behind an AR(1) matrix. The variance is the
 common diagonal entry and the correlation is the first off-diagonal
-entry divided by it, both read exactly; the remaining entries of the
-matrix are then compared with the pattern that those two values imply.
+entry divided by it, and the method reads both exactly; the remaining
+entries of the matrix are then compared with the pattern that those two
+values imply.
 
 ## Arguments
 
@@ -39,4 +40,4 @@ passes the result to this method.
 ## See also
 
 [`param_value.Ar1Param()`](https://statmodels7.github.io/parameters7/reference/param_value.Ar1Param.md),
-the map this inverts.
+the map that this method inverts.

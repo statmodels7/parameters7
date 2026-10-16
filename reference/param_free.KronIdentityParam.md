@@ -1,8 +1,8 @@
 # Free Vector of a Block Replication
 
-Reads the free vector from the **first** diagonal block, by inverting
-the inner parameter there, and then checks the whole matrix against the
-replication that free vector implies. A matrix whose blocks are not
+Reads the free vector from the first diagonal block, by inverting the
+inner parameter there, and then checks the whole matrix against the
+replication that this free vector implies. A matrix whose blocks are not
 identical, or whose first block is outside the inner family, is
 rejected.
 
@@ -34,4 +34,4 @@ A numeric vector of length `s@n_free`, named by `s@free_names`.
 ## See also
 
 [`param_value.KronIdentityParam()`](https://statmodels7.github.io/parameters7/reference/param_value.KronIdentityParam.md),
-the map this inverts.
+the map that this method inverts.

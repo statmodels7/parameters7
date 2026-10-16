@@ -44,4 +44,4 @@ rejects such a block at construction.
 ## See also
 
 [`param_value.DrProdParam()`](https://statmodels7.github.io/parameters7/reference/param_value.DrProdParam.md),
-the map this inverts.
+the map that this inverts.

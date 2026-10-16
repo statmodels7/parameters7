@@ -1,7 +1,8 @@
 # A Non-Negative Combination of Fixed Matrices
 
-The S7 class of a matrix parameter that is a sum of **fixed** symmetric
-positive semidefinite matrices, each carried by one positive free value.
+`SumStructParam` is the S7 class of a matrix parameter that is a sum of
+fixed symmetric positive semidefinite matrices, each of which is carried
+by one positive free value.
 [`sum_struct()`](https://statmodels7.github.io/parameters7/reference/sum_struct.md)
 builds one.
 
@@ -82,7 +83,8 @@ for the properties that this class inherits.
 ## Examples
 
 ``` r
-# One free value per component, whatever the side of the matrices.
+# The parameter has one free value per component, whatever the side of the
+# matrices.
 s <- sum_struct(list(between = matrix(1, 3, 3), within = diag(3)))
 c(dimension = s@dimension, n_free = s@n_free)
 #> dimension    n_free 

@@ -1,13 +1,14 @@
 # Log-Determinant of a Compound Symmetry Parameter
 
-Closed form, from the two distinct eigenvalues
-\\\sigma^2\\1+(p-1)\rho\\\\ and \\\sigma^2(1-\rho)\\:
+Computes the log-determinant in closed form, from the two distinct
+eigenvalues \\\sigma^2\\1+(p-1)\rho\\\\ and \\\sigma^2(1-\rho)\\:
 
 \$\$\log\|M\| = p\log\sigma^2 + \log\\1+(p-1)\rho\\ +
 (p-1)\log(1-\rho).\$\$
 
-Three logarithms and no factorization, whatever \\p\\ is, where the base
-method takes an \\O(p^3)\\ eigendecomposition.
+The computation uses three logarithms and does not factorize a matrix,
+whatever \\p\\ is, whereas the base method takes an \\O(p^3)\\
+eigendecomposition.
 
 The two correlation logarithms are evaluated from the second free value,
 as \\\log p + \log\omega\\ and \\\log(p/(p-1)) + \log(1-\omega)\\ with

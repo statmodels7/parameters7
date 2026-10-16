@@ -1,12 +1,12 @@
 # First Derivatives of a Simplex Parameter
 
-Closed form:
+Computes the first derivatives in closed form,
 
 \$\$\partial_b \pi_a = \pi_a(\delta\_{ab} - \pi_b),\$\$
 
 which is the covariance structure of a categorical indicator, the same
 array that appears in the score of a multinomial model. Every component
-sums to zero over the category index, \\\sum_a \pi_a\\ being the
+sums to zero over the category index, because \\\sum_a \pi_a\\ is the
 constant 1.
 
 ## Arguments
@@ -29,7 +29,7 @@ constant 1.
 ## Value
 
 A list of `s@n_free` numeric vectors of length \\K\\, named by
-`s@free_names`, each summing to 0.
+`s@free_names`. Each vector sums to 0.
 
 ## See also
 

@@ -5,7 +5,8 @@ Applies the parameter's inverse link to the free vector and returns the
 diagonal for a
 [`scalar_matrix()`](https://statmodels7.github.io/parameters7/reference/scalar_matrix.md).
 Every method of the family that needs the entries starts here, so the
-shared and unshared cases branch in one place.
+case of a shared free value and the case of one free value per entry
+branch in one place.
 
 ## Usage
 
@@ -33,13 +34,13 @@ diag_entries(s, eta)
 ## Value
 
 A numeric vector of length `s@dimension`, strictly positive under any
-link
+link that
 [`check_positive_link()`](https://statmodels7.github.io/parameters7/reference/check_positive_link.md)
 admits.
 
 ## See also
 
 [`diag_owner()`](https://statmodels7.github.io/parameters7/reference/diag_owner.md)
-for which free value each entry belongs to, and
+for the free value to which each entry belongs, and
 [`diag_multiplicity()`](https://statmodels7.github.io/parameters7/reference/diag_multiplicity.md)
 for how many entries each free value owns.

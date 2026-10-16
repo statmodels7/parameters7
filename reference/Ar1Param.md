@@ -1,10 +1,11 @@
 # AR(1) Parameter
 
-The S7 class of first-order autoregressive covariance matrices: equal
-variances and a correlation falling geometrically with the lag,
-\\M\_{ij} = \sigma^2 \rho^{\|i-j\|}\\. Two free values at every
-dimension, and the correlation is unrestricted in \\(-1, 1)\\, unlike
-[`compound_symmetry()`](https://statmodels7.github.io/parameters7/reference/compound_symmetry.md)'s.
+`Ar1Param` is the S7 class of first-order autoregressive covariance
+matrices, which have equal variances and a correlation that falls
+geometrically with the lag, \\M\_{ij} = \sigma^2 \rho^{\|i-j\|}\\. The
+family has two free values at every dimension, and its correlation is
+unrestricted in \\(-1, 1)\\, unlike that of
+[`compound_symmetry()`](https://statmodels7.github.io/parameters7/reference/compound_symmetry.md).
 
 [`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md)
 builds one. It shares its whole derivative skeleton with
@@ -14,7 +15,7 @@ through
 [`econ_derivative()`](https://statmodels7.github.io/parameters7/reference/econ_derivative.md)
 and
 [`econ_logdet_derivative()`](https://statmodels7.github.io/parameters7/reference/econ_logdet_derivative.md);
-what differs is the pattern and the log-determinant terms.
+only the pattern and the log-determinant terms differ.
 
 ## Usage
 
@@ -75,7 +76,7 @@ Ar1Param(
 An object of class `Ar1Param`, a subclass of
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
 adding no properties of its own. `param_params` holds `link_scale` and
-`link_rho`, the second a
+`link_rho`, and `link_rho` is a
 [`linkfunctions7::rhobit_link()`](https://statmodels7.github.io/linkfunctions7/reference/rhobit_link.html)
 at every dimension. `n_free` is 2 and `rank` is \\p\\.
 
@@ -93,7 +94,8 @@ for the properties that this class inherits.
 ## Examples
 
 ``` r
-# Two free values whatever the dimension, and a rhobit correlation.
+# The family has two free values whatever the dimension, and a rhobit
+# correlation.
 s <- ar1(4)
 S7::S7_inherits(s, Ar1Param)
 #> [1] TRUE

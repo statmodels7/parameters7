@@ -31,7 +31,7 @@ A numeric vector of length `s@n_free`, the linked weights, named by
 
 ## Details
 
-Two rejections, each with its own message:
+The method rejects two kinds of matrix, each with its own message:
 
 - a matrix that the combination cannot reproduce, checked by residual at
   \\10^{-8}\\ relative to `max(1, max(abs(m)))`. The span is
@@ -39,7 +39,7 @@ Two rejections, each with its own message:
   symmetric matrices, so almost every matrix is outside it and this is
   the ordinary failure.
 
-- a matrix in the span needing a **non-positive weight**, which the link
+- a matrix in the span needing a non-positive weight, which the link
   cannot carry. Such a matrix may still be positive semidefinite, so the
   rejection concerns the parametrization and not the matrix.
 
@@ -49,4 +49,4 @@ least-squares projection.
 ## See also
 
 [`param_value.SumStructParam()`](https://statmodels7.github.io/parameters7/reference/param_value.SumStructParam.md),
-the map this inverts.
+the map that this method inverts.

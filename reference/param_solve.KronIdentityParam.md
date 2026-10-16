@@ -3,9 +3,9 @@
 Solves blockwise: \\M^{-1} = I_m \otimes S^{-1}\\, so the rows of `b`
 belonging to each block are handed to the inner parameter's own
 [`param_solve()`](https://statmodels7.github.io/parameters7/reference/param_solve.md)
-in turn. Nothing of side \\md\\ is factorized, and the method uses the
-inner parameter's own route, including a closed inverse where it has
-one.
+in turn. The method does not factorize any matrix of side \\md\\, and it
+uses the inner parameter's own route, including a closed inverse where
+it has one.
 
 The generic has already rejected a rank-deficient composite, which a
 deficient inner parameter produces, and filled `b` with the identity

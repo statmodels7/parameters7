@@ -1,5 +1,6 @@
 # Derivatives of a Scales-Times-Correlation Parameter
 
+Defines
 [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md),
 [`param_d2()`](https://statmodels7.github.io/parameters7/reference/param_d2.md),
 [`param_d3()`](https://statmodels7.github.io/parameters7/reference/param_d3.md)
@@ -8,9 +9,9 @@ and
 for a
 [`dr_prod()`](https://statmodels7.github.io/parameters7/reference/dr_prod.md)
 parameter. Each component is the scale factor times the correlation's
-own component, elementwise, the two groups of free values being
-disjoint, so the correlation family's own components are used and
-nothing is differenced.
+own component, elementwise, because the two groups of free values are
+disjoint, so the correlation family's own components are used and finite
+differences are not taken.
 
 ## Arguments
 
@@ -39,8 +40,9 @@ At order 1, a list of `s@n_free` symmetric matrices named by
 
 The four share
 [`dr_prod_derivs()`](https://statmodels7.github.io/parameters7/reference/dr_prod_derivs.md)
-and differ only in the order they pass. Both factors are sparse, and
-where their supports miss each other the component is exactly zero; see
+and differ only in the order that they pass. Both factors are sparse,
+and where their supports miss each other the component is exactly zero;
+see
 [`dr_prod()`](https://statmodels7.github.io/parameters7/reference/dr_prod.md)
 for the rule.
 

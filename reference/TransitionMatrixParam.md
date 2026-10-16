@@ -1,13 +1,14 @@
 # Transition Matrix Parameter
 
-The S7 class of row-stochastic matrices, each row on the open simplex in
-the additive log-ratio parametrization. Its value is a matrix but **not
-a symmetric** one, so it inherits
+`TransitionMatrixParam` is the S7 class of row-stochastic matrices, each
+row on the open simplex in the additive log-ratio parametrization. Its
+value is a matrix but not a symmetric one, so it inherits
 [`parameter()`](https://statmodels7.github.io/parameters7/reference/parameter.md)
-directly, never
-[`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md):
-there is no `rank` and no `null_basis`, and a transition matrix has no
-log-determinant, solve or factor.
+directly and not
+[`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md).
+The class therefore lacks `rank` and `null_basis`, and the
+log-determinant, solve and factor are not defined for a transition
+matrix.
 
 [`transition_matrix()`](https://statmodels7.github.io/parameters7/reference/transition_matrix.md)
 builds one. The rows are independent in the parametrization, so every
@@ -32,12 +33,12 @@ TransitionMatrixParam(
 
   A single character string naming the family, used in the error
   messages that the validators raise and in the object's `print` output.
-  `"log_cholesky"`, `"ar1"` and so on.
+  Examples are `"log_cholesky"` and `"ar1"`.
 
 - n_free:
 
   The length \\d\\ of the free vector: a single non-negative integer.
-  Zero is legal and describes a family with nothing to estimate. The
+  Zero is allowed and describes a family with nothing to estimate. The
   validator rejects a vector, a negative value, or a length that
   disagrees with `free_names`.
 
@@ -74,20 +75,21 @@ the constructor,
 [`simplex()`](https://statmodels7.github.io/parameters7/reference/simplex.md),
 which is one row of this, and
 [`parameter()`](https://statmodels7.github.io/parameters7/reference/parameter.md)
-for the properties that this class inherits and the generics that it
-does not get.
+for the properties that this class inherits and the generics that are
+not defined for it.
 
 ## Examples
 
 ``` r
-# A matrix, but not a symmetric one, so not a matrix_parameter.
+# The value is a matrix but not a symmetric one, so the class is not a
+# matrix_parameter.
 s <- transition_matrix(3)
 c(parameter = S7::S7_inherits(s, parameter),
   matrix_parameter = S7::S7_inherits(s, matrix_parameter))
 #>        parameter matrix_parameter 
 #>             TRUE            FALSE 
 
-# K(K-1) free values: one simplex per row.
+# There are K(K-1) free values, one simplex per row.
 rbind(K = 2:5, n_free = vapply(2:5, function(k)
   transition_matrix(k)@n_free, integer(1)))
 #>        [,1] [,2] [,3] [,4]

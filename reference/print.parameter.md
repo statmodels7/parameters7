@@ -51,7 +51,7 @@ for a validation report instead of a description.
 ## Examples
 
 ``` r
-# A full-rank family: nothing from the base class.
+# A full-rank family takes nothing from the base class.
 log_cholesky(3)
 #> Parameter: log_cholesky
 #> Matrix:    3 x 3, symmetric
@@ -82,7 +82,7 @@ simplex(4)
 #> 
 #> From the base class: none
 
-# Twelve free names at most, with the rest counted.
+# At most twelve free names are shown, and the rest are counted.
 log_cholesky(6)
 #> Parameter: log_cholesky
 #> Matrix:    6 x 6, symmetric

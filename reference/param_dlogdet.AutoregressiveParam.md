@@ -5,10 +5,10 @@
 [`param_d3logdet()`](https://statmodels7.github.io/parameters7/reference/param_d3logdet.md)
 and
 [`param_d4logdet()`](https://statmodels7.github.io/parameters7/reference/param_d4logdet.md)
-for an
+return the derivatives of the log-determinant of an
 [`autoregressive()`](https://statmodels7.github.io/parameters7/reference/autoregressive.md)
-parameter, closed form at every order and **separable**: the
-log-determinant is a sum with one term per free value, so every mixed
+parameter in closed form at every order. The log-determinant is
+separable: it is a sum with one term per free value, so every mixed
 component is exactly zero. At \\q = 2\\ the mixed components are 3 of
 the 6 at order 2, 7 of 10 at order 3 and 12 of 15 at order 4.
 
@@ -39,7 +39,7 @@ at order \\k\\.
 
 The four share
 [`ar_logdet_derivative()`](https://statmodels7.github.io/parameters7/reference/ar_logdet_derivative.md)
-and differ only in the order they pass. Compare
+and differ only in the order that they pass. Compare
 [`compound_symmetry()`](https://statmodels7.github.io/parameters7/reference/compound_symmetry.md)
 and
 [`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md),

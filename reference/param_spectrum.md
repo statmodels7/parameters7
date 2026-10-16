@@ -49,16 +49,16 @@ A list with four components
 
 ## Details
 
-Which eigenvalues count as zero is settled **by position**, never by
-size. [`eigen()`](https://rdrr.io/r/base/eigen.html) returns them in
-decreasing order, so the first `s@rank` are kept and the rest dropped,
-whatever their numerical values are. The rank itself comes from the
-object and is never re-derived: counting eigenvalues above a relative
-tolerance is not scale invariant, so a family whose components differ by
-many orders of magnitude would be assigned a different rank at different
-\\\eta\\, and a fitted model with smoothing parameters that far apart is
-ordinary. The rank is fixed once, at construction, from the components;
-see
+The eigenvalues that count as zero are selected by their position and
+never by their size. [`eigen()`](https://rdrr.io/r/base/eigen.html)
+returns them in decreasing order, so the first `s@rank` are kept and the
+rest dropped, whatever their numerical values are. The rank itself comes
+from the object and is never re-derived: counting eigenvalues above a
+relative tolerance is not scale invariant, so a family whose components
+differ by many orders of magnitude would be assigned a different rank at
+different \\\eta\\, and a fitted model with smoothing parameters that
+far apart is ordinary. The rank is fixed once, at construction, from the
+components; see
 [`param_null_basis()`](https://statmodels7.github.io/parameters7/reference/param_null_basis.md).
 
 The matrix is symmetrized as `(m + t(m)) / 2` before the decomposition,

@@ -1,8 +1,8 @@
 # Reject a Correlation Block That Carries a Scale
 
 Reads the diagonal of `correlation`'s own value at two probe free
-vectors and signals an error unless every entry is 1. This is the
-property on which \\\Sigma = D R D\\ rests: the standard deviations are
+vectors and signals an error unless every entry is 1. The decomposition
+\\\Sigma = D R D\\ rests on this property: the standard deviations are
 read off \\D\\, so a block with a scale of its own describes the same
 matrix from a whole ray of free vectors and the composite has one free
 value too many.
@@ -26,8 +26,9 @@ check_unit_diagonal(correlation)
 ## Value
 
 Invisibly `TRUE`. For a block whose diagonal departs from 1 at either
-probe, an error that names the family and quotes the worst entry. A
-probe at which the family cannot be evaluated is skipped.
+probe, the function signals an error that names the family and quotes
+the worst entry. A probe at which the family cannot be evaluated is
+skipped.
 
 ## The probe free vectors
 
@@ -52,9 +53,9 @@ rejection is reproducible.
 Two probes cannot prove a property that holds over the whole free space.
 The check catches a family that carries a scale, which is the usual way
 in which the requirement is broken; a family constructed to have a unit
-diagonal at exactly these two points passes.
-[`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)'s
-round trip is what reports the ray itself.
+diagonal at exactly these two points passes. The round trip of
+[`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)
+reports the ray itself.
 
 ## See also
 

@@ -7,7 +7,7 @@ the one free value is recycled, giving \\h(\eta_1) I\\. Positive
 definiteness follows from the link, which
 [`check_positive_link()`](https://statmodels7.github.io/parameters7/reference/check_positive_link.md)
 required at construction to map into the non-negative half line, so
-nothing is tested here.
+definiteness is not tested here.
 
 ## Arguments
 

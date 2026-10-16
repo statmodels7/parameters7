@@ -1,8 +1,8 @@
 # Derivatives of an Inverse Parameter of a Given Order
 
-The ordered-block-partition sum of
-[`inverse_of()`](https://statmodels7.github.io/parameters7/reference/inverse_of.md),
-run over the enumeration by which the class is keyed.
+Computes the ordered-block-partition sum of
+[`inverse_of()`](https://statmodels7.github.io/parameters7/reference/inverse_of.md)
+over the enumeration by which the class is keyed.
 
 ## Usage
 

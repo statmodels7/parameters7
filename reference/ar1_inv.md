@@ -2,8 +2,8 @@
 
 Returns the family whose value is \\\Sigma(\eta)^{-1}\\ for \\\Sigma\\
 an [`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md)
-matrix: the **tridiagonal** precision of a first-order autoregression.
-It carries
+matrix: the tridiagonal precision of a first-order autoregression. It
+carries
 [`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md)'s
 free vector unchanged, so its two coordinates are the scale and the
 correlation of the process whose precision this is.
@@ -37,14 +37,14 @@ and `rank` equal to `dimension`.
 ## Which side is which
 
 [`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md) is
-the AR(1) **pattern**, \\\sigma^2\rho^{\|i-j\|}\\. A family that takes a
-matrix parameter decides what it does with it, so
-`mvgaussian1_distrib(p, ar1(p))` is the process whose covariance is
-AR(1) and `mvgaussian2_distrib(p, ar1(p))` the model whose precision has
-those entries, which is a different and legitimate model. This family is
-the third object in that picture: the matrix whose inverse is an AR(1),
-so `mvgaussian2_distrib(p, ar1_inv(p))` is again the AR(1) process,
-written on the precision side.
+the AR(1) pattern, \\\sigma^2\rho^{\|i-j\|}\\. The family that takes a
+matrix parameter determines whether the matrix is a covariance or a
+precision, so `mvgaussian1_distrib(p, ar1(p))` is the process whose
+covariance is AR(1) and `mvgaussian2_distrib(p, ar1(p))` the model whose
+precision has those entries, which is a different and legitimate model.
+This family is the third object in that picture: the matrix whose
+inverse is an AR(1), so `mvgaussian2_distrib(p, ar1_inv(p))` is again
+the AR(1) process, written on the precision side.
 
 ## The value
 
@@ -62,37 +62,40 @@ one copy of it in the package.
 
 ## The derivatives
 
-The value is a **product** of a function of the first free value and a
+The value is a product of a function of the first free value and a
 matrix function of the second, so a component with \\a\\ scale indices
-and \\b\\ correlation indices is \\(\partial^a\tau)(\partial^b G)\\ and
-no mixed expansion is needed. The scale factor is the reciprocal of the
-link's inverse, chained through \\x\mapsto x^{-1}\\. Under the rhobit
-link, with \\\rho = \tanh z\\, the pattern's three distinct entries are
-\\G\_{11} = w = \cosh^2 z\\, \\G\_{ii} = 2w - 1 = \cosh 2z\\ and
-\\G\_{i,i\pm1} = -\tfrac{1}{2}\sinh 2z\\, so their derivatives in \\z\\
-are written out directly,
+and \\b\\ correlation indices is \\(\partial^a\tau)(\partial^b G)\\, and
+the derivative does not require a mixed expansion. The scale factor is
+the reciprocal of the link's inverse, chained through \\x\mapsto
+x^{-1}\\. Under the rhobit link, with \\\rho = \tanh z\\, the pattern's
+three distinct entries are \\G\_{11} = w = \cosh^2 z\\, \\G\_{ii} = 2w -
+1 = \cosh 2z\\ and \\G\_{i,i\pm1} = -\tfrac{1}{2}\sinh 2z\\, so their
+derivatives in \\z\\ are written out directly,
 
 \$\$w^{(k)} = 2^{k-1}\sinh 2z \\(k \text{ odd}), \qquad w^{(k)} =
 2^{k-1}\cosh 2z \\(k \text{ even}),\$\$
 
 with \\G\_{ii}^{(k)} = 2w^{(k)}\\ above order zero and
-\\G\_{i,i\pm1}^{(k)} = -\tfrac{1}{2}w^{(k+1)}\\. No difference \\1 -
-\rho^2\\ is formed, so the derivatives keep their accuracy where
+\\G\_{i,i\pm1}^{(k)} = -\tfrac{1}{2}w^{(k+1)}\\. The difference \\1 -
+\rho^2\\ is never formed, so the derivatives keep their accuracy where
 \\\rho\\ rounds to \\-1\\ or 1.
 
-This is what the family adds over `inverse_of(ar1(p))`, which reaches
-the same numbers through the ordered-block-partition sum. There a
-fourth-order component is a sum of 75 products, one for each ordered set
-partition of its four positions, each of three to nine matrices; here it
-is one elementwise product. The two routes agree to rounding.
+This family differs from `inverse_of(ar1(p))`, which reaches the same
+numbers through the ordered-block-partition sum, in that it writes the
+derivatives out. In that sum a fourth-order component is a sum of 75
+products, one for each ordered set partition of its four positions, each
+of three to nine matrices; here it is one elementwise product. The two
+routes agree to rounding.
 
 ## The log-determinant
 
 \\\log\lvert\Omega\rvert = -\log\lvert\Sigma\rvert\\, so the value and
 all four orders are
 [`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md)'s
-negated, and the closed form \\p\log\sigma^2 + (p-1)\log(1-\rho^2)\\ is
-what is negated.
+negated, and for
+[`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md)
+the log-determinant is the closed form \\p\log\sigma^2 +
+(p-1)\log(1-\rho^2)\\.
 
 ## Notation
 
@@ -103,7 +106,7 @@ what is negated.
 ## See also
 
 [`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md)
-for the family this inverts,
+for the family that this inverts,
 [`autoregressive_inv()`](https://statmodels7.github.io/parameters7/reference/autoregressive_inv.md)
 for the order-\\q\\ case, and
 [`inverse_of()`](https://statmodels7.github.io/parameters7/reference/inverse_of.md)
@@ -125,7 +128,7 @@ round(param_value(s, eta), 4)
 #> v4  0.0000  0.0000 -0.4688  1.0625 -0.4688
 #> v5  0.0000  0.0000  0.0000 -0.4688  0.7812
 
-# And it is exactly the inverse of the AR(1) it names.
+# And it is exactly the inverse of the AR(1) that it names.
 max(abs(param_value(s, eta) %*% param_value(ar1(5), eta) - diag(5)))
 #> [1] 4.440892e-16
 

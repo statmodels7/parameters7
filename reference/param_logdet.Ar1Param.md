@@ -1,15 +1,15 @@
 # Log-Determinant of an AR(1) Parameter
 
-Closed form. The determinant of the correlation pattern is
-\\(1-\rho^2)^{p-1}\\, so
+The log-determinant has closed form. The determinant of the correlation
+pattern is \\(1-\rho^2)^{p-1}\\, so
 
 \$\$\log\|M\| = p\log\sigma^2 + (p-1)\log(1-\rho^2).\$\$
 
-Two logarithms and no factorization, whatever \\p\\ is, where the base
-method takes an \\O(p^3)\\ eigendecomposition. With \\\rho = \tanh z\\,
-the second term is evaluated as \\(p-1)\\2\log 2 - 2\|z\| - 2\log(1 +
-e^{-2\|z\|})\\\\, which does not lose accuracy where \\\rho\\ rounds to
-\\-1\\ or 1.
+The evaluation needs two logarithms and no factorization, whatever \\p\\
+is, where the base method takes an \\O(p^3)\\ eigendecomposition. With
+\\\rho = \tanh z\\, the second term is evaluated as \\(p-1)\\2\log 2 -
+2\|z\| - 2\log(1 + e^{-2\|z\|})\\\\, which does not lose accuracy where
+\\\rho\\ rounds to \\-1\\ or 1.
 
 ## Arguments
 

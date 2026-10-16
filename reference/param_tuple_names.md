@@ -11,7 +11,7 @@ with the diagonal pairs first; at orders 3 and 4 the keys of
 and
 [`param_d4()`](https://statmodels7.github.io/parameters7/reference/param_d4.md),
 in lexicographic order. Use it to look a component up by name, or to
-walk a derivative list beside the index tuples
+walk a derivative list beside the index tuples that
 [`param_tuple_indices()`](https://statmodels7.github.io/parameters7/reference/param_tuple_indices.md)
 returns.
 
@@ -32,7 +32,7 @@ param_tuple_names(s, order = 2L)
 
 - order:
 
-  The derivative order. `2` by default, which is the order
+  The derivative order. It is `2` by default, which is the order that
   [`param_d2()`](https://statmodels7.github.io/parameters7/reference/param_d2.md)
   and
   [`param_d2logdet()`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.md)
@@ -46,8 +46,8 @@ param_tuple_names(s, order = 2L)
 ## Value
 
 A character vector of `choose(s@n_free + order - 1, order)` names, in
-the same order as the list they key. At order 2 the `s@n_free` diagonal
-pairs come first.
+the same order as the list that they key. At order 2 the `s@n_free`
+diagonal pairs come first.
 
 ## How many there are
 
@@ -66,11 +66,11 @@ components against 1296 ordered ones.
 
 The package never recovers an index by splitting a key apart. Splitting
 `"log_L1:log_L2"` on `":"` gives the wrong number of pieces when a free
-name contains the separator, and no error is signaled.
+name contains the separator, without signaling an error.
 `param_tuple_names()` calls
 [`param_tuple_indices()`](https://statmodels7.github.io/parameters7/reference/param_tuple_indices.md)
-and labels what it gets, so the names and the indices agree by
-construction.
+and labels the tuples that this returns, so the names and the indices
+agree by construction.
 
 ## Notation
 

@@ -1,7 +1,7 @@
 # A Short Name for a Link
 
-Returns the word that a free name uses to say which transformation
-produced a coordinate, given the link that produced it.
+Returns the tag that appears in a free name to indicate which
+transformation produced a coordinate, given the link that produced it.
 
 ## Usage
 
@@ -21,9 +21,9 @@ A single character string, empty for the identity link. The tags in use
 are `"log"` (log and either singly bounded link), `"logit"` (logit and
 the doubly bounded link), `"z"` (rhobit), and `"probit"`, `"cloglog"`,
 `"loglog"`, `"cauchit"`, `"sqrt"`, `"inv"`, `"invsq"`, `"power"` and
-`"softplus"` for the rest. A link from outside linkfunctions7 gets its
-own `link_name` reduced to lowercase letters, digits and underscores, or
-`"f"` if nothing survives that.
+`"softplus"` for the rest. For a link from outside linkfunctions7, the
+tag is its own `link_name` reduced to lowercase letters, digits and
+underscores, or `"f"` if the reduction leaves no characters.
 
 ## Details
 
@@ -42,4 +42,4 @@ lowercase letters, digits and underscores.
 [`tagged_name()`](https://statmodels7.github.io/parameters7/reference/tagged_name.md),
 which prefixes a quantity with the tag, and
 [`parameter()`](https://statmodels7.github.io/parameters7/reference/parameter.md)
-for the naming convention this serves.
+for the naming convention that this serves.

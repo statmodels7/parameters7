@@ -1,8 +1,9 @@
 # First Derivative of a Scaled Parameter
 
-Closed form: \\\partial\_\eta M = h'(\eta)\\P\\, the fixed matrix times
-the link's own first derivative. Under the default log link \\h' = h\\,
-so the derivative **is** the matrix, which the example on
+The first derivative has closed form, \\\partial\_\eta M =
+h'(\eta)\\P\\, which is the fixed matrix times the link's own first
+derivative. Under the default log link \\h' = h\\, so the derivative is
+the matrix, which the example on
 [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md)
 checks.
 

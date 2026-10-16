@@ -1,12 +1,14 @@
 # Third Log-Determinant Derivatives of a Log-Cholesky Parameter
 
-Closed form, and identically zero. \\\log\|M\| = 2\sum_i \eta_i\\ is
-linear in the free vector, so every derivative above the first vanishes
-at every \\\eta\\. The zeros are exact, so a consumer can drop the term
-instead of carrying small numbers through a contraction.
+Computes the third derivatives in closed form, and they are identically
+zero. \\\log\|M\| = 2\sum_i \eta_i\\ is linear in the free vector, so
+every derivative above the first vanishes at every \\\eta\\. The zeros
+are exact, so a consumer can drop the term instead of carrying small
+numbers through a contraction.
 
-A comparison of a general third log-determinant derivative against a
-numerical reference therefore compares two zeros on this family.
+Therefore, when a general check compares the third log-determinant
+derivative with a numerical reference on this family, both sides are
+zero.
 [`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md),
 [`compound_symmetry()`](https://statmodels7.github.io/parameters7/reference/compound_symmetry.md)
 and

@@ -4,7 +4,7 @@ Runs the compiled kernel of one order: `ar_value_cpp()` at order 0 and
 `ar_d1_cpp()` to `ar_d4_cpp()` above. The scale and the partial
 autocorrelations enter as their link inverses with derivatives to
 `order`, and the autocovariances and the autoregressive coefficients
-come back with the derivative components of that order alone.
+come back with only the derivative components of that order.
 
 ## Usage
 
@@ -42,10 +42,10 @@ at that order, in its order.
 The coefficients are multilinear in the partial autocorrelations \\r\\:
 step \\k\\ of the recursion is affine in \\r_k\\ and the earlier
 coefficients do not involve it. The kernel differentiates the recursion
-in \\r\\ for every multiset of indices up to `order`, the products by
-Leibniz over the sub-multisets without a repeated index, and applies the
-links once at the end through the partial Bell polynomials, each \\r_k\\
-depending on its own free value alone.
+in \\r\\ for every multiset of indices up to `order`, taking each
+product by Leibniz over the sub-multisets without a repeated index, and
+applies the links once at the end through the partial Bell polynomials,
+because each \\r_k\\ depends on its own free value only.
 
 ## See also
 

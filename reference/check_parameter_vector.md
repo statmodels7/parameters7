@@ -1,8 +1,8 @@
 # The Reduced Battery for a Parameter That Is Not a Matrix
 
-The checks that
+Carries out the checks that
 [`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)
-runs for a family whose value is not a symmetric matrix and which
+applies to a family whose value is not a symmetric matrix and which
 therefore has no log-determinant, no solve and no factor: the inverse
 round trip and each of the four derivative orders against the
 single-stencil numerical construction, and, for
@@ -47,7 +47,7 @@ and
 [`transition_matrix()`](https://statmodels7.github.io/parameters7/reference/transition_matrix.md)
 and five for any other family. The `status` is `"OK"`, `"FAIL"` or, for
 a derivative order that comes from a numerical fallback,
-`"NOT CHECKED"`. The column `note` is **character**, holding a formatted
+`"NOT CHECKED"`. The column `note` is character and holds a formatted
 number, the string `numerical` or the empty string, where the matrix
 branch of
 [`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)
@@ -55,13 +55,13 @@ returns a numeric `statistic`.
 
 ## Details
 
-The last check is an identity the set itself supplies. Differentiating
-\\\sum_a \pi_a = 1\\ gives \\\sum_a \partial \pi_a = 0\\, and
-differentiating again gives the same for every higher order, so a
-derivative array that fails the identity is wrong, whatever other check
-it passes. A
+The last check is an identity that the set itself supplies.
+Differentiating \\\sum_a \pi_a = 1\\ gives \\\sum_a \partial \pi_a =
+0\\, and differentiating again gives the same for every higher order, so
+a derivative array that fails the identity is wrong, whatever other
+check it passes. A
 [`transition_matrix()`](https://statmodels7.github.io/parameters7/reference/transition_matrix.md)
-satisfies it row by row, its rows being simplexes.
+satisfies it row by row, because its rows are simplexes.
 
 Three free vectors are used, drawn from `rnorm(s@n_free, sd = 0.8)`
 after `set.seed(101)`, `set.seed(102)` and `set.seed(103)`, so the

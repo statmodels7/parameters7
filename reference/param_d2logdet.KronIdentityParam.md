@@ -1,7 +1,8 @@
 # Log-Determinant Hessian of a Block Replication
 
-Closed form: \\m\\ times the inner parameter's Hessian, with the same
-keying. Zero wherever the inner parameter's is, so replicating a
+The Hessian has closed form and equals \\m\\ times the inner parameter's
+Hessian, with the same keying. It is zero wherever the inner parameter's
+is, so replicating a
 [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
 gives exact zeros here and replicating an
 [`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md)

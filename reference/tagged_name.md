@@ -3,7 +3,8 @@
 Prefixes the name of a quantity with the tag of the link that carries it
 onto the free scale, so `tagged_name(log_link(), "d1")` is `"log_d1"`
 and `tagged_name(rhobit_link(), "rho")` is `"z_rho"`. Under the identity
-link the name is left alone, the coordinate then **being** the quantity.
+link the name is left alone, because the coordinate is then the quantity
+itself.
 
 Every constructor in the package that takes a link builds its
 `free_names` through this, which is how the convention stays uniform

@@ -26,8 +26,8 @@ corr_dfactor(s, tb, ks)
 
 - ks:
 
-  A multiset of free-value indices, possibly empty. Positions in
-  `1:s@n_free`.
+  A multiset of free-value indices, possibly empty. The indices are
+  positions in `1:s@n_free`.
 
 ## Value
 
@@ -36,7 +36,7 @@ A `s@dimension` by `s@dimension` lower triangular numeric matrix, or
 
 ## Details
 
-An entry of \\L\\ depends only on the angles of **its own row**, so a
+An entry of \\L\\ depends only on the angles of its own row, so a
 multiset spanning two rows gives `NULL`. Within a row, an entry is a
 product over a prefix of the angles, so it is zero unless every
 differentiated angle appears among its factors: a derivative in
@@ -44,8 +44,8 @@ differentiated angle appears among its factors: a derivative in
 onwards, and the other entries of the returned matrix are zero.
 
 The factor's derivative across two rows is zero, but the derivative of
-\\R = LL^\top\\ across those rows is not, \\R\_{ij}\\ being the inner
-product of two rows. See
+\\R = LL^\top\\ across those rows is not, because \\R\_{ij}\\ is the
+inner product of two rows. See
 [`correlation_matrix()`](https://statmodels7.github.io/parameters7/reference/correlation_matrix.md)
 for the support that does hold.
 

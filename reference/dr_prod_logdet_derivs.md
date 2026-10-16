@@ -2,9 +2,9 @@
 
 The log-determinant is \\2\sum_j \log d_j + \log\lvert R\rvert\\, a sum
 of one term per scale and one term for the correlation. A component is
-therefore the scale's own where every index names **one** scale
-coordinate, the correlation's own where every index is a correlation
-coordinate, and 0 otherwise.
+therefore the scale's own where every index names one scale coordinate,
+the correlation's own where every index is a correlation coordinate, and
+0 otherwise.
 
 ## Usage
 
@@ -38,8 +38,9 @@ as `param_tuple_names(s, order)` and in that order.
 Two separabilities hold at once. The scales separate from each other, so
 a component naming two different scales is zero, and the correlation
 separates from the scales, so a component mixing a scale with a
-correlation coordinate is zero. What survives is \\2\\\partial^m \log
-d_k\\ on the diagonal of the scale block, through
+correlation coordinate is zero. The surviving components are
+\\2\\\partial^m \log d_k\\ on the diagonal of the scale block, computed
+through
 [`diag_dlog()`](https://statmodels7.github.io/parameters7/reference/diag_dlog.md),
 and the correlation family's own derivatives.
 

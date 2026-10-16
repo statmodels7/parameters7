@@ -1,6 +1,7 @@
 # Log-Determinant Hessian of a Matrix Logarithm Parameter
 
-Closed form, and identically zero: \\\log\|M\| = \mathrm{tr}(S)\\ is
+Returns the second derivatives of the log-determinant, which are
+identically zero in closed form: \\\log\|M\| = \mathrm{tr}(S)\\ is
 linear in the free vector, so its second derivative vanishes at every
 \\\eta\\. The zeros are exact.
 

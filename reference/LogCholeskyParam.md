@@ -1,10 +1,11 @@
 # Unstructured Positive Definite Parameter
 
-The S7 class of unstructured symmetric positive definite matrices in the
-log-Cholesky parametrization, \\M = L L^\top\\ with \\L\\ lower
-triangular and positive on the diagonal. The methods of the family
-dispatch on this class, and each of them is closed form, including all
-four derivative orders and all four orders of the log-determinant.
+This S7 class represents unstructured symmetric positive definite
+matrices in the log-Cholesky parametrization, \\M = L L^\top\\ with
+\\L\\ lower triangular and positive on the diagonal. The methods of the
+family dispatch on this class, and each of them is closed form,
+including all four derivative orders and all four orders of the
+log-determinant.
 
 Call
 [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
@@ -85,7 +86,7 @@ for the properties that this class inherits.
 ## Examples
 
 ``` r
-# The class is what dispatch keys on.
+# Dispatch keys on the class.
 s <- log_cholesky(2)
 c(S7::S7_inherits(s, LogCholeskyParam),
   S7::S7_inherits(s, matrix_parameter))

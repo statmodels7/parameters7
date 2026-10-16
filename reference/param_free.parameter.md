@@ -1,6 +1,6 @@
 # Default Inverse Map
 
-The method that every
+This is the method that every
 [`parameter()`](https://statmodels7.github.io/parameters7/reference/parameter.md)
 inherits when it registers no
 [`param_free()`](https://statmodels7.github.io/parameters7/reference/param_free.md)
@@ -24,7 +24,7 @@ reached only by a family defined elsewhere.
 
 - m:
 
-  A value of the family's shape. Never read.
+  A value of the family's shape. The method never reads it.
 
 - ...:
 

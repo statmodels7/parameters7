@@ -38,9 +38,9 @@ Writing \\N = \mathrm{diag}(\tau)U\\, the inner Leibniz gives
 \\\partial_T N = \sum\_{R \subseteq T} \mathrm{diag}(\partial_R \tau)
 \partial\_{T \setminus R} U\\, and the outer one \\\partial_I \Omega =
 \sum\_{S \subseteq I} (\partial_S U)^\top \partial\_{I \setminus S} N\\.
-Both sums run over subsets of the index positions, which is what makes a
-repeated index count with its multiplicity. Every \\\partial_S N\\ is
-built once and read by every component that needs it.
+Both sums run over subsets of the index positions, so a repeated index
+counts with its multiplicity. Every \\\partial_S N\\ is built once and
+read by every component that needs it.
 
 ## See also
 

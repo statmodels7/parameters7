@@ -1,14 +1,14 @@
 # Log-Determinant of a Block-Diagonal Parameter
 
-The sum of the blocks' log-(pseudo-)determinants, the determinant of a
-block-diagonal matrix being the product of the blocks'. Each block
-computes its own by whatever route it has, so a closed form in a block
-stays a closed form in the composite, and no determinant of the
-assembled matrix is taken.
+Returns the sum of the blocks' log-(pseudo-)determinants, because the
+determinant of a block-diagonal matrix is the product of the blocks'
+determinants. Each block computes its own by whatever route is available
+to it, so a closed form in a block stays a closed form in the composite,
+and the method does not take the determinant of the assembled matrix.
 
-Where a block is rank deficient its term is the log
-**pseudo**-determinant, the sum over the non-zero eigenvalues, and the
-composite's is then a pseudo one too.
+Where a block is rank deficient its term is the log pseudo-determinant,
+the sum over the non-zero eigenvalues, and the composite's is then a
+pseudo one too.
 
 ## Arguments
 

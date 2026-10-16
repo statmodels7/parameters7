@@ -2,18 +2,19 @@
 
 Returns an object holding the matrix logarithm parametrization of a
 symmetric positive definite matrix: \\M = \exp(S)\\ with \\S\\ symmetric
-and **genuinely free**. No entry is transformed; the free values fill
-the lower triangle of \\S\\ directly, the diagonal first and then below
-the diagonal column by column, and the exponential does the rest. Any
-vector in \\\mathbb{R}^{p(p+1)/2}\\ gives a positive definite matrix,
-the exponential of a symmetric matrix having positive eigenvalues, as
-long as no eigenvalue of \\S\\ exceeds about 709.78, above which the
-exponential overflows in double precision.
+and genuinely free. The entries of \\S\\ are not transformed: the free
+values fill the lower triangle of \\S\\ directly, starting with the
+diagonal and continuing below the diagonal column by column, and the
+exponential does the rest. Any vector in \\\mathbb{R}^{p(p+1)/2}\\ gives
+a positive definite matrix, because the exponential of a symmetric
+matrix has positive eigenvalues, as long as all eigenvalues of \\S\\ are
+at most about 709.78; above that value the exponential overflows in
+double precision.
 
 It parametrizes the same cone as
 [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
 with the same number of free values. The choice between the two depends
-on which quantities should have a closed form; see **Details**.
+on which quantities should have a closed form; see Details.
 
 ## Usage
 
@@ -50,10 +51,10 @@ eigendecomposition, with no factorization, so `param_solve(s, eta)` and
 ## The derivatives, and the reason for the Opitz route
 
 They are the Frechet derivatives of the matrix exponential, by the
-Daleckii-Krein representation. With \\S = Q \Lambda Q^\top\\ and the
-directions rotated by \\Q\\, the \\k\\-th derivative contracts the
-directions against divided differences of \\e^x\\ of order \\k+1\\ at
-the eigenvalues, summed over the orderings of the directions.
+Daleckii-Krein representation. With \\S = Q \Lambda Q^\top\\, the
+\\k\\-th derivative contracts the directions, rotated by \\Q\\, against
+divided differences of \\e^x\\ of order \\k+1\\ at the eigenvalues,
+summed over the orderings of the directions.
 
 The divided differences come from the Opitz theorem, the exponential of
 a small upper bidiagonal matrix read off its corner, in place of the
@@ -82,7 +83,7 @@ suits a model that takes derivatives repeatedly.
 ## Notation
 
 \\\eta\\ is the free vector, of length \\d = p(p+1)/2\\, \\S\\ the
-symmetric matrix it fills, and \\M = \exp(S)\\ the value. \\Q\\ and
+symmetric matrix that it fills, and \\M = \exp(S)\\ the value. \\Q\\ and
 \\\Lambda\\ are the eigenvectors and eigenvalues of \\S\\, and
 \\e\[\lambda_1, \dots, \lambda_m\]\\ a divided difference of the
 exponential.
@@ -108,8 +109,8 @@ which here is the map at \\-\eta\\.
 ## Examples
 
 ``` r
-# A 3 x 3 unstructured covariance. The free names carry no transformation:
-# the free values are the entries of S itself.
+# This example uses a 3 x 3 unstructured covariance. The free names carry no
+# transformation: the free values are the entries of S itself.
 s <- matrix_log(3)
 s@free_names
 #> [1] "S1"   "S2"   "S3"   "S2.1" "S3.1" "S3.2"
@@ -130,8 +131,8 @@ c(closed = param_logdet(s, eta), trace = sum(eta[1:3]),
 #>     closed      trace from_eigen 
 #>        0.3        0.3        0.3 
 
-# Which makes its gradient a vector of ones and zeros, and every higher
-# order exactly zero.
+# This makes its gradient a vector of ones and zeros, and every higher order
+# exactly zero.
 param_dlogdet(s, eta)
 #>   S1   S2   S3 S2.1 S3.1 S3.2 
 #>    1    1    1    0    0    0 

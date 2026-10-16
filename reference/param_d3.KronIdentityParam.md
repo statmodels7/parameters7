@@ -1,7 +1,7 @@
 # Third Derivatives of a Block Replication
 
-Closed form: the inner parameter's third derivatives, each lifted into
-\\m\\ identical blocks.
+The third derivative has closed form: the method lifts each of the inner
+parameter's third derivatives into \\m\\ identical blocks.
 
 ## Arguments
 

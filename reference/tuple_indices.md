@@ -1,8 +1,8 @@
 # The Index Tuples of a Given Width
 
-The enumeration behind
+Returns the enumeration behind
 [`param_tuple_indices()`](https://statmodels7.github.io/parameters7/reference/param_tuple_indices.md),
-taken over a plain count of variables instead of over a parameter
+computed over a plain count of variables instead of over a parameter
 object, so that anything holding derivatives over \\d\\ variables can
 use it without constructing a
 [`parameter()`](https://statmodels7.github.io/parameters7/reference/parameter.md).

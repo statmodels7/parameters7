@@ -8,9 +8,9 @@ third that the family supplies, as
 [`param_analytic()`](https://statmodels7.github.io/parameters7/reference/param_analytic.md)
 reads it, and to
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
-where there is none. This is the method
+where there is none. The generic
 [`param_d3()`](https://statmodels7.github.io/parameters7/reference/param_d3.md)
-dispatches to when a family has not written its own.
+dispatches to this method when a family has not written its own.
 
 ## Usage
 
@@ -38,9 +38,10 @@ numerical_d3(s, eta, accuracy = 4L)
 ## Value
 
 A list of `choose(s@n_free + 2, 3)` estimates keyed as
-`param_tuple_names(s, 3)` and in that order, each shaped like
+`param_tuple_names(s, 3)` and in that order, each of which has the shape
+of
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)'s
-result and symmetrized for a matrix family.
+result and is symmetrized for a matrix family.
 
 ## The stencil
 
@@ -57,8 +58,8 @@ tensor product,
 \partial^\beta V\Bigl(\eta + \textstyle\sum\_{j=1}^{r} o^{(m_j)}\_{i_j}
 h_j e\_{c_j}\Bigr),\$\$
 
-with the zero-weight nodes skipped and every point shared by several
-tuples evaluated once. With an analytic
+where the nodes of zero weight are skipped and every point shared by
+several tuples is evaluated once. With an analytic
 [`param_d2()`](https://statmodels7.github.io/parameters7/reference/param_d2.md)
 each tuple is one first difference of a second derivative.
 
@@ -99,7 +100,8 @@ numerical_d3(s, 0.3)
 max(abs(numerical_d3(s, 0.3)[[1]] - param_value(s, 0.3)))
 #> [1] 1.063594e-13
 
-# Against a family that writes its own third derivatives.
+# The estimates are compared with those of a family that writes its own
+# third derivatives.
 q <- log_cholesky(2)
 eta <- c(0.2, -0.1, 0.4)
 ana <- param_d3(q, eta)

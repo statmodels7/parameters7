@@ -4,12 +4,12 @@ A constrained parameter is a map from an unconstrained vector onto the
 set where the parameter lives: the positive definite cone, the simplex,
 the row-stochastic matrices.
 [parameters7](https://statmodels7.github.io/parameters7/) represents
-such a map as an S7 object that can be **evaluated, inverted, and
-differentiated to fourth order**. A family whose value is a symmetric
-matrix also returns its **log-determinant and its derivatives, its
-solves and its factor**. A matrix that is **rank deficient**, as a
-penalty precision often is, has a log pseudo-determinant, and its solve
-and factor are rejected.
+such a map as an S7 object that can be evaluated, inverted, and
+differentiated to fourth order. A family whose value is a symmetric
+matrix also returns its log-determinant and its derivatives, its solves
+and its factor. A matrix that is rank deficient, as a penalty precision
+often is, has a log pseudo-determinant, and its solve and factor are
+rejected.
 
 It is the constrained-parameter layer of
 [statmodels7](https://statmodels7.github.io), an S7 toolkit for
@@ -30,8 +30,8 @@ statistical modeling, alongside
 pak::pak("statmodels7/parameters7")
 ```
 
-Or the whole toolkit at once, which also installs the other seven
-packages:
+Alternatively, the following command installs the whole toolkit,
+including the other packages:
 
 ``` r
 
@@ -74,10 +74,10 @@ max(abs(param_free(s, param_value(s, eta)) - eta))
 
 A link in
 [linkfunctions7](https://statmodels7.github.io/linkfunctions7/) is a
-**scalar** bijection with a diagonal Jacobian, and everything built on
-it depends on that diagonality. A map from $`\mathbb{R}^d`$ to a matrix
-has a full Jacobian, so it is a different class. The two **compose**:
-the diagonal of a diagonal matrix is a scalar map, and
+scalar bijection with a diagonal Jacobian, and everything built on it
+depends on that diagonality. A map from $`\mathbb{R}^d`$ to a matrix has
+a full Jacobian, so it is a different class. The two compose: the
+diagonal of a diagonal matrix is a scalar map, and
 [linkfunctions7](https://statmodels7.github.io/linkfunctions7/) links
 serve there directly.
 
@@ -171,8 +171,8 @@ is a triangle), so the family is parametrized by the partial
 autocorrelations, each in $`(-1, 1)`$ and carried onto the free scale by
 the inverse hyperbolic tangent, and the Levinson-Durbin recursion maps
 them onto the coefficients. Every free vector is stationary, and the
-precision is banded with the order as bandwidth, an autoregression of
-order $`q`$ being Markov of order $`q`$:
+precision is banded with the order as bandwidth, because an
+autoregression of order $`q`$ is Markov of order $`q`$:
 
 ``` r
 
@@ -210,7 +210,7 @@ round(r, 3)
 
 A spline penalty is singular by construction: its null space contains
 the functions that it does not penalize. Read as a prior, the penalty is
-improper, so it is a legitimate **penalty** but not a density.
+improper, so it is a valid penalty but not a density.
 
 ``` r
 
@@ -240,8 +240,8 @@ c(penalty_annihilates_them = max(abs(p %*% lin)),
 #>              0.000000e+00              9.482992e-16
 ```
 
-The log-determinant becomes the log **pseudo**-determinant, and under
-the log link its derivative is the rank at every scale:
+The log-determinant becomes the log pseudo-determinant, and under the
+log link its derivative is the rank at every scale:
 
 ``` r
 
@@ -406,9 +406,9 @@ number on a scale to which it does not belong.
 [`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)
 runs nine checks on a matrix family, fewer on a family that is not a
 matrix, each against a route that the implementation does not take. A
-quantity that comes from the base class is reported as **not checked**:
-comparing a finite difference with a finite difference is the same
-arithmetic twice.
+quantity that comes from the base class is reported as not checked,
+because comparing a finite difference with a finite difference applies
+the same arithmetic to both sides.
 
 ``` r
 

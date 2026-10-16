@@ -1,9 +1,9 @@
 # Derivative Arrays of an Inverse Autoregressive Parameter
 
-The four orders of \\\partial\Omega\\ for \\\Omega\\ the precision of an
-autoregression of order \\q\\, written out from the prediction
-factorization instead of assembled by the ordered-block-partition sum
-that
+Returns the four orders of \\\partial\Omega\\ for \\\Omega\\ the
+precision of an autoregression of order \\q\\, written out from the
+prediction factorization instead of assembled by the
+ordered-block-partition sum that
 [`inverse_of()`](https://statmodels7.github.io/parameters7/reference/inverse_of.md)
 uses. The two routes agree to rounding.
 

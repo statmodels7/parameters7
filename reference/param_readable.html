@@ -7,8 +7,9 @@ estimates, and it is rarely the quantity that a reader wants: the hyperbolic
 arc tangent of a partial autocorrelation has no direct meaning, and the
 autoregressive coefficients cannot be recovered from a printed covariance.
 Use it to turn an estimate and its variance matrix into a table that a reader
-can use. The base class declares nothing, so a family whose matrix is all there is
-to say returns NULL and a consumer falls back on reporting the matrix."><meta property="og:description" content="Returns the interpretable quantities that a family declares, with the
+can use. The base class method has no declaration, so a family whose matrix
+is all there is to say returns NULL and a consumer falls back on reporting
+the matrix."><meta property="og:description" content="Returns the interpretable quantities that a family declares, with the
 information that a consumer needs to report them: the values, the Jacobian of
 the map from the free vector, the scale on which each interval should be
 built, and a label for the block. The free vector is the quantity that a fit
@@ -16,8 +17,9 @@ estimates, and it is rarely the quantity that a reader wants: the hyperbolic
 arc tangent of a partial autocorrelation has no direct meaning, and the
 autoregressive coefficients cannot be recovered from a printed covariance.
 Use it to turn an estimate and its variance matrix into a table that a reader
-can use. The base class declares nothing, so a family whose matrix is all there is
-to say returns NULL and a consumer falls back on reporting the matrix."><meta property="og:image" content="https://statmodels7.github.io/parameters7/logo.png"></head><body>
+can use. The base class method has no declaration, so a family whose matrix
+is all there is to say returns NULL and a consumer falls back on reporting
+the matrix."><meta property="og:image" content="https://statmodels7.github.io/parameters7/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -25,7 +27,7 @@ to say returns NULL and a consumer falls back on reporting the matrix."><meta pr
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,8 +65,9 @@ estimates, and it is rarely the quantity that a reader wants: the hyperbolic
 arc tangent of a partial autocorrelation has no direct meaning, and the
 autoregressive coefficients cannot be recovered from a printed covariance.</p>
 <p>Use it to turn an estimate and its variance matrix into a table that a reader
-can use. The base class declares nothing, so a family whose matrix is all there is
-to say returns <code>NULL</code> and a consumer falls back on reporting the matrix.</p>
+can use. The base class method has no declaration, so a family whose matrix
+is all there is to say returns <code>NULL</code> and a consumer falls back on reporting
+the matrix.</p>
     </div>
 
     <div class="section level2">
@@ -134,7 +137,7 @@ read off the first-order block instead of being computed again.</p>
 <code><a href="scaled_matrix.html">scaled_matrix()</a></code> declares its multiplier, or <code>NULL</code> when it was built with
 <code>link = NULL</code> and has none. <code><a href="simplex.html">simplex()</a></code> declares the probability vector.
 <code><a href="autoregressive.html">autoregressive()</a></code> declares the variance, the partial autocorrelations that
-parametrize it, <strong>and</strong> the autoregressive coefficients, which appear nowhere
+parametrize it, and the autoregressive coefficients, which appear nowhere
 in the covariance. Every other family, including <code><a href="log_cholesky.html">log_cholesky()</a></code>,
 <code><a href="correlation_matrix.html">correlation_matrix()</a></code> and <code><a href="transition_matrix.html">transition_matrix()</a></code>, takes the base method and
 returns <code>NULL</code>.</p>
@@ -158,7 +161,7 @@ assembly.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   scale     rho </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   "log" "atanh" </span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># What a consumer does with the Jacobian: the delta method. With a variance</span></span></span>
+<span class="r-in"><span><span class="co"># A consumer applies the delta method to the Jacobian. With a variance</span></span></span>
 <span class="r-in"><span><span class="co"># of 0.01 on the second free value, the correlation's standard error is</span></span></span>
 <span class="r-in"><span><span class="co"># |drho/dz| * 0.1.</span></span></span>
 <span class="r-in"><span><span class="va">V</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.04</span>, <span class="fl">0.01</span><span class="op">)</span><span class="op">)</span></span></span>

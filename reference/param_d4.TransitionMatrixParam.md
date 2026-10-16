@@ -1,6 +1,6 @@
 # Fourth Derivatives of a Transition Matrix Parameter
 
-Closed form, from
+Computes the fourth derivatives in closed form from
 [`simplex()`](https://statmodels7.github.io/parameters7/reference/simplex.md)'s
 cumulant recursion at fourth order, embedded row by row. A component
 whose four free values do not all belong to one row is exactly the zero

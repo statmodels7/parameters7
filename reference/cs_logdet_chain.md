@@ -2,7 +2,7 @@
 
 Returns a function of the second free value \\\eta_2\\ and an order that
 gives the order-th derivative of \\q(\rho) = \log\\1 + (p-1)\rho\\ +
-(p-1)\log(1-\rho)\\ in \\\eta_2\\, with the correlation carried by
+(p-1)\log(1-\rho)\\ in \\\eta_2\\, where the correlation is carried by
 `bounded_link(-1/(p-1), 1)`.
 
 ## Usage

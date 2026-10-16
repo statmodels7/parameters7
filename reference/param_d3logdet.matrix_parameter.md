@@ -1,6 +1,6 @@
 # Default Third Log-Determinant Derivatives
 
-The method that every
+This is the method that every
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
 inherits when it registers no
 [`param_d3logdet()`](https://statmodels7.github.io/parameters7/reference/param_d3logdet.md)
@@ -40,7 +40,7 @@ A numeric vector of `choose(s@n_free + 2, 3)` entries, keyed as
 ## Accuracy
 
 [`param_d2logdet()`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.md)
-is an exact identity **given** the matrix derivative arrays, so it is
+is an exact identity given the matrix derivative arrays, so it is
 differenced where
 [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md)
 and

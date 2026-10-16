@@ -2,7 +2,7 @@
 
 Returns the value and the derivatives of \\\eta \mapsto 1/h(\eta)\\ from
 the value and the derivatives of \\h\\, by composing \\x^{-1}\\ onto
-them, to the order `v` carries.
+them, to the order that `v` carries.
 
 ## Usage
 

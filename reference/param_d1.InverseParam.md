@@ -1,9 +1,9 @@
 # Derivative Arrays of an Inverse Parameter
 
-The four orders of \\\partial N\\ for \\N = S^{-1}\\, each the ordered
-set-partition sum that
+Computes the four orders of \\\partial N\\ for \\N = S^{-1}\\, each as
+the ordered set-partition sum that
 [`inverse_of()`](https://statmodels7.github.io/parameters7/reference/inverse_of.md)
-writes out. Every factor comes from the inner family's own arrays, so a
+describes. Every factor comes from the inner family's own arrays, so a
 closed form there stays closed here. For a
 [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
 inner family, the four orders are read from

@@ -37,11 +37,11 @@ A numeric vector of the length of `z`.
 
 \\\mathrm{sech}^2 z\\ is evaluated as \\4a/(1 + a)^2\\ with \\a =
 e^{-2\|z\|}\\, and its logarithm as \\2\log 2 - 2\|z\| - 2\log(1 + a)\\.
-Neither is computed from \\1 - \tanh^2 z\\, which loses all accuracy
-once \\\tanh z\\ rounds to \\-1\\ or 1. With \\t = \tanh z\\ and \\u =
-\mathrm{sech}^2 z\\, from \\t' = u\\ and \\u' = -2tu\\, the four
-derivatives of the logarithm are \\-2t\\, \\-2u\\, \\4tu\\ and \\4u(u -
-2t^2)\\.
+The function and its logarithm are not computed from \\1 - \tanh^2 z\\,
+which loses all accuracy once \\\tanh z\\ rounds to \\-1\\ or 1. With
+\\t = \tanh z\\ and \\u = \mathrm{sech}^2 z\\, from \\t' = u\\ and \\u'
+= -2tu\\, the four derivatives of the logarithm are \\-2t\\, \\-2u\\,
+\\4tu\\ and \\4u(u - 2t^2)\\.
 
 ## See also
 

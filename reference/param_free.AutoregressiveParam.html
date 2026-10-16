@@ -13,7 +13,7 @@ describes."><meta property="og:image" content="https://statmodels7.github.io/par
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -82,17 +82,18 @@ rounding error:</p><ul><li><p>a diagonal that is not constant, which is not stat
 <li><p>a matrix that is not Toeplitz, which is rejected instead of being averaged
 along its diagonals;</p></li>
 <li><p>an implied partial autocorrelation at or beyond \(\pm 1\), or a vanishing
-prediction variance, neither of which is stationary;</p></li>
+prediction variance, both of which are non-stationary;</p></li>
 <li><p>a Toeplitz matrix whose autocorrelations stop following the Yule-Walker
-recursion beyond lag \(q\). This last one is what separates an AR(2) from
-an AR(3) at \(p \ge 4\), and it is checked by rebuilding the matrix from
-the recovered free vector and comparing.</p></li>
+recursion beyond lag \(q\). This last condition distinguishes an AR(2)
+from an AR(3) at \(p \ge 4\), and the method checks it by rebuilding the
+matrix from the recovered free vector and comparing.</p></li>
 </ul><p>The tolerances are relative to <code>max(1, max(abs(m)))</code>: \(10^{-8}\) for the
 structure and \(10^{-7}\) for the rebuild.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="param_value.AutoregressiveParam.html">param_value.AutoregressiveParam()</a></code>, the map this inverts.</p></div>
+    <div class="dont-index"><p><code><a href="param_value.AutoregressiveParam.html">param_value.AutoregressiveParam()</a></code>, the map that this method
+inverts.</p></div>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

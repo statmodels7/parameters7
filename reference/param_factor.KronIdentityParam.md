@@ -1,9 +1,9 @@
 # Factor of a Block Replication
 
-Closed form: \\I_m \otimes L\\, the inner parameter's Cholesky factor
-lifted. A block-diagonal matrix of identical blocks factors blockwise,
-so one inner factorization serves every block and nothing of side \\md\\
-is decomposed.
+The factor has closed form, \\I_m \otimes L\\, which lifts the inner
+parameter's Cholesky factor. A block-diagonal matrix of identical blocks
+factors blockwise, so one inner factorization serves every block and the
+method does not decompose any matrix of side \\md\\.
 
 ## Arguments
 

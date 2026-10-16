@@ -13,7 +13,7 @@ the same on two runs, without leaving the caller's stream changed."><meta proper
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,7 +61,7 @@ the same on two runs, without leaving the caller's stream changed.</p>
 
 
 <dl><dt id="arg-old">old<a class="anchor" aria-label="anchor" href="#arg-old"></a></dt>
-<dd><p>The value <code>capture_seed()</code> returned, or <code>NULL</code>.</p></dd>
+<dd><p>The value that <code>capture_seed()</code> returned, or <code>NULL</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -86,8 +86,9 @@ validator set is not left behind.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># the property the pair exists for, through the public interface: a</span></span></span>
-<span class="r-in"><span><span class="co"># validator call leaves the caller's stream exactly as it found it</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># The pair exists to give the following property, which is tested through</span></span></span>
+<span class="r-in"><span><span class="co"># the public interface: a validator call leaves the caller's stream exactly</span></span></span>
+<span class="r-in"><span><span class="co"># as it found it.</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">want</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span></span>

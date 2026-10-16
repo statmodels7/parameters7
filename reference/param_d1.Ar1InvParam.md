@@ -1,8 +1,8 @@
 # Derivative Arrays of an Inverse AR(1) Parameter
 
-The four orders of \\\partial\Omega\\ for \\\Omega\\ the precision of an
-AR(1), written out from the product structure instead of assembled by
-the ordered-block-partition sum that
+Returns the four orders of \\\partial\Omega\\ for \\\Omega\\ the
+precision of an AR(1), written out from the product structure instead of
+assembled by the ordered-block-partition sum that
 [`inverse_of()`](https://statmodels7.github.io/parameters7/reference/inverse_of.md)
 uses. The two routes agree to rounding.
 

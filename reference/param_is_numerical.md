@@ -28,12 +28,13 @@ param_is_numerical(s)
 ## Value
 
 A named logical vector, `TRUE` where the base-class method is in force.
-Its length depends on the branch: **nine** entries for a
+Its length depends on the branch: nine entries for a
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md),
 over `param_d1`, `param_d2`, `param_d3`, `param_d4`, `param_logdet`,
 `param_dlogdet`, `param_d2logdet`, `param_d3logdet` and
-`param_d4logdet`; **four** for a family that is not a matrix, over the
-derivative orders alone, the log-determinant not existing there.
+`param_d4logdet`; four for a family that is not a matrix, over the
+derivative orders only, because the log-determinant does not exist
+there.
 
 ## Why the answer matters
 
@@ -43,7 +44,7 @@ difference, and a log-determinant read off an eigendecomposition cannot
 be checked against an eigendecomposition: the comparison is the same
 arithmetic twice, and it agrees however wrong the parametrization is.
 [`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)
-calls this and reports such a quantity as **not checked** instead of as
+calls this and reports such a quantity as not checked instead of as
 passed.
 
 ## What is not in the list
@@ -88,7 +89,8 @@ param_is_numerical(log_cholesky(3))
 any(param_is_numerical(diagonal_matrix(3)))
 #> [1] FALSE
 
-# Nine components for a matrix family, four for one that is not.
+# A matrix family has nine components, and a family that is not a matrix
+# has four.
 c(matrix = length(param_is_numerical(log_cholesky(3))),
   not_matrix = length(param_is_numerical(simplex(3))))
 #>     matrix not_matrix 

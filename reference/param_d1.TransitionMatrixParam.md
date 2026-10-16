@@ -1,13 +1,14 @@
 # First Derivatives of a Transition Matrix Parameter
 
-Closed form. The free value `alr{i}.{j}` belongs to row \\i\\ alone, so
-\\\partial P\\ is zero in every other row and, inside row \\i\\, is the
+Computes the first derivatives in closed form. The free value
+`alr{i}.{j}` belongs only to row \\i\\, so \\\partial P\\ is zero in
+every other row and, inside row \\i\\, equals the
 [`simplex()`](https://statmodels7.github.io/parameters7/reference/simplex.md)
-first derivative \\\partial_b \pi_a = \pi_a(\delta\_{ab} - \pi_b)\\: the
-covariance structure of a categorical indicator.
+first derivative \\\partial_b \pi_a = \pi_a(\delta\_{ab} - \pi_b)\\,
+which is the covariance structure of a categorical indicator.
 
-Each component therefore sums to zero along its own row, the row sums of
-\\P\\ being the constant 1.
+Each component therefore sums to zero along its own row, because the row
+sums of \\P\\ are the constant 1.
 
 ## Arguments
 
@@ -28,8 +29,8 @@ Each component therefore sums to zero along its own row, the row sums of
 
 ## Value
 
-A list of `s@n_free` \\K \times K\\ matrices named by `s@free_names`,
-each supported on one row.
+A list of `s@n_free` \\K \times K\\ matrices named by `s@free_names`.
+Each matrix is supported on one row.
 
 ## See also
 

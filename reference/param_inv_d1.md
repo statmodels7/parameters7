@@ -86,7 +86,7 @@ At third and fourth order the same method differentiates \\L G = I\\ and
 values, \$\$\partial_S G = -G \sum\_{\emptyset \ne U \subseteq S}
 (\partial_U L)(\partial\_{S \setminus U} G), \qquad \partial_S M^{-1} =
 \sum\_{U \subseteq S} (\partial_U G)^\top (\partial\_{S \setminus U}
-G),\$\$ the subsets being taken over the positions of \\S\\. Every
+G),\$\$ where the subsets are taken over the positions of \\S\\. Every
 factor is triangular and every derivative of \\L\\ has a single non-zero
 entry, so these products do not cancel either.
 
@@ -107,7 +107,8 @@ for the family whose value is the inverse.
 s <- log_cholesky(2)
 eta <- c(-0.5, -11.5, 0.07)
 d <- param_inv_d1(s, eta)
-# against a difference of the inverse, which here is itself accurate
+# The result is compared with a difference of the inverse, which here is
+# itself accurate.
 h <- 1e-6
 num <- (param_solve(s, eta + c(0, 0, h)) - param_solve(s, eta - c(0, 0, h))) /
   (2 * h)

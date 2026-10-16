@@ -1,9 +1,10 @@
 # Fourth Derivatives of a Matrix Logarithm Parameter
 
-Chains of four rotated directions contracted against five-point divided
-differences, summed over the orderings of the four directions, up to
-twenty-four per component. Exact, and much more expensive than the
-fourth derivatives of
+Computes the fourth Frechet derivative: chains of four rotated
+directions are contracted against five-point divided differences, and
+the contractions are summed over the orderings of the four directions,
+up to twenty-four per component. The result is exact, and it is much
+more expensive to compute than the fourth derivatives of
 [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
 on a matrix of the same size.
 

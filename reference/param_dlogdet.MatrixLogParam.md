@@ -1,7 +1,8 @@
 # Log-Determinant Gradient of a Matrix Logarithm Parameter
 
-Closed form and constant: 1 in each of the \\p\\ diagonal directions and
-0 in the \\p(p-1)/2\\ below-diagonal ones, the log-determinant being
+Returns the gradient of the log-determinant in closed form; it is
+constant: 1 in each of the \\p\\ diagonal directions and 0 in the
+\\p(p-1)/2\\ below-diagonal ones, because the log-determinant is
 \\\sum_i \eta_i\\. The value does not depend on `eta`, which is read
 only for its length.
 

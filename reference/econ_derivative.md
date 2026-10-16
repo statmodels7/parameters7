@@ -50,7 +50,7 @@ matrices keyed as `param_tuple_names(s, order)` and in that order, each
 
 ## Details
 
-The value is a **product** of a function of the first free value and a
+The value is a product of a function of the first free value and a
 function of the second, so a component with \\a\\ scale indices and
 \\b\\ correlation indices is the \\a\\-th derivative of the scale times
 the \\b\\-th derivative of the pattern. Every derivative is exact, and a

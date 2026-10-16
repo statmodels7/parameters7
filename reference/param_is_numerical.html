@@ -21,7 +21,7 @@ a stencil on the order below for its third and fourth."><meta property="og:image
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,11 +77,11 @@ a stencil on the order below for its third and fourth.</p>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A named logical vector, <code>TRUE</code> where the base-class method is in
-force. Its length depends on the branch: <strong>nine</strong> entries for a
+force. Its length depends on the branch: nine entries for a
 <code><a href="matrix_parameter.html">matrix_parameter()</a></code>, over <code>param_d1</code>, <code>param_d2</code>, <code>param_d3</code>, <code>param_d4</code>,
 <code>param_logdet</code>, <code>param_dlogdet</code>, <code>param_d2logdet</code>, <code>param_d3logdet</code> and
-<code>param_d4logdet</code>; <strong>four</strong> for a family that is not a matrix, over the
-derivative orders alone, the log-determinant not existing there.</p>
+<code>param_d4logdet</code>; four for a family that is not a matrix, over the
+derivative orders only, because the log-determinant does not exist there.</p>
     </div>
     <div class="section level2">
     <h2 id="why-the-answer-matters">Why the answer matters<a class="anchor" aria-label="anchor" href="#why-the-answer-matters"></a></h2>
@@ -90,7 +90,7 @@ computed by finite differences cannot be checked against a finite difference,
 and a log-determinant read off an eigendecomposition cannot be checked against
 an eigendecomposition: the comparison is the same arithmetic twice, and it
 agrees however wrong the parametrization is. <code><a href="check_parameter.html">check_parameter()</a></code> calls this
-and reports such a quantity as <strong>not checked</strong> instead of as passed.</p>
+and reports such a quantity as not checked instead of as passed.</p>
     </div>
     <div class="section level2">
     <h2 id="what-is-not-in-the-list">What is not in the list<a class="anchor" aria-label="anchor" href="#what-is-not-in-the-list"></a></h2>
@@ -126,7 +126,8 @@ a <code>TRUE</code> names.</p></div>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/any.html" class="external-link">any</a></span><span class="op">(</span><span class="fu">param_is_numerical</span><span class="op">(</span><span class="fu"><a href="diagonal_matrix.html">diagonal_matrix</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Nine components for a matrix family, four for one that is not.</span></span></span>
+<span class="r-in"><span><span class="co"># A matrix family has nine components, and a family that is not a matrix</span></span></span>
+<span class="r-in"><span><span class="co"># has four.</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>matrix <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu">param_is_numerical</span><span class="op">(</span><span class="fu"><a href="log_cholesky.html">log_cholesky</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  not_matrix <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu">param_is_numerical</span><span class="op">(</span><span class="fu"><a href="simplex.html">simplex</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     matrix not_matrix </span>

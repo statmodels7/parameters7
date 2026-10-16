@@ -1,10 +1,10 @@
 # Correlation Matrix Parameter
 
-The S7 class of correlation matrices, symmetric positive definite with a
-unit diagonal, in the spherical parametrization of Rapisarda, Brigo and
-Mercurio (2007). The rows of the factor are unit vectors, so the unit
-diagonal holds by construction, and every free vector gives a
-correlation matrix.
+This S7 class represents correlation matrices, which are symmetric
+positive definite with a unit diagonal, in the spherical parametrization
+of Rapisarda, Brigo and Mercurio (2007). The rows of the factor are unit
+vectors, so the unit diagonal holds by construction, and every free
+vector gives a correlation matrix.
 
 [`correlation_matrix()`](https://statmodels7.github.io/parameters7/reference/correlation_matrix.md)
 builds one. The free values are angles carried onto the real line, and

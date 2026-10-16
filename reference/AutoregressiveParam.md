@@ -1,8 +1,9 @@
 # Autoregressive Parameter
 
-The S7 class of covariance matrices of \\p\\ consecutive observations of
-a stationary autoregression of order \\q\\, parametrized by the marginal
-variance and the \\q\\ partial autocorrelations.
+`AutoregressiveParam` is the S7 class of covariance matrices of \\p\\
+consecutive observations of a stationary autoregression of order \\q\\,
+parametrized by the marginal variance and the \\q\\ partial
+autocorrelations.
 [`autoregressive()`](https://statmodels7.github.io/parameters7/reference/autoregressive.md)
 builds one.
 
@@ -92,7 +93,8 @@ vapply(c(6, 20, 200), function(p) autoregressive(p, order = 2)@n_free,
        numeric(1))
 #> [1] 3 3 3
 
-# One scale and q partial autocorrelations, each on its own chart.
+# The free vector holds one scale and q partial autocorrelations, each on its
+# own chart.
 autoregressive(20, order = 3)@free_names
 #> [1] "log_scale" "z_pacf1"   "z_pacf2"   "z_pacf3"  
 ```

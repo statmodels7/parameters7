@@ -2,7 +2,7 @@
 
 Returns the two free values behind a compound-symmetric matrix. The
 variance is the common diagonal entry and the correlation is the common
-off-diagonal entry divided by it, both read exactly and then carried
+off-diagonal entry divided by it. Both are read exactly and then carried
 onto the free scale by the two links. The round trip closes up to
 rounding.
 
@@ -30,13 +30,13 @@ A numeric vector of length 2, named by `s@free_names`.
 ## Details
 
 A matrix whose diagonal is not constant, or whose off-diagonal entries
-are not all equal, is **rejected** with a message naming which, and is
-never averaged into the nearest compound-symmetric matrix, because a
-silent projection would hide a mistake in the caller's matrix. A caller
-who wants the nearest such matrix computes it separately and passes the
-result in.
+are not all equal, is rejected with a message naming which, and is never
+averaged into the nearest compound-symmetric matrix, because a silent
+projection would hide a mistake in the caller's matrix. A caller who
+wants the nearest such matrix computes it separately and supplies it as
+`m`.
 
 ## See also
 
 [`param_value.CompoundSymmetryParam()`](https://statmodels7.github.io/parameters7/reference/param_value.CompoundSymmetryParam.md),
-the map this inverts.
+the map that this inverts.

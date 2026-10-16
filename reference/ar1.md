@@ -20,8 +20,8 @@ ar1(dimension, link_scale = linkfunctions7::log_link())
 
 - dimension:
 
-  The side \\p\\ of the matrix, **at least 2**. A one by one matrix has
-  no correlation, so `ar1(1)` signals an error stating that the family
+  The side \\p\\ of the matrix, at least 2. A one by one matrix has no
+  correlation, so `ar1(1)` signals an error stating that the family
   would carry a free value with no effect.
 
 - link_scale:
@@ -70,8 +70,8 @@ first off-diagonal:
 & 1 \end{pmatrix}.\$\$
 
 [`param_solve()`](https://statmodels7.github.io/parameters7/reference/param_solve.md)
-builds it from that form, so no factorization is performed; the matrix
-is assembled densely and multiplied by `b`, at \\O(p^2)\\ per column of
+builds it from that form and does not factorize the matrix; it assembles
+the matrix densely and multiplies it by `b`, at \\O(p^2)\\ per column of
 `b`.
 
 The precision is tridiagonal but is not itself an AR(1) matrix. Its
@@ -79,8 +79,8 @@ lag-1 correlation is not constant along the diagonal (at \\p = 4\\ and
 \\\rho = 0.6\\ it is \\-0.514\\ at the ends and \\-0.441\\ in the
 middle), and its lag-2 correlation is 0, where an AR(1) matrix has
 \\\rho^2\\. An AR(1) covariance and an AR(1) precision therefore define
-different models. This family is the AR(1) pattern itself, whichever
-side a consumer puts it on;
+different models. This family is the AR(1) pattern itself, on whichever
+side a consumer puts it;
 [`ar1_inv()`](https://statmodels7.github.io/parameters7/reference/ar1_inv.md)
 is the family whose value is the matrix above, so that the AR(1) process
 is the one written on the other side.
@@ -92,7 +92,8 @@ The determinant of the correlation pattern is \\(1-\rho^2)^{p-1}\\, so
 \$\$\log\|M\| = p\log\sigma^2 + (p-1)\log(1-\rho^2),\$\$
 
 a sum of a function of one free value and a function of the other. Every
-mixed derivative of it is exactly zero, and no determinant is computed.
+mixed derivative of it is exactly zero, and the method does not compute
+a determinant.
 
 ## Derivatives of the pattern
 
@@ -103,7 +104,7 @@ for the lag \\m\\, so its derivatives in the free value are a power
 composed with the link, taken to fourth order by
 [`compose_order()`](https://statmodels7.github.io/parameters7/reference/compose_order.md).
 Each distinct lag is composed once and written into every entry that
-carries it, the matrix having only \\p\\ distinct values.
+carries it, because the matrix has only \\p\\ distinct values.
 
 ## Notation
 
@@ -125,7 +126,8 @@ for the tridiagonal inverse.
 ## Examples
 
 ``` r
-# A 4 x 4 AR(1) covariance at a variance of 2 and a correlation of 0.6.
+# Here is a 4 x 4 AR(1) covariance at a variance of 2 and a correlation of
+# 0.6.
 s <- ar1(4)
 eta <- c(log(2), atanh(0.6))
 m <- param_value(s, eta)
@@ -140,7 +142,7 @@ round(m, 4)
 all.equal(m[1, 4], 2 * 0.6^3, check.attributes = FALSE)
 #> [1] TRUE
 
-# A free value of 0 is a correlation of 0, the link being rhobit.
+# A free value of 0 is a correlation of 0, because the link is rhobit.
 param_value(s, c(0, 0))[1, 2]
 #> [1] 0
 

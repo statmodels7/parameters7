@@ -42,12 +42,13 @@ error and not a rounding error:
   averaged along its diagonals;
 
 - an implied partial autocorrelation at or beyond \\\pm 1\\, or a
-  vanishing prediction variance, neither of which is stationary;
+  vanishing prediction variance, both of which are non-stationary;
 
 - a Toeplitz matrix whose autocorrelations stop following the
-  Yule-Walker recursion beyond lag \\q\\. This last one is what
-  separates an AR(2) from an AR(3) at \\p \ge 4\\, and it is checked by
-  rebuilding the matrix from the recovered free vector and comparing.
+  Yule-Walker recursion beyond lag \\q\\. This last condition
+  distinguishes an AR(2) from an AR(3) at \\p \ge 4\\, and the method
+  checks it by rebuilding the matrix from the recovered free vector and
+  comparing.
 
 The tolerances are relative to `max(1, max(abs(m)))`: \\10^{-8}\\ for
 the structure and \\10^{-7}\\ for the rebuild.
@@ -55,4 +56,4 @@ the structure and \\10^{-7}\\ for the rebuild.
 ## See also
 
 [`param_value.AutoregressiveParam()`](https://statmodels7.github.io/parameters7/reference/param_value.AutoregressiveParam.md),
-the map this inverts.
+the map that this method inverts.

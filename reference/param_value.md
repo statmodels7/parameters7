@@ -1,8 +1,8 @@
-# The Value a Parameter Produces
+# The Value That a Parameter Produces
 
-Evaluates the map a parametrization stands for: given a free vector
-\\\eta\\ on the unconstrained scale, returns the constrained value it
-produces. The shape depends on the family. A
+Evaluates the map that a parametrization represents: given a free vector
+\\\eta\\ on the unconstrained scale, returns the constrained value that
+\\\eta\\ produces. The shape depends on the family. A
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
 returns a symmetric \\p \times p\\ matrix,
 [`simplex()`](https://statmodels7.github.io/parameters7/reference/simplex.md)
@@ -12,8 +12,8 @@ a row-stochastic matrix. For every finite \\\eta\\ the value satisfies
 the family's constraint, within the range of floating-point arithmetic,
 so a caller does not have to test the result.
 
-This is the only method a new family must write. Every derivative order
-is then available numerically, and for a matrix family so are the
+This is the only method that a new family must write. Every derivative
+order is then available numerically, and for a matrix family so are the
 log-determinant, the solve and the factor.
 
 ## Usage
@@ -74,10 +74,10 @@ on, so every method inherits the check, including one written outside
 the package. Three things are rejected: a non-numeric `eta`, a length
 other than `s@n_free` (the message names both counts and lists the
 family's `free_names`), and any `NA`, `NaN` or infinite entry. The last
-is a caller error rather than a boundary of the domain, the
-unconstrained scale having no edge to reach.
+is a caller error rather than a boundary of the domain, because the
+unconstrained scale has no edge to reach.
 
-## What is exact and what is not
+## Exact and numerical methods
 
 Every family in this package writes its own `param_value()` and its
 derivatives out, and
@@ -90,8 +90,8 @@ serve a family written elsewhere.
 ## Notation
 
 \\\eta\\ is the free vector, the point on the unconstrained scale, of
-length \\d = \\ `s@n_free`. \\p\\ is the side of the matrix a matrix
-family returns.
+length \\d = \\ `s@n_free`. \\p\\ is the side of the matrix that a
+matrix family returns.
 
 ## See also
 
@@ -112,8 +112,8 @@ to verify a family end to end.
 ## Examples
 
 ``` r
-# An unstructured covariance. Any six numbers give a positive definite
-# matrix, which is the property the parametrization exists for.
+# This builds an unstructured covariance. Any six numbers give a positive
+# definite matrix, and the parametrization is designed to have this property.
 s <- log_cholesky(3)
 M <- param_value(s, c(0.1, -0.2, 0.3, 0.5, -0.4, 0.2))
 round(M, 4)
@@ -129,14 +129,14 @@ eigen(param_value(s, c(-8, 9, -7, 100, -100, 50)),
       only.values = TRUE)$values > 0
 #> [1] TRUE TRUE TRUE
 
-# A probability vector, and a row-stochastic matrix.
+# These calls return a probability vector and a row-stochastic matrix.
 sum(param_value(simplex(4), c(1.2, -0.7, 0.3)))
 #> [1] 1
 rowSums(param_value(transition_matrix(3), rep(0.4, 6)))
 #> s1 s2 s3 
 #>  1  1  1 
 
-# The three ways a free vector is rejected.
+# These calls show the three ways in which a free vector is rejected.
 try(param_value(s, c(1, 2)))
 #> Error : 'eta' has 2 value(s) but 'log_cholesky' has 6 free value(s) (log_L1, log_L2, log_L3, L2.1, L3.1, L3.2).
 try(param_value(s, c(0, 0, 0, 0, 0, Inf)))

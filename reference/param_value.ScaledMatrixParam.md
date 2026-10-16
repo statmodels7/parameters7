@@ -1,10 +1,11 @@
 # Matrix of a Scaled Parameter
 
 Returns \\M = h(\eta)\\P\\, the stored fixed matrix times the scale,
-which is \\P\\ itself for a fixed parameter. One elementwise
-multiplication and no decomposition. The result inherits \\P\\'s rank
-exactly, a positive multiple leaving a null space alone, which is why
-the class can record that rank at construction.
+which is \\P\\ itself for a fixed parameter. The computation is one
+elementwise multiplication and does not decompose the matrix. The result
+inherits \\P\\'s rank exactly, because a positive multiple leaves a null
+space alone, and the class can therefore record that rank at
+construction.
 
 ## Arguments
 
@@ -26,8 +27,8 @@ the class can record that rank at construction.
 ## Value
 
 A symmetric positive semidefinite `s@dimension` by `s@dimension` numeric
-matrix with dimnames `v1`, `v2`, ..., of rank `s@rank`. Positive
-definite only where `s@rank == s@dimension`.
+matrix with dimnames `v1`, `v2`, ..., of rank `s@rank`. The matrix is
+positive definite only where `s@rank == s@dimension`.
 
 ## See also
 

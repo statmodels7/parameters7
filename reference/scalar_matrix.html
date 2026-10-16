@@ -13,7 +13,7 @@ is the parametrization of a random effect with a single variance component."><me
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,7 +44,7 @@ is the parametrization of a random effect with a single variance component."><me
 
     <div class="ref-description section level2">
     <p>Returns an object holding the map \(M = \tau I\) with \(\tau = h(\eta_1)\)
-positive: a diagonal matrix with <strong>one</strong> free value shared by every entry,
+positive: a diagonal matrix with one free value shared by every entry,
 whatever \(p\) is. It is the simplest parametrization in the package, and it
 is the parametrization of a random effect with a single variance component.</p>
     </div>
@@ -59,8 +59,8 @@ is the parametrization of a random effect with a single variance component.</p>
 
 
 <dl><dt id="arg-dimension">dimension<a class="anchor" aria-label="anchor" href="#arg-dimension"></a></dt>
-<dd><p>The side \(p\) of the matrix. A single positive whole
-number, finite and at least 1; any other value signals an error.</p></dd>
+<dd><p>The side \(p\) of the matrix. It must be a single
+positive whole number, finite and at least 1; any other value signals an error.</p></dd>
 
 
 <dt id="arg-link">link<a class="anchor" aria-label="anchor" href="#arg-link"></a></dt>
@@ -111,7 +111,7 @@ replicate any parametrization over independent groups.</p></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># One free value at any dimension.</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># The family has one free value at any dimension.</span></span></span>
 <span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu">scalar_matrix</span><span class="op">(</span><span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>n_free <span class="op">=</span> <span class="va">s</span><span class="op">@</span><span class="va">n_free</span>, dimension <span class="op">=</span> <span class="va">s</span><span class="op">@</span><span class="va">dimension</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    n_free dimension </span>

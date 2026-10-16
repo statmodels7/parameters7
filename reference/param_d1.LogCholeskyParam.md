@@ -1,7 +1,8 @@
 # First Derivatives of a Log-Cholesky Parameter
 
-Closed form, by the Leibniz rule on \\M = L L^\top\\. Writing \\L_k\\
-for the derivative of the factor in the \\k\\-th free value,
+Computes the first derivatives in closed form, by the Leibniz rule on
+\\M = L L^\top\\. Writing \\L_k\\ for the derivative of the factor in
+the \\k\\-th free value,
 
 \$\$\partial_k M = L_k L^\top + L L_k^\top.\$\$
 

@@ -5,10 +5,10 @@
 [`param_d3()`](https://statmodels7.github.io/parameters7/reference/param_d3.md)
 and
 [`param_d4()`](https://statmodels7.github.io/parameters7/reference/param_d4.md)
-for a
+return, for a
 [`block_diag()`](https://statmodels7.github.io/parameters7/reference/block_diag.md)
-parameter: each block's own derivatives, placed in the rows and columns
-that block occupies, and **exactly zero** for a tuple spanning two
+parameter, each block's own derivatives placed in the rows and columns
+that the block occupies, and exactly zero for a tuple spanning two
 blocks. The blocks' derivatives are used as they are, with no
 differencing, so the composite is as exact as its blocks are.
 
@@ -39,10 +39,10 @@ At order 1, a list of `s@n_free` symmetric matrices named by
 
 The four share
 [`block_diag_derivs()`](https://statmodels7.github.io/parameters7/reference/block_diag_derivs.md)
-and differ only in the order they pass. The zeros are structural: they
-follow from the free values of one block not entering another, and at
-order 4 with blocks of 3 and 2 free values they are 50 of the 70
-components. See
+and differ only in the order that they pass. The zeros are structural:
+they follow from the fact that the free values of one block do not enter
+another, and at order 4 with blocks of 3 and 2 free values they are 50
+of the 70 components. See
 [`block_diag()`](https://statmodels7.github.io/parameters7/reference/block_diag.md)
 for the argument.
 

@@ -1,10 +1,10 @@
 # Free Vector of a Correlation Parameter
 
 Returns the angles behind a correlation matrix, read off its Cholesky
-factor and carried onto the free scale by the link. Exact:
+factor and carried onto the free scale by the link. The map is exact:
 \\\theta\_{i1} = \arccos L\_{i1}\\, and each subsequent angle divides
-out the sines already recovered before taking an arc cosine. A true
-inverse of
+out the sines already recovered before taking an arc cosine. It is a
+true inverse of
 [`param_value.CorrelationParam()`](https://statmodels7.github.io/parameters7/reference/param_value.CorrelationParam.md):
 the round trip closes up to rounding for angles of moderate size, and
 its error grows with the free values.
@@ -33,9 +33,9 @@ A numeric vector of length `s@n_free`, named by `s@free_names`.
 
 ## Details
 
-Three rejections. `m` must have a unit diagonal, or it is not a
-correlation matrix. It must be positive definite, tested on the
-eigenvalues through
+The method rejects an input in three cases. `m` must have a unit
+diagonal, or it is not a correlation matrix. It must be positive
+definite, tested on the eigenvalues through
 [`chol_pd()`](https://statmodels7.github.io/parameters7/reference/chol_pd.md).
 And in each row of its factor, the product of the sines of the angles
 already recovered must not fall below \\10^{-12}\\: that happens as a
@@ -50,6 +50,6 @@ be inverted back.
 ## See also
 
 [`param_value.CorrelationParam()`](https://statmodels7.github.io/parameters7/reference/param_value.CorrelationParam.md),
-the map this inverts, and
+the map that this inverts, and
 [`chol_pd()`](https://statmodels7.github.io/parameters7/reference/chol_pd.md)
 for the definiteness test.

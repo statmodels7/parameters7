@@ -1,6 +1,6 @@
 # Default Factor
 
-The method that every
+This is the method that every
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
 inherits when it registers no
 [`param_factor()`](https://statmodels7.github.io/parameters7/reference/param_factor.md)
@@ -8,8 +8,8 @@ of its own. It evaluates
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
 and returns the lower triangular Cholesky factor through
 [`chol_pd()`](https://statmodels7.github.io/parameters7/reference/chol_pd.md),
-which decides positive definiteness from the eigenvalues before
-attempting the factorization. Exact, at \\O(p^3)\\.
+which tests positive definiteness from the eigenvalues before attempting
+the factorization. The result is exact, and the cost is \\O(p^3)\\.
 
 ## Arguments
 

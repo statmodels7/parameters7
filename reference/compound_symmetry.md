@@ -5,7 +5,8 @@ Returns an object holding the exchangeable covariance
 \$\$M(\eta) = \sigma^2\\(1-\rho)I + \rho J\\,\$\$
 
 with \\\sigma^2\\ positive and \\\rho\\ the correlation that every pair
-shares. Two free values at every dimension, against the \\p(p+1)/2\\ of
+shares. The family has two free values at every dimension, against the
+\\p(p+1)/2\\ of
 [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md),
 so it is the parametrization to use when the measurements are
 exchangeable: repeated measures on a subject, items in a block, the
@@ -21,9 +22,9 @@ compound_symmetry(dimension, link_scale = linkfunctions7::log_link())
 
 - dimension:
 
-  The side \\p\\ of the matrix, **at least 2**. A one by one matrix has
-  no correlation, so `compound_symmetry(1)` signals an error stating
-  that the family would carry a free value with no effect.
+  The side \\p\\ of the matrix, at least 2. A one by one matrix has no
+  correlation, so `compound_symmetry(1)` signals an error stating that
+  the family would carry a free value with no effect.
 
 - link_scale:
 
@@ -60,8 +61,8 @@ at \\p = 4\\ a correlation of \\-0.5\\ is inside \\(-1, 1)\\ and outside
 the cone. The bound depends on the dimension, so two objects of
 different sizes carry different links.
 
-A free value of 0 is the **midpoint** of that interval, so at \\p = 4\\
-it gives a correlation of \\1/3\\.
+A free value of 0 is the midpoint of that interval, so at \\p = 4\\ it
+gives a correlation of \\1/3\\.
 
 ## The log-determinant and the inverse
 
@@ -71,8 +72,8 @@ From the eigenvalues,
 (p-1)\log(1-\rho),\$\$
 
 a sum of a function of one free value and a function of the other, so
-every mixed derivative of the log-determinant is exactly zero and no
-determinant is computed.
+every mixed derivative of the log-determinant is exactly zero and a
+determinant is not computed.
 
 The inverse is compound symmetric again, by Sherman-Morrison, so
 [`param_solve()`](https://statmodels7.github.io/parameters7/reference/param_solve.md)
@@ -82,8 +83,8 @@ under the choice of side.
 
 ## The derivatives
 
-The value is the scale times a pattern **linear** in the correlation,
-\\I + \rho(J - I)\\, so a component with \\a\\ scale indices and \\b\\
+The value is the scale times a pattern linear in the correlation, \\I +
+\rho(J - I)\\, so a component with \\a\\ scale indices and \\b\\
 correlation indices is the \\a\\-th derivative of the scale times the
 \\b\\-th derivative of the pattern. All four orders follow from the two
 links' own derivatives with no further algebra: a component with \\b\\
@@ -111,7 +112,7 @@ for the closed inverse.
 ## Examples
 
 ``` r
-# Two free values at p = 4: a variance and one correlation.
+# The parameter has two free values at p = 4: a variance and one correlation.
 s <- compound_symmetry(4)
 c(n_free = s@n_free)
 #> n_free 
@@ -128,7 +129,7 @@ round(m, 4)
 #> v3 1.1733 1.1733 2.0000 1.1733
 #> v4 1.1733 1.1733 1.1733 2.0000
 
-# The eigenvalues are the two the bound comes from.
+# The eigenvalues are the two values from which the bound comes.
 sig2 <- m[1, 1]
 rho <- m[1, 2] / sig2
 round(eigen(m, only.values = TRUE)$values, 6)

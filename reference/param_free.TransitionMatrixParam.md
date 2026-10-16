@@ -28,14 +28,14 @@ A numeric vector of length `s@n_free`, named by `s@free_names`.
 
 ## Details
 
-A matrix is rejected when it has a non-positive entry, being then
-outside the **open** simplex where \\\log 0\\ is not finite, or when a
+A matrix is rejected when it has a non-positive entry, because it is
+then outside the open simplex, where \\\log 0\\ is not finite, or when a
 row does not sum to 1, in which case it is not a probability
-distribution and is **not** renormalized. The messages state the
-condition that failed and do not name the row.
+distribution and is not renormalized. The messages state the condition
+that failed and do not name the row.
 
-The first rejection is the one that a fit meets: a large positive free
-value makes
+Of these rejections, a fit meets the first. A large positive free value
+makes
 [`simplex_point()`](https://statmodels7.github.io/parameters7/reference/simplex_point.md)
 return an exact 0 in the reference state, so a matrix produced at the
 boundary cannot be inverted back.
@@ -43,6 +43,6 @@ boundary cannot be inverted back.
 ## See also
 
 [`param_value.TransitionMatrixParam()`](https://statmodels7.github.io/parameters7/reference/param_value.TransitionMatrixParam.md),
-the map this inverts, and
+the map that this inverts, and
 [`param_free.SimplexParam()`](https://statmodels7.github.io/parameters7/reference/param_free.SimplexParam.md),
 which does the same for one row.

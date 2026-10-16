@@ -1,6 +1,6 @@
 # Default Solve
 
-The method that every
+This is the method that every
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
 inherits when it registers no
 [`param_solve()`](https://statmodels7.github.io/parameters7/reference/param_solve.md)
@@ -46,9 +46,9 @@ A numeric matrix with `s@dimension` rows and as many columns as `b`.
 
 ## Details
 
-Positive definiteness is decided inside
+The test for positive definiteness runs inside
 [`param_factor()`](https://statmodels7.github.io/parameters7/reference/param_factor.md),
-from the eigenvalues, before any factorization is attempted; see
+on the eigenvalues, before any factorization is attempted; see
 [`chol_pd()`](https://statmodels7.github.io/parameters7/reference/chol_pd.md)
 for why the verdict does not come from whether
 [`base::chol()`](https://rdrr.io/r/base/chol.html) signals an error.

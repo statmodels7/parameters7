@@ -5,15 +5,15 @@
 [`param_d3()`](https://statmodels7.github.io/parameters7/reference/param_d3.md)
 and
 [`param_d4()`](https://statmodels7.github.io/parameters7/reference/param_d4.md)
-for an
+return the derivatives of an
 [`autoregressive()`](https://statmodels7.github.io/parameters7/reference/autoregressive.md)
-parameter, closed form at every order. The map from the partial
+parameter in closed form at every order. The map from the partial
 autocorrelations to the matrix is polynomial, so the derivative arrays
 propagated through the Levinson-Durbin recursion give each derivative
-exactly and nothing is differenced.
+exactly, without any differencing.
 
-Every component is Toeplitz, the structure being a property of the
-family and fixed as the point moves.
+Every component is Toeplitz, because this structure is a property of the
+family and stays fixed as the point moves.
 
 ## Arguments
 
@@ -43,8 +43,8 @@ order \\k\\.
 
 The four share
 [`ar_derivative()`](https://statmodels7.github.io/parameters7/reference/ar_derivative.md)
-and differ only in the order they pass. Each order runs its own kernel,
-which returns the components of that order only.
+and differ only in the order that they pass. Each order runs its own
+kernel, which returns the components of that order only.
 
 ## See also
 

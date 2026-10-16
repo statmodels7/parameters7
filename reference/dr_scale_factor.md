@@ -3,8 +3,8 @@
 Evaluates \\\partial^{S_D}(d_i d_j)\\ for every pair \\(i, j)\\ at once,
 given the multiset \\S_D\\ of scale indices. It is zero wherever \\S_D\\
 contains an index naming neither \\i\\ nor \\j\\, so the result is
-**supported on the rows and columns that those indices name**, which
-keeps the cost of the composition low.
+supported on the rows and columns that those indices name, which keeps
+the cost of the composition low.
 
 ## Usage
 
@@ -34,16 +34,16 @@ A symmetric \\p\\ by \\p\\ numeric matrix.
 
 Three cases, and the arithmetic differs in each:
 
-- **no indices.** The factor is \\d_i d_j\\, an outer product, the case
-  of a component that differentiates the correlation alone.
+- No indices. The factor is \\d_i d_j\\, an outer product, the case of a
+  component that differentiates only the correlation.
 
-- **one distinct index \\k\\, with multiplicity \\m\\.** Off the
-  diagonal the entry carries one factor of \\d_k\\, so it is \\d_k^{(m)}
-  d_j\\; on the diagonal it carries two, so it is the Leibniz expansion
+- One distinct index \\k\\, with multiplicity \\m\\. Off the diagonal
+  the entry carries one factor of \\d_k\\, so it is \\d_k^{(m)} d_j\\;
+  on the diagonal it carries two, so it is the Leibniz expansion
   \\\sum_r \binom{m}{r} d_k^{(r)} d_k^{(m-r)}\\ of \\\partial^m d_k^2\\.
 
-- **two distinct indices \\i\\ and \\j\\.** Only the entries \\(i,j)\\
-  and \\(j,i)\\ survive, each \\d_i^{(m_i)} d_j^{(m_j)}\\.
+- Two distinct indices \\i\\ and \\j\\. Only the entries \\(i,j)\\ and
+  \\(j,i)\\ survive, each \\d_i^{(m_i)} d_j^{(m_j)}\\.
 
 Three or more distinct indices give the zero matrix: an entry of
 \\\Sigma\\ carries at most two scales, so a third differentiation in a
@@ -54,4 +54,4 @@ new scale annihilates it.
 [`dr_prod_derivs()`](https://statmodels7.github.io/parameters7/reference/dr_prod_derivs.md),
 the only caller, and
 [`dr_prod()`](https://statmodels7.github.io/parameters7/reference/dr_prod.md)
-for the factorization this is half of.
+for the factorization of which this is half.

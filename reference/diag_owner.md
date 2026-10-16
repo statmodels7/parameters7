@@ -1,4 +1,4 @@
-# The Free Value Each Diagonal Entry Belongs To
+# The Free Value to Which Each Diagonal Entry Belongs
 
 Returns, for each of the \\p\\ diagonal entries, the index into the free
 vector of the value that controls it: `1:p` for a

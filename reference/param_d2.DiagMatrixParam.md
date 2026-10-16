@@ -1,11 +1,11 @@
 # Second Derivatives of a Diagonal Parameter
 
-Closed form, from
+Computes the second derivatives in closed form from
 [`linkfunctions7::d2linkinv()`](https://statmodels7.github.io/linkfunctions7/reference/d2linkinv.html).
-The family is **separable**: each diagonal entry is a function of one
-free value alone, so a component \\\partial\_{kl} M\\ with \\k \ne l\\
-is exactly the zero matrix, and a pure one carries \\h''(\eta_k)\\ in
-the entries that value owns. A
+The family is separable: each diagonal entry is a function of a single
+free value, so a component \\\partial\_{kl} M\\ with \\k \ne l\\ is
+exactly the zero matrix, and a pure one carries \\h''(\eta_k)\\ in the
+entries owned by that value. A
 [`scalar_matrix()`](https://statmodels7.github.io/parameters7/reference/scalar_matrix.md)
 has one free value and so one component.
 
@@ -32,7 +32,8 @@ those methods keep only the pure components too.
 ## Value
 
 A list of `choose(s@n_free + 1, 2)` diagonal matrices keyed as
-`param_tuple_names(s)` and in that order, the mixed ones exactly zero.
+`param_tuple_names(s)` and in that order. The mixed ones are exactly
+zero.
 
 ## See also
 

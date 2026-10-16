@@ -30,21 +30,22 @@ A list as described in
 
 ## Why the coefficients are declared
 
-\\\phi_1, \dots, \phi_q\\ are what an autoregression is reported in, and
-they appear nowhere in the covariance the fit prints, nor among the free
-values, which are partial autocorrelations. A partial autocorrelation
-reported in place of a coefficient is a different number: at \\q = 2\\
-with free values \\(0, 0.9, -0.4)\\ the coefficients are \\(0.988,
--0.380)\\ while the partial autocorrelations are \\(0.716, -0.380)\\, so
-\\\phi_1\\ and \\\rho_1\\ differ in the first decimal. At \\q = 1\\ they
-coincide exactly, the first partial autocorrelation being the AR(1)
-coefficient, so the two differ only for \\q \> 1\\.
+An autoregression is reported in terms of \\\phi_1, \dots, \phi_q\\.
+These coefficients do not appear in the covariance that the fit prints
+or among the free values, which are partial autocorrelations. A partial
+autocorrelation reported in place of a coefficient is a different
+number: at \\q = 2\\ with free values \\(0, 0.9, -0.4)\\ the
+coefficients are \\(0.988, -0.380)\\ while the partial autocorrelations
+are \\(0.716, -0.380)\\, so \\\phi_1\\ and \\\rho_1\\ differ in the
+first decimal. At \\q = 1\\ they coincide exactly, because the first
+partial autocorrelation is the AR(1) coefficient, so the two differ only
+for \\q \> 1\\.
 
 ## The Jacobian is not diagonal
 
-A coefficient reads the **whole** chart, so its row of the Jacobian is
-dense in the partial autocorrelation columns. Those derivatives come out
-of the Levinson-Durbin recursion, through which the family already
+A coefficient reads the whole chart, so its row of the Jacobian is dense
+in the partial autocorrelation columns. Those derivatives come out of
+the Levinson-Durbin recursion, through which the family already
 propagates derivative arrays, so they are read off the first-order block
 instead of recomputed. The variance's row is a single entry, and each
 partial autocorrelation's is the link's own derivative.
@@ -57,5 +58,5 @@ unit circle, a condition that a scalar transformation of a single
 coefficient cannot express. A set that respected the constraint would
 not be an interval, so the identity scale is used and a reported
 coefficient interval may extend outside the stationary region. The
-partial autocorrelations, whose chart **is** a box, get `"atanh"` and
-stay inside it.
+intervals of the partial autocorrelations, whose chart is a box, are
+built on the `"atanh"` scale and stay inside it.

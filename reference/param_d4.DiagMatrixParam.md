@@ -1,14 +1,14 @@
 # Fourth Derivatives of a Diagonal Parameter
 
-Closed form, the same separable structure as at third order with
-\\h''''(\eta_k)\\ in place of \\h'''(\eta_k)\\. Only the pure components
-survive; every tuple naming two different free values is the exact zero
-matrix.
+Computes the fourth derivatives in closed form, with the same separable
+structure as at third order and \\h''''(\eta_k)\\ in place of
+\\h'''(\eta_k)\\. Only the pure components survive; every tuple naming
+two different free values is the exact zero matrix.
 
 \\h''''\\ comes from
 [`linkfunctions7::d4linkinv()`](https://statmodels7.github.io/linkfunctions7/reference/d4linkinv.html).
-This is the order at which a numerical route is least accurate, so the
-closed form matters most here.
+A numerical route is least accurate at this order, so the closed form
+gains the most here.
 
 ## Arguments
 

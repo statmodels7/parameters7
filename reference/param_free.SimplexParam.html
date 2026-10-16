@@ -9,7 +9,7 @@ true inverse of param_value.SimplexParam(), up to rounding."><meta property="og:
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,19 +67,19 @@ to 1.</p></dd>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Three rejections, each with its own message. An argument that is not a
-numeric vector of length \(K\) is rejected. A vector with a non-positive or
-missing entry is outside the <strong>open</strong> simplex, and \(\log 0\) is not
-finite. A vector that does not sum to 1 is not a probability vector, and it
-is <strong>not renormalized</strong>, because a silent repair would hide an error in the
-caller.</p>
-<p>The second rejection is the one that a fit meets: a large positive free
-value makes <code><a href="simplex_point.html">simplex_point()</a></code> return an exact 0 in the reference category, so
-a value produced at the boundary cannot be inverted back.</p>
+    <p>The method signals three errors, each with its own message. An argument that
+is not a numeric vector of length \(K\) is rejected. A vector with a
+non-positive or missing entry is outside the open simplex, and \(\log 0\)
+is not finite. A vector that does not sum to 1 is not a probability vector,
+and it is not renormalized, because a silent repair would hide an error in
+the caller.</p>
+<p>Of these rejections, a fit meets the second. A large positive free value makes
+<code><a href="simplex_point.html">simplex_point()</a></code> return an exact 0 in the reference category, so a value
+produced at the boundary cannot be inverted back.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="param_value.SimplexParam.html">param_value.SimplexParam()</a></code>, the map this inverts.</p></div>
+    <div class="dont-index"><p><code><a href="param_value.SimplexParam.html">param_value.SimplexParam()</a></code>, the map that this inverts.</p></div>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

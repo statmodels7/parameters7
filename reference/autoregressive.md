@@ -8,8 +8,8 @@ observations of a stationary autoregression of order \\q\\,
 
 parametrized by its marginal variance \\\gamma_0\\ and its \\q\\ partial
 autocorrelations \\r_1, \dots, r_q\\. That is \\q + 1\\ free values
-**whatever the dimension**: `n_free` is 3 for an order-2 process,
-whether it is observed 6 times or 200 times.
+whatever the dimension: `n_free` is 3 for an order-2 process, whether it
+is observed 6 times or 200 times.
 
 ## Usage
 
@@ -22,9 +22,9 @@ autoregressive(dimension, order, link_scale = linkfunctions7::log_link())
 - dimension:
 
   The side \\p\\ of the matrix: the number of consecutive observations.
-  Must exceed `order`, since a stretch of \\q\\ observations does not
-  identify \\q\\ partial autocorrelations; \\p = q + 1\\ is legal and is
-  the smallest legal dimension.
+  The dimension must exceed `order`, since a stretch of \\q\\
+  observations does not identify \\q\\ partial autocorrelations; the
+  smallest valid dimension is \\p = q + 1\\.
 
 - order:
 
@@ -56,9 +56,9 @@ The coefficients \\\phi\\ are stationary exactly when the roots of \\1 -
 \phi_1 z - \cdots - \phi_q z^{q}\\ lie outside the unit circle, and that
 set is not a box. At \\q = 2\\ it is the open triangle with vertices
 \\(-2, -1)\\, \\(2, -1)\\ and \\(0, 1)\\, of area 4 inside a bounding
-box \\(-2, 2) \times (-1, 1)\\ of area 8: **exactly half the box is
-non-stationary**, and \\\phi = (1.5, 0.6)\\, which sits comfortably
-inside the box, has a root of modulus 0.547. Scalar links onto intervals
+box \\(-2, 2) \times (-1, 1)\\ of area 8: exactly half the box is
+non-stationary, and \\\phi = (1.5, 0.6)\\, which sits comfortably inside
+the box, has a root of modulus 0.547. Scalar links onto intervals
 therefore cannot cover the stationary region, for any choice of
 intervals.
 
@@ -94,10 +94,10 @@ and the Yule-Walker equations at order \\k\\ give \\\rho_k =
 \sum\_{j\<k} \phi^{(k)}\_j \rho\_{k-j} + r_k\\, after which \\\rho_h =
 \sum_j \phi_j \rho\_{h-j}\\ for every lag beyond the order. The whole
 map from the partial autocorrelations to the matrix is therefore
-**polynomial**, built from sums and products alone, and its derivatives
-to fourth order come from propagating the derivative arrays through the
-recursion in compiled code, the product rule written out per order, with
-nothing differenced.
+polynomial, built only from sums and products, and its derivatives to
+fourth order come from propagating the derivative arrays through the
+recursion in compiled code, where the product rule is written out per
+order and the code does not difference any step.
 
 ## The log-determinant and the inverse
 
@@ -106,17 +106,18 @@ The innovation variances of the Levinson-Durbin recursion give
 \$\$\log\lvert M \rvert = p\log\gamma_0 + \sum\_{k=1}^{q} (p -
 k)\log(1 - r_k^{2}),\$\$
 
-one term per free value, so the log-determinant is **separable** and
-every mixed derivative of it is exactly zero: at order 4 and \\q = 2\\,
-12 of the 15 components are mixed and are 0 by construction. It costs a
-sum of \\q + 1\\ terms at any dimension.
+one term per free value, so the log-determinant is separable and every
+mixed derivative of it is exactly zero: at order 4 and \\q = 2\\, 12 of
+the 15 components are mixed and are 0 by construction. It costs a sum of
+\\q + 1\\ terms at any dimension.
 
-The inverse is **banded of bandwidth \\q\\**: an autoregression of order
-\\q\\ is Markov of that order, so its precision carries no entry beyond
+The inverse is banded of bandwidth \\q\\: an autoregression of order
+\\q\\ is Markov of that order, so its precision has only zeros beyond
 the \\q\\-th off-diagonal, and every entry outside the band is exactly
 0. It is assembled from the prediction form \\M^{-1} = U^\top D^{-1}
-U\\, with \\U\\ unit lower triangular holding the predictor coefficients
-and \\D\\ the innovation variances, so no factorization is taken.
+U\\, in which \\U\\ is unit lower triangular and holds the predictor
+coefficients and \\D\\ holds the innovation variances, so the assembly
+does not factorize the matrix.
 
 ## Implementation
 
@@ -140,10 +141,12 @@ same number.
 
 ## The name
 
-The name is `autoregressive()` rather than
+The function is named `autoregressive()` and not
 [`ar()`](https://rdrr.io/r/stats/ar.html) because
-[`stats::ar()`](https://rdrr.io/r/stats/ar.html) is a function of stats,
-and a package meant to be attached alongside others should not mask one.
+[`ar()`](https://rdrr.io/r/stats/ar.html) is already the name of
+[`stats::ar()`](https://rdrr.io/r/stats/ar.html) in stats, and attaching
+this package would mask that function. The name `autoregressive()`
+avoids the masking.
 
 ## Notation
 
@@ -195,8 +198,8 @@ c(from_matrix = M[1, 2] / M[1, 1], from_eta = tanh(eta[2]))
 #> from_matrix    from_eta 
 #>         0.7         0.7 
 
-# The precision is banded of bandwidth two, the process being Markov of
-# order two: everything beyond the second off-diagonal is exactly zero.
+# The precision is banded with bandwidth two because the process is Markov
+# of order two: everything beyond the second off-diagonal is exactly zero.
 lag <- abs(outer(1:6, 1:6, "-"))
 max(abs(param_solve(s, eta)[lag > 2]))
 #> [1] 0

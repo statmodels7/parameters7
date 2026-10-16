@@ -1,9 +1,9 @@
 # Compound Symmetry Parameter
 
-The S7 class of compound-symmetric covariance matrices: equal variances
-and one common correlation, so **two** free values at every dimension.
-It is the covariance of an exchangeable set of measurements, and the one
-that a random intercept induces.
+This is the S7 class of compound-symmetric covariance matrices, which
+have equal variances and one common correlation, so they have two free
+values at every dimension. It is the covariance of an exchangeable set
+of measurements, and the one that a random intercept induces.
 
 [`compound_symmetry()`](https://statmodels7.github.io/parameters7/reference/compound_symmetry.md)
 builds one. `param_params` records the two links, and the correlation's
@@ -83,14 +83,14 @@ for the properties that this class inherits.
 ## Examples
 
 ``` r
-# Two free values whatever the dimension.
+# The parameter has two free values whatever the dimension.
 s <- compound_symmetry(3)
 S7::S7_inherits(s, CompoundSymmetryParam)
 #> [1] TRUE
 vapply(2:6, function(p) compound_symmetry(p)@n_free, integer(1))
 #> [1] 2 2 2 2 2
 
-# The correlation's link depends on the dimension, its lower bound being
+# The correlation's link depends on the dimension, and its lower bound is
 # -1/(p-1): below that the matrix would not be positive definite.
 t(vapply(c(2, 4, 10),
          function(p) compound_symmetry(p)@param_params$link_rho@link_bounds,

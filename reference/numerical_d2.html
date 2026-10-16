@@ -3,13 +3,15 @@
 \(\partial^2 V / \partial \eta_k \partial \eta_l\), taking exactly one
 difference for each, through param_tensor(). Which quantity is differenced
 depends on what the family already supplies: the analytic first derivative
-where there is one, and param_value() itself where there is not. This is
-the method param_d2() dispatches to when a family has not written its own."><meta property="og:description" content="Estimates the \(d(d+1)/2\) distinct second derivatives
+where there is one, and param_value() itself where there is not. The
+generic param_d2() dispatches to this method when a family has not written
+its own."><meta property="og:description" content="Estimates the \(d(d+1)/2\) distinct second derivatives
 \(\partial^2 V / \partial \eta_k \partial \eta_l\), taking exactly one
 difference for each, through param_tensor(). Which quantity is differenced
 depends on what the family already supplies: the analytic first derivative
-where there is one, and param_value() itself where there is not. This is
-the method param_d2() dispatches to when a family has not written its own."><meta property="og:image" content="https://statmodels7.github.io/parameters7/logo.png"></head><body>
+where there is one, and param_value() itself where there is not. The
+generic param_d2() dispatches to this method when a family has not written
+its own."><meta property="og:image" content="https://statmodels7.github.io/parameters7/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -17,7 +19,7 @@ the method param_d2() dispatches to when a family has not written its own."><met
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,8 +53,9 @@ the method param_d2() dispatches to when a family has not written its own."><met
 \(\partial^2 V / \partial \eta_k \partial \eta_l\), taking exactly one
 difference for each, through <code><a href="param_tensor.html">param_tensor()</a></code>. Which quantity is differenced
 depends on what the family already supplies: the analytic first derivative
-where there is one, and <code><a href="param_value.html">param_value()</a></code> itself where there is not. This is
-the method <code><a href="param_d2.html">param_d2()</a></code> dispatches to when a family has not written its own.</p>
+where there is one, and <code><a href="param_value.html">param_value()</a></code> itself where there is not. The
+generic <code><a href="param_d2.html">param_d2()</a></code> dispatches to this method when a family has not written
+its own.</p>
     </div>
 
     <div class="section level2">
@@ -80,8 +83,8 @@ whole number.</p></dd>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A list of <code>choose(s@n_free + 1, 2)</code> estimates keyed as
-<code>param_tuple_names(s)</code> and in that order, each shaped like
-<code><a href="param_value.html">param_value()</a></code>'s result and symmetrized for a matrix family.</p>
+<code>param_tuple_names(s)</code> and in that order, each of which has the shape
+of <code><a href="param_value.html">param_value()</a></code>'s result and is symmetrized for a matrix family.</p>
     </div>
     <div class="section level2">
     <h2 id="the-two-routes">The two routes<a class="anchor" aria-label="anchor" href="#the-two-routes"></a></h2>
@@ -116,7 +119,8 @@ order below, and <code><a href="param_tensor.html">param_tensor()</a></code>, wh
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu">numerical_d2</span><span class="op">(</span><span class="va">s</span>, <span class="fl">0.3</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">-</span> <span class="fu"><a href="param_value.html">param_value</a></span><span class="op">(</span><span class="va">s</span>, <span class="fl">0.3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.063594e-13</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Against a family that writes its own second derivatives.</span></span></span>
+<span class="r-in"><span><span class="co"># The estimates are compared with those of a family that writes its own</span></span></span>
+<span class="r-in"><span><span class="co"># second derivatives.</span></span></span>
 <span class="r-in"><span><span class="va">q</span> <span class="op">&lt;-</span> <span class="fu"><a href="log_cholesky.html">log_cholesky</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">eta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="op">-</span><span class="fl">0.1</span>, <span class="fl">0.4</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu">numerical_d2</span><span class="op">(</span><span class="va">q</span>, <span class="va">eta</span><span class="op">)</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="param_d2.html">param_d2</a></span><span class="op">(</span><span class="va">q</span>, <span class="va">eta</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>

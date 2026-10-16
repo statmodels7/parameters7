@@ -13,7 +13,7 @@ serves them."><meta property="og:image" content="https://statmodels7.github.io/p
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,7 +87,8 @@ caller needing both does not evaluate the map twice.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Which eigenvalues count as zero is settled <strong>by position</strong>, never by size.
+    <p>The eigenvalues that count as zero are selected by their position and never
+by their size.
 <code><a href="https://rdrr.io/r/base/eigen.html" class="external-link">eigen()</a></code> returns them in decreasing order, so the first <code>s@rank</code> are kept and
 the rest dropped, whatever their numerical values are. The rank itself comes
 from the object and is never re-derived: counting eigenvalues above a relative

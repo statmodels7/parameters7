@@ -5,9 +5,9 @@ returns the inner family's inverse, read through
 [`param_solve()`](https://statmodels7.github.io/parameters7/reference/param_solve.md)
 so that a family with a closed inverse never reaches a factorization.
 [`param_free()`](https://statmodels7.github.io/parameters7/reference/param_free.md)
-inverts the matrix given and hands it to the inner family's own inverse
-map, so the free vector is the inner one and the round trip closes on
-it.
+inverts the matrix that it receives and passes it to the inner family's
+own inverse map, so the free vector is the inner one and the round trip
+closes on it.
 
 ## Arguments
 

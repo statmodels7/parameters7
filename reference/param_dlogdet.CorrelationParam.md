@@ -1,6 +1,7 @@
 # Log-Determinant Derivatives of a Correlation Parameter
 
-Closed form at all four orders. One page covers
+Computes the derivatives in closed form at all four orders. One page
+covers
 [`param_dlogdet()`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.md),
 [`param_d2logdet()`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.md),
 [`param_d3logdet()`](https://statmodels7.github.io/parameters7/reference/param_d3logdet.md)
@@ -8,7 +9,7 @@ and
 [`param_d4logdet()`](https://statmodels7.github.io/parameters7/reference/param_d4logdet.md)
 for this family because the four differ only in the order of one chain:
 \\\log\|R\| = 2\sum\_{i,k}\log\sin\theta\_{ik}\\ is a sum with one term
-per free value, so it is **separable**, every mixed component is exactly
+per free value, so it is separable, every mixed component is exactly
 zero at every order, and each pure one is the matching derivative of
 \\2\log\sin\theta_k\\ in \\\eta_k\\.
 
@@ -36,8 +37,8 @@ places them.
 
 ## Value
 
-A named numeric vector, of the length and keying its own order calls
-for; see **Details**.
+A named numeric vector whose length and keys are those of its own order;
+see Details.
 
 ## Details
 

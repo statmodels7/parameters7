@@ -11,7 +11,7 @@ NULL when \(S\) spans two rows of \(L\). The empty multiset gives
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,8 +65,8 @@ NULL when \(S\) spans two rows of \(L\). The empty multiset gives
 
 
 <dt id="arg-ks">ks<a class="anchor" aria-label="anchor" href="#arg-ks"></a></dt>
-<dd><p>A multiset of free-value indices, possibly empty. Positions in
-<code>1:s@n_free</code>.</p></dd>
+<dd><p>A multiset of free-value indices, possibly empty. The indices are
+positions in <code>1:s@n_free</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -76,16 +76,16 @@ NULL when \(S\) spans two rows of \(L\). The empty multiset gives
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>An entry of \(L\) depends only on the angles of <strong>its own row</strong>, so a
+    <p>An entry of \(L\) depends only on the angles of its own row, so a
 multiset spanning two rows gives <code>NULL</code>. Within a row, an entry is a product
 over a prefix of the angles, so it is zero unless every differentiated angle
 appears among its factors: a derivative in \(\theta_{ij}\) touches only the
 entries of row \(i\) from column \(j\) onwards, and the other entries of
 the returned matrix are zero.</p>
 <p>The factor's derivative across two rows is zero, but the derivative of
-\(R = LL^\top\) across those rows is not, \(R_{ij}\) being the inner
-product of two rows. See
-<code><a href="correlation_matrix.html">correlation_matrix()</a></code> for the support that does hold.</p>
+\(R = LL^\top\) across those rows is not, because \(R_{ij}\) is the inner
+product of two rows. See <code><a href="correlation_matrix.html">correlation_matrix()</a></code> for the support that does
+hold.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

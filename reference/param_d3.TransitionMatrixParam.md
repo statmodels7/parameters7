@@ -1,6 +1,6 @@
 # Third Derivatives of a Transition Matrix Parameter
 
-Closed form, from
+Computes the third derivatives in closed form from
 [`simplex()`](https://statmodels7.github.io/parameters7/reference/simplex.md)'s
 cumulant recursion at third order, embedded row by row. A component
 whose three free values do not all belong to one row is exactly the zero

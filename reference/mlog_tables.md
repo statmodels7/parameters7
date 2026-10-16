@@ -1,8 +1,8 @@
 # The Eigendecomposition and Divided-Difference Tables at a Point
 
-Everything the derivative contractions need: the eigendecomposition of
-\\S\\, the rotated basis directions, and the divided-difference tables
-of the requested orders, computed once per free vector.
+Computes everything that the derivative contractions need, namely the
+eigendecomposition of \\S\\, the rotated basis directions, and the
+divided-difference tables of the requested orders, once per free vector.
 
 ## Usage
 
@@ -24,7 +24,7 @@ mlog_tables(s, eta, order)
 
 - order:
 
-  The highest derivative order wanted: 1, 2, 3 or 4.
+  The highest derivative order to compute: 1, 2, 3 or 4.
 
 ## Value
 
@@ -34,7 +34,7 @@ tables `dd2` up to `dd<order+1>`.
 
 ## Details
 
-Everything here depends on \\\eta\\ alone, never on the index tuple, so
+Everything here depends only on \\\eta\\, never on the index tuple, so
 it is computed once and every component of the order reads it. The
 rotated directions are \\Q^\top E_k Q\\ for each basis direction
 \\E_k\\. The table of \\m\\ points is an array with one divided

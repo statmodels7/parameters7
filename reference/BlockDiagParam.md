@@ -1,8 +1,8 @@
 # Distinct Blocks of a Matrix Parameter
 
-The S7 class of a block-diagonal matrix built from several matrix
-parameters, each block a family of its own and each carrying its own
-stretch of the free vector.
+`BlockDiagParam` is the S7 class of a block-diagonal matrix built from
+several matrix parameters, in which each block is a family of its own
+and carries its own stretch of the free vector.
 [`block_diag()`](https://statmodels7.github.io/parameters7/reference/block_diag.md)
 builds one.
 

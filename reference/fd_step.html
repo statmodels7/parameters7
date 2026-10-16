@@ -13,7 +13,7 @@ here and the step that the stencil library documents cannot drift apart."><meta 
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,7 +63,8 @@ here and the step that the stencil library documents cannot drift apart.</p>
 
 
 <dt id="arg-order">order<a class="anchor" aria-label="anchor" href="#arg-order"></a></dt>
-<dd><p>The derivative order the step is for: 1, 2, 3 or 4.</p></dd>
+<dd><p>The derivative order for which the step is intended: 1, 2, 3
+or 4.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -75,8 +76,8 @@ here and the step that the stencil library documents cannot drift apart.</p>
     <p>The rule is \(\varepsilon^{1/(k+2)} \max(1, |\eta_k|)\) for a \(k\)-th
 derivative, which balances the truncation error against the rounding that
 the division by \(h^k\) amplifies. In doubles that is \(6.1 \times 10^{-6}\)
-at first order and \(1.2 \times 10^{-4}\) at second, both scaling up once
-\(|\eta_k|\) passes 1.</p>
+at first order and \(1.2 \times 10^{-4}\) at second, and both steps scale
+up once \(|\eta_k|\) passes 1.</p>
 <p>The step is not clamped. The unconstrained scale has no boundary, so the
 <code>bounds</code> argument of <code><a href="https://statmodels7.github.io/numericals7/reference/fd_step.html" class="external-link">numericals7::fd_step()</a></code> is left at its default.</p>
     </div>

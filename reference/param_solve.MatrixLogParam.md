@@ -1,7 +1,7 @@
 # Solve of a Matrix Logarithm Parameter
 
-Exact: \\M^{-1} = \exp(-S)\\, through the same eigendecomposition as the
-value, applied to `b`.
+Returns \\M^{-1} b\\ exactly, where \\M^{-1} = \exp(-S)\\ is computed
+through the same eigendecomposition as the value.
 
 ## Arguments
 

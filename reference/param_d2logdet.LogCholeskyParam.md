@@ -1,13 +1,15 @@
 # Log-Determinant Hessian of a Log-Cholesky Parameter
 
-Closed form, and identically zero: \\\log\|M\| = 2\sum_i \eta_i\\ is
-linear in the free vector, so its second derivative vanishes at every
-\\\eta\\. The zeros are exact, so a consumer can drop the term entirely
-instead of carrying small numbers through a contraction.
+Computes the second derivatives in closed form, and they are identically
+zero: \\\log\|M\| = 2\sum_i \eta_i\\ is linear in the free vector, so
+its second derivative vanishes at every \\\eta\\. The zeros are exact,
+so a consumer can drop the term entirely instead of carrying small
+numbers through a contraction.
 
-A comparison of a general log-determinant Hessian against a numerical
-reference therefore compares two zeros on
-[`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md).
+Therefore, when a general check compares the log-determinant Hessian
+with a numerical reference on
+[`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md),
+both sides are zero.
 [`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md),
 [`compound_symmetry()`](https://statmodels7.github.io/parameters7/reference/compound_symmetry.md)
 and

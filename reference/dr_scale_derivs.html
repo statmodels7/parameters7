@@ -11,7 +11,7 @@ order."><meta property="og:image" content="https://statmodels7.github.io/paramet
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,20 +65,19 @@ entries are read.</p></dd>
 
 
 <dt id="arg-order">order<a class="anchor" aria-label="anchor" href="#arg-order"></a></dt>
-<dd><p>The highest derivative order wanted, an integer from 0 to 4.</p></dd>
+<dd><p>The highest derivative order to compute, an integer from 0 to 4.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An <code>order + 1</code> by \(p\) numeric matrix, row \(k+1\) holding the
-\(k\)-th
-derivative of the inverse link at each scale coordinate, so row 1 is the
-scales themselves.</p>
+    <p>An <code>order + 1</code> by \(p\) numeric matrix. Row \(k+1\) holds the
+\(k\)-th derivative of the inverse link at each scale coordinate, so
+row 1 is the scales themselves.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Each scale depends on one free value only, so the table is complete: there are
-no cross-derivatives between scales to record. It is computed once per call to
+    <p>Each scale depends on one free value only, so the table is complete:
+cross-derivatives between scales are zero and need no entry. It is computed once per call to
 <code><a href="dr_prod_derivs.html">dr_prod_derivs()</a></code> and read by <code><a href="dr_scale_factor.html">dr_scale_factor()</a></code> for every component of the
 order.</p>
 <p>The correlation's part of <code>eta</code> is ignored, so one table serves every

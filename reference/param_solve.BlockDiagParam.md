@@ -56,8 +56,8 @@ triangular with \\M = L L^\top\\, as
 [`param_factor()`](https://statmodels7.github.io/parameters7/reference/param_factor.md)
 requires.
 
-Both are rejected by the generic where any block is rank deficient, the
-composite having no inverse and no Cholesky factor then.
+Both are rejected by the generic where any block is rank deficient,
+because the composite then has no inverse and no Cholesky factor.
 
 ## See also
 

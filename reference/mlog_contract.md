@@ -39,9 +39,9 @@ returns, and the sum is multiplied by \\\prod_j m_j!\\, where the
 distinct ordering occurs that many times among all of them. Without that
 factor the result would be too small by exactly that factor.
 
-The cost is the reason this family's higher orders are expensive: at
-order 4 a component with four different indices has 24 orderings, each a
-contraction of \\O(p^5)\\ operations.
+The sum over orderings makes the higher orders of this family expensive:
+at order 4 a component with four different indices has 24 orderings, and
+each ordering is a contraction of \\O(p^5)\\ operations.
 
 ## See also
 

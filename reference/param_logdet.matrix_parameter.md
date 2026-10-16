@@ -1,6 +1,6 @@
 # Default Log-Determinant
 
-The method that every
+This is the method that every
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
 inherits when it registers no
 [`param_logdet()`](https://statmodels7.github.io/parameters7/reference/param_logdet.md)
@@ -8,7 +8,7 @@ of its own. It takes an eigendecomposition of
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md),
 keeps the first `s@rank` eigenvalues, and returns the sum of their
 logarithms: the log-determinant for a full-rank family and the log
-pseudo-determinant otherwise. Which eigenvalues are kept is decided by
+pseudo-determinant otherwise. The method selects the eigenvalues by
 position, from the declared rank, and never from their size.
 
 The result is exact up to rounding, so
@@ -42,9 +42,9 @@ A single number.
 
 A non-positive eigenvalue among those that the rank keeps signals an
 error naming the family and the counts: the family has declared a rank
-it does not have at this \\\eta\\, so
+that it does not have at this \\\eta\\, so
 [`log()`](https://rdrr.io/r/base/Log.html) of a non-positive number
-would be the wrong thing to return. This is the check that catches a
+would be the wrong thing to return. This check catches a
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
 method whose matrix leaves the positive semidefinite cone.
 

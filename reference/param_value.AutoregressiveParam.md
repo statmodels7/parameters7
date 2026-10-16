@@ -1,11 +1,11 @@
 # Value of an Autoregressive Parameter
 
-Returns the Toeplitz matrix \\\gamma_0 \rho\_{\lvert i-j \rvert}\\, the
-autocorrelations coming from the Levinson-Durbin recursion of
+Returns the Toeplitz matrix \\\gamma_0 \rho\_{\lvert i-j \rvert}\\,
+where the autocorrelations come from the Levinson-Durbin recursion of
 [`ar_tables()`](https://statmodels7.github.io/parameters7/reference/ar_tables.md)
-and the marginal variance from the scale link. Positive definite at
-every free vector in exact arithmetic, the partial autocorrelations
-being inside \\(-1, 1)\\ by construction; see
+and the marginal variance comes from the scale link. The matrix is
+positive definite at every free vector in exact arithmetic, because the
+partial autocorrelations lie inside \\(-1, 1)\\ by construction; see
 [`autoregressive()`](https://statmodels7.github.io/parameters7/reference/autoregressive.md)
 for the edge of the chart in double precision.
 

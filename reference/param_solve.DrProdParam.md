@@ -1,5 +1,6 @@
 # Solve and Factor of a Scales-Times-Correlation Parameter
 
+Defines
 [`param_solve()`](https://statmodels7.github.io/parameters7/reference/param_solve.md)
 and
 [`param_factor()`](https://statmodels7.github.io/parameters7/reference/param_factor.md)
@@ -7,8 +8,8 @@ for a
 [`dr_prod()`](https://statmodels7.github.io/parameters7/reference/dr_prod.md)
 parameter. Both come from the correlation block with a scaling on either
 side: \\\Sigma^{-1} = D^{-1} R^{-1} D^{-1}\\, and \\\Sigma =
-(DL)(DL)^\top\\ for \\L\\ the correlation's own factor. Neither forms
-\\\Sigma\\ and neither factorizes it.
+(DL)(DL)^\top\\ for \\L\\ the correlation's own factor. The methods do
+not form \\\Sigma\\ and do not factorize it.
 
 ## Arguments
 
@@ -43,15 +44,15 @@ a lower triangular `s@dimension` by `s@dimension` matrix.
 
 ## Details
 
-The scaling is done by dividing and multiplying rows, which for a
-diagonal matrix is what the products amount to. The factor is lower
-triangular, as
+The methods scale the rows by division and multiplication, which for a
+diagonal matrix is equivalent to forming the products. The factor is
+lower triangular, as
 [`param_factor()`](https://statmodels7.github.io/parameters7/reference/param_factor.md)
 requires, because scaling the rows of a lower triangular matrix leaves
 it lower triangular.
 
-Neither is rejected for rank: this family admits no deficient
-correlation block, so it is always of full rank.
+The methods do not reject a matrix because of its rank: this family
+admits only correlation blocks of full rank, so it always has full rank.
 
 ## See also
 

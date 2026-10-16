@@ -1,17 +1,18 @@
 # First Derivatives of a Correlation Parameter
 
-Closed form, by the Leibniz rule on \\R = LL^\top\\,
+Computes the first derivatives in closed form, by the Leibniz rule on
+\\R = LL^\top\\,
 
 \$\$\partial_k R = L_k L^\top + L L_k^\top,\$\$
 
-with the factor's derivative \\L_k\\ built from the trigonometric tables
-of the angles: differentiating an entry of \\L\\ replaces one sine or
-cosine factor by its own derivative in the free value.
+where the factor's derivative \\L_k\\ is built from the trigonometric
+tables of the angles: differentiating an entry of \\L\\ replaces one
+sine or cosine factor by its own derivative in the free value.
 
-The diagonal of every component is exactly zero, the diagonal of \\R\\
-being the constant 1. Angle \\\theta\_{ij}\\ belongs to row \\i\\, so
-\\\partial_k L\\ is supported on that row alone, though \\\partial_k R\\
-is not.
+The diagonal of every component is exactly zero, because the diagonal of
+\\R\\ is the constant 1. Angle \\\theta\_{ij}\\ belongs to row \\i\\, so
+\\\partial_k L\\ is supported only on that row, although \\\partial_k
+R\\ is not.
 
 ## Arguments
 

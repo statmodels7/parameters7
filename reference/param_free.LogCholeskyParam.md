@@ -1,9 +1,10 @@
 # Free Vector of a Log-Cholesky Parameter
 
-Returns the free vector behind a matrix: the Cholesky factor of `m`,
+Returns the free vector behind a matrix: the Cholesky factor of `m` is
 read off at the positions that
 [`chol_positions()`](https://statmodels7.github.io/parameters7/reference/chol_positions.md)
-records, with the diagonal logged. Exact, and a true inverse of
+records, and its diagonal is logged. The map is exact, and it is a true
+inverse of
 [`param_value.LogCholeskyParam()`](https://statmodels7.github.io/parameters7/reference/param_value.LogCholeskyParam.md)
 because the triangular factor with a positive diagonal is unique; the
 round trip closes up to rounding.
@@ -32,11 +33,11 @@ A numeric vector of length `s@n_free`, named by `s@free_names`.
 
 ## Details
 
-`m` is rejected when it is not positive definite, with the verdict taken
-from the eigenvalues through
-[`chol_pd()`](https://statmodels7.github.io/parameters7/reference/chol_pd.md),
-at a relative tolerance of \\10^{-14}\\. A test on the spectrum gives
-the same answer on every platform, while a caught
+`m` is rejected when it is not positive definite;
+[`chol_pd()`](https://statmodels7.github.io/parameters7/reference/chol_pd.md)
+takes the verdict from the eigenvalues, at a relative tolerance of
+\\10^{-14}\\. A test on the spectrum gives the same answer on every
+platform, while a caught
 [`base::chol()`](https://rdrr.io/r/base/chol.html) error can differ
 between platforms on a matrix with an exactly zero eigenvalue.
 
@@ -49,6 +50,6 @@ that the function then discards.
 ## See also
 
 [`param_value.LogCholeskyParam()`](https://statmodels7.github.io/parameters7/reference/param_value.LogCholeskyParam.md),
-the map this inverts, and
+the map that this inverts, and
 [`chol_pd()`](https://statmodels7.github.io/parameters7/reference/chol_pd.md)
 for the definiteness test.

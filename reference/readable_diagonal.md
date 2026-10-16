@@ -3,16 +3,15 @@
 Assembles a
 [`param_readable()`](https://statmodels7.github.io/parameters7/reference/param_readable.md)
 declaration for a family whose quantities are one scalar link each of
-one free value each. The Jacobian is then **diagonal**, its \\k\\-th
-entry the inverse link's first derivative at \\\eta_k\\, and there is
-nothing else to compute.
+one free value each. The Jacobian is then diagonal, and its \\k\\-th
+entry is the inverse link's first derivative at \\\eta_k\\, so these
+entries give the whole Jacobian.
 
 [`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md),
 [`compound_symmetry()`](https://statmodels7.github.io/parameters7/reference/compound_symmetry.md)
 and
 [`scaled_matrix()`](https://statmodels7.github.io/parameters7/reference/scaled_matrix.md)
-all declare through this, which is why their three methods are one call
-each.
+all declare through this, which is why their methods are one call each.
 
 ## Usage
 

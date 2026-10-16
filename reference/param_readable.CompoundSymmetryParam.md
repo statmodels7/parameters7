@@ -3,7 +3,7 @@
 Declares two quantities: the marginal variance and the correlation that
 every pair shares. The Jacobian is diagonal, through
 [`readable_diagonal()`](https://statmodels7.github.io/parameters7/reference/readable_diagonal.md),
-each quantity being one link of one free value.
+because each quantity is one link of one free value.
 
 The correlation's interval is built on the inverse hyperbolic tangent.
 The family's own link is bounded below by \\-1/(p-1)\\, which is above

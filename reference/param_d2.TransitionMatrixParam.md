@@ -1,9 +1,9 @@
 # Second Derivatives of a Transition Matrix Parameter
 
-Closed form, and mostly zero. A component pairing free values from two
-**different** rows is exactly the zero matrix, the rows being
-parametrized independently; one pairing two free values of the same row
-is that row's
+Computes the second derivatives in closed form; most components are
+zero. A component pairing free values from two different rows is exactly
+the zero matrix, because the rows are parametrized independently. A
+component pairing two free values of the same row is that row's
 [`simplex()`](https://statmodels7.github.io/parameters7/reference/simplex.md)
 second derivative, embedded in that row.
 
@@ -30,8 +30,8 @@ Of the 21 components at \\K = 3\\, only 9 can be non-zero.
 ## Value
 
 A list of `choose(s@n_free + 1, 2)` \\K \times K\\ matrices keyed as
-`param_tuple_names(s)` and in that order, the cross-row ones exactly
-zero.
+`param_tuple_names(s)` and in that order. The cross-row matrices are
+exactly zero.
 
 ## See also
 

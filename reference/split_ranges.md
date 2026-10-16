@@ -23,7 +23,7 @@ A list of integer vectors, one per width, in order.
 
 ## Details
 
-A width of zero gives an **empty range**, `integer(0)`, instead of being
+A width of zero gives an empty range, `integer(0)`, instead of being
 dropped, so the list stays aligned with the blocks and the \\b\\-th
 element is always the \\b\\-th block's. That case is reachable: a fully
 known

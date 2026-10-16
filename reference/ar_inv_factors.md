@@ -2,7 +2,8 @@
 
 Returns the two factors of \\\Omega = U^\top \mathrm{diag}(\tau) U\\,
 each with its derivative arrays to fourth order, stored under the
-integer code of the sub-multiset differentiated in.
+integer code of the sub-multiset of indices in which the derivative is
+taken.
 
 ## Usage
 
@@ -29,8 +30,8 @@ ar_inv_factors(s, eta, cd, order)
 
 - order:
 
-  The derivative order the codes belong to, which bounds every factor's
-  order.
+  The derivative order to which the codes belong, which bounds every
+  factor's order.
 
 ## Value
 
@@ -39,8 +40,8 @@ A list with `u` and `tau`, each a list indexed by code: `u` of
 
 ## Details
 
-\\U\\ is unit lower triangular of bandwidth \\q\\, row \\t\\ holding the
-coefficients of the best linear predictor of \\y_t\\ from its
+\\U\\ is unit lower triangular of bandwidth \\q\\, and its row \\t\\
+holds the coefficients of the best linear predictor of \\y_t\\ from its
 predecessors, which for \\t\\ beyond the order are the autoregression's
 own. Those lower-order coefficients are the coefficients of the same
 family at that order (row \\k+1\\ of
@@ -48,7 +49,7 @@ family at that order (row \\k+1\\ of
 negated and read backwards, is the `phi` of
 `autoregressive(p, order = k)` up to rounding), so the intermediate
 derivative arrays come from the compiled Levinson-Durbin recursion run
-once per order, and nothing is rederived here. A component
+once per order, and the function does not rederive them. A component
 differentiating in a partial autocorrelation that the order does not
 reach is exactly zero.
 
@@ -66,4 +67,4 @@ in a factor that row does not carry.
 [`autoregressive_inv()`](https://statmodels7.github.io/parameters7/reference/autoregressive_inv.md)
 for the formula and
 [`ar_tables()`](https://statmodels7.github.io/parameters7/reference/ar_tables.md)
-for the recursion the coefficients come from.
+for the recursion from which the coefficients come.

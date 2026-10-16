@@ -5,10 +5,10 @@
 [`param_d3logdet()`](https://statmodels7.github.io/parameters7/reference/param_d3logdet.md)
 and
 [`param_d4logdet()`](https://statmodels7.github.io/parameters7/reference/param_d4logdet.md)
-for a
+return the derivatives of the log-determinant of a
 [`sum_struct()`](https://statmodels7.github.io/parameters7/reference/sum_struct.md)
-parameter: the cyclic trace expansion in the weights, carried onto the
-free scale by a chain rule with a diagonal Jacobian.
+parameter. They evaluate the cyclic trace expansion in the weights and
+carry it onto the free scale by a chain rule with a diagonal Jacobian.
 
 ## Arguments
 
@@ -36,19 +36,19 @@ above it, `choose(s@n_free + k - 1, k)` values keyed as
 
 The four share
 [`sum_struct_logdet_derivs()`](https://statmodels7.github.io/parameters7/reference/sum_struct_logdet_derivs.md)
-and differ only in the order they pass. Where the family is rank
+and differ only in the order that they pass. Where the family is rank
 deficient they differentiate the log pseudo-determinant that
 [`param_logdet()`](https://statmodels7.github.io/parameters7/reference/param_logdet.md)
 returns. Unlike the value's own derivatives, the mixed components are in
 general not zero: for the two variance components of the example in
 [`sum_struct()`](https://statmodels7.github.io/parameters7/reference/sum_struct.md)
 the mixed second derivative is \\-0.245\\ against \\0.245\\ for each
-pure one. The log-determinant of a sum is not a sum, which is why this
-family needs an expansion where
+pure one. This family needs an expansion because the log-determinant of
+a sum is not a sum of log-determinants, whereas
 [`block_diag()`](https://statmodels7.github.io/parameters7/reference/block_diag.md)
 and
 [`dr_prod()`](https://statmodels7.github.io/parameters7/reference/dr_prod.md)
-need none.
+need no expansion.
 
 It is the most expensive quantity of the family.
 

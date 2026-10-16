@@ -1,14 +1,14 @@
 # Third Derivatives of a Diagonal Parameter
 
-Closed form. A diagonal entry depends on one free value through its
-link, so the only surviving components are the pure ones, and each
-carries \\h'''(\eta_k)\\ on the entries that value owns. Every mixed
-component is the exact zero matrix.
+Computes the third derivatives in closed form. A diagonal entry depends
+on one free value through its link, so the only surviving components are
+the pure ones, and each carries \\h'''(\eta_k)\\ on the entries owned by
+that value. Every mixed component is the exact zero matrix.
 
 \\h'''\\ comes from
 [`linkfunctions7::d3linkinv()`](https://statmodels7.github.io/linkfunctions7/reference/d3linkinv.html),
-so the accuracy is the link's; a family without a closed form here gets
-a less accurate product stencil.
+so the accuracy is the link's; a family without a closed form here is
+handled by a less accurate product stencil.
 
 ## Arguments
 

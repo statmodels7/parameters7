@@ -13,7 +13,7 @@ code is that vector read as a base-five numeral."><meta property="og:image" cont
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,15 +71,16 @@ returns them.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A list with <code>pow</code>, the base-five weights; <code>codes</code>, one integer
 vector per tuple holding the code of <code>t[take]</code> for every subset of
-positions in the order the bits enumerate them; <code>comp</code>, the matching codes
-of the complements; and <code>all</code>, every distinct code with <code>cnt</code>, the count
-vector that each stands for.</p>
+positions in the order in which the bits enumerate them; <code>comp</code>, the
+matching codes of the complements; and <code>all</code>, every distinct code with
+<code>cnt</code>, the count vector represented by each.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>A count vector needs neither a string key nor a sort: <code><a href="https://rdrr.io/r/base/tabulate.html" class="external-link">tabulate()</a></code> builds it
 in one call, and the code indexes a list directly. Five is a safe base
-because a derivative order here is at most four, so no count can reach it.</p>
+because a derivative order here is at most four, so every count stays
+below five.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

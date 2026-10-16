@@ -7,9 +7,9 @@ each, through
 Which quantity is differenced depends on what the family already
 supplies: the analytic first derivative where there is one, and
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
-itself where there is not. This is the method
+itself where there is not. The generic
 [`param_d2()`](https://statmodels7.github.io/parameters7/reference/param_d2.md)
-dispatches to when a family has not written its own.
+dispatches to this method when a family has not written its own.
 
 ## Usage
 
@@ -37,9 +37,9 @@ numerical_d2(s, eta, accuracy = 4L)
 ## Value
 
 A list of `choose(s@n_free + 1, 2)` estimates keyed as
-`param_tuple_names(s)` and in that order, each shaped like
+`param_tuple_names(s)` and in that order, each of which has the shape of
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)'s
-result and symmetrized for a matrix family.
+result and is symmetrized for a matrix family.
 
 ## The two routes
 
@@ -82,7 +82,8 @@ numerical_d2(s, 0.3)
 max(abs(numerical_d2(s, 0.3)[[1]] - param_value(s, 0.3)))
 #> [1] 1.063594e-13
 
-# Against a family that writes its own second derivatives.
+# The estimates are compared with those of a family that writes its own
+# second derivatives.
 q <- log_cholesky(2)
 eta <- c(0.2, -0.1, 0.4)
 max(abs(unlist(numerical_d2(q, eta)) - unlist(param_d2(q, eta))))

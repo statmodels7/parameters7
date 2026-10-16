@@ -1,5 +1,18 @@
 # Changelog
 
+## parameters7 0.25.1
+
+- Documentation and messages: relative clauses without a relative
+  pronoun, stranded prepositions, absolute constructions, sentences
+  without a verb (example captions included), emphasis in bold and
+  personified descriptions of the code rewritten as plain clauses. Two
+  error messages are reworded
+  ([`param_solve()`](https://statmodels7.github.io/parameters7/reference/param_solve.md)
+  for a rank-deficient matrix and
+  [`param_free()`](https://statmodels7.github.io/parameters7/reference/param_free.md)
+  of a correlation matrix that is not positive definite). No change to
+  the code.
+
 ## parameters7 0.25.0
 
 - The numerical fallbacks are computed by

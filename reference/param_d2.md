@@ -1,12 +1,12 @@
 # Second Derivatives of a Parameter's Value
 
 Differentiates the map twice, returning the \\d(d+1)/2\\ distinct
-components \\\partial^2 V / \partial \eta_k \partial \eta_l\\, each
-shaped like the value. A mixed partial does not depend on the order of
-differentiation, so only the unordered pairs are returned; the caller
-reads the \\(l, k)\\ entry off the \\(k, l)\\ one. A Newton step in the
-free vector needs these, and so does the observed information of a model
-whose covariance is parametrized this way.
+components \\\partial^2 V / \partial \eta_k \partial \eta_l\\, each of
+which has the shape of the value. A mixed partial does not depend on the
+order of differentiation, so only the unordered pairs are returned; the
+caller reads the \\(l, k)\\ entry off the \\(k, l)\\ one. A Newton step
+in the free vector needs these, and so does the observed information of
+a model whose covariance is parametrized this way.
 
 ## Usage
 
@@ -47,16 +47,16 @@ interface:
 returns the index pairs in exactly the same order, so a caller can walk
 the two together.
 
-Both come from one enumeration, and neither is produced by taking a key
-apart. Splitting `"log_L1:log_L2"` on `":"` would give the wrong number
-of pieces whenever a free name contains the separator, and no error
-would be signaled.
+Both come from one enumeration, and the package never obtains either of
+them by taking a key apart. Splitting `"log_L1:log_L2"` on `":"` would
+give the wrong number of pieces whenever a free name contains the
+separator, without signaling an error.
 
 ## Exact, or one stencil
 
 Every family here is closed form. The fallback on
 [`parameter()`](https://statmodels7.github.io/parameters7/reference/parameter.md)
-takes one difference and no more, and which quantity it differences
+takes one difference and no more. The quantity that it differences
 depends on what the family already supplies. Where
 [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md)
 is analytic it differences that once, in the other index. Where
@@ -66,13 +66,13 @@ is itself numerical it works on
 directly: a three-point second difference where the two indices
 coincide, and one difference in each of the two components where they
 differ. A mixed derivative in two different variables is one stencil
-however it is written; the nesting that the package avoids is two
-differences in the same variable.
+however it is written; the package avoids nesting two differences in the
+same variable.
 
 ## Notation
 
 \\\eta\\ is the free vector, of length \\d = \\ `s@n_free`, and \\V\\
-the value
+the value that
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
 returns.
 

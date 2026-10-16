@@ -5,12 +5,12 @@
 [`param_d3()`](https://statmodels7.github.io/parameters7/reference/param_d3.md)
 and
 [`param_d4()`](https://statmodels7.github.io/parameters7/reference/param_d4.md)
-for a
+return the derivatives of a
 [`sum_struct()`](https://statmodels7.github.io/parameters7/reference/sum_struct.md)
-parameter. The value being linear in the weights, a component is
-**exactly zero** unless every index names the same free value, and is
-then that weight's \\m\\-th derivative times its own fixed matrix.
-Nothing is differenced, and the only matrix arithmetic is a
+parameter. Because the value is linear in the weights, a component is
+exactly zero unless every index names the same free value, and is then
+that weight's \\m\\-th derivative times its own fixed matrix. The
+derivatives are not differenced, and the only matrix arithmetic is a
 multiplication by a scalar.
 
 ## Arguments
@@ -40,8 +40,8 @@ At order 1, a list of `s@n_free` symmetric matrices named by
 
 The four share
 [`sum_struct_derivs()`](https://statmodels7.github.io/parameters7/reference/sum_struct_derivs.md)
-and differ only in the order they pass. At \\K = 2\\ the zeros are 1 of
-the 3 second-order components, 2 of 4 at third order and 3 of 5 at
+and differ only in the order that they pass. At \\K = 2\\ the zeros are
+1 of the 3 second-order components, 2 of 4 at third order and 3 of 5 at
 fourth. Compare
 [`param_dlogdet.SumStructParam()`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.SumStructParam.md),
 where the mixed components are in general not zero: the value is linear

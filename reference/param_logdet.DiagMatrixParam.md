@@ -6,8 +6,8 @@ log-determinant exactly. For a
 [`scalar_matrix()`](https://statmodels7.github.io/parameters7/reference/scalar_matrix.md)
 the one entry is counted \\p\\ times, giving \\p \log h(\eta_1)\\.
 
-Under the **log** link \\\log h(\eta) = \eta\\, so the result is
-`sum(eta)` for a
+Under the log link \\\log h(\eta) = \eta\\, so the result is `sum(eta)`
+for a
 [`diagonal_matrix()`](https://statmodels7.github.io/parameters7/reference/diagonal_matrix.md)
 and `dimension * eta` for a
 [`scalar_matrix()`](https://statmodels7.github.io/parameters7/reference/scalar_matrix.md),

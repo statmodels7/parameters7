@@ -10,7 +10,7 @@ unconstrained free values, with the last category as reference,
 Every free vector gives non-negative entries that sum to 1 up to
 rounding, so a mixture weight, a categorical probability or a
 latent-state distribution can be estimated without a constraint. The
-value is **not a matrix**; see
+value is not a matrix; see
 [`SimplexParam()`](https://statmodels7.github.io/parameters7/reference/SimplexParam.md)
 for the consequences.
 
@@ -24,8 +24,8 @@ simplex(n_cat)
 
 - n_cat:
 
-  The number of categories \\K\\, **at least 2**. A single integer; `1`,
-  a fraction, `NA` and a vector all signal the error
+  The number of categories \\K\\, at least 2. A single integer; `1`, a
+  fraction, `NA` and a vector all signal the error
   `'n_cat' must be a single integer of at least 2.` A one-category
   simplex is the constant 1 and has nothing to estimate.
 
@@ -35,7 +35,7 @@ An object of class
 [`SimplexParam()`](https://statmodels7.github.io/parameters7/reference/SimplexParam.md),
 with `n_free` equal to `n_cat - 1`, `free_names` `alr1` ... `alr(K-1)`,
 `param_name` `"simplex"`, and `param_params` holding `n_cat`. It carries
-no `dimension`, `rank`, or `null_basis`, being a
+no `dimension`, `rank`, or `null_basis`, because it is a
 [`parameter()`](https://statmodels7.github.io/parameters7/reference/parameter.md)
 and never a
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md).
@@ -51,7 +51,7 @@ rule applied repeatedly:
 
 At first order that is the covariance matrix of a categorical indicator,
 the same array that appears in the score of a multinomial model. All
-four orders are closed form and no stencil is used.
+four orders are closed form, and the computation does not use a stencil.
 
 ## The derivatives sum to zero
 
@@ -60,16 +60,16 @@ four orders are closed form and no stencil is used.
 derivative component therefore sums to zero over the value index, up to
 rounding, and
 [`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)
-tests this identity: a derivative array that fails it is wrong, whatever
-other check it passes.
+tests this identity. A derivative array that fails this test is
+incorrect even if it passes the other checks.
 
 ## Large free values saturate instead of overflowing
 
 [`simplex_point()`](https://statmodels7.github.io/parameters7/reference/simplex_point.md)
 applies the log-sum-exp shift, so a free value of 800 gives \\\pi_1 =
-1\\ and \\\pi_K = 0\\ with the vector summing to exactly 1, where the
+1\\ and \\\pi_K = 0\\, and the vector sums to exactly 1, whereas the
 naive expression would divide `Inf` by `Inf`. The value then lies on the
-**boundary** of the simplex, so
+boundary of the simplex, so
 [`param_free()`](https://statmodels7.github.io/parameters7/reference/param_free.md)
 cannot invert it: \\\log(0)\\ is not finite.
 
@@ -105,7 +105,7 @@ whose battery for a family that is not a matrix runs here.
 ## Examples
 
 ``` r
-# Four categories, three free values.
+# A simplex of four categories has three free values.
 s <- simplex(4)
 s@free_names
 #> [1] "alr1" "alr2" "alr3"

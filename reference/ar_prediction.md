@@ -3,9 +3,8 @@
 Returns the unit lower triangular matrix \\U\\ of one-step predictor
 coefficients and the vector \\v\\ of innovation variances, which factor
 the matrix as \\M = U^{-1} D U^{-\top}\\ with \\D = \mathrm{diag}(v)\\.
-It is where
-[`param_solve.AutoregressiveParam()`](https://statmodels7.github.io/parameters7/reference/param_solve.AutoregressiveParam.md)'s
-banded precision comes from.
+[`param_solve.AutoregressiveParam()`](https://statmodels7.github.io/parameters7/reference/param_solve.AutoregressiveParam.md)
+uses them to obtain the banded precision.
 
 ## Usage
 

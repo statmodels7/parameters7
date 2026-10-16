@@ -5,9 +5,9 @@ Differentiates the map four times, returning the distinct components
 \$\$\frac{\partial^{4} V(\eta)}
 {\partial\eta_k\\\partial\eta_l\\\partial\eta_m\\\partial\eta_n},\$\$
 
-each shaped like the value. Fourth order is the highest order that the
-package provides, and a fourth-order chain rule through a link needs
-derivatives up to this order.
+each of which has the shape of the value. Fourth order is the highest
+order that the package provides, and a fourth-order chain rule through a
+link needs derivatives up to this order.
 
 ## Usage
 
@@ -40,7 +40,7 @@ the value.
 
 The derivative is symmetric in its indices, so the \\\binom{d+3}{4}\\
 unordered quadruples are returned, keyed by `param_tuple_names(s, 4)` in
-lexicographic order, with `param_tuple_indices(s, 4)` giving the index
+lexicographic order, and `param_tuple_indices(s, 4)` gives the index
 quadruples in the same order. At \\d = 3\\ there are fifteen, at \\d =
 6\\ a hundred and twenty-six, so the list grows quickly in the size of
 the matrix.
@@ -50,7 +50,7 @@ the matrix.
 Every family here is closed form. The fallback on
 [`parameter()`](https://statmodels7.github.io/parameters7/reference/parameter.md)
 applies one product stencil per quadruple, with a factor per distinct
-index of the width its multiplicity calls for, evaluated in one pass
+index of the width that its multiplicity requires, evaluated in one pass
 over
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md).
 At fourth order the rounding of a difference grows as \\\varepsilon /
@@ -60,7 +60,7 @@ orders, and a family used for fitting should write the closed form out.
 ## Notation
 
 \\\eta\\ is the free vector, of length \\d = \\ `s@n_free`, and \\V\\
-the value
+the value that
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
 returns.
 

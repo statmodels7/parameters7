@@ -15,7 +15,7 @@ chol_leibniz() is."><meta property="og:image" content="https://statmodels7.githu
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -80,16 +80,16 @@ keyed as <code>param_tuple_names(s, order)</code>, identical to <code><a href="c
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The two routes agree exactly, both summing the same Leibniz terms, with the
-compiled one skipping only additions of structural zeros.</p>
+    <p>The two routes agree exactly, because both sum the same Leibniz terms, and
+the compiled one skips only additions of structural zeros.</p>
 <p>The compiled route is the production one because every derivative of the
 factor is a single-entry matrix, so a Leibniz term is one row, one column or
 one cell, where this twin forms a full \(p \times p\) product.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="chol_leibniz.html">chol_leibniz()</a></code>, the compiled route this mirrors, and
-<code><a href="leibniz_gram.html">leibniz_gram()</a></code>, the dense Leibniz sum it uses.</p></div>
+    <div class="dont-index"><p><code><a href="chol_leibniz.html">chol_leibniz()</a></code>, the compiled route that this mirrors, and
+<code><a href="leibniz_gram.html">leibniz_gram()</a></code>, the dense Leibniz sum that it uses.</p></div>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

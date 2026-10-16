@@ -25,7 +25,7 @@ subjects still estimates three numbers."><meta property="og:image" content="http
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,7 +57,7 @@ subjects still estimates three numbers."><meta property="og:image" content="http
     <div class="ref-description section level2">
     <p>Returns an object holding \(M(\eta) = I_m \otimes S(\eta)\) for an inner
 matrix parameter \(S\) of side \(d\): a block-diagonal matrix of side
-\(md\) whose \(m\) diagonal blocks are the <strong>same</strong> matrix, sharing one
+\(md\) whose \(m\) diagonal blocks are the same matrix, sharing one
 free vector.</p>
 <p>This is the covariance, or precision, of \(m\) independent groups whose
 within-group structure is common, which is the shape that a grouped
@@ -103,7 +103,8 @@ replicated blockwise, and <code>param_params</code> holding <code>inner</code> a
     <p>$$\partial_k M = I_m \otimes \partial_k S, \qquad
       \log|M|_{+} = m \log|S|_{+}, \qquad
       M^{-1} = I_m \otimes S^{-1}.$$</p>
-<p>No matrix of side \(md\) is decomposed, and no new derivation is needed:
+<p>The class does not decompose a matrix of side \(md\) and does not need a
+new derivation:
 the rank is \(m\) times the inner rank, the null basis is the inner one replicated
 blockwise, and <code><a href="param_solve.html">param_solve()</a></code> loops over the blocks solving the inner
 parameter \(m\) times.</p>
@@ -144,7 +145,8 @@ values, <code><a href="dr_prod.html">dr_prod()</a></code> and <code><a href="sum
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Three groups sharing one 2 x 2 covariance: 6 x 6, three free values.</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Here are three groups that share one 2 x 2 covariance, which give a 6 x 6</span></span></span>
+<span class="r-in"><span><span class="co"># matrix with three free values.</span></span></span>
 <span class="r-in"><span><span class="va">inner</span> <span class="op">&lt;-</span> <span class="fu"><a href="log_cholesky.html">log_cholesky</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu">kron_identity</span><span class="op">(</span><span class="va">inner</span>, <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>dimension <span class="op">=</span> <span class="va">s</span><span class="op">@</span><span class="va">dimension</span>, n_free <span class="op">=</span> <span class="va">s</span><span class="op">@</span><span class="va">n_free</span><span class="op">)</span></span></span>

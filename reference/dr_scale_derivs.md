@@ -25,19 +25,19 @@ dr_scale_derivs(s, eta, order)
 
 - order:
 
-  The highest derivative order wanted, an integer from 0 to 4.
+  The highest derivative order to compute, an integer from 0 to 4.
 
 ## Value
 
-An `order + 1` by \\p\\ numeric matrix, row \\k+1\\ holding the \\k\\-th
+An `order + 1` by \\p\\ numeric matrix. Row \\k+1\\ holds the \\k\\-th
 derivative of the inverse link at each scale coordinate, so row 1 is the
 scales themselves.
 
 ## Details
 
 Each scale depends on one free value only, so the table is complete:
-there are no cross-derivatives between scales to record. It is computed
-once per call to
+cross-derivatives between scales are zero and need no entry. It is
+computed once per call to
 [`dr_prod_derivs()`](https://statmodels7.github.io/parameters7/reference/dr_prod_derivs.md)
 and read by
 [`dr_scale_factor()`](https://statmodels7.github.io/parameters7/reference/dr_scale_factor.md)

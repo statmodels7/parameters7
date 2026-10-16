@@ -1,9 +1,9 @@
 # The Basis Direction of One Free Value
 
-Returns \\\partial S / \partial \eta_k\\, which is a constant matrix,
-\\S\\ being linear in the free vector: a single 1 on the diagonal for a
-diagonal free value, and a symmetric pair of 1s below and above the
-diagonal for the rest. These are the directions against which the
+Returns \\\partial S / \partial \eta_k\\, which is a constant matrix
+because \\S\\ is linear in the free vector: a single 1 on the diagonal
+for a diagonal free value, and a symmetric pair of 1s below and above
+the diagonal for the rest. These are the directions against which the
 Frechet derivatives contract.
 
 Because they do not depend on \\\eta\\, the whole nonlinearity of the

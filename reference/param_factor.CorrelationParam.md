@@ -1,8 +1,8 @@
 # Factor of a Correlation Parameter
 
-Returns \\L\\ by assembling it from the angles, so no factorization is
-taken: the factor is what the parametrization holds. Its rows are unit
-vectors, which is where \\R = LL^\top\\ gets its unit diagonal.
+Returns \\L\\, assembled from the angles without a factorization,
+because the parametrization holds the factor directly. Its rows are unit
+vectors, so \\R = LL^\top\\ has a unit diagonal.
 
 It is the natural way to simulate a correlated standard normal vector:
 \\Lz\\ with \\z\\ standard normal has correlation matrix \\R\\ and unit

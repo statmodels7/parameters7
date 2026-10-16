@@ -7,8 +7,8 @@ matrix. `parameter` is the base S7 class of every such map. It records
 how many free values the map consumes, what each of them is called, and
 whatever the family needs in order to evaluate itself. Because the
 domain is the whole of \\\mathbb{R}^{d}\\, an optimizer may move
-\\\eta\\ anywhere and every point it visits still maps to a valid value,
-so no constraint has to be policed during a fit.
+\\\eta\\ anywhere and every point that it visits still maps to a valid
+value, so the fit does not have to enforce any constraint.
 
 The class is not meant to be instantiated directly. Call a constructor:
 [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
@@ -38,12 +38,12 @@ parameter(
 
   A single character string naming the family, used in the error
   messages that the validators raise and in the object's `print` output.
-  `"log_cholesky"`, `"ar1"` and so on.
+  Examples are `"log_cholesky"` and `"ar1"`.
 
 - n_free:
 
   The length \\d\\ of the free vector: a single non-negative integer.
-  Zero is legal and describes a family with nothing to estimate. The
+  Zero is allowed and describes a family with nothing to estimate. The
   validator rejects a vector, a negative value, or a length that
   disagrees with `free_names`.
 
@@ -110,7 +110,7 @@ and
 [`param_d4()`](https://statmodels7.github.io/parameters7/reference/param_d4.md),
 each a product stencil applied to the map itself. A closed form
 registered later replaces the inherited numerical method through
-dispatch, and no caller changes.
+dispatch, and every caller remains unchanged.
 
 The inverse map and the matrix quantities are not supplied in this way:
 
@@ -141,18 +141,18 @@ the quantity, as the below-diagonal entries `"L2.1"` of a Cholesky
 factor are.
 
 A consumer outside the family flattens the free vector into scalar
-parameters carrying identity links, so a label promising a bounded
+parameters carrying identity links, so a label that names a bounded
 quantity would report a number that is not on that scale: a free value
 of 1.4 called `rho` reads as a correlation of 1.4, while called `z_rho`
 it reads as the correlation \\\tanh(1.4) = 0.885\\.
 
 ## Notation
 
-\\\eta\\ is the **free vector**, the point on the unconstrained scale
-that an optimizer moves, and \\d\\ its length, the object's `n_free`.
-Note that \\\eta\\ means a linear predictor elsewhere in the toolkit;
-here it is always the free vector of a parametrization. \\p\\ is the
-side of the matrix a matrix family produces.
+\\\eta\\ is the free vector, the point on the unconstrained scale that
+an optimizer moves, and \\d\\ its length, the object's `n_free`. In
+other parts of the toolkit \\\eta\\ means a linear predictor; here it is
+always the free vector of a parametrization. \\p\\ is the side of the
+matrix that a matrix family produces.
 
 ## See also
 
@@ -199,7 +199,7 @@ s <- log_cholesky(3)
 S7::S7_inherits(s, parameter)
 #> [1] TRUE
 
-# The four properties that the class itself holds.
+# The class itself holds four properties.
 s@param_name
 #> [1] "log_cholesky"
 s@n_free

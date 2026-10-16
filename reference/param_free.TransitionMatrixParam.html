@@ -11,7 +11,7 @@ closes up to rounding."><meta property="og:image" content="https://statmodels7.g
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,18 +70,18 @@ with every row summing to 1.</p></dd>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>A matrix is rejected when it has a non-positive entry, being then outside
-the <strong>open</strong> simplex where \(\log 0\) is not finite, or when a row does not
-sum to 1, in which case it is not a probability distribution and is <strong>not</strong>
-renormalized. The messages state the condition that failed and do not name
-the row.</p>
-<p>The first rejection is the one that a fit meets: a large positive free value
-makes <code><a href="simplex_point.html">simplex_point()</a></code> return an exact 0 in the reference state, so a matrix
+    <p>A matrix is rejected when it has a non-positive entry, because it is then
+outside the open simplex, where \(\log 0\) is not finite, or when a row
+does not sum to 1, in which case it is not a probability distribution and is
+not renormalized. The messages state the condition that failed and do not
+name the row.</p>
+<p>Of these rejections, a fit meets the first. A large positive free value makes
+<code><a href="simplex_point.html">simplex_point()</a></code> return an exact 0 in the reference state, so a matrix
 produced at the boundary cannot be inverted back.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="param_value.TransitionMatrixParam.html">param_value.TransitionMatrixParam()</a></code>, the map this inverts, and
+    <div class="dont-index"><p><code><a href="param_value.TransitionMatrixParam.html">param_value.TransitionMatrixParam()</a></code>, the map that this inverts, and
 <code><a href="param_free.SimplexParam.html">param_free.SimplexParam()</a></code>, which does the same for one row.</p></div>
     </div>
 

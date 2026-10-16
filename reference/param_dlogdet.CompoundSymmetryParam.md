@@ -1,15 +1,15 @@
 # Log-Determinant Derivatives of a Compound Symmetry Parameter
 
-Closed form at all four orders. One page covers
+The derivatives are in closed form at all four orders. One page covers
 [`param_dlogdet()`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.md),
 [`param_d2logdet()`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.md),
 [`param_d3logdet()`](https://statmodels7.github.io/parameters7/reference/param_d3logdet.md)
 and
 [`param_d4logdet()`](https://statmodels7.github.io/parameters7/reference/param_d4logdet.md)
 because the four differ only in the order taken: \\\log\|M\| =
-p\log\sigma^2 + q(\rho)\\ is a **sum** of a function of one free value
-and a function of the other, so every mixed component is exactly zero
-and the pure ones are the two chains taken separately.
+p\log\sigma^2 + q(\rho)\\ is a sum of a function of one free value and a
+function of the other, so every mixed component is exactly zero and the
+pure ones are the two chains taken separately.
 
 ## Arguments
 

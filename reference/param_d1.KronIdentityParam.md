@@ -1,8 +1,9 @@
 # First Derivatives of a Block Replication
 
-Closed form: \\\partial_k M = I_m \otimes \partial_k S\\, the inner
-parameter's first derivatives lifted one at a time. Exact whenever the
-inner parameter's are, and numerical whenever they are not.
+The first derivative has closed form, \\\partial_k M = I_m \otimes
+\partial_k S\\, which lifts the inner parameter's first derivatives one
+at a time. The derivatives are exact whenever the inner parameter's are,
+and numerical whenever they are not.
 [`param_is_numerical()`](https://statmodels7.github.io/parameters7/reference/param_is_numerical.md)
 does not propagate this: it reports `FALSE` for every quantity of the
 composite, which has methods of its own.

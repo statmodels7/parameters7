@@ -1,9 +1,9 @@
 # Scaled Fixed Matrix Parameter
 
-The S7 class of a fixed symmetric positive semidefinite matrix \\P\\
-carried by a single positive scale, \\M(\eta) = h(\eta) P\\. It is the
-family through which a **rank-deficient** matrix usually enters the
-package
+`ScaledMatrixParam` is the S7 class of a fixed symmetric positive
+semidefinite matrix \\P\\ carried by a single positive scale, \\M(\eta)
+= h(\eta) P\\. It is the family through which a rank-deficient matrix
+usually enters the package
 ([`sum_struct()`](https://statmodels7.github.io/parameters7/reference/sum_struct.md)
 also accepts a deficient sum): \\P\\ may be a difference penalty or a
 basis Gram matrix with a genuine null space, and the class records that
@@ -100,7 +100,7 @@ c(dimension = q@dimension, rank = q@rank, null = ncol(q@null_basis))
 #> dimension      rank      null 
 #>         6         4         2 
 
-# With no link there is nothing to estimate.
+# With no link the family has no free value to estimate.
 f <- scaled_matrix(diag(3), link = NULL)
 c(n_free = f@n_free, name = f@param_name)
 #>  n_free    name 

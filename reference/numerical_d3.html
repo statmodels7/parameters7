@@ -3,13 +3,13 @@
 index tuple, through param_tensor(). The stencil is applied to the
 highest analytic derivative below the third that the family supplies, as
 param_analytic() reads it, and to param_value() where there is none.
-This is the method param_d3() dispatches to when a family has not written
-its own."><meta property="og:description" content="Estimates the distinct third derivatives, one tensor-product stencil per
+The generic param_d3() dispatches to this method when a family has not
+written its own."><meta property="og:description" content="Estimates the distinct third derivatives, one tensor-product stencil per
 index tuple, through param_tensor(). The stencil is applied to the
 highest analytic derivative below the third that the family supplies, as
 param_analytic() reads it, and to param_value() where there is none.
-This is the method param_d3() dispatches to when a family has not written
-its own."><meta property="og:image" content="https://statmodels7.github.io/parameters7/logo.png"></head><body>
+The generic param_d3() dispatches to this method when a family has not
+written its own."><meta property="og:image" content="https://statmodels7.github.io/parameters7/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -17,7 +17,7 @@ its own."><meta property="og:image" content="https://statmodels7.github.io/param
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,8 +51,8 @@ its own."><meta property="og:image" content="https://statmodels7.github.io/param
 index tuple, through <code><a href="param_tensor.html">param_tensor()</a></code>. The stencil is applied to the
 highest analytic derivative below the third that the family supplies, as
 <code><a href="param_analytic.html">param_analytic()</a></code> reads it, and to <code><a href="param_value.html">param_value()</a></code> where there is none.
-This is the method <code><a href="param_d3.html">param_d3()</a></code> dispatches to when a family has not written
-its own.</p>
+The generic <code><a href="param_d3.html">param_d3()</a></code> dispatches to this method when a family has not
+written its own.</p>
     </div>
 
     <div class="section level2">
@@ -80,8 +80,8 @@ whole number.</p></dd>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A list of <code>choose(s@n_free + 2, 3)</code> estimates keyed as
-<code>param_tuple_names(s, 3)</code> and in that order, each shaped like
-<code><a href="param_value.html">param_value()</a></code>'s result and symmetrized for a matrix family.</p>
+<code>param_tuple_names(s, 3)</code> and in that order, each of which has the shape
+of <code><a href="param_value.html">param_value()</a></code>'s result and is symmetrized for a matrix family.</p>
     </div>
     <div class="section level2">
     <h2 id="the-stencil">The stencil<a class="anchor" aria-label="anchor" href="#the-stencil"></a></h2>
@@ -97,8 +97,8 @@ product,</p>
   \sum_{i_1, \dots, i_r} \left(\prod_{j=1}^{r} w^{(m_j)}_{i_j}\right)
   \partial^\beta V\Bigl(\eta + \textstyle\sum_{j=1}^{r} o^{(m_j)}_{i_j} h_j
   e_{c_j}\Bigr),$$</p>
-<p>with the zero-weight nodes skipped and every point shared by several tuples
-evaluated once. With an analytic <code><a href="param_d2.html">param_d2()</a></code> each tuple is one first
+<p>where the nodes of zero weight are skipped and every point shared by several
+tuples is evaluated once. With an analytic <code><a href="param_d2.html">param_d2()</a></code> each tuple is one first
 difference of a second derivative.</p>
     </div>
     <div class="section level2">
@@ -135,7 +135,8 @@ builds the stencils, and <code><a href="numerical_d4.html">numerical_d4()</a></c
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu">numerical_d3</span><span class="op">(</span><span class="va">s</span>, <span class="fl">0.3</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">-</span> <span class="fu"><a href="param_value.html">param_value</a></span><span class="op">(</span><span class="va">s</span>, <span class="fl">0.3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.063594e-13</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Against a family that writes its own third derivatives.</span></span></span>
+<span class="r-in"><span><span class="co"># The estimates are compared with those of a family that writes its own</span></span></span>
+<span class="r-in"><span><span class="co"># third derivatives.</span></span></span>
 <span class="r-in"><span><span class="va">q</span> <span class="op">&lt;-</span> <span class="fu"><a href="log_cholesky.html">log_cholesky</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">eta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="op">-</span><span class="fl">0.1</span>, <span class="fl">0.4</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">ana</span> <span class="op">&lt;-</span> <span class="fu"><a href="param_d3.html">param_d3</a></span><span class="op">(</span><span class="va">q</span>, <span class="va">eta</span><span class="op">)</span></span></span>

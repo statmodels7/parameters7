@@ -1,12 +1,12 @@
-# The Number of Diagonal Entries Each Free Value Owns
+# The Number of Diagonal Entries Owned by Each Free Value
 
 Returns \\m_k\\, the number of diagonal entries that the \\k\\-th free
 value controls: 1 for every value of a
 [`diagonal_matrix()`](https://statmodels7.github.io/parameters7/reference/diagonal_matrix.md),
 and \\p\\ for the single value of a
 [`scalar_matrix()`](https://statmodels7.github.io/parameters7/reference/scalar_matrix.md).
-It is the multiplicity that appears in the log-determinant's
-derivatives, \\\log\|M\|\\ counting a shared value once per entry.
+This multiplicity appears in the log-determinant's derivatives, because
+\\\log\|M\|\\ counts a shared value once per entry.
 
 ## Usage
 

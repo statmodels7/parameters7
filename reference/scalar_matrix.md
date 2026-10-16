@@ -1,8 +1,8 @@
 # Construct a Scalar Multiple of the Identity
 
 Returns an object holding the map \\M = \tau I\\ with \\\tau =
-h(\eta_1)\\ positive: a diagonal matrix with **one** free value shared
-by every entry, whatever \\p\\ is. It is the simplest parametrization in
+h(\eta_1)\\ positive: a diagonal matrix with one free value shared by
+every entry, whatever \\p\\ is. It is the simplest parametrization in
 the package, and it is the parametrization of a random effect with a
 single variance component.
 
@@ -16,8 +16,8 @@ scalar_matrix(dimension, link = linkfunctions7::log_link())
 
 - dimension:
 
-  The side \\p\\ of the matrix. A single positive whole number, finite
-  and at least 1; any other value signals an error.
+  The side \\p\\ of the matrix. It must be a single positive whole
+  number, finite and at least 1; any other value signals an error.
 
 - link:
 
@@ -75,7 +75,7 @@ to replicate any parametrization over independent groups.
 ## Examples
 
 ``` r
-# One free value at any dimension.
+# The family has one free value at any dimension.
 s <- scalar_matrix(3)
 c(n_free = s@n_free, dimension = s@dimension)
 #>    n_free dimension 

@@ -1,6 +1,6 @@
 # Default Log-Determinant Hessian
 
-The method that every
+This is the method that every
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
 inherits when it registers no
 [`param_d2logdet()`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.md)
@@ -16,10 +16,11 @@ M)\right),\$\$
 with \\M^{+}\\ the pseudo-inverse over the directions that the declared
 rank keeps. The second trace is formed as
 `sum(t(mi %*% dk) * (mi %*% dl))`, which is the trace of the product
-without the product being multiplied out.
+without multiplying the product out.
 
-Exact given the derivative arrays, so the accuracy is theirs: rounding
-with analytic arrays, and that of the stencils with numerical ones.
+The result is exact given the derivative arrays, so the accuracy is
+theirs: rounding with analytic arrays, and that of the stencils with
+numerical ones.
 
 ## Arguments
 
@@ -50,6 +51,6 @@ for the generic,
 [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md)
 and
 [`param_d2()`](https://statmodels7.github.io/parameters7/reference/param_d2.md)
-for the arrays this reads, and
+for the arrays that this reads, and
 [`param_d3logdet.matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/param_d3logdet.matrix_parameter.md)
 for the order above, which differences this one.

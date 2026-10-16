@@ -1,11 +1,11 @@
 # The Pieces Behind a Log-Cholesky Inverse's Derivatives
 
-\\L\\, \\G = L^{-1}\\, and for each free value \\B_k = G\\\partial_k L\\
-and \\C_k = B_k + B_k^\top\\, which
+Returns \\L\\, \\G = L^{-1}\\, and for each free value \\B_k =
+G\\\partial_k L\\ and \\C_k = B_k + B_k^\top\\. These pieces are read by
 [`param_inv_d1()`](https://statmodels7.github.io/parameters7/reference/param_inv_d1.md)
 and
 [`param_inv_d2()`](https://statmodels7.github.io/parameters7/reference/param_inv_d1.md)
-read for a
+for a
 [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
 parameter.
 

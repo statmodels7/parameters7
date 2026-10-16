@@ -1,9 +1,10 @@
 # A Factor of a Parameter's Matrix
 
 Returns the lower triangular \\L\\ with \\M = L L^\top\\, the Cholesky
-factor of the matrix the parametrization produces. Simulation is the
-usual reason to want it: \\L z\\ with \\z\\ standard normal has
-covariance \\M\\, so one factor draws as many vectors as needed. For
+factor of the matrix that the parametrization produces. Simulation is
+the usual reason to want it: \\L z\\ with \\z\\ standard normal has
+covariance \\M\\, so one factor suffices to draw as many vectors as
+needed. For
 [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
 the factor is assembled directly from the free vector, with one
 exponential per diagonal entry and no decomposition.
@@ -56,7 +57,7 @@ not a symmetric matrix.
 
 ## Notation
 
-\\M\\ is the matrix
+\\M\\ is the matrix that
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
 returns, \\p\\ its side, and \\\eta\\ the free vector.
 
@@ -65,7 +66,7 @@ returns, \\p\\ its side, and \\\eta\\ the free vector.
 [`param_solve()`](https://statmodels7.github.io/parameters7/reference/param_solve.md)
 for a solve through the same factor,
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
-for the matrix it factors, and
+for the matrix that it factors, and
 [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md),
 whose first \\p\\ free values are the logarithms of this factor's
 diagonal.
@@ -90,7 +91,7 @@ max(abs(L %*% t(L) - param_value(s, eta)))
 all.equal(diag(L), exp(eta[1:3]))
 #> [1] TRUE
 
-# What it is for: simulating with the right covariance.
+# The factor is used to simulate with the right covariance.
 set.seed(1)
 y <- t(L %*% matrix(rnorm(3 * 20000), 3, 20000))
 round(cov(y) - param_value(s, eta), 2)

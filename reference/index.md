@@ -61,7 +61,7 @@ matrix is used.
 ## The map and its inverse
 
 - [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
-  : The Value a Parameter Produces
+  : The Value That a Parameter Produces
 - [`param_free()`](https://statmodels7.github.io/parameters7/reference/param_free.md)
   : The Free Vector Behind a Value
 
@@ -249,7 +249,7 @@ them.
 - [`chol_leibniz()`](https://statmodels7.github.io/parameters7/reference/chol_leibniz.md)
   : Derivative Components of a Log-Cholesky Parameter
 - [`chol_pd()`](https://statmodels7.github.io/parameters7/reference/chol_pd.md)
-  : Cholesky Factorization, With the Rank Decided Before It
+  : Cholesky Factorization After a Positive Definiteness Test
 - [`chol_positions()`](https://statmodels7.github.io/parameters7/reference/chol_positions.md)
   : Positions of the Free Values in the Lower Triangle
 - [`combinat_perms()`](https://statmodels7.github.io/parameters7/reference/combinat_perms.md)
@@ -283,9 +283,9 @@ them.
 - [`diag_logdet_higher()`](https://statmodels7.github.io/parameters7/reference/diag_logdet_higher.md)
   : Higher Derivatives of a Diagonal Log-Determinant
 - [`diag_multiplicity()`](https://statmodels7.github.io/parameters7/reference/diag_multiplicity.md)
-  : The Number of Diagonal Entries Each Free Value Owns
+  : The Number of Diagonal Entries Owned by Each Free Value
 - [`diag_owner()`](https://statmodels7.github.io/parameters7/reference/diag_owner.md)
-  : The Free Value Each Diagonal Entry Belongs To
+  : The Free Value to Which Each Diagonal Entry Belongs
 - [`.chol_leibniz_r()`](https://statmodels7.github.io/parameters7/reference/dot-chol_leibniz_r.md)
   : The R Twin of the Compiled Leibniz Assembly
 - [`.inv_inner()`](https://statmodels7.github.io/parameters7/reference/dot-inv_inner.md)
@@ -734,7 +734,7 @@ them.
 - [`sum_struct_weight_derivs()`](https://statmodels7.github.io/parameters7/reference/sum_struct_weight_derivs.md)
   : Derivatives of the Weights of a Sum of Fixed Matrices
 - [`sweep_etas()`](https://statmodels7.github.io/parameters7/reference/sweep_etas.md)
-  : Free Vectors to Sweep a Parameter Over
+  : Free Vectors for Sweeping a Parameter
 - [`tagged_name()`](https://statmodels7.github.io/parameters7/reference/tagged_name.md)
   : Name a Coordinate After Its Link
 - [`tm_derivative()`](https://statmodels7.github.io/parameters7/reference/tm_derivative.md)

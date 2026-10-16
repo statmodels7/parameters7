@@ -1,15 +1,15 @@
 # Third Derivatives of a Log-Cholesky Parameter
 
-Closed form, by the Leibniz rule on \\M = L L^\top\\. Each component
-distributes its three differentiations over the two factors, and a
-factor differentiated more than once survives only where the repetitions
-name the same diagonal free value, every derivative of \\e^{\eta_k}\\
-being itself.
+Computes the third derivatives in closed form, by the Leibniz rule on
+\\M = L L^\top\\. Each component distributes its three differentiations
+over the two factors, and a factor differentiated more than once
+survives only where the repetitions name the same diagonal free value,
+because every derivative of \\e^{\eta_k}\\ is itself.
 
-Two consequences follow. A component repeating a below-diagonal free
-value three times is exactly zero, \\M\\ being quadratic in it. A
-component repeating a diagonal value three times is not, that value
-entering through an exponential.
+A component repeating a below-diagonal free value three times is exactly
+zero, because \\M\\ is quadratic in it. A component repeating a diagonal
+value three times is not zero, because that value enters through an
+exponential.
 
 ## Arguments
 

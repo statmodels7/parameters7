@@ -4,8 +4,8 @@ Returns the distinct third derivatives of the log-determinant, or of the
 log pseudo-determinant, keyed as `param_tuple_names(s, 3)`. The exact
 gradient of a marginal criterion reaches this order: differentiating a
 Laplace approximation with respect to a hyperparameter moves the
-penalized mode, and the third derivative is what the movement contracts
-against.
+penalized mode, and the movement is contracted against the third
+derivative.
 
 ## Usage
 
@@ -33,7 +33,7 @@ param_d3logdet(s, eta, ...)
 A named numeric vector of `choose(s@n_free + 2, 3)` entries, keyed as
 `param_tuple_names(s, 3)` and in that order.
 
-## Where it comes from
+## Origin of the expansion
 
 Two rules generate every order. The trace is linear, and
 
@@ -43,8 +43,8 @@ Applying them to \\\partial\_{kl}\log\|M\|\\ gives a sum of traces of
 alternating products
 \\M^{-1}(\partial\_{I_1}M)M^{-1}(\partial\_{I_2}M)\cdots\\, one factor
 per block of a partition of the index set, with the sign and the
-multiplicity the two rules produce. The Moore-Penrose inverse replaces
-\\M^{-1}\\ for a rank-deficient family.
+multiplicity that the two rules produce. The Moore-Penrose inverse
+replaces \\M^{-1}\\ for a rank-deficient family.
 
 The expansion is not written out in the package. Each family in this
 package computes this order without differencing, and the base method on
@@ -54,13 +54,13 @@ derivative below the third,
 [`param_d2logdet()`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.md)
 where the arrays are analytic and
 [`param_logdet()`](https://statmodels7.github.io/parameters7/reference/param_logdet.md)
-where none is. A written-out expansion has one term per set partition of
-the indices, five at third order, and a transcription of it is easy to
-get wrong.
+otherwise. A written-out expansion has one term per set partition of the
+indices, five at third order, and a transcription of it is easy to get
+wrong.
 
 ## Notation
 
-\\M\\ is the matrix
+\\M\\ is the matrix that
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
 returns and \\\eta\\ the free vector, of length \\d = \\ `s@n_free`.
 \\\partial_I M\\ is the derivative of \\M\\ in the free values named by
@@ -80,7 +80,7 @@ for the third derivative of the matrix itself.
 ## Examples
 
 ``` r
-# An AR(1) covariance. The log-determinant is linear in the log of the
+# For an AR(1) covariance the log-determinant is linear in the log of the
 # scale, so only the correlation direction survives to third order.
 s <- ar1(4)
 param_d3logdet(s, c(0.3, 0.8))

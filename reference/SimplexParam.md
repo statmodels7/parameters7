@@ -1,17 +1,17 @@
 # Simplex Parameter
 
-The S7 class of probability vectors on the open simplex, in the additive
-log-ratio parametrization. It inherits
+`SimplexParam` is the S7 class of probability vectors on the open
+simplex, in the additive log-ratio parametrization. It inherits
 [`parameter()`](https://statmodels7.github.io/parameters7/reference/parameter.md)
-**directly**, never
+directly and not
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md),
-its value being a vector: there is no `dimension`, no `rank` and no
-`null_basis`, and
+because its value is a vector. The class therefore lacks the properties
+`dimension`, `rank` and `null_basis`, and the generics
 [`param_logdet()`](https://statmodels7.github.io/parameters7/reference/param_logdet.md),
 [`param_solve()`](https://statmodels7.github.io/parameters7/reference/param_solve.md)
 and
 [`param_factor()`](https://statmodels7.github.io/parameters7/reference/param_factor.md)
-have no method for it, so a call for the log-determinant of a
+are not defined for it, so a call for the log-determinant of a
 probability vector fails at dispatch.
 
 [`simplex()`](https://statmodels7.github.io/parameters7/reference/simplex.md)
@@ -34,12 +34,12 @@ SimplexParam(
 
   A single character string naming the family, used in the error
   messages that the validators raise and in the object's `print` output.
-  `"log_cholesky"`, `"ar1"` and so on.
+  Examples are `"log_cholesky"` and `"ar1"`.
 
 - n_free:
 
   The length \\d\\ of the free vector: a single non-negative integer.
-  Zero is legal and describes a family with nothing to estimate. The
+  Zero is allowed and describes a family with nothing to estimate. The
   validator rejects a vector, a negative value, or a length that
   disagrees with `free_names`.
 
@@ -78,7 +78,7 @@ which is one of these per row,
 [`parameter()`](https://statmodels7.github.io/parameters7/reference/parameter.md)
 for the properties that this class inherits, and
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
-for the generics that it does not get.
+for the generics that are not defined for it.
 
 ## Examples
 
@@ -90,11 +90,11 @@ c(parameter = S7::S7_inherits(s, parameter),
 #>        parameter matrix_parameter 
 #>             TRUE            FALSE 
 
-# K - 1 free values for K categories.
+# A simplex of K categories has K - 1 free values.
 vapply(2:5, function(k) simplex(k)@n_free, integer(1))
 #> [1] 1 2 3 4
 
-# And no log-determinant.
+# The log-determinant is not defined for a simplex.
 try(param_logdet(s, c(0, 0)))
 #> Error : Can't find method for `param_logdet(<parameters7::SimplexParam>)`.
 ```

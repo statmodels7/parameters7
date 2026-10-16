@@ -1,16 +1,16 @@
 # Second Derivatives of a Log-Cholesky Parameter
 
-Closed form. Differentiating \\\partial_k M = L_k L^\top + L L_k^\top\\
-once more,
+Computes the second derivatives in closed form. Differentiating
+\\\partial_k M = L_k L^\top + L L_k^\top\\ once more gives
 
 \$\$\partial\_{kl} M = L\_{kl} L^\top + L_k L_l^\top + L_l L_k^\top + L
-L\_{kl}^\top,\$\$
+L\_{kl}^\top.\$\$
 
-and the factor's second derivative \\L\_{kl}\\ is non-zero only where
-\\k = l\\ names a diagonal free value, where it is \\L\_{ii} E\_{ii}\\
-again. A below-diagonal value enters \\L\\ linearly, so any second
-derivative touching one of those drops the outer terms and leaves the
-two cross products.
+The factor's second derivative \\L\_{kl}\\ is non-zero only where \\k =
+l\\ names a diagonal free value, where it is \\L\_{ii} E\_{ii}\\ again.
+A below-diagonal value enters \\L\\ linearly, so any second derivative
+touching one of those drops the outer terms and leaves the two cross
+products.
 
 \\M\\ is quadratic in each below-diagonal free value, so the component
 keyed by that value twice is a constant in \\\eta\\, and every third and

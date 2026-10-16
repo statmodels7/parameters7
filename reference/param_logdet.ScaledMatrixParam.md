@@ -1,14 +1,14 @@
 # Log-Determinant of a Scaled Parameter
 
-Closed form,
+The log-determinant has closed form,
 
 \$\$\log\|M\|\_+ = r \log h(\eta) + \log\|P\|\_+,\$\$
 
-with \\r\\ the rank and \\\log\|P\|\_+\\ a constant of the object,
-computed once at construction. The scale enters once per non-zero
-eigenvalue, which is where the factor \\r\\ comes from. One expression
-covers both cases: it is the log-determinant where the family is of full
-rank and the log pseudo-determinant otherwise. Under the log link it is
+where \\r\\ is the rank and \\\log\|P\|\_+\\ is a constant of the
+object, computed once at construction. The scale enters once per
+non-zero eigenvalue, so the factor \\r\\ appears. One expression covers
+both cases: it is the log-determinant where the family is of full rank
+and the log pseudo-determinant otherwise. Under the log link it is
 \\r\eta + \log\|P\|\_+\\, so a step of 1 in the free value moves it by
 \\r\\.
 
@@ -39,4 +39,4 @@ A single number.
 [`param_dlogdet.ScaledMatrixParam()`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.ScaledMatrixParam.md)
 for its gradient, and
 [`param_null_basis()`](https://statmodels7.github.io/parameters7/reference/param_null_basis.md)
-for the rank it uses.
+for the rank that it uses.

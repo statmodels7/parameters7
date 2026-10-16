@@ -1,9 +1,9 @@
 # Value of a Block-Diagonal Parameter
 
 Evaluates each block at its own stretch of the free vector and writes it
-into the rows and columns that block occupies, leaving the off-diagonal
-blocks at the zeros with which the matrix was created. Each block is
-identical to what its own family returns.
+into the rows and columns that the block occupies, leaving the
+off-diagonal blocks at the zeros with which the matrix was created. Each
+block is identical to what its own family returns.
 
 The value is labeled `v1`, `v2`, ..., `vp` on both margins, the
 convention that

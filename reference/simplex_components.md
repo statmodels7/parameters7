@@ -37,8 +37,8 @@ simplex_components(s, tens, order, wrap = identity)
 ## Value
 
 A named list of `choose(s@n_free + order - 1, order)` entries, keyed as
-`param_tuple_names(s, order)` and in that order, each entry `wrap()`'s
-result.
+`param_tuple_names(s, order)` and in that order. Each entry is the
+result of `wrap()`.
 
 ## Details
 

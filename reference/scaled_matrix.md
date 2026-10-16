@@ -5,11 +5,11 @@ symmetric positive semidefinite matrix \\P\\, supplied by the caller,
 times one positive scale. With `link = NULL` it holds \\P\\ alone and
 has no free value.
 
-This is the commonest penalty in semiparametric regression, and it is
-the reason why the package accepts rank-deficient matrices. \\P\\ may be
-the Gram matrix of a basis derivative, a difference penalty
-\\\Delta^\top \Delta\\, a neighborhood matrix, or the identity, which
-makes the object a ridge.
+This is the commonest penalty in semiparametric regression, and the
+package accepts rank-deficient matrices because of it. \\P\\ may be the
+Gram matrix of a basis derivative, a difference penalty \\\Delta^\top
+\Delta\\, a neighborhood matrix, or the identity, which makes the object
+a ridge.
 
 ## Usage
 
@@ -89,8 +89,8 @@ includes it.
 ## Rank deficiency
 
 A deficient \\P\\ makes the corresponding Gaussian improper, so it is a
-legitimate **penalty** without being a legitimate density. Both readings
-of a multivariate Gaussian need full rank: a singular covariance is
+legitimate penalty without being a legitimate density. Both readings of
+a multivariate Gaussian need full rank: a singular covariance is
 degenerate on a subspace, and a singular precision does not normalize.
 [`param_logdet()`](https://statmodels7.github.io/parameters7/reference/param_logdet.md)
 returns the pseudo-determinant, while
@@ -121,7 +121,7 @@ for the pseudo-determinant.
 ## Examples
 
 ``` r
-# A ridge: the identity, scaled. Full rank, and log|M| = p * eta.
+# A ridge is the identity, scaled; it has full rank, and log|M| = p * eta.
 r <- scaled_matrix(diag(4))
 c(rank = r@rank, logdet_at_0 = param_logdet(r, 0))
 #>        rank logdet_at_0 
@@ -129,8 +129,8 @@ c(rank = r@rank, logdet_at_0 = param_logdet(r, 0))
 all.equal(param_logdet(r, 1.3), 4 * 1.3)
 #> [1] TRUE
 
-# A second-difference penalty on six coefficients: deficient by two, its
-# null space being the constants and the straight lines.
+# A second-difference penalty on six coefficients is deficient by two,
+# because its null space consists of the constants and the straight lines.
 d <- diff(diag(6), differences = 2)
 s <- scaled_matrix(crossprod(d))
 c(dimension = s@dimension, rank = s@rank)
@@ -159,10 +159,10 @@ c(closed_form = s@rank / bPb, numeric = optimize(obj, c(1e-6, 100))$minimum)
 try(param_solve(s, 0))
 #> Error : 'scaled' is rank deficient (4 of 6), so it has no inverse. A consumer of
 #>   an improper prior needs the quadratic form and the log
-#>   pseudo-determinant, not a pseudo-inverse: assemble the matrix the
+#>   pseudo-determinant, not a pseudo-inverse: assemble the matrix that the
 #>   model actually inverts and solve that.
 
-# With no link the matrix is fully known and there is nothing to estimate.
+# With no link the matrix is fully known and has no free value to estimate.
 f <- scaled_matrix(diag(3), link = NULL)
 c(n_free = f@n_free, logdet = param_logdet(f, numeric(0)))
 #> n_free logdet 

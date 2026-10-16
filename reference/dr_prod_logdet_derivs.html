@@ -15,7 +15,7 @@ otherwise."><meta property="og:image" content="https://statmodels7.github.io/par
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,7 +47,7 @@ otherwise."><meta property="og:image" content="https://statmodels7.github.io/par
     <div class="ref-description section level2">
     <p>The log-determinant is \(2\sum_j \log d_j + \log\lvert R\rvert\), a sum of
 one term per scale and one term for the correlation. A component is therefore
-the scale's own where every index names <strong>one</strong> scale coordinate, the
+the scale's own where every index names one scale coordinate, the
 correlation's own where every index is a correlation coordinate, and 0
 otherwise.</p>
     </div>
@@ -83,9 +83,9 @@ as <code>param_tuple_names(s, order)</code> and in that order.</p>
     <p>Two separabilities hold at once. The scales separate from each other, so a
 component naming two different scales is zero, and the correlation separates
 from the scales, so a component mixing a scale with a correlation coordinate
-is zero. What survives is \(2\,\partial^m \log d_k\) on the diagonal of the
-scale block, through <code><a href="diag_dlog.html">diag_dlog()</a></code>, and the correlation family's own
-derivatives.</p>
+is zero. The surviving components are \(2\,\partial^m \log d_k\) on the
+diagonal of the scale block, computed through <code><a href="diag_dlog.html">diag_dlog()</a></code>, and the
+correlation family's own derivatives.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

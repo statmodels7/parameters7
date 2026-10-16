@@ -24,7 +24,7 @@ ar1_inv_pattern(s, z, order)
 
 - order:
 
-  The highest derivative order wanted, from 0 to 4.
+  The highest derivative order to compute, from 0 to 4.
 
 ## Value
 
@@ -39,8 +39,8 @@ are \\\cosh^2 z\\, \\\cosh 2z\\ and \\-\tfrac{1}{2}\sinh 2z\\, so one
 sequence of derivatives of \\w\\ in \\z\\, from
 [`cosh2_derivs()`](https://statmodels7.github.io/parameters7/reference/cosh2_derivs.md),
 serves all three: the second is \\2w^{(k)}\\ above order zero and the
-third is \\-\tfrac{1}{2}w^{(k+1)}\\. Nothing is chained through the link
-and no difference \\1 - \rho^2\\ is formed.
+third is \\-\tfrac{1}{2}w^{(k+1)}\\. The derivatives are not chained
+through the link, and the difference \\1 - \rho^2\\ is not formed.
 
 ## See also
 

@@ -13,7 +13,7 @@ rotates it back by \(Q\)."><meta property="og:image" content="https://statmodels
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,9 +81,9 @@ sum is multiplied by \(\prod_j m_j!\), where the \(m_j\) are the
 multiplicities of the repeated indices, because each distinct ordering
 occurs that many times among all of them. Without that factor the result
 would be too small by exactly that factor.</p>
-<p>The cost is the reason this family's higher orders are expensive: at order 4
-a component with four different indices has 24 orderings, each a contraction
-of \(O(p^5)\) operations.</p>
+<p>The sum over orderings makes the higher orders of this family expensive: at order 4 a
+component with four different indices has 24 orderings, and each ordering is
+a contraction of \(O(p^5)\) operations.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

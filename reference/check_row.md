@@ -21,14 +21,14 @@ check_row(name, status, statistic = NA_real_)
 - status:
 
   One of `"OK"`, `"FAIL"` or `"NOT CHECKED"`. The third is used where
-  the quantity comes from a numerical fallback and no independent route
-  exists to compare against.
+  the quantity comes from a numerical fallback and the check does not
+  have an independent route against which to compare it.
 
 - statistic:
 
-  The number the verdict rests on, a relative discrepancy, or `NA_real_`
-  for a check that is structural and has no number, such as the shape
-  and name check.
+  The number on which the verdict rests, a relative discrepancy, or
+  `NA_real_` for a check that is structural and has no number, such as
+  the shape and name check.
 
 ## Value
 

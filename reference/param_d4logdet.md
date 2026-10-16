@@ -31,9 +31,9 @@ param_d4logdet(s, eta, ...)
 A named numeric vector of `choose(s@n_free + 3, 4)` entries, keyed as
 `param_tuple_names(s, 4)` and in that order.
 
-## Where it comes from
+## Origin of the expansion
 
-The same two rules as at third order. The trace is linear, and
+The same two rules apply as at third order. The trace is linear, and
 
 \$\$\partial_m M^{-1} = -M^{-1}(\partial_m M)M^{-1},\$\$
 
@@ -69,7 +69,7 @@ are among the families where this order is not zero.
 
 ## Notation
 
-\\M\\ is the matrix
+\\M\\ is the matrix that
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
 returns and \\\eta\\ the free vector, of length \\d = \\ `s@n_free`.
 \\\partial_I M\\ is the derivative of \\M\\ in the free values named by
@@ -87,8 +87,9 @@ for the fourth derivative of the matrix itself.
 ## Examples
 
 ``` r
-# An AR(1) covariance: five components at d = 2, of which only the one
-# purely in the correlation is non-zero, the scale entering linearly.
+# For an AR(1) covariance there are five components at d = 2, and only the
+# one purely in the correlation is non-zero, because the scale enters
+# linearly.
 s <- ar1(4)
 eta <- c(0.3, 0.8)
 param_d4logdet(s, eta)

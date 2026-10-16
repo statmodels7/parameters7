@@ -15,7 +15,7 @@ a property of the family and can be computed once, at construction."><meta prope
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,7 +45,7 @@ a property of the family and can be computed once, at construction."><meta prope
     </div>
 
     <div class="ref-description section level2">
-    <p>Returns an orthonormal basis of the <strong>intersection</strong> of the components' null
+    <p>Returns an orthonormal basis of the intersection of the components' null
 spaces, which is the null space of every non-negative combination of them: a
 quadratic form \(v^\top M v = \sum_k c_k\, v^\top P_k v\) is a sum of
 non-negative terms, so it vanishes only where every term does. It is therefore
@@ -69,7 +69,7 @@ same side, already checked by <code><a href="sum_struct.html">sum_struct()</a></
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A numeric matrix with <code>nrow(components[[1]])</code> rows whose columns are
-an orthonormal basis of the shared null space, with <strong>zero columns</strong> where
+an orthonormal basis of the shared null space, with zero columns where
 the family has full rank.</p>
     </div>
     <div class="section level2">
@@ -77,7 +77,7 @@ the family has full rank.</p>
     <p>The components are stacked into one tall matrix and its right singular vectors
 at negligible singular values are returned, which is the intersection of the
 row spaces' orthogonal complements.</p>
-<p>Each component is <strong>divided by its own largest entry</strong> before stacking.
+<p>Each component is divided by its own largest entry before stacking.
 Without that normalization a component whose scale is many orders below
 another's would fall below the tolerance and be read as absent, which is the
 failure that a rank taken from an assembled matrix shows (see <code><a href="sum_struct.html">sum_struct()</a></code>).</p>

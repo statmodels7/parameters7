@@ -5,11 +5,11 @@
 [`param_d3logdet()`](https://statmodels7.github.io/parameters7/reference/param_d3logdet.md)
 and
 [`param_d4logdet()`](https://statmodels7.github.io/parameters7/reference/param_d4logdet.md)
-for a
+return, for a
 [`block_diag()`](https://statmodels7.github.io/parameters7/reference/block_diag.md)
-parameter: the blocks' own, placed by owner, with every cross-block
-component exactly zero because the log-determinant is a sum over the
-blocks.
+parameter, the blocks' own derivatives placed by owner, with every
+cross-block component exactly zero because the log-determinant is a sum
+over the blocks.
 
 ## Arguments
 
@@ -37,16 +37,17 @@ above it, `choose(s@n_free + k - 1, k)` values keyed as
 
 The four share
 [`block_diag_logdet_derivs()`](https://statmodels7.github.io/parameters7/reference/block_diag_logdet_derivs.md)
-and differ only in the order they pass. The first order names its result
-by `s@free_names`, one value per free value; the orders above it are
-keyed by tuple, as
+and differ only in the order that they pass. The first order names its
+result by `s@free_names`, one value per free value; the orders above it
+are keyed by tuple, as
 [`param_tuple_names()`](https://statmodels7.github.io/parameters7/reference/param_tuple_names.md)
 defines.
 
-A block's **own** mixed components are in general not zero, this
-separability being over blocks and not over free values. Compare
+A block's own mixed components are in general not zero, because this
+separability is over blocks and not over free values. Compare
 [`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md),
-where it is over free values and every mixed component vanishes.
+where the separability is over free values and every mixed component
+vanishes.
 
 ## See also
 

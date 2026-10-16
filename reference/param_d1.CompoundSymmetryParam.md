@@ -1,6 +1,6 @@
 # Derivatives of a Compound Symmetry Parameter
 
-Closed form at all four orders. One page covers
+The derivatives are in closed form at all four orders. One page covers
 [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md),
 [`param_d2()`](https://statmodels7.github.io/parameters7/reference/param_d2.md),
 [`param_d3()`](https://statmodels7.github.io/parameters7/reference/param_d3.md)
@@ -37,7 +37,7 @@ one derivative of each chain. A tuple enters only through the counts
 ## Value
 
 A named list of `order + 1` symmetric `s@dimension` by `s@dimension`
-matrices; see **Details** for the keying of each order.
+matrices; see Details for the keying of each order.
 
 ## Details
 
@@ -60,9 +60,9 @@ The lists are this short because there are two free values: at \\d = 2\\
 the count \\\binom{d+k-1}{k}\\ is \\k+1\\.
 
 Every component with at least one correlation index has a zero diagonal,
-the diagonal of \\P\\ being the constant 1; and a component with \\b\\
-correlation indices carries the \\b\\-th derivative of the link alone,
-\\P\\ being linear in \\\rho\\.
+because the diagonal of \\P\\ is the constant 1; and a component with
+\\b\\ correlation indices carries the \\b\\-th derivative of the link
+only, because \\P\\ is linear in \\\rho\\.
 
 ## See also
 

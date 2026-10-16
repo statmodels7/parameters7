@@ -1,12 +1,13 @@
 # Fourth Log-Determinant Derivatives of a Log-Cholesky Parameter
 
-Closed form, and identically zero, for the reason it is zero at second
-and third order: \\\log\|M\| = 2\sum_i \eta_i\\ is linear in the free
-vector. The zeros are exact.
+Computes the fourth derivatives in closed form, and they are identically
+zero, for the reason that they are zero at second and third order:
+\\\log\|M\| = 2\sum_i \eta_i\\ is linear in the free vector. The zeros
+are exact.
 
-This is the order at which a numerical fallback is least accurate, so a
-family whose log-determinant is not linear gains most from a closed form
-here. See
+A numerical fallback is least accurate at this order, so a closed form
+gains the most here for a family whose log-determinant is not linear.
+See
 [`param_d4logdet.matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/param_d4logdet.matrix_parameter.md)
 for the fallback.
 

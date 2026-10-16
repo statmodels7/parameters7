@@ -20,7 +20,7 @@ fd_step(eta_k, order = 1L)
 
 - order:
 
-  The derivative order the step is for: 1, 2, 3 or 4.
+  The derivative order for which the step is intended: 1, 2, 3 or 4.
 
 ## Value
 
@@ -31,8 +31,8 @@ A single positive number.
 The rule is \\\varepsilon^{1/(k+2)} \max(1, \|\eta_k\|)\\ for a \\k\\-th
 derivative, which balances the truncation error against the rounding
 that the division by \\h^k\\ amplifies. In doubles that is \\6.1 \times
-10^{-6}\\ at first order and \\1.2 \times 10^{-4}\\ at second, both
-scaling up once \\\|\eta_k\|\\ passes 1.
+10^{-6}\\ at first order and \\1.2 \times 10^{-4}\\ at second, and both
+steps scale up once \\\|\eta_k\|\\ passes 1.
 
 The step is not clamped. The unconstrained scale has no boundary, so the
 `bounds` argument of

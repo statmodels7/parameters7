@@ -1,8 +1,9 @@
 # Second Derivative of a Scaled Parameter
 
-Closed form: \\\partial^2\_\eta M = h''(\eta)\\P\\. With one free value
-there is one component, and under the default log link it is the matrix
-again, \\h'' = h\\. Empty for a fixed parameter.
+The second derivative has closed form, \\\partial^2\_\eta M =
+h''(\eta)\\P\\. With one free value there is one component, and under
+the default log link it is the matrix again, \\h'' = h\\. The list is
+empty for a fixed parameter.
 
 ## Arguments
 

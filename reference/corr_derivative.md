@@ -1,7 +1,7 @@
 # Derivative Components of a Correlation Parameter
 
 Assembles a whole derivative order of \\R = LL^\top\\ by the Leibniz
-rule, the factor's derivatives coming from
+rule. The factor's derivatives come from
 [`corr_dfactor()`](https://statmodels7.github.io/parameters7/reference/corr_dfactor.md)
 and the trigonometric tables of
 [`corr_tables()`](https://statmodels7.github.io/parameters7/reference/corr_tables.md).

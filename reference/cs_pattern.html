@@ -17,7 +17,7 @@ formula."><meta property="og:image" content="https://statmodels7.github.io/param
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,7 +49,7 @@ formula."><meta property="og:image" content="https://statmodels7.github.io/param
     <div class="ref-description section level2">
     <p>Returns \(P(\rho) = I + \rho(J - I)\), the correlation pattern of a
 compound-symmetric matrix, together with its derivatives in the second free
-value to the order that the scalars carry. The pattern is <strong>linear</strong> in the
+value to the order that the scalars carry. The pattern is linear in the
 correlation, so every derivative is the matching derivative of \(\rho\)
 times the constant matrix \(J - I\), and every order uses the same
 formula.</p>
@@ -78,8 +78,8 @@ correlation and its derivatives.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A list of <code>s@dimension</code> by <code>s@dimension</code> matrices, one more than the
 number of derivatives that <code>sc</code> carries: the pattern at index 1 and its derivatives at
-the following indices. Each derivative has a zero diagonal, the diagonal
-of the pattern being the constant 1.</p>
+the following indices. Each derivative has a zero diagonal, because the
+diagonal of the pattern is the constant 1.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

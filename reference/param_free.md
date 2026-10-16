@@ -32,7 +32,7 @@ param_free(s, m, ...)
   [`simplex()`](https://statmodels7.github.io/parameters7/reference/simplex.md),
   a row-stochastic matrix for
   [`transition_matrix()`](https://statmodels7.github.io/parameters7/reference/transition_matrix.md).
-  It must satisfy the family's constraint; see **Details** for what each
+  It must satisfy the family's constraint; see Details for what each
   family rejects.
 
 - ...:
@@ -57,7 +57,7 @@ from a correct one.
 ## A value outside the set is rejected
 
 Every method checks `m` against the family's own constraint before
-inverting, and the message says what failed.
+inverting, and the message states what failed.
 [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
 rejects a matrix that is not positive definite;
 [`simplex()`](https://statmodels7.github.io/parameters7/reference/simplex.md)
@@ -78,7 +78,7 @@ the value on the constrained scale.
 ## See also
 
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md),
-the map this inverts, and
+the map that this inverts, and
 [`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md),
 which closes the round trip as one of its checks.
 
@@ -105,7 +105,7 @@ round(start, 3)
 max(abs(param_value(s, start) - cov(y)))
 #> [1] 1.110223e-16
 
-# A matrix outside the set is rejected, and the message says why.
+# A matrix outside the set is rejected, and the message states why.
 try(param_free(s, diag(c(1, 1, -1))))
 #> Error : 'm' is not positive definite, so it is not in the set that
 #>   log_cholesky() parametrizes.

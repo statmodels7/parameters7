@@ -3,11 +3,11 @@
 a diagonal family. The log-determinant is \(\sum_i \log h(\eta_i)\), a sum
 of functions of one free value each, so every mixed component is exactly zero
 and a pure one is the matching derivative from diag_dlog(), counted once per
-entry the free value owns."><meta property="og:description" content="Assembles the derivative components of orders two to four of \(\log|M|\) for
+entry that the free value owns."><meta property="og:description" content="Assembles the derivative components of orders two to four of \(\log|M|\) for
 a diagonal family. The log-determinant is \(\sum_i \log h(\eta_i)\), a sum
 of functions of one free value each, so every mixed component is exactly zero
 and a pure one is the matching derivative from diag_dlog(), counted once per
-entry the free value owns."><meta property="og:image" content="https://statmodels7.github.io/parameters7/logo.png"></head><body>
+entry that the free value owns."><meta property="og:image" content="https://statmodels7.github.io/parameters7/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -15,7 +15,7 @@ entry the free value owns."><meta property="og:image" content="https://statmodel
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,7 +49,7 @@ entry the free value owns."><meta property="og:image" content="https://statmodel
 a diagonal family. The log-determinant is \(\sum_i \log h(\eta_i)\), a sum
 of functions of one free value each, so every mixed component is exactly zero
 and a pure one is the matching derivative from <code><a href="diag_dlog.html">diag_dlog()</a></code>, counted once per
-entry the free value owns.</p>
+entry that the free value owns.</p>
     </div>
 
     <div class="section level2">
@@ -77,8 +77,8 @@ entry the free value owns.</p>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A numeric vector of <code>choose(s@n_free + order - 1, order)</code> entries,
 keyed as <code>param_tuple_names(s, order)</code> and in that order. Under the log link
-it is all zeros at every order above 1, \(\log h(\eta) = \eta\) being
-linear.</p>
+it is all zeros at every order above 1, because \(\log h(\eta) = \eta\)
+is linear.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

@@ -1,9 +1,10 @@
 # Fourth Derivatives of a Correlation Parameter
 
-Closed form, the Leibniz rule with four differentiations distributed
-over the two factors of \\R = LL^\top\\. This is the order at which a
-numerical route is least accurate, and here every factor derivative is a
-product of trigonometric tables that
+Computes the fourth derivatives in closed form, by the Leibniz rule, in
+which the four differentiations are distributed over the two factors of
+\\R = LL^\top\\. This is the order at which a numerical route is least
+accurate, and here every factor derivative is a product of trigonometric
+tables that
 [`corr_tables()`](https://statmodels7.github.io/parameters7/reference/corr_tables.md)
 has already built.
 

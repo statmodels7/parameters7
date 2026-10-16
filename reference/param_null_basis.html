@@ -17,7 +17,7 @@ null_basis properties."><meta property="og:image" content="https://statmodels7.g
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,8 +67,9 @@ rank and the null space are read off its singular value decomposition.
 <dl><dt id="arg-mats">mats<a class="anchor" aria-label="anchor" href="#arg-mats"></a></dt>
 <dd><p>A list of symmetric numeric matrices, all of the same side, or a
 single matrix, which is wrapped in a list. An empty list signals the error
-<code>'mats' must not be empty.</code>; the matrices themselves are not checked for symmetry
-or definiteness, the callers being the package's own constructors.</p></dd>
+<code>'mats' must not be empty.</code>; the matrices themselves are not checked for
+symmetry or definiteness, because the callers are the package's own
+constructors.</p></dd>
 
 
 <dt id="arg-tol">tol<a class="anchor" aria-label="anchor" href="#arg-tol"></a></dt>
@@ -115,23 +116,23 @@ fitted models.</p>
     <div class="section level2">
     <h2 id="the-scaling">The scaling<a class="anchor" aria-label="anchor" href="#the-scaling"></a></h2>
     <p>Each component is divided by its largest absolute entry before stacking, so
-that a component contributed in different units still gets an equal vote. A
+that a component expressed in different units carries the same weight. A
 component that is identically zero is passed through as zero and contributes
 nothing, which is correct: its null space is the whole space.</p>
     </div>
     <div class="section level2">
     <h2 id="cost">Cost<a class="anchor" aria-label="anchor" href="#cost"></a></h2>
-    <p>One singular value decomposition of an \((kp) \times p\) matrix for
-\(k\) components of side \(p\), so \(O(k p^3)\). It runs once per
+    <p>The cost is one singular value decomposition of an \((kp) \times p\)
+matrix for \(k\) components of side \(p\), so \(O(k p^3)\). It runs once per
 constructed parameter and never inside a fit.</p>
     </div>
     <div class="section level2">
     <h2 id="notation">Notation<a class="anchor" aria-label="anchor" href="#notation"></a></h2>
 
 
-<p>\(p\) is the side of the matrices and \(k\) their number. The <strong>null
-basis</strong> is a matrix whose columns span \(\{v : M v = 0 \text{ for every }
-M\}\), and the <strong>rank</strong> is \(p\) minus the dimension of that space.</p>
+<p>\(p\) is the side of the matrices and \(k\) their number. The null
+basis is a matrix whose columns span \(\{v : M v = 0 \text{ for every }
+M\}\), and the rank is \(p\) minus the dimension of that space.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -142,8 +143,8 @@ accept a rank-deficient matrix of their own.</p></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># A second-difference penalty on six coefficients has rank 4, its null space</span></span></span>
-<span class="r-in"><span><span class="co"># being the constants and the straight lines.</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># A second-difference penalty on six coefficients has rank 4, and its null</span></span></span>
+<span class="r-in"><span><span class="co"># space is the constants and the straight lines.</span></span></span>
 <span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="fl">6</span><span class="op">)</span>, differences <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">nb</span> <span class="op">&lt;-</span> <span class="fu">param_null_basis</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/crossprod.html" class="external-link">crossprod</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">nb</span><span class="op">$</span><span class="va">rank</span></span></span>
@@ -158,8 +159,8 @@ accept a rank-deficient matrix of their own.</p></div>
 <span class="r-in"><span>       <span class="kw">function</span><span class="op">(</span><span class="va">v</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="op">(</span><span class="va">v</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/stats/proj.html" class="external-link">proj</a></span><span class="op">(</span><span class="va">v</span><span class="op">)</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">v</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.351405e-15 6.105395e-16 1.281025e-01</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Why the components are taken separately. Two marginal penalties on a</span></span></span>
-<span class="r-in"><span><span class="co"># 4 x 8 tensor product: the pair has rank 28 out of 32.</span></span></span>
+<span class="r-in"><span><span class="co"># This shows why the components are taken separately. The two marginal</span></span></span>
+<span class="r-in"><span><span class="co"># penalties on a 4 x 8 tensor product together have rank 28 out of 32.</span></span></span>
 <span class="r-in"><span><span class="va">P</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">m</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/crossprod.html" class="external-link">crossprod</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span>, differences <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">P1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/kronecker.html" class="external-link">kronecker</a></span><span class="op">(</span><span class="fu">P</span><span class="op">(</span><span class="fl">4</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="fl">8</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">P2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/kronecker.html" class="external-link">kronecker</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="fl">4</span><span class="op">)</span>, <span class="fu">P</span><span class="op">(</span><span class="fl">8</span><span class="op">)</span><span class="op">)</span></span></span>

@@ -13,7 +13,7 @@ penalties7::structured_penalty() fixes the precision."><meta property="og:image"
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,7 +71,7 @@ by 0 matrix, and <code>param_name</code> <code>"inverse_of(&lt;inner&gt;)"</code
 family's name written in, for example <code>"inverse_of(ar1)"</code>.</p>
     </div>
     <div class="section level2">
-    <h2 id="what-it-is-for">What it is for<a class="anchor" aria-label="anchor" href="#what-it-is-for"></a></h2>
+    <h2 id="purpose">Purpose<a class="anchor" aria-label="anchor" href="#purpose"></a></h2>
     <p>A family and its inverse are the same set of matrices only when the family
 is closed under inversion, which <code><a href="log_cholesky.html">log_cholesky()</a></code>, <code><a href="matrix_log.html">matrix_log()</a></code>,
 <code><a href="diagonal_matrix.html">diagonal_matrix()</a></code>, <code><a href="scalar_matrix.html">scalar_matrix()</a></code>, <code><a href="compound_symmetry.html">compound_symmetry()</a></code> and
@@ -88,18 +88,18 @@ them without a factorization.</p>
     </div>
     <div class="section level2">
     <h2 id="the-derivatives">The derivatives<a class="anchor" aria-label="anchor" href="#the-derivatives"></a></h2>
-    <p>Differentiating \(N = S^{-1}\) repeatedly gives a sum over the <strong>ordered</strong>
+    <p>Differentiating \(N = S^{-1}\) repeatedly gives a sum over the ordered
 set partitions of the differentiated positions,</p>
 <p>$$\partial_I N = \sum_{(B_1, \ldots, B_q)} (-1)^q\,
   N\,(\partial_{B_1} S)\,N \cdots N\,(\partial_{B_q} S)\,N,$$</p>
-<p>the blocks being ordered because matrices do not commute. At first order it
+<p>where the blocks are ordered because matrices do not commute. At first order it
 is \(-N (\partial_k S) N\) and at second
 \(N(\partial_k S\,N\,\partial_l S + \partial_l S\,N\,\partial_k S)N -
 N(\partial_{kl}S)N\), which are the two expressions written by hand
 elsewhere in the toolkit. The number of terms is the Fubini number of the
 order: 1, 3, 13 and 75.</p>
-<p>Every factor is the inner family's own closed form, so nothing is
-differenced. The products are formed in floating point, however, and the
+<p>Every factor is the inner family's own closed form, so the computation does
+not use finite differences. The products are formed in floating point, however, and the
 partition sum loses accuracy roughly as the square of the condition number
 of the inner matrix. For an inner <code><a href="log_cholesky.html">log_cholesky()</a></code> family, the four orders
 are computed by <code><a href="param_inv_d1.html">param_inv_d1()</a></code>, <code><a href="param_inv_d1.html">param_inv_d2()</a></code>, <code><a href="param_inv_d1.html">param_inv_d3()</a></code> and
@@ -108,8 +108,8 @@ are computed by <code><a href="param_inv_d1.html">param_inv_d1()</a></code>, <co
     <div class="section level2">
     <h2 id="the-log-determinant">The log-determinant<a class="anchor" aria-label="anchor" href="#the-log-determinant"></a></h2>
     <p>\(\log\lvert N\rvert = -\log\lvert S\rvert\), so the value and all four
-derivative orders are the inner family's negated, and no determinant of the
-inverted matrix is taken.</p>
+derivative orders are the inner family's negated, and the determinant of the
+inverted matrix is not computed.</p>
     </div>
     <div class="section level2">
     <h2 id="rank">Rank<a class="anchor" aria-label="anchor" href="#rank"></a></h2>
@@ -121,7 +121,7 @@ and the dimension.</p>
     <h2 id="notation">Notation<a class="anchor" aria-label="anchor" href="#notation"></a></h2>
 
 
-<p>\(S\) is the inner family's map, \(N = S^{-1}\) the one this builds,
+<p>\(S\) is the inner family's map, \(N = S^{-1}\) the one that this builds,
 \(I\) a multiset of differentiated positions and \((B_1,\ldots,B_q)\) an
 ordered partition of it into non-empty blocks.</p>
     </div>

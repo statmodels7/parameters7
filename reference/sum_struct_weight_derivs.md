@@ -24,24 +24,24 @@ sum_struct_weight_derivs(s, eta, order)
 
 - order:
 
-  The highest derivative order wanted, an integer from 0 to 4.
+  The highest derivative order to compute, an integer from 0 to 4.
 
 ## Value
 
-An `order + 1` by \\K\\ numeric matrix, row \\m+1\\ holding the \\m\\-th
+An `order + 1` by \\K\\ numeric matrix. Row \\m+1\\ holds the \\m\\-th
 derivative of the inverse link at each free value, so row 1 is the
 weights themselves.
 
 ## Details
 
-Each weight depends on one free value only, so the table is complete:
-there are no cross-derivatives between weights to record, and that is
-the whole reason a derivative of the value naming two weights is zero.
-It is computed once per call and read for every component of the order.
+Each weight depends on one free value only, so the table is complete: it
+records no cross-derivatives between weights. A derivative of the value
+that names two weights is zero for that reason and no other. The table
+is computed once per call and read for every component of the order.
 
 ## See also
 
 [`sum_struct_logdet_derivs()`](https://statmodels7.github.io/parameters7/reference/sum_struct_logdet_derivs.md),
 the caller;
 [`sum_struct_derivs()`](https://statmodels7.github.io/parameters7/reference/sum_struct_derivs.md)
-reads the derivative of its own order alone.
+reads only the derivative of its own order.

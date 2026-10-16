@@ -1,7 +1,7 @@
 # Scales Times a Correlation Matrix
 
-The S7 class of a covariance written as \\D R D\\, for a diagonal matrix
-\\D\\ of positive scales and a correlation matrix \\R\\.
+This is the S7 class of a covariance written as \\D R D\\, for a
+diagonal matrix \\D\\ of positive scales and a correlation matrix \\R\\.
 [`dr_prod()`](https://statmodels7.github.io/parameters7/reference/dr_prod.md)
 builds one.
 
@@ -70,7 +70,8 @@ An object of class `DrProdParam`, a subclass of
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
 adding no properties of its own. `param_params` holds `cor` (the
 correlation parameter), `link` and `p`. `n_free` is \\p\\ plus the
-correlation's, and `rank` is \\p\\, this family admitting no deficiency.
+correlation's, and `rank` is \\p\\ because this family admits no
+deficiency.
 
 ## See also
 
@@ -89,7 +90,8 @@ s <- dr_prod(3)
 s@free_names
 #> [1] "log_sd1" "log_sd2" "log_sd3" "z2.1"    "z3.1"    "z3.2"   
 
-# p standard deviations plus the correlation's p(p-1)/2 angles.
+# The free values are p standard deviations plus the correlation's p(p-1)/2
+# angles.
 c(p = 4, n_free = dr_prod(4)@n_free)
 #>      p n_free 
 #>      4     10 

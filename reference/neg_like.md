@@ -3,7 +3,7 @@
 Returns `-x` for a numeric vector and the elementwise negation for a
 list, so that the log-determinant derivatives of
 [`inverse_of()`](https://statmodels7.github.io/parameters7/reference/inverse_of.md)
-come back in the shape the inner family returned them in.
+come back in the same shape in which the inner family returned them.
 
 ## Usage
 
@@ -23,12 +23,11 @@ neg_like(x)
 
 ## Details
 
-The type matters:
 [`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)
 subtracts the result of
 [`param_dlogdet()`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.md)
-from a reference, which a list does not support, so the negation of a
-numeric vector has to stay a numeric vector.
+from a reference, and a list does not support that subtraction, so the
+negation of a numeric vector has to stay a numeric vector.
 
 ## See also
 

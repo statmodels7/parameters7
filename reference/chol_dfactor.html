@@ -11,7 +11,7 @@ which keeps the Leibniz sum of chol_leibniz() short."><meta property="og:image" 
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,21 +78,20 @@ derivative is identically zero.</p>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Three cases exhaust it. An empty \(S\) gives \(L\) itself. A single index
-gives a <strong>single-entry matrix</strong>: \(L_{ii} E_{ii}\) for a diagonal free
+gives a single-entry matrix: \(L_{ii} E_{ii}\) for a diagonal free
 value, whose parametrization is a logarithm, and \(E_{ij}\) for one below
 the diagonal, which enters \(L\) linearly. A repeated index gives
 \(L_{ii} E_{ii}\) again where every repetition names the same diagonal
-value, every derivative of \(\exp(\eta_i)\) being itself, and <code>NULL</code>
+value, because every derivative of \(\exp(\eta_i)\) is itself, and <code>NULL</code>
 otherwise.</p>
-<p>So the only surviving higher derivatives are the pure diagonal ones, and the
-single-entry shape is what the compiled kernel exploits: each Leibniz term
-becomes one row, one column or one cell of a product, never a matrix
-multiplication.</p>
+<p>So the only surviving higher derivatives are the pure diagonal ones. The
+compiled kernel exploits the single-entry shape: each Leibniz term becomes
+one row, one column or one cell of a product, never a matrix multiplication.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p><code><a href="chol_leibniz.html">chol_leibniz()</a></code>, the caller, and <code><a href="leibniz_gram.html">leibniz_gram()</a></code>, the generic
-Leibniz sum the R twin uses.</p></div>
+Leibniz sum that the R twin uses.</p></div>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

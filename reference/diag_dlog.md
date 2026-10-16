@@ -31,8 +31,8 @@ A numeric vector the length of `eta`.
 
 ## Details
 
-Faa di Bruno's formula for the logarithm, written out. With \\u_m =
-h^{(m)}/h\\ the four orders are
+The result follows Faa di Bruno's formula for the logarithm, written out
+in full. With \\u_m = h^{(m)}/h\\ the four orders are
 
 \$\$u_1, \quad u_2 - u_1^2, \quad u_3 - 3u_1u_2 + 2u_1^3, \quad u_4 -
 4u_1u_3 - 3u_2^2 + 12u_1^2u_2 - 6u_1^4.\$\$

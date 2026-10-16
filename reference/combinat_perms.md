@@ -17,7 +17,8 @@ combinat_perms(x)
 
 - x:
 
-  An integer vector, of length 1 to 4 in every call the package makes.
+  An integer vector, of length 1 to 4 in every call that the package
+  makes.
 
 ## Value
 

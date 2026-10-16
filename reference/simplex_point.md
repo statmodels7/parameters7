@@ -1,9 +1,9 @@
 # The Softmax Point Behind a Free Vector
 
 Computes the value \\\pi\\ from a free vector, appending the reference
-category's implicit 0 and taking the softmax through the **log-sum-exp
-shift**: the largest entry is subtracted before exponentiating, so a
-large free value saturates instead of overflowing.
+category's implicit 0 and taking the softmax through the log-sum-exp
+shift: the largest entry is subtracted before exponentiating, so a large
+free value saturates instead of overflowing.
 
 ## Usage
 
@@ -15,8 +15,8 @@ simplex_point(eta)
 
 - eta:
 
-  A numeric vector of length \\K - 1\\. Not checked; the callers have
-  been through the generic.
+  A numeric vector of length \\K - 1\\. It is not checked, because the
+  callers have already been through the generic.
 
 ## Value
 
@@ -28,9 +28,9 @@ and no names. The names `p1` ... `pK` are applied by
 
 The naive expression \\e^{\eta_a}/(1 + \sum_b e^{\eta_b})\\ is `Inf/Inf`
 from about \\\eta = 710\\. With the shift, a free value of 500 returns
-\\\pi_K = 7 \times 10^{-218}\\, still representable, and a free value of
-800 returns \\\pi_1 = 1\\ and \\\pi_K = 0\\ with the vector summing to
-exactly 1. That value is on the boundary of the simplex, which
+\\\pi_K = 7 \times 10^{-218}\\, which is still representable. A free
+value of 800 returns \\\pi_1 = 1\\ and \\\pi_K = 0\\, and the vector
+sums to exactly 1. That value is on the boundary of the simplex, which
 [`param_free()`](https://statmodels7.github.io/parameters7/reference/param_free.md)
 cannot invert.
 

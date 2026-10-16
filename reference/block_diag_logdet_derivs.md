@@ -35,7 +35,7 @@ as `param_tuple_names(s, order)` and in that order.
 The structure is
 [`block_diag_derivs()`](https://statmodels7.github.io/parameters7/reference/block_diag_derivs.md)'s
 with numbers in place of matrices, including the per-block cache and the
-sorted-tuple key. It is a different separability from the one
+sorted-tuple key. It is a different separability from the one that
 [`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md) or
 [`compound_symmetry()`](https://statmodels7.github.io/parameters7/reference/compound_symmetry.md)
 have: there the log-determinant separates over the free values

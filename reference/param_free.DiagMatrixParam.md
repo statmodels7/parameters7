@@ -1,10 +1,10 @@
 # Free Vector of a Diagonal Parameter
 
 Returns \\g\\ applied to the diagonal of `m`, the link in the forward
-direction, after checking that `m` is in the family's set. Exact, and a
-true inverse of
-[`param_value.DiagMatrixParam()`](https://statmodels7.github.io/parameters7/reference/param_value.DiagMatrixParam.md),
-the link being a bijection.
+direction, after checking that `m` is in the family's set. The map is
+exact, and it is a true inverse of
+[`param_value.DiagMatrixParam()`](https://statmodels7.github.io/parameters7/reference/param_value.DiagMatrixParam.md)
+because the link is a bijection.
 
 ## Arguments
 
@@ -31,17 +31,19 @@ A numeric vector of length `s@n_free`, named by `s@free_names`.
 
 ## Details
 
-Four rejections, each with its own message. `m` must be diagonal, tested
-as `max(abs(off)) > 1e-10 * max(1, max(abs(d)))` on the off-diagonal
-part, so an asymmetry of rounding size passes and a real off-diagonal
-entry does not. Its diagonal entries must all be positive and inside the
-open range of the link (for `logit_link()`, between 0 and 1). And for a
+The method rejects an input in four cases, and each case has its own
+message. `m` must be diagonal, tested as
+`max(abs(off)) > 1e-10 * max(1, max(abs(d)))` on the off-diagonal part,
+so an asymmetry of rounding size passes and a real off-diagonal entry
+does not. Its diagonal entries must all be positive and inside the open
+range of the link (for `logit_link()`, between 0 and 1). And for a
 [`scalar_matrix()`](https://statmodels7.github.io/parameters7/reference/scalar_matrix.md)
-they must all be **equal**, tested by
-`diff(range(d)) > 1e-10 * max(abs(d))`, a diagonal that varies not being
-a scalar multiple of the identity; only the first entry is then read.
+they must all be equal, as tested by
+`diff(range(d)) > 1e-10 * max(abs(d))`, because a diagonal that varies
+is not a scalar multiple of the identity; only the first entry is then
+read.
 
 ## See also
 
 [`param_value.DiagMatrixParam()`](https://statmodels7.github.io/parameters7/reference/param_value.DiagMatrixParam.md),
-the map this inverts.
+the map that this inverts.

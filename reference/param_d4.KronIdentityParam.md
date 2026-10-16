@@ -1,8 +1,9 @@
 # Fourth Derivatives of a Block Replication
 
-Closed form: the inner parameter's fourth derivatives, each lifted into
-\\m\\ identical blocks. Each component is a dense matrix of side \\md\\,
-so the memory grows with \\(md)^2\\ for every component.
+The fourth derivative has closed form: the method lifts each of the
+inner parameter's fourth derivatives into \\m\\ identical blocks. Each
+component is a dense matrix of side \\md\\, so the memory grows with
+\\(md)^2\\ for every component.
 
 ## Arguments
 

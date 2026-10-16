@@ -1,11 +1,12 @@
 # Second Derivatives of a Simplex Parameter
 
-Closed form, one further application of the product rule to \\\partial_b
-\pi_a = \pi_a(\delta\_{ab} - \pi_b)\\. The array is the third cumulant
-of a categorical indicator, and every component sums to zero over the
+Computes the second derivatives in closed form, by one further
+application of the product rule to \\\partial_b \pi_a =
+\pi_a(\delta\_{ab} - \pi_b)\\. The array is the third cumulant of a
+categorical indicator, and every component sums to zero over the
 category index.
 
-Unlike a diagonal family, nothing here is separable: the entries of
+Unlike a diagonal family, this family is not separable: the entries of
 \\\pi\\ are coupled through the shared normalizing constant, so a
 component in two different free values is generally non-zero.
 
@@ -29,7 +30,8 @@ component in two different free values is generally non-zero.
 ## Value
 
 A list of `choose(s@n_free + 1, 2)` numeric vectors of length \\K\\,
-keyed as `param_tuple_names(s)` and in that order, each summing to 0.
+keyed as `param_tuple_names(s)` and in that order. Each vector sums to
+0.
 
 ## See also
 

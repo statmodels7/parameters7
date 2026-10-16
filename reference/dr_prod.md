@@ -1,9 +1,9 @@
 # Construct a Covariance as Scales Times a Correlation
 
 Returns an object holding \\\Sigma(\eta) = D(\eta_D)\\ R(\eta_R)\\
-D(\eta_D)\\, with \\D = \mathrm{diag}(d_1, \ldots, d_p)\\ carrying the
-standard deviations through a positive link and \\R\\ a correlation
-matrix parameter.
+D(\eta_D)\\, where \\D = \mathrm{diag}(d_1, \ldots, d_p)\\ holds the
+standard deviations, which pass through a positive link, and \\R\\ is a
+correlation matrix parameter.
 
 ## Usage
 
@@ -22,8 +22,8 @@ dr_prod(dimension, correlation = NULL, link = linkfunctions7::log_link())
 
   A
   [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
-  of side `dimension` **producing correlation matrices**, that is with a
-  unit diagonal at every free vector. Defaults to
+  of side `dimension` that produces correlation matrices, that is, with
+  a unit diagonal at every free vector. Defaults to
   [`correlation_matrix(dimension)`](https://statmodels7.github.io/parameters7/reference/correlation_matrix.md);
   [`block_diag()`](https://statmodels7.github.io/parameters7/reference/block_diag.md)
   and
@@ -33,9 +33,9 @@ dr_prod(dimension, correlation = NULL, link = linkfunctions7::log_link())
   blocks have the property as well. A block carrying a scale of its own,
   such as
   [`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md),
-  makes the composite unidentified, the same matrix arising from a whole
-  ray of free vectors; the constructor reads the diagonal at two probe
-  free vectors and rejects such a block, which
+  makes the composite unidentified, because the same matrix then arises
+  from a whole ray of free vectors; the constructor reads the diagonal
+  at two probe free vectors and rejects such a block, which
   [`check_unit_diagonal()`](https://statmodels7.github.io/parameters7/reference/check_unit_diagonal.md)
   describes.
 
@@ -82,14 +82,15 @@ where \\S_D\\ and \\S_R\\ are the parts of the multiset \\S\\ falling in
 each group. The correlation family's own components are fetched and
 multiplied entrywise, with no new derivation.
 
-Both factors are **sparse**, and where their supports miss each other
-the component is exactly zero. The scale factor is supported on the rows
-and columns that the indices of \\S_D\\ name, and vanishes altogether
-once \\S_D\\ names three distinct scales; a correlation derivative in an
+Both factors are sparse, and where their supports miss each other the
+component is exactly zero. The scale factor is supported on the rows and
+columns that the indices of \\S_D\\ name, and vanishes altogether once
+\\S_D\\ names three distinct scales; a correlation derivative in an
 angle of row \\i\\ is supported on the entries of row and column \\i\\
 whose inner product involves that angle, which for `z3.2` are \\(3,2)\\
-and \\(2,3)\\. So `log_sd1:z3.2` is zero, the first factor living in row
-and column 1 and the second on entries \\(3,2)\\ and \\(2,3)\\.
+and \\(2,3)\\. So `log_sd1:z3.2` is zero, because the first factor lives
+in row and column 1 and the second lives on entries \\(3,2)\\ and
+\\(2,3)\\.
 
 ## The log-determinant
 
@@ -98,15 +99,15 @@ and column 1 and the second on entries \\(3,2)\\ and \\(2,3)\\.
 separable in the scales and separable from the correlation, so a
 component mixing two scales, or a scale with a correlation, is exactly
 zero. Under the default log link the first derivative in a scale is 2 at
-every point, the scales entering on both sides; for another link it is
-\\2h'(\eta)/h(\eta)\\.
+every point, because the scales enter on both sides; for another link it
+is \\2h'(\eta)/h(\eta)\\.
 
 ## The correlation block must have full rank
 
 A rank-deficient \\R\\ would give \\\Sigma\\ the null space \\D^{-1}\ker
-R\\, which **moves with the free vector**, while the class records the
-rank and the null space as properties of the family. The constructor
-rejects one instead of recording a rank that is not stable.
+R\\, which moves with the free vector, while the class records the rank
+and the null space as properties of the family. The constructor rejects
+one instead of recording a rank that is not stable.
 
 ## Notation
 

@@ -13,7 +13,7 @@ comparable size, and its error grows with the spread of the weights."><meta prop
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,12 +75,12 @@ by the generic.</p></dd>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Two rejections, each with its own message:</p><ul><li><p>a matrix that the combination cannot reproduce, checked by residual at
+    <p>The method rejects two kinds of matrix, each with its own message:</p><ul><li><p>a matrix that the combination cannot reproduce, checked by residual at
 \(10^{-8}\) relative to <code>max(1, max(abs(m)))</code>. The span is
 \(K\)-dimensional inside the \(p(p+1)/2\)-dimensional space of symmetric
 matrices, so almost every matrix is outside it and this is the ordinary
 failure.</p></li>
-<li><p>a matrix in the span needing a <strong>non-positive weight</strong>, which the link
+<li><p>a matrix in the span needing a non-positive weight, which the link
 cannot carry. Such a matrix may still be positive semidefinite, so the
 rejection concerns the parametrization and not the matrix.</p></li>
 </ul><p>The residual check separates a solution of the system from a least-squares
@@ -88,7 +88,7 @@ projection.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="param_value.SumStructParam.html">param_value.SumStructParam()</a></code>, the map this inverts.</p></div>
+    <div class="dont-index"><p><code><a href="param_value.SumStructParam.html">param_value.SumStructParam()</a></code>, the map that this method inverts.</p></div>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

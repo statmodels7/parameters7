@@ -1,6 +1,6 @@
 # Default Log-Determinant Gradient
 
-The method that every
+This is the method that every
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
 inherits when it registers no
 [`param_dlogdet()`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.md)
@@ -11,8 +11,9 @@ M\right),\$\$
 
 with \\M^{+}\\ the Moore-Penrose inverse formed from the directions that
 the declared rank keeps, which is the ordinary inverse for a full-rank
-family. The trace is computed as `sum(mi * dk)`, the elementwise product
-summed, both matrices being symmetric, so no matrix product is formed.
+family. The trace is computed as `sum(mi * dk)`, the sum of the
+elementwise product, which is valid because both matrices are symmetric,
+so the method does not form a matrix product.
 
 The identity is exact, so the accuracy is entirely the accuracy of
 [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md):
@@ -45,6 +46,6 @@ A numeric vector of length `s@n_free`, named by `s@free_names`.
 [`param_dlogdet()`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.md)
 for the generic,
 [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md)
-for the derivative arrays this reads, and
+for the derivative arrays that this reads, and
 [`spectrum_pinv()`](https://statmodels7.github.io/parameters7/reference/spectrum_pinv.md)
 for \\M^{+}\\.

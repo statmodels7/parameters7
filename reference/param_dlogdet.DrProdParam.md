@@ -1,5 +1,6 @@
 # Log-Determinant Derivatives of a Scales-Times-Correlation Parameter
 
+Defines
 [`param_dlogdet()`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.md),
 [`param_d2logdet()`](https://statmodels7.github.io/parameters7/reference/param_d2logdet.md),
 [`param_d3logdet()`](https://statmodels7.github.io/parameters7/reference/param_d3logdet.md)
@@ -37,10 +38,10 @@ above it, `choose(s@n_free + k - 1, k)` values keyed as
 
 The four share
 [`dr_prod_logdet_derivs()`](https://statmodels7.github.io/parameters7/reference/dr_prod_logdet_derivs.md)
-and differ only in the order they pass. Under the default log link the
-first-order scale entries are 2 at every point, the scales entering
-\\\log\lvert\Sigma\rvert\\ through \\2\log d_j\\ and the log link
-canceling its own derivative.
+and differ only in the order that they pass. Under the default log link
+the first-order scale entries are 2 at every point, because the scales
+enter \\\log\lvert\Sigma\rvert\\ through \\2\log d_j\\ and the log link
+cancels its own derivative.
 
 ## See also
 

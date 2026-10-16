@@ -33,14 +33,14 @@ A numeric matrix with `s@dimension` rows and as many columns as `b`.
 
 ## Details
 
-The precision is **banded of bandwidth \\q\\**, which is the content of
-an order-\\q\\ Markov property: no partial correlation beyond the lag.
-Every entry outside the band is exactly 0.
+The precision is banded of bandwidth \\q\\, which expresses an
+order-\\q\\ Markov property: partial correlations vanish beyond lag
+\\q\\. Every entry outside the band is exactly 0.
 
-The bandedness is not exploited for speed here, the whole \\p\\ by \\p\\
-precision being formed and multiplied. What it buys a consumer is the
-structure: a model assembling a penalty from this parameter gets a
-banded block, and a sparse solver can use it.
+The bandedness is not exploited for speed here, because the whole \\p\\
+by \\p\\ precision is formed and multiplied. The bandedness is still
+useful to a consumer as structure: a model that assembles a penalty from
+this parameter receives a banded block, which a sparse solver can use.
 
 ## See also
 

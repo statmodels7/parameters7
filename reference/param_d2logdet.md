@@ -34,19 +34,19 @@ A named numeric vector of `choose(s@n_free + 1, 2)` entries, keyed as
 first, then the off-diagonal ones. The \\(l, k)\\ entry equals the \\(k,
 l)\\ one and is not repeated.
 
-## The identity it must satisfy
+## The identity that it must satisfy
 
 Differentiating \\\partial_k \log\|M\| = \mathrm{tr}(M^{-1}\partial_k
 M)\\ once more, with \\\partial_l M^{-1} = -M^{-1}(\partial_l
-M)M^{-1}\\,
+M)M^{-1}\\, gives
 
 \$\$\partial\_{kl} \log\|M\| =
 \mathrm{tr}\\\left(M^{-1}\partial\_{kl}M\right) -
 \mathrm{tr}\\\left(M^{-1}(\partial_k M) M^{-1} (\partial_l
-M)\right),\$\$
+M)\right).\$\$
 
-and with the Moore-Penrose inverse in place of \\M^{-1}\\ when the
-family is rank deficient.
+When the family is rank deficient, the Moore-Penrose inverse replaces
+\\M^{-1}\\.
 
 Without the second trace the result would be the trace of the second
 derivative of the matrix, which is a different quantity and is not zero
@@ -60,7 +60,7 @@ and the example below compares it with the two traces.
 
 ## Notation
 
-\\M\\ is the matrix
+\\M\\ is the matrix that
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
 returns and \\\eta\\ the free vector, of length \\d = \\ `s@n_free`.
 
@@ -75,12 +75,12 @@ for the orders above,
 [`param_tuple_names()`](https://statmodels7.github.io/parameters7/reference/param_tuple_names.md)
 for the keys, and
 [`param_d2()`](https://statmodels7.github.io/parameters7/reference/param_d2.md),
-which this must agree with through the two traces.
+with which this must agree through the two traces.
 
 ## Examples
 
 ``` r
-# The identity, checked against param_d1() and param_d2() directly.
+# The identity is checked against param_d1() and param_d2() directly.
 s <- ar1(4)
 eta <- c(0.3, 0.8)
 Minv <- solve(param_value(s, eta))

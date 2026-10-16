@@ -30,8 +30,9 @@ dr_prod_derivs(s, eta, order)
 ## Value
 
 A list of `choose(s@n_free + order - 1, order)` symmetric matrices keyed
-as `param_tuple_names(s, order)` and in that order, each `s@dimension`
-by `s@dimension` and labeled `v1`, `v2`, ..., `vp` on both margins.
+as `param_tuple_names(s, order)` and in that order. Each matrix is
+`s@dimension` by `s@dimension` and is labeled `v1`, `v2`, ..., `vp` on
+both margins.
 
 ## Details
 
@@ -39,10 +40,10 @@ The correlation's arrays are fetched at most once per order and re-keyed
 by the sorted local index tuple, the same device that
 [`block_derivs_by_tuple()`](https://statmodels7.github.io/parameters7/reference/block_derivs_by_tuple.md)
 uses and for the same reason: the composite's names are not the block's,
-but the sorted index tuple is a key both sides can compute.
+but the sorted index tuple is a key that both sides can compute.
 
 A component whose correlation part is empty reads the correlation's
-**value**, which is why
+value, which is why
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
 appears in a derivative routine.
 

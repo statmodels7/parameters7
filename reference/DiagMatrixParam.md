@@ -1,18 +1,19 @@
 # Diagonal Parameter
 
-The S7 class of diagonal matrices with positive entries, each entry
-carried onto the free scale by a linkfunctions7 link. Two constructors
-return it, and the difference is recorded in `param_params$shared`:
+This S7 class represents diagonal matrices with positive entries, and a
+linkfunctions7 link carries each entry onto the free scale. Two
+constructors return it, and the difference is recorded in
+`param_params$shared`:
 [`diagonal_matrix()`](https://statmodels7.github.io/parameters7/reference/diagonal_matrix.md)
 gives one free value per entry, and
 [`scalar_matrix()`](https://statmodels7.github.io/parameters7/reference/scalar_matrix.md)
 one free value for the whole diagonal. Every method here reads that
 flag, so the two share one class and one set of formulas.
 
-It is the family in which parameters7 and linkfunctions7 meet: the
-Jacobian of a diagonal map is diagonal, which is exactly what a scalar
-link supplies, so the link's own exact derivatives to fourth order are
-used as they are.
+This family combines parameters7 with linkfunctions7: the Jacobian of a
+diagonal map is diagonal, which is exactly what a scalar link supplies,
+so the link's own exact derivatives to fourth order are used as they
+are.
 
 ## Usage
 
@@ -77,7 +78,7 @@ adding no properties of its own. `param_params` holds two entries:
 [`scalar_matrix()`](https://statmodels7.github.io/parameters7/reference/scalar_matrix.md)
 and `FALSE` for
 [`diagonal_matrix()`](https://statmodels7.github.io/parameters7/reference/diagonal_matrix.md).
-`rank` is always \\p\\, every entry being positive.
+`rank` is always \\p\\, because every entry is positive.
 
 ## See also
 
@@ -91,7 +92,7 @@ for the properties that this class inherits.
 ## Examples
 
 ``` r
-# One class, two constructors, told apart by `shared`.
+# The two constructors return one class, and `shared` distinguishes them.
 d <- diagonal_matrix(3)
 q <- scalar_matrix(3)
 c(S7::S7_inherits(d, DiagMatrixParam), S7::S7_inherits(q, DiagMatrixParam))

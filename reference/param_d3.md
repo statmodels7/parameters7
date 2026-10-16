@@ -2,11 +2,11 @@
 
 Differentiates the map three times, returning the distinct components
 \\\partial^3 V / \partial \eta_k \partial \eta_l \partial \eta_m\\, each
-shaped like the value. The derivative is symmetric in its indices, so
-the \\\binom{d+2}{3}\\ unordered triples are returned, not the \\d^3\\
-ordered ones. A third-order chain rule through a link needs them, and so
-does the exact gradient of a marginal criterion, which differentiates a
-penalized mode with respect to a hyperparameter.
+of which has the shape of the value. The derivative is symmetric in its
+indices, so the \\\binom{d+2}{3}\\ unordered triples are returned, not
+the \\d^3\\ ordered ones. A third-order chain rule through a link needs
+them, and so does the exact gradient of a marginal criterion, which
+differentiates a penalized mode with respect to a hyperparameter.
 
 ## Usage
 
@@ -46,18 +46,18 @@ index triples in the same order. At \\d = 3\\ there are ten of them, at
 
 Every family here is closed form. The fallback on
 [`parameter()`](https://statmodels7.github.io/parameters7/reference/parameter.md)
-applies one product stencil per triple, of the width each repeated index
-calls for: an index appearing three times takes the four-point
+applies one product stencil per triple, of the width that each repeated
+index requires: an index appearing three times takes the four-point
 third-difference factor, one appearing twice the three-point
 second-difference factor, and a distinct index a two-point
 first-difference factor. The product is evaluated in one pass over
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md),
-so no order is reached by differencing the order below.
+so the method does not reach any order by differencing the order below.
 
 ## Notation
 
 \\\eta\\ is the free vector, of length \\d = \\ `s@n_free`, and \\V\\
-the value
+the value that
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
 returns.
 

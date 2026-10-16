@@ -1,8 +1,8 @@
 # Third Derivatives of a Correlation Parameter
 
-Closed form, the same Leibniz rule on \\R = LL^\top\\ with the three
-differentiations distributed over the two factors. Each \\\partial^S L\\
-comes from
+Computes the third derivatives in closed form, by the same Leibniz rule
+on \\R = LL^\top\\, in which the three differentiations are distributed
+over the two factors. Each \\\partial^S L\\ comes from
 [`corr_dfactor()`](https://statmodels7.github.io/parameters7/reference/corr_dfactor.md),
 which returns `NULL` whenever \\S\\ spans two rows of \\L\\, so those
 terms of the sum are skipped instead of computed and discarded.
@@ -10,8 +10,8 @@ terms of the sum are skipped instead of computed and discarded.
 The angles reach the free scale through a bounded link, so the chain to
 third order is
 [`compose_order()`](https://statmodels7.github.io/parameters7/reference/compose_order.md)'s
-and the accuracy is the link's; nothing is differenced. The diagonal is
-exactly zero.
+and the accuracy is the link's, and the derivatives are not computed by
+differencing. The diagonal is exactly zero.
 
 ## Arguments
 

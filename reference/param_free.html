@@ -19,7 +19,7 @@ as a starting point."><meta property="og:image" content="https://statmodels7.git
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,7 +75,7 @@ as a starting point.</p>
 <dd><p>A value of the family's shape: a symmetric <code>s@dimension</code> by
 <code>s@dimension</code> numeric matrix on the matrix branch, a probability vector for
 <code><a href="simplex.html">simplex()</a></code>, a row-stochastic matrix for <code><a href="transition_matrix.html">transition_matrix()</a></code>. It must
-satisfy the family's constraint; see <strong>Details</strong> for what each family
+satisfy the family's constraint; see Details for what each family
 rejects.</p></dd>
 
 
@@ -100,9 +100,10 @@ a correct one.</p>
     <div class="section level2">
     <h2 id="a-value-outside-the-set-is-rejected">A value outside the set is rejected<a class="anchor" aria-label="anchor" href="#a-value-outside-the-set-is-rejected"></a></h2>
     <p>Every method checks <code>m</code> against the family's own constraint before
-inverting, and the message says what failed. <code><a href="log_cholesky.html">log_cholesky()</a></code> rejects a
-matrix that is not positive definite; <code><a href="simplex.html">simplex()</a></code> rejects a vector that does not sum to one, and does
-not renormalize it, because a silent repair would hide the caller's mistake.
+inverting, and the message states what failed. <code><a href="log_cholesky.html">log_cholesky()</a></code> rejects a
+matrix that is not positive definite; <code><a href="simplex.html">simplex()</a></code> rejects a vector that does
+not sum to one, and does not renormalize it, because a silent repair would
+hide the caller's mistake.
 The checks shared by the matrix families are the shape, the entries and the
 symmetry: a matrix of the wrong side is rejected with a message naming the
 side required, a missing or infinite entry is rejected, and an asymmetry
@@ -118,7 +119,7 @@ the value on the constrained scale.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="param_value.html">param_value()</a></code>, the map this inverts, and <code><a href="check_parameter.html">check_parameter()</a></code>,
+    <div class="dont-index"><p><code><a href="param_value.html">param_value()</a></code>, the map that this inverts, and <code><a href="check_parameter.html">check_parameter()</a></code>,
 which closes the round trip as one of its checks.</p></div>
     </div>
 
@@ -144,7 +145,7 @@ which closes the round trip as one of its checks.</p></div>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="fu"><a href="param_value.html">param_value</a></span><span class="op">(</span><span class="va">s</span>, <span class="va">start</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cov</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.110223e-16</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># A matrix outside the set is rejected, and the message says why.</span></span></span>
+<span class="r-in"><span><span class="co"># A matrix outside the set is rejected, and the message states why.</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu">param_free</span><span class="op">(</span><span class="va">s</span>, <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Error : 'm' is not positive definite, so it is not in the set that</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   log_cholesky() parametrizes.</span>

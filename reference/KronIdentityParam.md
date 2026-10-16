@@ -1,14 +1,15 @@
 # Identical Blocks of a Matrix Parameter
 
-The S7 class of a block-diagonal matrix built from \\m\\ identical
-copies of an inner matrix parameter, \\I_m \otimes S(\eta)\\. The blocks
-**share one free vector**, so `n_free` is the inner parameter's however
-large \\m\\ is, and the free names are the inner ones unchanged.
+`KronIdentityParam` is the S7 class of a block-diagonal matrix built
+from \\m\\ identical copies of an inner matrix parameter, \\I_m \otimes
+S(\eta)\\. The blocks share one free vector, so `n_free` is the inner
+parameter's however large \\m\\ is, and the free names are the inner
+ones unchanged.
 
-It is one of the five composition wrappers. The value, the derivatives,
-the log-determinant, the solve and the factor are each a linear lift of
-the inner parameter's, so no new derivation is needed and no matrix of
-side \\md\\ is decomposed.
+It is one of the composition wrappers. The value, the derivatives, the
+log-determinant, the solve and the factor are each a linear lift of the
+inner parameter's, so the class needs no new derivation and does not
+decompose any matrix of side \\md\\.
 
 ## Usage
 
@@ -70,23 +71,23 @@ An object of class `KronIdentityParam`, a subclass of
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
 adding no properties of its own. `param_params` holds `inner`, the
 per-block parameter, and `m`, the number of blocks. `param_name` is
-`kron(I<m>, <inner>)` with the number of blocks and the inner family's
-name written in, for example `"kron(I3, log_cholesky)"`.
+`kron(I<m>, <inner>)`, where the number of blocks and the inner family's
+name are written in, for example `"kron(I3, log_cholesky)"`.
 
 ## See also
 
 [`kron_identity()`](https://statmodels7.github.io/parameters7/reference/kron_identity.md),
 the constructor,
 [`block_diag()`](https://statmodels7.github.io/parameters7/reference/block_diag.md)
-for blocks that are **not** identical and do not share a free vector,
-and
+for blocks that are not identical and do not share a free vector, and
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
 for the properties that this class inherits.
 
 ## Examples
 
 ``` r
-# Three copies of a 2 x 2 covariance: a 6 x 6 matrix with three free values.
+# Here are three copies of a 2 x 2 covariance, which form a 6 x 6 matrix
+# with three free values.
 s <- kron_identity(log_cholesky(2), 3)
 S7::S7_inherits(s, KronIdentityParam)
 #> [1] TRUE

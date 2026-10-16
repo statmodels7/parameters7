@@ -1,9 +1,10 @@
 # Third Log-Determinant Derivatives of a Scaled Parameter
 
-Closed form. The log-(pseudo-)determinant is \\r \log h(\eta) +
-\log\|P\|\_+\\ with \\r\\ the rank, so every derivative is \\r\\ times
-the matching derivative of \\\log h\\, and the constant contributes
-nothing. With one free value there is one component.
+The third derivative has closed form. The log-(pseudo-)determinant is
+\\r \log h(\eta) + \log\|P\|\_+\\ with \\r\\ the rank, so every
+derivative is \\r\\ times the matching derivative of \\\log h\\, and the
+constant contributes nothing. With one free value there is one
+component.
 
 Under the default log link \\\log h(\eta) = \eta\\, so the result is
 exactly zero; under a link with curvature it is not.

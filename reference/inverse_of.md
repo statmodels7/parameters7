@@ -28,7 +28,7 @@ with `dimension`, `rank`, `n_free` and `free_names` the inner family's,
 `"inverse_of(<inner>)"` with the inner family's name written in, for
 example `"inverse_of(ar1)"`.
 
-## What it is for
+## Purpose
 
 A family and its inverse are the same set of matrices only when the
 family is closed under inversion, which
@@ -60,23 +60,23 @@ give the same values as `inverse_of(ar1())` and
 
 ## The derivatives
 
-Differentiating \\N = S^{-1}\\ repeatedly gives a sum over the
-**ordered** set partitions of the differentiated positions,
+Differentiating \\N = S^{-1}\\ repeatedly gives a sum over the ordered
+set partitions of the differentiated positions,
 
 \$\$\partial_I N = \sum\_{(B_1, \ldots, B_q)} (-1)^q\\
 N\\(\partial\_{B_1} S)\\N \cdots N\\(\partial\_{B_q} S)\\N,\$\$
 
-the blocks being ordered because matrices do not commute. At first order
-it is \\-N (\partial_k S) N\\ and at second \\N(\partial_k
+where the blocks are ordered because matrices do not commute. At first
+order it is \\-N (\partial_k S) N\\ and at second \\N(\partial_k
 S\\N\\\partial_l S + \partial_l S\\N\\\partial_k S)N -
 N(\partial\_{kl}S)N\\, which are the two expressions written by hand
 elsewhere in the toolkit. The number of terms is the Fubini number of
 the order: 1, 3, 13 and 75.
 
-Every factor is the inner family's own closed form, so nothing is
-differenced. The products are formed in floating point, however, and the
-partition sum loses accuracy roughly as the square of the condition
-number of the inner matrix. For an inner
+Every factor is the inner family's own closed form, so the computation
+does not use finite differences. The products are formed in floating
+point, however, and the partition sum loses accuracy roughly as the
+square of the condition number of the inner matrix. For an inner
 [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md)
 family, the four orders are computed by
 [`param_inv_d1()`](https://statmodels7.github.io/parameters7/reference/param_inv_d1.md),
@@ -89,8 +89,8 @@ which are exact, and the sum is not used.
 ## The log-determinant
 
 \\\log\lvert N\rvert = -\log\lvert S\rvert\\, so the value and all four
-derivative orders are the inner family's negated, and no determinant of
-the inverted matrix is taken.
+derivative orders are the inner family's negated, and the determinant of
+the inverted matrix is not computed.
 
 ## Rank
 
@@ -100,9 +100,9 @@ rank and the dimension.
 
 ## Notation
 
-\\S\\ is the inner family's map, \\N = S^{-1}\\ the one this builds,
-\\I\\ a multiset of differentiated positions and \\(B_1,\ldots,B_q)\\ an
-ordered partition of it into non-empty blocks.
+\\S\\ is the inner family's map, \\N = S^{-1}\\ the one that this
+builds, \\I\\ a multiset of differentiated positions and
+\\(B_1,\ldots,B_q)\\ an ordered partition of it into non-empty blocks.
 
 ## See also
 

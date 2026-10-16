@@ -3,9 +3,9 @@
 Returns the unordered index tuples that
 [`param_tuple_names()`](https://statmodels7.github.io/parameters7/reference/param_tuple_names.md)
 labels, in exactly the same order, as integer positions into the free
-vector. A consumer that has to know *which* free values a component
-differentiates in reads these; a consumer that only has to display a
-label reads the names. At order 2 the diagonal pairs come first and the
+vector. A consumer that has to know the free values in which a component
+differentiates uses these tuples; a consumer that only has to display a
+label uses the names. At order 2 the diagonal pairs come first and the
 off-diagonal ones after, which is how a Hessian is filled; at orders 3
 and 4 the tuples are the lexicographic combinations with repetition.
 
@@ -56,14 +56,15 @@ for the same tuples as labels, and
 [`param_d3()`](https://statmodels7.github.io/parameters7/reference/param_d3.md)
 and
 [`param_d4()`](https://statmodels7.github.io/parameters7/reference/param_d4.md)
-for the lists they index.
+for the lists that they index.
 
 ## Examples
 
 ``` r
 s <- log_cholesky(2)
 
-# Order 2: the three diagonal pairs first, then the three off-diagonal ones.
+# At order 2 the three diagonal pairs come first, then the three
+# off-diagonal ones.
 param_tuple_indices(s, 2)
 #> [[1]]
 #> [1] 1 1
@@ -91,7 +92,8 @@ identical(nm, vapply(idx, function(t) paste(s@free_names[t], collapse = ":"),
                      character(1)))
 #> [1] TRUE
 
-# What they are for: reading a component's indices to contract with.
+# The tuples give the indices of a component, which a caller reads in order
+# to contract it.
 d2 <- param_d2(s, c(0.2, -0.1, 0.4))
 d1 <- param_d1(s, c(0.2, -0.1, 0.4))
 i <- which(param_tuple_names(s, 2) == "log_L1:L2.1")
@@ -100,7 +102,7 @@ param_tuple_indices(s, 2)[[i]]
 dim(d2[[i]])
 #> [1] 2 2
 
-# Counts, over unordered tuples.
+# The counts are over unordered tuples.
 vapply(1:4, function(k) length(param_tuple_indices(s, k)), integer(1))
 #> [1]  3  6 10 15
 ```

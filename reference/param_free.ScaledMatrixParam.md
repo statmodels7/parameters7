@@ -2,7 +2,7 @@
 
 Returns \\g(h)\\ where \\h\\ is the multiple of \\P\\ that `m` is, read
 off the ratio at the entry of \\P\\ of largest magnitude, which is where
-it is best determined. Exact, and a true inverse of
+it is best determined. The map is exact and is a true inverse of
 [`param_value.ScaledMatrixParam()`](https://statmodels7.github.io/parameters7/reference/param_value.ScaledMatrixParam.md).
 
 ## Arguments
@@ -29,16 +29,16 @@ A numeric vector of length `s@n_free` named by `s@free_names`, or
 
 ## Details
 
-Four rejections. The ratio must be positive, or `m` is not a positive
-multiple. `m` must then agree with `h * p` to \\10^{-8}\\ relative
-everywhere, or it is not a multiple of \\P\\ at all: the ratio at one
-entry is not enough, since any matrix has *some* ratio there. And for a
-fixed parameter, built with `link = NULL`, the multiple must be 1 to
-\\10^{-8}\\, the object having no free value to absorb anything else;
-the result is then `numeric(0)`. Otherwise the multiple must lie inside
-the open range of the link.
+The method signals an error in four cases. The ratio must be positive,
+or `m` is not a positive multiple. `m` must then agree with `h * p` to
+\\10^{-8}\\ relative everywhere, or it is not a multiple of \\P\\ at
+all: the ratio at one entry is not enough, since any matrix has *some*
+ratio there. And for a fixed parameter, built with `link = NULL`, the
+multiple must be 1 to \\10^{-8}\\, because the object has no free value
+to absorb anything else; the result is then `numeric(0)`. Otherwise the
+multiple must lie inside the open range of the link.
 
 ## See also
 
 [`param_value.ScaledMatrixParam()`](https://statmodels7.github.io/parameters7/reference/param_value.ScaledMatrixParam.md),
-the map this inverts.
+the map that this method inverts.

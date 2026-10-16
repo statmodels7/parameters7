@@ -1,9 +1,10 @@
 # First Derivatives of a Matrix Logarithm Parameter
 
-The Frechet derivative of the matrix exponential, by Daleckii-Krein:
-rotate the basis direction \\E_k\\ by the eigenvectors of \\S\\, weight
-it entrywise by the two-point divided differences \\e\[\lambda_i,
-\lambda_j\]\\, and rotate back. Exact, with no differencing.
+Returns the Frechet derivative of the matrix exponential, by
+Daleckii-Krein: rotate the basis direction \\E_k\\ by the eigenvectors
+of \\S\\, weight it entrywise by the two-point divided differences
+\\e\[\lambda_i, \lambda_j\]\\, and rotate back. The result is exact,
+without differencing.
 
 The derivative \\\partial_k M\\ differs from \\E_k \exp(S)\\, because
 the exponential of a matrix does not commute with an arbitrary

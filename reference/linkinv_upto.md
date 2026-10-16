@@ -23,12 +23,12 @@ linkinv_upto(link, e, order)
 
 - order:
 
-  The highest order wanted, an integer from 0 to 4.
+  The highest order to compute, an integer from 0 to 4.
 
 ## Value
 
 A list of `order + 1` elements: the value, then the derivatives in
-order, each the shape of `e`.
+order, and each of them has the same shape as `e`.
 
 ## See also
 

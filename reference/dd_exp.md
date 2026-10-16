@@ -1,12 +1,12 @@
 # Divided Differences of the Exponential
 
-Returns \\e\[\lambda_1, \dots, \lambda_m\]\\ by the **Opitz theorem**:
-build the upper bidiagonal matrix with the arguments on the diagonal and
-ones above it, exponentiate it, and read the divided difference off the
-top-right corner. Exact under repeated arguments, where the recursive
-quotient \\(f\[\lambda_2..\] - f\[\lambda_1..\])/(\lambda_m -
+Returns \\e\[\lambda_1, \dots, \lambda_m\]\\ by the Opitz theorem: build
+the upper bidiagonal matrix with the arguments on the diagonal and ones
+above it, exponentiate it, and read the divided difference off the
+top-right corner. The value is exact under repeated arguments, where the
+recursive quotient \\(f\[\lambda_2..\] - f\[\lambda_1..\])/(\lambda_m -
 \lambda_1)\\ divides by zero, and accurate under nearly repeated ones,
-where it cancels.
+where the quotient cancels.
 
 ## Usage
 
@@ -18,9 +18,10 @@ dd_exp(lams)
 
 - lams:
 
-  The arguments, in any order and with repeats allowed. A divided
+  The arguments, which may be in any order and may repeat. A divided
   difference is symmetric in its arguments, so the order does not
-  matter. At most 5 of them, the number fourth-order derivatives need.
+  matter. The number of arguments is at most 5, which is the number that
+  fourth-order derivatives need.
 
 ## Value
 

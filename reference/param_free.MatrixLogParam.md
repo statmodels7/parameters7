@@ -1,10 +1,10 @@
 # Free Vector of a Matrix Logarithm Parameter
 
 Returns the matrix logarithm of `m`, read off its eigendecomposition as
-\\Q \log(\Lambda) Q^\top\\ and then read out of the lower triangle.
-Exact and a true inverse of
+\\Q \log(\Lambda) Q^\top\\ and then read out of the lower triangle. The
+result is exact and is a true inverse of
 [`param_value.MatrixLogParam()`](https://statmodels7.github.io/parameters7/reference/param_value.MatrixLogParam.md),
-the matrix logarithm of a symmetric positive definite matrix being
+because the matrix logarithm of a symmetric positive definite matrix is
 unique among symmetric matrices. The round trip passes through two
 eigendecompositions, one in each direction.
 
@@ -38,4 +38,4 @@ to return. The test is on the eigenvalues of `m`.
 ## See also
 
 [`param_value.MatrixLogParam()`](https://statmodels7.github.io/parameters7/reference/param_value.MatrixLogParam.md),
-the map this inverts.
+the map that this method inverts.

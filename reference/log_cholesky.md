@@ -6,11 +6,11 @@ that is not positive definite, and the likelihood is undefined there.
 This function returns an object holding the log-Cholesky map, which
 sends an unconstrained vector to \\M = L L^\top\\ with \\L\\ lower
 triangular and positive on the diagonal. Every vector in
-\\\mathbb{R}^{p(p+1)/2}\\ gives a valid matrix, so the optimizer never
-has to be told about the constraint.
+\\\mathbb{R}^{p(p+1)/2}\\ gives a valid matrix, so the optimizer can
+search over all of \\\mathbb{R}^{p(p+1)/2}\\ without a constraint.
 
-Reach for it when nothing is known about the matrix. It is the
-parametrization of Pinheiro and Bates (1996).
+Use it when the matrix has no known structure. It is the parametrization
+of Pinheiro and Bates (1996).
 
 ## Usage
 
@@ -22,9 +22,10 @@ log_cholesky(dimension)
 
 - dimension:
 
-  The side \\p\\ of the matrix. A single positive whole number, finite
-  and at least 1. `0`, `2.5`, `c(1, 2)`, `"3"`, `Inf` and `NA` all
-  signal the error `'dimension' must be a single positive integer.`
+  The side \\p\\ of the matrix. It must be a single positive whole
+  number, finite and at least 1. `0`, `2.5`, `c(1, 2)`, `"3"`, `Inf` and
+  `NA` all signal the error
+  `'dimension' must be a single positive integer.`
 
 ## Value
 
@@ -70,12 +71,12 @@ The exponential keeps the diagonal of \\L\\ positive, and a triangular
 matrix with a positive diagonal has full rank, so \\L L^\top\\ is
 positive definite at every finite \\\eta\\, within the range of
 floating-point arithmetic. The map is smooth in both directions and one
-to one, the Cholesky factor with a positive diagonal being unique.
+to one, because the Cholesky factor with a positive diagonal is unique.
 
 The logarithm on the diagonal belongs to the parametrization and is not
 a swappable link, which is why it appears in the free names. Use
 [`diagonal_matrix()`](https://statmodels7.github.io/parameters7/reference/diagonal_matrix.md)
-if a choice of link is wanted.
+if a choice of link is needed.
 
 ## Reading the free vector
 
@@ -98,15 +99,16 @@ it is twice the sum of the first \\p\\ free values:
 \$\$\log\|M\| = 2 \sum\_{i=1}^{p} \log L\_{ii} = 2 \sum\_{i=1}^{p}
 \eta_i\$\$
 
-Linear, so the gradient is the constant 2 in the diagonal directions and
-0 elsewhere, and the second, third and fourth derivatives are exactly
-zero. All four are returned without any factorization being taken.
+The log-determinant is linear, so the gradient is the constant 2 in the
+diagonal directions and 0 elsewhere, and the second, third and fourth
+derivatives are exactly zero. All four are returned without computing a
+factorization.
 
 ## Other families
 
-This is the parametrization for an unstructured matrix, where
-\\p(p+1)/2\\ free values is the price of assuming nothing. A structured
-family estimates fewer and imposes its structure exactly:
+This is the parametrization for an unstructured matrix, and it uses
+\\p(p+1)/2\\ free values. A structured family estimates fewer and
+imposes its structure exactly:
 [`diagonal_matrix()`](https://statmodels7.github.io/parameters7/reference/diagonal_matrix.md)
 for independence,
 [`compound_symmetry()`](https://statmodels7.github.io/parameters7/reference/compound_symmetry.md)
@@ -162,7 +164,7 @@ for the alternatives.
 ## Examples
 
 ``` r
-# A 3 x 3 unstructured covariance: six free values, no constraints.
+# A 3 x 3 unstructured covariance has six free values and no constraints.
 s <- log_cholesky(3)
 s
 #> Parameter: log_cholesky

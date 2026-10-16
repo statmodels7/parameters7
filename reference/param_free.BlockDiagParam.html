@@ -9,7 +9,7 @@ results, so the composite is as exact as its blocks are."><meta property="og:ima
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,21 +64,21 @@ generic.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A numeric vector of length <code>s@n_free</code>, the blocks' free vectors
-concatenated, named by <code>s@free_names</code>.</p>
+    <p>A numeric vector of length <code>s@n_free</code> that holds the blocks' free
+vectors concatenated and is named by <code>s@free_names</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>A matrix whose off-diagonal blocks are not zero is rejected with
-<code>'m' is not block diagonal in the blocks of this parameter.</code>, that being a
-matrix that this family cannot represent; the tolerance is \(10^{-8}\) relative
+<code>'m' is not block diagonal in the blocks of this parameter.</code>, because this
+family cannot represent such a matrix; the tolerance is \(10^{-8}\) relative
 to <code>max(1, max(abs(m)))</code>. The blocks are inverted first, so a diagonal block
 that is outside its own family is reported by that family's message, which is
 the more specific of the two.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="param_value.BlockDiagParam.html">param_value.BlockDiagParam()</a></code>, the map this inverts.</p></div>
+    <div class="dont-index"><p><code><a href="param_value.BlockDiagParam.html">param_value.BlockDiagParam()</a></code>, the map that this method inverts.</p></div>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

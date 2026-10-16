@@ -3,16 +3,16 @@
 symmetric positive semidefinite matrix \(P\), supplied by the caller, times
 one positive scale. With link = NULL it holds \(P\) alone and has no free
 value.
-This is the commonest penalty in semiparametric regression, and it is the
-reason why the package accepts rank-deficient matrices. \(P\) may be the
+This is the commonest penalty in semiparametric regression, and the package
+accepts rank-deficient matrices because of it. \(P\) may be the
 Gram matrix of a basis derivative, a difference penalty
 \(\Delta^\top \Delta\), a neighborhood matrix, or the identity, which makes
 the object a ridge."><meta property="og:description" content="Returns an object holding the map \(M(\eta) = h(\eta)\,P\): a fixed
 symmetric positive semidefinite matrix \(P\), supplied by the caller, times
 one positive scale. With link = NULL it holds \(P\) alone and has no free
 value.
-This is the commonest penalty in semiparametric regression, and it is the
-reason why the package accepts rank-deficient matrices. \(P\) may be the
+This is the commonest penalty in semiparametric regression, and the package
+accepts rank-deficient matrices because of it. \(P\) may be the
 Gram matrix of a basis derivative, a difference penalty
 \(\Delta^\top \Delta\), a neighborhood matrix, or the identity, which makes
 the object a ridge."><meta property="og:image" content="https://statmodels7.github.io/parameters7/logo.png"></head><body>
@@ -23,7 +23,7 @@ the object a ridge."><meta property="og:image" content="https://statmodels7.gith
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,8 +57,8 @@ the object a ridge."><meta property="og:image" content="https://statmodels7.gith
 symmetric positive semidefinite matrix \(P\), supplied by the caller, times
 one positive scale. With <code>link = NULL</code> it holds \(P\) alone and has no free
 value.</p>
-<p>This is the commonest penalty in semiparametric regression, and it is the
-reason why the package accepts rank-deficient matrices. \(P\) may be the
+<p>This is the commonest penalty in semiparametric regression, and the package
+accepts rank-deficient matrices because of it. \(P\) may be the
 Gram matrix of a basis derivative, a difference penalty
 \(\Delta^\top \Delta\), a neighborhood matrix, or the identity, which makes
 the object a ridge.</p>
@@ -131,7 +131,7 @@ includes it.</p>
     <div class="section level2">
     <h2 id="rank-deficiency">Rank deficiency<a class="anchor" aria-label="anchor" href="#rank-deficiency"></a></h2>
     <p>A deficient \(P\) makes the corresponding Gaussian improper, so it is a
-legitimate <strong>penalty</strong> without being a legitimate density. Both readings of a
+legitimate penalty without being a legitimate density. Both readings of a
 multivariate Gaussian need full rank: a singular covariance is degenerate on a
 subspace, and a singular precision does not normalize. <code><a href="param_logdet.html">param_logdet()</a></code>
 returns the pseudo-determinant, while <code><a href="param_solve.html">param_solve()</a></code> and <code><a href="param_factor.html">param_factor()</a></code>
@@ -157,7 +157,7 @@ pseudo-determinant.</p></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># A ridge: the identity, scaled. Full rank, and log|M| = p * eta.</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># A ridge is the identity, scaled; it has full rank, and log|M| = p * eta.</span></span></span>
 <span class="r-in"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu">scaled_matrix</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="fl">4</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>rank <span class="op">=</span> <span class="va">r</span><span class="op">@</span><span class="va">rank</span>, logdet_at_0 <span class="op">=</span> <span class="fu"><a href="param_logdet.html">param_logdet</a></span><span class="op">(</span><span class="va">r</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        rank logdet_at_0 </span>
@@ -165,8 +165,8 @@ pseudo-determinant.</p></div>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/all.equal.html" class="external-link">all.equal</a></span><span class="op">(</span><span class="fu"><a href="param_logdet.html">param_logdet</a></span><span class="op">(</span><span class="va">r</span>, <span class="fl">1.3</span><span class="op">)</span>, <span class="fl">4</span> <span class="op">*</span> <span class="fl">1.3</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># A second-difference penalty on six coefficients: deficient by two, its</span></span></span>
-<span class="r-in"><span><span class="co"># null space being the constants and the straight lines.</span></span></span>
+<span class="r-in"><span><span class="co"># A second-difference penalty on six coefficients is deficient by two,</span></span></span>
+<span class="r-in"><span><span class="co"># because its null space consists of the constants and the straight lines.</span></span></span>
 <span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="fl">6</span><span class="op">)</span>, differences <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu">scaled_matrix</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/crossprod.html" class="external-link">crossprod</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>dimension <span class="op">=</span> <span class="va">s</span><span class="op">@</span><span class="va">dimension</span>, rank <span class="op">=</span> <span class="va">s</span><span class="op">@</span><span class="va">rank</span><span class="op">)</span></span></span>
@@ -195,10 +195,10 @@ pseudo-determinant.</p></div>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="param_solve.html">param_solve</a></span><span class="op">(</span><span class="va">s</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Error : 'scaled' is rank deficient (4 of 6), so it has no inverse. A consumer of</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   an improper prior needs the quadratic form and the log</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   pseudo-determinant, not a pseudo-inverse: assemble the matrix the</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   pseudo-determinant, not a pseudo-inverse: assemble the matrix that the</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   model actually inverts and solve that.</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># With no link the matrix is fully known and there is nothing to estimate.</span></span></span>
+<span class="r-in"><span><span class="co"># With no link the matrix is fully known and has no free value to estimate.</span></span></span>
 <span class="r-in"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu">scaled_matrix</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span>, link <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>n_free <span class="op">=</span> <span class="va">f</span><span class="op">@</span><span class="va">n_free</span>, logdet <span class="op">=</span> <span class="fu"><a href="param_logdet.html">param_logdet</a></span><span class="op">(</span><span class="va">f</span>, <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> n_free logdet </span>

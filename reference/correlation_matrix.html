@@ -5,7 +5,7 @@ the Cholesky
 factor is a point on the unit sphere written in angular coordinates, and each
 angle is carried onto the whole real line by a bounded link, so any free
 vector in \(\mathbb{R}^{p(p-1)/2}\) gives a valid correlation matrix.
-Use it when the correlations are what the model is about and a scale belongs
+Use it when the model concerns the correlations and a scale belongs
 elsewhere: a copula, an LKJ prior, or the correlation half of a covariance
 built with dr_prod()."><meta property="og:description" content="Returns an object holding the spherical parametrization of a correlation
 matrix: symmetric, positive definite, and with a unit diagonal. Each row of
@@ -13,7 +13,7 @@ the Cholesky
 factor is a point on the unit sphere written in angular coordinates, and each
 angle is carried onto the whole real line by a bounded link, so any free
 vector in \(\mathbb{R}^{p(p-1)/2}\) gives a valid correlation matrix.
-Use it when the correlations are what the model is about and a scale belongs
+Use it when the model concerns the correlations and a scale belongs
 elsewhere: a copula, an LKJ prior, or the correlation half of a covariance
 built with dr_prod()."><meta property="og:image" content="https://statmodels7.github.io/parameters7/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -23,7 +23,7 @@ built with dr_prod()."><meta property="og:image" content="https://statmodels7.gi
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,7 +59,7 @@ the Cholesky
 factor is a point on the unit sphere written in angular coordinates, and each
 angle is carried onto the whole real line by a bounded link, so any free
 vector in \(\mathbb{R}^{p(p-1)/2}\) gives a valid correlation matrix.</p>
-<p>Use it when the correlations are what the model is about and a scale belongs
+<p>Use it when the model concerns the correlations and a scale belongs
 elsewhere: a copula, an LKJ prior, or the correlation half of a covariance
 built with <code><a href="dr_prod.html">dr_prod()</a></code>.</p>
     </div>
@@ -74,9 +74,9 @@ built with <code><a href="dr_prod.html">dr_prod()</a></code>.</p>
 
 
 <dl><dt id="arg-dimension">dimension<a class="anchor" aria-label="anchor" href="#arg-dimension"></a></dt>
-<dd><p>The side \(p\) of the matrix. A single positive whole
-number, finite and at least 1; \(p = 1\) gives a constant with no free
-values, as <strong>Details</strong> describes. Any other value signals the error
+<dd><p>The side \(p\) of the matrix. It must be a single
+positive whole number, finite and at least 1; \(p = 1\) gives a constant with no free
+values, as described under Details. Any other value signals the error
 <code>'dimension' must be a single positive integer.</code></p></dd>
 
 </dl></div>
@@ -95,8 +95,8 @@ and <code>param_params</code> holding <code>row</code>, <code>col</code> and <co
   \qquad L_{ii} = \prod_{k &lt; i} \sin\theta_{ik}.$$</p>
 <p>The squared entries of a row telescope to one, so every row of \(L\) is a
 unit vector and \(R = LL^\top\) has a unit diagonal by construction. It is
-positive definite at every value of the angles, \(L\) being triangular with
-a positive diagonal. The angles reach the free scale through
+positive definite at every value of the angles, because \(L\) is triangular
+with a positive diagonal. The angles reach the free scale through
 <code>linkfunctions7::bounded_link(lwr = 0, upr = pi)</code>, so there is nothing to
 constrain on the free scale; in double precision the boundary is reached at
 large free values (see below). <code><a href="param_value.html">param_value()</a></code> sets the diagonal to exactly 1
@@ -105,10 +105,10 @@ to remove the rounding of the telescoping sum.</p>
     <div class="section level2">
     <h2 id="derivatives">Derivatives<a class="anchor" aria-label="anchor" href="#derivatives"></a></h2>
     <p>Derivatives come from the same Leibniz rule that the log-Cholesky family uses,
-\(R\) being a Gram product again; what changes is the factor, whose entries
-are products of sines and cosines of angles that each depend on one free
+because \(R\) is again a Gram product. Here the entries of the factor are
+products of sines and cosines of angles, and each angle depends on one free
 value.</p>
-<p>The rows of \(L\) are independent, so a derivative of the <strong>factor</strong> in free
+<p>The rows of \(L\) are independent, so a derivative of the factor in free
 values from two different rows is zero. The same does not hold for \(R\):
 its entry \((i, j)\) is the inner product of rows \(i\) and \(j\) of
 \(L\), so a second derivative across those two rows need not vanish. Such a
@@ -122,8 +122,8 @@ that the two rows share.</p>
 <p>$$\log|R| = 2 \sum_{i,k} \log \sin\theta_{ik},$$</p>
 <p>one term per free value. Every mixed derivative of the log-determinant is
 therefore exactly zero at every order, and each pure one is a logarithm
-composed with that angle's sine. No factorization and no determinant is
-computed.</p>
+composed with that angle's sine. The computation involves neither a
+factorization nor a determinant.</p>
     </div>
     <div class="section level2">
     <h2 id="reading-the-free-vector">Reading the free vector<a class="anchor" aria-label="anchor" href="#reading-the-free-vector"></a></h2>
@@ -135,9 +135,9 @@ a free value of 0.4 is not an angle of 0.4; the angle is
     <div class="section level2">
     <h2 id="the-boundary-in-double-precision">The boundary in double precision<a class="anchor" aria-label="anchor" href="#the-boundary-in-double-precision"></a></h2>
     <p>As the free values grow, the angles approach 0 or \(\pi\) and a
-correlation approaches \(\pm 1\). At \(p = 3\) with every free value equal
-to 10 the matrix is singular in double precision, with a correlation equal to
-\(-1\) to every printed digit. A free value beyond about \(\pm 8\) in a
+correlation approaches \(\pm 1\). At \(p = 3\), if every free value
+equals 10, the matrix is singular in double precision, and a correlation
+equals \(-1\) to every printed digit. A free value beyond about \(\pm 8\) in a
 fit therefore indicates a correlation at the boundary, and
 <code><a href="check_parameter.html">check_parameter()</a></code> sweeps only to \(\pm 2\).</p>
     </div>
@@ -145,12 +145,12 @@ fit therefore indicates a correlation at the boundary, and
     <h2 id="p-is-a-constant">p = 1 is a constant<a class="anchor" aria-label="anchor" href="#p-is-a-constant"></a></h2>
     <p>A \(1 \times 1\) correlation matrix has no angles, so <code>n_free</code> is 0 and
 <code>free_names</code> is empty. <code><a href="param_value.html">param_value()</a></code> returns the \(1 \times 1\) identity
-at the only free vector there is, <code>numeric(0)</code>, <code><a href="param_d1.html">param_d1()</a></code> and <code><a href="param_d2.html">param_d2()</a></code>
+at <code>numeric(0)</code>, which is the only free vector, <code><a href="param_d1.html">param_d1()</a></code> and <code><a href="param_d2.html">param_d2()</a></code>
 return empty lists, and <code><a href="param_logdet.html">param_logdet()</a></code> is 0. <code><a href="check_parameter.html">check_parameter()</a></code> passes,
-reporting its two log-determinant derivative rows as <code>NOT CHECKED</code>, there
-being no free value to differentiate in. The family therefore degenerates to
-a constant instead of signaling an error, so it can still be composed
-inside <code><a href="block_diag.html">block_diag()</a></code>; it carries no information of its own.</p>
+reporting its two log-determinant derivative rows as <code>NOT CHECKED</code>, because
+there is no free value in which to differentiate. The family therefore
+degenerates to a constant instead of signaling an error, so it can still be
+composed inside <code><a href="block_diag.html">block_diag()</a></code>; it carries no information of its own.</p>
     </div>
     <div class="section level2">
     <h2 id="notation">Notation<a class="anchor" aria-label="anchor" href="#notation"></a></h2>
@@ -159,8 +159,8 @@ inside <code><a href="block_diag.html">block_diag()</a></code>; it carries no in
 <p>\(\eta\) is the free vector, of length \(d = p(p-1)/2\), and \(p\) the
 side of the matrix. \(\theta_{ij} \in (0, \pi)\) is the \(j\)-th angle of
 row \(i\), \(L\) the lower triangular factor and \(R = LL^\top\) the
-correlation matrix. Note that \(\theta\) is an angle here and a distribution
-parameter elsewhere in the toolkit.</p>
+correlation matrix. The symbol \(\theta\) denotes an angle here and a
+distribution parameter elsewhere in the toolkit.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -178,7 +178,7 @@ values, and <code><a href="param_value.html">param_value()</a></code> for the ma
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Three angles for a 3 x 3 correlation matrix, named by row and column.</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># The three angles of a 3 x 3 correlation matrix are named by row and column.</span></span></span>
 <span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu">correlation_matrix</span><span class="op">(</span><span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">s</span><span class="op">@</span><span class="va">free_names</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "z2.1" "z3.1" "z3.2"</span>

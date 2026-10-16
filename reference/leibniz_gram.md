@@ -1,6 +1,6 @@
 # A Gram Product's Derivatives From Its Factor's
 
-The derivative of \\M = L L^\top\\ for one index tuple, from the
+Returns the derivative of \\M = L L^\top\\ for one index tuple, from the
 derivatives of \\L\\.
 
 ## Usage
@@ -21,8 +21,8 @@ leibniz_gram(dfactor, tuple, p)
 - tuple:
 
   The index tuple, an integer vector whose length is the derivative
-  order. Repeated entries are handled correctly, the sum running over
-  subsets of positions.
+  order. Repeated entries are handled correctly, because the sum runs
+  over subsets of positions.
 
 - p:
 
@@ -36,8 +36,8 @@ A symmetric `p` by `p` numeric matrix, with no dimnames.
 
 The Leibniz rule distributes the differentiations of a product over its
 two factors in every way, so \$\$\partial^T (L L^\top) = \sum\_{S
-\subseteq T} (\partial^S L)(\partial^{T \setminus S} L)^\top,\$\$ the
-sum running over subsets of *positions* in the tuple, which handles a
+\subseteq T} (\partial^S L)(\partial^{T \setminus S} L)^\top,\$\$ where
+the sum runs over subsets of *positions* in the tuple, which handles a
 repeated index correctly without a multiplicity bookkeeping of its own.
 
 The result is symmetric in exact arithmetic, with no symmetrizing step:
@@ -49,7 +49,8 @@ transpose, so the asymmetry is of the size of the rounding error.
 The loop walks the \\2^{\|T\|}\\ subsets through a bit mask, so the cost
 is \\2^{\text{order}}\\ matrix products at worst, and far fewer in
 practice: a term whose `dfactor` returns `NULL` is skipped before the
-product is formed, and for both families that use this most terms do.
+product is formed, and in the families that use this function `dfactor`
+returns `NULL` for most terms.
 
 ## See also
 
@@ -58,6 +59,6 @@ for the other piece of shared arithmetic,
 [`chol_dfactor()`](https://statmodels7.github.io/parameters7/reference/chol_dfactor.md)
 and
 [`corr_dfactor()`](https://statmodels7.github.io/parameters7/reference/corr_dfactor.md)
-for the two `dfactor` arguments the package supplies, and
+for the two `dfactor` arguments that the package supplies, and
 [`chol_leibniz()`](https://statmodels7.github.io/parameters7/reference/chol_leibniz.md),
 the compiled route that replaces this for the log-Cholesky family.

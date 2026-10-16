@@ -3,7 +3,7 @@
 Returns \\\sigma^2\\(1-\rho)I + \rho J\\\\: the common variance on the
 diagonal and the common covariance \\\sigma^2\rho\\ everywhere else.
 Positive definiteness follows from the correlation's link, which is
-bounded below at \\-1/(p-1)\\, so nothing is tested here.
+bounded below at \\-1/(p-1)\\, so the method does not test it.
 
 ## Arguments
 

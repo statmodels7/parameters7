@@ -4,8 +4,8 @@ Carries
 [`sum_struct_trace_term()`](https://statmodels7.github.io/parameters7/reference/sum_struct_trace_term.md)'s
 expansion in the weights onto the free scale. The map from free values
 to weights is diagonal, so the chain rule groups the tuple by index and
-takes one set partition per group, each block contributing a derivative
-of the inverse link and one differentiation in that weight.
+takes one set partition per group, and each block contributes a
+derivative of the inverse link and one differentiation in that weight.
 
 ## Usage
 
@@ -41,17 +41,17 @@ of going through
 [`compose_order()`](https://statmodels7.github.io/parameters7/reference/compose_order.md),
 because the outer function is a derivative in several weights at once,
 never a univariate composition. The product over the groups' partitions
-is the grid the loop walks; the partitions come from
+is the grid that the loop walks; the partitions come from
 [`numericals7::set_partitions()`](https://statmodels7.github.io/numericals7/reference/set_partitions.html),
-the one enumeration the toolkit keeps.
+the one enumeration that the toolkit keeps.
 
 Where the family is rank deficient, the derivatives are those of the log
 pseudo-determinant: the inverse in the expansion is replaced by \\(M +
 ZZ^\top)^{-1} - ZZ^\top\\, with \\Z\\ the orthonormal basis of the
 declared null space, which does not move with the free vector.
 
-It is the most expensive quantity of this family, the expansion
-evaluating a chain of matrix products for each ordering.
+It is the most expensive quantity of this family, because the expansion
+evaluates a chain of matrix products for each ordering.
 
 ## See also
 

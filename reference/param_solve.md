@@ -1,12 +1,12 @@
 # Solve Through a Parameter's Matrix
 
 Returns \\M^{-1} B\\ for a right-hand side \\B\\, computed through a
-factorization instead of by forming the inverse. This is what a Gaussian
-quadratic form needs: `crossprod(r, param_solve(s, eta, r))` is \\r^\top
-M^{-1} r\\, which the base method computes from a Cholesky factor and
-two triangular solves; inverting and multiplying would cost more and be
-less accurate. Called with no `b` it returns the inverse, which is
-convenient for reading a covariance off a precision.
+factorization instead of by forming the inverse. A Gaussian quadratic
+form needs this product: `crossprod(r, param_solve(s, eta, r))` equals
+\\r^\top M^{-1} r\\, which the base method computes from a Cholesky
+factor and two triangular solves; inverting and multiplying would cost
+more and be less accurate. Called with no `b` it returns the inverse,
+which is convenient for reading a covariance off a precision.
 
 ## Usage
 
@@ -46,8 +46,8 @@ returns a one-column matrix, not a vector.
 ## Rank deficiency is rejected
 
 A deficient family signals an error and names its rank, instead of
-returning a pseudo-inverse. What a consumer of an improper prior needs
-is the quadratic form and the log pseudo-determinant: penalized normal
+returning a pseudo-inverse. A consumer of an improper prior needs the
+quadratic form and the log pseudo-determinant: penalized normal
 equations invert \\X^\top X + \lambda P\\, which is non-singular even
 where \\P\\ is not, and the consumer assembles that matrix itself. A
 pseudo-inverse is not returned, because the caller could not distinguish
@@ -58,19 +58,19 @@ it from an inverse.
 [`simplex()`](https://statmodels7.github.io/parameters7/reference/simplex.md)
 and
 [`transition_matrix()`](https://statmodels7.github.io/parameters7/reference/transition_matrix.md)
-inherit
-[`parameter()`](https://statmodels7.github.io/parameters7/reference/parameter.md)
-alone, not
+inherit only
+[`parameter()`](https://statmodels7.github.io/parameters7/reference/parameter.md),
+and not
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md),
 and the generic checks for that before dispatching, so the message names
-the family and says its value is not a symmetric matrix.
+the family and states that its value is not a symmetric matrix.
 
 ## Cost
 
 The base method on
 [`matrix_parameter()`](https://statmodels7.github.io/parameters7/reference/matrix_parameter.md)
-works through a Cholesky factor: \\O(p^3)\\ once plus \\O(p^2)\\ per
-column of \\B\\.
+works through a Cholesky factor, at a cost of \\O(p^3)\\ once plus
+\\O(p^2)\\ per column of \\B\\.
 [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md),
 [`diagonal_matrix()`](https://statmodels7.github.io/parameters7/reference/diagonal_matrix.md),
 [`scalar_matrix()`](https://statmodels7.github.io/parameters7/reference/scalar_matrix.md),
@@ -85,11 +85,12 @@ uses Sherman-Morrison, and
 [`block_diag()`](https://statmodels7.github.io/parameters7/reference/block_diag.md)
 and
 [`kron_identity()`](https://statmodels7.github.io/parameters7/reference/kron_identity.md)
-solve blockwise, so these four decompose no matrix of side \\p\\.
+solve blockwise, so these families do not decompose a matrix of side
+\\p\\.
 
 ## Notation
 
-\\M\\ is the matrix
+\\M\\ is the matrix that
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
 returns, \\p\\ its side, and \\\eta\\ the free vector.
 
@@ -112,7 +113,7 @@ eta <- c(0.1, -0.2, 0.3, 0.5, -0.4, 0.2)
 max(abs(param_solve(s, eta) - solve(param_value(s, eta))))
 #> [1] 4.440892e-16
 
-# The quadratic form of a Gaussian log-density, in one solve.
+# The quadratic form of a Gaussian log-density is computed in one solve.
 r <- c(0.4, -1.1, 0.7)
 q <- drop(crossprod(r, param_solve(s, eta, r)))
 c(q, drop(r %*% solve(param_value(s, eta)) %*% r))
@@ -122,13 +123,13 @@ c(q, drop(r %*% solve(param_value(s, eta)) %*% r))
 dim(param_solve(s, eta, r))
 #> [1] 3 1
 
-# A rank-deficient family is rejected, and the message says what to do
+# A rank-deficient family is rejected, and the message states what to do
 # instead.
 r_def <- scaled_matrix(crossprod(diff(diag(6), differences = 2)))
 try(param_solve(r_def, 0))
 #> Error : 'scaled' is rank deficient (4 of 6), so it has no inverse. A consumer of
 #>   an improper prior needs the quadratic form and the log
-#>   pseudo-determinant, not a pseudo-inverse: assemble the matrix the
+#>   pseudo-determinant, not a pseudo-inverse: assemble the matrix that the
 #>   model actually inverts and solve that.
 
 # So does a family whose value is not a symmetric matrix.

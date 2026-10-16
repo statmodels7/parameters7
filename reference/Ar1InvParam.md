@@ -1,8 +1,9 @@
 # The Precision of an AR(1) Process
 
-The S7 class of the family whose value is the **inverse** of an
+This is the S7 class of the family whose value is the inverse of an
 [`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md)
-matrix: tridiagonal, the precision of a first-order autoregression.
+matrix. That matrix is tridiagonal and is the precision of a first-order
+autoregression.
 [`ar1_inv()`](https://statmodels7.github.io/parameters7/reference/ar1_inv.md)
 builds one.
 
@@ -73,9 +74,9 @@ family being inverted.
 [`ar1_inv()`](https://statmodels7.github.io/parameters7/reference/ar1_inv.md),
 the constructor,
 [`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md)
-for the family it inverts, and
+for the family that it inverts, and
 [`inverse_of()`](https://statmodels7.github.io/parameters7/reference/inverse_of.md)
-for the general composition it specializes.
+for the general composition that it specializes.
 
 ## Examples
 

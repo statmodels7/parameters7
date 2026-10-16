@@ -1,9 +1,9 @@
-# Cholesky Factorization, With the Rank Decided Before It
+# Cholesky Factorization After a Positive Definiteness Test
 
 Returns the lower triangular Cholesky factor of a symmetric matrix, or
 `NULL` when the matrix is not positive definite to the given relative
-tolerance. Positive definiteness is decided **before** the factorization
-is attempted, from the eigenvalues.
+tolerance. The function tests positive definiteness from the eigenvalues
+before it attempts the factorization.
 
 ## Usage
 
@@ -15,8 +15,8 @@ chol_pd(m, tol = 1e-14)
 
 - m:
 
-  A symmetric numeric matrix. Not checked for symmetry; the callers pass
-  the value of
+  A symmetric numeric matrix. The function does not check it for
+  symmetry; the callers pass the value of
   [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
   or a matrix already symmetrized by
   [`check_matrix()`](https://statmodels7.github.io/parameters7/reference/check_matrix.md).
@@ -25,8 +25,8 @@ chol_pd(m, tol = 1e-14)
 
   The relative tolerance below which the smallest eigenvalue counts as
   zero, so `m` is rejected when `min(ev) <= tol * max(ev)`. Defaults to
-  `1e-14`. At that default `diag(c(1, 1e-14))` returns `NULL`, the test
-  being an inequality, and `diag(c(1, 1e-13))` factors.
+  `1e-14`. At that default, `diag(c(1, 1e-14))` returns `NULL` because
+  the test is an inequality, and `diag(c(1, 1e-13))` factors.
 
 ## Value
 

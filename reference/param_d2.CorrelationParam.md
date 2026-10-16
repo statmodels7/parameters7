@@ -1,6 +1,7 @@
 # Second Derivatives of a Correlation Parameter
 
-Closed form, by the Leibniz rule on \\R = LL^\top\\ taken twice,
+Computes the second derivatives in closed form, by the Leibniz rule on
+\\R = LL^\top\\ taken twice,
 
 \$\$\partial\_{kl} R = L\_{kl} L^\top + L_k L_l^\top + L_l L_k^\top + L
 L\_{kl}^\top,\$\$
@@ -9,11 +10,11 @@ with each \\\partial^S L\\ from
 [`corr_dfactor()`](https://statmodels7.github.io/parameters7/reference/corr_dfactor.md)
 and zero wherever the multiset \\S\\ spans two rows of \\L\\.
 
-A component in two angles from **different** rows \\i\\ and \\j\\ does
-not vanish: the two outer terms drop, but \\L_k L_l^\top + L_l
-L_k^\top\\ is supported on the entries \\(i, j)\\ and \\(j, i)\\. It is
-zero even there when the two angles lie beyond the columns that the two
-rows share. The diagonal is exactly zero at every order.
+A component in two angles from different rows \\i\\ and \\j\\ does not
+vanish: the two outer terms drop, but \\L_k L_l^\top + L_l L_k^\top\\ is
+supported on the entries \\(i, j)\\ and \\(j, i)\\. It is zero even
+there when the two angles lie beyond the columns that the two rows
+share. The diagonal is exactly zero at every order.
 
 ## Arguments
 

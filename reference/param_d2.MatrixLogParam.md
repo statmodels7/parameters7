@@ -1,9 +1,9 @@
 # Second Derivatives of a Matrix Logarithm Parameter
 
-The second Frechet derivative: chains of two rotated directions
-contracted against three-point divided differences \\e\[\lambda_i,
-\lambda_j, \lambda_k\]\\, summed over both orderings of the two
-directions.
+Computes the second Frechet derivative: chains of two rotated directions
+are contracted against three-point divided differences \\e\[\lambda_i,
+\lambda_j, \lambda_k\]\\, and the contractions are summed over both
+orderings of the two directions.
 
 For the component in one free value twice the two orderings coincide;
 [`mlog_contract()`](https://statmodels7.github.io/parameters7/reference/mlog_contract.md)

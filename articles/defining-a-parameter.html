@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -197,8 +197,8 @@ improves the second derivative and the log-determinant derivatives.</p>
 <div class="section level2">
 <h2 id="adding-a-closed-form">Adding a closed form<a class="anchor" aria-label="anchor" href="#adding-a-closed-form"></a>
 </h2>
-<p>A registered method takes over through dispatch. The MA(1)
-derivatives are elementary: with
+<p>A method registered for the class replaces the default through
+dispatch. The MA(1) derivatives are elementary: with
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mo>=</mo><mrow><mi mathvariant="normal">tanh</mi><mo>⁡</mo></mrow><mi>z</mi></mrow><annotation encoding="application/x-tex">t = \tanh z</annotation></semantics></math>
 and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>t</mi><mo>′</mo></msup><mo>=</mo><mn>1</mn><mo>−</mo><msup><mi>t</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">t' = 1 - t^2</annotation></semantics></math>,</p>
@@ -293,10 +293,10 @@ the matrix, and that the shapes and names are as declared.</p>
 <span><span class="co">#&gt; 8   solve and factor          OK 5.087223e-16</span></span>
 <span><span class="co">#&gt; 9   shapes and names          OK           NA</span></span></code></pre></div>
 <p>A quantity that comes from the base class would be compared with a
-numerical differentiation, which is the same arithmetic twice and would
-agree however wrong the family is. Such a quantity is reported as
-<strong>NOT CHECKED</strong>, so the report distinguishes what was
-verified from what was only computed.</p>
+numerical differentiation, which applies the same arithmetic to both
+sides and would agree however wrong the family is. Such a quantity is
+reported as NOT CHECKED, so the report distinguishes what was verified
+from what was only computed.</p>
 <p>A validator is tested by breaking something and confirming that the
 check fails:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
@@ -324,9 +324,8 @@ not checked before remain NOT CHECKED.</p>
 </h2>
 <p>A family may be rank deficient, and then some results change.
 <code><a href="../reference/scaled_matrix.html">scaled_matrix()</a></code> on a singular matrix records the rank,
-reports the <strong>log pseudo-determinant</strong>, the determinant
-itself being
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mi>∞</mi></mrow><annotation encoding="application/x-tex">-\infty</annotation></semantics></math>,
+reports the log pseudo-determinant (the determinant itself is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mi>∞</mi></mrow><annotation encoding="application/x-tex">-\infty</annotation></semantics></math>),
 and rejects the solve:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scaled_matrix.html">scaled_matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>       <span class="co"># rank 1 by construction</span></span>
@@ -338,7 +337,7 @@ and rejects the solve:</p>
 <span><span class="kw"><a href="https://rdrr.io/r/base/try.html" class="external-link">try</a></span><span class="op">(</span><span class="fu"><a href="../reference/param_solve.html">param_solve</a></span><span class="op">(</span><span class="va">sm</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Error : 'scaled' is rank deficient (1 of 2), so it has no inverse. A consumer of</span></span>
 <span><span class="co">#&gt;   an improper prior needs the quadratic form and the log</span></span>
-<span><span class="co">#&gt;   pseudo-determinant, not a pseudo-inverse: assemble the matrix the</span></span>
+<span><span class="co">#&gt;   pseudo-determinant, not a pseudo-inverse: assemble the matrix that the</span></span>
 <span><span class="co">#&gt;   model actually inverts and solve that.</span></span></code></pre></div>
 <p>The rejection is deliberate. A consumer of an improper prior needs
 the quadratic form and the log pseudo-determinant, and the matrix that
@@ -373,7 +372,8 @@ vector for the delta method:</p>
 of the first partial autocorrelation, <code>pacf1</code>, and
 <code>phi1</code> is the first autoregressive coefficient, which does
 not appear among the coordinates. The intervals of the coefficients are
-built on the identity scale, the stationary region not being a box.</p>
+built on the identity scale, because the stationary region is not a
+box.</p>
 </div>
 <div class="section level2">
 <h2 id="composing">Composing<a class="anchor" aria-label="anchor" href="#composing"></a>
@@ -402,21 +402,19 @@ of the correlation block; <code><a href="../reference/sum_struct.html">sum_struc
 combination of fixed matrices, and its log-determinant derivatives are
 the cyclic trace expansion; <code><a href="../reference/inverse_of.html">inverse_of()</a></code> gives the family
 whose value is the inverse of another family’s.</p>
-<p><code><a href="../reference/sum_struct.html">sum_struct()</a></code> reads its rank from the components
-<strong>stacked and individually normalized</strong>, never from the
-assembled matrix. The null space of a sum of positive semidefinite
-matrices is the intersection of theirs and does not move with the
-weights, while a count taken from the assembled matrix falls as the
-weights spread apart.</p>
+<p><code><a href="../reference/sum_struct.html">sum_struct()</a></code> reads its rank from the components stacked
+and individually normalized, never from the assembled matrix. The null
+space of a sum of positive semidefinite matrices is the intersection of
+theirs and does not move with the weights, while a count taken from the
+assembled matrix falls as the weights spread apart.</p>
 </div>
 <div class="section level2">
 <h2 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
 </h2>
 <ul>
-<li>
-<strong>Minimum to define a parameter:</strong> a subclass of
+<li>The minimum to define a parameter is a subclass of
 <code>parameter</code> or <code>matrix_parameter</code> and a
-<code><a href="../reference/param_value.html">param_value()</a></code> method, with the constructor recording
+<code><a href="../reference/param_value.html">param_value()</a></code> method, and the constructor records
 <code>n_free</code>, <code>free_names</code>, and for a matrix the
 <code>dimension</code>, <code>rank</code> and
 <code>null_basis</code>.</li>
@@ -426,9 +424,9 @@ rejected.</li>
 <li>Every generic except <code><a href="../reference/param_free.html">param_free()</a></code> has a method on the
 base classes, and <code><a href="../reference/param_is_numerical.html">param_is_numerical()</a></code> reports which
 quantities use it.</li>
-<li>Closed forms can be registered one at a time, each taking over
-through dispatch; a closed first derivative improves the default second
-derivative and the log-determinant derivatives.</li>
+<li>Closed forms can be registered one at a time, and each one replaces
+the default through dispatch; a closed first derivative improves the
+default second derivative and the log-determinant derivatives.</li>
 <li>
 <code><a href="../reference/check_parameter.html">check_parameter()</a></code> verifies what can be verified and
 reports the rest as NOT CHECKED.</li>

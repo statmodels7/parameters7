@@ -24,7 +24,7 @@ Every matrix family in the package returns a subclass of it:
 [`ar1_inv()`](https://statmodels7.github.io/parameters7/reference/ar1_inv.md),
 [`autoregressive_inv()`](https://statmodels7.github.io/parameters7/reference/autoregressive_inv.md),
 [`scaled_matrix()`](https://statmodels7.github.io/parameters7/reference/scaled_matrix.md)
-and the five compositions
+and the compositions
 [`kron_identity()`](https://statmodels7.github.io/parameters7/reference/kron_identity.md),
 [`block_diag()`](https://statmodels7.github.io/parameters7/reference/block_diag.md),
 [`dr_prod()`](https://statmodels7.github.io/parameters7/reference/dr_prod.md),
@@ -111,13 +111,13 @@ plus the four that it inherits, `param_name`, `n_free`, `free_names` and
 ## Rank and null space are fixed at construction
 
 They are properties of the family, the same at every point \\\eta\\.
-Scaling a matrix by a positive number leaves its null space alone, and
-the null space of a sum of positive semidefinite matrices is the
-intersection of theirs, so no free value moves it. Recording them once
-at construction is exact, and it is also the only stable way to obtain
-them: counting the small eigenvalues of an assembled matrix is not scale
-invariant, and reads a component whose weight is small as a null
-direction.
+Scaling a matrix by a positive number leaves its null space unchanged,
+and the null space of a sum of positive semidefinite matrices is the
+intersection of theirs, so the null space does not depend on any free
+value. Recording them once at construction is exact, and it is also the
+only stable way to obtain them: counting the small eigenvalues of an
+assembled matrix is not scale invariant, and reads a component whose
+weight is small as a null direction.
 [`param_null_basis()`](https://statmodels7.github.io/parameters7/reference/param_null_basis.md)
 computes them from the components, and its examples show the comparison.
 
@@ -172,7 +172,7 @@ c(parameter = S7::S7_inherits(s, parameter),
 #>        parameter matrix_parameter 
 #>             TRUE             TRUE 
 
-# The three properties that this branch adds.
+# This branch adds three properties.
 c(dimension = s@dimension, rank = s@rank, null_columns = ncol(s@null_basis))
 #>    dimension         rank null_columns 
 #>            3            3            0 

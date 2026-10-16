@@ -141,8 +141,9 @@ improves the second derivative and the log-determinant derivatives.
 
 ## Adding a closed form
 
-A registered method takes over through dispatch. The MA(1) derivatives
-are elementary: with $`t = \tanh z`$ and $`t' = 1 - t^2`$,
+A method registered for the class replaces the default through dispatch.
+The MA(1) derivatives are elementary: with $`t = \tanh z`$ and
+$`t' = 1 - t^2`$,
 
 ``` math
 \frac{\partial\Sigma}{\partial\log\sigma} = 2\Sigma,\qquad
@@ -253,10 +254,10 @@ res
 ```
 
 A quantity that comes from the base class would be compared with a
-numerical differentiation, which is the same arithmetic twice and would
-agree however wrong the family is. Such a quantity is reported as **NOT
-CHECKED**, so the report distinguishes what was verified from what was
-only computed.
+numerical differentiation, which applies the same arithmetic to both
+sides and would agree however wrong the family is. Such a quantity is
+reported as NOT CHECKED, so the report distinguishes what was verified
+from what was only computed.
 
 A validator is tested by breaking something and confirming that the
 check fails:
@@ -288,9 +289,9 @@ checked before remain NOT CHECKED.
 
 A family may be rank deficient, and then some results change.
 [`scaled_matrix()`](https://statmodels7.github.io/parameters7/reference/scaled_matrix.md)
-on a singular matrix records the rank, reports the **log
-pseudo-determinant**, the determinant itself being $`-\infty`$, and
-rejects the solve:
+on a singular matrix records the rank, reports the log
+pseudo-determinant (the determinant itself is $`-\infty`$), and rejects
+the solve:
 
 ``` r
 
@@ -303,7 +304,7 @@ param_logdet(sm, 0)                        # log of the one non-zero eigenvalue
 try(param_solve(sm, 0))
 #> Error : 'scaled' is rank deficient (1 of 2), so it has no inverse. A consumer of
 #>   an improper prior needs the quadratic form and the log
-#>   pseudo-determinant, not a pseudo-inverse: assemble the matrix the
+#>   pseudo-determinant, not a pseudo-inverse: assemble the matrix that the
 #>   model actually inverts and solve that.
 ```
 
@@ -342,8 +343,8 @@ data.frame(quantity = rownames(rd$jacobian), value = signif(rd$value, 6),
 The coordinate `z_pacf1` is the inverse hyperbolic tangent of the first
 partial autocorrelation, `pacf1`, and `phi1` is the first autoregressive
 coefficient, which does not appear among the coordinates. The intervals
-of the coefficients are built on the identity scale, the stationary
-region not being a box.
+of the coefficients are built on the identity scale, because the
+stationary region is not a box.
 
 ## Composing
 
@@ -380,19 +381,19 @@ derivatives are the cyclic trace expansion;
 gives the family whose value is the inverse of another family’s.
 
 [`sum_struct()`](https://statmodels7.github.io/parameters7/reference/sum_struct.md)
-reads its rank from the components **stacked and individually
-normalized**, never from the assembled matrix. The null space of a sum
-of positive semidefinite matrices is the intersection of theirs and does
-not move with the weights, while a count taken from the assembled matrix
-falls as the weights spread apart.
+reads its rank from the components stacked and individually normalized,
+never from the assembled matrix. The null space of a sum of positive
+semidefinite matrices is the intersection of theirs and does not move
+with the weights, while a count taken from the assembled matrix falls as
+the weights spread apart.
 
 ## Summary
 
-- **Minimum to define a parameter:** a subclass of `parameter` or
+- The minimum to define a parameter is a subclass of `parameter` or
   `matrix_parameter` and a
   [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
-  method, with the constructor recording `n_free`, `free_names`, and for
-  a matrix the `dimension`, `rank` and `null_basis`.
+  method, and the constructor records `n_free`, `free_names`, and for a
+  matrix the `dimension`, `rank` and `null_basis`.
 - Rank and null space are properties of the family and must not move
   with the free vector; a family whose null space would move is
   rejected.
@@ -401,9 +402,9 @@ falls as the weights spread apart.
   has a method on the base classes, and
   [`param_is_numerical()`](https://statmodels7.github.io/parameters7/reference/param_is_numerical.md)
   reports which quantities use it.
-- Closed forms can be registered one at a time, each taking over through
-  dispatch; a closed first derivative improves the default second
-  derivative and the log-determinant derivatives.
+- Closed forms can be registered one at a time, and each one replaces
+  the default through dispatch; a closed first derivative improves the
+  default second derivative and the log-determinant derivatives.
 - [`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)
   verifies what can be verified and reports the rest as NOT CHECKED.
 - `free_names` names the transform;

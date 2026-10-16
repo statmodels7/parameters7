@@ -1,7 +1,7 @@
 # Orderings of a Multiset, Counted With Multiplicity
 
-All \\n!\\ orderings of a vector of indices, **without** deduplicating
-the ones that coincide because an index repeats:
+Returns all \\n!\\ orderings of a vector of indices, without
+deduplicating the ones that coincide because an index repeats:
 `multiset_orderings(c(1, 1))` returns two elements.
 
 ## Usage
@@ -14,9 +14,9 @@ multiset_orderings(v)
 
 - v:
 
-  An integer vector, of length 0 to 3 in every call the package makes,
-  the expansion at order \\n\\ permuting the \\n-1\\ indices after the
-  first.
+  An integer vector, of length 0 to 3 in every call that the package
+  makes, because the expansion at order \\n\\ permutes the \\n-1\\
+  indices after the first.
 
 ## Value
 

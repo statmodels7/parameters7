@@ -1,8 +1,8 @@
 # Log-Determinant Hessian of a Diagonal Parameter
 
-Closed form. The log-determinant is a sum of \\\log h(\eta_k)\\ terms,
-one free value each, so every mixed component is exactly zero and a pure
-one is
+Computes the Hessian in closed form. The log-determinant is a sum of
+\\\log h(\eta_k)\\ terms, one free value each, so every mixed component
+is exactly zero and a pure one is
 
 \$\$\partial\_{kk} \log\|M\| = m_k\left\\\frac{h''(\eta_k)}{h(\eta_k)} -
 \left(\frac{h'(\eta_k)}{h(\eta_k)}\right)^{2}\right\\,\$\$
@@ -10,8 +10,8 @@ one is
 the second derivative of \\\log h\\ times the number of entries that the
 value owns.
 
-Under the **log** link this is identically zero, \\\log h(\eta) = \eta\\
-being linear. Under a softplus link at \\\eta = (1, 2)\\ the pure
+Under the log link this is identically zero, because \\\log h(\eta) =
+\eta\\ is linear. Under a softplus link at \\\eta = (1, 2)\\ the pure
 components are \\(-0.160, -0.122)\\.
 
 ## Arguments
@@ -34,7 +34,8 @@ components are \\(-0.160, -0.122)\\.
 ## Value
 
 A numeric vector of `choose(s@n_free + 1, 2)` entries, keyed as
-`param_tuple_names(s)` and in that order, the mixed ones exactly zero.
+`param_tuple_names(s)` and in that order. The mixed ones are exactly
+zero.
 
 ## See also
 

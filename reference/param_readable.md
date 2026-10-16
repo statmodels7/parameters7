@@ -10,9 +10,9 @@ has no direct meaning, and the autoregressive coefficients cannot be
 recovered from a printed covariance.
 
 Use it to turn an estimate and its variance matrix into a table that a
-reader can use. The base class declares nothing, so a family whose
-matrix is all there is to say returns `NULL` and a consumer falls back
-on reporting the matrix.
+reader can use. The base class method has no declaration, so a family
+whose matrix is all there is to say returns `NULL` and a consumer falls
+back on reporting the matrix.
 
 ## Usage
 
@@ -98,7 +98,7 @@ and has none.
 declares the probability vector.
 [`autoregressive()`](https://statmodels7.github.io/parameters7/reference/autoregressive.md)
 declares the variance, the partial autocorrelations that parametrize it,
-**and** the autoregressive coefficients, which appear nowhere in the
+and the autoregressive coefficients, which appear nowhere in the
 covariance. Every other family, including
 [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md),
 [`correlation_matrix()`](https://statmodels7.github.io/parameters7/reference/correlation_matrix.md)
@@ -128,7 +128,7 @@ r$transform
 #>   scale     rho 
 #>   "log" "atanh" 
 
-# What a consumer does with the Jacobian: the delta method. With a variance
+# A consumer applies the delta method to the Jacobian. With a variance
 # of 0.01 on the second free value, the correlation's standard error is
 # |drho/dz| * 0.1.
 V <- diag(c(0.04, 0.01))

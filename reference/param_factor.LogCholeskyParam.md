@@ -1,9 +1,8 @@
 # Factor of a Log-Cholesky Parameter
 
-Returns \\L\\ by assembling it from the free vector: no factorization is
-taken, because the free vector holds the factor. The assembly is
-\\O(p^2)\\, against the \\O(p^3)\\ Cholesky factorization of the base
-method.
+Returns \\L\\, assembled from the free vector without a factorization,
+because the free vector holds the factor. The assembly is \\O(p^2)\\,
+against the \\O(p^3)\\ Cholesky factorization of the base method.
 
 The diagonal is `exp(eta[1:p])` and the entries below it are the
 remaining free values, so a caller who wants a standard deviation off

@@ -1,7 +1,7 @@
 # The Blocks' Derivative Components, Keyed by Local Index Tuple
 
 Fetches one block's derivatives of a given order and re-keys them by the
-**sorted local index tuple**, as `"1"`, `"1,2"`, `"2,2"` and so on.
+sorted local index tuple, as `"1"`, `"1,2"`, `"2,2"` and so on.
 
 ## Usage
 
@@ -39,9 +39,9 @@ without assuming the two enumerations correspond. A block's own
 [`param_tuple_names()`](https://statmodels7.github.io/parameters7/reference/param_tuple_names.md)
 are built from its own `free_names`, which the composite has prefixed
 with a label, so the two name sets differ; the sorted index tuple is the
-one key both sides can compute. Sorting matters because a derivative is
-symmetric in its indices and the two enumerations need not order a tuple
-the same way.
+one key that both sides can compute. Sorting matters because a
+derivative is symmetric in its indices and the two enumerations need not
+order a tuple the same way.
 
 ## See also
 

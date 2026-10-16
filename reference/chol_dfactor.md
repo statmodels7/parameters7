@@ -39,21 +39,21 @@ derivative is identically zero.
 ## Details
 
 Three cases exhaust it. An empty \\S\\ gives \\L\\ itself. A single
-index gives a **single-entry matrix**: \\L\_{ii} E\_{ii}\\ for a
-diagonal free value, whose parametrization is a logarithm, and
-\\E\_{ij}\\ for one below the diagonal, which enters \\L\\ linearly. A
-repeated index gives \\L\_{ii} E\_{ii}\\ again where every repetition
-names the same diagonal value, every derivative of \\\exp(\eta_i)\\
-being itself, and `NULL` otherwise.
+index gives a single-entry matrix: \\L\_{ii} E\_{ii}\\ for a diagonal
+free value, whose parametrization is a logarithm, and \\E\_{ij}\\ for
+one below the diagonal, which enters \\L\\ linearly. A repeated index
+gives \\L\_{ii} E\_{ii}\\ again where every repetition names the same
+diagonal value, because every derivative of \\\exp(\eta_i)\\ is itself,
+and `NULL` otherwise.
 
-So the only surviving higher derivatives are the pure diagonal ones, and
-the single-entry shape is what the compiled kernel exploits: each
-Leibniz term becomes one row, one column or one cell of a product, never
-a matrix multiplication.
+So the only surviving higher derivatives are the pure diagonal ones. The
+compiled kernel exploits the single-entry shape: each Leibniz term
+becomes one row, one column or one cell of a product, never a matrix
+multiplication.
 
 ## See also
 
 [`chol_leibniz()`](https://statmodels7.github.io/parameters7/reference/chol_leibniz.md),
 the caller, and
 [`leibniz_gram()`](https://statmodels7.github.io/parameters7/reference/leibniz_gram.md),
-the generic Leibniz sum the R twin uses.
+the generic Leibniz sum that the R twin uses.

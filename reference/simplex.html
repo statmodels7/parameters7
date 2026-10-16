@@ -23,7 +23,7 @@ SimplexParam() for the consequences."><meta property="og:image" content="https:/
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,7 +60,7 @@ values, with the last category as reference,</p>
       \pi_K = \frac{1}{1 + \sum_b e^{\eta_b}}.$$</p>
 <p>Every free vector gives non-negative entries that sum to 1 up to rounding, so
 a mixture weight, a categorical probability or a latent-state distribution
-can be estimated without a constraint. The value is <strong>not a matrix</strong>; see
+can be estimated without a constraint. The value is not a matrix; see
 <code><a href="SimplexParam.html">SimplexParam()</a></code> for the consequences.</p>
     </div>
 
@@ -74,7 +74,7 @@ can be estimated without a constraint. The value is <strong>not a matrix</strong
 
 
 <dl><dt id="arg-n-cat">n_cat<a class="anchor" aria-label="anchor" href="#arg-n-cat"></a></dt>
-<dd><p>The number of categories \(K\), <strong>at least 2</strong>. A single
+<dd><p>The number of categories \(K\), at least 2. A single
 integer; <code>1</code>, a fraction, <code>NA</code> and a vector all signal the error <code>'n_cat' must be a single integer of at least 2.</code> A one-category simplex is the constant 1 and
 has nothing to estimate.</p></dd>
 
@@ -84,7 +84,7 @@ has nothing to estimate.</p></dd>
     <p>An object of class <code><a href="SimplexParam.html">SimplexParam()</a></code>, with <code>n_free</code> equal to
 <code>n_cat - 1</code>, <code>free_names</code> <code>alr1</code> ... <code>alr(K-1)</code>, <code>param_name</code> <code>"simplex"</code>,
 and <code>param_params</code> holding <code>n_cat</code>. It carries no <code>dimension</code>, <code>rank</code>,
-or <code>null_basis</code>, being a <code><a href="parameter.html">parameter()</a></code> and never a
+or <code>null_basis</code>, because it is a <code><a href="parameter.html">parameter()</a></code> and never a
 <code><a href="matrix_parameter.html">matrix_parameter()</a></code>.</p>
     </div>
     <div class="section level2">
@@ -96,22 +96,22 @@ applied repeatedly:</p>
 <p>$$\partial_b \pi_a = \pi_a(\delta_{ab} - \pi_b).$$</p>
 <p>At first order that is the covariance matrix of a categorical indicator, the
 same array that appears in the score of a multinomial model. All four orders
-are closed form and no stencil is used.</p>
+are closed form, and the computation does not use a stencil.</p>
     </div>
     <div class="section level2">
     <h2 id="the-derivatives-sum-to-zero">The derivatives sum to zero<a class="anchor" aria-label="anchor" href="#the-derivatives-sum-to-zero"></a></h2>
     <p>\(\sum_a \pi_a = 1\) at every \(\eta\), so differentiating it gives
 \(\sum_a \partial \pi_a = 0\), and the same at every higher order. Every
 derivative component therefore sums to zero over the value index, up to
-rounding, and <code><a href="check_parameter.html">check_parameter()</a></code> tests this identity: a derivative array
-that fails it is wrong, whatever other check it passes.</p>
+rounding, and <code><a href="check_parameter.html">check_parameter()</a></code> tests this identity. A derivative array
+that fails this test is incorrect even if it passes the other checks.</p>
     </div>
     <div class="section level2">
     <h2 id="large-free-values-saturate-instead-of-overflowing">Large free values saturate instead of overflowing<a class="anchor" aria-label="anchor" href="#large-free-values-saturate-instead-of-overflowing"></a></h2>
     <p><code><a href="simplex_point.html">simplex_point()</a></code> applies the log-sum-exp shift, so a free value of 800 gives
-\(\pi_1 = 1\) and \(\pi_K = 0\) with the vector summing to exactly 1,
-where the naive expression would divide <code>Inf</code> by <code>Inf</code>. The value then lies
-on the <strong>boundary</strong> of the simplex, so <code><a href="param_free.html">param_free()</a></code> cannot invert it:
+\(\pi_1 = 1\) and \(\pi_K = 0\), and the vector sums to exactly 1,
+whereas the naive expression would divide <code>Inf</code> by <code>Inf</code>. The value then lies
+on the boundary of the simplex, so <code><a href="param_free.html">param_free()</a></code> cannot invert it:
 \(\log(0)\) is not finite.</p>
     </div>
     <div class="section level2">
@@ -144,7 +144,7 @@ here.</p></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Four categories, three free values.</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># A simplex of four categories has three free values.</span></span></span>
 <span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu">simplex</span><span class="op">(</span><span class="fl">4</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">s</span><span class="op">@</span><span class="va">free_names</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "alr1" "alr2" "alr3"</span>

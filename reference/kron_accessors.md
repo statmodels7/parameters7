@@ -1,6 +1,6 @@
 # The Inner Parameter, the Block Count, and the Lift
 
-The three one-line accessors that the
+This page documents the three one-line accessors that the
 [`KronIdentityParam()`](https://statmodels7.github.io/parameters7/reference/KronIdentityParam.md)
 methods use. `.kron_inner()` returns the per-block parameter,
 `.kron_m()` the number of blocks, and `.kron_lift()` places a `d` by `d`
@@ -37,9 +37,9 @@ one place. `.kron_lift()` is the whole arithmetic of the composition:
 the value, every derivative component and the factor are the inner
 quantity passed through it.
 
-Note that [`kronecker()`](https://rdrr.io/r/base/kronecker.html) drops
-dimnames, so a lifted matrix carries none where the inner one carried
-`v1`, `v2`, ...
+The function [`kronecker()`](https://rdrr.io/r/base/kronecker.html)
+drops dimnames, so a lifted matrix carries none where the inner one
+carried `v1`, `v2`, ...
 
 ## See also
 

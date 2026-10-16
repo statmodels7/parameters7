@@ -4,11 +4,11 @@ Returns an object holding a \\K \times K\\ row-stochastic matrix, the
 transition matrix of a Markov chain on \\K\\ states, with each row an
 independent
 [`simplex()`](https://statmodels7.github.io/parameters7/reference/simplex.md)
-in the additive log-ratio chart. \\K(K-1)\\ free values in all, and
-every free vector gives non-negative entries with rows summing to 1 up
-to rounding, so a chain can be estimated without a constraint. An entry
-underflows to exactly 0 when its free value is more than about 745 below
-the largest in its row.
+in the additive log-ratio chart. The parametrization has \\K(K-1)\\ free
+values in all, and every free vector gives non-negative entries and rows
+that sum to 1 up to rounding, so a chain can be estimated without a
+constraint. An entry underflows to exactly 0 when its free value is more
+than about 745 below the largest in its row.
 
 ## Usage
 
@@ -20,7 +20,7 @@ transition_matrix(n_state)
 
 - n_state:
 
-  The number of states \\K\\, **at least 2**. A single integer; `1`, a
+  The number of states \\K\\, at least 2. A single integer; `1`, a
   fraction, `NA` and a vector all signal the error
   `'n_state' must be a single integer of at least 2.` A one-state chain
   has nothing to estimate.
@@ -31,23 +31,23 @@ An object of class
 [`TransitionMatrixParam()`](https://statmodels7.github.io/parameters7/reference/TransitionMatrixParam.md),
 with `n_free` equal to \\K(K-1)\\, `free_names` `alr1.1`, `alr1.2`, ...,
 `alr{K}.{K-1}` row by row, `param_name` `"transition_matrix"`, and
-`param_params` holding `n_state`. No `dimension`, `rank` or
-`null_basis`.
+`param_params` holding `n_state`. The object carries no `dimension`,
+`rank` or `null_basis`.
 
 ## Rows, not columns
 
 The rows live on the simplex, so row \\i\\ holds the probabilities of
-moving **from** state \\i\\. A transition matrix in this convention acts
-on row vectors of probabilities, \\\pi\_{t+1} = \pi_t P\\; the column
+moving from state \\i\\. A transition matrix in this convention acts on
+row vectors of probabilities, \\\pi\_{t+1} = \pi_t P\\; the column
 convention is its transpose.
 
 ## The rows are independent
 
 Each row is parametrized by its own \\K-1\\ free values and no others,
-so every derivative array is **block diagonal by row**: a component
-pairing free values of two different rows is exactly the zero matrix,
-and a component inside row \\i\\ is zero everywhere outside row \\i\\.
-The implementation evaluates the simplex kernels row by row and does not
+so every derivative array is block diagonal by row: a component pairing
+free values of two different rows is exactly the zero matrix, and a
+component inside row \\i\\ is zero everywhere outside row \\i\\. The
+implementation evaluates the simplex kernels row by row and does not
 compute the cross-row components, which are returned as matrices of
 zeros.
 
@@ -74,8 +74,8 @@ and never a
 so those generics have no method and fail at dispatch.
 [`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)
 runs its seven-check battery instead of the nine-check one, and the
-identity it tests here is that every derivative component sums to zero
-along each row.
+identity that it tests here is that every derivative component sums to
+zero along each row.
 
 ## Notation
 
@@ -98,7 +98,7 @@ for the battery that a non-matrix family gets.
 ## Examples
 
 ``` r
-# Three states: six free values, two per row.
+# Three states give six free values, two per row.
 s <- transition_matrix(3)
 c(n_free = s@n_free)
 #> n_free 

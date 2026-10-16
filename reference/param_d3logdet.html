@@ -3,11 +3,11 @@
 pseudo-determinant, keyed as param_tuple_names(s, 3). The exact gradient of
 a marginal criterion reaches this order: differentiating a Laplace
 approximation with respect to a hyperparameter moves the penalized mode, and
-the third derivative is what the movement contracts against."><meta property="og:description" content="Returns the distinct third derivatives of the log-determinant, or of the log
+the movement is contracted against the third derivative."><meta property="og:description" content="Returns the distinct third derivatives of the log-determinant, or of the log
 pseudo-determinant, keyed as param_tuple_names(s, 3). The exact gradient of
 a marginal criterion reaches this order: differentiating a Laplace
 approximation with respect to a hyperparameter moves the penalized mode, and
-the third derivative is what the movement contracts against."><meta property="og:image" content="https://statmodels7.github.io/parameters7/logo.png"></head><body>
+the movement is contracted against the third derivative."><meta property="og:image" content="https://statmodels7.github.io/parameters7/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -15,7 +15,7 @@ the third derivative is what the movement contracts against."><meta property="og
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,7 +49,7 @@ the third derivative is what the movement contracts against."><meta property="og
 pseudo-determinant, keyed as <code>param_tuple_names(s, 3)</code>. The exact gradient of
 a marginal criterion reaches this order: differentiating a Laplace
 approximation with respect to a hyperparameter moves the penalized mode, and
-the third derivative is what the movement contracts against.</p>
+the movement is contracted against the third derivative.</p>
     </div>
 
     <div class="section level2">
@@ -79,20 +79,20 @@ the third derivative is what the movement contracts against.</p>
 <code>param_tuple_names(s, 3)</code> and in that order.</p>
     </div>
     <div class="section level2">
-    <h2 id="where-it-comes-from">Where it comes from<a class="anchor" aria-label="anchor" href="#where-it-comes-from"></a></h2>
+    <h2 id="origin-of-the-expansion">Origin of the expansion<a class="anchor" aria-label="anchor" href="#origin-of-the-expansion"></a></h2>
     <p>Two rules generate every order. The trace is linear, and</p>
 <p>$$\partial_m M^{-1} = -M^{-1}(\partial_m M)M^{-1}.$$</p>
 <p>Applying them to \(\partial_{kl}\log|M|\) gives a sum of traces of
 alternating products
 \(M^{-1}(\partial_{I_1}M)M^{-1}(\partial_{I_2}M)\cdots\), one factor per
-block of a partition of the index set, with the sign and the multiplicity the
-two rules produce. The Moore-Penrose inverse replaces \(M^{-1}\) for a
+block of a partition of the index set, with the sign and the multiplicity that
+the two rules produce. The Moore-Penrose inverse replaces \(M^{-1}\) for a
 rank-deficient family.</p>
 <p>The expansion is not written out in the package. Each family in this package
 computes this order without differencing, and the base method on
 <code><a href="matrix_parameter.html">matrix_parameter()</a></code> applies one tensor stencil to the highest analytic
 log-determinant derivative below the third, <code><a href="param_d2logdet.html">param_d2logdet()</a></code> where the
-arrays are analytic and <code><a href="param_logdet.html">param_logdet()</a></code> where none is. A
+arrays are analytic and <code><a href="param_logdet.html">param_logdet()</a></code> otherwise. A
 written-out expansion has one term per set partition of the indices, five at
 third order, and a transcription of it is easy to get wrong.</p>
     </div>
@@ -100,7 +100,7 @@ third order, and a transcription of it is easy to get wrong.</p>
     <h2 id="notation">Notation<a class="anchor" aria-label="anchor" href="#notation"></a></h2>
 
 
-<p>\(M\) is the matrix <code><a href="param_value.html">param_value()</a></code> returns and \(\eta\) the free vector,
+<p>\(M\) is the matrix that <code><a href="param_value.html">param_value()</a></code> returns and \(\eta\) the free vector,
 of length \(d = \) <code>s@n_free</code>. \(\partial_I M\) is the derivative of
 \(M\) in the free values named by the index set \(I\).</p>
     </div>
@@ -113,7 +113,7 @@ third derivative of the matrix itself.</p></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># An AR(1) covariance. The log-determinant is linear in the log of the</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># For an AR(1) covariance the log-determinant is linear in the log of the</span></span></span>
 <span class="r-in"><span><span class="co"># scale, so only the correlation direction survives to third order.</span></span></span>
 <span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="ar1.html">ar1</a></span><span class="op">(</span><span class="fl">4</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">param_d3logdet</span><span class="op">(</span><span class="va">s</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.3</span>, <span class="fl">0.8</span><span class="op">)</span><span class="op">)</span></span></span>

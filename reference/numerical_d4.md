@@ -7,10 +7,10 @@ applied to the highest analytic derivative below the fourth that the
 family supplies and to
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
 where there is none. It is the order-four analogue of
-[`numerical_d3()`](https://statmodels7.github.io/parameters7/reference/numerical_d3.md)
-and the method
+[`numerical_d3()`](https://statmodels7.github.io/parameters7/reference/numerical_d3.md),
+and
 [`param_d4()`](https://statmodels7.github.io/parameters7/reference/param_d4.md)
-dispatches to when a family has not written its own.
+dispatches to it when a family has not written its own.
 
 ## Usage
 
@@ -38,9 +38,10 @@ numerical_d4(s, eta, accuracy = 4L)
 ## Value
 
 A list of `choose(s@n_free + 3, 4)` estimates keyed as
-`param_tuple_names(s, 4)` and in that order, each shaped like
+`param_tuple_names(s, 4)` and in that order, each of which has the shape
+of
 [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)'s
-result and symmetrized for a matrix family.
+result and is symmetrized for a matrix family.
 
 ## Details
 
@@ -74,7 +75,7 @@ s <- scalar_matrix(2)
 max(abs(numerical_d4(s, 0.3)[[1]] - param_value(s, 0.3)))
 #> [1] 1.063594e-13
 
-# Against a family that writes its own.
+# The estimates are compared with those of a family that writes its own.
 q <- log_cholesky(2)
 eta <- c(0.2, -0.1, 0.4)
 ana <- param_d4(q, eta)

@@ -1,15 +1,15 @@
 # Log-Determinant of a Matrix Logarithm Parameter
 
-Closed form and linear. The eigenvalues of \\M = \exp(S)\\ are
-\\e^{\lambda_i}\\, so
+Returns the log-determinant in closed form; it is linear in the free
+vector. The eigenvalues of \\M = \exp(S)\\ are \\e^{\lambda_i}\\, so
 
 \$\$\log\|M\| = \sum_i \lambda_i = \mathrm{tr}(S) = \sum\_{i=1}^{p}
 \eta_i,\$\$
 
-the sum of the diagonal free values. One
-[`sum()`](https://rdrr.io/r/base/sum.html) over \\p\\ numbers: no
-eigendecomposition and no determinant, with nothing growing in \\p\\
-beyond the sum itself.
+which is the sum of the diagonal free values. The computation is one
+[`sum()`](https://rdrr.io/r/base/sum.html) over \\p\\ numbers, without
+an eigendecomposition or a determinant, and its cost does not grow in
+\\p\\ beyond the sum itself.
 
 ## Arguments
 

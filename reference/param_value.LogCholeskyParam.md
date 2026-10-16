@@ -1,12 +1,13 @@
 # Matrix of a Log-Cholesky Parameter
 
-Returns \\M = L L^\top\\, with \\L\\ assembled from the free vector by
+Returns \\M = L L^\top\\, where \\L\\ is assembled from the free vector
+by
 [`chol_assemble()`](https://statmodels7.github.io/parameters7/reference/chol_assemble.md)
-and the product taken as `tcrossprod(l)`. Positive definiteness needs no
-checking: \\L\\ is triangular with a diagonal that is an exponential, so
-it has full rank at every finite \\\eta\\, and \\L L^\top\\ is therefore
-in the interior of the cone. The cost is one \\O(p^3)\\ product and no
-factorization.
+and the product is computed as `tcrossprod(l)`. Positive definiteness
+needs no checking: \\L\\ is triangular with a diagonal that is an
+exponential, so it has full rank at every finite \\\eta\\, and \\L
+L^\top\\ is therefore in the interior of the cone. The cost is one
+\\O(p^3)\\ product and no factorization.
 
 ## Arguments
 

@@ -1,8 +1,9 @@
 # Second Derivatives of a Block Replication
 
-Closed form: \\\partial\_{kl} M = I_m \otimes \partial\_{kl} S\\. The
-blocks share their free values, so there is no cross-block component to
-compute and the list is exactly the inner parameter's, lifted.
+The second derivative has closed form, \\\partial\_{kl} M = I_m \otimes
+\partial\_{kl} S\\. The blocks share their free values, so a cross-block
+component does not arise, and the list consists exactly of the inner
+parameter's components, lifted.
 
 ## Arguments
 

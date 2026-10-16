@@ -1,9 +1,10 @@
 # Log-Determinant Gradient of a Log-Cholesky Parameter
 
-Closed form and constant: 2 in each of the \\p\\ diagonal directions and
-0 in the \\p(p-1)/2\\ below-diagonal ones, since \\\log\|M\|\\ is
-\\2\sum_i \eta_i\\ and does not involve the rest of \\\eta\\ at all. The
-value does not depend on `eta`, which the method does not read.
+Computes the gradient in closed form. It is constant: 2 in each of the
+\\p\\ diagonal directions and 0 in the \\p(p-1)/2\\ below-diagonal ones,
+since \\\log\|M\|\\ is \\2\sum_i \eta_i\\ and does not involve the rest
+of \\\eta\\ at all. The value does not depend on `eta`, which the method
+does not read.
 
 ## Arguments
 

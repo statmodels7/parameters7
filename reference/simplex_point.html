@@ -13,7 +13,7 @@ free value saturates instead of overflowing."><meta property="og:image" content=
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,8 +44,8 @@ free value saturates instead of overflowing."><meta property="og:image" content=
 
     <div class="ref-description section level2">
     <p>Computes the value \(\pi\) from a free vector, appending the reference
-category's implicit 0 and taking the softmax through the <strong>log-sum-exp
-shift</strong>: the largest entry is subtracted before exponentiating, so a large
+category's implicit 0 and taking the softmax through the log-sum-exp
+shift: the largest entry is subtracted before exponentiating, so a large
 free value saturates instead of overflowing.</p>
     </div>
 
@@ -59,8 +59,8 @@ free value saturates instead of overflowing.</p>
 
 
 <dl><dt id="arg-eta">eta<a class="anchor" aria-label="anchor" href="#arg-eta"></a></dt>
-<dd><p>A numeric vector of length \(K - 1\). Not checked; the callers
-have been through the generic.</p></dd>
+<dd><p>A numeric vector of length \(K - 1\). It is not checked,
+because the callers have already been through the generic.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -73,8 +73,8 @@ have been through the generic.</p></dd>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The naive expression \(e^{\eta_a}/(1 + \sum_b e^{\eta_b})\) is <code>Inf/Inf</code> from
 about \(\eta = 710\). With the shift, a free value of 500 returns
-\(\pi_K = 7 \times 10^{-218}\), still representable, and a free value of
-800 returns \(\pi_1 = 1\) and \(\pi_K = 0\) with the vector summing to
+\(\pi_K = 7 \times 10^{-218}\), which is still representable. A free value
+of 800 returns \(\pi_1 = 1\) and \(\pi_K = 0\), and the vector sums to
 exactly 1. That value is on the boundary of the simplex, which
 <code><a href="param_free.html">param_free()</a></code> cannot invert.</p>
     </div>
