@@ -8,9 +8,9 @@ autoregressive(dimension, order, link_scale = linkfunctions7::log_link())
 }
 \arguments{
 \item{dimension}{The side \eqn{p} of the matrix: the number of consecutive
-observations. Must exceed \code{order}, since a stretch of \eqn{q} observations
-does not identify \eqn{q} partial autocorrelations; \eqn{p = q + 1} is legal
-and is the smallest legal dimension.}
+observations. The dimension must exceed \code{order}, since a stretch of
+\eqn{q} observations does not identify \eqn{q} partial autocorrelations; the
+smallest valid dimension is \eqn{p = q + 1}.}
 
 \item{order}{The order \eqn{q} of the autoregression: a single positive whole
 number, no smaller than 1.}
@@ -35,16 +35,16 @@ of a stationary autoregression of order \eqn{q},
 
 parametrized by its marginal variance \eqn{\gamma_0} and its \eqn{q} partial
 autocorrelations \eqn{r_1, \dots, r_q}. That is \eqn{q + 1} free values
-\strong{whatever the dimension}: \code{n_free} is 3 for an order-2 process, whether it
-is observed 6 times or 200 times.
+whatever the dimension: \code{n_free} is 3 for an order-2 process, whether it is
+observed 6 times or 200 times.
 }
 \section{Why the partial autocorrelations carry the parametrization}{
 The coefficients \eqn{\phi} are stationary exactly when the roots of
 \eqn{1 - \phi_1 z - \cdots - \phi_q z^{q}} lie outside the unit circle, and
 that set is not a box. At \eqn{q = 2} it is the open triangle with vertices
 \eqn{(-2, -1)}, \eqn{(2, -1)} and \eqn{(0, 1)}, of area 4 inside a bounding
-box \eqn{(-2, 2) \times (-1, 1)} of area 8: \strong{exactly half the box is
-non-stationary}, and \eqn{\phi = (1.5, 0.6)}, which sits comfortably inside
+box \eqn{(-2, 2) \times (-1, 1)} of area 8: exactly half the box is
+non-stationary, and \eqn{\phi = (1.5, 0.6)}, which sits comfortably inside
 the box, has a root of modulus 0.547. Scalar links onto intervals therefore
 cannot cover the stationary region, for any choice of intervals.
 
@@ -76,10 +76,10 @@ and the Yule-Walker equations at order \eqn{k} give
 \eqn{\rho_k = \sum_{j<k} \phi^{(k)}_j \rho_{k-j} + r_k}, after which
 \eqn{\rho_h = \sum_j \phi_j \rho_{h-j}} for every lag beyond the order. The
 whole map from the partial autocorrelations to the matrix is therefore
-\strong{polynomial}, built from sums and products alone, and its derivatives to
-fourth order come from propagating the derivative arrays through the recursion
-in compiled code, the product rule written out per order, with nothing
-differenced.
+polynomial, built only from sums and products, and its derivatives to fourth
+order come from propagating the derivative arrays through the recursion in
+compiled code, where the product rule is written out per order and the code
+does not difference any step.
 }
 
 \section{The log-determinant and the inverse}{
@@ -88,17 +88,18 @@ The innovation variances of the Levinson-Durbin recursion give
 \deqn{\log\lvert M \rvert = p\log\gamma_0
   + \sum_{k=1}^{q} (p - k)\log(1 - r_k^{2}),}
 
-one term per free value, so the log-determinant is \strong{separable} and every
+one term per free value, so the log-determinant is separable and every
 mixed derivative of it is exactly zero: at order 4 and \eqn{q = 2}, 12 of the
 15 components are mixed and are 0 by construction. It costs a sum of
 \eqn{q + 1} terms at any dimension.
 
-The inverse is \strong{banded of bandwidth \eqn{q}}: an autoregression of order
-\eqn{q} is Markov of that order, so its precision carries no entry beyond the
+The inverse is banded of bandwidth \eqn{q}: an autoregression of order
+\eqn{q} is Markov of that order, so its precision has only zeros beyond the
 \eqn{q}-th off-diagonal, and every entry outside the band is exactly 0. It is
-assembled from the prediction form \eqn{M^{-1} = U^\top D^{-1} U}, with
-\eqn{U} unit lower triangular holding the predictor coefficients and \eqn{D}
-the innovation variances, so no factorization is taken.
+assembled from the prediction form \eqn{M^{-1} = U^\top D^{-1} U}, in which
+\eqn{U} is unit lower triangular and holds the predictor coefficients and
+\eqn{D} holds the innovation variances, so the assembly does not factorize
+the matrix.
 }
 
 \section{Implementation}{
@@ -118,9 +119,9 @@ same number.
 }
 
 \section{The name}{
-The name is \code{autoregressive()} rather than \code{ar()} because \code{\link[stats:ar]{stats::ar()}} is a
-function of \pkg{stats}, and a package meant to be attached alongside others
-should not mask one.
+The function is named \code{autoregressive()} and not \code{ar()} because \code{ar()} is
+already the name of \code{\link[stats:ar]{stats::ar()}} in \pkg{stats}, and attaching this package
+would mask that function. The name \code{autoregressive()} avoids the masking.
 }
 
 \section{Notation}{
@@ -142,8 +143,8 @@ round(M, 4)
 # The first partial autocorrelation is the lag-one correlation.
 c(from_matrix = M[1, 2] / M[1, 1], from_eta = tanh(eta[2]))
 
-# The precision is banded of bandwidth two, the process being Markov of
-# order two: everything beyond the second off-diagonal is exactly zero.
+# The precision is banded with bandwidth two because the process is Markov
+# of order two: everything beyond the second off-diagonal is exactly zero.
 lag <- abs(outer(1:6, 1:6, "-"))
 max(abs(param_solve(s, eta)[lag > 2]))
 

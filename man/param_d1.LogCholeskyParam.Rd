@@ -16,8 +16,9 @@ A list of \code{s@n_free} symmetric matrices named by \code{s@free_names}, each
 \code{s@dimension} by \code{s@dimension} with dimnames \code{v1}, \code{v2}, ...
 }
 \description{
-Closed form, by the Leibniz rule on \eqn{M = L L^\top}. Writing \eqn{L_k} for
-the derivative of the factor in the \eqn{k}-th free value,
+Computes the first derivatives in closed form, by the Leibniz rule on
+\eqn{M = L L^\top}. Writing \eqn{L_k} for the derivative of the factor in the
+\eqn{k}-th free value,
 
 \deqn{\partial_k M = L_k L^\top + L L_k^\top.}
 

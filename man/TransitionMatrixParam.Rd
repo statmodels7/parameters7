@@ -14,11 +14,10 @@ TransitionMatrixParam(
 \arguments{
 \item{param_name}{A single character string naming the family, used in the
 error messages that the validators raise and in the object's \code{print}
-output.
-\code{"log_cholesky"}, \code{"ar1"} and so on.}
+output. Examples are \code{"log_cholesky"} and \code{"ar1"}.}
 
 \item{n_free}{The length \eqn{d} of the free vector: a single non-negative
-integer. Zero is legal and describes a family with nothing to estimate.
+integer. Zero is allowed and describes a family with nothing to estimate.
 The validator rejects a vector, a negative value, or a length that
 disagrees with \code{free_names}.}
 
@@ -41,23 +40,25 @@ An object of class \code{TransitionMatrixParam}, a subclass of
 \verb{alr\{i\}.\{j\}} row by row, and \code{param_params} holds \code{n_state}.
 }
 \description{
-The S7 class of row-stochastic matrices, each row on the open simplex in the
-additive log-ratio parametrization. Its value is a matrix but \strong{not a
-symmetric} one, so it inherits \code{\link[=parameter]{parameter()}} directly, never
-\code{\link[=matrix_parameter]{matrix_parameter()}}: there is no \code{rank} and no \code{null_basis}, and a
-transition matrix has no log-determinant, solve or factor.
+\code{TransitionMatrixParam} is the S7 class of row-stochastic matrices, each row
+on the open simplex in the additive log-ratio parametrization. Its value is
+a matrix but not a symmetric one, so it inherits \code{\link[=parameter]{parameter()}} directly and
+not \code{\link[=matrix_parameter]{matrix_parameter()}}. The class therefore lacks \code{rank} and
+\code{null_basis}, and the log-determinant, solve and factor are not defined for
+a transition matrix.
 
 \code{\link[=transition_matrix]{transition_matrix()}} builds one. The rows are independent in the
 parametrization, so every derivative array is block diagonal by row and the
 family reuses \code{\link[=simplex]{simplex()}}'s kernels row by row.
 }
 \examples{
-# A matrix, but not a symmetric one, so not a matrix_parameter.
+# The value is a matrix but not a symmetric one, so the class is not a
+# matrix_parameter.
 s <- transition_matrix(3)
 c(parameter = S7::S7_inherits(s, parameter),
   matrix_parameter = S7::S7_inherits(s, matrix_parameter))
 
-# K(K-1) free values: one simplex per row.
+# There are K(K-1) free values, one simplex per row.
 rbind(K = 2:5, n_free = vapply(2:5, function(k)
   transition_matrix(k)@n_free, integer(1)))
 
@@ -65,5 +66,5 @@ rbind(K = 2:5, n_free = vapply(2:5, function(k)
 \seealso{
 \code{\link[=transition_matrix]{transition_matrix()}}, the constructor, \code{\link[=simplex]{simplex()}}, which is one
 row of this, and \code{\link[=parameter]{parameter()}} for the properties that this class
-inherits and the generics that it does not get.
+inherits and the generics that are not defined for it.
 }

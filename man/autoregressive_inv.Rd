@@ -22,7 +22,7 @@ An object of class \code{\link[=AutoregressiveInvParam]{AutoregressiveInvParam()
 \description{
 Returns the family whose value is \eqn{\Sigma(\eta)^{-1}} for \eqn{\Sigma}
 an \code{\link[=autoregressive]{autoregressive()}} matrix: the precision of an autoregression of order
-\eqn{q}, \strong{banded of bandwidth \eqn{q}}. It carries
+\eqn{q}, banded of bandwidth \eqn{q}. It carries
 \code{\link[=autoregressive]{autoregressive()}}'s free vector unchanged, so its coordinates are the scale
 and the partial autocorrelations of the process whose precision this is.
 }
@@ -31,19 +31,20 @@ An autoregression of order \eqn{q} is Markov of that order, so its precision
 carries no entry beyond the \eqn{q}-th diagonal. The value comes from
 \code{\link[=param_solve.AutoregressiveParam]{param_solve.AutoregressiveParam()}}, which reads it off the prediction form
 of the process instead of factorizing, and the log-determinant is
-\code{\link[=autoregressive]{autoregressive()}}'s negated. Both are exact, and neither factorizes a
-matrix of side \eqn{p}.
+\code{\link[=autoregressive]{autoregressive()}}'s negated. Both are exact and avoid factorizing a matrix
+of side \eqn{p}.
 }
 
 \section{The derivative arrays}{
-Written out, from the same prediction form the value comes from:
+The derivatives are written out from the same prediction form from which
+the value comes:
 
 \deqn{\Omega = U^\top \mathrm{diag}(\tau)\, U,}
 
-with \eqn{U} unit lower triangular of bandwidth \eqn{q}, row \eqn{t}
-carrying the coefficients of the best linear predictor of \eqn{y_t} from its
+with \eqn{U} unit lower triangular of bandwidth \eqn{q}, whose row \eqn{t}
+holds the coefficients of the best linear predictor of \eqn{y_t} from its
 predecessors, and \eqn{\tau_t = 1/v_t} the reciprocal innovation variances.
-Two facts make every order exact without a new recursion.
+Every order is exact without a new recursion, because of two facts.
 
 The lower-order rows of \eqn{U} are the coefficients of the same family at
 that order, so their derivative arrays come from the compiled
@@ -55,8 +56,8 @@ correlation that the prediction has reached, so a mixed derivative of it is a
 product of univariate derivatives and is exactly zero where it
 differentiates in a factor that a row does not carry.
 
-What is left is the Leibniz rule over three factors, taken twice so that a
-component costs \eqn{2^m} matrix products rather than \eqn{3^m}.
+After these two facts, the remaining step is the Leibniz rule over three
+factors, applied twice so that a component costs \eqn{2^m} matrix products rather than \eqn{3^m}.
 
 The result agrees with \code{inverse_of(autoregressive(p, q))}, which reaches the
 same values through the ordered-block-partition sum and shares no arithmetic
@@ -72,13 +73,13 @@ eta <- c(log(1.5), atanh(0.5), atanh(-0.2))
 lag <- abs(outer(1:6, 1:6, "-"))
 max(abs(param_value(s, eta)[lag > 2]))
 
-# And it is the inverse of the autoregression it names.
+# And it is the inverse of the autoregression that it names.
 max(abs(param_value(s, eta) \%*\% param_value(autoregressive(6, 2), eta) -
         diag(6)))
 
 }
 \seealso{
-\code{\link[=autoregressive]{autoregressive()}} for the family this inverts, \code{\link[=ar1_inv]{ar1_inv()}} for the
-order-one case, and \code{\link[=inverse_of]{inverse_of()}} for the general composition both of
-them specialize.
+\code{\link[=autoregressive]{autoregressive()}} for the family that this inverts, \code{\link[=ar1_inv]{ar1_inv()}}
+for the order-one case, and \code{\link[=inverse_of]{inverse_of()}} for the general composition that
+both of them specialize.
 }

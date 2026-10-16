@@ -7,8 +7,8 @@
 simplex_point(eta)
 }
 \arguments{
-\item{eta}{A numeric vector of length \eqn{K - 1}. Not checked; the callers
-have been through the generic.}
+\item{eta}{A numeric vector of length \eqn{K - 1}. It is not checked,
+because the callers have already been through the generic.}
 }
 \value{
 A numeric vector of length \eqn{K} with non-negative entries summing to
@@ -17,15 +17,15 @@ A numeric vector of length \eqn{K} with non-negative entries summing to
 }
 \description{
 Computes the value \eqn{\pi} from a free vector, appending the reference
-category's implicit 0 and taking the softmax through the \strong{log-sum-exp
-shift}: the largest entry is subtracted before exponentiating, so a large
+category's implicit 0 and taking the softmax through the log-sum-exp
+shift: the largest entry is subtracted before exponentiating, so a large
 free value saturates instead of overflowing.
 }
 \details{
 The naive expression \eqn{e^{\eta_a}/(1 + \sum_b e^{\eta_b})} is \code{Inf/Inf} from
 about \eqn{\eta = 710}. With the shift, a free value of 500 returns
-\eqn{\pi_K = 7 \times 10^{-218}}, still representable, and a free value of
-800 returns \eqn{\pi_1 = 1} and \eqn{\pi_K = 0} with the vector summing to
+\eqn{\pi_K = 7 \times 10^{-218}}, which is still representable. A free value
+of 800 returns \eqn{\pi_1 = 1} and \eqn{\pi_K = 0}, and the vector sums to
 exactly 1. That value is on the boundary of the simplex, which
 \code{\link[=param_free]{param_free()}} cannot invert.
 }

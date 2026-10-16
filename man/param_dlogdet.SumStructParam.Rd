@@ -21,19 +21,21 @@ A numeric vector: at order 1, \code{s@n_free} values named by
 }
 \description{
 \code{param_dlogdet()}, \code{param_d2logdet()}, \code{param_d3logdet()} and
-\code{param_d4logdet()} for a \code{\link[=sum_struct]{sum_struct()}} parameter: the cyclic trace expansion
-in the weights, carried onto the free scale by a chain rule with a diagonal
+\code{param_d4logdet()} return the derivatives of the log-determinant of a
+\code{\link[=sum_struct]{sum_struct()}} parameter. They evaluate the cyclic trace expansion in the
+weights and carry it onto the free scale by a chain rule with a diagonal
 Jacobian.
 }
 \details{
-The four share \code{\link[=sum_struct_logdet_derivs]{sum_struct_logdet_derivs()}} and differ only in the order they
-pass. Where the family is rank deficient they differentiate the log
+The four share \code{\link[=sum_struct_logdet_derivs]{sum_struct_logdet_derivs()}} and differ only in the order that
+they pass. Where the family is rank deficient they differentiate the log
 pseudo-determinant that \code{\link[=param_logdet]{param_logdet()}} returns. Unlike the value's own
 derivatives, the mixed components are in general not zero: for the two
 variance components of the example in \code{\link[=sum_struct]{sum_struct()}} the mixed second
-derivative is \eqn{-0.245} against \eqn{0.245} for each pure one. The
-log-determinant of a sum is not a sum, which is why this family needs an
-expansion where \code{\link[=block_diag]{block_diag()}} and \code{\link[=dr_prod]{dr_prod()}} need none.
+derivative is \eqn{-0.245} against \eqn{0.245} for each pure one. This
+family needs an expansion because the log-determinant of a sum is not a sum
+of log-determinants, whereas \code{\link[=block_diag]{block_diag()}} and \code{\link[=dr_prod]{dr_prod()}} need no
+expansion.
 
 It is the most expensive quantity of the family.
 }

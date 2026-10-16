@@ -22,7 +22,7 @@ the same free vector, the inverted value. It gives the other side of the
 pair (covariance or precision) to a consumer that fixes one of them, as
 \code{\link[penalties7:structured_penalty]{penalties7::structured_penalty()}} fixes the precision.
 }
-\section{What it is for}{
+\section{Purpose}{
 A family and its inverse are the same set of matrices only when the family
 is closed under inversion, which \code{\link[=log_cholesky]{log_cholesky()}}, \code{\link[=matrix_log]{matrix_log()}},
 \code{\link[=diagonal_matrix]{diagonal_matrix()}}, \code{\link[=scalar_matrix]{scalar_matrix()}}, \code{\link[=compound_symmetry]{compound_symmetry()}} and
@@ -40,21 +40,21 @@ them without a factorization.
 }
 
 \section{The derivatives}{
-Differentiating \eqn{N = S^{-1}} repeatedly gives a sum over the \strong{ordered}
+Differentiating \eqn{N = S^{-1}} repeatedly gives a sum over the ordered
 set partitions of the differentiated positions,
 
 \deqn{\partial_I N = \sum_{(B_1, \ldots, B_q)} (-1)^q\,
   N\,(\partial_{B_1} S)\,N \cdots N\,(\partial_{B_q} S)\,N,}
 
-the blocks being ordered because matrices do not commute. At first order it
+where the blocks are ordered because matrices do not commute. At first order it
 is \eqn{-N (\partial_k S) N} and at second
 \eqn{N(\partial_k S\,N\,\partial_l S + \partial_l S\,N\,\partial_k S)N -
 N(\partial_{kl}S)N}, which are the two expressions written by hand
 elsewhere in the toolkit. The number of terms is the Fubini number of the
 order: 1, 3, 13 and 75.
 
-Every factor is the inner family's own closed form, so nothing is
-differenced. The products are formed in floating point, however, and the
+Every factor is the inner family's own closed form, so the computation does
+not use finite differences. The products are formed in floating point, however, and the
 partition sum loses accuracy roughly as the square of the condition number
 of the inner matrix. For an inner \code{\link[=log_cholesky]{log_cholesky()}} family, the four orders
 are computed by \code{\link[=param_inv_d1]{param_inv_d1()}}, \code{\link[=param_inv_d2]{param_inv_d2()}}, \code{\link[=param_inv_d3]{param_inv_d3()}} and
@@ -63,8 +63,8 @@ are computed by \code{\link[=param_inv_d1]{param_inv_d1()}}, \code{\link[=param_
 
 \section{The log-determinant}{
 \eqn{\log\lvert N\rvert = -\log\lvert S\rvert}, so the value and all four
-derivative orders are the inner family's negated, and no determinant of the
-inverted matrix is taken.
+derivative orders are the inner family's negated, and the determinant of the
+inverted matrix is not computed.
 }
 
 \section{Rank}{
@@ -75,7 +75,7 @@ and the dimension.
 
 \section{Notation}{
 
-\eqn{S} is the inner family's map, \eqn{N = S^{-1}} the one this builds,
+\eqn{S} is the inner family's map, \eqn{N = S^{-1}} the one that this builds,
 \eqn{I} a multiset of differentiated positions and \eqn{(B_1,\ldots,B_q)} an
 ordered partition of it into non-empty blocks.
 }

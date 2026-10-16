@@ -30,7 +30,7 @@ the pattern's. The four derivative methods of both families are one call each
 to this function, differing only in the \code{pattern} passed.
 }
 \details{
-The value is a \strong{product} of a function of the first free value and a
+The value is a product of a function of the first free value and a
 function of the second, so a component with \eqn{a} scale indices and \eqn{b}
 correlation indices is the \eqn{a}-th derivative of the scale times the
 \eqn{b}-th derivative of the pattern. Every derivative is exact, and a tuple

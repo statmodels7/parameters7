@@ -32,10 +32,10 @@ Invisibly, a data frame with one row per check. For a
 check that was skipped or has no number.}
 }
 For a family that is not a matrix it has the columns \code{check}, \code{status} and
-\code{note}, the last being \strong{character} and holding a formatted number, the
-string \code{numerical} or the empty string, with seven rows for \code{\link[=simplex]{simplex()}} and
-\code{\link[=transition_matrix]{transition_matrix()}} and five for any other such family. The \code{status}
-column is common to both.
+\code{note}, where \code{note} is character and holds a formatted number, the
+string \code{numerical} or the empty string, and the table has seven rows for
+\code{\link[=simplex]{simplex()}} and \code{\link[=transition_matrix]{transition_matrix()}} and five for any other such family.
+The \code{status} column is common to both.
 }
 \description{
 Runs a battery of numerical checks on a parametrization, each against a route
@@ -50,40 +50,41 @@ values has no log-determinant gradient or Hessian; those rows are reported as
 NOT CHECKED.
 }
 \section{The NOT CHECKED status}{
-A quantity that comes from a numerical fallback is reported as \strong{NOT
-CHECKED}, never as passed. Comparing a finite difference against a finite
+A quantity that comes from a numerical fallback is reported as NOT
+CHECKED, never as passed. Comparing a finite difference against a finite
 difference is the same arithmetic twice, and it agrees however wrong the
-parametrization is. \code{\link[=param_is_numerical]{param_is_numerical()}} is what decides, and a family
-supplying only \code{\link[=param_value]{param_value()}} therefore comes back with six of the nine rows
-not checked, because nothing in it can be compared with an independent
-route.
+parametrization is. The function \code{\link[=param_is_numerical]{param_is_numerical()}} determines which
+quantities come from a fallback, and a family that supplies only
+\code{\link[=param_value]{param_value()}} therefore comes back with six of the nine rows not checked,
+because its quantities cannot be compared with an independent route.
 }
 
 \section{The nine checks and their references}{
 \enumerate{
-\item \strong{membership}: the matrix is symmetric to within \code{tol} (relative to
+\item membership: the matrix is symmetric to within \code{tol} (relative to
 the larger of 1 and its largest entry) and positive semidefinite, a
 full-rank family has a strictly positive smallest eigenvalue, and a
 rank-deficient one annihilates its declared null space. The last is tested
 through the null basis and not by counting eigenvalues, since a count of
 small eigenvalues is not scale invariant.
-\item \strong{round trip}: \code{\link[=param_free]{param_free()}} recovers the free vector from the matrix,
+\item round trip: \code{\link[=param_free]{param_free()}} recovers the free vector from the matrix,
 where the family implements an inverse.
-\item \strong{first derivatives} against one central difference of \code{\link[=param_value]{param_value()}}.
-\item \strong{second derivatives} against one central difference of the analytic
+\item first derivatives against one central difference of \code{\link[=param_value]{param_value()}}.
+\item second derivatives against one central difference of the analytic
 first derivatives.
-\item \strong{log-determinant} against the sum of the logs of the eigenvalues that
+\item log-determinant against the sum of the logs of the eigenvalues that
 the declared rank keeps.
-\item \strong{logdet gradient} against \eqn{\mathrm{tr}(M^{+} \partial_k M)}, with
-the pseudo-inverse formed from an eigendecomposition instead of from
+\item logdet gradient against \eqn{\mathrm{tr}(M^{+} \partial_k M)}, where
+the pseudo-inverse is formed from an eigendecomposition instead of from
 \code{\link[=param_solve]{param_solve()}}, so the two routes share no arithmetic.
-\item \strong{logdet hessian} against one central difference of the analytic
+\item logdet hessian against one central difference of the analytic
 gradient.
-\item \strong{solve and factor} against \code{base::solve()}, where the family is of full
+\item solve and factor against \code{base::solve()}, where the family is of full
 rank; for a deficient one, which has no inverse, the row is named \code{solve}
 and reported as NOT CHECKED.
-\item \strong{shapes and names}: the declared dimension, the lengths and the names
-match what the methods return. Structural, so it carries no statistic.
+\item shapes and names: the declared dimension, the lengths and the names
+match what the methods return. This check is structural, so it carries no
+statistic.
 }
 
 Each check except the shapes check reports the worst discrepancy over every
@@ -93,7 +94,7 @@ the shapes check reads the origin.
 
 \section{The caller's random stream}{
 Both batteries draw from a fixed seed, so two calls on the same family report
-the same statistics, and both put back the \code{.Random.seed} they found on
+the same statistics, and both put back the \code{.Random.seed} that they found on
 entry, so a call in the middle of a simulation leaves that simulation
 unchanged. The matrix branch seeds once before \code{\link[=sweep_etas]{sweep_etas()}}; the branch for
 a family that is not a matrix seeds each of its three draws. Restoring is
@@ -106,25 +107,27 @@ A family whose value is not a symmetric matrix has no log-determinant, no
 solve and no factor, so other checks run instead: the inverse round trip and
 the four derivative orders against the single-stencil construction, and, for
 \code{\link[=simplex]{simplex()}} and \code{\link[=transition_matrix]{transition_matrix()}}, that the value stays on the simplex
-and that every derivative component sums to zero over the value index. A derivative order that comes from a numerical fallback is
-reported as \strong{NOT CHECKED} there too. \strong{The returned table has different
-columns in that case}; see \strong{Value}.
+and that every derivative component sums to zero over the value index. A
+derivative order that comes from a numerical fallback is reported as NOT
+CHECKED there too. The returned table has different columns in that case;
+see Value.
 }
 
 \examples{
 set.seed(1)
 
-# A family that passes everything.
+# This family passes every check.
 r <- check_parameter(log_cholesky(3))
 r$status
 
-# A rank-deficient penalty passes the same battery, with the solve skipped:
-# it has no inverse, and the null-space check replaces the definiteness one.
+# A rank-deficient penalty passes the same battery, and the solve is
+# skipped: it has no inverse, and the null-space check replaces the
+# definiteness one.
 P <- crossprod(diff(diag(6), differences = 2))
 d <- check_parameter(scaled_matrix(P))
 d[d$status != "OK", ]
 
-# A family that is not a matrix gets the seven-row battery and a `note`
+# For a family that is not a matrix, the result has seven rows and a `note`
 # column in place of `statistic`.
 v <- check_parameter(simplex(4), verbose = FALSE)
 names(v)
@@ -148,6 +151,6 @@ bad[bad$status == "FAIL", ]
 
 }
 \seealso{
-\code{\link[=param_is_numerical]{param_is_numerical()}}, which decides what is checkable, and
+\code{\link[=param_is_numerical]{param_is_numerical()}}, which determines what is checkable, and
 \code{\link[=param_null_basis]{param_null_basis()}} for the null space that check 1 uses.
 }

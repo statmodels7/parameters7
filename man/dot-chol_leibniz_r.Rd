@@ -25,15 +25,15 @@ shows up as a disagreement. It is not called on a production path;
 \code{\link[=chol_leibniz]{chol_leibniz()}} is.
 }
 \details{
-The two routes agree exactly, both summing the same Leibniz terms, with the
-compiled one skipping only additions of structural zeros.
+The two routes agree exactly, because both sum the same Leibniz terms, and
+the compiled one skips only additions of structural zeros.
 
 The compiled route is the production one because every derivative of the
 factor is a single-entry matrix, so a Leibniz term is one row, one column or
 one cell, where this twin forms a full \eqn{p \times p} product.
 }
 \seealso{
-\code{\link[=chol_leibniz]{chol_leibniz()}}, the compiled route this mirrors, and
-\code{\link[=leibniz_gram]{leibniz_gram()}}, the dense Leibniz sum it uses.
+\code{\link[=chol_leibniz]{chol_leibniz()}}, the compiled route that this mirrors, and
+\code{\link[=leibniz_gram]{leibniz_gram()}}, the dense Leibniz sum that it uses.
 }
 \keyword{internal}

@@ -14,8 +14,8 @@ NULL
 #' A Short Name for a Link
 #'
 #' @description
-#' Returns the word that a free name uses to say which transformation produced
-#' a coordinate, given the link that produced it.
+#' Returns the tag that appears in a free name to indicate which transformation
+#' produced a coordinate, given the link that produced it.
 #'
 #' @details
 #' The tag comes from the link's class, never from its `link_name`, because a
@@ -35,12 +35,12 @@ NULL
 #'   use are `"log"` (log and either singly bounded link), `"logit"` (logit and
 #'   the doubly bounded link), `"z"` (rhobit), and `"probit"`, `"cloglog"`,
 #'   `"loglog"`, `"cauchit"`, `"sqrt"`, `"inv"`, `"invsq"`, `"power"` and
-#'   `"softplus"` for the rest. A link from outside \pkg{linkfunctions7} gets its
-#'   own `link_name` reduced to lowercase letters, digits and underscores, or
-#'   `"f"` if nothing survives that.
+#'   `"softplus"` for the rest. For a link from outside \pkg{linkfunctions7}, the
+#'   tag is its own `link_name` reduced to lowercase letters, digits and
+#'   underscores, or `"f"` if the reduction leaves no characters.
 #'
 #' @seealso [tagged_name()], which prefixes a quantity with the tag, and
-#'   [parameter()] for the naming convention this serves.
+#'   [parameter()] for the naming convention that this serves.
 #'
 #' @keywords internal
 link_tag <- function(link) {
@@ -78,7 +78,7 @@ link_tag <- function(link) {
 #' Prefixes the name of a quantity with the tag of the link that carries it onto
 #' the free scale, so `tagged_name(log_link(), "d1")` is `"log_d1"` and
 #' `tagged_name(rhobit_link(), "rho")` is `"z_rho"`. Under the identity link the
-#' name is left alone, the coordinate then **being** the quantity.
+#' name is left alone, because the coordinate is then the quantity itself.
 #'
 #' Every constructor in the package that takes a link builds its `free_names`
 #' through this, which is how the convention stays uniform across the families.

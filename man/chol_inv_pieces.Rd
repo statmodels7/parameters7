@@ -16,8 +16,9 @@ A list with \code{l}, \code{g}, \code{b} and \code{c}, the last two lists over t
 free values.
 }
 \description{
-\eqn{L}, \eqn{G = L^{-1}}, and for each free value \eqn{B_k = G\,\partial_k
-L} and \eqn{C_k = B_k + B_k^\top}, which \code{\link[=param_inv_d1]{param_inv_d1()}} and
-\code{\link[=param_inv_d2]{param_inv_d2()}} read for a \code{\link[=log_cholesky]{log_cholesky()}} parameter.
+Returns \eqn{L}, \eqn{G = L^{-1}}, and for each free value
+\eqn{B_k = G\,\partial_k L} and \eqn{C_k = B_k + B_k^\top}. These pieces are
+read by \code{\link[=param_inv_d1]{param_inv_d1()}} and \code{\link[=param_inv_d2]{param_inv_d2()}} for a \code{\link[=log_cholesky]{log_cholesky()}}
+parameter.
 }
 \keyword{internal}

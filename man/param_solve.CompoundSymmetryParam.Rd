@@ -18,14 +18,15 @@ vector and defaulted to the identity by the generic.}
 A numeric matrix with \code{s@dimension} rows and as many columns as \code{b}.
 }
 \description{
-Exact, by Sherman-Morrison. The inverse of
+The result is exact, by the Sherman-Morrison formula. The inverse of
 \eqn{\sigma^2\{(1-\rho)I + \rho J\}} is
 
 \deqn{\frac{1}{\sigma^2(1-\rho)}
-  \left[I - \frac{\rho}{1 + (p-1)\rho}J\right],}
+  \left[I - \frac{\rho}{1 + (p-1)\rho}J\right].}
 
-compound symmetric again, so the inverse is written down and no factorization
-is performed: the cost is \eqn{O(p^2)} per column of \code{b}, against the
+This inverse is compound symmetric again, so the method writes it down
+without performing a factorization: the cost is \eqn{O(p^2)} per column of
+\code{b}, against the
 \eqn{O(p^3)} Cholesky factorization of the base method. The factors
 \eqn{1 + (p-1)\rho} and \eqn{1 - \rho} are evaluated from the second free
 value, as \eqn{p\omega} and \eqn{p(1-\omega)/(p-1)} with \eqn{\omega} the
@@ -37,6 +38,6 @@ closed under the choice of side.
 }
 \seealso{
 \code{\link[=param_solve]{param_solve()}} for the generic, and
-\code{\link[=param_solve.matrix_parameter]{param_solve.matrix_parameter()}} for the factorization this avoids.
+\code{\link[=param_solve.matrix_parameter]{param_solve.matrix_parameter()}} for the factorization that this avoids.
 }
 \keyword{internal}

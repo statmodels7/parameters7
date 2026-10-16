@@ -24,8 +24,8 @@ that is genuinely not symmetric.}
 }
 \description{
 Checks that \code{m} is a square symmetric numeric matrix of the parameter's
-dimension, and returns it symmetrized. Called before dispatch in the body
-of the \code{\link[=param_free]{param_free()}} generic, on the matrix to be inverted, whenever the
+dimension, and returns it symmetrized. The \code{\link[=param_free]{param_free()}} generic calls it
+before dispatch, in its body, on the matrix to be inverted, whenever the
 parameter inherits from \code{\link[=matrix_parameter]{matrix_parameter()}}.
 }
 \details{

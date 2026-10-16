@@ -19,8 +19,9 @@ numeric vector of length \code{s@dimension}.
 \description{
 Returns the unit lower triangular matrix \eqn{U} of one-step predictor
 coefficients and the vector \eqn{v} of innovation variances, which factor the
-matrix as \eqn{M = U^{-1} D U^{-\top}} with \eqn{D = \mathrm{diag}(v)}. It is
-where \code{\link[=param_solve.AutoregressiveParam]{param_solve.AutoregressiveParam()}}'s banded precision comes from.
+matrix as \eqn{M = U^{-1} D U^{-\top}} with \eqn{D = \mathrm{diag}(v)}.
+\code{\link[=param_solve.AutoregressiveParam]{param_solve.AutoregressiveParam()}} uses them to obtain the banded
+precision.
 }
 \details{
 Row \eqn{t} holds the coefficients of the best linear predictor of \eqn{y_t}

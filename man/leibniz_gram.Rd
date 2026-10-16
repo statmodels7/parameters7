@@ -13,8 +13,8 @@ vector of free-value indices, returning the corresponding derivative of
 vector must give \eqn{L} itself.}
 
 \item{tuple}{The index tuple, an integer vector whose length is the derivative
-order. Repeated entries are handled correctly, the sum running over subsets
-of positions.}
+order. Repeated entries are handled correctly, because the sum runs over
+subsets of positions.}
 
 \item{p}{The side of the matrix.}
 }
@@ -22,7 +22,7 @@ of positions.}
 A symmetric \code{p} by \code{p} numeric matrix, with no dimnames.
 }
 \description{
-The derivative of \eqn{M = L L^\top} for one index tuple, from the
+Returns the derivative of \eqn{M = L L^\top} for one index tuple, from the
 derivatives of \eqn{L}.
 }
 \details{
@@ -30,7 +30,7 @@ The Leibniz rule distributes the differentiations of a product over its
 two factors in every way, so
 \deqn{\partial^T (L L^\top) = \sum_{S \subseteq T}
   (\partial^S L)(\partial^{T \setminus S} L)^\top,}
-the sum running over subsets of \emph{positions} in the tuple, which
+where the sum runs over subsets of \emph{positions} in the tuple, which
 handles a repeated index correctly without a multiplicity bookkeeping of
 its own.
 
@@ -43,12 +43,13 @@ asymmetry is of the size of the rounding error.
 The loop walks the \eqn{2^{|T|}} subsets through a bit mask, so the cost is
 \eqn{2^{\text{order}}} matrix products at worst, and far fewer in practice: a
 term whose \code{dfactor} returns \code{NULL} is skipped before the product is formed,
-and for both families that use this most terms do.
+and in the families that use this function \code{dfactor} returns \code{NULL} for most
+terms.
 }
 \seealso{
 \code{\link[=compose_order]{compose_order()}} for the other piece of shared arithmetic,
-\code{\link[=chol_dfactor]{chol_dfactor()}} and \code{\link[=corr_dfactor]{corr_dfactor()}} for the two \code{dfactor} arguments the
-package supplies, and \code{\link[=chol_leibniz]{chol_leibniz()}}, the compiled route that replaces
+\code{\link[=chol_dfactor]{chol_dfactor()}} and \code{\link[=corr_dfactor]{corr_dfactor()}} for the two \code{dfactor} arguments that
+the package supplies, and \code{\link[=chol_leibniz]{chol_leibniz()}}, the compiled route that replaces
 this for the log-Cholesky family.
 }
 \keyword{internal}

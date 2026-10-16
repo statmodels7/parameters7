@@ -17,8 +17,8 @@ A list of \code{choose(s@n_free + 2, 3)} symmetric matrices keyed as
 labeled \code{v1}, \code{v2}, ..., \code{v(md)} on both margins.
 }
 \description{
-Closed form: the inner parameter's third derivatives, each lifted into \eqn{m}
-identical blocks.
+The third derivative has closed form: the method lifts each of the inner
+parameter's third derivatives into \eqn{m} identical blocks.
 }
 \seealso{
 \code{\link[=param_d4.KronIdentityParam]{param_d4.KronIdentityParam()}} for the order above.

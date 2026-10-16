@@ -16,9 +16,10 @@ A list of \code{choose(s@n_free + 1, 2)} symmetric matrices keyed as
 \code{param_tuple_names(s)} and in that order.
 }
 \description{
-The second Frechet derivative: chains of two rotated directions contracted
-against three-point divided differences \eqn{e[\lambda_i, \lambda_j,
-\lambda_k]}, summed over both orderings of the two directions.
+Computes the second Frechet derivative: chains of two rotated directions are
+contracted against three-point divided differences \eqn{e[\lambda_i,
+\lambda_j, \lambda_k]}, and the contractions are summed over both orderings
+of the two directions.
 
 For the component in one free value twice the two orderings coincide;
 \code{\link[=mlog_contract]{mlog_contract()}} evaluates that ordering once and multiplies it by 2, which

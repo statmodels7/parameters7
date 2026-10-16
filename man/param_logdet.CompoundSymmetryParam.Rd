@@ -16,13 +16,14 @@ A single number, finite at every free vector: both eigenvalues are
 strictly positive inside the correlation's link bounds.
 }
 \description{
-Closed form, from the two distinct eigenvalues
-\eqn{\sigma^2\{1+(p-1)\rho\}} and \eqn{\sigma^2(1-\rho)}:
+Computes the log-determinant in closed form, from the two distinct
+eigenvalues \eqn{\sigma^2\{1+(p-1)\rho\}} and \eqn{\sigma^2(1-\rho)}:
 
 \deqn{\log|M| = p\log\sigma^2 + \log\{1+(p-1)\rho\} + (p-1)\log(1-\rho).}
 
-Three logarithms and no factorization, whatever \eqn{p} is, where the base
-method takes an \eqn{O(p^3)} eigendecomposition.
+The computation uses three logarithms and does not factorize a matrix,
+whatever \eqn{p} is, whereas the base method takes an \eqn{O(p^3)}
+eigendecomposition.
 
 The two correlation logarithms are evaluated from the second free value, as
 \eqn{\log p + \log\omega} and \eqn{\log(p/(p-1)) + \log(1-\omega)} with

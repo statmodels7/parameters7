@@ -16,7 +16,8 @@ A numeric vector of \code{choose(s@n_free + 2, 3)} entries, keyed as
 \code{param_tuple_names(s, 3)}.
 }
 \description{
-Closed form: \eqn{m} times the inner parameter's third-order vector.
+The third-order vector has closed form and equals \eqn{m} times the inner
+parameter's third-order vector.
 }
 \seealso{
 \code{\link[=param_d4logdet.KronIdentityParam]{param_d4logdet.KronIdentityParam()}} for the order above.

@@ -21,19 +21,19 @@ A numeric vector: at order 1, \code{s@n_free} values named by
 }
 \description{
 \code{param_dlogdet()}, \code{param_d2logdet()}, \code{param_d3logdet()} and
-\code{param_d4logdet()} for a \code{\link[=block_diag]{block_diag()}} parameter: the blocks' own, placed by
-owner, with every cross-block component exactly zero because the
-log-determinant is a sum over the blocks.
+\code{param_d4logdet()} return, for a \code{\link[=block_diag]{block_diag()}} parameter, the blocks' own
+derivatives placed by owner, with every cross-block component exactly zero
+because the log-determinant is a sum over the blocks.
 }
 \details{
-The four share \code{\link[=block_diag_logdet_derivs]{block_diag_logdet_derivs()}} and differ only in the order they
-pass. The first order names its result by \code{s@free_names}, one value per free
+The four share \code{\link[=block_diag_logdet_derivs]{block_diag_logdet_derivs()}} and differ only in the order that
+they pass. The first order names its result by \code{s@free_names}, one value per free
 value; the orders above it are keyed by tuple, as \code{\link[=param_tuple_names]{param_tuple_names()}}
 defines.
 
-A block's \strong{own} mixed components are in general not zero, this
-separability being over blocks and not over free values. Compare \code{\link[=ar1]{ar1()}}, where it is over free values
-and every mixed component vanishes.
+A block's own mixed components are in general not zero, because this
+separability is over blocks and not over free values. Compare \code{\link[=ar1]{ar1()}}, where
+the separability is over free values and every mixed component vanishes.
 }
 \seealso{
 \code{\link[=block_diag_logdet_derivs]{block_diag_logdet_derivs()}}, which assembles them, and

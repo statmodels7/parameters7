@@ -24,8 +24,8 @@ null directions instead of taking \code{log(0)}.
 \description{
 Returns \eqn{\log|M|} for a full-rank family, and the log
 pseudo-determinant, the sum of the logs of the non-zero eigenvalues, for a
-rank-deficient one. This is the quantity a Gaussian likelihood needs beside
-the quadratic form, and every matrix family answers it, in closed form where
+rank-deficient one. This is the quantity that a Gaussian likelihood needs beside
+the quadratic form, and every matrix family returns it, in closed form where
 one exists.
 
 One generic covers both cases because the quantity needed from either is the
@@ -36,28 +36,29 @@ pseudo-determinant, so the caller does not have to branch.
 \section{The sign belongs to the caller}{
 A Gaussian log-density written in the covariance carries
 \eqn{-\tfrac{1}{2}\log|\Sigma|} and one written in the precision carries
-\eqn{+\tfrac{1}{2}\log|\Omega|}. The parameter reports what the
-log-determinant is; the likelihood decides where it goes and with what sign.
-A parameter does not record which side it was built for: the consumer
-declares that, as \code{\link[=inverse_of]{inverse_of()}} does when the side is fixed.
+\eqn{+\tfrac{1}{2}\log|\Omega|}. The parameter returns the value of the
+log-determinant, and the caller sets where it enters the likelihood and with
+what sign. A parameter does not record the side for which it was built: the
+consumer declares that, as \code{\link[=inverse_of]{inverse_of()}} does when the side is fixed.
 }
 
 \section{Closed forms and the base method}{
 A closed form is usually far cheaper than a decomposition, and often simply
 linear. In the log-Cholesky parametrization
 \eqn{\log|M| = 2\sum_{i=1}^{p} \eta_i}, twice the sum of the first \eqn{p}
-free values, so no factorization happens at all. For the \code{\link[=ar1]{ar1()}} family it is
+free values, so the method computes the value without any factorization. For
+the \code{\link[=ar1]{ar1()}} family it is
 \eqn{p\,\eta_1 + (p-1)\log(1 - \rho^2)}, again in constant work whatever
 \eqn{p} is. The base method on \code{\link[=matrix_parameter]{matrix_parameter()}}, which a family written
 elsewhere inherits, takes an eigendecomposition and sums the logs of the
-largest \eqn{r} eigenvalues, \eqn{r} being the declared rank, at
+largest \eqn{r} eigenvalues, where \eqn{r} is the declared rank, at a cost of
 \eqn{O(p^3)}.
 }
 
 \section{Rank deficiency}{
 A deficient family returns the log pseudo-determinant, and its \code{null_basis}
-records which directions were left out. That is the quantity an improper prior
-contributes to a marginal likelihood: the penalized normal equations invert
+records which directions were left out. That is the quantity that an improper
+prior contributes to a marginal likelihood: the penalized normal equations invert
 \eqn{X^\top X + \lambda P}, which is non-singular even when \eqn{P} is not,
 so the deficiency never has to be inverted. \code{\link[=param_solve]{param_solve()}} and
 \code{\link[=param_factor]{param_factor()}} reject it for that reason.
@@ -65,13 +66,14 @@ so the deficiency never has to be inverted. \code{\link[=param_solve]{param_solv
 
 \section{Notation}{
 
-\eqn{M} is the matrix \code{\link[=param_value]{param_value()}} returns, \eqn{\Sigma} read as a
+\eqn{M} is the matrix that \code{\link[=param_value]{param_value()}} returns, \eqn{\Sigma} read as a
 covariance and \eqn{\Omega} read as a precision. \eqn{\eta} is the free
 vector and \eqn{p} the side of the matrix.
 }
 
 \examples{
-# It agrees with the eigenvalues, and is cheaper: no decomposition is taken.
+# It agrees with the eigenvalues, and is cheaper because it takes no
+# decomposition.
 s <- log_cholesky(3)
 eta <- c(0.1, -0.2, 0.3, 0.5, -0.4, 0.2)
 M <- param_value(s, eta)
@@ -80,15 +82,16 @@ c(param_logdet(s, eta), determinant(M, logarithm = TRUE)$modulus)
 # In this parametrization it is linear: twice the sum of the first p entries.
 all.equal(param_logdet(s, eta), 2 * sum(eta[1:3]))
 
-# An AR(1) covariance, where it is not linear.
+# For an AR(1) covariance the log-determinant is not linear.
 a <- ar1(4)
 a@free_names
 eta_a <- c(0.3, 0.8)
 rho <- tanh(eta_a[2])
 all.equal(param_logdet(a, eta_a), 4 * eta_a[1] + 3 * log(1 - rho^2))
 
-# A rank-deficient precision: the pseudo-determinant over the four non-zero
-# eigenvalues of a second-difference penalty on six coefficients.
+# For a rank-deficient precision, the pseudo-determinant is taken over the
+# four non-zero eigenvalues of a second-difference penalty on six
+# coefficients.
 P <- crossprod(diff(diag(6), differences = 2))
 r <- scaled_matrix(P)
 ev <- eigen(P, symmetric = TRUE, only.values = TRUE)$values
@@ -102,6 +105,6 @@ param_logdet(r, 1) - param_logdet(r, 0)
 \seealso{
 \code{\link[=param_dlogdet]{param_dlogdet()}}, \code{\link[=param_d2logdet]{param_d2logdet()}}, \code{\link[=param_d3logdet]{param_d3logdet()}} and
 \code{\link[=param_d4logdet]{param_d4logdet()}} for its derivatives, \code{\link[=param_solve]{param_solve()}} for the quadratic
-form that goes with it, and \code{\link[=param_null_basis]{param_null_basis()}} for the directions a
+form that goes with it, and \code{\link[=param_null_basis]{param_null_basis()}} for the directions that a
 deficient family omits.
 }

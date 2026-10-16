@@ -20,19 +20,19 @@ coefficients that they produce. It declares more quantities than it has free
 values, as \code{\link[=simplex]{simplex()}} does; for this family the reason is the third group.
 }
 \section{Why the coefficients are declared}{
-\eqn{\phi_1, \dots, \phi_q} are what an autoregression is reported in, and they
-appear nowhere in the covariance the fit prints, nor among the free values,
-which are partial autocorrelations. A partial autocorrelation reported in
+An autoregression is reported in terms of \eqn{\phi_1, \dots, \phi_q}. These
+coefficients do not appear in the covariance that the fit prints or among the
+free values, which are partial autocorrelations. A partial autocorrelation reported in
 place of a coefficient is a different number: at \eqn{q = 2} with free values
 \eqn{(0, 0.9, -0.4)} the coefficients are \eqn{(0.988, -0.380)} while the
 partial autocorrelations are \eqn{(0.716, -0.380)}, so \eqn{\phi_1} and
 \eqn{\rho_1} differ in the first decimal. At \eqn{q = 1} they coincide exactly,
-the first partial autocorrelation being the AR(1) coefficient, so the two
-differ only for \eqn{q > 1}.
+because the first partial autocorrelation is the AR(1) coefficient, so the
+two differ only for \eqn{q > 1}.
 }
 
 \section{The Jacobian is not diagonal}{
-A coefficient reads the \strong{whole} chart, so its row of the Jacobian is dense in
+A coefficient reads the whole chart, so its row of the Jacobian is dense in
 the partial autocorrelation columns. Those derivatives come out of the
 Levinson-Durbin recursion, through which the family already propagates
 derivative arrays, so they are read off the first-order block instead of
@@ -47,8 +47,9 @@ roots of \eqn{1 - \phi_1 z - \cdots - \phi_q z^q} lying outside the unit
 circle, a condition that a scalar transformation of a single coefficient
 cannot express. A set that respected the constraint would not be an
 interval, so the identity scale is used and a reported coefficient interval
-may extend outside the stationary region. The partial autocorrelations, whose chart
-\strong{is} a box, get \code{"atanh"} and stay inside it.
+may extend outside the stationary region. The intervals of the partial
+autocorrelations, whose chart is a box, are built on the \code{"atanh"} scale and
+stay inside it.
 }
 
 \keyword{internal}

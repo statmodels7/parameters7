@@ -17,8 +17,8 @@ A list of \code{choose(s@n_free + 3, 4)} symmetric matrices keyed as
 labeled \code{v1}, \code{v2}, ..., \code{v(md)} on both margins.
 }
 \description{
-Closed form: the inner parameter's fourth derivatives, each lifted into \eqn{m}
-identical blocks. Each component is a dense matrix of side \eqn{md}, so the
+The fourth derivative has closed form: the method lifts each of the inner
+parameter's fourth derivatives into \eqn{m} identical blocks. Each component is a dense matrix of side \eqn{md}, so the
 memory grows with \eqn{(md)^2} for every component.
 }
 \seealso{

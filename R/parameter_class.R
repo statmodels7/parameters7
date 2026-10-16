@@ -8,8 +8,8 @@
 #' records how many free values the map consumes, what each of them is
 #' called, and whatever the family needs in order to evaluate itself. Because
 #' the domain is the whole of \eqn{\mathbb{R}^{d}}, an optimizer may move
-#' \eqn{\eta} anywhere and every point it visits still maps to a valid value,
-#' so no constraint has to be policed during a fit.
+#' \eqn{\eta} anywhere and every point that it visits still maps to a valid
+#' value, so the fit does not have to enforce any constraint.
 #'
 #' The class is not meant to be instantiated directly. Call a
 #' constructor: [log_cholesky()] for an unstructured covariance, [ar1()] or
@@ -30,7 +30,8 @@
 #' [param_value()] is the one compulsory method. Given it, a subclass inherits
 #' [param_d1()], [param_d2()], [param_d3()] and [param_d4()], each a product
 #' stencil applied to the map itself. A closed form registered later replaces
-#' the inherited numerical method through dispatch, and no caller changes.
+#' the inherited numerical method through dispatch, and every caller remains
+#' unchanged.
 #'
 #' The inverse map and the matrix quantities are not supplied in this way:
 #'
@@ -53,24 +54,23 @@
 #' quantity, as the below-diagonal entries `"L2.1"` of a Cholesky factor are.
 #'
 #' A consumer outside the family flattens the free vector into scalar
-#' parameters carrying identity links, so a label promising
+#' parameters carrying identity links, so a label that names
 #' a bounded quantity would report a number that is not on that scale: a free
 #' value of 1.4 called `rho` reads as a correlation of 1.4, while called
 #' `z_rho` it reads as the correlation \eqn{\tanh(1.4) = 0.885}.
 #'
 #' @section Notation:
-#' \eqn{\eta} is the **free vector**, the point on the unconstrained scale that
-#' an optimizer moves, and \eqn{d} its length, the object's `n_free`. Note that
-#' \eqn{\eta} means a linear predictor elsewhere in the toolkit; here it is
+#' \eqn{\eta} is the free vector, the point on the unconstrained scale that
+#' an optimizer moves, and \eqn{d} its length, the object's `n_free`. In other
+#' parts of the toolkit \eqn{\eta} means a linear predictor; here it is
 #' always the free vector of a parametrization. \eqn{p} is the side of the
-#' matrix a matrix family produces.
+#' matrix that a matrix family produces.
 #'
 #' @param param_name A single character string naming the family, used in the
 #'   error messages that the validators raise and in the object's `print`
-#'   output.
-#'   `"log_cholesky"`, `"ar1"` and so on.
+#'   output. Examples are `"log_cholesky"` and `"ar1"`.
 #' @param n_free The length \eqn{d} of the free vector: a single non-negative
-#'   integer. Zero is legal and describes a family with nothing to estimate.
+#'   integer. Zero is allowed and describes a family with nothing to estimate.
 #'   The validator rejects a vector, a negative value, or a length that
 #'   disagrees with `free_names`.
 #' @param free_names A character vector of length `n_free`, one label per free
@@ -114,7 +114,7 @@
 #' s <- log_cholesky(3)
 #' S7::S7_inherits(s, parameter)
 #'
-#' # The four properties that the class itself holds.
+#' # The class itself holds four properties.
 #' s@param_name
 #' s@n_free
 #' s@free_names
@@ -177,7 +177,7 @@ parameter <- S7::new_class(
 #' Every matrix family in the package returns a subclass of it:
 #' [log_cholesky()], [matrix_log()], [diagonal_matrix()], [scalar_matrix()],
 #' [correlation_matrix()], [compound_symmetry()], [ar1()], [autoregressive()],
-#' [ar1_inv()], [autoregressive_inv()], [scaled_matrix()] and the five
+#' [ar1_inv()], [autoregressive_inv()], [scaled_matrix()] and the
 #' compositions [kron_identity()], [block_diag()], [dr_prod()], [sum_struct()]
 #' and [inverse_of()].
 #'
@@ -185,9 +185,9 @@ parameter <- S7::new_class(
 #' # Rank and null space are fixed at construction
 #'
 #' They are properties of the family, the same at every point \eqn{\eta}.
-#' Scaling a matrix by a positive number leaves its null space alone, and the
-#' null space of a sum of positive semidefinite matrices is the intersection of
-#' theirs, so no free value moves it. Recording them once at construction is
+#' Scaling a matrix by a positive number leaves its null space unchanged, and
+#' the null space of a sum of positive semidefinite matrices is the intersection
+#' of theirs, so the null space does not depend on any free value. Recording them once at construction is
 #' exact, and it is also the only stable way to obtain them: counting the small
 #' eigenvalues of an assembled matrix is not scale invariant, and reads a
 #' component whose weight is small as a null direction. [param_null_basis()]
@@ -249,7 +249,7 @@ parameter <- S7::new_class(
 #' c(parameter = S7::S7_inherits(s, parameter),
 #'   matrix_parameter = S7::S7_inherits(s, matrix_parameter))
 #'
-#' # The three properties that this branch adds.
+#' # This branch adds three properties.
 #' c(dimension = s@dimension, rank = s@rank, null_columns = ncol(s@null_basis))
 #'
 #' # Belonging to this branch is what gives the family a log-determinant, and
@@ -301,9 +301,10 @@ matrix_parameter <- S7::new_class(
 #' @description
 #' Checks the matrix side that every matrix family's constructor takes, and
 #' returns it coerced to integer so the caller can store it in the class's
-#' integer property. Called by [log_cholesky()], [matrix_log()],
-#' [diagonal_matrix()], [scalar_matrix()], [correlation_matrix()],
-#' [compound_symmetry()], [ar1()], [autoregressive()] and [dr_prod()].
+#' integer property. The function is called by [log_cholesky()],
+#' [matrix_log()], [diagonal_matrix()], [scalar_matrix()],
+#' [correlation_matrix()], [compound_symmetry()], [ar1()], [autoregressive()]
+#' and [dr_prod()].
 #'
 #' @param dimension The side of the matrix. Must be a single finite number, at
 #'   least 1, equal to its own `round()`. `0`, `2.5`, `c(1, 2)`, `"3"`, `Inf`
@@ -326,10 +327,10 @@ check_param_args <- function(dimension) {
 #'
 #' @description
 #' Checks that `eta` is a finite numeric vector of the length that the
-#' parameter declares, and returns it with its names stripped. Called before
-#' dispatch in the body of every generic that takes `eta`, so a parameter
-#' written outside the package
-#' inherits the check without doing anything.
+#' parameter declares, and returns it with its names stripped. The function is
+#' called before dispatch in the body of every generic that takes `eta`, so a
+#' parameter written outside the package inherits the check without further
+#' code.
 #'
 #' @details
 #' Three conditions are checked, each with its own message. A non-numeric `eta`
@@ -337,9 +338,9 @@ check_param_args <- function(dimension) {
 #' both counts and listing the family's `free_names`, so a caller who has
 #' mismatched two parametrizations can see which is which; and any `NA`, `NaN`
 #' or infinite entry signals `'eta' must be finite: the free scale has no
-#' boundary to reach.` The last message states the reason a non-finite free value is a
-#' caller error: the unconstrained scale has no edge, so an infinity there is a
-#' runaway rather than a limit reached.
+#' boundary to reach.` The last message states why a non-finite free value is a
+#' caller error: the unconstrained scale has no edge, so an infinite value
+#' indicates a runaway and not a limit that has been reached.
 #'
 #' Names are stripped for the same reason that `align_theta()` strips them in
 #' \pkg{distributions7}. A value that has been through a link comes back
@@ -376,8 +377,8 @@ check_eta <- function(s, eta) {
 #'
 #' @description
 #' Checks that `m` is a square symmetric numeric matrix of the parameter's
-#' dimension, and returns it symmetrized. Called before dispatch in the body
-#' of the [param_free()] generic, on the matrix to be inverted, whenever the
+#' dimension, and returns it symmetrized. The [param_free()] generic calls it
+#' before dispatch, in its body, on the matrix to be inverted, whenever the
 #' parameter inherits from [matrix_parameter()].
 #'
 #' @details
@@ -427,24 +428,25 @@ check_matrix <- function(s, m, tol = 1e-8) {
 #'
 #' @description
 #' Applies the dimension labels that every matrix produced by a parameter carries:
-#' `"v1"`, `"v2"`, ..., `"vp"` on both margins, `p` being the parameter's
-#' `dimension`. One convention across the families, so a consumer can read a
-#' printed covariance without knowing which parametrization built it.
+#' `"v1"`, `"v2"`, ..., `"vp"` on both margins, where `p` is the parameter's
+#' `dimension`. The convention is the same across the families, so a consumer
+#' can read a printed covariance without identifying which parametrization
+#' built it.
 #'
 #' It covers the value and the four derivative orders. A factor and a solve are
-#' left as each family produces them, the families disagreeing there, and
-#' [transition_matrix()] labels its own margins `"s1"`, `"s2"`, ..., its rows
-#' being states rather than variables. [check_parameter()]'s shapes-and-names
-#' check reads the margins of `param_value()`, `param_d1()` and `param_d2()`,
-#' so the convention is tested rather than only stated.
+#' left as each family produces them, because the families differ there, and
+#' [transition_matrix()] labels its own margins `"s1"`, `"s2"`, ..., because
+#' its rows are states rather than variables. [check_parameter()]'s
+#' shapes-and-names check reads the margins of `param_value()`, `param_d1()` and
+#' `param_d2()`, so the convention is tested.
 #'
 #' @param m A numeric matrix, `p` by `p`. Not checked; the callers are the
 #'   package's own [param_value()] methods and the helpers assembling the
 #'   derivative arrays.
 #' @param s A [parameter()] object, whose `dimension` supplies `p`.
 #'
-#' @return `m`, with `dimnames` set to `list(v1..vp, v1..vp)`. Any dimnames it
-#'   arrived with are replaced.
+#' @return `m`, whose `dimnames` are set to `list(v1..vp, v1..vp)`. Any dimnames
+#'   that `m` had on input are replaced.
 #'
 #' @keywords internal
 name_dims <- function(m, s) {
@@ -485,25 +487,26 @@ name_dims <- function(m, s) {
 #' # The scaling
 #'
 #' Each component is divided by its largest absolute entry before stacking, so
-#' that a component contributed in different units still gets an equal vote. A
+#' that a component expressed in different units carries the same weight. A
 #' component that is identically zero is passed through as zero and contributes
 #' nothing, which is correct: its null space is the whole space.
 #'
 #' # Cost
 #'
-#' One singular value decomposition of an \eqn{(kp) \times p} matrix for
-#' \eqn{k} components of side \eqn{p}, so \eqn{O(k p^3)}. It runs once per
+#' The cost is one singular value decomposition of an \eqn{(kp) \times p}
+#' matrix for \eqn{k} components of side \eqn{p}, so \eqn{O(k p^3)}. It runs once per
 #' constructed parameter and never inside a fit.
 #'
 #' @section Notation:
-#' \eqn{p} is the side of the matrices and \eqn{k} their number. The **null
-#' basis** is a matrix whose columns span \eqn{\{v : M v = 0 \text{ for every }
-#' M\}}, and the **rank** is \eqn{p} minus the dimension of that space.
+#' \eqn{p} is the side of the matrices and \eqn{k} their number. The null
+#' basis is a matrix whose columns span \eqn{\{v : M v = 0 \text{ for every }
+#' M\}}, and the rank is \eqn{p} minus the dimension of that space.
 #'
 #' @param mats A list of symmetric numeric matrices, all of the same side, or a
 #'   single matrix, which is wrapped in a list. An empty list signals the error
-#'   `'mats' must not be empty.`; the matrices themselves are not checked for symmetry
-#'   or definiteness, the callers being the package's own constructors.
+#'   `'mats' must not be empty.`; the matrices themselves are not checked for
+#'   symmetry or definiteness, because the callers are the package's own
+#'   constructors.
 #' @param tol The relative tolerance below which a singular value counts as
 #'   zero: a singular value \eqn{s_j} is null when
 #'   \eqn{s_j \le \mathrm{tol} \cdot \max_i s_i}. Defaults to `1e-10`, well above
@@ -528,8 +531,8 @@ name_dims <- function(m, s) {
 #'   accept a rank-deficient matrix of their own.
 #'
 #' @examples
-#' # A second-difference penalty on six coefficients has rank 4, its null space
-#' # being the constants and the straight lines.
+#' # A second-difference penalty on six coefficients has rank 4, and its null
+#' # space is the constants and the straight lines.
 #' d <- diff(diag(6), differences = 2)
 #' nb <- param_null_basis(crossprod(d))
 #' nb$rank
@@ -541,8 +544,8 @@ name_dims <- function(m, s) {
 #' vapply(list(rep(1, 6), 1:6, (1:6)^2),
 #'        function(v) sqrt(sum((v - proj(v))^2)) / sqrt(sum(v^2)), numeric(1))
 #'
-#' # Why the components are taken separately. Two marginal penalties on a
-#' # 4 x 8 tensor product: the pair has rank 28 out of 32.
+#' # This shows why the components are taken separately. The two marginal
+#' # penalties on a 4 x 8 tensor product together have rank 28 out of 32.
 #' P <- function(m) crossprod(diff(diag(m), differences = 2))
 #' P1 <- kronecker(P(4), diag(8))
 #' P2 <- kronecker(diag(4), P(8))
@@ -585,7 +588,7 @@ param_null_basis <- function(mats, tol = 1e-10) {
 #' No Null Space
 #'
 #' @description
-#' The empty basis a full-rank family declares. Every family whose value is
+#' Returns the empty basis that a full-rank family declares. Every family whose value is
 #' positive definite at every free vector passes this, or an equal empty
 #' matrix, to its [matrix_parameter()] constructor. The validator's shape rule,
 #' `dimension` by `dimension - rank`, requires exactly this when `rank` is

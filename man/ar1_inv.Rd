@@ -18,17 +18,18 @@ An object of class \code{\link[=Ar1InvParam]{Ar1InvParam()}}, with \code{n_free}
 }
 \description{
 Returns the family whose value is \eqn{\Sigma(\eta)^{-1}} for
-\eqn{\Sigma} an \code{\link[=ar1]{ar1()}} matrix: the \strong{tridiagonal} precision of a
+\eqn{\Sigma} an \code{\link[=ar1]{ar1()}} matrix: the tridiagonal precision of a
 first-order autoregression. It carries \code{\link[=ar1]{ar1()}}'s free vector unchanged, so
 its two coordinates are the scale and the correlation of the process whose
 precision this is.
 }
 \section{Which side is which}{
-\code{\link[=ar1]{ar1()}} is the AR(1) \strong{pattern}, \eqn{\sigma^2\rho^{|i-j|}}. A family that
-takes a matrix parameter decides what it does with it, so
-\code{mvgaussian1_distrib(p, ar1(p))} is the process whose covariance is AR(1)
-and \code{mvgaussian2_distrib(p, ar1(p))} the model whose precision has those
-entries, which is a different and legitimate model. This family is the third
+\code{\link[=ar1]{ar1()}} is the AR(1) pattern, \eqn{\sigma^2\rho^{|i-j|}}. The family that
+takes a matrix parameter determines whether the matrix is a covariance or a
+precision, so \code{mvgaussian1_distrib(p, ar1(p))} is the process whose
+covariance is AR(1) and \code{mvgaussian2_distrib(p, ar1(p))} the model whose
+precision has those entries, which is a different and legitimate model.
+This family is the third
 object in that picture: the matrix whose inverse is an AR(1), so
 \code{mvgaussian2_distrib(p, ar1_inv(p))} is again the AR(1) process, written on
 the precision side.
@@ -49,10 +50,10 @@ factorization, so there is one copy of it in the package.
 }
 
 \section{The derivatives}{
-The value is a \strong{product} of a function of the first free value and a
+The value is a product of a function of the first free value and a
 matrix function of the second, so a component with \eqn{a} scale indices and
-\eqn{b} correlation indices is \eqn{(\partial^a\tau)(\partial^b G)} and no
-mixed expansion is needed. The scale factor is the reciprocal of the link's
+\eqn{b} correlation indices is \eqn{(\partial^a\tau)(\partial^b G)}, and the
+derivative does not require a mixed expansion. The scale factor is the reciprocal of the link's
 inverse, chained through \eqn{x\mapsto x^{-1}}. Under the rhobit link,
 with \eqn{\rho = \tanh z}, the pattern's three distinct entries are
 \eqn{G_{11} = w = \cosh^2 z}, \eqn{G_{ii} = 2w - 1 = \cosh 2z} and
@@ -63,21 +64,21 @@ are written out directly,
   w^{(k)} = 2^{k-1}\cosh 2z \;(k \text{ even}),}
 
 with \eqn{G_{ii}^{(k)} = 2w^{(k)}} above order zero and
-\eqn{G_{i,i\pm1}^{(k)} = -\tfrac{1}{2}w^{(k+1)}}. No difference
-\eqn{1 - \rho^2} is formed, so the derivatives keep their accuracy where
-\eqn{\rho} rounds to \eqn{-1} or 1.
+\eqn{G_{i,i\pm1}^{(k)} = -\tfrac{1}{2}w^{(k+1)}}. The difference
+\eqn{1 - \rho^2} is never formed, so the derivatives keep their accuracy
+where \eqn{\rho} rounds to \eqn{-1} or 1.
 
-This is what the family adds over \code{inverse_of(ar1(p))}, which reaches the
-same numbers through the ordered-block-partition sum. There a fourth-order
-component is a sum of 75 products, one for each ordered set partition of its
+This family differs from \code{inverse_of(ar1(p))}, which reaches the same
+numbers through the ordered-block-partition sum, in that it writes the
+derivatives out. In that sum a fourth-order component is a sum of 75 products, one for each ordered set partition of its
 four positions, each of three to nine matrices; here it is one elementwise
 product. The two routes agree to rounding.
 }
 
 \section{The log-determinant}{
 \eqn{\log\lvert\Omega\rvert = -\log\lvert\Sigma\rvert}, so the value and all
-four orders are \code{\link[=ar1]{ar1()}}'s negated, and the closed form
-\eqn{p\log\sigma^2 + (p-1)\log(1-\rho^2)} is what is negated.
+four orders are \code{\link[=ar1]{ar1()}}'s negated, and for \code{\link[=ar1]{ar1()}} the log-determinant is
+the closed form \eqn{p\log\sigma^2 + (p-1)\log(1-\rho^2)}.
 }
 
 \section{Notation}{
@@ -95,7 +96,7 @@ eta <- c(log(2), atanh(0.6))
 # entry beyond the first off-diagonal.
 round(param_value(s, eta), 4)
 
-# And it is exactly the inverse of the AR(1) it names.
+# And it is exactly the inverse of the AR(1) that it names.
 max(abs(param_value(s, eta) \%*\% param_value(ar1(5), eta) - diag(5)))
 
 # The written-out derivatives agree with the general composition's.
@@ -104,6 +105,6 @@ max(abs(unlist(param_d4(s, eta)) - unlist(param_d4(g, eta))))
 
 }
 \seealso{
-\code{\link[=ar1]{ar1()}} for the family this inverts, \code{\link[=autoregressive_inv]{autoregressive_inv()}} for the
+\code{\link[=ar1]{ar1()}} for the family that this inverts, \code{\link[=autoregressive_inv]{autoregressive_inv()}} for the
 order-\eqn{q} case, and \code{\link[=inverse_of]{inverse_of()}} for any other family's inverse.
 }

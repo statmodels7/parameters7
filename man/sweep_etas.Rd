@@ -2,7 +2,7 @@
 % Please edit documentation in R/check_parameter.R
 \name{sweep_etas}
 \alias{sweep_etas}
-\title{Free Vectors to Sweep a Parameter Over}
+\title{Free Vectors for Sweeping a Parameter}
 \usage{
 sweep_etas(s, n = 4L)
 }

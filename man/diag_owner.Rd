@@ -2,7 +2,7 @@
 % Please edit documentation in R/diagonal_matrix.R
 \name{diag_owner}
 \alias{diag_owner}
-\title{The Free Value Each Diagonal Entry Belongs To}
+\title{The Free Value to Which Each Diagonal Entry Belongs}
 \usage{
 diag_owner(s)
 }

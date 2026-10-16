@@ -9,8 +9,9 @@ param_null_basis(mats, tol = 1e-10)
 \arguments{
 \item{mats}{A list of symmetric numeric matrices, all of the same side, or a
 single matrix, which is wrapped in a list. An empty list signals the error
-\verb{'mats' must not be empty.}; the matrices themselves are not checked for symmetry
-or definiteness, the callers being the package's own constructors.}
+\verb{'mats' must not be empty.}; the matrices themselves are not checked for
+symmetry or definiteness, because the callers are the package's own
+constructors.}
 
 \item{tol}{The relative tolerance below which a singular value counts as
 zero: a singular value \eqn{s_j} is null when
@@ -59,27 +60,27 @@ fitted models.
 
 \section{The scaling}{
 Each component is divided by its largest absolute entry before stacking, so
-that a component contributed in different units still gets an equal vote. A
+that a component expressed in different units carries the same weight. A
 component that is identically zero is passed through as zero and contributes
 nothing, which is correct: its null space is the whole space.
 }
 
 \section{Cost}{
-One singular value decomposition of an \eqn{(kp) \times p} matrix for
-\eqn{k} components of side \eqn{p}, so \eqn{O(k p^3)}. It runs once per
+The cost is one singular value decomposition of an \eqn{(kp) \times p}
+matrix for \eqn{k} components of side \eqn{p}, so \eqn{O(k p^3)}. It runs once per
 constructed parameter and never inside a fit.
 }
 
 \section{Notation}{
 
-\eqn{p} is the side of the matrices and \eqn{k} their number. The \strong{null
-basis} is a matrix whose columns span \eqn{\{v : M v = 0 \text{ for every }
-M\}}, and the \strong{rank} is \eqn{p} minus the dimension of that space.
+\eqn{p} is the side of the matrices and \eqn{k} their number. The null
+basis is a matrix whose columns span \eqn{\{v : M v = 0 \text{ for every }
+M\}}, and the rank is \eqn{p} minus the dimension of that space.
 }
 
 \examples{
-# A second-difference penalty on six coefficients has rank 4, its null space
-# being the constants and the straight lines.
+# A second-difference penalty on six coefficients has rank 4, and its null
+# space is the constants and the straight lines.
 d <- diff(diag(6), differences = 2)
 nb <- param_null_basis(crossprod(d))
 nb$rank
@@ -91,8 +92,8 @@ proj <- function(v) nb$null_basis \%*\% (t(nb$null_basis) \%*\% v)
 vapply(list(rep(1, 6), 1:6, (1:6)^2),
        function(v) sqrt(sum((v - proj(v))^2)) / sqrt(sum(v^2)), numeric(1))
 
-# Why the components are taken separately. Two marginal penalties on a
-# 4 x 8 tensor product: the pair has rank 28 out of 32.
+# This shows why the components are taken separately. The two marginal
+# penalties on a 4 x 8 tensor product together have rank 28 out of 32.
 P <- function(m) crossprod(diff(diag(m), differences = 2))
 P1 <- kronecker(P(4), diag(8))
 P2 <- kronecker(diag(4), P(8))

@@ -44,8 +44,8 @@ An object of class \code{InverseParam}, a subclass of
 \code{inner}, the family being inverted.
 }
 \description{
-The S7 class of the family whose value is the inverse of another family's.
-\code{\link[=inverse_of]{inverse_of()}} builds one. It carries the inner family's free vector
+\code{InverseParam} is the S7 class of the family whose value is the inverse of
+another family's. \code{\link[=inverse_of]{inverse_of()}} builds one. It carries the inner family's free vector
 unchanged, so its coordinates are read as those of the matrix that it
 inverts.
 }

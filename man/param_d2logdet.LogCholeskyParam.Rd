@@ -16,13 +16,14 @@ A numeric vector of \code{choose(s@n_free + 1, 2)} zeros, keyed as
 \code{param_tuple_names(s)}.
 }
 \description{
-Closed form, and identically zero: \eqn{\log|M| = 2\sum_i \eta_i} is linear in
-the free vector, so its second derivative vanishes at every \eqn{\eta}. The
-zeros are exact, so a consumer can drop the term entirely instead of
-carrying small numbers through a contraction.
+Computes the second derivatives in closed form, and they are identically
+zero: \eqn{\log|M| = 2\sum_i \eta_i} is linear in the free vector, so its
+second derivative vanishes at every \eqn{\eta}. The zeros are exact, so a
+consumer can drop the term entirely instead of carrying small numbers
+through a contraction.
 
-A comparison of a general log-determinant Hessian against a numerical
-reference therefore compares two zeros on \code{log_cholesky()}. \code{\link[=ar1]{ar1()}},
+Therefore, when a general check compares the log-determinant Hessian with a
+numerical reference on \code{log_cholesky()}, both sides are zero. \code{\link[=ar1]{ar1()}},
 \code{\link[=compound_symmetry]{compound_symmetry()}} and \code{\link[=correlation_matrix]{correlation_matrix()}} are families where this
 order is not zero.
 }

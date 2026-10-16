@@ -20,7 +20,7 @@ logarithms of the diagonal entries, which for a diagonal matrix is the
 log-determinant exactly. For a \code{\link[=scalar_matrix]{scalar_matrix()}} the one entry is counted
 \eqn{p} times, giving \eqn{p \log h(\eta_1)}.
 
-Under the \strong{log} link \eqn{\log h(\eta) = \eta}, so the result is \code{sum(eta)}
+Under the log link \eqn{\log h(\eta) = \eta}, so the result is \code{sum(eta)}
 for a \code{\link[=diagonal_matrix]{diagonal_matrix()}} and \code{dimension * eta} for a \code{\link[=scalar_matrix]{scalar_matrix()}}, linear
 in the free vector as long as the link's inverse does not reach the floor
 that \pkg{linkfunctions7} applies to it; under another link it is not

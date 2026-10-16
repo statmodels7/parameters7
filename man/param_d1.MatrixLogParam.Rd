@@ -16,10 +16,10 @@ A list of \code{s@n_free} symmetric matrices named by \code{s@free_names}, each
 \code{s@dimension} by \code{s@dimension}.
 }
 \description{
-The Frechet derivative of the matrix exponential, by Daleckii-Krein: rotate
-the basis direction \eqn{E_k} by the eigenvectors of \eqn{S}, weight it
-entrywise by the two-point divided differences
-\eqn{e[\lambda_i, \lambda_j]}, and rotate back. Exact, with no
+Returns the Frechet derivative of the matrix exponential, by
+Daleckii-Krein: rotate the basis direction \eqn{E_k} by the eigenvectors of
+\eqn{S}, weight it entrywise by the two-point divided differences
+\eqn{e[\lambda_i, \lambda_j]}, and rotate back. The result is exact, without
 differencing.
 
 The derivative \eqn{\partial_k M} differs from \eqn{E_k \exp(S)}, because the

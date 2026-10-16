@@ -16,10 +16,10 @@ A numeric vector with one entry keyed as \code{param_tuple_names(s)}, or
 empty for a fixed parameter.
 }
 \description{
-Closed form: \eqn{r\{h''/h - (h'/h)^2\}}, the rank times the second derivative
-of \eqn{\log h}. Under the default log link it is exactly zero, the log
-pseudo-determinant being \eqn{r\eta + \log|P|_+} and so linear in the free
-value. Under a link with curvature it is not.
+The Hessian has closed form, \eqn{r\{h''/h - (h'/h)^2\}}, which is the rank
+times the second derivative of \eqn{\log h}. Under the default log link it is
+exactly zero, because the log pseudo-determinant is \eqn{r\eta + \log|P|_+}
+and so is linear in the free value. Under a link with curvature it is not.
 }
 \seealso{
 \code{\link[=param_dlogdet.ScaledMatrixParam]{param_dlogdet.ScaledMatrixParam()}} for the order below, and

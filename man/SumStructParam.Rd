@@ -45,15 +45,16 @@ An object of class \code{SumStructParam}, a subclass of
 \code{rank} is fixed at construction from their shared null space.
 }
 \description{
-The S7 class of a matrix parameter that is a sum of \strong{fixed} symmetric
-positive semidefinite matrices, each carried by one positive free value.
-\code{\link[=sum_struct]{sum_struct()}} builds one.
+\code{SumStructParam} is the S7 class of a matrix parameter that is a sum of fixed
+symmetric positive semidefinite matrices, each of which is carried by one
+positive free value. \code{\link[=sum_struct]{sum_struct()}} builds one.
 
 It is the variance-components covariance. Its free values are weights:
 \code{n_free} is the number of components, whatever the dimension.
 }
 \examples{
-# One free value per component, whatever the side of the matrices.
+# The parameter has one free value per component, whatever the side of the
+# matrices.
 s <- sum_struct(list(between = matrix(1, 3, 3), within = diag(3)))
 c(dimension = s@dimension, n_free = s@n_free)
 s@free_names

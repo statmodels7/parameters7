@@ -12,7 +12,8 @@ and \code{keep}.}
 }
 \value{
 A symmetric numeric matrix of the same side as \code{sp$vectors}. When
-\code{keep} is all \code{FALSE}, which happens only at rank 0, the zero matrix.
+\code{keep} is all \code{FALSE}, which happens only at rank 0, the result is the zero
+matrix.
 }
 \description{
 Builds the pseudo-inverse of \eqn{M(\eta)} as

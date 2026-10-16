@@ -46,9 +46,10 @@ the log pseudo-determinant of \eqn{P} computed once at construction.
 \code{n_free} is 1, or 0 when \code{link} is \code{NULL}.
 }
 \description{
-The S7 class of a fixed symmetric positive semidefinite matrix \eqn{P} carried
-by a single positive scale, \eqn{M(\eta) = h(\eta) P}. It is the family
-through which a \strong{rank-deficient} matrix usually enters the package
+\code{ScaledMatrixParam} is the S7 class of a fixed symmetric positive
+semidefinite matrix \eqn{P} carried by a single positive scale,
+\eqn{M(\eta) = h(\eta) P}. It is the family
+through which a rank-deficient matrix usually enters the package
 (\code{\link[=sum_struct]{sum_struct()}} also accepts a deficient sum): \eqn{P} may be a difference
 penalty or a basis Gram matrix with a genuine null space, and the class
 records that rank and null basis at construction.
@@ -67,7 +68,7 @@ c(S7::S7_inherits(r, ScaledMatrixParam), rank = r@rank, n_free = r@n_free)
 q <- scaled_matrix(crossprod(diff(diag(6), differences = 2)))
 c(dimension = q@dimension, rank = q@rank, null = ncol(q@null_basis))
 
-# With no link there is nothing to estimate.
+# With no link the family has no free value to estimate.
 f <- scaled_matrix(diag(3), link = NULL)
 c(n_free = f@n_free, name = f@param_name)
 

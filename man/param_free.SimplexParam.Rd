@@ -19,18 +19,18 @@ Returns the additive log-ratio, \eqn{\eta_a = \log(\pi_a/\pi_K)}, exact and a
 true inverse of \code{\link[=param_value.SimplexParam]{param_value.SimplexParam()}}, up to rounding.
 }
 \details{
-Three rejections, each with its own message. An argument that is not a
-numeric vector of length \eqn{K} is rejected. A vector with a non-positive or
-missing entry is outside the \strong{open} simplex, and \eqn{\log 0} is not
-finite. A vector that does not sum to 1 is not a probability vector, and it
-is \strong{not renormalized}, because a silent repair would hide an error in the
-caller.
+The method signals three errors, each with its own message. An argument that
+is not a numeric vector of length \eqn{K} is rejected. A vector with a
+non-positive or missing entry is outside the open simplex, and \eqn{\log 0}
+is not finite. A vector that does not sum to 1 is not a probability vector,
+and it is not renormalized, because a silent repair would hide an error in
+the caller.
 
-The second rejection is the one that a fit meets: a large positive free
-value makes \code{\link[=simplex_point]{simplex_point()}} return an exact 0 in the reference category, so
-a value produced at the boundary cannot be inverted back.
+Of these rejections, a fit meets the second. A large positive free value makes
+\code{\link[=simplex_point]{simplex_point()}} return an exact 0 in the reference category, so a value
+produced at the boundary cannot be inverted back.
 }
 \seealso{
-\code{\link[=param_value.SimplexParam]{param_value.SimplexParam()}}, the map this inverts.
+\code{\link[=param_value.SimplexParam]{param_value.SimplexParam()}}, the map that this inverts.
 }
 \keyword{internal}

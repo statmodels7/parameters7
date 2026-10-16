@@ -20,17 +20,17 @@ and \code{param_params} holding \code{positions}.
 \description{
 Returns an object holding the matrix logarithm parametrization of a symmetric
 positive definite matrix: \eqn{M = \exp(S)} with \eqn{S} symmetric and
-\strong{genuinely free}. No entry is transformed; the free values fill the lower
-triangle of \eqn{S} directly, the diagonal first and then below the diagonal
-column by column, and the exponential does the rest. Any vector in
-\eqn{\mathbb{R}^{p(p+1)/2}} gives a positive definite matrix, the exponential
-of a symmetric matrix having positive eigenvalues, as long as no eigenvalue
-of \eqn{S} exceeds about 709.78, above which the exponential overflows in
-double precision.
+genuinely free. The entries of \eqn{S} are not transformed: the free values
+fill the lower triangle of \eqn{S} directly, starting with the diagonal and
+continuing below the diagonal column by column, and the exponential does the
+rest. Any vector in \eqn{\mathbb{R}^{p(p+1)/2}} gives a positive definite
+matrix, because the exponential of a symmetric matrix has positive
+eigenvalues, as long as all eigenvalues of \eqn{S} are at most about 709.78;
+above that value the exponential overflows in double precision.
 
 It parametrizes the same cone as \code{\link[=log_cholesky]{log_cholesky()}} with the same number of free
 values. The choice between the two depends on which quantities should have a
-closed form; see \strong{Details}.
+closed form; see Details.
 }
 \section{The log-determinant and the inverse}{
 \deqn{\log|M| = \mathrm{tr}(S) = \sum_{i=1}^{p} \eta_i,}
@@ -44,10 +44,10 @@ up to rounding.
 
 \section{The derivatives, and the reason for the Opitz route}{
 They are the Frechet derivatives of the matrix exponential, by the
-Daleckii-Krein representation. With \eqn{S = Q \Lambda Q^\top} and the
-directions rotated by \eqn{Q}, the \eqn{k}-th derivative contracts the
-directions against divided differences of \eqn{e^x} of order \eqn{k+1} at the
-eigenvalues, summed over the orderings of the directions.
+Daleckii-Krein representation. With \eqn{S = Q \Lambda Q^\top}, the
+\eqn{k}-th derivative contracts the directions, rotated by \eqn{Q}, against
+divided differences of \eqn{e^x} of order \eqn{k+1} at the eigenvalues,
+summed over the orderings of the directions.
 
 The divided differences come from the Opitz theorem, the exponential of a
 small upper bidiagonal matrix read off its corner, in place of the recursive
@@ -73,14 +73,14 @@ one whose free values should form an unconstrained symmetric matrix.
 \section{Notation}{
 
 \eqn{\eta} is the free vector, of length \eqn{d = p(p+1)/2}, \eqn{S} the
-symmetric matrix it fills, and \eqn{M = \exp(S)} the value. \eqn{Q} and
+symmetric matrix that it fills, and \eqn{M = \exp(S)} the value. \eqn{Q} and
 \eqn{\Lambda} are the eigenvectors and eigenvalues of \eqn{S}, and
 \eqn{e[\lambda_1, \dots, \lambda_m]} a divided difference of the exponential.
 }
 
 \examples{
-# A 3 x 3 unstructured covariance. The free names carry no transformation:
-# the free values are the entries of S itself.
+# This example uses a 3 x 3 unstructured covariance. The free names carry no
+# transformation: the free values are the entries of S itself.
 s <- matrix_log(3)
 s@free_names
 eta <- c(0.2, -0.3, 0.4, 0.1, -0.2, 0.15)
@@ -93,8 +93,8 @@ eigen(M, only.values = TRUE)$values > 0
 c(closed = param_logdet(s, eta), trace = sum(eta[1:3]),
   from_eigen = sum(log(eigen(M, only.values = TRUE)$values)))
 
-# Which makes its gradient a vector of ones and zeros, and every higher
-# order exactly zero.
+# This makes its gradient a vector of ones and zeros, and every higher order
+# exactly zero.
 param_dlogdet(s, eta)
 c(second = max(abs(param_d2logdet(s, eta))),
   third = max(abs(param_d3logdet(s, eta))),

@@ -13,12 +13,13 @@ checked by the generic.}
 }
 \value{
 A list of \code{choose(s@n_free + 2, 3)} numeric vectors of length \eqn{K},
-keyed as \code{param_tuple_names(s, 3)} and in that order, each summing to 0.
+keyed as \code{param_tuple_names(s, 3)} and in that order. Each vector sums to 0.
 }
 \description{
-Closed form, the same product rule applied a third time, which is the cumulant
-recursion of a categorical indicator at third order. Exact, where a family
-without a closed form gets a less accurate product stencil.
+Computes the third derivatives in closed form, by applying the same product
+rule a third time, which is the cumulant recursion of a categorical indicator
+at third order. The result is exact, whereas a family without a closed form
+uses a less accurate product stencil.
 Every component sums to zero over the category index.
 }
 \seealso{

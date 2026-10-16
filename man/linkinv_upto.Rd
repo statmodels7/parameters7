@@ -11,11 +11,11 @@ linkinv_upto(link, e, order)
 
 \item{e}{A numeric vector of free values.}
 
-\item{order}{The highest order wanted, an integer from 0 to 4.}
+\item{order}{The highest order to compute, an integer from 0 to 4.}
 }
 \value{
 A list of \code{order + 1} elements: the value, then the derivatives in
-order, each the shape of \code{e}.
+order, and each of them has the same shape as \code{e}.
 }
 \description{
 Returns \eqn{g^{-1}(\eta)} and its derivatives of orders 1 to \code{order}, from

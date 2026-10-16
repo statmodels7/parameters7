@@ -4,9 +4,9 @@ NULL
 #' Distinct Blocks of a Matrix Parameter
 #'
 #' @description
-#' The S7 class of a block-diagonal matrix built from several matrix parameters,
-#' each block a family of its own and each carrying its own stretch of the free
-#' vector. [block_diag()] builds one.
+#' `BlockDiagParam` is the S7 class of a block-diagonal matrix built from
+#' several matrix parameters, in which each block is a family of its own and
+#' carries its own stretch of the free vector. [block_diag()] builds one.
 #'
 #' It is the composition for independent groups of coefficients whose structures
 #' differ, where [kron_identity()] is the one for identical blocks sharing a
@@ -43,7 +43,8 @@ BlockDiagParam <- S7::new_class("BlockDiagParam", parent = matrix_parameter)
 #' Returns an object holding
 #' \eqn{M(\eta) = \mathrm{diag}(S_1(\eta_1), \ldots, S_B(\eta_B))} for matrix
 #' parameters \eqn{S_1, \ldots, S_B}: a block-diagonal matrix whose blocks are
-#' **distinct families**, each governed by its own stretch of the free vector.
+#' distinct families, and each block is governed by its own stretch of the free
+#' vector.
 #'
 #' It is the covariance (or precision) of several independent groups of
 #' coefficients whose structures differ, as a model carrying more than one
@@ -59,16 +60,16 @@ BlockDiagParam <- S7::new_class("BlockDiagParam", parent = matrix_parameter)
 #'       \qquad M^{-1} = \mathrm{diag}(S_1^{-1}, \ldots, S_B^{-1}),}
 #'
 #' and a derivative whose indices do not all belong to one block is
-#' **identically zero**, at every order and for the log-determinant as well as
+#' identically zero, at every order and for the log-determinant as well as
 #' for the value. For `block_diag(log_cholesky(2), ar1(3))`, whose five free
 #' values split 3 and 2, 6 of the 15 second-order components are cross-block,
 #' 21 of 35 at third order and 50 of 70 at fourth, and every one of them is
-#' exactly 0. What is left is fetched from the block and placed in the
-#' rows and columns that block occupies.
+#' exactly 0. The remaining components are fetched from the block and placed in
+#' the rows and columns that the block occupies.
 #'
 #' The rank is the sum of the blocks' ranks and the null basis is their block
-#' diagonal, both taken from the blocks and not from the eigenvalues of the
-#' assembled matrix, because the rank is a property of the family and an
+#' diagonal, and the method takes both from the blocks and not from the
+#' eigenvalues of the assembled matrix, because the rank is a property of the family and an
 #' eigenvalue count would depend on the free vector. A deficient block is
 #' therefore admitted, and the composite reports the deficiency: with a rank-one \eqn{P} of side 2,
 #' `block_diag(scaled_matrix(P), ar1(3))` has rank 4 of 5 and a null basis of one
@@ -77,7 +78,7 @@ BlockDiagParam <- S7::new_class("BlockDiagParam", parent = matrix_parameter)
 #'
 #' # Against kron_identity()
 #'
-#' [kron_identity()] repeats **one** block \eqn{m} times and they share a single
+#' [kron_identity()] repeats one block \eqn{m} times and they share a single
 #' free vector, so its `n_free` does not grow with \eqn{m}. Here the blocks are
 #' different objects and their free vectors are concatenated, so the composite has
 #' \eqn{\sum_b d_b} free values. This composition suits groups with different
@@ -95,7 +96,7 @@ BlockDiagParam <- S7::new_class("BlockDiagParam", parent = matrix_parameter)
 #' @section Notation:
 #' \eqn{B} is the number of blocks, \eqn{S_b} the \eqn{b}-th block's map,
 #' \eqn{d_b} its number of free values, and \eqn{\eta_b} the stretch of the free
-#' vector it owns.
+#' vector that it owns.
 #'
 #' @param ... One or more objects inheriting from [matrix_parameter()], or a
 #'   single list of them. Named arguments supply the block labels, which must be
@@ -129,8 +130,8 @@ BlockDiagParam <- S7::new_class("BlockDiagParam", parent = matrix_parameter)
 #'   sum_of_blocks = param_logdet(log_cholesky(2), eta[1:3]) +
 #'                   param_logdet(ar1(3), eta[4:5]))
 #'
-#' # And 50 of the 70 fourth-order components are exactly zero, their indices
-#' # not all belonging to one block.
+#' # And 50 of the 70 fourth-order components are exactly zero, because their
+#' # indices do not all belong to one block.
 #' owner <- s@param_params$owner
 #' cross <- vapply(param_tuple_indices(s, 4L),
 #'                 function(t) length(unique(owner[t])) > 1L, logical(1))
@@ -214,7 +215,7 @@ block_diag <- function(...) {
 #' the matrix and once for their stretches of the free vector.
 #'
 #' @details
-#' A width of zero gives an **empty range**, `integer(0)`, instead of being
+#' A width of zero gives an empty range, `integer(0)`, instead of being
 #' dropped, so the list stays aligned with the blocks and the \eqn{b}-th element
 #' is always the \eqn{b}-th block's. That case is reachable: a fully known
 #' [scaled_matrix()] has no free values at all, so
@@ -242,14 +243,14 @@ split_ranges <- function(widths) {
 #'
 #' @description
 #' Fetches one block's derivatives of a given order and re-keys them by the
-#' **sorted local index tuple**, as `"1"`, `"1,2"`, `"2,2"` and so on.
+#' sorted local index tuple, as `"1"`, `"1,2"`, `"2,2"` and so on.
 #'
 #' @details
 #' The re-keying lets a lookup from the composite's enumeration succeed without
 #' assuming the two enumerations correspond. A block's own
 #' `param_tuple_names()` are built from its own `free_names`, which the composite
 #' has prefixed with a label, so the two name sets differ; the sorted index tuple
-#' is the one key both sides can compute. Sorting matters because a derivative is
+#' is the one key that both sides can compute. Sorting matters because a derivative is
 #' symmetric in its indices and the two enumerations need not order a tuple the
 #' same way.
 #'
@@ -342,7 +343,7 @@ block_diag_derivs <- function(s, eta, order) {
 #' @details
 #' The structure is [block_diag_derivs()]'s with numbers in place of matrices,
 #' including the per-block cache and the sorted-tuple key. It is a different
-#' separability from the one [ar1()] or [compound_symmetry()] have: there the
+#' separability from the one that [ar1()] or [compound_symmetry()] have: there the
 #' log-determinant separates over the free values themselves, here it separates
 #' over the blocks and a block's own mixed components survive.
 #'
@@ -389,7 +390,7 @@ block_diag_logdet_derivs <- function(s, eta, order) {
 #' @name param_value.BlockDiagParam
 #' @description
 #' Evaluates each block at its own stretch of the free vector and writes it into
-#' the rows and columns that block occupies, leaving the off-diagonal blocks at
+#' the rows and columns that the block occupies, leaving the off-diagonal blocks at
 #' the zeros with which the matrix was created. Each block is identical to what
 #' its own family returns.
 #'
@@ -420,8 +421,8 @@ S7::method(param_value, BlockDiagParam) <- function(s, eta, ...) {
 #' results, so the composite is as exact as its blocks are.
 #' @details
 #' A matrix whose off-diagonal blocks are not zero is rejected with
-#' `'m' is not block diagonal in the blocks of this parameter.`, that being a
-#' matrix that this family cannot represent; the tolerance is \eqn{10^{-8}} relative
+#' `'m' is not block diagonal in the blocks of this parameter.`, because this
+#' family cannot represent such a matrix; the tolerance is \eqn{10^{-8}} relative
 #' to `max(1, max(abs(m)))`. The blocks are inverted first, so a diagonal block
 #' that is outside its own family is reported by that family's message, which is
 #' the more specific of the two.
@@ -430,9 +431,9 @@ S7::method(param_value, BlockDiagParam) <- function(s, eta, ...) {
 #'   this parameter's blocks, already checked for shape and symmetry by the
 #'   generic.
 #' @param ... Unused, and accepted so the signature matches the generic's.
-#' @return A numeric vector of length `s@n_free`, the blocks' free vectors
-#'   concatenated, named by `s@free_names`.
-#' @seealso [param_value.BlockDiagParam()], the map this inverts.
+#' @return A numeric vector of length `s@n_free` that holds the blocks' free
+#'   vectors concatenated and is named by `s@free_names`.
+#' @seealso [param_value.BlockDiagParam()], the map that this method inverts.
 #' @keywords internal
 S7::method(param_free, BlockDiagParam) <- function(s, m, ...) {
   b <- .bd(s)
@@ -457,9 +458,9 @@ S7::method(param_free, BlockDiagParam) <- function(s, m, ...) {
 #' @title Derivatives of a Block-Diagonal Parameter
 #' @name param_d1.BlockDiagParam
 #' @description
-#' `param_d1()`, `param_d2()`, `param_d3()` and `param_d4()` for a
-#' [block_diag()] parameter: each block's own derivatives, placed in the rows and
-#' columns that block occupies, and **exactly zero** for a tuple spanning two
+#' `param_d1()`, `param_d2()`, `param_d3()` and `param_d4()` return, for a
+#' [block_diag()] parameter, each block's own derivatives placed in the rows and
+#' columns that the block occupies, and exactly zero for a tuple spanning two
 #' blocks. The blocks' derivatives are used as they are, with no differencing,
 #' so the composite is as exact as its blocks are.
 #' @param s A [BlockDiagParam()] object.
@@ -473,9 +474,10 @@ S7::method(param_free, BlockDiagParam) <- function(s, m, ...) {
 #' @seealso [block_diag_derivs()], which assembles them, and
 #'   [param_dlogdet.BlockDiagParam()] for the log-determinant's own.
 #' @details
-#' The four share [block_diag_derivs()] and differ only in the order they pass.
-#' The zeros are structural: they follow from the free values of one block not
-#' entering another, and at order 4 with blocks of 3 and 2 free values they are
+#' The four share [block_diag_derivs()] and differ only in the order that they
+#' pass.
+#' The zeros are structural: they follow from the fact that the free values of
+#' one block do not enter another, and at order 4 with blocks of 3 and 2 free values they are
 #' 50 of the 70 components. See [block_diag()] for the argument.
 #' @keywords internal
 S7::method(param_d1, BlockDiagParam) <- function(s, eta, ...) {
@@ -506,12 +508,13 @@ S7::method(param_d4, BlockDiagParam) <- function(s, eta, ...) {
 #' @title Log-Determinant of a Block-Diagonal Parameter
 #' @name param_logdet.BlockDiagParam
 #' @description
-#' The sum of the blocks' log-(pseudo-)determinants, the determinant of a
-#' block-diagonal matrix being the product of the blocks'. Each block computes
-#' its own by whatever route it has, so a closed form in a block stays a closed
-#' form in the composite, and no determinant of the assembled matrix is taken.
+#' Returns the sum of the blocks' log-(pseudo-)determinants, because the
+#' determinant of a block-diagonal matrix is the product of the blocks'
+#' determinants. Each block computes its own by whatever route is available to
+#' it, so a closed form in a block stays a closed form in the composite, and the
+#' method does not take the determinant of the assembled matrix.
 #'
-#' Where a block is rank deficient its term is the log **pseudo**-determinant,
+#' Where a block is rank deficient its term is the log pseudo-determinant,
 #' the sum over the non-zero eigenvalues, and the composite's is then a pseudo
 #' one too.
 #' @param s A [BlockDiagParam()] object.
@@ -532,18 +535,18 @@ S7::method(param_logdet, BlockDiagParam) <- function(s, eta, ...) {
 #' @name param_dlogdet.BlockDiagParam
 #' @description
 #' `param_dlogdet()`, `param_d2logdet()`, `param_d3logdet()` and
-#' `param_d4logdet()` for a [block_diag()] parameter: the blocks' own, placed by
-#' owner, with every cross-block component exactly zero because the
-#' log-determinant is a sum over the blocks.
+#' `param_d4logdet()` return, for a [block_diag()] parameter, the blocks' own
+#' derivatives placed by owner, with every cross-block component exactly zero
+#' because the log-determinant is a sum over the blocks.
 #' @details
-#' The four share [block_diag_logdet_derivs()] and differ only in the order they
-#' pass. The first order names its result by `s@free_names`, one value per free
+#' The four share [block_diag_logdet_derivs()] and differ only in the order that
+#' they pass. The first order names its result by `s@free_names`, one value per free
 #' value; the orders above it are keyed by tuple, as [param_tuple_names()]
 #' defines.
 #'
-#' A block's **own** mixed components are in general not zero, this
-#' separability being over blocks and not over free values. Compare [ar1()], where it is over free values
-#' and every mixed component vanishes.
+#' A block's own mixed components are in general not zero, because this
+#' separability is over blocks and not over free values. Compare [ar1()], where
+#' the separability is over free values and every mixed component vanishes.
 #' @param s A [BlockDiagParam()] object.
 #' @param eta A numeric vector of length `s@n_free`, already checked by the
 #'   generic.
@@ -593,8 +596,8 @@ S7::method(param_d4logdet, BlockDiagParam) <- function(s, eta, ...) {
 #' assembles the blocks' factors on the diagonal; the result is lower triangular
 #' with \eqn{M = L L^\top}, as [param_factor()] requires.
 #'
-#' Both are rejected by the generic where any block is rank deficient, the
-#' composite having no inverse and no Cholesky factor then.
+#' Both are rejected by the generic where any block is rank deficient, because
+#' the composite then has no inverse and no Cholesky factor.
 #' @param s A [BlockDiagParam()] object.
 #' @param eta A numeric vector of length `s@n_free`, already checked by the
 #'   generic.

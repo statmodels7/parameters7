@@ -16,8 +16,8 @@ A symmetric positive definite \code{s@dimension} by \code{s@dimension} numeric
 matrix, labeled \code{v1}, \code{v2}, ..., \code{vp} on both margins.
 }
 \description{
-Forms \eqn{D R D} as \code{outer(d, d) * R}, the elementwise product being what two
-diagonal multiplications amount to. The correlation block is evaluated at its
+Forms \eqn{D R D} as \code{outer(d, d) * R}, because the elementwise product is
+equivalent to the two diagonal multiplications. The correlation block is evaluated at its
 own stretch of the free vector, so the composite is the value of that family,
 rescaled.
 

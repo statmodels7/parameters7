@@ -12,7 +12,7 @@ param_free(s, m, ...)
 \item{m}{A value of the family's shape: a symmetric \code{s@dimension} by
 \code{s@dimension} numeric matrix on the matrix branch, a probability vector for
 \code{\link[=simplex]{simplex()}}, a row-stochastic matrix for \code{\link[=transition_matrix]{transition_matrix()}}. It must
-satisfy the family's constraint; see \strong{Details} for what each family
+satisfy the family's constraint; see Details for what each family
 rejects.}
 
 \item{...}{Passed to the method. The methods in this package do not read it.}
@@ -42,9 +42,10 @@ a correct one.
 
 \section{A value outside the set is rejected}{
 Every method checks \code{m} against the family's own constraint before
-inverting, and the message says what failed. \code{log_cholesky()} rejects a
-matrix that is not positive definite; \code{simplex()} rejects a vector that does not sum to one, and does
-not renormalize it, because a silent repair would hide the caller's mistake.
+inverting, and the message states what failed. \code{log_cholesky()} rejects a
+matrix that is not positive definite; \code{simplex()} rejects a vector that does
+not sum to one, and does not renormalize it, because a silent repair would
+hide the caller's mistake.
 The checks shared by the matrix families are the shape, the entries and the
 symmetry: a matrix of the wrong side is rejected with a message naming the
 side required, a missing or infinite entry is rejected, and an asymmetry
@@ -73,7 +74,7 @@ start <- param_free(s, cov(y))
 round(start, 3)
 max(abs(param_value(s, start) - cov(y)))
 
-# A matrix outside the set is rejected, and the message says why.
+# A matrix outside the set is rejected, and the message states why.
 try(param_free(s, diag(c(1, 1, -1))))
 
 # So is a vector off the simplex; it is not renormalized.
@@ -81,6 +82,6 @@ try(param_free(simplex(3), c(0.5, 0.6, 0.2)))
 
 }
 \seealso{
-\code{\link[=param_value]{param_value()}}, the map this inverts, and \code{\link[=check_parameter]{check_parameter()}},
+\code{\link[=param_value]{param_value()}}, the map that this inverts, and \code{\link[=check_parameter]{check_parameter()}},
 which closes the round trip as one of its checks.
 }

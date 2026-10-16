@@ -21,7 +21,7 @@ the following indices, each derivative with a zero diagonal.
 Returns \eqn{P(\rho)_{ij} = \rho^{|i-j|}}, the correlation pattern of an AR(1)
 matrix, together with its derivatives in the second free value to the
 order that the scalars carry. Each
-entry is a \strong{power} of the correlation, so unlike \code{\link[=cs_pattern]{cs_pattern()}}'s the
+entry is a power of the correlation, so unlike \code{\link[=cs_pattern]{cs_pattern()}}'s the
 pattern is not linear and each order needs a genuine chain: \code{\link[=compose_order]{compose_order()}}
 composes \eqn{\rho \mapsto \rho^m} with the link's own derivatives, one
 order at a time.

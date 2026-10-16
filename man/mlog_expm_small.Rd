@@ -7,15 +7,16 @@
 mlog_expm_small(a)
 }
 \arguments{
-\item{a}{A square numeric matrix, upper triangular in every call the package
-makes, and at most 5 by 5.}
+\item{a}{A square numeric matrix, upper triangular in every call that the
+package makes, and at most 5 by 5.}
 }
 \value{
 Its exponential, a numeric matrix of the same shape.
 }
 \description{
-Scaling and squaring with a Taylor series, written out here for the tiny
-bidiagonal matrices that \code{\link[=dd_exp]{dd_exp()}} builds. The matrices are at most 5 by 5,
+Computes the exponential by scaling and squaring with a Taylor series,
+written out here for the tiny bidiagonal matrices that \code{\link[=dd_exp]{dd_exp()}} builds. The
+matrices are at most 5 by 5,
 so a general-purpose matrix exponential, and the dependency that it would
 bring, is not needed.
 }

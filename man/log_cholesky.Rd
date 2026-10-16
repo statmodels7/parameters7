@@ -7,8 +7,8 @@
 log_cholesky(dimension)
 }
 \arguments{
-\item{dimension}{The side \eqn{p} of the matrix. A single positive whole
-number, finite and at least 1. \code{0}, \code{2.5}, \code{c(1, 2)}, \code{"3"}, \code{Inf} and \code{NA}
+\item{dimension}{The side \eqn{p} of the matrix. It must be a single
+positive whole number, finite and at least 1. \code{0}, \code{2.5}, \code{c(1, 2)}, \code{"3"}, \code{Inf} and \code{NA}
 all signal the error \verb{'dimension' must be a single positive integer.}}
 }
 \value{
@@ -30,13 +30,14 @@ column and diagonal flag of each free value.}
 Estimating a covariance matrix directly is awkward. An optimizer moving
 freely through \eqn{p(p+1)/2} numbers will eventually propose a matrix that is
 not positive definite, and the likelihood is undefined there. This function
-returns an object holding the log-Cholesky map, which sends an unconstrained vector to \eqn{M = L L^\top}
-with \eqn{L} lower triangular and positive on the diagonal. Every vector in
-\eqn{\mathbb{R}^{p(p+1)/2}} gives a valid matrix, so the optimizer never has
-to be told about the constraint.
+returns an object holding the log-Cholesky map, which sends an unconstrained
+vector to \eqn{M = L L^\top} with \eqn{L} lower triangular and positive on
+the diagonal. Every vector in \eqn{\mathbb{R}^{p(p+1)/2}} gives a valid
+matrix, so the optimizer can search over all of
+\eqn{\mathbb{R}^{p(p+1)/2}} without a constraint.
 
-Reach for it when nothing is known about the matrix. It is the parametrization
-of Pinheiro and Bates (1996).
+Use it when the matrix has no known structure. It is the parametrization of
+Pinheiro and Bates (1996).
 }
 \section{Positive definiteness of the map}{
 \deqn{M = L L^\top, \qquad L_{ii} = \exp(\eta_i) > 0}
@@ -44,12 +45,12 @@ of Pinheiro and Bates (1996).
 The exponential keeps the diagonal of \eqn{L} positive, and a triangular
 matrix with a positive diagonal has full rank, so \eqn{L L^\top} is positive
 definite at every finite \eqn{\eta}, within the range of floating-point
-arithmetic. The map is smooth in both directions and one to one, the
-Cholesky factor with a positive diagonal being unique.
+arithmetic. The map is smooth in both directions and one to one, because the
+Cholesky factor with a positive diagonal is unique.
 
 The logarithm on the diagonal belongs to the parametrization and is not a
 swappable link, which is why it appears in the free names. Use
-\code{\link[=diagonal_matrix]{diagonal_matrix()}} if a choice of link is wanted.
+\code{\link[=diagonal_matrix]{diagonal_matrix()}} if a choice of link is needed.
 }
 
 \section{Reading the free vector}{
@@ -70,14 +71,15 @@ is twice the sum of the first \eqn{p} free values:
 
 \deqn{\log|M| = 2 \sum_{i=1}^{p} \log L_{ii} = 2 \sum_{i=1}^{p} \eta_i}
 
-Linear, so the gradient is the constant 2 in the diagonal directions and 0
-elsewhere, and the second, third and fourth derivatives are exactly zero. All
-four are returned without any factorization being taken.
+The log-determinant is linear, so the gradient is the constant 2 in the
+diagonal directions and 0 elsewhere, and the second, third and fourth
+derivatives are exactly zero. All four are returned without computing a
+factorization.
 }
 
 \section{Other families}{
-This is the parametrization for an unstructured matrix, where
-\eqn{p(p+1)/2} free values is the price of assuming nothing. A structured
+This is the parametrization for an unstructured matrix, and it uses
+\eqn{p(p+1)/2} free values. A structured
 family estimates fewer and imposes its structure exactly: \code{\link[=diagonal_matrix]{diagonal_matrix()}}
 for independence, \code{\link[=compound_symmetry]{compound_symmetry()}} for exchangeable equicorrelation,
 \code{\link[=ar1]{ar1()}} and \code{\link[=autoregressive]{autoregressive()}} for a time series, \code{\link[=correlation_matrix]{correlation_matrix()}} for a
@@ -95,7 +97,7 @@ and 0 elsewhere.
 }
 
 \examples{
-# A 3 x 3 unstructured covariance: six free values, no constraints.
+# A 3 x 3 unstructured covariance has six free values and no constraints.
 s <- log_cholesky(3)
 s
 s@n_free

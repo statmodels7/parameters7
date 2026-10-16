@@ -16,19 +16,19 @@ result is \code{logdet_p} alone.}
 A single number.
 }
 \description{
-Closed form,
+The log-determinant has closed form,
 
 \deqn{\log|M|_+ = r \log h(\eta) + \log|P|_+,}
 
-with \eqn{r} the rank and \eqn{\log|P|_+} a constant of the object, computed
-once at construction. The scale enters once per non-zero eigenvalue, which is
-where the factor \eqn{r} comes from. One expression covers both cases: it is
+where \eqn{r} is the rank and \eqn{\log|P|_+} is a constant of the object,
+computed once at construction. The scale enters once per non-zero
+eigenvalue, so the factor \eqn{r} appears. One expression covers both cases: it is
 the log-determinant where the family is of full rank and the log
 pseudo-determinant otherwise. Under the log link it is \eqn{r\eta + \log|P|_+},
 so a step of 1 in the free value moves it by \eqn{r}.
 }
 \seealso{
 \code{\link[=param_dlogdet.ScaledMatrixParam]{param_dlogdet.ScaledMatrixParam()}} for its gradient, and
-\code{\link[=param_null_basis]{param_null_basis()}} for the rank it uses.
+\code{\link[=param_null_basis]{param_null_basis()}} for the rank that it uses.
 }
 \keyword{internal}

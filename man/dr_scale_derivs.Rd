@@ -12,13 +12,12 @@ dr_scale_derivs(s, eta, order)
 \item{eta}{A numeric vector of length \code{s@n_free}; only its first \eqn{p}
 entries are read.}
 
-\item{order}{The highest derivative order wanted, an integer from 0 to 4.}
+\item{order}{The highest derivative order to compute, an integer from 0 to 4.}
 }
 \value{
-An \code{order + 1} by \eqn{p} numeric matrix, row \eqn{k+1} holding the
-\eqn{k}-th
-derivative of the inverse link at each scale coordinate, so row 1 is the
-scales themselves.
+An \code{order + 1} by \eqn{p} numeric matrix. Row \eqn{k+1} holds the
+\eqn{k}-th derivative of the inverse link at each scale coordinate, so
+row 1 is the scales themselves.
 }
 \description{
 Returns \eqn{d_j} and its derivatives to order \code{order} in the free value
@@ -26,8 +25,8 @@ that carries it, for every \eqn{j} at once, as a matrix with one row per
 order.
 }
 \details{
-Each scale depends on one free value only, so the table is complete: there are
-no cross-derivatives between scales to record. It is computed once per call to
+Each scale depends on one free value only, so the table is complete:
+cross-derivatives between scales are zero and need no entry. It is computed once per call to
 \code{\link[=dr_prod_derivs]{dr_prod_derivs()}} and read by \code{\link[=dr_scale_factor]{dr_scale_factor()}} for every component of the
 order.
 

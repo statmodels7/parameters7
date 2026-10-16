@@ -16,11 +16,11 @@ generic.}
 }
 \value{
 A named list of \code{order + 1} symmetric \code{s@dimension} by \code{s@dimension}
-matrices; see \strong{Details} for the keying of each order.
+matrices; see Details for the keying of each order.
 }
 \description{
-Closed form at all four orders. One page covers \code{\link[=param_d1]{param_d1()}}, \code{\link[=param_d2]{param_d2()}},
-\code{\link[=param_d3]{param_d3()}} and \code{\link[=param_d4]{param_d4()}} for this family because the four are the same
+The derivatives are in closed form at all four orders. One page covers
+\code{\link[=param_d1]{param_d1()}}, \code{\link[=param_d2]{param_d2()}}, \code{\link[=param_d3]{param_d3()}} and \code{\link[=param_d4]{param_d4()}} for this family because the four are the same
 product taken at different orders: the value is
 \eqn{M = \sigma^2 P(\rho)} with \eqn{P(\rho) = I + \rho(J - I)} linear in the
 correlation, so a component with \eqn{a} scale indices and \eqn{b} correlation
@@ -46,10 +46,10 @@ of their own order:
 The lists are this short because there are two free values: at \eqn{d = 2} the
 count \eqn{\binom{d+k-1}{k}} is \eqn{k+1}.
 
-Every component with at least one correlation index has a zero diagonal, the
-diagonal of \eqn{P} being the constant 1; and a component with \eqn{b}
-correlation indices carries the \eqn{b}-th derivative of the link alone,
-\eqn{P} being linear in \eqn{\rho}.
+Every component with at least one correlation index has a zero diagonal,
+because the diagonal of \eqn{P} is the constant 1; and a component with
+\eqn{b} correlation indices carries the \eqn{b}-th derivative of the link
+only, because \eqn{P} is linear in \eqn{\rho}.
 }
 \seealso{
 \code{\link[=econ_derivative]{econ_derivative()}}, which assembles all four, \code{\link[=cs_pattern]{cs_pattern()}} for the

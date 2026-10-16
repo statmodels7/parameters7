@@ -16,15 +16,16 @@ A list of \code{choose(s@n_free + 2, 3)} symmetric matrices keyed as
 \code{param_tuple_names(s, 3)} and in that order.
 }
 \description{
-Closed form, by the Leibniz rule on \eqn{M = L L^\top}. Each component
-distributes its three differentiations over the two factors, and a factor
-differentiated more than once survives only where the repetitions name the
-same diagonal free value, every derivative of \eqn{e^{\eta_k}} being itself.
+Computes the third derivatives in closed form, by the Leibniz rule on
+\eqn{M = L L^\top}. Each component distributes its three differentiations
+over the two factors, and a factor differentiated more than once survives
+only where the repetitions name the same diagonal free value, because every
+derivative of \eqn{e^{\eta_k}} is itself.
 
-Two consequences follow. A component repeating a below-diagonal free value
-three times is exactly zero, \eqn{M} being quadratic
-in it. A component repeating a diagonal value three times is not, that value
-entering through an exponential.
+A component repeating a below-diagonal free value three times is exactly
+zero, because \eqn{M} is quadratic in it. A component repeating a diagonal
+value three times is not zero, because that value enters through an
+exponential.
 }
 \seealso{
 \code{\link[=chol_leibniz]{chol_leibniz()}}, which assembles it, and

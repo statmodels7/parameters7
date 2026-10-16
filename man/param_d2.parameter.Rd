@@ -13,14 +13,14 @@ checked by the generic.}
 }
 \value{
 A list of \code{choose(s@n_free + 1, 2)} estimates keyed as
-\code{param_tuple_names(s)} and in that order, each shaped like
-\code{\link[=param_value]{param_value()}}'s result and symmetrized for a matrix family.
+\code{param_tuple_names(s)} and in that order, each of which has the shape
+of \code{\link[=param_value]{param_value()}}'s result and is symmetrized for a matrix family.
 }
 \description{
-The method that every \code{\link[=parameter]{parameter()}} inherits when it registers no \code{\link[=param_d2]{param_d2()}} of
-its own. It takes exactly one difference per component, through
-\code{\link[=numerical_d2]{numerical_d2()}} at its default accuracy 4, of whichever quantity the family
-already supplies: the analytic \code{\link[=param_d1]{param_d1()}} where there is one, and
+This is the method that every \code{\link[=parameter]{parameter()}} inherits when it registers no
+\code{\link[=param_d2]{param_d2()}} of its own. It takes exactly one difference per component,
+through \code{\link[=numerical_d2]{numerical_d2()}} at its default accuracy 4, of the quantity that the
+family already supplies: the analytic \code{\link[=param_d1]{param_d1()}} where there is one, and
 \code{\link[=param_value]{param_value()}} itself where there is not. The truncation error is of order
 \eqn{h^4} on every route. The families in this package do not reach it.
 }

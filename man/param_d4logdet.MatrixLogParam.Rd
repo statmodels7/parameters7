@@ -14,9 +14,10 @@
 A named numeric vector of zeros.
 }
 \description{
-Closed form, and identically zero, for the reason it is zero at second and
-third order: \eqn{\log|M| = \mathrm{tr}(S)} is linear in the free vector. The
-zeros are exact.
+Returns the fourth derivatives of the log-determinant, which are identically
+zero in closed form for the same reason as at second and third order:
+\eqn{\log|M| = \mathrm{tr}(S)} is linear in the free vector. The zeros are
+exact.
 
 This is the order at which a numerical fallback is least accurate, so a
 family whose log-determinant is not linear gains most from a closed form

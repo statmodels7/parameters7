@@ -19,8 +19,8 @@ A named list of \code{s@dimension} square matrices, keyed as
 \code{\link[=param_tuple_names]{param_tuple_names()}} gives them.
 }
 \description{
-The four orders of \eqn{\partial N} for \eqn{N = S^{-1}}, each the ordered
-set-partition sum that \code{\link[=inverse_of]{inverse_of()}} writes out. Every factor comes from the
+Computes the four orders of \eqn{\partial N} for \eqn{N = S^{-1}}, each as
+the ordered set-partition sum that \code{\link[=inverse_of]{inverse_of()}} describes. Every factor comes from the
 inner family's own arrays, so a closed form there stays closed here. For a
 \code{\link[=log_cholesky]{log_cholesky()}} inner family, the four orders are read from
 \code{\link[=param_inv_d1]{param_inv_d1()}}, \code{\link[=param_inv_d2]{param_inv_d2()}}, \code{\link[=param_inv_d3]{param_inv_d3()}} and \code{\link[=param_inv_d4]{param_inv_d4()}}.

@@ -16,14 +16,15 @@ A numeric vector with one entry keyed as \code{param_tuple_names(s, 4)}, or
 empty for a fixed parameter.
 }
 \description{
-Closed form: \eqn{r} times the fourth derivative of \eqn{\log h}, which
-\code{\link[=diag_dlog]{diag_dlog()}} writes out as
+The fourth derivative has closed form: \eqn{r} times the fourth derivative of
+\eqn{\log h}, which \code{\link[=diag_dlog]{diag_dlog()}} gives as
 \eqn{u_4 - 4u_1u_3 - 3u_2^2 + 12u_1^2u_2 - 6u_1^4} with
 \eqn{u_m = h^{(m)}/h}. The constant \eqn{\log|P|_+} contributes nothing.
 
-Exactly zero under the default log link, the quantity being linear in the free
-value. This is the order at which a numerical route is least accurate, so a
-family with a curved link gains most from the closed form here.
+The quantity is exactly zero under the default log link, because it is linear
+in the free value. This is the order at which a numerical route is least
+accurate, so a family with a curved link gains most from the closed form
+here.
 }
 \seealso{
 \code{\link[=diag_dlog]{diag_dlog()}} for the expression, and

@@ -11,11 +11,11 @@ param_is_numerical(s)
 }
 \value{
 A named logical vector, \code{TRUE} where the base-class method is in
-force. Its length depends on the branch: \strong{nine} entries for a
+force. Its length depends on the branch: nine entries for a
 \code{\link[=matrix_parameter]{matrix_parameter()}}, over \code{param_d1}, \code{param_d2}, \code{param_d3}, \code{param_d4},
 \code{param_logdet}, \code{param_dlogdet}, \code{param_d2logdet}, \code{param_d3logdet} and
-\code{param_d4logdet}; \strong{four} for a family that is not a matrix, over the
-derivative orders alone, the log-determinant not existing there.
+\code{param_d4logdet}; four for a family that is not a matrix, over the
+derivative orders only, because the log-determinant does not exist there.
 }
 \description{
 Reports, one derivative quantity at a time, whether the parameter has a
@@ -33,7 +33,7 @@ computed by finite differences cannot be checked against a finite difference,
 and a log-determinant read off an eigendecomposition cannot be checked against
 an eigendecomposition: the comparison is the same arithmetic twice, and it
 agrees however wrong the parametrization is. \code{\link[=check_parameter]{check_parameter()}} calls this
-and reports such a quantity as \strong{not checked} instead of as passed.
+and reports such a quantity as not checked instead of as passed.
 }
 
 \section{What is not in the list}{
@@ -57,7 +57,8 @@ to show what a \code{TRUE} looks like.
 param_is_numerical(log_cholesky(3))
 any(param_is_numerical(diagonal_matrix(3)))
 
-# Nine components for a matrix family, four for one that is not.
+# A matrix family has nine components, and a family that is not a matrix
+# has four.
 c(matrix = length(param_is_numerical(log_cholesky(3))),
   not_matrix = length(param_is_numerical(simplex(3))))
 

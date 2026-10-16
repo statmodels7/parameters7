@@ -2,7 +2,7 @@
 % Please edit documentation in R/generics.R
 \name{param_value}
 \alias{param_value}
-\title{The Value a Parameter Produces}
+\title{The Value That a Parameter Produces}
 \usage{
 param_value(s, eta, ...)
 }
@@ -32,15 +32,15 @@ entries and rows summing to 1, with \code{dimnames} \code{s1}, \code{s2}, ...}
 }
 }
 \description{
-Evaluates the map a parametrization stands for: given a free vector
-\eqn{\eta} on the unconstrained scale, returns the constrained value it
-produces. The shape depends on the family. A \code{\link[=matrix_parameter]{matrix_parameter()}} returns a
-symmetric \eqn{p \times p} matrix, \code{\link[=simplex]{simplex()}} a probability vector, and
+Evaluates the map that a parametrization represents: given a free vector
+\eqn{\eta} on the unconstrained scale, returns the constrained value that
+\eqn{\eta} produces. The shape depends on the family. A \code{\link[=matrix_parameter]{matrix_parameter()}}
+returns a symmetric \eqn{p \times p} matrix, \code{\link[=simplex]{simplex()}} a probability vector, and
 \code{\link[=transition_matrix]{transition_matrix()}} a row-stochastic matrix. For every finite
 \eqn{\eta} the value satisfies the family's constraint, within the range of
 floating-point arithmetic, so a caller does not have to test the result.
 
-This is the only method a new family must write. Every derivative order is
+This is the only method that a new family must write. Every derivative order is
 then available numerically, and for a matrix family so are the
 log-determinant, the solve and the factor.
 }
@@ -50,11 +50,11 @@ so every method inherits the check, including one written outside the
 package. Three things are rejected: a non-numeric \code{eta}, a length other than
 \code{s@n_free} (the message names both counts and lists the family's
 \code{free_names}), and any \code{NA}, \code{NaN} or infinite entry. The last is a caller
-error rather than a boundary of the domain, the unconstrained scale having no
-edge to reach.
+error rather than a boundary of the domain, because the unconstrained scale
+has no edge to reach.
 }
 
-\section{What is exact and what is not}{
+\section{Exact and numerical methods}{
 Every family in this package writes its own \code{\link[=param_value]{param_value()}} and its
 derivatives out, and \code{param_is_numerical()} returns \code{FALSE} for every
 component of every family. The numerical methods on \code{\link[=parameter]{parameter()}} serve a
@@ -64,13 +64,13 @@ family written elsewhere.
 \section{Notation}{
 
 \eqn{\eta} is the free vector, the point on the unconstrained scale, of
-length \eqn{d = } \code{s@n_free}. \eqn{p} is the side of the matrix a matrix
+length \eqn{d = } \code{s@n_free}. \eqn{p} is the side of the matrix that a matrix
 family returns.
 }
 
 \examples{
-# An unstructured covariance. Any six numbers give a positive definite
-# matrix, which is the property the parametrization exists for.
+# This builds an unstructured covariance. Any six numbers give a positive
+# definite matrix, and the parametrization is designed to have this property.
 s <- log_cholesky(3)
 M <- param_value(s, c(0.1, -0.2, 0.3, 0.5, -0.4, 0.2))
 round(M, 4)
@@ -80,11 +80,11 @@ eigen(M, only.values = TRUE)$values > 0
 eigen(param_value(s, c(-8, 9, -7, 100, -100, 50)),
       only.values = TRUE)$values > 0
 
-# A probability vector, and a row-stochastic matrix.
+# These calls return a probability vector and a row-stochastic matrix.
 sum(param_value(simplex(4), c(1.2, -0.7, 0.3)))
 rowSums(param_value(transition_matrix(3), rep(0.4, 6)))
 
-# The three ways a free vector is rejected.
+# These calls show the three ways in which a free vector is rejected.
 try(param_value(s, c(1, 2)))
 try(param_value(s, c(0, 0, 0, 0, 0, Inf)))
 try(param_value(s, letters[1:6]))

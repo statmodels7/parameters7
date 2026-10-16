@@ -25,15 +25,15 @@ pseudo-determinant, keyed as \code{\link[=param_tuple_names]{param_tuple_names()
 vector of a Gaussian model needs them, and so does the observed information
 of a covariance parametrized this way.
 }
-\section{The identity it must satisfy}{
+\section{The identity that it must satisfy}{
 Differentiating \eqn{\partial_k \log|M| = \mathrm{tr}(M^{-1}\partial_k M)}
-once more, with \eqn{\partial_l M^{-1} = -M^{-1}(\partial_l M)M^{-1}},
+once more, with \eqn{\partial_l M^{-1} = -M^{-1}(\partial_l M)M^{-1}}, gives
 
 \deqn{\partial_{kl} \log|M| = \mathrm{tr}\!\left(M^{-1}\partial_{kl}M\right)
-  - \mathrm{tr}\!\left(M^{-1}(\partial_k M) M^{-1} (\partial_l M)\right),}
+  - \mathrm{tr}\!\left(M^{-1}(\partial_k M) M^{-1} (\partial_l M)\right).}
 
-and with the Moore-Penrose inverse in place of \eqn{M^{-1}} when the family
-is rank deficient.
+When the family is rank deficient, the Moore-Penrose inverse replaces
+\eqn{M^{-1}}.
 
 Without the second trace the result would be the trace of the second
 derivative of the matrix, which is a different quantity and is not zero even
@@ -44,12 +44,12 @@ the example below compares it with the two traces.
 
 \section{Notation}{
 
-\eqn{M} is the matrix \code{\link[=param_value]{param_value()}} returns and \eqn{\eta} the free vector,
+\eqn{M} is the matrix that \code{\link[=param_value]{param_value()}} returns and \eqn{\eta} the free vector,
 of length \eqn{d = } \code{s@n_free}.
 }
 
 \examples{
-# The identity, checked against param_d1() and param_d2() directly.
+# The identity is checked against param_d1() and param_d2() directly.
 s <- ar1(4)
 eta <- c(0.3, 0.8)
 Minv <- solve(param_value(s, eta))
@@ -76,5 +76,5 @@ max(abs(param_d2logdet(log_cholesky(3), rep(0.2, 6))))
 \seealso{
 \code{\link[=param_dlogdet]{param_dlogdet()}} for the order below, \code{\link[=param_d3logdet]{param_d3logdet()}} and
 \code{\link[=param_d4logdet]{param_d4logdet()}} for the orders above, \code{\link[=param_tuple_names]{param_tuple_names()}} for the
-keys, and \code{\link[=param_d2]{param_d2()}}, which this must agree with through the two traces.
+keys, and \code{\link[=param_d2]{param_d2()}}, with which this must agree through the two traces.
 }

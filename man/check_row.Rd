@@ -11,10 +11,10 @@ check_row(name, status, statistic = NA_real_)
 \code{"membership"}, \code{"round trip"}, \code{"first derivatives"} and the rest.}
 
 \item{status}{One of \code{"OK"}, \code{"FAIL"} or \code{"NOT CHECKED"}. The third is used
-where the quantity comes from a numerical fallback and no independent route
-exists to compare against.}
+where the quantity comes from a numerical fallback and the check does not
+have an independent route against which to compare it.}
 
-\item{statistic}{The number the verdict rests on, a relative discrepancy, or
+\item{statistic}{The number on which the verdict rests, a relative discrepancy, or
 \code{NA_real_} for a check that is structural and has no number, such as the
 shape and name check.}
 }

@@ -15,8 +15,8 @@ A list as described in \code{\link[=param_readable]{param_readable()}}.
 }
 \description{
 Declares two quantities: the marginal variance and the correlation that every
-pair shares. The Jacobian is diagonal, through \code{\link[=readable_diagonal]{readable_diagonal()}}, each quantity
-being one link of one free value.
+pair shares. The Jacobian is diagonal, through \code{\link[=readable_diagonal]{readable_diagonal()}},
+because each quantity is one link of one free value.
 
 The correlation's interval is built on the inverse hyperbolic tangent. The
 family's own link is bounded below by \eqn{-1/(p-1)}, which is above \eqn{-1}

@@ -16,10 +16,10 @@ A numeric vector of length \code{s@n_free}, named by \code{s@free_names}.
 }
 \description{
 Returns the matrix logarithm of \code{m}, read off its eigendecomposition as
-\eqn{Q \log(\Lambda) Q^\top} and then read out of the lower triangle. Exact
-and a true inverse of \code{\link[=param_value.MatrixLogParam]{param_value.MatrixLogParam()}}, the matrix logarithm of
-a symmetric positive definite matrix being unique among symmetric matrices.
-The round trip passes through two eigendecompositions, one in each
+\eqn{Q \log(\Lambda) Q^\top} and then read out of the lower triangle. The
+result is exact and is a true inverse of \code{\link[=param_value.MatrixLogParam]{param_value.MatrixLogParam()}},
+because the matrix logarithm of a symmetric positive definite matrix is
+unique among symmetric matrices. The round trip passes through two eigendecompositions, one in each
 direction.
 }
 \details{
@@ -28,6 +28,6 @@ non-positive eigenvalue is not a real number, so there is no free vector to
 return. The test is on the eigenvalues of \code{m}.
 }
 \seealso{
-\code{\link[=param_value.MatrixLogParam]{param_value.MatrixLogParam()}}, the map this inverts.
+\code{\link[=param_value.MatrixLogParam]{param_value.MatrixLogParam()}}, the map that this method inverts.
 }
 \keyword{internal}

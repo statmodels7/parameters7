@@ -20,8 +20,8 @@ Returns \eqn{M = \mathrm{diag}(h(\eta_1), \dots, h(\eta_p))}, the inverse link
 applied to each free value and placed on the diagonal. For a
 \code{\link[=scalar_matrix]{scalar_matrix()}} the one free value is recycled, giving \eqn{h(\eta_1) I}.
 Positive definiteness follows from the link, which \code{\link[=check_positive_link]{check_positive_link()}}
-required at construction to map into the non-negative half line, so nothing
-is tested here.
+required at construction to map into the non-negative half line, so
+definiteness is not tested here.
 }
 \seealso{
 \code{\link[=diag_entries]{diag_entries()}}, which applies the link, and

@@ -64,15 +64,15 @@ construction.
 Every matrix family in the package returns a subclass of it:
 \code{\link[=log_cholesky]{log_cholesky()}}, \code{\link[=matrix_log]{matrix_log()}}, \code{\link[=diagonal_matrix]{diagonal_matrix()}}, \code{\link[=scalar_matrix]{scalar_matrix()}},
 \code{\link[=correlation_matrix]{correlation_matrix()}}, \code{\link[=compound_symmetry]{compound_symmetry()}}, \code{\link[=ar1]{ar1()}}, \code{\link[=autoregressive]{autoregressive()}},
-\code{\link[=ar1_inv]{ar1_inv()}}, \code{\link[=autoregressive_inv]{autoregressive_inv()}}, \code{\link[=scaled_matrix]{scaled_matrix()}} and the five
+\code{\link[=ar1_inv]{ar1_inv()}}, \code{\link[=autoregressive_inv]{autoregressive_inv()}}, \code{\link[=scaled_matrix]{scaled_matrix()}} and the
 compositions \code{\link[=kron_identity]{kron_identity()}}, \code{\link[=block_diag]{block_diag()}}, \code{\link[=dr_prod]{dr_prod()}}, \code{\link[=sum_struct]{sum_struct()}}
 and \code{\link[=inverse_of]{inverse_of()}}.
 }
 \section{Rank and null space are fixed at construction}{
 They are properties of the family, the same at every point \eqn{\eta}.
-Scaling a matrix by a positive number leaves its null space alone, and the
-null space of a sum of positive semidefinite matrices is the intersection of
-theirs, so no free value moves it. Recording them once at construction is
+Scaling a matrix by a positive number leaves its null space unchanged, and
+the null space of a sum of positive semidefinite matrices is the intersection
+of theirs, so the null space does not depend on any free value. Recording them once at construction is
 exact, and it is also the only stable way to obtain them: counting the small
 eigenvalues of an assembled matrix is not scale invariant, and reads a
 component whose weight is small as a null direction. \code{\link[=param_null_basis]{param_null_basis()}}
@@ -105,7 +105,7 @@ s <- log_cholesky(3)
 c(parameter = S7::S7_inherits(s, parameter),
   matrix_parameter = S7::S7_inherits(s, matrix_parameter))
 
-# The three properties that this branch adds.
+# This branch adds three properties.
 c(dimension = s@dimension, rank = s@rank, null_columns = ncol(s@null_basis))
 
 # Belonging to this branch is what gives the family a log-determinant, and

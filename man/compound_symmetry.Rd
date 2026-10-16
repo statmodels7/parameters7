@@ -7,7 +7,7 @@
 compound_symmetry(dimension, link_scale = linkfunctions7::log_link())
 }
 \arguments{
-\item{dimension}{The side \eqn{p} of the matrix, \strong{at least 2}. A one by one
+\item{dimension}{The side \eqn{p} of the matrix, at least 2. A one by one
 matrix has no correlation, so \code{compound_symmetry(1)} signals an error
 stating that the family would carry a free value with no effect.}
 
@@ -29,9 +29,9 @@ Returns an object holding the exchangeable covariance
 \deqn{M(\eta) = \sigma^2\{(1-\rho)I + \rho J\},}
 
 with \eqn{\sigma^2} positive and \eqn{\rho} the correlation that every pair
-shares. Two free values at every dimension, against the \eqn{p(p+1)/2} of
-\code{\link[=log_cholesky]{log_cholesky()}}, so it is the parametrization to use when the measurements
-are exchangeable: repeated measures on a subject, items in a block, the
+shares. The family has two free values at every dimension, against the
+\eqn{p(p+1)/2} of \code{\link[=log_cholesky]{log_cholesky()}}, so it is the parametrization to use when
+the measurements are exchangeable: repeated measures on a subject, items in a block, the
 covariance that a random intercept induces.
 }
 \section{Bounds of the correlation}{
@@ -47,7 +47,7 @@ The correlation is therefore mapped by
 \eqn{-0.5} is inside \eqn{(-1, 1)} and outside the cone. The bound depends on
 the dimension, so two objects of different sizes carry different links.
 
-A free value of 0 is the \strong{midpoint} of that interval, so at \eqn{p = 4} it
+A free value of 0 is the midpoint of that interval, so at \eqn{p = 4} it
 gives a correlation of \eqn{1/3}.
 }
 
@@ -57,8 +57,8 @@ From the eigenvalues,
 \deqn{\log|M| = p\log\sigma^2 + \log\{1 + (p-1)\rho\} + (p-1)\log(1-\rho),}
 
 a sum of a function of one free value and a function of the other, so every
-mixed derivative of the log-determinant is exactly zero and no determinant is
-computed.
+mixed derivative of the log-determinant is exactly zero and a determinant is
+not computed.
 
 The inverse is compound symmetric again, by Sherman-Morrison, so
 \code{\link[=param_solve]{param_solve()}} returns it in closed form and factorizes nothing. An
@@ -67,7 +67,7 @@ closed under the choice of side.
 }
 
 \section{The derivatives}{
-The value is the scale times a pattern \strong{linear} in the correlation,
+The value is the scale times a pattern linear in the correlation,
 \eqn{I + \rho(J - I)}, so a component with \eqn{a} scale indices and \eqn{b}
 correlation indices is the \eqn{a}-th derivative of the scale times the
 \eqn{b}-th derivative of the pattern. All four orders follow from the two
@@ -84,7 +84,7 @@ matrix, \eqn{I} the identity and \eqn{J} the matrix of ones.
 }
 
 \examples{
-# Two free values at p = 4: a variance and one correlation.
+# The parameter has two free values at p = 4: a variance and one correlation.
 s <- compound_symmetry(4)
 c(n_free = s@n_free)
 s@free_names
@@ -93,7 +93,7 @@ eta <- c(log(2), 0.8)
 m <- param_value(s, eta)
 round(m, 4)
 
-# The eigenvalues are the two the bound comes from.
+# The eigenvalues are the two values from which the bound comes.
 sig2 <- m[1, 1]
 rho <- m[1, 2] / sig2
 round(eigen(m, only.values = TRUE)$values, 6)

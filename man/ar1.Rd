@@ -7,7 +7,7 @@
 ar1(dimension, link_scale = linkfunctions7::log_link())
 }
 \arguments{
-\item{dimension}{The side \eqn{p} of the matrix, \strong{at least 2}. A one by one
+\item{dimension}{The side \eqn{p} of the matrix, at least 2. A one by one
 matrix has no correlation, so \code{ar1(1)} signals an error stating that the
 family would carry a free value with no effect.}
 
@@ -58,8 +58,8 @@ off-diagonal:
      & & -\rho & 1
   \end{pmatrix}.}
 
-\code{\link[=param_solve]{param_solve()}} builds it from that form, so no factorization is performed;
-the matrix is assembled densely and multiplied by \code{b}, at \eqn{O(p^2)} per
+\code{\link[=param_solve]{param_solve()}} builds it from that form and does not factorize the matrix;
+it assembles the matrix densely and multiplies it by \code{b}, at \eqn{O(p^2)} per
 column of \code{b}.
 
 The precision is tridiagonal but is not itself an AR(1) matrix. Its lag-1
@@ -67,8 +67,8 @@ correlation is not constant along the diagonal (at \eqn{p = 4} and
 \eqn{\rho = 0.6} it is \eqn{-0.514} at the ends and \eqn{-0.441} in the
 middle), and its lag-2 correlation is 0, where an AR(1) matrix has
 \eqn{\rho^2}. An AR(1) covariance and an AR(1) precision therefore define
-different models. This family is the AR(1) pattern itself, whichever side a
-consumer puts it on; \code{\link[=ar1_inv]{ar1_inv()}} is the family whose value is the matrix
+different models. This family is the AR(1) pattern itself, on whichever side
+a consumer puts it; \code{\link[=ar1_inv]{ar1_inv()}} is the family whose value is the matrix
 above, so that the AR(1) process is the one written on the other side.
 }
 
@@ -78,7 +78,8 @@ The determinant of the correlation pattern is \eqn{(1-\rho^2)^{p-1}}, so
 \deqn{\log|M| = p\log\sigma^2 + (p-1)\log(1-\rho^2),}
 
 a sum of a function of one free value and a function of the other. Every
-mixed derivative of it is exactly zero, and no determinant is computed.
+mixed derivative of it is exactly zero, and the method does not compute a
+determinant.
 }
 
 \section{Derivatives of the pattern}{
@@ -86,8 +87,8 @@ Unlike the pattern of \code{\link[=compound_symmetry]{compound_symmetry()}}, thi
 the correlation. An entry is \eqn{\rho^{m}}
 for the lag \eqn{m}, so its derivatives in the free value are a power composed
 with the link, taken to fourth order by \code{\link[=compose_order]{compose_order()}}. Each distinct lag is
-composed once and written into every entry that carries it, the matrix having
-only \eqn{p} distinct values.
+composed once and written into every entry that carries it, because the
+matrix has only \eqn{p} distinct values.
 }
 
 \section{Notation}{
@@ -98,7 +99,8 @@ matrix and \eqn{m = |i-j|} the lag of an entry.
 }
 
 \examples{
-# A 4 x 4 AR(1) covariance at a variance of 2 and a correlation of 0.6.
+# Here is a 4 x 4 AR(1) covariance at a variance of 2 and a correlation of
+# 0.6.
 s <- ar1(4)
 eta <- c(log(2), atanh(0.6))
 m <- param_value(s, eta)
@@ -107,7 +109,7 @@ round(m, 4)
 # The entries really are sigma^2 rho^|i-j|.
 all.equal(m[1, 4], 2 * 0.6^3, check.attributes = FALSE)
 
-# A free value of 0 is a correlation of 0, the link being rhobit.
+# A free value of 0 is a correlation of 0, because the link is rhobit.
 param_value(s, c(0, 0))[1, 2]
 
 # The inverse is tridiagonal, and exact: an AR(1) process is Markov.

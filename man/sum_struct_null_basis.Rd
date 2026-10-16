@@ -12,11 +12,11 @@ same side, already checked by \code{\link[=sum_struct]{sum_struct()}}.}
 }
 \value{
 A numeric matrix with \code{nrow(components[[1]])} rows whose columns are
-an orthonormal basis of the shared null space, with \strong{zero columns} where
+an orthonormal basis of the shared null space, with zero columns where
 the family has full rank.
 }
 \description{
-Returns an orthonormal basis of the \strong{intersection} of the components' null
+Returns an orthonormal basis of the intersection of the components' null
 spaces, which is the null space of every non-negative combination of them: a
 quadratic form \eqn{v^\top M v = \sum_k c_k\, v^\top P_k v} is a sum of
 non-negative terms, so it vanishes only where every term does. It is therefore
@@ -27,7 +27,7 @@ The components are stacked into one tall matrix and its right singular vectors
 at negligible singular values are returned, which is the intersection of the
 row spaces' orthogonal complements.
 
-Each component is \strong{divided by its own largest entry} before stacking.
+Each component is divided by its own largest entry before stacking.
 Without that normalization a component whose scale is many orders below
 another's would fall below the tolerance and be read as absent, which is the
 failure that a rank taken from an assembled matrix shows (see \code{\link[=sum_struct]{sum_struct()}}).

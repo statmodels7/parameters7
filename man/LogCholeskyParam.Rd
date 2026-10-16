@@ -46,9 +46,9 @@ An object of class \code{LogCholeskyParam}, a subclass of
 \code{param_params}, whose only entry is \code{positions}.
 }
 \description{
-The S7 class of unstructured symmetric positive definite matrices in the
-log-Cholesky parametrization, \eqn{M = L L^\top} with \eqn{L} lower triangular
-and positive on the diagonal. The methods of the family dispatch on this
+This S7 class represents unstructured symmetric positive definite matrices in
+the log-Cholesky parametrization, \eqn{M = L L^\top} with \eqn{L} lower
+triangular and positive on the diagonal. The methods of the family dispatch on this
 class, and each of them is closed form, including all four derivative orders
 and all four orders of the log-determinant.
 
@@ -57,7 +57,7 @@ properties directly and does no work; using it means computing \code{free_names}
 \code{rank} and \code{param_params} by hand.
 }
 \examples{
-# The class is what dispatch keys on.
+# Dispatch keys on the class.
 s <- log_cholesky(2)
 c(S7::S7_inherits(s, LogCholeskyParam),
   S7::S7_inherits(s, matrix_parameter))

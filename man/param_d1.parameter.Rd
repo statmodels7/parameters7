@@ -12,12 +12,13 @@ checked by the generic.}
 \item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A list of \code{s@n_free} estimates named by \code{s@free_names}, each shaped
-like the result of \code{\link[=param_value]{param_value()}} and symmetrized for a matrix family.
+A list of \code{s@n_free} estimates named by \code{s@free_names}, each of which
+has the shape of the result of \code{\link[=param_value]{param_value()}} and is symmetrized for a
+matrix family.
 }
 \description{
-The method that every \code{\link[=parameter]{parameter()}} inherits when it registers no \code{\link[=param_d1]{param_d1()}} of
-its own. It estimates \eqn{\partial V/\partial \eta_k} by one central
+This is the method that every \code{\link[=parameter]{parameter()}} inherits when it registers no
+\code{\link[=param_d1]{param_d1()}} of its own. It estimates \eqn{\partial V/\partial \eta_k} by one central
 difference of \code{\link[=param_value]{param_value()}} in each component, through \code{\link[=numerical_d1]{numerical_d1()}}
 at its default accuracy 4: the five-point rule at the step
 \eqn{\varepsilon^{1/5}\max(1, |\eta_k|)}, at a cost of \eqn{4d}

@@ -17,8 +17,8 @@ A symmetric \code{s@dimension} by \code{s@dimension} numeric matrix with one or
 two non-zero entries, all of them 1.
 }
 \description{
-Returns \eqn{\partial S / \partial \eta_k}, which is a constant matrix,
-\eqn{S} being linear in the free vector: a single 1 on the diagonal for a
+Returns \eqn{\partial S / \partial \eta_k}, which is a constant matrix
+because \eqn{S} is linear in the free vector: a single 1 on the diagonal for a
 diagonal free value, and a symmetric pair of 1s below and above the diagonal
 for the rest. These are the directions against which the Frechet
 derivatives contract.

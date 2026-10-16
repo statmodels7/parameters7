@@ -21,13 +21,15 @@ At order 1, a list of \code{s@n_free} symmetric matrices named by
 \code{s@dimension} and labeled \code{v1}, \code{v2}, ..., \code{vp} on both margins.
 }
 \description{
-\code{param_d1()}, \code{param_d2()}, \code{param_d3()} and \code{param_d4()} for a \code{\link[=dr_prod]{dr_prod()}}
-parameter. Each component is the scale factor times the correlation's own
-component, elementwise, the two groups of free values being disjoint, so
-the correlation family's own components are used and nothing is differenced.
+Defines \code{param_d1()}, \code{param_d2()}, \code{param_d3()} and \code{param_d4()} for a
+\code{\link[=dr_prod]{dr_prod()}} parameter. Each component is the scale factor times the
+correlation's own component, elementwise, because the two groups of free
+values are disjoint, so the correlation family's own components are used and
+finite differences are not taken.
 }
 \details{
-The four share \code{\link[=dr_prod_derivs]{dr_prod_derivs()}} and differ only in the order they pass. Both
+The four share \code{\link[=dr_prod_derivs]{dr_prod_derivs()}} and differ only in the order that they
+pass. Both
 factors are sparse, and where their supports miss each other the component is
 exactly zero; see \code{\link[=dr_prod]{dr_prod()}} for the rule.
 }

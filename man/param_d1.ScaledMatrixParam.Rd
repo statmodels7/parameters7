@@ -16,9 +16,10 @@ A list with one symmetric matrix named by \code{s@free_names}, or an empty
 list for a fixed parameter.
 }
 \description{
-Closed form: \eqn{\partial_\eta M = h'(\eta)\,P}, the fixed matrix times the
-link's own first derivative. Under the default log link \eqn{h' = h}, so the
-derivative \strong{is} the matrix, which the example on \code{\link[=param_d1]{param_d1()}} checks.
+The first derivative has closed form, \eqn{\partial_\eta M = h'(\eta)\,P},
+which is the fixed matrix times the link's own first derivative. Under the
+default log link \eqn{h' = h}, so the derivative is the matrix, which the
+example on \code{\link[=param_d1]{param_d1()}} checks.
 
 A fixed parameter, built with \code{link = NULL}, has no free value, so the list is
 empty.

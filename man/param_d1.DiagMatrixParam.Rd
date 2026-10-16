@@ -16,7 +16,8 @@ A list of \code{s@n_free} diagonal matrices named by \code{s@free_names}, each
 \code{s@dimension} by \code{s@dimension} with dimnames \code{v1}, \code{v2}, ...
 }
 \description{
-Closed form, and it is the link's own derivative placed on a diagonal:
+Computes each first derivative in closed form as the link's own derivative
+placed on a diagonal:
 
 \deqn{\partial_k M = h'(\eta_k)\, \textstyle\sum_{i:\, o_i = k} E_{ii},}
 
@@ -26,7 +27,7 @@ where \eqn{o_i} is the free value to which entry \eqn{i} belongs. For a
 whole diagonal and \eqn{\partial_1 M = h'(\eta_1) I}.
 
 \eqn{h'} comes from \code{linkfunctions7::dlinkinv()}, so its accuracy is the
-link's and nothing is differenced.
+link's, and the derivative is computed without differencing.
 }
 \seealso{
 \code{\link[=diag_owner]{diag_owner()}} for the ownership map, and

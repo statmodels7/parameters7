@@ -6,7 +6,7 @@
 \arguments{
 \item{s}{A \code{\link[=parameter]{parameter()}} object, whose \code{param_name} goes into the message.}
 
-\item{m}{A value of the family's shape. Never read.}
+\item{m}{A value of the family's shape. The method never reads it.}
 
 \item{...}{Unused, and accepted so the signature matches the generic's.}
 }
@@ -14,8 +14,8 @@
 Never returns; always signals an error.
 }
 \description{
-The method that every \code{\link[=parameter]{parameter()}} inherits when it registers no \code{\link[=param_free]{param_free()}} of
-its own. It always signals an error naming the family; it is the one generic
+This is the method that every \code{\link[=parameter]{parameter()}} inherits when it registers no
+\code{\link[=param_free]{param_free()}} of its own. It always signals an error naming the family; it is the one generic
 whose base method rejects the call instead of computing. An inverse obtained
 by minimizing \eqn{\lVert V(\eta) - m \rVert} would return an \eqn{\eta} even
 for a matrix that lies outside the family's set, and the caller could not

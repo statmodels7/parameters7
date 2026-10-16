@@ -16,8 +16,8 @@ A \code{s@dimension} by \code{s@dimension} correlation matrix: symmetric,
 positive definite, unit diagonal, dimnames \code{v1}, \code{v2}, ...
 }
 \description{
-Returns \eqn{R = LL^\top}, with \eqn{L} assembled from the angles: row \eqn{i}
-is a unit vector in spherical coordinates, so the diagonal of \eqn{R} is 1
+Returns \eqn{R = LL^\top}, where \eqn{L} is assembled from the angles: row
+\eqn{i} is a unit vector in spherical coordinates, so the diagonal of \eqn{R} is 1
 and its off-diagonal entries are correlations. The diagonal is then set to
 exactly 1, which removes the rounding of the telescoping sum; the positive
 definiteness follows from the construction and is not tested. The cost is one

@@ -11,7 +11,7 @@ mlog_tables(s, eta, order)
 
 \item{eta}{A numeric vector of free values, of length \code{s@n_free}.}
 
-\item{order}{The highest derivative order wanted: 1, 2, 3 or 4.}
+\item{order}{The highest derivative order to compute: 1, 2, 3 or 4.}
 }
 \value{
 A list with \code{q} and \code{lam}, the eigenvectors and eigenvalues of
@@ -19,12 +19,12 @@ A list with \code{q} and \code{lam}, the eigenvectors and eigenvalues of
 divided-difference tables \code{dd2} up to \verb{dd<order+1>}.
 }
 \description{
-Everything the derivative contractions need: the eigendecomposition of
-\eqn{S}, the rotated basis directions, and the divided-difference tables
-of the requested orders, computed once per free vector.
+Computes everything that the derivative contractions need, namely the
+eigendecomposition of \eqn{S}, the rotated basis directions, and the
+divided-difference tables of the requested orders, once per free vector.
 }
 \details{
-Everything here depends on \eqn{\eta} alone, never on the index tuple, so it
+Everything here depends only on \eqn{\eta}, never on the index tuple, so it
 is computed once and every component of the order reads it. The rotated
 directions are \eqn{Q^\top E_k Q} for each basis direction \eqn{E_k}. The
 table of \eqn{m} points is an array with one divided difference for each

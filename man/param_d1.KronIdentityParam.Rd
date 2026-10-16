@@ -17,9 +17,11 @@ A list of \code{s@n_free} symmetric matrices named by \code{s@free_names}, each
 \code{v(md)} on both margins.
 }
 \description{
-Closed form: \eqn{\partial_k M = I_m \otimes \partial_k S}, the inner
-parameter's first derivatives lifted one at a time. Exact whenever the inner
-parameter's are, and numerical whenever they are not. \code{\link[=param_is_numerical]{param_is_numerical()}}
+The first derivative has closed form,
+\eqn{\partial_k M = I_m \otimes \partial_k S}, which lifts the inner
+parameter's first derivatives one at a time. The derivatives are exact
+whenever the inner parameter's are, and numerical whenever they are not.
+\code{\link[=param_is_numerical]{param_is_numerical()}}
 does not propagate this: it reports \code{FALSE} for every quantity of the
 composite, which has methods of its own.
 }

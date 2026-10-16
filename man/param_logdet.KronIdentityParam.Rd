@@ -15,10 +15,11 @@ already checked by the generic.}
 A single number.
 }
 \description{
-Closed form: \eqn{\log|M|_{+} = m \log|S|_{+}}, the inner parameter's
-log-(pseudo-)determinant times the number of blocks. A block-diagonal
-determinant is the product of the blocks' and they are identical, so nothing
-of side \eqn{md} is decomposed.
+The log-determinant has closed form, \eqn{\log|M|_{+} = m \log|S|_{+}}, which
+is the inner parameter's log-(pseudo-)determinant times the number of
+blocks. A block-diagonal determinant is the product of the blocks' and the
+blocks are identical, so the method does not decompose any matrix of side
+\eqn{md}.
 }
 \seealso{
 \code{\link[=param_dlogdet.KronIdentityParam]{param_dlogdet.KronIdentityParam()}} for its derivatives.

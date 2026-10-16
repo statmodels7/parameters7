@@ -9,10 +9,10 @@ power_derivs(r, m, order)
 \arguments{
 \item{r}{The point, a single number or a vector.}
 
-\item{m}{The exponent, a non-negative integer. At \code{m = 0} all are 0, the
-power being the constant 1; at \code{m = 2} the first four are \verb{c(2r, 2, 0, 0)}.}
+\item{m}{The exponent, a non-negative integer. At \code{m = 0} all are 0, because
+the power is the constant 1; at \code{m = 2} the first four are \verb{c(2r, 2, 0, 0)}.}
 
-\item{order}{The highest order wanted, an integer from 0 to 4.}
+\item{order}{The highest order to compute, an integer from 0 to 4.}
 }
 \value{
 A list of \code{order} elements, the first to the \code{order}-th
@@ -22,8 +22,8 @@ those of higher order are the scalar 0.
 \description{
 Returns the derivatives of orders 1 to \code{order} of \eqn{r \mapsto r^{m}} at
 \eqn{r}, ready to be the outer map of a \code{\link[=compose_order]{compose_order()}} call. They are
-\eqn{m(m-1)\cdots(m-k+1)\,r^{m-k}} and vanish beyond order \eqn{m}, the power
-being a polynomial. \code{ar1_pattern()} calls it once per distinct lag.
+\eqn{m(m-1)\cdots(m-k+1)\,r^{m-k}} and vanish beyond order \eqn{m}, because
+the power is a polynomial. \code{ar1_pattern()} calls it once per distinct lag.
 }
 \seealso{
 \code{\link[=compose_order]{compose_order()}}, which chains these onto a link's derivatives,

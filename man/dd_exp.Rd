@@ -7,20 +7,21 @@
 dd_exp(lams)
 }
 \arguments{
-\item{lams}{The arguments, in any order and with repeats allowed. A divided
-difference is symmetric in its arguments, so the order does not matter. At
-most 5 of them, the number fourth-order derivatives need.}
+\item{lams}{The arguments, which may be in any order and may repeat. A
+divided difference is symmetric in its arguments, so the order does not
+matter. The number of arguments is at most 5, which is the number that
+fourth-order derivatives need.}
 }
 \value{
 A single number.
 }
 \description{
-Returns \eqn{e[\lambda_1, \dots, \lambda_m]} by the \strong{Opitz theorem}: build
+Returns \eqn{e[\lambda_1, \dots, \lambda_m]} by the Opitz theorem: build
 the upper bidiagonal matrix with the arguments on the diagonal and ones above
 it, exponentiate it, and read the divided difference off the top-right corner.
-Exact under repeated arguments, where the recursive quotient
+The value is exact under repeated arguments, where the recursive quotient
 \eqn{(f[\lambda_2..] - f[\lambda_1..])/(\lambda_m - \lambda_1)} divides by
-zero, and accurate under nearly repeated ones, where it cancels.
+zero, and accurate under nearly repeated ones, where the quotient cancels.
 }
 \details{
 When two arguments nearly coincide, the quotient loses accuracy as the gap

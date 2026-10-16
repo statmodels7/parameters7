@@ -13,8 +13,8 @@ ar_inv_factors(s, eta, cd, order)
 
 \item{cd}{The codes of \code{\link[=ar_inv_codes]{ar_inv_codes()}}.}
 
-\item{order}{The derivative order the codes belong to, which bounds every
-factor's order.}
+\item{order}{The derivative order to which the codes belong, which bounds
+every factor's order.}
 }
 \value{
 A list with \code{u} and \code{tau}, each a list indexed by code: \code{u} of
@@ -23,19 +23,19 @@ A list with \code{u} and \code{tau}, each a list indexed by code: \code{u} of
 \description{
 Returns the two factors of \eqn{\Omega = U^\top \mathrm{diag}(\tau) U},
 each with its derivative arrays to fourth order, stored under the integer
-code of the sub-multiset differentiated in.
+code of the sub-multiset of indices in which the derivative is taken.
 }
 \details{
-\eqn{U} is unit lower triangular of bandwidth \eqn{q}, row \eqn{t} holding
-the coefficients of the best linear predictor of \eqn{y_t} from its
+\eqn{U} is unit lower triangular of bandwidth \eqn{q}, and its row \eqn{t}
+holds the coefficients of the best linear predictor of \eqn{y_t} from its
 predecessors, which for \eqn{t} beyond the order are the autoregression's
 own. Those lower-order coefficients are the coefficients of the same family
 at that order (row \eqn{k+1} of \code{ar_prediction()}, negated and read
 backwards, is the \code{phi} of \code{autoregressive(p, order = k)} up to rounding), so
 the intermediate derivative arrays come from the compiled Levinson-Durbin
-recursion run once per order, and nothing is rederived here. A component
-differentiating in a partial autocorrelation that the order does not reach
-is exactly zero.
+recursion run once per order, and the function does not rederive them. A
+component differentiating in a partial autocorrelation that the order does
+not reach is exactly zero.
 
 \eqn{\tau_t = 1/v_t} is a product of one factor per free value:
 \eqn{1/v_0} from the scale, and \eqn{(1-r_j^2)^{-1} = \cosh^2 z_j} from
@@ -47,6 +47,6 @@ carry.
 }
 \seealso{
 \code{\link[=autoregressive_inv]{autoregressive_inv()}} for the formula and \code{\link[=ar_tables]{ar_tables()}} for the
-recursion the coefficients come from.
+recursion from which the coefficients come.
 }
 \keyword{internal}

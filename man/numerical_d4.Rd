@@ -16,15 +16,15 @@ whole number.}
 }
 \value{
 A list of \code{choose(s@n_free + 3, 4)} estimates keyed as
-\code{param_tuple_names(s, 4)} and in that order, each shaped like
-\code{\link[=param_value]{param_value()}}'s result and symmetrized for a matrix family.
+\code{param_tuple_names(s, 4)} and in that order, each of which has the shape
+of \code{\link[=param_value]{param_value()}}'s result and is symmetrized for a matrix family.
 }
 \description{
 Estimates the distinct fourth derivatives, one tensor-product stencil per
 index tuple, through \code{\link[=param_tensor]{param_tensor()}}, applied to the highest analytic
 derivative below the fourth that the family supplies and to \code{\link[=param_value]{param_value()}}
-where there is none. It is the order-four analogue of \code{\link[=numerical_d3]{numerical_d3()}} and
-the method \code{\link[=param_d4]{param_d4()}} dispatches to when a family has not written its own.
+where there is none. It is the order-four analogue of \code{\link[=numerical_d3]{numerical_d3()}}, and
+\code{\link[=param_d4]{param_d4()}} dispatches to it when a family has not written its own.
 }
 \details{
 The tensor product is the one written out under \code{\link[=numerical_d3]{numerical_d3()}}. With an
@@ -40,7 +40,7 @@ transcription error in a closed form.
 s <- scalar_matrix(2)
 max(abs(numerical_d4(s, 0.3)[[1]] - param_value(s, 0.3)))
 
-# Against a family that writes its own.
+# The estimates are compared with those of a family that writes its own.
 q <- log_cholesky(2)
 eta <- c(0.2, -0.1, 0.4)
 ana <- param_d4(q, eta)

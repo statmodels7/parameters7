@@ -15,7 +15,8 @@ already checked by the generic.}
 A numeric vector of length \code{s@n_free}, named by \code{s@free_names}.
 }
 \description{
-Closed form: \eqn{m} times the inner parameter's gradient. A shared free value
+The gradient has closed form and equals \eqn{m} times the inner parameter's
+gradient. A shared free value
 moves every block, so the gradient is multiplied rather than copied: at
 \eqn{m = 3} over a 2 x 2 log-Cholesky covariance it is \code{c(6, 6, 0)} where the
 inner parameter returns \code{c(2, 2, 0)}.

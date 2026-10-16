@@ -5,9 +5,10 @@ NULL
 #' Matrix Logarithm Parameter
 #'
 #' @description
-#' The S7 class of unstructured symmetric positive definite matrices in the
-#' matrix logarithm parametrization, \eqn{M = \exp(S)} with \eqn{S} symmetric and
-#' its lower triangle read straight off the free vector. It is a second chart
+#' `MatrixLogParam` is the S7 class of unstructured symmetric positive definite
+#' matrices in the matrix logarithm parametrization, \eqn{M = \exp(S)} with
+#' \eqn{S} symmetric and its lower triangle read straight off the free vector.
+#' It is a second chart
 #' onto the cone that [log_cholesky()] parametrizes, with different quantities
 #' in closed form.
 #'
@@ -27,11 +28,12 @@ NULL
 #'   this class inherits.
 #'
 #' @examples
-#' # The same cone as log_cholesky(), the same number of free values.
+#' # This chart parametrizes the same cone as log_cholesky(), with the same
+#' # number of free values.
 #' s <- matrix_log(3)
 #' c(matrix_log = s@n_free, log_cholesky = log_cholesky(3)@n_free)
 #'
-#' # But different free names: no entry is transformed here.
+#' # The free names differ, because the entries of S are not transformed here.
 #' rbind(matrix_log = s@free_names, log_cholesky = log_cholesky(3)@free_names)
 #'
 #' @export
@@ -43,17 +45,17 @@ MatrixLogParam <- S7::new_class("MatrixLogParam", parent = matrix_parameter)
 #' @description
 #' Returns an object holding the matrix logarithm parametrization of a symmetric
 #' positive definite matrix: \eqn{M = \exp(S)} with \eqn{S} symmetric and
-#' **genuinely free**. No entry is transformed; the free values fill the lower
-#' triangle of \eqn{S} directly, the diagonal first and then below the diagonal
-#' column by column, and the exponential does the rest. Any vector in
-#' \eqn{\mathbb{R}^{p(p+1)/2}} gives a positive definite matrix, the exponential
-#' of a symmetric matrix having positive eigenvalues, as long as no eigenvalue
-#' of \eqn{S} exceeds about 709.78, above which the exponential overflows in
-#' double precision.
+#' genuinely free. The entries of \eqn{S} are not transformed: the free values
+#' fill the lower triangle of \eqn{S} directly, starting with the diagonal and
+#' continuing below the diagonal column by column, and the exponential does the
+#' rest. Any vector in \eqn{\mathbb{R}^{p(p+1)/2}} gives a positive definite
+#' matrix, because the exponential of a symmetric matrix has positive
+#' eigenvalues, as long as all eigenvalues of \eqn{S} are at most about 709.78;
+#' above that value the exponential overflows in double precision.
 #'
 #' It parametrizes the same cone as [log_cholesky()] with the same number of free
 #' values. The choice between the two depends on which quantities should have a
-#' closed form; see **Details**.
+#' closed form; see Details.
 #'
 #' @details
 #' # The log-determinant and the inverse
@@ -69,10 +71,10 @@ MatrixLogParam <- S7::new_class("MatrixLogParam", parent = matrix_parameter)
 #' # The derivatives, and the reason for the Opitz route
 #'
 #' They are the Frechet derivatives of the matrix exponential, by the
-#' Daleckii-Krein representation. With \eqn{S = Q \Lambda Q^\top} and the
-#' directions rotated by \eqn{Q}, the \eqn{k}-th derivative contracts the
-#' directions against divided differences of \eqn{e^x} of order \eqn{k+1} at the
-#' eigenvalues, summed over the orderings of the directions.
+#' Daleckii-Krein representation. With \eqn{S = Q \Lambda Q^\top}, the
+#' \eqn{k}-th derivative contracts the directions, rotated by \eqn{Q}, against
+#' divided differences of \eqn{e^x} of order \eqn{k+1} at the eigenvalues,
+#' summed over the orderings of the directions.
 #'
 #' The divided differences come from the Opitz theorem, the exponential of a
 #' small upper bidiagonal matrix read off its corner, in place of the recursive
@@ -96,7 +98,7 @@ MatrixLogParam <- S7::new_class("MatrixLogParam", parent = matrix_parameter)
 #'
 #' @section Notation:
 #' \eqn{\eta} is the free vector, of length \eqn{d = p(p+1)/2}, \eqn{S} the
-#' symmetric matrix it fills, and \eqn{M = \exp(S)} the value. \eqn{Q} and
+#' symmetric matrix that it fills, and \eqn{M = \exp(S)} the value. \eqn{Q} and
 #' \eqn{\Lambda} are the eigenvectors and eigenvalues of \eqn{S}, and
 #' \eqn{e[\lambda_1, \dots, \lambda_m]} a divided difference of the exponential.
 #'
@@ -122,8 +124,8 @@ MatrixLogParam <- S7::new_class("MatrixLogParam", parent = matrix_parameter)
 #'   the map at \eqn{-\eta}.
 #'
 #' @examples
-#' # A 3 x 3 unstructured covariance. The free names carry no transformation:
-#' # the free values are the entries of S itself.
+#' # This example uses a 3 x 3 unstructured covariance. The free names carry no
+#' # transformation: the free values are the entries of S itself.
 #' s <- matrix_log(3)
 #' s@free_names
 #' eta <- c(0.2, -0.3, 0.4, 0.1, -0.2, 0.15)
@@ -136,8 +138,8 @@ MatrixLogParam <- S7::new_class("MatrixLogParam", parent = matrix_parameter)
 #' c(closed = param_logdet(s, eta), trace = sum(eta[1:3]),
 #'   from_eigen = sum(log(eigen(M, only.values = TRUE)$values)))
 #'
-#' # Which makes its gradient a vector of ones and zeros, and every higher
-#' # order exactly zero.
+#' # This makes its gradient a vector of ones and zeros, and every higher order
+#' # exactly zero.
 #' param_dlogdet(s, eta)
 #' c(second = max(abs(param_d2logdet(s, eta))),
 #'   third = max(abs(param_d3logdet(s, eta))),
@@ -172,9 +174,9 @@ matrix_log <- function(dimension) {
 #' The Symmetric Matrix Behind a Free Vector
 #'
 #' @description
-#' Fills the lower triangle of \eqn{S} with the free values, in the order
-#' `param_params$positions` records, and mirrors it to the upper triangle. No
-#' transformation is applied: the free values **are** the entries of \eqn{S}.
+#' Fills the lower triangle of \eqn{S} with the free values, in the order that
+#' `param_params$positions` records, and mirrors it to the upper triangle. The
+#' free values are not transformed: they are the entries of \eqn{S}.
 #' In [log_cholesky()], by contrast, the diagonal free values are logarithms.
 #'
 #' @param s A [MatrixLogParam()] object, whose `dimension` and
@@ -201,8 +203,8 @@ mlog_s <- function(s, eta) {
 #' The Basis Direction of One Free Value
 #'
 #' @description
-#' Returns \eqn{\partial S / \partial \eta_k}, which is a constant matrix,
-#' \eqn{S} being linear in the free vector: a single 1 on the diagonal for a
+#' Returns \eqn{\partial S / \partial \eta_k}, which is a constant matrix
+#' because \eqn{S} is linear in the free vector: a single 1 on the diagonal for a
 #' diagonal free value, and a symmetric pair of 1s below and above the diagonal
 #' for the rest. These are the directions against which the Frechet
 #' derivatives contract.
@@ -235,13 +237,14 @@ mlog_basis <- function(s, k) {
 #' Exponential of a Small Upper Triangular Matrix
 #'
 #' @description
-#' Scaling and squaring with a Taylor series, written out here for the tiny
-#' bidiagonal matrices that [dd_exp()] builds. The matrices are at most 5 by 5,
+#' Computes the exponential by scaling and squaring with a Taylor series,
+#' written out here for the tiny bidiagonal matrices that [dd_exp()] builds. The
+#' matrices are at most 5 by 5,
 #' so a general-purpose matrix exponential, and the dependency that it would
 #' bring, is not needed.
 #'
-#' @param a A square numeric matrix, upper triangular in every call the package
-#'   makes, and at most 5 by 5.
+#' @param a A square numeric matrix, upper triangular in every call that the
+#'   package makes, and at most 5 by 5.
 #'
 #' @return Its exponential, a numeric matrix of the same shape.
 #'
@@ -267,12 +270,12 @@ mlog_expm_small <- function(a) {
 #' Divided Differences of the Exponential
 #'
 #' @description
-#' Returns \eqn{e[\lambda_1, \dots, \lambda_m]} by the **Opitz theorem**: build
+#' Returns \eqn{e[\lambda_1, \dots, \lambda_m]} by the Opitz theorem: build
 #' the upper bidiagonal matrix with the arguments on the diagonal and ones above
 #' it, exponentiate it, and read the divided difference off the top-right corner.
-#' Exact under repeated arguments, where the recursive quotient
+#' The value is exact under repeated arguments, where the recursive quotient
 #' \eqn{(f[\lambda_2..] - f[\lambda_1..])/(\lambda_m - \lambda_1)} divides by
-#' zero, and accurate under nearly repeated ones, where it cancels.
+#' zero, and accurate under nearly repeated ones, where the quotient cancels.
 #'
 #' @details
 #' When two arguments nearly coincide, the quotient loses accuracy as the gap
@@ -280,9 +283,10 @@ mlog_expm_small <- function(a) {
 #' eigenvalues are ordinary here: any \eqn{S} with a symmetry has them, and a
 #' scalar multiple of the identity has an exactly repeated pair.
 #'
-#' @param lams The arguments, in any order and with repeats allowed. A divided
-#'   difference is symmetric in its arguments, so the order does not matter. At
-#'   most 5 of them, the number fourth-order derivatives need.
+#' @param lams The arguments, which may be in any order and may repeat. A
+#'   divided difference is symmetric in its arguments, so the order does not
+#'   matter. The number of arguments is at most 5, which is the number that
+#'   fourth-order derivatives need.
 #'
 #' @return A single number.
 #'
@@ -302,12 +306,12 @@ dd_exp <- function(lams) {
 #' The Eigendecomposition and Divided-Difference Tables at a Point
 #'
 #' @description
-#' Everything the derivative contractions need: the eigendecomposition of
-#' \eqn{S}, the rotated basis directions, and the divided-difference tables
-#' of the requested orders, computed once per free vector.
+#' Computes everything that the derivative contractions need, namely the
+#' eigendecomposition of \eqn{S}, the rotated basis directions, and the
+#' divided-difference tables of the requested orders, once per free vector.
 #'
 #' @details
-#' Everything here depends on \eqn{\eta} alone, never on the index tuple, so it
+#' Everything here depends only on \eqn{\eta}, never on the index tuple, so it
 #' is computed once and every component of the order reads it. The rotated
 #' directions are \eqn{Q^\top E_k Q} for each basis direction \eqn{E_k}. The
 #' table of \eqn{m} points is an array with one divided difference for each
@@ -316,7 +320,7 @@ dd_exp <- function(lams) {
 #'
 #' @param s A [MatrixLogParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`.
-#' @param order The highest derivative order wanted: 1, 2, 3 or 4.
+#' @param order The highest derivative order to compute: 1, 2, 3 or 4.
 #'
 #' @return A list with `q` and `lam`, the eigenvectors and eigenvalues of
 #'   \eqn{S}; `e`, a list of `s@n_free` rotated directions; and the
@@ -383,9 +387,9 @@ mlog_tables <- function(s, eta, order) {
 #' occurs that many times among all of them. Without that factor the result
 #' would be too small by exactly that factor.
 #'
-#' The cost is the reason this family's higher orders are expensive: at order 4
-#' a component with four different indices has 24 orderings, each a contraction
-#' of \eqn{O(p^5)} operations.
+#' The sum over orderings makes the higher orders of this family expensive: at order 4 a
+#' component with four different indices has 24 orderings, and each ordering is
+#' a contraction of \eqn{O(p^5)} operations.
 #'
 #' @param tb The tables of [mlog_tables()], carrying at least
 #'   `length(dirs) + 1` points.
@@ -449,7 +453,8 @@ mlog_contract <- function(tb, dirs) {
 #' `combinat_perms(c(1, 1))` gives one element. [mlog_contract()] restores the
 #' multiplicity with the product of the factorials of the repeat counts.
 #'
-#' @param x An integer vector, of length 1 to 4 in every call the package makes.
+#' @param x An integer vector, of length 1 to 4 in every call that the package
+#'   makes.
 #'
 #' @return A list of the distinct orderings of `x`, each an integer vector:
 #'   `factorial(length(x))` of them when the entries of `x` are all different,
@@ -473,8 +478,9 @@ combinat_perms <- function(x) {
 #' Third and Fourth Derivatives of a Matrix Exponential
 #'
 #' @description
-#' The derivative components of orders three and four of \eqn{M = e^{S}} with
-#' respect to the free entries of the symmetric matrix \eqn{S}.
+#' Computes the derivative components of orders three and four of
+#' \eqn{M = e^{S}} with respect to the free entries of the symmetric matrix
+#' \eqn{S}.
 #'
 #' @details
 #' The Frechet derivatives of the exponential contract chains of directions
@@ -495,7 +501,7 @@ combinat_perms <- function(x) {
 #'   `s@dimension` by `s@dimension`.
 #'
 #' @seealso [mlog_contract()], which computes one component, [mlog_tables()] for
-#'   the shared tables, and [matrix_log()] for the cost this order carries.
+#'   the shared tables, and [matrix_log()] for the cost that this order carries.
 #'
 #' @keywords internal
 mlog_higher <- function(s, eta, order) {
@@ -517,9 +523,9 @@ mlog_higher <- function(s, eta, order) {
 #' @description
 #' Returns \eqn{M = \exp(S)}, through the eigendecomposition of \eqn{S}:
 #' \eqn{Q \exp(\Lambda) Q^\top}, the exponential applied to the eigenvalues.
-#' Positive definiteness needs no checking, every \eqn{e^{\lambda}} being
-#' positive whatever \eqn{S} is, up to the overflow of the exponential for an
-#' eigenvalue above about 709.78. The cost is one \eqn{O(p^3)}
+#' Positive definiteness does not need to be checked, because every
+#' \eqn{e^{\lambda}} is positive whatever \eqn{S} is, up to the overflow of the
+#' exponential for an eigenvalue above about 709.78. The cost is one \eqn{O(p^3)}
 #' eigendecomposition.
 #' @param s A [MatrixLogParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
@@ -541,10 +547,10 @@ S7::method(param_value, MatrixLogParam) <- function(s, eta, ...) {
 #' @name param_free.MatrixLogParam
 #' @description
 #' Returns the matrix logarithm of `m`, read off its eigendecomposition as
-#' \eqn{Q \log(\Lambda) Q^\top} and then read out of the lower triangle. Exact
-#' and a true inverse of [param_value.MatrixLogParam()], the matrix logarithm of
-#' a symmetric positive definite matrix being unique among symmetric matrices.
-#' The round trip passes through two eigendecompositions, one in each
+#' \eqn{Q \log(\Lambda) Q^\top} and then read out of the lower triangle. The
+#' result is exact and is a true inverse of [param_value.MatrixLogParam()],
+#' because the matrix logarithm of a symmetric positive definite matrix is
+#' unique among symmetric matrices. The round trip passes through two eigendecompositions, one in each
 #' direction.
 #' @details
 #' A matrix that is not positive definite is rejected: the logarithm of a
@@ -555,7 +561,7 @@ S7::method(param_value, MatrixLogParam) <- function(s, eta, ...) {
 #'   matrix, already checked for shape and symmetry by the generic.
 #' @param ... Unused, and accepted so the signature matches the generic's.
 #' @return A numeric vector of length `s@n_free`, named by `s@free_names`.
-#' @seealso [param_value.MatrixLogParam()], the map this inverts.
+#' @seealso [param_value.MatrixLogParam()], the map that this method inverts.
 #' @keywords internal
 S7::method(param_free, MatrixLogParam) <- function(s, m, ...) {
   es <- eigen(m, symmetric = TRUE)
@@ -574,10 +580,10 @@ S7::method(param_free, MatrixLogParam) <- function(s, m, ...) {
 #' @title First Derivatives of a Matrix Logarithm Parameter
 #' @name param_d1.MatrixLogParam
 #' @description
-#' The Frechet derivative of the matrix exponential, by Daleckii-Krein: rotate
-#' the basis direction \eqn{E_k} by the eigenvectors of \eqn{S}, weight it
-#' entrywise by the two-point divided differences
-#' \eqn{e[\lambda_i, \lambda_j]}, and rotate back. Exact, with no
+#' Returns the Frechet derivative of the matrix exponential, by
+#' Daleckii-Krein: rotate the basis direction \eqn{E_k} by the eigenvectors of
+#' \eqn{S}, weight it entrywise by the two-point divided differences
+#' \eqn{e[\lambda_i, \lambda_j]}, and rotate back. The result is exact, without
 #' differencing.
 #'
 #' The derivative \eqn{\partial_k M} differs from \eqn{E_k \exp(S)}, because the
@@ -607,9 +613,10 @@ S7::method(param_d1, MatrixLogParam) <- function(s, eta, ...) {
 #' @title Second Derivatives of a Matrix Logarithm Parameter
 #' @name param_d2.MatrixLogParam
 #' @description
-#' The second Frechet derivative: chains of two rotated directions contracted
-#' against three-point divided differences \eqn{e[\lambda_i, \lambda_j,
-#' \lambda_k]}, summed over both orderings of the two directions.
+#' Computes the second Frechet derivative: chains of two rotated directions are
+#' contracted against three-point divided differences \eqn{e[\lambda_i,
+#' \lambda_j, \lambda_k]}, and the contractions are summed over both orderings
+#' of the two directions.
 #'
 #' For the component in one free value twice the two orderings coincide;
 #' [mlog_contract()] evaluates that ordering once and multiplies it by 2, which
@@ -632,9 +639,10 @@ S7::method(param_d2, MatrixLogParam) <- function(s, eta, ...) {
 #' @title Third Derivatives of a Matrix Logarithm Parameter
 #' @name param_d3.MatrixLogParam
 #' @description
-#' Chains of three rotated directions contracted against four-point divided
-#' differences, summed over the orderings of the three directions. Exact, with
-#' no differencing.
+#' Computes the third Frechet derivative: chains of three rotated directions
+#' are contracted against four-point divided differences, and the contractions
+#' are summed over the orderings of the three directions. The result is exact,
+#' without differencing.
 #'
 #' The cost grows quickly: up to six orderings per component, each an
 #' \eqn{O(p^4)} contraction, and \eqn{\binom{d+2}{3}} components. See
@@ -657,10 +665,11 @@ S7::method(param_d3, MatrixLogParam) <- function(s, eta, ...) {
 #' @title Fourth Derivatives of a Matrix Logarithm Parameter
 #' @name param_d4.MatrixLogParam
 #' @description
-#' Chains of four rotated directions contracted against five-point divided
-#' differences, summed over the orderings of the four directions, up to
-#' twenty-four per component. Exact, and much more expensive than the fourth
-#' derivatives of [log_cholesky()] on a matrix of the same size.
+#' Computes the fourth Frechet derivative: chains of four rotated directions
+#' are contracted against five-point divided differences, and the contractions
+#' are summed over the orderings of the four directions, up to twenty-four per
+#' component. The result is exact, and it is much more expensive to compute than
+#' the fourth derivatives of [log_cholesky()] on a matrix of the same size.
 #'
 #' The cost is the price of a linear log-determinant and of an inverse equal to
 #' the map at \eqn{-\eta}. When fourth derivatives are taken repeatedly and those
@@ -683,14 +692,14 @@ S7::method(param_d4, MatrixLogParam) <- function(s, eta, ...) {
 #' @title Log-Determinant of a Matrix Logarithm Parameter
 #' @name param_logdet.MatrixLogParam
 #' @description
-#' Closed form and linear. The eigenvalues of \eqn{M = \exp(S)} are
-#' \eqn{e^{\lambda_i}}, so
+#' Returns the log-determinant in closed form; it is linear in the free vector.
+#' The eigenvalues of \eqn{M = \exp(S)} are \eqn{e^{\lambda_i}}, so
 #'
 #' \deqn{\log|M| = \sum_i \lambda_i = \mathrm{tr}(S) = \sum_{i=1}^{p} \eta_i,}
 #'
-#' the sum of the diagonal free values. One `sum()` over \eqn{p} numbers: no
-#' eigendecomposition and no determinant, with nothing growing in \eqn{p} beyond
-#' the sum itself.
+#' which is the sum of the diagonal free values. The computation is one `sum()`
+#' over \eqn{p} numbers, without an eigendecomposition or a determinant, and its
+#' cost does not grow in \eqn{p} beyond the sum itself.
 #' @param s A [MatrixLogParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic.
@@ -707,10 +716,10 @@ S7::method(param_logdet, MatrixLogParam) <- function(s, eta, ...) {
 #' @title Log-Determinant Gradient of a Matrix Logarithm Parameter
 #' @name param_dlogdet.MatrixLogParam
 #' @description
-#' Closed form and constant: 1 in each of the \eqn{p} diagonal directions and 0
-#' in the \eqn{p(p-1)/2} below-diagonal ones, the log-determinant being
-#' \eqn{\sum_i \eta_i}. The value does not depend on `eta`, which is read only
-#' for its length.
+#' Returns the gradient of the log-determinant in closed form; it is constant:
+#' 1 in each of the \eqn{p} diagonal directions and 0 in the \eqn{p(p-1)/2}
+#' below-diagonal ones, because the log-determinant is \eqn{\sum_i \eta_i}. The
+#' value does not depend on `eta`, which is read only for its length.
 #'
 #' The gradient is 1 where that of [log_cholesky()] is 2: there the diagonal
 #' free value is \eqn{\log L_{ii}} and \eqn{|M| = |L|^2}, while here it is a
@@ -734,7 +743,8 @@ S7::method(param_dlogdet, MatrixLogParam) <- function(s, eta, ...) {
 #' @title Log-Determinant Hessian of a Matrix Logarithm Parameter
 #' @name param_d2logdet.MatrixLogParam
 #' @description
-#' Closed form, and identically zero: \eqn{\log|M| = \mathrm{tr}(S)} is linear in
+#' Returns the second derivatives of the log-determinant, which are
+#' identically zero in closed form: \eqn{\log|M| = \mathrm{tr}(S)} is linear in
 #' the free vector, so its second derivative vanishes at every \eqn{\eta}. The
 #' zeros are exact.
 #'
@@ -759,9 +769,10 @@ S7::method(param_d2logdet, MatrixLogParam) <- function(s, eta, ...) {
 #' @title Third Log-Determinant Derivatives of a Matrix Logarithm Parameter
 #' @name param_d3logdet.MatrixLogParam
 #' @description
-#' Closed form, and identically zero, the trace being linear in the free vector.
-#' The zeros are exact, so a consumer can drop the term instead of carrying small
-#' numbers through a contraction.
+#' Returns the third derivatives of the log-determinant, which are identically
+#' zero in closed form because the trace is linear in the free vector. The zeros
+#' are exact, so a consumer can drop the term instead of carrying small numbers
+#' through a contraction.
 #' @param s A [MatrixLogParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic. Its values do not enter the result.
@@ -779,9 +790,10 @@ S7::method(param_d3logdet, MatrixLogParam) <- function(s, eta, ...) {
 #' @title Fourth Log-Determinant Derivatives of a Matrix Logarithm Parameter
 #' @name param_d4logdet.MatrixLogParam
 #' @description
-#' Closed form, and identically zero, for the reason it is zero at second and
-#' third order: \eqn{\log|M| = \mathrm{tr}(S)} is linear in the free vector. The
-#' zeros are exact.
+#' Returns the fourth derivatives of the log-determinant, which are identically
+#' zero in closed form for the same reason as at second and third order:
+#' \eqn{\log|M| = \mathrm{tr}(S)} is linear in the free vector. The zeros are
+#' exact.
 #'
 #' This is the order at which a numerical fallback is least accurate, so a
 #' family whose log-determinant is not linear gains most from a closed form
@@ -798,8 +810,9 @@ S7::method(param_d4logdet, MatrixLogParam) <- function(s, eta, ...) {
 
 #' @title Solve of a Matrix Logarithm Parameter
 #' @name param_solve.MatrixLogParam
-#' @description Exact: \eqn{M^{-1} = \exp(-S)}, through the same
-#'   eigendecomposition as the value, applied to `b`.
+#' @description Returns \eqn{M^{-1} b} exactly, where
+#'   \eqn{M^{-1} = \exp(-S)} is computed through the same eigendecomposition as
+#'   the value.
 #' @param s A [MatrixLogParam()] object.
 #' @param eta A numeric vector of free values.
 #' @param b A numeric matrix with `s@dimension` rows.

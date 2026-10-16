@@ -27,7 +27,7 @@ replicated blockwise, and \code{param_params} holding \code{inner} and \code{m}.
 \description{
 Returns an object holding \eqn{M(\eta) = I_m \otimes S(\eta)} for an inner
 matrix parameter \eqn{S} of side \eqn{d}: a block-diagonal matrix of side
-\eqn{md} whose \eqn{m} diagonal blocks are the \strong{same} matrix, sharing one
+\eqn{md} whose \eqn{m} diagonal blocks are the same matrix, sharing one
 free vector.
 
 This is the covariance, or precision, of \eqn{m} independent groups whose
@@ -42,7 +42,8 @@ subjects still estimates three numbers.
       \log|M|_{+} = m \log|S|_{+}, \qquad
       M^{-1} = I_m \otimes S^{-1}.}
 
-No matrix of side \eqn{md} is decomposed, and no new derivation is needed:
+The class does not decompose a matrix of side \eqn{md} and does not need a
+new derivation:
 the rank is \eqn{m} times the inner rank, the null basis is the inner one replicated
 blockwise, and \code{\link[=param_solve]{param_solve()}} loops over the blocks solving the inner
 parameter \eqn{m} times.
@@ -76,7 +77,8 @@ Kronecker product. \eqn{\eta} is the free vector, shared by every block.
 }
 
 \examples{
-# Three groups sharing one 2 x 2 covariance: 6 x 6, three free values.
+# Here are three groups that share one 2 x 2 covariance, which give a 6 x 6
+# matrix with three free values.
 inner <- log_cholesky(2)
 s <- kron_identity(inner, 3)
 c(dimension = s@dimension, n_free = s@n_free)

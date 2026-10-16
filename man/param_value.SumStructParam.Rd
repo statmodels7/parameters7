@@ -16,11 +16,12 @@ A symmetric positive semidefinite \code{s@dimension} by \code{s@dimension}
 numeric matrix, labeled \code{v1}, \code{v2}, ..., \code{vp} on both margins.
 }
 \description{
-The weighted sum \eqn{\sum_k c_k(\eta_k) P_k}, accumulated in place over the
-components. Positive semidefinite at every free vector, a non-negative
-combination of positive semidefinite matrices being one; positive \strong{definite}
-only where the components' null spaces meet at the origin, which is the
-condition \code{rank} records.
+Returns the weighted sum \eqn{\sum_k c_k(\eta_k) P_k}, accumulated in place
+over the components. The matrix is positive semidefinite at every free
+vector, because a non-negative combination of positive semidefinite matrices
+is positive semidefinite, and it is positive definite only where the
+components' null spaces meet at the origin, which is the condition that
+\code{rank} records.
 
 The value is labeled \code{v1}, \code{v2}, ..., \code{vp} on both margins, the convention
 that \code{\link[=name_dims]{name_dims()}} states.

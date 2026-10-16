@@ -9,7 +9,8 @@ fd_step(eta_k, order = 1L)
 \arguments{
 \item{eta_k}{The value of the component, a single number.}
 
-\item{order}{The derivative order the step is for: 1, 2, 3 or 4.}
+\item{order}{The derivative order for which the step is intended: 1, 2, 3
+or 4.}
 }
 \value{
 A single positive number.
@@ -24,8 +25,8 @@ here and the step that the stencil library documents cannot drift apart.
 The rule is \eqn{\varepsilon^{1/(k+2)} \max(1, |\eta_k|)} for a \eqn{k}-th
 derivative, which balances the truncation error against the rounding that
 the division by \eqn{h^k} amplifies. In doubles that is \eqn{6.1 \times 10^{-6}}
-at first order and \eqn{1.2 \times 10^{-4}} at second, both scaling up once
-\eqn{|\eta_k|} passes 1.
+at first order and \eqn{1.2 \times 10^{-4}} at second, and both steps scale
+up once \eqn{|\eta_k|} passes 1.
 
 The step is not clamped. The unconstrained scale has no boundary, so the
 \code{bounds} argument of \code{\link[numericals7:fd_step]{numericals7::fd_step()}} is left at its default.

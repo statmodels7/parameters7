@@ -14,11 +14,10 @@ SimplexParam(
 \arguments{
 \item{param_name}{A single character string naming the family, used in the
 error messages that the validators raise and in the object's \code{print}
-output.
-\code{"log_cholesky"}, \code{"ar1"} and so on.}
+output. Examples are \code{"log_cholesky"} and \code{"ar1"}.}
 
 \item{n_free}{The length \eqn{d} of the free vector: a single non-negative
-integer. Zero is legal and describes a family with nothing to estimate.
+integer. Zero is allowed and describes a family with nothing to estimate.
 The validator rejects a vector, a negative value, or a length that
 disagrees with \code{free_names}.}
 
@@ -41,12 +40,13 @@ no properties of its own: \code{param_name} is \code{"simplex"}, \code{n_free} i
 \code{n_cat}.
 }
 \description{
-The S7 class of probability vectors on the open simplex, in the additive
-log-ratio parametrization. It inherits \code{\link[=parameter]{parameter()}} \strong{directly}, never
-\code{\link[=matrix_parameter]{matrix_parameter()}}, its value being a vector: there is no \code{dimension}, no
-\code{rank} and no \code{null_basis}, and \code{\link[=param_logdet]{param_logdet()}}, \code{\link[=param_solve]{param_solve()}}
-and \code{\link[=param_factor]{param_factor()}} have no method for it, so a call for the
-log-determinant of a probability vector fails at dispatch.
+\code{SimplexParam} is the S7 class of probability vectors on the open simplex,
+in the additive log-ratio parametrization. It inherits \code{\link[=parameter]{parameter()}}
+directly and not \code{\link[=matrix_parameter]{matrix_parameter()}}, because its value is a vector. The
+class therefore lacks the properties \code{dimension}, \code{rank} and \code{null_basis},
+and the generics \code{\link[=param_logdet]{param_logdet()}}, \code{\link[=param_solve]{param_solve()}} and \code{\link[=param_factor]{param_factor()}} are
+not defined for it, so a call for the log-determinant of a probability
+vector fails at dispatch.
 
 \code{\link[=simplex]{simplex()}} builds one. The four derivative orders are all closed form.
 }
@@ -56,15 +56,15 @@ s <- simplex(3)
 c(parameter = S7::S7_inherits(s, parameter),
   matrix_parameter = S7::S7_inherits(s, matrix_parameter))
 
-# K - 1 free values for K categories.
+# A simplex of K categories has K - 1 free values.
 vapply(2:5, function(k) simplex(k)@n_free, integer(1))
 
-# And no log-determinant.
+# The log-determinant is not defined for a simplex.
 try(param_logdet(s, c(0, 0)))
 
 }
 \seealso{
 \code{\link[=simplex]{simplex()}}, the constructor, \code{\link[=transition_matrix]{transition_matrix()}}, which is one of
 these per row, \code{\link[=parameter]{parameter()}} for the properties that this class inherits,
-and \code{\link[=matrix_parameter]{matrix_parameter()}} for the generics that it does not get.
+and \code{\link[=matrix_parameter]{matrix_parameter()}} for the generics that are not defined for it.
 }

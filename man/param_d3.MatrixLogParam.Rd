@@ -16,9 +16,10 @@ A list of \code{choose(s@n_free + 2, 3)} symmetric matrices keyed as
 \code{param_tuple_names(s, 3)} and in that order.
 }
 \description{
-Chains of three rotated directions contracted against four-point divided
-differences, summed over the orderings of the three directions. Exact, with
-no differencing.
+Computes the third Frechet derivative: chains of three rotated directions
+are contracted against four-point divided differences, and the contractions
+are summed over the orderings of the three directions. The result is exact,
+without differencing.
 
 The cost grows quickly: up to six orderings per component, each an
 \eqn{O(p^4)} contraction, and \eqn{\binom{d+2}{3}} components. See

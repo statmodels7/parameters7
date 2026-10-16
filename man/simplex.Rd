@@ -7,7 +7,7 @@
 simplex(n_cat)
 }
 \arguments{
-\item{n_cat}{The number of categories \eqn{K}, \strong{at least 2}. A single
+\item{n_cat}{The number of categories \eqn{K}, at least 2. A single
 integer; \code{1}, a fraction, \code{NA} and a vector all signal the error \verb{'n_cat' must be a single integer of at least 2.} A one-category simplex is the constant 1 and
 has nothing to estimate.}
 }
@@ -15,7 +15,7 @@ has nothing to estimate.}
 An object of class \code{\link[=SimplexParam]{SimplexParam()}}, with \code{n_free} equal to
 \code{n_cat - 1}, \code{free_names} \code{alr1} ... \code{alr(K-1)}, \code{param_name} \code{"simplex"},
 and \code{param_params} holding \code{n_cat}. It carries no \code{dimension}, \code{rank},
-or \code{null_basis}, being a \code{\link[=parameter]{parameter()}} and never a
+or \code{null_basis}, because it is a \code{\link[=parameter]{parameter()}} and never a
 \code{\link[=matrix_parameter]{matrix_parameter()}}.
 }
 \description{
@@ -28,7 +28,7 @@ values, with the last category as reference,
 
 Every free vector gives non-negative entries that sum to 1 up to rounding, so
 a mixture weight, a categorical probability or a latent-state distribution
-can be estimated without a constraint. The value is \strong{not a matrix}; see
+can be estimated without a constraint. The value is not a matrix; see
 \code{\link[=SimplexParam]{SimplexParam()}} for the consequences.
 }
 \section{The derivatives close over the value}{
@@ -41,22 +41,22 @@ applied repeatedly:
 
 At first order that is the covariance matrix of a categorical indicator, the
 same array that appears in the score of a multinomial model. All four orders
-are closed form and no stencil is used.
+are closed form, and the computation does not use a stencil.
 }
 
 \section{The derivatives sum to zero}{
 \eqn{\sum_a \pi_a = 1} at every \eqn{\eta}, so differentiating it gives
 \eqn{\sum_a \partial \pi_a = 0}, and the same at every higher order. Every
 derivative component therefore sums to zero over the value index, up to
-rounding, and \code{\link[=check_parameter]{check_parameter()}} tests this identity: a derivative array
-that fails it is wrong, whatever other check it passes.
+rounding, and \code{\link[=check_parameter]{check_parameter()}} tests this identity. A derivative array
+that fails this test is incorrect even if it passes the other checks.
 }
 
 \section{Large free values saturate instead of overflowing}{
 \code{\link[=simplex_point]{simplex_point()}} applies the log-sum-exp shift, so a free value of 800 gives
-\eqn{\pi_1 = 1} and \eqn{\pi_K = 0} with the vector summing to exactly 1,
-where the naive expression would divide \code{Inf} by \code{Inf}. The value then lies
-on the \strong{boundary} of the simplex, so \code{\link[=param_free]{param_free()}} cannot invert it:
+\eqn{\pi_1 = 1} and \eqn{\pi_K = 0}, and the vector sums to exactly 1,
+whereas the naive expression would divide \code{Inf} by \code{Inf}. The value then lies
+on the boundary of the simplex, so \code{\link[=param_free]{param_free()}} cannot invert it:
 \eqn{\log(0)} is not finite.
 }
 
@@ -75,7 +75,7 @@ delta. The reference category is the last, \eqn{K}.
 }
 
 \examples{
-# Four categories, three free values.
+# A simplex of four categories has three free values.
 s <- simplex(4)
 s@free_names
 eta <- c(0.5, -0.2, 1.1)

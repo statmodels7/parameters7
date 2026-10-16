@@ -15,8 +15,9 @@ dr_prod_derivs(s, eta, order)
 }
 \value{
 A list of \code{choose(s@n_free + order - 1, order)} symmetric matrices
-keyed as \code{param_tuple_names(s, order)} and in that order, each
-\code{s@dimension} by \code{s@dimension} and labeled \code{v1}, \code{v2}, ..., \code{vp} on both margins.
+keyed as \code{param_tuple_names(s, order)} and in that order. Each matrix is
+\code{s@dimension} by \code{s@dimension} and is labeled \code{v1}, \code{v2}, ..., \code{vp} on both
+margins.
 }
 \description{
 Splits each tuple of the composite's enumeration into its scale indices and
@@ -27,9 +28,9 @@ correlation's own component of the matching order, elementwise.
 The correlation's arrays are fetched at most once per order and re-keyed by
 the sorted local index tuple, the same device that \code{\link[=block_derivs_by_tuple]{block_derivs_by_tuple()}} uses
 and for the same reason: the composite's names are not the block's, but the
-sorted index tuple is a key both sides can compute.
+sorted index tuple is a key that both sides can compute.
 
-A component whose correlation part is empty reads the correlation's \strong{value},
+A component whose correlation part is empty reads the correlation's value,
 which is why \code{param_value()} appears in a derivative routine.
 }
 \seealso{

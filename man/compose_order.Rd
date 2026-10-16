@@ -8,9 +8,9 @@ compose_order(fd, gd, k)
 }
 \arguments{
 \item{fd}{A list or vector of the derivatives of the outer map at
-\eqn{g(x)}, in order, at least \code{k} of them. Read with \code{[[}, so a list, a
-numeric vector or a list of numeric vectors all serve. The \strong{value} of
-\eqn{f} is not needed and is not read.}
+\eqn{g(x)}, in order, at least \code{k} of them. The function reads the argument
+with \code{[[}, so a list, a numeric vector or a list of numeric vectors all
+serve. The value of \eqn{f} is not needed and is not read.}
 
 \item{gd}{A list or vector of the derivatives of the inner map at \eqn{x},
 in order, at least \code{k} of them, read the same way.}
@@ -18,19 +18,19 @@ in order, at least \code{k} of them, read the same way.}
 \item{k}{The order, an integer from 1 to 4.}
 }
 \value{
-The derivative of order \code{k} of the composition, the shape the
-arithmetic on \code{fd} and \code{gd} produces: a single number where both are
+The derivative of order \code{k} of the composition, with the shape that
+the arithmetic on \code{fd} and \code{gd} produces: a single number where both are
 scalar, a vector where either is, a matrix where either is.
 }
 \description{
-The derivative of order \code{k} of \eqn{f(g(x))}, from the derivatives of
+Returns the derivative of order \code{k} of \eqn{f(g(x))}, from the derivatives of
 \eqn{f} at \eqn{g(x)} and of \eqn{g} at \eqn{x} up to that order. Each order
 is its own formula and forms nothing above it; a caller that needs several
 orders calls it once per order.
 }
 \details{
-Faa di Bruno's formula, whose coefficients are the numbers of set
-partitions of a given shape:
+The derivatives follow Faa di Bruno's formula, whose coefficients are the
+numbers of set partitions of a given shape:
 \deqn{(f \circ g)' = f' g',}
 \deqn{(f \circ g)'' = f'' g'^2 + f' g'',}
 \deqn{(f \circ g)''' = f''' g'^3 + 3 f'' g' g'' + f' g''',}

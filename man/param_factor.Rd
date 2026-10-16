@@ -19,9 +19,9 @@ a positive diagonal, satisfying \code{L \%*\% t(L) == param_value(s, eta)}.
 }
 \description{
 Returns the lower triangular \eqn{L} with \eqn{M = L L^\top}, the Cholesky
-factor of the matrix the parametrization produces. Simulation is the usual
-reason to want it: \eqn{L z} with \eqn{z} standard normal has covariance
-\eqn{M}, so one factor draws as many vectors as needed. For
+factor of the matrix that the parametrization produces. Simulation is the
+usual reason to want it: \eqn{L z} with \eqn{z} standard normal has covariance
+\eqn{M}, so one factor suffices to draw as many vectors as needed. For
 \code{\link[=log_cholesky]{log_cholesky()}} the factor is assembled directly from the free vector, with
 one exponential per diagonal entry and no decomposition.
 }
@@ -42,7 +42,7 @@ the family, because their value is not a symmetric matrix.
 
 \section{Notation}{
 
-\eqn{M} is the matrix \code{\link[=param_value]{param_value()}} returns, \eqn{p} its side, and
+\eqn{M} is the matrix that \code{\link[=param_value]{param_value()}} returns, \eqn{p} its side, and
 \eqn{\eta} the free vector.
 }
 
@@ -58,7 +58,7 @@ max(abs(L \%*\% t(L) - param_value(s, eta)))
 # In this parametrization the diagonal is exp() of the first p free values.
 all.equal(diag(L), exp(eta[1:3]))
 
-# What it is for: simulating with the right covariance.
+# The factor is used to simulate with the right covariance.
 set.seed(1)
 y <- t(L \%*\% matrix(rnorm(3 * 20000), 3, 20000))
 round(cov(y) - param_value(s, eta), 2)
@@ -69,6 +69,6 @@ try(param_factor(scaled_matrix(crossprod(diff(diag(6), differences = 2))), 0))
 }
 \seealso{
 \code{\link[=param_solve]{param_solve()}} for a solve through the same factor,
-\code{\link[=param_value]{param_value()}} for the matrix it factors, and \code{\link[=log_cholesky]{log_cholesky()}}, whose
+\code{\link[=param_value]{param_value()}} for the matrix that it factors, and \code{\link[=log_cholesky]{log_cholesky()}}, whose
 first \eqn{p} free values are the logarithms of this factor's diagonal.
 }

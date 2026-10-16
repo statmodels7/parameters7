@@ -12,14 +12,15 @@ checked for its class, its side and its rank.}
 }
 \value{
 Invisibly \code{TRUE}. For a block whose diagonal departs from 1 at
-either probe, an error that names the family and quotes the worst entry. A
-probe at which the family cannot be evaluated is skipped.
+either probe, the function signals an error that names the family and
+quotes the worst entry. A probe at which the family cannot be evaluated is
+skipped.
 }
 \description{
 Reads the diagonal of \code{correlation}'s own value at two probe free vectors and
-signals an error unless every entry is 1. This is the property on which
-\eqn{\Sigma = D R D} rests: the standard deviations are read off
-\eqn{D}, so a block with a scale of its own describes the same matrix from a
+signals an error unless every entry is 1. The decomposition
+\eqn{\Sigma = D R D} rests on this property: the standard deviations are
+read off \eqn{D}, so a block with a scale of its own describes the same matrix from a
 whole ray of free vectors and the composite has one free value too many.
 }
 \section{The probe free vectors}{
@@ -36,7 +37,7 @@ Two probes cannot prove a property that holds over the whole free space. The
 check catches a family that carries a scale, which is the usual way in which
 the requirement is broken; a family constructed to have a unit diagonal at
 exactly these two points passes.
-\code{check_parameter()}'s round trip is what reports the ray itself.
+The round trip of \code{check_parameter()} reports the ray itself.
 }
 
 \seealso{

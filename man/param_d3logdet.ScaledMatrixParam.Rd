@@ -16,7 +16,8 @@ A numeric vector with one entry keyed as \code{param_tuple_names(s, 3)}, or
 empty for a fixed parameter.
 }
 \description{
-Closed form. The log-(pseudo-)determinant is \eqn{r \log h(\eta) + \log|P|_+}
+The third derivative has closed form. The log-(pseudo-)determinant is
+\eqn{r \log h(\eta) + \log|P|_+}
 with \eqn{r} the rank, so every derivative is \eqn{r} times the matching
 derivative of \eqn{\log h}, and the constant contributes nothing. With one
 free value there is one component.

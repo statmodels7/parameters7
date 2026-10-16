@@ -17,15 +17,15 @@ A numeric vector of length \code{s@n_free}, named by \code{s@free_names}.
 }
 \description{
 Returns the angles behind a correlation matrix, read off its Cholesky factor
-and carried onto the free scale by the link. Exact:
+and carried onto the free scale by the link. The map is exact:
 \eqn{\theta_{i1} = \arccos L_{i1}}, and each subsequent angle divides out the
-sines already recovered before taking an arc cosine. A true inverse of
+sines already recovered before taking an arc cosine. It is a true inverse of
 \code{\link[=param_value.CorrelationParam]{param_value.CorrelationParam()}}: the round trip closes up to rounding for
 angles of moderate size, and its error grows with the free values.
 }
 \details{
-Three rejections. \code{m} must have a unit diagonal, or it is not a correlation
-matrix. It must be positive definite, tested on the eigenvalues through
+The method rejects an input in three cases. \code{m} must have a unit diagonal, or
+it is not a correlation matrix. It must be positive definite, tested on the eigenvalues through
 \code{\link[=chol_pd]{chol_pd()}}. And in each row of its factor, the product of the sines of the
 angles already recovered must not fall below \eqn{10^{-12}}: that happens as
 a correlation approaches \eqn{\pm 1} and an angle approaches 0 or \eqn{\pi},
@@ -37,7 +37,7 @@ precision, so a matrix produced by a fit that ran to its boundary cannot be
 inverted back.
 }
 \seealso{
-\code{\link[=param_value.CorrelationParam]{param_value.CorrelationParam()}}, the map this inverts, and
+\code{\link[=param_value.CorrelationParam]{param_value.CorrelationParam()}}, the map that this inverts, and
 \code{\link[=chol_pd]{chol_pd()}} for the definiteness test.
 }
 \keyword{internal}

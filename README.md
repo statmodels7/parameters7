@@ -18,11 +18,11 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 A constrained parameter is a map from an unconstrained vector onto the
 set where the parameter lives: the positive definite cone, the simplex,
 the row-stochastic matrices. `{parameters7}` represents such a map as an
-S7 object that can be **evaluated, inverted, and differentiated to
-fourth order**. A family whose value is a symmetric matrix also returns
-its **log-determinant and its derivatives, its solves and its factor**.
-A matrix that is **rank deficient**, as a penalty precision often is,
-has a log pseudo-determinant, and its solve and factor are rejected.
+S7 object that can be evaluated, inverted, and differentiated to fourth
+order. A family whose value is a symmetric matrix also returns its
+log-determinant and its derivatives, its solves and its factor. A matrix
+that is rank deficient, as a penalty precision often is, has a log
+pseudo-determinant, and its solve and factor are rejected.
 
 It is the constrained-parameter layer of
 [statmodels7](https://statmodels7.github.io), an S7 toolkit for
@@ -42,8 +42,8 @@ statistical modeling, alongside
 pak::pak("statmodels7/parameters7")
 ```
 
-Or the whole toolkit at once, which also installs the other seven
-packages:
+Alternatively, the following command installs the whole toolkit,
+including the other packages:
 
 ``` r
 pak::pak("statmodels7/statmodels7")
@@ -81,11 +81,11 @@ max(abs(param_free(s, param_value(s, eta)) - eta))
 
 ## Parameters and links
 
-A link in `{linkfunctions7}` is a **scalar** bijection with a diagonal
+A link in `{linkfunctions7}` is a scalar bijection with a diagonal
 Jacobian, and everything built on it depends on that diagonality. A map
 from $\mathbb{R}^d$ to a matrix has a full Jacobian, so it is a
-different class. The two **compose**: the diagonal of a diagonal matrix
-is a scalar map, and `{linkfunctions7}` links serve there directly.
+different class. The two compose: the diagonal of a diagonal matrix is a
+scalar map, and `{linkfunctions7}` links serve there directly.
 
 ``` r
 param_value(diagonal_matrix(3, link = linkfunctions7::softplus_link()), c(1, 2, 3))
@@ -172,8 +172,8 @@ so the family is parametrized by the partial autocorrelations, each in
 $(-1, 1)$ and carried onto the free scale by the inverse hyperbolic
 tangent, and the Levinson-Durbin recursion maps them onto the
 coefficients. Every free vector is stationary, and the precision is
-banded with the order as bandwidth, an autoregression of order $q$ being
-Markov of order $q$:
+banded with the order as bandwidth, because an autoregression of order
+$q$ is Markov of order $q$:
 
 ``` r
 s <- autoregressive(7, order = 2)
@@ -207,7 +207,7 @@ round(r, 3)
 
 A spline penalty is singular by construction: its null space contains
 the functions that it does not penalize. Read as a prior, the penalty is
-improper, so it is a legitimate **penalty** but not a density.
+improper, so it is a valid penalty but not a density.
 
 ``` r
 p <- crossprod(diff(diag(6), differences = 2))
@@ -235,8 +235,8 @@ c(penalty_annihilates_them = max(abs(p %*% lin)),
 #>              0.000000e+00              9.482992e-16
 ```
 
-The log-determinant becomes the log **pseudo**-determinant, and under
-the log link its derivative is the rank at every scale:
+The log-determinant becomes the log pseudo-determinant, and under the
+log link its derivative is the rank at every scale:
 
 ``` r
 c(at_small_scale = unname(param_dlogdet(s, -6)),
@@ -388,8 +388,8 @@ belong.
 `check_parameter()` runs nine checks on a matrix family, fewer on a
 family that is not a matrix, each against a route that the
 implementation does not take. A quantity that comes from the base class
-is reported as **not checked**: comparing a finite difference with a
-finite difference is the same arithmetic twice.
+is reported as not checked, because comparing a finite difference with a
+finite difference applies the same arithmetic to both sides.
 
 ``` r
 invisible(check_parameter(log_cholesky(3)))

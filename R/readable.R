@@ -24,8 +24,9 @@ NULL
 #' autoregressive coefficients cannot be recovered from a printed covariance.
 #'
 #' Use it to turn an estimate and its variance matrix into a table that a reader
-#' can use. The base class declares nothing, so a family whose matrix is all there is
-#' to say returns `NULL` and a consumer falls back on reporting the matrix.
+#' can use. The base class method has no declaration, so a family whose matrix
+#' is all there is to say returns `NULL` and a consumer falls back on reporting
+#' the matrix.
 #'
 #' @details
 #' # What a consumer does with it
@@ -53,7 +54,7 @@ NULL
 #' [scaled_matrix()] declares its multiplier, or `NULL` when it was built with
 #' `link = NULL` and has none. [simplex()] declares the probability vector.
 #' [autoregressive()] declares the variance, the partial autocorrelations that
-#' parametrize it, **and** the autoregressive coefficients, which appear nowhere
+#' parametrize it, and the autoregressive coefficients, which appear nowhere
 #' in the covariance. Every other family, including [log_cholesky()],
 #' [correlation_matrix()] and [transition_matrix()], takes the base method and
 #' returns `NULL`.
@@ -86,7 +87,7 @@ NULL
 #' r$value
 #' r$transform
 #'
-#' # What a consumer does with the Jacobian: the delta method. With a variance
+#' # A consumer applies the delta method to the Jacobian. With a variance
 #' # of 0.01 on the second free value, the correlation's standard error is
 #' # |drho/dz| * 0.1.
 #' V <- diag(c(0.04, 0.01))
@@ -114,19 +115,19 @@ param_readable <- S7::new_generic("param_readable", "s",
 #' No Declared Quantities
 #'
 #' @description
-#' The method that every [parameter()] inherits when it declares no interpretable
-#' quantities of its own. It returns `NULL`. For [log_cholesky()],
-#' [matrix_log()], [correlation_matrix()], the five composition wrappers and the
+#' This method is inherited by every [parameter()] that declares no
+#' interpretable quantities of its own. It returns `NULL`. For [log_cholesky()],
+#' [matrix_log()], [correlation_matrix()], the composition wrappers and the
 #' other families without a method of their own, the matrix itself is the
 #' quantity that a reader reads, and a consumer that receives `NULL` reports the
 #' matrix.
 #'
 #' Because the result is `NULL` and not an error, a consumer can call the generic
-#' on every parameter in a model without knowing which families declare
+#' on every parameter in a model without checking which families declare
 #' something.
 #'
-#' @param s A [parameter()] object. Not read.
-#' @param eta A numeric vector of free values. Not read.
+#' @param s A [parameter()] object. The method does not read it.
+#' @param eta A numeric vector of free values. The method does not read it.
 #' @param ... Ignored.
 #'
 #' @return `NULL`.
@@ -143,12 +144,12 @@ S7::method(param_readable, parameter) <- function(s, eta, ...) NULL
 #'
 #' @description
 #' Assembles a [param_readable()] declaration for a family whose quantities are
-#' one scalar link each of one free value each. The Jacobian is then **diagonal**,
-#' its \eqn{k}-th entry the inverse link's first derivative at \eqn{\eta_k}, and
-#' there is nothing else to compute.
+#' one scalar link each of one free value each. The Jacobian is then diagonal,
+#' and its \eqn{k}-th entry is the inverse link's first derivative at
+#' \eqn{\eta_k}, so these entries give the whole Jacobian.
 #'
 #' [ar1()], [compound_symmetry()] and [scaled_matrix()] all declare through this,
-#' which is why their three methods are one call each.
+#' which is why their methods are one call each.
 #'
 #' @param links A list of \pkg{linkfunctions7} links, one per quantity, in the
 #'   order of the free values that they read. `links[[k]]` must be the link of
@@ -213,8 +214,8 @@ S7::method(param_readable, Ar1Param) <- function(s, eta, ...) {
 #'
 #' @description
 #' Declares two quantities: the marginal variance and the correlation that every
-#' pair shares. The Jacobian is diagonal, through [readable_diagonal()], each quantity
-#' being one link of one free value.
+#' pair shares. The Jacobian is diagonal, through [readable_diagonal()],
+#' because each quantity is one link of one free value.
 #'
 #' The correlation's interval is built on the inverse hyperbolic tangent. The
 #' family's own link is bounded below by \eqn{-1/(p-1)}, which is above \eqn{-1}
@@ -273,11 +274,11 @@ S7::method(param_readable, ScaledMatrixParam) <- function(s, eta, ...) {
 #' ratios against the last category and are not interpretable on their own.
 #'
 #' The Jacobian is the softmax map's,
-#' \eqn{\partial p_i/\partial\eta_j = p_i(\delta_{ij} - p_j)}, with the reference
-#' category's row contributing \eqn{-p_K p_j}. It is \eqn{K} by \eqn{K-1}: one
+#' \eqn{\partial p_i/\partial\eta_j = p_i(\delta_{ij} - p_j)}, and the row of the
+#' reference category contributes \eqn{-p_K p_j}. It is \eqn{K} by \eqn{K-1}: one
 #' more quantity than there are free values, since the reference probability is
-#' determined by the others. Its **columns** sum to zero up to rounding,
-#' \eqn{\sum_i p_i} being the constant 1.
+#' determined by the others. Its columns sum to zero up to rounding, because
+#' \eqn{\sum_i p_i} is the constant 1.
 #'
 #' Every interval is built on the logit scale, so it stays inside \eqn{(0, 1)}.
 #'
@@ -316,19 +317,19 @@ S7::method(param_readable, SimplexParam) <- function(s, eta, ...) {
 #' @details
 #' # Why the coefficients are declared
 #'
-#' \eqn{\phi_1, \dots, \phi_q} are what an autoregression is reported in, and they
-#' appear nowhere in the covariance the fit prints, nor among the free values,
-#' which are partial autocorrelations. A partial autocorrelation reported in
+#' An autoregression is reported in terms of \eqn{\phi_1, \dots, \phi_q}. These
+#' coefficients do not appear in the covariance that the fit prints or among the
+#' free values, which are partial autocorrelations. A partial autocorrelation reported in
 #' place of a coefficient is a different number: at \eqn{q = 2} with free values
 #' \eqn{(0, 0.9, -0.4)} the coefficients are \eqn{(0.988, -0.380)} while the
 #' partial autocorrelations are \eqn{(0.716, -0.380)}, so \eqn{\phi_1} and
 #' \eqn{\rho_1} differ in the first decimal. At \eqn{q = 1} they coincide exactly,
-#' the first partial autocorrelation being the AR(1) coefficient, so the two
-#' differ only for \eqn{q > 1}.
+#' because the first partial autocorrelation is the AR(1) coefficient, so the
+#' two differ only for \eqn{q > 1}.
 #'
 #' # The Jacobian is not diagonal
 #'
-#' A coefficient reads the **whole** chart, so its row of the Jacobian is dense in
+#' A coefficient reads the whole chart, so its row of the Jacobian is dense in
 #' the partial autocorrelation columns. Those derivatives come out of the
 #' Levinson-Durbin recursion, through which the family already propagates
 #' derivative arrays, so they are read off the first-order block instead of
@@ -343,8 +344,9 @@ S7::method(param_readable, SimplexParam) <- function(s, eta, ...) {
 #' circle, a condition that a scalar transformation of a single coefficient
 #' cannot express. A set that respected the constraint would not be an
 #' interval, so the identity scale is used and a reported coefficient interval
-#' may extend outside the stationary region. The partial autocorrelations, whose chart
-#' **is** a box, get `"atanh"` and stay inside it.
+#' may extend outside the stationary region. The intervals of the partial
+#' autocorrelations, whose chart is a box, are built on the `"atanh"` scale and
+#' stay inside it.
 #'
 #' @param s An [AutoregressiveParam()] object.
 #' @param eta A numeric vector of free values, of length \eqn{q+1}.

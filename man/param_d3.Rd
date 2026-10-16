@@ -20,8 +20,8 @@ value.
 }
 \description{
 Differentiates the map three times, returning the distinct components
-\eqn{\partial^3 V / \partial \eta_k \partial \eta_l \partial \eta_m}, each
-shaped like the value. The derivative is symmetric in its indices, so the
+\eqn{\partial^3 V / \partial \eta_k \partial \eta_l \partial \eta_m}, each of
+which has the shape of the value. The derivative is symmetric in its indices, so the
 \eqn{\binom{d+2}{3}} unordered triples are returned, not the \eqn{d^3}
 ordered ones. A third-order chain rule through a link needs them, and so does
 the exact gradient of a marginal criterion, which differentiates a penalized
@@ -36,18 +36,18 @@ triples in the same order. At \eqn{d = 3} there are ten of them, at
 
 \section{Exact, or one stencil}{
 Every family here is closed form. The fallback on \code{\link[=parameter]{parameter()}} applies one
-product stencil per triple, of the width each repeated index calls for: an
+product stencil per triple, of the width that each repeated index requires: an
 index appearing three times takes the four-point third-difference factor, one
 appearing twice the three-point second-difference factor, and a distinct
 index a two-point first-difference factor. The product is evaluated in one
-pass over \code{\link[=param_value]{param_value()}}, so no order is reached by differencing the order
-below.
+pass over \code{\link[=param_value]{param_value()}}, so the method does not reach any order by
+differencing the order below.
 }
 
 \section{Notation}{
 
 \eqn{\eta} is the free vector, of length \eqn{d = } \code{s@n_free}, and \eqn{V}
-the value \code{\link[=param_value]{param_value()}} returns.
+the value that \code{\link[=param_value]{param_value()}} returns.
 }
 
 \examples{

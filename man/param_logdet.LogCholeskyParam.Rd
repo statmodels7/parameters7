@@ -16,19 +16,19 @@ A single number, always finite: \code{eta} is finite by the generic's check
 and the sum of \eqn{p} finite numbers cannot overflow at any usable \eqn{p}.
 }
 \description{
-Closed form, and linear in the free vector. Since \eqn{|M| = |L|^2} and
-\eqn{L} is triangular,
+Computes the log-determinant in closed form, and it is linear in the free
+vector. Since \eqn{|M| = |L|^2} and \eqn{L} is triangular,
 
 \deqn{\log|M| = 2\sum_{i=1}^{p} \log L_{ii} = 2\sum_{i=1}^{p} \eta_i,}
 
-twice the sum of the free values on the diagonal. It is one \code{sum()} over
-\eqn{p} numbers: no factorization, no determinant, no eigendecomposition, and
-nothing that grows with \eqn{p} beyond the sum itself, against the base
-class's \eqn{O(p^3)}.
+which is twice the sum of the free values on the diagonal. It is one \code{sum()}
+over \eqn{p} numbers, so it needs no factorization, no determinant and no
+eigendecomposition, and its cost grows with \eqn{p} only through the sum
+itself, against the base class's \eqn{O(p^3)}.
 }
 \seealso{
 \code{\link[=param_dlogdet.LogCholeskyParam]{param_dlogdet.LogCholeskyParam()}} for its gradient, and
-\code{\link[=param_logdet.matrix_parameter]{param_logdet.matrix_parameter()}} for the route a family without a closed
-form takes.
+\code{\link[=param_logdet.matrix_parameter]{param_logdet.matrix_parameter()}} for the route that a family without a
+closed form takes.
 }
 \keyword{internal}

@@ -15,13 +15,13 @@ A single character string, empty for the identity link. The tags in
 use are \code{"log"} (log and either singly bounded link), \code{"logit"} (logit and
 the doubly bounded link), \code{"z"} (rhobit), and \code{"probit"}, \code{"cloglog"},
 \code{"loglog"}, \code{"cauchit"}, \code{"sqrt"}, \code{"inv"}, \code{"invsq"}, \code{"power"} and
-\code{"softplus"} for the rest. A link from outside \pkg{linkfunctions7} gets its
-own \code{link_name} reduced to lowercase letters, digits and underscores, or
-\code{"f"} if nothing survives that.
+\code{"softplus"} for the rest. For a link from outside \pkg{linkfunctions7}, the
+tag is its own \code{link_name} reduced to lowercase letters, digits and
+underscores, or \code{"f"} if the reduction leaves no characters.
 }
 \description{
-Returns the word that a free name uses to say which transformation produced
-a coordinate, given the link that produced it.
+Returns the tag that appears in a free name to indicate which transformation
+produced a coordinate, given the link that produced it.
 }
 \details{
 The tag comes from the link's class, never from its \code{link_name}, because a
@@ -36,6 +36,6 @@ lowercase letters, digits and underscores.
 }
 \seealso{
 \code{\link[=tagged_name]{tagged_name()}}, which prefixes a quantity with the tag, and
-\code{\link[=parameter]{parameter()}} for the naming convention this serves.
+\code{\link[=parameter]{parameter()}} for the naming convention that this serves.
 }
 \keyword{internal}

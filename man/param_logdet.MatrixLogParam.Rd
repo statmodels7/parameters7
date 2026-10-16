@@ -15,14 +15,14 @@ checked by the generic.}
 A single number.
 }
 \description{
-Closed form and linear. The eigenvalues of \eqn{M = \exp(S)} are
-\eqn{e^{\lambda_i}}, so
+Returns the log-determinant in closed form; it is linear in the free vector.
+The eigenvalues of \eqn{M = \exp(S)} are \eqn{e^{\lambda_i}}, so
 
 \deqn{\log|M| = \sum_i \lambda_i = \mathrm{tr}(S) = \sum_{i=1}^{p} \eta_i,}
 
-the sum of the diagonal free values. One \code{sum()} over \eqn{p} numbers: no
-eigendecomposition and no determinant, with nothing growing in \eqn{p} beyond
-the sum itself.
+which is the sum of the diagonal free values. The computation is one \code{sum()}
+over \eqn{p} numbers, without an eigendecomposition or a determinant, and its
+cost does not grow in \eqn{p} beyond the sum itself.
 }
 \seealso{
 \code{\link[=param_dlogdet.MatrixLogParam]{param_dlogdet.MatrixLogParam()}} for its gradient, and

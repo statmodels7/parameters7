@@ -25,9 +25,10 @@ of the tuple names the same free value, and it is then that weight's
 }
 \details{
 A surviving component is one scalar times a component that the object has
-held since construction, and the rest share a single zero matrix; no other
-arithmetic is done on the matrices. At \eqn{K = 2} that is 1 of the 3 second-order
-components, 2 of 4 at third order and 3 of 5 at fourth.
+held since construction, and the other components share a single zero
+matrix; this multiplication is the only arithmetic on the matrices. At
+\eqn{K = 2} that is 1 of the 3 second-order components, 2 of 4 at third order
+and 3 of 5 at fourth.
 }
 \seealso{
 \code{\link[=sum_struct_weight_derivs]{sum_struct_weight_derivs()}} for the scalars, and

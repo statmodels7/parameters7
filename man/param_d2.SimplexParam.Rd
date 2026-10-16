@@ -13,17 +13,18 @@ checked by the generic.}
 }
 \value{
 A list of \code{choose(s@n_free + 1, 2)} numeric vectors of length \eqn{K},
-keyed as \code{param_tuple_names(s)} and in that order, each summing to 0.
+keyed as \code{param_tuple_names(s)} and in that order. Each vector sums to 0.
 }
 \description{
-Closed form, one further application of the product rule to
+Computes the second derivatives in closed form, by one further application
+of the product rule to
 \eqn{\partial_b \pi_a = \pi_a(\delta_{ab} - \pi_b)}. The array is the
 third cumulant of a categorical indicator, and every component sums to zero
 over the category index.
 
-Unlike a diagonal family, nothing here is separable: the entries of \eqn{\pi}
-are coupled through the shared normalizing constant, so a component in two
-different free values is generally non-zero.
+Unlike a diagonal family, this family is not separable: the entries of
+\eqn{\pi} are coupled through the shared normalizing constant, so a component
+in two different free values is generally non-zero.
 }
 \seealso{
 \code{\link[=param_d1.SimplexParam]{param_d1.SimplexParam()}} and \code{\link[=param_d3.SimplexParam]{param_d3.SimplexParam()}} for the

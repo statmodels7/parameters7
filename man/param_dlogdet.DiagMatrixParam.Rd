@@ -15,7 +15,7 @@ checked by the generic.}
 A numeric vector of length \code{s@n_free}, named by \code{s@free_names}.
 }
 \description{
-Closed form,
+Computes the gradient in closed form,
 
 \deqn{\partial_k \log|M| = m_k \frac{h'(\eta_k)}{h(\eta_k)},}
 

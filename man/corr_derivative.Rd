@@ -19,8 +19,8 @@ keyed as \code{param_tuple_names(s, order)} and in that order, each
 \code{s@dimension} by \code{s@dimension} with a diagonal of exact zeros.
 }
 \description{
-Assembles a whole derivative order of \eqn{R = LL^\top} by the Leibniz rule,
-the factor's derivatives coming from \code{\link[=corr_dfactor]{corr_dfactor()}} and the trigonometric
+Assembles a whole derivative order of \eqn{R = LL^\top} by the Leibniz rule.
+The factor's derivatives come from \code{\link[=corr_dfactor]{corr_dfactor()}} and the trigonometric
 tables of \code{\link[=corr_tables]{corr_tables()}}. The four methods \code{\link[=param_d1]{param_d1()}} through
 \code{\link[=param_d4]{param_d4()}} of this family are one call each to this function.
 }

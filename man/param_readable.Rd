@@ -37,8 +37,9 @@ arc tangent of a partial autocorrelation has no direct meaning, and the
 autoregressive coefficients cannot be recovered from a printed covariance.
 
 Use it to turn an estimate and its variance matrix into a table that a reader
-can use. The base class declares nothing, so a family whose matrix is all there is
-to say returns \code{NULL} and a consumer falls back on reporting the matrix.
+can use. The base class method has no declaration, so a family whose matrix
+is all there is to say returns \code{NULL} and a consumer falls back on reporting
+the matrix.
 }
 \section{What a consumer does with it}{
 Given the free vector's variance matrix \eqn{V}, the standard errors of the
@@ -64,7 +65,7 @@ read off the first-order block instead of being computed again.
 \code{\link[=scaled_matrix]{scaled_matrix()}} declares its multiplier, or \code{NULL} when it was built with
 \code{link = NULL} and has none. \code{\link[=simplex]{simplex()}} declares the probability vector.
 \code{\link[=autoregressive]{autoregressive()}} declares the variance, the partial autocorrelations that
-parametrize it, \strong{and} the autoregressive coefficients, which appear nowhere
+parametrize it, and the autoregressive coefficients, which appear nowhere
 in the covariance. Every other family, including \code{\link[=log_cholesky]{log_cholesky()}},
 \code{\link[=correlation_matrix]{correlation_matrix()}} and \code{\link[=transition_matrix]{transition_matrix()}}, takes the base method and
 returns \code{NULL}.
@@ -77,7 +78,7 @@ r <- param_readable(ar1(5), c(log(2), atanh(0.6)))
 r$value
 r$transform
 
-# What a consumer does with the Jacobian: the delta method. With a variance
+# A consumer applies the delta method to the Jacobian. With a variance
 # of 0.01 on the second free value, the correlation's standard error is
 # |drho/dz| * 0.1.
 V <- diag(c(0.04, 0.01))

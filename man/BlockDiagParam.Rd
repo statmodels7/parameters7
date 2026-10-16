@@ -46,9 +46,9 @@ in the matrix and in the free vector) and \code{owner} (the block to which each
 free value belongs). \code{dimension}, \code{n_free} and \code{rank} are the sums of the blocks'.
 }
 \description{
-The S7 class of a block-diagonal matrix built from several matrix parameters,
-each block a family of its own and each carrying its own stretch of the free
-vector. \code{\link[=block_diag]{block_diag()}} builds one.
+\code{BlockDiagParam} is the S7 class of a block-diagonal matrix built from
+several matrix parameters, in which each block is a family of its own and
+carries its own stretch of the free vector. \code{\link[=block_diag]{block_diag()}} builds one.
 
 It is the composition for independent groups of coefficients whose structures
 differ, where \code{\link[=kron_identity]{kron_identity()}} is the one for identical blocks sharing a

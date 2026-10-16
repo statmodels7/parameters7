@@ -19,7 +19,7 @@ not.
 Prefixes the name of a quantity with the tag of the link that carries it onto
 the free scale, so \code{tagged_name(log_link(), "d1")} is \code{"log_d1"} and
 \code{tagged_name(rhobit_link(), "rho")} is \code{"z_rho"}. Under the identity link the
-name is left alone, the coordinate then \strong{being} the quantity.
+name is left alone, because the coordinate is then the quantity itself.
 
 Every constructor in the package that takes a link builds its \code{free_names}
 through this, which is how the convention stays uniform across the families.

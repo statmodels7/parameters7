@@ -17,15 +17,15 @@ A list of \code{choose(s@n_free + 2, 3)} symmetric matrices keyed as
 exact zeros.
 }
 \description{
-Closed form, the same Leibniz rule on \eqn{R = LL^\top} with the three
-differentiations distributed over the two factors. Each \eqn{\partial^S L}
-comes from \code{\link[=corr_dfactor]{corr_dfactor()}}, which returns \code{NULL} whenever \eqn{S} spans two
-rows of \eqn{L}, so those terms of the sum are skipped instead of computed
-and discarded.
+Computes the third derivatives in closed form, by the same Leibniz rule on
+\eqn{R = LL^\top}, in which the three differentiations are distributed over
+the two factors. Each \eqn{\partial^S L} comes from \code{\link[=corr_dfactor]{corr_dfactor()}}, which
+returns \code{NULL} whenever \eqn{S} spans two rows of \eqn{L}, so those terms of
+the sum are skipped instead of computed and discarded.
 
 The angles reach the free scale through a bounded link, so the chain to third
-order is \code{\link[=compose_order]{compose_order()}}'s and the accuracy is the link's; nothing is
-differenced. The diagonal is exactly zero.
+order is \code{\link[=compose_order]{compose_order()}}'s and the accuracy is the link's, and the
+derivatives are not computed by differencing. The diagonal is exactly zero.
 }
 \seealso{
 \code{\link[=corr_derivative]{corr_derivative()}}, which assembles it, and

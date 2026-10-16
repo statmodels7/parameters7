@@ -13,15 +13,15 @@ checked by the generic.}
 }
 \value{
 A symmetric positive semidefinite \code{s@dimension} by \code{s@dimension}
-numeric matrix with dimnames \code{v1}, \code{v2}, ..., of rank \code{s@rank}. Positive
-definite only where \code{s@rank == s@dimension}.
+numeric matrix with dimnames \code{v1}, \code{v2}, ..., of rank \code{s@rank}. The matrix
+is positive definite only where \code{s@rank == s@dimension}.
 }
 \description{
 Returns \eqn{M = h(\eta)\,P}, the stored fixed matrix times the scale, which
-is \eqn{P} itself for a fixed parameter. One elementwise multiplication and no
-decomposition. The result inherits \eqn{P}'s rank exactly, a positive multiple
-leaving a null space alone, which is why the class can record that rank at
-construction.
+is \eqn{P} itself for a fixed parameter. The computation is one elementwise
+multiplication and does not decompose the matrix. The result inherits
+\eqn{P}'s rank exactly, because a positive multiple leaves a null space
+alone, and the class can therefore record that rank at construction.
 }
 \seealso{
 \code{\link[=param_free.ScaledMatrixParam]{param_free.ScaledMatrixParam()}} for the inverse, and

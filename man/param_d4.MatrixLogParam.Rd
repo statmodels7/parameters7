@@ -16,10 +16,11 @@ A list of \code{choose(s@n_free + 3, 4)} symmetric matrices keyed as
 \code{param_tuple_names(s, 4)} and in that order.
 }
 \description{
-Chains of four rotated directions contracted against five-point divided
-differences, summed over the orderings of the four directions, up to
-twenty-four per component. Exact, and much more expensive than the fourth
-derivatives of \code{\link[=log_cholesky]{log_cholesky()}} on a matrix of the same size.
+Computes the fourth Frechet derivative: chains of four rotated directions
+are contracted against five-point divided differences, and the contractions
+are summed over the orderings of the four directions, up to twenty-four per
+component. The result is exact, and it is much more expensive to compute than
+the fourth derivatives of \code{\link[=log_cholesky]{log_cholesky()}} on a matrix of the same size.
 
 The cost is the price of a linear log-determinant and of an inverse equal to
 the map at \eqn{-\eta}. When fourth derivatives are taken repeatedly and those

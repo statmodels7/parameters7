@@ -16,8 +16,9 @@ A numeric vector of \code{choose(s@n_free + 1, 2)} entries, keyed as
 \code{param_tuple_names(s)}.
 }
 \description{
-Closed form: \eqn{m} times the inner parameter's Hessian, with the same keying.
-Zero wherever the inner parameter's is, so replicating a \code{\link[=log_cholesky]{log_cholesky()}}
+The Hessian has closed form and equals \eqn{m} times the inner parameter's
+Hessian, with the same keying. It is zero wherever the inner parameter's is,
+so replicating a \code{\link[=log_cholesky]{log_cholesky()}}
 gives exact zeros here and replicating an \code{\link[=ar1]{ar1()}} does not.
 }
 \seealso{

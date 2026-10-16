@@ -11,12 +11,13 @@ dr_prod(dimension, correlation = NULL, link = linkfunctions7::log_link())
 correlation matrix has no free value, and the constructor signals an
 error.}
 
-\item{correlation}{A \code{\link[=matrix_parameter]{matrix_parameter()}} of side \code{dimension} \strong{producing
-correlation matrices}, that is with a unit diagonal at every free vector.
+\item{correlation}{A \code{\link[=matrix_parameter]{matrix_parameter()}} of side \code{dimension} that produces
+correlation matrices, that is, with a unit diagonal at every free vector.
 Defaults to \code{\link[=correlation_matrix]{correlation_matrix(dimension)}};
 \code{\link[=block_diag]{block_diag()}} and \code{\link[=kron_identity]{kron_identity()}} of \code{correlation_matrix()} blocks have
-the property as well. A block carrying a scale of its own, such as \code{\link[=ar1]{ar1()}}, makes the composite unidentified, the same matrix
-arising from a whole ray of free vectors; the constructor reads the diagonal
+the property as well. A block carrying a scale of its own, such as
+\code{\link[=ar1]{ar1()}}, makes the composite unidentified, because the same matrix then
+arises from a whole ray of free vectors; the constructor reads the diagonal
 at two probe free vectors and rejects such a block, which
 \code{\link[=check_unit_diagonal]{check_unit_diagonal()}} describes.}
 
@@ -33,9 +34,10 @@ followed by the correlation's own, \code{rank} equal to \code{dimension}, and an
 }
 \description{
 Returns an object holding
-\eqn{\Sigma(\eta) = D(\eta_D)\, R(\eta_R)\, D(\eta_D)}, with
-\eqn{D = \mathrm{diag}(d_1, \ldots, d_p)} carrying the standard deviations
-through a positive link and \eqn{R} a correlation matrix parameter.
+\eqn{\Sigma(\eta) = D(\eta_D)\, R(\eta_R)\, D(\eta_D)}, where
+\eqn{D = \mathrm{diag}(d_1, \ldots, d_p)} holds the standard deviations,
+which pass through a positive link, and \eqn{R} is a correlation matrix
+parameter.
 }
 \section{The separation of scales and correlations}{
 The quantities that a reader takes off a fitted covariance are the standard
@@ -59,14 +61,14 @@ where \eqn{S_D} and \eqn{S_R} are the parts of the multiset \eqn{S} falling in
 each group. The correlation family's own components are fetched and
 multiplied entrywise, with no new derivation.
 
-Both factors are \strong{sparse}, and where their supports miss each other the
+Both factors are sparse, and where their supports miss each other the
 component is exactly zero. The scale factor is supported on the rows and
 columns that the indices of \eqn{S_D} name, and vanishes altogether once
 \eqn{S_D} names three distinct scales; a correlation derivative in an angle
 of row \eqn{i} is supported on the entries of row and column \eqn{i} whose
 inner product involves that angle, which for \code{z3.2} are \eqn{(3,2)} and
-\eqn{(2,3)}. So \code{log_sd1:z3.2} is zero, the first factor living in row and
-column 1 and the second on entries \eqn{(3,2)} and \eqn{(2,3)}.
+\eqn{(2,3)}. So \code{log_sd1:z3.2} is zero, because the first factor lives in row
+and column 1 and the second lives on entries \eqn{(3,2)} and \eqn{(2,3)}.
 }
 
 \section{The log-determinant}{
@@ -74,14 +76,14 @@ column 1 and the second on entries \eqn{(3,2)} and \eqn{(2,3)}.
 
 separable in the scales and separable from the correlation, so a component
 mixing two scales, or a scale with a correlation, is exactly zero. Under the
-default log link the first derivative in a scale is 2 at every point, the
-scales entering on both sides; for another link it is
+default log link the first derivative in a scale is 2 at every point, because
+the scales enter on both sides; for another link it is
 \eqn{2h'(\eta)/h(\eta)}.
 }
 
 \section{The correlation block must have full rank}{
 A rank-deficient \eqn{R} would give \eqn{\Sigma} the null space
-\eqn{D^{-1}\ker R}, which \strong{moves with the free vector}, while the class
+\eqn{D^{-1}\ker R}, which moves with the free vector, while the class
 records the rank and the null space as properties of the family. The
 constructor rejects one instead of recording a rank that is not stable.
 }

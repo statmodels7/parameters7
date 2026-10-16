@@ -21,17 +21,17 @@ dimnames, keyed as \code{param_tuple_names(s, order)} and in that order:
 \eqn{k}.
 }
 \description{
-\code{param_d1()}, \code{param_d2()}, \code{param_d3()} and \code{param_d4()} for an
-\code{\link[=autoregressive]{autoregressive()}} parameter, closed form at every order. The map from the
-partial autocorrelations to the matrix is polynomial, so the derivative arrays
-propagated through the Levinson-Durbin recursion give each derivative exactly
-and nothing is differenced.
+\code{param_d1()}, \code{param_d2()}, \code{param_d3()} and \code{param_d4()} return the
+derivatives of an \code{\link[=autoregressive]{autoregressive()}} parameter in closed form at every order.
+The map from the partial autocorrelations to the matrix is polynomial, so the
+derivative arrays propagated through the Levinson-Durbin recursion give each
+derivative exactly, without any differencing.
 
-Every component is Toeplitz, the structure being a property of the family and
-fixed as the point moves.
+Every component is Toeplitz, because this structure is a property of the
+family and stays fixed as the point moves.
 }
 \details{
-The four share \code{\link[=ar_derivative]{ar_derivative()}} and differ only in the order they pass.
+The four share \code{\link[=ar_derivative]{ar_derivative()}} and differ only in the order that they pass.
 Each order runs its own kernel, which returns the components of that order
 only.
 }

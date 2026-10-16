@@ -16,7 +16,7 @@ A numeric vector of \code{choose(s@n_free + 1, 2)} entries, keyed as
 \code{param_tuple_names(s)} and in that order.
 }
 \description{
-The method that every \code{\link[=matrix_parameter]{matrix_parameter()}} inherits when it registers no
+This is the method that every \code{\link[=matrix_parameter]{matrix_parameter()}} inherits when it registers no
 \code{\link[=param_d2logdet]{param_d2logdet()}} of its own. It evaluates the identity that follows from
 differentiating \code{\link[=param_dlogdet]{param_dlogdet()}}'s trace once more, using
 \eqn{\partial_l M^{-1} = -M^{-1}(\partial_l M)M^{-1}},
@@ -26,14 +26,14 @@ differentiating \code{\link[=param_dlogdet]{param_dlogdet()}}'s trace once more,
 
 with \eqn{M^{+}} the pseudo-inverse over the directions that the declared
 rank keeps. The second trace is formed as \code{sum(t(mi \%*\% dk) * (mi \%*\% dl))}, which
-is the trace of the product without the product being multiplied out.
+is the trace of the product without multiplying the product out.
 
-Exact given the derivative arrays, so the accuracy is theirs: rounding with
-analytic arrays, and that of the stencils with numerical ones.
+The result is exact given the derivative arrays, so the accuracy is theirs:
+rounding with analytic arrays, and that of the stencils with numerical ones.
 }
 \seealso{
 \code{\link[=param_d2logdet]{param_d2logdet()}} for the generic, \code{\link[=param_d1]{param_d1()}} and \code{\link[=param_d2]{param_d2()}} for
-the arrays this reads, and \code{\link[=param_d3logdet.matrix_parameter]{param_d3logdet.matrix_parameter()}} for the order
+the arrays that this reads, and \code{\link[=param_d3logdet.matrix_parameter]{param_d3logdet.matrix_parameter()}} for the order
 above, which differences this one.
 }
 \keyword{internal}

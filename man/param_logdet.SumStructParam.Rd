@@ -15,16 +15,17 @@ generic.}
 A single number.
 }
 \description{
-The log-determinant of the assembled matrix where the family has full rank,
-and its log \strong{pseudo}-determinant, the sum over the \code{s@rank} largest
+Returns the log-determinant of the assembled matrix where the family has full
+rank, and its log pseudo-determinant, the sum over the \code{s@rank} largest
 eigenvalues, where it does not. A sum of fixed matrices has no structure that
 a closed form could exploit, so this method assembles the matrix and
 decomposes it.
 }
 \details{
-Which branch is taken is decided by \code{s@rank}, fixed at construction from the
-components' shared null space, and never by counting eigenvalues at the point:
-that count falls as the weights spread apart (see \code{\link[=sum_struct]{sum_struct()}}). So the
+The branch depends on \code{s@rank}, which is fixed at construction from the
+components' shared null space, and not on a count of eigenvalues at the
+point, because that count falls as the weights spread apart (see
+\code{\link[=sum_struct]{sum_struct()}}). So the
 number of eigenvalues summed does not move as a fit walks the free vector.
 }
 \seealso{

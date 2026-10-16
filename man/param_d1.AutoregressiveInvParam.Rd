@@ -19,10 +19,11 @@ A named list of \code{s@dimension} square matrices, keyed as
 \code{\link[=param_tuple_names]{param_tuple_names()}} gives them.
 }
 \description{
-The four orders of \eqn{\partial\Omega} for \eqn{\Omega} the precision of an
-autoregression of order \eqn{q}, written out from the prediction
-factorization instead of assembled by the ordered-block-partition sum that
-\code{\link[=inverse_of]{inverse_of()}} uses. The two routes agree to rounding.
+Returns the four orders of \eqn{\partial\Omega} for \eqn{\Omega} the
+precision of an autoregression of order \eqn{q}, written out from the
+prediction factorization instead of assembled by the
+ordered-block-partition sum that \code{\link[=inverse_of]{inverse_of()}} uses. The two routes agree
+to rounding.
 }
 \seealso{
 \code{\link[=autoregressive_inv]{autoregressive_inv()}} for the formulas.

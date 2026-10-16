@@ -22,9 +22,9 @@ Returns the distinct third derivatives of the log-determinant, or of the log
 pseudo-determinant, keyed as \code{param_tuple_names(s, 3)}. The exact gradient of
 a marginal criterion reaches this order: differentiating a Laplace
 approximation with respect to a hyperparameter moves the penalized mode, and
-the third derivative is what the movement contracts against.
+the movement is contracted against the third derivative.
 }
-\section{Where it comes from}{
+\section{Origin of the expansion}{
 Two rules generate every order. The trace is linear, and
 
 \deqn{\partial_m M^{-1} = -M^{-1}(\partial_m M)M^{-1}.}
@@ -32,28 +32,28 @@ Two rules generate every order. The trace is linear, and
 Applying them to \eqn{\partial_{kl}\log|M|} gives a sum of traces of
 alternating products
 \eqn{M^{-1}(\partial_{I_1}M)M^{-1}(\partial_{I_2}M)\cdots}, one factor per
-block of a partition of the index set, with the sign and the multiplicity the
-two rules produce. The Moore-Penrose inverse replaces \eqn{M^{-1}} for a
+block of a partition of the index set, with the sign and the multiplicity that
+the two rules produce. The Moore-Penrose inverse replaces \eqn{M^{-1}} for a
 rank-deficient family.
 
 The expansion is not written out in the package. Each family in this package
 computes this order without differencing, and the base method on
 \code{\link[=matrix_parameter]{matrix_parameter()}} applies one tensor stencil to the highest analytic
 log-determinant derivative below the third, \code{\link[=param_d2logdet]{param_d2logdet()}} where the
-arrays are analytic and \code{\link[=param_logdet]{param_logdet()}} where none is. A
+arrays are analytic and \code{\link[=param_logdet]{param_logdet()}} otherwise. A
 written-out expansion has one term per set partition of the indices, five at
 third order, and a transcription of it is easy to get wrong.
 }
 
 \section{Notation}{
 
-\eqn{M} is the matrix \code{\link[=param_value]{param_value()}} returns and \eqn{\eta} the free vector,
+\eqn{M} is the matrix that \code{\link[=param_value]{param_value()}} returns and \eqn{\eta} the free vector,
 of length \eqn{d = } \code{s@n_free}. \eqn{\partial_I M} is the derivative of
 \eqn{M} in the free values named by the index set \eqn{I}.
 }
 
 \examples{
-# An AR(1) covariance. The log-determinant is linear in the log of the
+# For an AR(1) covariance the log-determinant is linear in the log of the
 # scale, so only the correlation direction survives to third order.
 s <- ar1(4)
 param_d3logdet(s, c(0.3, 0.8))

@@ -18,9 +18,9 @@ a positive diagonal and unit row norms, satisfying
 dimnames.
 }
 \description{
-Returns \eqn{L} by assembling it from the angles, so no factorization is
-taken: the factor is what the parametrization holds. Its rows are unit
-vectors, which is where \eqn{R = LL^\top} gets its unit diagonal.
+Returns \eqn{L}, assembled from the angles without a factorization, because
+the parametrization holds the factor directly. Its rows are unit vectors, so
+\eqn{R = LL^\top} has a unit diagonal.
 
 It is the natural way to simulate a correlated standard normal vector:
 \eqn{Lz} with \eqn{z} standard normal has correlation matrix \eqn{R} and unit

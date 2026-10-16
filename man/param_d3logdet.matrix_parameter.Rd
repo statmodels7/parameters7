@@ -16,7 +16,7 @@ A numeric vector of \code{choose(s@n_free + 2, 3)} entries, keyed as
 \code{param_tuple_names(s, 3)} and in that order.
 }
 \description{
-The method that every \code{\link[=matrix_parameter]{matrix_parameter()}} inherits when it registers no
+This is the method that every \code{\link[=matrix_parameter]{matrix_parameter()}} inherits when it registers no
 \code{\link[=param_d3logdet]{param_d3logdet()}} of its own. Each component is one tensor-product central
 difference, through \code{\link[=param_tensor]{param_tensor()}} at accuracy 4, of the highest analytic
 log-determinant derivative below the third, as \code{\link[=param_analytic]{param_analytic()}} reads
@@ -25,7 +25,7 @@ it: for the tuple \eqn{(k, l, m)}, one first difference of the
 step \eqn{\varepsilon^{1/5}\max(1, |\eta_m|)}.
 }
 \section{Accuracy}{
-\code{\link[=param_d2logdet]{param_d2logdet()}} is an exact identity \strong{given} the matrix derivative
+\code{\link[=param_d2logdet]{param_d2logdet()}} is an exact identity given the matrix derivative
 arrays, so it is differenced where \code{\link[=param_d1]{param_d1()}} and \code{\link[=param_d2]{param_d2()}} are
 analytic or where the family writes it out, and the error is of order
 \eqn{10^{-11}}. Where the base-class \code{\link[=param_d2logdet]{param_d2logdet()}} would read

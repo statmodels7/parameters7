@@ -17,20 +17,20 @@ A list of \code{choose(s@n_free + 3, 4)} symmetric matrices keyed as
 components, at \eqn{p = 8} it is 82251.
 }
 \description{
-Closed form, by the same Leibniz rule on \eqn{M = L L^\top} as at third order,
-with the four differentiations distributed over the two factors. The
-derivative of \eqn{L} in a multiset of indices is non-zero only for an empty
-multiset, a single index, or a repetition of one diagonal free value, so of
-the \eqn{2^4} ways to split a quadruple between the factors almost all
+Computes the fourth derivatives in closed form, by the same Leibniz rule on
+\eqn{M = L L^\top} as at third order, in which the four differentiations are
+distributed over the two factors. The derivative of \eqn{L} in a multiset of
+indices is non-zero only for an empty multiset, a single index, or a
+repetition of one diagonal free value, so of the \eqn{2^4} ways to split a quadruple between the factors almost all
 contribute nothing.
 
-Exact at this order, the highest that the package provides, and a
-fourth-order chain rule through a link needs it. Nothing is differenced, so
-the accuracy is that of rounding, where a stencil at this order is accurate
-to about five digits.
+The result is exact at this order, which is the highest that the package
+provides, and a fourth-order chain rule through a link needs it. The
+derivatives are computed without differencing, so the accuracy is that of
+rounding, whereas a stencil at this order is accurate to about five digits.
 
 A component repeating a below-diagonal free value three or more times is
-exactly zero, \eqn{M} being quadratic in each of those.
+exactly zero, because \eqn{M} is quadratic in each of those.
 }
 \seealso{
 \code{\link[=chol_leibniz]{chol_leibniz()}}, which assembles it, \code{\link[=param_d3.LogCholeskyParam]{param_d3.LogCholeskyParam()}}

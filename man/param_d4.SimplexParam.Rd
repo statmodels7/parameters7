@@ -13,16 +13,17 @@ checked by the generic.}
 }
 \value{
 A list of \code{choose(s@n_free + 3, 4)} numeric vectors of length \eqn{K},
-keyed as \code{param_tuple_names(s, 4)} and in that order, each summing to 0.
+keyed as \code{param_tuple_names(s, 4)} and in that order. Each vector sums to 0.
 }
 \description{
-Closed form, the cumulant recursion at fourth order, the highest order that
-the package provides. A product stencil at fourth order is the least accurate
+Computes the fourth derivatives in closed form, by the cumulant recursion at
+fourth order, which is the highest order that the package provides. A
+product stencil at fourth order is the least accurate
 of the four, and a fourth-order chain rule through a link uses this array.
 Every component sums to zero over the category index, up to rounding.
 
-The array holds \eqn{K(K-1)^4} entries, so it is the largest object the family
-builds; at \eqn{K = 4} that is 324.
+The array holds \eqn{K(K-1)^4} entries, so it is the largest object that the
+family builds; at \eqn{K = 4} that is 324.
 }
 \seealso{
 \code{\link[=simplex_tensors]{simplex_tensors()}}, which builds the array,

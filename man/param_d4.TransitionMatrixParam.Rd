@@ -17,8 +17,8 @@ A list of \code{choose(s@n_free + 3, 4)} \eqn{K \times K} matrices keyed as
 components, of which 15 can be non-zero.
 }
 \description{
-Closed form, from \code{\link[=simplex]{simplex()}}'s cumulant recursion at fourth order, embedded
-row by row. A component whose four free values do not all belong to one row
+Computes the fourth derivatives in closed form from \code{\link[=simplex]{simplex()}}'s cumulant
+recursion at fourth order, embedded row by row. A component whose four free values do not all belong to one row
 is exactly the zero matrix.
 
 A product stencil at fourth order, as in \code{\link[=numerical_d4]{numerical_d4()}}, is far less

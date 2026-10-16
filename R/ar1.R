@@ -5,30 +5,31 @@ NULL
 #' AR(1) Parameter
 #'
 #' @description
-#' The S7 class of first-order autoregressive covariance matrices: equal
-#' variances and a correlation falling geometrically with the lag,
-#' \eqn{M_{ij} = \sigma^2 \rho^{|i-j|}}. Two free values at every dimension, and
-#' the correlation is unrestricted in \eqn{(-1, 1)}, unlike
-#' [compound_symmetry()]'s.
+#' `Ar1Param` is the S7 class of first-order autoregressive covariance
+#' matrices, which have equal variances and a correlation that falls
+#' geometrically with the lag, \eqn{M_{ij} = \sigma^2 \rho^{|i-j|}}. The family
+#' has two free values at every dimension, and its correlation is unrestricted
+#' in \eqn{(-1, 1)}, unlike that of [compound_symmetry()].
 #'
 #' [ar1()] builds one. It shares its whole derivative skeleton with
 #' [compound_symmetry()] through [econ_scalars()], [econ_derivative()] and
-#' [econ_logdet_derivative()]; what differs is the pattern and the
-#' log-determinant terms.
+#' [econ_logdet_derivative()]; only the pattern and the log-determinant terms
+#' differ.
 #'
 #' @inheritParams matrix_parameter
 #'
 #' @return An object of class `Ar1Param`, a subclass of [matrix_parameter()]
 #'   adding no properties of its own. `param_params` holds `link_scale` and
-#'   `link_rho`, the second a `linkfunctions7::rhobit_link()` at every dimension.
-#'   `n_free` is 2 and `rank` is \eqn{p}.
+#'   `link_rho`, and `link_rho` is a `linkfunctions7::rhobit_link()` at every
+#'   dimension. `n_free` is 2 and `rank` is \eqn{p}.
 #'
 #' @seealso [ar1()], the constructor, [compound_symmetry()] for the sibling
 #'   family, [autoregressive()] for higher orders, and [matrix_parameter()] for
 #'   the properties that this class inherits.
 #'
 #' @examples
-#' # Two free values whatever the dimension, and a rhobit correlation.
+#' # The family has two free values whatever the dimension, and a rhobit
+#' # correlation.
 #' s <- ar1(4)
 #' S7::S7_inherits(s, Ar1Param)
 #' c(p4 = ar1(4)@n_free, p20 = ar1(20)@n_free)
@@ -81,8 +82,8 @@ Ar1Param <- S7::new_class("Ar1Param", parent = matrix_parameter)
 #'      & & -\rho & 1
 #'   \end{pmatrix}.}
 #'
-#' [param_solve()] builds it from that form, so no factorization is performed;
-#' the matrix is assembled densely and multiplied by `b`, at \eqn{O(p^2)} per
+#' [param_solve()] builds it from that form and does not factorize the matrix;
+#' it assembles the matrix densely and multiplies it by `b`, at \eqn{O(p^2)} per
 #' column of `b`.
 #'
 #' The precision is tridiagonal but is not itself an AR(1) matrix. Its lag-1
@@ -90,8 +91,8 @@ Ar1Param <- S7::new_class("Ar1Param", parent = matrix_parameter)
 #' \eqn{\rho = 0.6} it is \eqn{-0.514} at the ends and \eqn{-0.441} in the
 #' middle), and its lag-2 correlation is 0, where an AR(1) matrix has
 #' \eqn{\rho^2}. An AR(1) covariance and an AR(1) precision therefore define
-#' different models. This family is the AR(1) pattern itself, whichever side a
-#' consumer puts it on; [ar1_inv()] is the family whose value is the matrix
+#' different models. This family is the AR(1) pattern itself, on whichever side
+#' a consumer puts it; [ar1_inv()] is the family whose value is the matrix
 #' above, so that the AR(1) process is the one written on the other side.
 #'
 #' # The log-determinant
@@ -101,7 +102,8 @@ Ar1Param <- S7::new_class("Ar1Param", parent = matrix_parameter)
 #' \deqn{\log|M| = p\log\sigma^2 + (p-1)\log(1-\rho^2),}
 #'
 #' a sum of a function of one free value and a function of the other. Every
-#' mixed derivative of it is exactly zero, and no determinant is computed.
+#' mixed derivative of it is exactly zero, and the method does not compute a
+#' determinant.
 #'
 #' # Derivatives of the pattern
 #'
@@ -109,15 +111,15 @@ Ar1Param <- S7::new_class("Ar1Param", parent = matrix_parameter)
 #' the correlation. An entry is \eqn{\rho^{m}}
 #' for the lag \eqn{m}, so its derivatives in the free value are a power composed
 #' with the link, taken to fourth order by [compose_order()]. Each distinct lag is
-#' composed once and written into every entry that carries it, the matrix having
-#' only \eqn{p} distinct values.
+#' composed once and written into every entry that carries it, because the
+#' matrix has only \eqn{p} distinct values.
 #'
 #' @section Notation:
 #' \eqn{\eta = (\eta_1, \eta_2)} is the free vector, \eqn{\sigma^2} the common
 #' variance and \eqn{\rho} the lag-one correlation. \eqn{p} is the side of the
 #' matrix and \eqn{m = |i-j|} the lag of an entry.
 #'
-#' @param dimension The side \eqn{p} of the matrix, **at least 2**. A one by one
+#' @param dimension The side \eqn{p} of the matrix, at least 2. A one by one
 #'   matrix has no correlation, so `ar1(1)` signals an error stating that the
 #'   family would carry a free value with no effect.
 #' @param link_scale A \pkg{linkfunctions7} link carrying the first free value
@@ -136,7 +138,8 @@ Ar1Param <- S7::new_class("Ar1Param", parent = matrix_parameter)
 #'   unrestricted correlation, and [param_solve()] for the tridiagonal inverse.
 #'
 #' @examples
-#' # A 4 x 4 AR(1) covariance at a variance of 2 and a correlation of 0.6.
+#' # Here is a 4 x 4 AR(1) covariance at a variance of 2 and a correlation of
+#' # 0.6.
 #' s <- ar1(4)
 #' eta <- c(log(2), atanh(0.6))
 #' m <- param_value(s, eta)
@@ -145,7 +148,7 @@ Ar1Param <- S7::new_class("Ar1Param", parent = matrix_parameter)
 #' # The entries really are sigma^2 rho^|i-j|.
 #' all.equal(m[1, 4], 2 * 0.6^3, check.attributes = FALSE)
 #'
-#' # A free value of 0 is a correlation of 0, the link being rhobit.
+#' # A free value of 0 is a correlation of 0, because the link is rhobit.
 #' param_value(s, c(0, 0))[1, 2]
 #'
 #' # The inverse is tridiagonal, and exact: an AR(1) process is Markov.
@@ -203,7 +206,7 @@ ar1 <- function(dimension,
 #' Returns \eqn{P(\rho)_{ij} = \rho^{|i-j|}}, the correlation pattern of an AR(1)
 #' matrix, together with its derivatives in the second free value to the
 #' order that the scalars carry. Each
-#' entry is a **power** of the correlation, so unlike [cs_pattern()]'s the
+#' entry is a power of the correlation, so unlike [cs_pattern()]'s the
 #' pattern is not linear and each order needs a genuine chain: [compose_order()]
 #' composes \eqn{\rho \mapsto \rho^m} with the link's own derivatives, one
 #' order at a time.
@@ -249,9 +252,10 @@ ar1_pattern <- function(s, sc) {
 #' @description
 #' Returns \eqn{M_{ij} = \sigma^2 \rho^{|i-j|}}: the common variance on the
 #' diagonal and a covariance falling geometrically with the lag. Positive
-#' definiteness holds at every free vector in exact arithmetic, the rhobit link
-#' keeping \eqn{|\rho| < 1}, so nothing is tested here; in double precision
-#' \eqn{\rho} rounds to \eqn{-1} or 1 from \eqn{|\eta_2|} of about 19.
+#' definiteness holds at every free vector in exact arithmetic because the
+#' rhobit link keeps \eqn{|\rho| < 1}, so the method does not test for it; in
+#' double precision \eqn{\rho} rounds to \eqn{-1} or 1 from \eqn{|\eta_2|} of
+#' about 19.
 #' @param s An [Ar1Param()] object.
 #' @param eta A numeric vector of two free values, already checked by the
 #'   generic.
@@ -273,7 +277,8 @@ S7::method(param_value, Ar1Param) <- function(s, eta, ...) {
 #' @description
 #' Returns the two free values behind an AR(1) matrix. The variance is the common
 #' diagonal entry and the correlation is the first off-diagonal entry divided by
-#' it, both read exactly; the remaining entries of the matrix are then compared
+#' it, and the method reads both exactly; the remaining entries of the matrix
+#' are then compared
 #' with the pattern that those two values imply.
 #' @details
 #' A matrix that does not match the implied pattern is rejected and is never
@@ -288,7 +293,7 @@ S7::method(param_value, Ar1Param) <- function(s, eta, ...) {
 #'   diagonal and the first off-diagonal.
 #' @param ... Unused, and accepted so the signature matches the generic's.
 #' @return A numeric vector of length 2, named by `s@free_names`.
-#' @seealso [param_value.Ar1Param()], the map this inverts.
+#' @seealso [param_value.Ar1Param()], the map that this method inverts.
 #' @keywords internal
 S7::method(param_free, Ar1Param) <- function(s, m, ...) {
   p <- s@dimension
@@ -322,11 +327,13 @@ S7::method(param_free, Ar1Param) <- function(s, m, ...) {
 #' @title Solve of an AR(1) Parameter
 #' @name param_solve.Ar1Param
 #' @description
-#' Exact, and tridiagonal. The precision of an AR(1) covariance is
+#' The method is exact, and the inverse is tridiagonal. The precision of an
+#' AR(1) covariance is
 #' \eqn{\{\sigma^2(1-\rho^2)\}^{-1}} times the matrix with 1 at the two corners
 #' of the diagonal, \eqn{1+\rho^2} elsewhere on it, and \eqn{-\rho} on the two
-#' first off-diagonals. Every other entry is exactly zero, an AR(1) process being
-#' Markov, so the inverse is written down and no factorization is performed. The
+#' first off-diagonals. Every other entry is exactly zero because an AR(1)
+#' process is Markov, so the method writes down the inverse and does not
+#' factorize the matrix. The
 #' matrix is assembled densely and multiplied by `b`, at \eqn{O(p^2)} per column
 #' of `b`. The factor \eqn{1 - \rho^2} is evaluated from the free value \eqn{z}
 #' as \eqn{\mathrm{sech}^2 z = 4e^{-2|z|}/(1 + e^{-2|z|})^2}, so the inverse stays
@@ -338,9 +345,9 @@ S7::method(param_free, Ar1Param) <- function(s, m, ...) {
 #'   vector and defaulted to the identity by the generic.
 #' @param ... Unused, and accepted so the signature matches the generic's.
 #' @return A numeric matrix with `s@dimension` rows and as many columns as `b`.
-#' @seealso [ar1()], which explains why the tridiagonal precision is not itself
-#'   AR(1), and [param_solve.matrix_parameter()] for the factorization this
-#'   avoids.
+#' @seealso [ar1()], for the reason why the tridiagonal precision is not itself
+#'   AR(1), and [param_solve.matrix_parameter()] for the factorization that this
+#'   method avoids.
 #' @keywords internal
 S7::method(param_solve, Ar1Param) <- function(s, eta, b = NULL, ...) {
   p <- s@dimension
@@ -364,13 +371,14 @@ S7::method(param_solve, Ar1Param) <- function(s, eta, b = NULL, ...) {
 #' @title Derivatives of an AR(1) Parameter
 #' @name param_d1.Ar1Param
 #' @description
-#' Closed form at all four orders. One page covers [param_d1()], [param_d2()],
+#' The derivatives have closed form at all four orders. One page covers
+#' [param_d1()], [param_d2()],
 #' [param_d3()] and [param_d4()] for this family because the four are the same
 #' product at different orders: \eqn{M = \sigma^2 P(\rho)}, so a component with
 #' \eqn{a} scale indices and \eqn{b} correlation indices is the \eqn{a}-th
 #' derivative of the scale times the \eqn{b}-th derivative of the pattern.
 #'
-#' The pattern's derivatives are the ones that need work here. An entry is
+#' The pattern's derivatives need work here. An entry is
 #' \eqn{\rho^{|i-j|}}, a power where [compound_symmetry()]'s pattern is linear,
 #' so each is composed with the rhobit link to the requested order, through
 #' [compose_order()]. Each distinct lag is composed once.
@@ -383,14 +391,14 @@ S7::method(param_solve, Ar1Param) <- function(s, eta, b = NULL, ...) {
 #' - [param_d3()]: 4 entries, `param_tuple_names(s, 3)`.
 #' - [param_d4()]: 5 entries, `param_tuple_names(s, 4)`.
 #'
-#' Every component with at least one correlation index has a zero diagonal, the
-#' lag-0 entries of the pattern being the constant 1.
+#' Every component with at least one correlation index has a zero diagonal,
+#' because the lag-0 entries of the pattern are the constant 1.
 #' @param s An [Ar1Param()] object.
 #' @param eta A numeric vector of two free values, already checked by the
 #'   generic.
 #' @param ... Unused, and accepted so the signature matches the generic's.
 #' @return A named list of `order + 1` symmetric `s@dimension` by `s@dimension`
-#'   matrices; see **Details** for the keying of each order.
+#'   matrices; see Details for the keying of each order.
 #' @seealso [econ_derivative()], which assembles all four, `ar1_pattern()` for
 #'   the pattern and its derivatives, and
 #'   [param_d1.CompoundSymmetryParam()] for the sibling family, whose pattern is
@@ -434,9 +442,9 @@ S7::method(param_d4, Ar1Param) <- function(s, eta, ...) {
 #' @details
 #' \eqn{\mathrm{sech}^2 z} is evaluated as \eqn{4a/(1 + a)^2} with
 #' \eqn{a = e^{-2|z|}}, and its logarithm as
-#' \eqn{2\log 2 - 2|z| - 2\log(1 + a)}. Neither is computed from
-#' \eqn{1 - \tanh^2 z}, which loses all accuracy once \eqn{\tanh z} rounds to
-#' \eqn{-1} or 1. With \eqn{t = \tanh z} and \eqn{u = \mathrm{sech}^2 z}, from
+#' \eqn{2\log 2 - 2|z| - 2\log(1 + a)}. The function and its logarithm are not
+#' computed from \eqn{1 - \tanh^2 z}, which loses all accuracy once
+#' \eqn{\tanh z} rounds to \eqn{-1} or 1. With \eqn{t = \tanh z} and \eqn{u = \mathrm{sech}^2 z}, from
 #' \eqn{t' = u} and \eqn{u' = -2tu}, the four derivatives of the logarithm are
 #' \eqn{-2t}, \eqn{-2u}, \eqn{4tu} and \eqn{4u(u - 2t^2)}.
 #'
@@ -497,14 +505,14 @@ ar1_logdet_chain <- function(s) {
 #' @title Log-Determinant of an AR(1) Parameter
 #' @name param_logdet.Ar1Param
 #' @description
-#' Closed form. The determinant of the correlation pattern is
-#' \eqn{(1-\rho^2)^{p-1}}, so
+#' The log-determinant has closed form. The determinant of the correlation
+#' pattern is \eqn{(1-\rho^2)^{p-1}}, so
 #'
 #' \deqn{\log|M| = p\log\sigma^2 + (p-1)\log(1-\rho^2).}
 #'
-#' Two logarithms and no factorization, whatever \eqn{p} is, where the base
-#' method takes an \eqn{O(p^3)} eigendecomposition. With \eqn{\rho = \tanh z},
-#' the second term is evaluated as
+#' The evaluation needs two logarithms and no factorization, whatever \eqn{p}
+#' is, where the base method takes an \eqn{O(p^3)} eigendecomposition. With
+#' \eqn{\rho = \tanh z}, the second term is evaluated as
 #' \eqn{(p-1)\{2\log 2 - 2|z| - 2\log(1 + e^{-2|z|})\}}, which does not lose
 #' accuracy where \eqn{\rho} rounds to \eqn{-1} or 1.
 #' @param s An [Ar1Param()] object.
@@ -524,10 +532,11 @@ S7::method(param_logdet, Ar1Param) <- function(s, eta, ...) {
 #' @title Log-Determinant Derivatives of an AR(1) Parameter
 #' @name param_dlogdet.Ar1Param
 #' @description
-#' Closed form at all four orders. One page covers [param_dlogdet()],
+#' The derivatives have closed form at all four orders. One page covers
+#' [param_dlogdet()],
 #' [param_d2logdet()], [param_d3logdet()] and [param_d4logdet()] because the four
 #' differ only in the order taken:
-#' \eqn{\log|M| = p\log\sigma^2 + (p-1)\log(1-\rho^2)} is a **sum** of a function
+#' \eqn{\log|M| = p\log\sigma^2 + (p-1)\log(1-\rho^2)} is a sum of a function
 #' of one free value and a function of the other, so every mixed component is
 #' exactly zero and the pure ones are the two chains taken separately.
 #' @details

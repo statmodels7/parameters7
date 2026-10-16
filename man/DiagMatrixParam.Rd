@@ -43,23 +43,22 @@ An object of class \code{DiagMatrixParam}, a subclass of
 \code{\link[=matrix_parameter]{matrix_parameter()}} adding no properties of its own. \code{param_params} holds
 two entries: \code{link}, the link object, and \code{shared}, \code{TRUE} for
 \code{\link[=scalar_matrix]{scalar_matrix()}} and \code{FALSE} for \code{\link[=diagonal_matrix]{diagonal_matrix()}}. \code{rank} is always
-\eqn{p}, every entry being positive.
+\eqn{p}, because every entry is positive.
 }
 \description{
-The S7 class of diagonal matrices with positive entries, each entry carried
-onto the free scale by a \pkg{linkfunctions7} link. Two constructors return
-it, and the difference is recorded in \code{param_params$shared}:
-\code{\link[=diagonal_matrix]{diagonal_matrix()}} gives one free value per entry, and \code{\link[=scalar_matrix]{scalar_matrix()}} one
-free value for the whole diagonal. Every method here reads that flag, so the
+This S7 class represents diagonal matrices with positive entries, and a
+\pkg{linkfunctions7} link carries each entry onto the free scale. Two
+constructors return it, and the difference is recorded in
+\code{param_params$shared}: \code{\link[=diagonal_matrix]{diagonal_matrix()}} gives one free value per entry,
+and \code{\link[=scalar_matrix]{scalar_matrix()}} one free value for the whole diagonal. Every method here reads that flag, so the
 two share one class and one set of formulas.
 
-It is the family in which \pkg{parameters7} and \pkg{linkfunctions7} meet: the
-Jacobian of a diagonal map is diagonal, which is exactly what a scalar link
-supplies, so the link's own exact derivatives to fourth order are used as they
-are.
+This family combines \pkg{parameters7} with \pkg{linkfunctions7}: the
+Jacobian of a diagonal map is diagonal, which is exactly what a scalar link supplies, so the
+link's own exact derivatives to fourth order are used as they are.
 }
 \examples{
-# One class, two constructors, told apart by `shared`.
+# The two constructors return one class, and `shared` distinguishes them.
 d <- diagonal_matrix(3)
 q <- scalar_matrix(3)
 c(S7::S7_inherits(d, DiagMatrixParam), S7::S7_inherits(q, DiagMatrixParam))

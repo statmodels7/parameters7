@@ -16,19 +16,19 @@ check_eta(s, eta)
 }
 \description{
 Checks that \code{eta} is a finite numeric vector of the length that the
-parameter declares, and returns it with its names stripped. Called before
-dispatch in the body of every generic that takes \code{eta}, so a parameter
-written outside the package
-inherits the check without doing anything.
+parameter declares, and returns it with its names stripped. The function is
+called before dispatch in the body of every generic that takes \code{eta}, so a
+parameter written outside the package inherits the check without further
+code.
 }
 \details{
 Three conditions are checked, each with its own message. A non-numeric \code{eta}
 signals \verb{'eta' must be numeric.}; a wrong length signals a message naming
 both counts and listing the family's \code{free_names}, so a caller who has
 mismatched two parametrizations can see which is which; and any \code{NA}, \code{NaN}
-or infinite entry signals \verb{'eta' must be finite: the free scale has no boundary to reach.} The last message states the reason a non-finite free value is a
-caller error: the unconstrained scale has no edge, so an infinity there is a
-runaway rather than a limit reached.
+or infinite entry signals \verb{'eta' must be finite: the free scale has no boundary to reach.} The last message states why a non-finite free value is a
+caller error: the unconstrained scale has no edge, so an infinite value
+indicates a runaway and not a limit that has been reached.
 
 Names are stripped for the same reason that \code{align_theta()} strips them in
 \pkg{distributions7}. A value that has been through a link comes back

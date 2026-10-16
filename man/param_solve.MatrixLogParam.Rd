@@ -16,7 +16,8 @@
 A numeric matrix.
 }
 \description{
-Exact: \eqn{M^{-1} = \exp(-S)}, through the same
-eigendecomposition as the value, applied to \code{b}.
+Returns \eqn{M^{-1} b} exactly, where
+\eqn{M^{-1} = \exp(-S)} is computed through the same eigendecomposition as
+the value.
 }
 \keyword{internal}

@@ -10,15 +10,15 @@ param_tuple_names(s, order = 2L)
 \item{s}{An object inheriting from class \code{\link[=parameter]{parameter()}}, whose \code{free_names}
 supply the labels and whose \code{n_free} supplies \eqn{d}.}
 
-\item{order}{The derivative order. \code{2} by default, which is the order
-\code{\link[=param_d2]{param_d2()}} and \code{\link[=param_d2logdet]{param_d2logdet()}} use; \code{3} and \code{4} name the components of
-\code{\link[=param_d3]{param_d3()}} and \code{\link[=param_d4]{param_d4()}}. \code{1} is accepted and returns the free names
+\item{order}{The derivative order. It is \code{2} by default, which is the order
+that \code{\link[=param_d2]{param_d2()}} and \code{\link[=param_d2logdet]{param_d2logdet()}} use; \code{3} and \code{4} name the
+components of \code{\link[=param_d3]{param_d3()}} and \code{\link[=param_d4]{param_d4()}}. \code{1} is accepted and returns the free names
 themselves. Any other value signals the error
 \verb{'order' must be 1, 2, 3 or 4.}}
 }
 \value{
 A character vector of \code{choose(s@n_free + order - 1, order)} names, in
-the same order as the list they key. At order 2 the \code{s@n_free} diagonal
+the same order as the list that they key. At order 2 the \code{s@n_free} diagonal
 pairs come first.
 }
 \description{
@@ -27,7 +27,7 @@ values, built by pasting the free names together with \code{":"}. At order 2 the
 are the keys of \code{\link[=param_d2]{param_d2()}} and \code{\link[=param_d2logdet]{param_d2logdet()}}, with the diagonal pairs
 first; at orders 3 and 4 the keys of \code{\link[=param_d3]{param_d3()}} and \code{\link[=param_d4]{param_d4()}}, in
 lexicographic order. Use it to look a component up by name, or to walk a
-derivative list beside the index tuples \code{\link[=param_tuple_indices]{param_tuple_indices()}} returns.
+derivative list beside the index tuples that \code{\link[=param_tuple_indices]{param_tuple_indices()}} returns.
 }
 \section{How many there are}{
 A mixed partial does not depend on the order of differentiation, so the
@@ -45,9 +45,9 @@ and of every derivative list of that order. For \eqn{d = 6}, which is a
 \section{One enumeration for the keys and the tuples}{
 The package never recovers an index by splitting a key apart. Splitting
 \code{"log_L1:log_L2"} on \code{":"} gives the wrong number of pieces when a free name
-contains the separator, and no error is signaled. \code{param_tuple_names()}
-calls \code{\link[=param_tuple_indices]{param_tuple_indices()}} and labels what it gets, so the names and the
-indices agree by construction.
+contains the separator, without signaling an error. \code{param_tuple_names()}
+calls \code{\link[=param_tuple_indices]{param_tuple_indices()}} and labels the tuples that this returns, so the
+names and the indices agree by construction.
 }
 
 \section{Notation}{

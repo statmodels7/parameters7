@@ -19,7 +19,8 @@ A numeric vector of length 2, named by \code{s@free_names}.
 \description{
 Returns the two free values behind an AR(1) matrix. The variance is the common
 diagonal entry and the correlation is the first off-diagonal entry divided by
-it, both read exactly; the remaining entries of the matrix are then compared
+it, and the method reads both exactly; the remaining entries of the matrix
+are then compared
 with the pattern that those two values imply.
 }
 \details{
@@ -30,6 +31,6 @@ nearest AR(1) matrix computes that projection separately and passes the
 result to this method.
 }
 \seealso{
-\code{\link[=param_value.Ar1Param]{param_value.Ar1Param()}}, the map this inverts.
+\code{\link[=param_value.Ar1Param]{param_value.Ar1Param()}}, the map that this method inverts.
 }
 \keyword{internal}

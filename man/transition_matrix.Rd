@@ -7,34 +7,34 @@
 transition_matrix(n_state)
 }
 \arguments{
-\item{n_state}{The number of states \eqn{K}, \strong{at least 2}. A single integer;
+\item{n_state}{The number of states \eqn{K}, at least 2. A single integer;
 \code{1}, a fraction, \code{NA} and a vector all signal the error \verb{'n_state' must be a single integer of at least 2.} A one-state chain has nothing to estimate.}
 }
 \value{
 An object of class \code{\link[=TransitionMatrixParam]{TransitionMatrixParam()}}, with \code{n_free} equal to
 \eqn{K(K-1)}, \code{free_names} \code{alr1.1}, \code{alr1.2}, ..., \verb{alr\{K\}.\{K-1\}} row by
 row, \code{param_name} \code{"transition_matrix"}, and \code{param_params} holding
-\code{n_state}. No \code{dimension}, \code{rank} or \code{null_basis}.
+\code{n_state}. The object carries no \code{dimension}, \code{rank} or \code{null_basis}.
 }
 \description{
 Returns an object holding a \eqn{K \times K} row-stochastic matrix, the
 transition matrix of a Markov chain on \eqn{K} states, with each row an
-independent \code{\link[=simplex]{simplex()}} in the additive log-ratio chart. \eqn{K(K-1)} free
-values in all, and every free vector gives non-negative entries with rows
-summing to 1 up to rounding, so a chain can be estimated without a
-constraint. An entry underflows to exactly 0 when its free value is more
+independent \code{\link[=simplex]{simplex()}} in the additive log-ratio chart. The
+parametrization has \eqn{K(K-1)} free values in all, and every free vector
+gives non-negative entries and rows that sum to 1 up to rounding, so a
+chain can be estimated without a constraint. An entry underflows to exactly 0 when its free value is more
 than about 745 below the largest in its row.
 }
 \section{Rows, not columns}{
 The rows live on the simplex, so row \eqn{i} holds the probabilities of moving
-\strong{from} state \eqn{i}. A transition matrix in this convention acts on row
+from state \eqn{i}. A transition matrix in this convention acts on row
 vectors of probabilities, \eqn{\pi_{t+1} = \pi_t P}; the column convention is
 its transpose.
 }
 
 \section{The rows are independent}{
 Each row is parametrized by its own \eqn{K-1} free values and no others, so
-every derivative array is \strong{block diagonal by row}: a component pairing free
+every derivative array is block diagonal by row: a component pairing free
 values of two different rows is exactly the zero matrix, and a component
 inside row \eqn{i} is zero everywhere outside row \eqn{i}. The implementation
 evaluates the simplex kernels row by row and does not compute the cross-row
@@ -57,8 +57,8 @@ cumulant recursion. There is no log-determinant, no solve and no factor: the
 value is not symmetric, and the object is a \code{\link[=parameter]{parameter()}} and never a
 \code{\link[=matrix_parameter]{matrix_parameter()}}, so those generics have no method and fail at dispatch.
 \code{\link[=check_parameter]{check_parameter()}} runs its seven-check battery instead of the nine-check one,
-and the identity it tests here is that every derivative component sums to zero
-along each row.
+and the identity that it tests here is that every derivative component sums
+to zero along each row.
 }
 
 \section{Notation}{
@@ -70,7 +70,7 @@ is its last state.
 }
 
 \examples{
-# Three states: six free values, two per row.
+# Three states give six free values, two per row.
 s <- transition_matrix(3)
 c(n_free = s@n_free)
 s@free_names

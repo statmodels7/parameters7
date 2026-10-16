@@ -15,19 +15,20 @@ checked by the generic.}
 A single number, \code{0} when \code{s@n_free} is 0.
 }
 \description{
-Closed form. The factor is triangular with \eqn{L_{ii} = \prod_{k<i}
-\sin\theta_{ik}} on its diagonal, so \eqn{|R| = \prod_i L_{ii}^2} and
+Computes the log-determinant in closed form. The factor is triangular with
+\eqn{L_{ii} = \prod_{k<i} \sin\theta_{ik}} on its diagonal, so
+\eqn{|R| = \prod_i L_{ii}^2} and
 
 \deqn{\log|R| = 2 \sum_{i,k} \log \sin\theta_{ik},}
 
-one term per free value. It is \code{2 * sum(log(sines))}: no factorization, no
-determinant, no eigendecomposition.
+one term per free value. It is \code{2 * sum(log(sines))}, computed without a
+factorization, a determinant or an eigendecomposition.
 
-It is always negative or zero, a correlation matrix having determinant at most
-1, with 0 reached only at the identity.
+It is always negative or zero, because a correlation matrix has determinant
+at most 1, and it equals 0 only at the identity.
 }
 \seealso{
 \code{\link[=param_dlogdet.CorrelationParam]{param_dlogdet.CorrelationParam()}} for its four derivative orders,
-and \code{\link[=corr_logdet_chains]{corr_logdet_chains()}} for the per-angle chains they read.
+and \code{\link[=corr_logdet_chains]{corr_logdet_chains()}} for the per-angle chains that they read.
 }
 \keyword{internal}

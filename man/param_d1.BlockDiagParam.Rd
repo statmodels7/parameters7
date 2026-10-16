@@ -21,16 +21,17 @@ At order 1, a list of \code{s@n_free} symmetric matrices named by
 \code{s@dimension} and labeled \code{v1}, \code{v2}, ..., \code{vp} on both margins.
 }
 \description{
-\code{param_d1()}, \code{param_d2()}, \code{param_d3()} and \code{param_d4()} for a
-\code{\link[=block_diag]{block_diag()}} parameter: each block's own derivatives, placed in the rows and
-columns that block occupies, and \strong{exactly zero} for a tuple spanning two
+\code{param_d1()}, \code{param_d2()}, \code{param_d3()} and \code{param_d4()} return, for a
+\code{\link[=block_diag]{block_diag()}} parameter, each block's own derivatives placed in the rows and
+columns that the block occupies, and exactly zero for a tuple spanning two
 blocks. The blocks' derivatives are used as they are, with no differencing,
 so the composite is as exact as its blocks are.
 }
 \details{
-The four share \code{\link[=block_diag_derivs]{block_diag_derivs()}} and differ only in the order they pass.
-The zeros are structural: they follow from the free values of one block not
-entering another, and at order 4 with blocks of 3 and 2 free values they are
+The four share \code{\link[=block_diag_derivs]{block_diag_derivs()}} and differ only in the order that they
+pass.
+The zeros are structural: they follow from the fact that the free values of
+one block do not enter another, and at order 4 with blocks of 3 and 2 free values they are
 50 of the 70 components. See \code{\link[=block_diag]{block_diag()}} for the argument.
 }
 \seealso{

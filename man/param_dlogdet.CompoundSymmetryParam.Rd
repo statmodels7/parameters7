@@ -19,10 +19,10 @@ A named numeric vector of \code{order + 1} entries, keyed as
 \code{param_tuple_names(s, order)}, with every mixed entry exactly zero.
 }
 \description{
-Closed form at all four orders. One page covers \code{\link[=param_dlogdet]{param_dlogdet()}},
-\code{\link[=param_d2logdet]{param_d2logdet()}}, \code{\link[=param_d3logdet]{param_d3logdet()}} and \code{\link[=param_d4logdet]{param_d4logdet()}} because the
-four differ only in the order taken:
-\eqn{\log|M| = p\log\sigma^2 + q(\rho)} is a \strong{sum} of a function of one free
+The derivatives are in closed form at all four orders. One page covers
+\code{\link[=param_dlogdet]{param_dlogdet()}}, \code{\link[=param_d2logdet]{param_d2logdet()}}, \code{\link[=param_d3logdet]{param_d3logdet()}} and
+\code{\link[=param_d4logdet]{param_d4logdet()}} because the four differ only in the order taken:
+\eqn{\log|M| = p\log\sigma^2 + q(\rho)} is a sum of a function of one free
 value and a function of the other, so every mixed component is exactly zero
 and the pure ones are the two chains taken separately.
 }

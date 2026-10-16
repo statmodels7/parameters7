@@ -17,17 +17,17 @@ A numeric vector of length 2, named by \code{s@free_names}.
 \description{
 Returns the two free values behind a compound-symmetric matrix. The variance
 is the common diagonal entry and the correlation is the common off-diagonal
-entry divided by it, both read exactly and then carried onto the free scale by
-the two links. The round trip closes up to rounding.
+entry divided by it. Both are read exactly and then carried onto the free
+scale by the two links. The round trip closes up to rounding.
 }
 \details{
 A matrix whose diagonal is not constant, or whose off-diagonal entries are not
-all equal, is \strong{rejected} with a message naming which, and is never averaged
+all equal, is rejected with a message naming which, and is never averaged
 into the nearest compound-symmetric matrix, because a silent projection would
 hide a mistake in the caller's matrix. A caller who wants the nearest such
-matrix computes it separately and passes the result in.
+matrix computes it separately and supplies it as \code{m}.
 }
 \seealso{
-\code{\link[=param_value.CompoundSymmetryParam]{param_value.CompoundSymmetryParam()}}, the map this inverts.
+\code{\link[=param_value.CompoundSymmetryParam]{param_value.CompoundSymmetryParam()}}, the map that this inverts.
 }
 \keyword{internal}

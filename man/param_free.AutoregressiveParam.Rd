@@ -32,17 +32,18 @@ rounding error:
 \item a matrix that is not Toeplitz, which is rejected instead of being averaged
 along its diagonals;
 \item an implied partial autocorrelation at or beyond \eqn{\pm 1}, or a vanishing
-prediction variance, neither of which is stationary;
+prediction variance, both of which are non-stationary;
 \item a Toeplitz matrix whose autocorrelations stop following the Yule-Walker
-recursion beyond lag \eqn{q}. This last one is what separates an AR(2) from
-an AR(3) at \eqn{p \ge 4}, and it is checked by rebuilding the matrix from
-the recovered free vector and comparing.
+recursion beyond lag \eqn{q}. This last condition distinguishes an AR(2)
+from an AR(3) at \eqn{p \ge 4}, and the method checks it by rebuilding the
+matrix from the recovered free vector and comparing.
 }
 
 The tolerances are relative to \code{max(1, max(abs(m)))}: \eqn{10^{-8}} for the
 structure and \eqn{10^{-7}} for the rebuild.
 }
 \seealso{
-\code{\link[=param_value.AutoregressiveParam]{param_value.AutoregressiveParam()}}, the map this inverts.
+\code{\link[=param_value.AutoregressiveParam]{param_value.AutoregressiveParam()}}, the map that this method
+inverts.
 }
 \keyword{internal}

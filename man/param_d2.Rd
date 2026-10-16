@@ -20,8 +20,8 @@ value, symmetric for a matrix family.
 }
 \description{
 Differentiates the map twice, returning the \eqn{d(d+1)/2} distinct
-components \eqn{\partial^2 V / \partial \eta_k \partial \eta_l}, each shaped
-like the value. A mixed partial does not depend on the order of
+components \eqn{\partial^2 V / \partial \eta_k \partial \eta_l}, each of which
+has the shape of the value. A mixed partial does not depend on the order of
 differentiation, so only the unordered pairs are returned; the caller reads
 the \eqn{(l, k)} entry off the \eqn{(k, l)} one. A Newton step in the free
 vector needs these, and so does the observed information of a model whose
@@ -34,28 +34,28 @@ order. The diagonal pairs come first because a Hessian is filled that way,
 and the ordering is part of the interface: \code{\link[=param_tuple_indices]{param_tuple_indices()}} returns the index
 pairs in exactly the same order, so a caller can walk the two together.
 
-Both come from one enumeration, and neither is produced by taking a key
-apart. Splitting \code{"log_L1:log_L2"} on \code{":"} would give the wrong number of
-pieces whenever a free name contains the separator, and no error would be
-signaled.
+Both come from one enumeration, and the package never obtains either of them
+by taking a key apart. Splitting \code{"log_L1:log_L2"} on \code{":"} would give the
+wrong number of pieces whenever a free name contains the separator, without
+signaling an error.
 }
 
 \section{Exact, or one stencil}{
 Every family here is closed form. The fallback on \code{\link[=parameter]{parameter()}} takes one
-difference and no more, and which quantity it differences depends on what the
+difference and no more. The quantity that it differences depends on what the
 family already supplies. Where \code{\link[=param_d1]{param_d1()}} is analytic it differences that
 once, in the other index. Where \code{\link[=param_d1]{param_d1()}} is itself numerical it works on
 \code{\link[=param_value]{param_value()}} directly: a three-point second difference where the two
 indices coincide, and one difference in each of the two components where they
 differ. A mixed derivative in two different variables is one stencil however
-it is written; the nesting that the package avoids is two differences in the
-same variable.
+it is written; the package avoids nesting two differences in the same
+variable.
 }
 
 \section{Notation}{
 
 \eqn{\eta} is the free vector, of length \eqn{d = } \code{s@n_free}, and \eqn{V}
-the value \code{\link[=param_value]{param_value()}} returns.
+the value that \code{\link[=param_value]{param_value()}} returns.
 }
 
 \examples{

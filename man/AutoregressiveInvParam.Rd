@@ -46,9 +46,10 @@ An object of class \code{AutoregressiveInvParam}, a subclass of
 environment that memoizes the subset structure of each derivative order.
 }
 \description{
-The S7 class of the family whose value is the \strong{inverse} of an
-\code{\link[=autoregressive]{autoregressive()}} matrix: banded of bandwidth \eqn{q}, the precision of an
-autoregression of that order. \code{\link[=autoregressive_inv]{autoregressive_inv()}} builds one.
+This is the S7 class of the family whose value is the inverse of an
+\code{\link[=autoregressive]{autoregressive()}} matrix. That matrix is banded of bandwidth \eqn{q} and is
+the precision of an autoregression of that order. \code{\link[=autoregressive_inv]{autoregressive_inv()}}
+builds one.
 }
 \examples{
 s <- autoregressive_inv(6, order = 2)

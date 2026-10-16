@@ -7,14 +7,14 @@
 diagonal_matrix(dimension, link = linkfunctions7::log_link())
 }
 \arguments{
-\item{dimension}{The side \eqn{p} of the matrix. A single positive whole
-number, finite and at least 1; any other value signals the error
+\item{dimension}{The side \eqn{p} of the matrix. It must be a single
+positive whole number, finite and at least 1; any other value signals the error
 \verb{'dimension' must be a single positive integer.}}
 
 \item{link}{A \pkg{linkfunctions7} link carrying the free scale onto the
 positive entries, \code{linkfunctions7::log_link()} by default. It must map
-\strong{onto} the positive half line, so \code{identity_link()} is rejected with its
-bounds in the message, and \strong{from} the whole real line, since the free
+onto the positive half line, so \code{identity_link()} is rejected with its
+bounds in the message, and from the whole real line, since the free
 vector is unconstrained by design. \code{\link[=check_positive_link]{check_positive_link()}} enforces both at
 construction, reading the link's own lower bound for the first and
 \code{\link[linkfunctions7:eta_bounds]{linkfunctions7::eta_bounds()}} for the second. \code{softplus_link()} satisfies
@@ -35,20 +35,20 @@ an empty \code{null_basis}, \code{param_name} \code{"diag"}, and \code{param_par
 }
 \description{
 Returns an object holding the map \eqn{M = \mathrm{diag}(h(\eta_1), \dots,
-h(\eta_p))}, a diagonal matrix whose \eqn{p} entries are positive, each
-carried from one free value by a scalar link. Use it for a covariance that
+h(\eta_p))}, a diagonal matrix whose \eqn{p} entries are positive and are each
+obtained from one free value by a scalar link. Use it for a covariance that
 assumes independence, which is \eqn{p} free values against
 \code{\link[=log_cholesky]{log_cholesky()}}'s \eqn{p(p+1)/2}, and for a set of independent variance
 components.
 
 The link is chosen by the caller, and the choice matters: the derivatives
 that the family reports are the link's own, so the curvature that an
-optimizer sees on the free scale changes with it. \code{\link[=scalar_matrix]{scalar_matrix()}} is the same object with one free
-value shared by every entry.
+optimizer sees on the free scale changes with it. \code{\link[=scalar_matrix]{scalar_matrix()}} is the
+same object with one free value shared by every entry.
 }
-\section{Where the two packages meet}{
-The Jacobian of a diagonal map is diagonal, which is what a scalar link
-supplies, so the \pkg{linkfunctions7} objects are used directly and their
+\section{The links of linkfunctions7}{
+The Jacobian of a diagonal map is diagonal, and a scalar link supplies
+exactly this, so the \pkg{linkfunctions7} objects are used directly and their
 exact derivatives to fourth order apply without a further chain rule.
 }
 
@@ -64,7 +64,7 @@ scale.
 \deqn{\log|M| = \sum_{i=1}^{p} \log h(\eta_i),}
 
 a sum of functions of one free value each, so every mixed derivative of it is
-exactly zero at every order. Under the \strong{log} link \eqn{\log h(\eta) = \eta},
+exactly zero at every order. Under the log link \eqn{\log h(\eta) = \eta},
 so the gradient is a vector of ones and the second, third and fourth
 derivatives all vanish. Under another link they do not: a softplus link at
 \eqn{\eta = (1, 2)} gives second derivatives of \eqn{(-0.160, -0.122)}.
@@ -78,7 +78,7 @@ positive diagonal entry, and \eqn{h'}, \eqn{h''} its derivatives in \eqn{\eta}.
 }
 
 \examples{
-# Three independent variances, on the log scale by default.
+# The three independent variances are on the log scale by default.
 s <- diagonal_matrix(3)
 s@free_names
 round(param_value(s, c(0, 0.5, -0.5)), 4)
@@ -95,8 +95,8 @@ r <- diagonal_matrix(2, link = linkfunctions7::softplus_link())
 r@free_names
 round(param_value(r, c(1, 2)), 4)
 
-# A link onto the whole line is rejected, an entry having to be positive,
-# and so is one defined on part of the line.
+# A link onto the whole line is rejected because an entry must be positive,
+# and so is a link defined on part of the line.
 try(diagonal_matrix(2, link = linkfunctions7::identity_link()))
 try(diagonal_matrix(2, link = linkfunctions7::sqrt_link()))
 

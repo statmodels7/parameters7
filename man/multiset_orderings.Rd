@@ -7,16 +7,16 @@
 multiset_orderings(v)
 }
 \arguments{
-\item{v}{An integer vector, of length 0 to 3 in every call the package makes,
-the expansion at order \eqn{n} permuting the \eqn{n-1} indices after the
-first.}
+\item{v}{An integer vector, of length 0 to 3 in every call that the package
+makes, because the expansion at order \eqn{n} permutes the \eqn{n-1}
+indices after the first.}
 }
 \value{
 A list of \code{factorial(length(v))} integer vectors.
 }
 \description{
-All \eqn{n!} orderings of a vector of indices, \strong{without} deduplicating the
-ones that coincide because an index repeats: \code{multiset_orderings(c(1, 1))}
+Returns all \eqn{n!} orderings of a vector of indices, without deduplicating
+the ones that coincide because an index repeats: \code{multiset_orderings(c(1, 1))}
 returns two elements.
 }
 \details{

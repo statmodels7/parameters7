@@ -16,8 +16,8 @@ A list of \code{choose(s@n_free + 2, 3)} \eqn{K \times K} matrices keyed as
 \code{param_tuple_names(s, 3)} and in that order.
 }
 \description{
-Closed form, from \code{\link[=simplex]{simplex()}}'s cumulant recursion at third order, embedded row
-by row. A component whose three free values do not all belong to one row is
+Computes the third derivatives in closed form from \code{\link[=simplex]{simplex()}}'s cumulant
+recursion at third order, embedded row by row. A component whose three free values do not all belong to one row is
 exactly the zero matrix, so most of the list is zero and is not computed.
 }
 \seealso{

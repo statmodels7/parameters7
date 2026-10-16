@@ -18,7 +18,7 @@ laid end to end. It is called twice at construction, once for the blocks' rows i
 the matrix and once for their stretches of the free vector.
 }
 \details{
-A width of zero gives an \strong{empty range}, \code{integer(0)}, instead of being
+A width of zero gives an empty range, \code{integer(0)}, instead of being
 dropped, so the list stays aligned with the blocks and the \eqn{b}-th element
 is always the \eqn{b}-th block's. That case is reachable: a fully known
 \code{\link[=scaled_matrix]{scaled_matrix()}} has no free values at all, so

@@ -13,16 +13,16 @@ checked by the generic.}
 }
 \value{
 A list of \code{s@n_free} numeric vectors of length \eqn{K}, named by
-\code{s@free_names}, each summing to 0.
+\code{s@free_names}. Each vector sums to 0.
 }
 \description{
-Closed form:
+Computes the first derivatives in closed form,
 
 \deqn{\partial_b \pi_a = \pi_a(\delta_{ab} - \pi_b),}
 
 which is the covariance structure of a categorical indicator, the same array
-that appears in the score of a multinomial model. Every component sums to zero over the
-category index, \eqn{\sum_a \pi_a} being the constant 1.
+that appears in the score of a multinomial model. Every component sums to
+zero over the category index, because \eqn{\sum_a \pi_a} is the constant 1.
 }
 \seealso{
 \code{\link[=simplex_tensors]{simplex_tensors()}}, which builds the array, and

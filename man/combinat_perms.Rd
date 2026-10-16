@@ -7,7 +7,8 @@
 combinat_perms(x)
 }
 \arguments{
-\item{x}{An integer vector, of length 1 to 4 in every call the package makes.}
+\item{x}{An integer vector, of length 1 to 4 in every call that the package
+makes.}
 }
 \value{
 A list of the distinct orderings of \code{x}, each an integer vector:

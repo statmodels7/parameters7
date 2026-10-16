@@ -15,14 +15,14 @@ generic.}
 A single number, finite at every free vector.
 }
 \description{
-Closed form. The determinant of the correlation pattern is
-\eqn{(1-\rho^2)^{p-1}}, so
+The log-determinant has closed form. The determinant of the correlation
+pattern is \eqn{(1-\rho^2)^{p-1}}, so
 
 \deqn{\log|M| = p\log\sigma^2 + (p-1)\log(1-\rho^2).}
 
-Two logarithms and no factorization, whatever \eqn{p} is, where the base
-method takes an \eqn{O(p^3)} eigendecomposition. With \eqn{\rho = \tanh z},
-the second term is evaluated as
+The evaluation needs two logarithms and no factorization, whatever \eqn{p}
+is, where the base method takes an \eqn{O(p^3)} eigendecomposition. With
+\eqn{\rho = \tanh z}, the second term is evaluated as
 \eqn{(p-1)\{2\log 2 - 2|z| - 2\log(1 + e^{-2|z|})\}}, which does not lose
 accuracy where \eqn{\rho} rounds to \eqn{-1} or 1.
 }

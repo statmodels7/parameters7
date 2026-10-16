@@ -4,9 +4,9 @@
 \alias{param_readable.parameter}
 \title{No Declared Quantities}
 \arguments{
-\item{s}{A \code{\link[=parameter]{parameter()}} object. Not read.}
+\item{s}{A \code{\link[=parameter]{parameter()}} object. The method does not read it.}
 
-\item{eta}{A numeric vector of free values. Not read.}
+\item{eta}{A numeric vector of free values. The method does not read it.}
 
 \item{...}{Ignored.}
 }
@@ -14,15 +14,15 @@
 \code{NULL}.
 }
 \description{
-The method that every \code{\link[=parameter]{parameter()}} inherits when it declares no interpretable
-quantities of its own. It returns \code{NULL}. For \code{\link[=log_cholesky]{log_cholesky()}},
-\code{\link[=matrix_log]{matrix_log()}}, \code{\link[=correlation_matrix]{correlation_matrix()}}, the five composition wrappers and the
+This method is inherited by every \code{\link[=parameter]{parameter()}} that declares no
+interpretable quantities of its own. It returns \code{NULL}. For \code{\link[=log_cholesky]{log_cholesky()}},
+\code{\link[=matrix_log]{matrix_log()}}, \code{\link[=correlation_matrix]{correlation_matrix()}}, the composition wrappers and the
 other families without a method of their own, the matrix itself is the
 quantity that a reader reads, and a consumer that receives \code{NULL} reports the
 matrix.
 
 Because the result is \code{NULL} and not an error, a consumer can call the generic
-on every parameter in a model without knowing which families declare
+on every parameter in a model without checking which families declare
 something.
 }
 \seealso{

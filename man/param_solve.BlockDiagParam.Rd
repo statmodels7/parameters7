@@ -33,8 +33,8 @@ to that block, so the whole matrix is never inverted. \code{param_factor()}
 assembles the blocks' factors on the diagonal; the result is lower triangular
 with \eqn{M = L L^\top}, as \code{\link[=param_factor]{param_factor()}} requires.
 
-Both are rejected by the generic where any block is rank deficient, the
-composite having no inverse and no Cholesky factor then.
+Both are rejected by the generic where any block is rank deficient, because
+the composite then has no inverse and no Cholesky factor.
 }
 \seealso{
 \code{\link[=param_solve]{param_solve()}} and \code{\link[=param_factor]{param_factor()}} for the two generics.

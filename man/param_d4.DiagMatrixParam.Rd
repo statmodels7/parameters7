@@ -16,14 +16,13 @@ A list of \code{choose(s@n_free + 3, 4)} diagonal matrices keyed as
 \code{param_tuple_names(s, 4)} and in that order.
 }
 \description{
-Closed form, the same separable structure as at third order with
-\eqn{h''''(\eta_k)} in place of \eqn{h'''(\eta_k)}. Only the pure components
-survive; every tuple naming two different free values is the exact zero
-matrix.
+Computes the fourth derivatives in closed form, with the same separable
+structure as at third order and \eqn{h''''(\eta_k)} in place of
+\eqn{h'''(\eta_k)}. Only the pure components survive; every tuple naming two
+different free values is the exact zero matrix.
 
-\eqn{h''''} comes from \code{linkfunctions7::d4linkinv()}. This is the order at
-which a numerical route is least accurate, so the closed form matters most
-here.
+\eqn{h''''} comes from \code{linkfunctions7::d4linkinv()}. A numerical route is
+least accurate at this order, so the closed form gains the most here.
 }
 \seealso{
 \code{\link[=diag_higher]{diag_higher()}}, which assembles it, \code{\link[=param_d3.DiagMatrixParam]{param_d3.DiagMatrixParam()}} for

@@ -17,7 +17,8 @@ A list of \code{choose(s@n_free + 1, 2)} symmetric matrices keyed as
 zeros.
 }
 \description{
-Closed form, by the Leibniz rule on \eqn{R = LL^\top} taken twice,
+Computes the second derivatives in closed form, by the Leibniz rule on
+\eqn{R = LL^\top} taken twice,
 
 \deqn{\partial_{kl} R = L_{kl} L^\top + L_k L_l^\top + L_l L_k^\top
                       + L L_{kl}^\top,}
@@ -25,9 +26,9 @@ Closed form, by the Leibniz rule on \eqn{R = LL^\top} taken twice,
 with each \eqn{\partial^S L} from \code{\link[=corr_dfactor]{corr_dfactor()}} and zero wherever the
 multiset \eqn{S} spans two rows of \eqn{L}.
 
-A component in two angles from \strong{different} rows \eqn{i} and \eqn{j} does not vanish: the two
-outer terms drop, but \eqn{L_k L_l^\top + L_l L_k^\top} is supported on
-the entries \eqn{(i, j)} and \eqn{(j, i)}. It is zero even there when the
+A component in two angles from different rows \eqn{i} and \eqn{j} does not
+vanish: the two outer terms drop, but \eqn{L_k L_l^\top + L_l L_k^\top} is
+supported on the entries \eqn{(i, j)} and \eqn{(j, i)}. It is zero even there when the
 two angles lie beyond the columns that the two rows share. The diagonal is
 exactly zero at every order.
 }

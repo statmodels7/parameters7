@@ -20,7 +20,7 @@ dimnames \code{v1}, \code{v2}, ...
 Returns \eqn{\sigma^2\{(1-\rho)I + \rho J\}}: the common variance on the
 diagonal and the common covariance \eqn{\sigma^2\rho} everywhere else.
 Positive definiteness follows from the correlation's link, which is bounded
-below at \eqn{-1/(p-1)}, so nothing is tested here.
+below at \eqn{-1/(p-1)}, so the method does not test it.
 }
 \seealso{
 \code{\link[=param_free.CompoundSymmetryParam]{param_free.CompoundSymmetryParam()}} for the inverse map, and

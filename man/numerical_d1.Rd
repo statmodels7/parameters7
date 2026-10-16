@@ -15,15 +15,16 @@ numerical_d1(s, eta, accuracy = 4L)
 whole number.}
 }
 \value{
-A list of \code{s@n_free} estimates named by \code{s@free_names}, each shaped
-like the result of \code{\link[=param_value]{param_value()}} and symmetrized for a matrix family.
+A list of \code{s@n_free} estimates named by \code{s@free_names}, each of which
+has the shape of the result of \code{\link[=param_value]{param_value()}} and is symmetrized for a
+matrix family.
 }
 \description{
 Estimates \eqn{\partial V / \partial \eta_k} for every free value by one
 central difference of \code{\link[=param_value]{param_value()}} in each component, through
-\code{\link[=param_tensor]{param_tensor()}}. This is the method \code{\link[=param_d1]{param_d1()}} dispatches to when a family
-has not written its own, and it is exported so that a family being developed
-can be compared against it.
+\code{\link[=param_tensor]{param_tensor()}}. The generic \code{\link[=param_d1]{param_d1()}} dispatches to this method when a
+family has not written its own, and the method is exported so that a family
+that is under development can be compared against it.
 }
 \details{
 At the default accuracy 4 the difference is the five-point rule
@@ -45,7 +46,7 @@ s <- scalar_matrix(2)
 numerical_d1(s, 0.3)
 max(abs(numerical_d1(s, 0.3)[[1]] - param_value(s, 0.3)))
 
-# Against a family that writes its own.
+# The estimates are compared with those of a family that writes its own.
 q <- log_cholesky(2)
 eta <- c(0.2, -0.1, 0.4)
 max(abs(unlist(numerical_d1(q, eta)) - unlist(param_d1(q, eta))))

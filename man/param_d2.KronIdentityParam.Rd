@@ -17,9 +17,10 @@ A list of \code{choose(s@n_free + 1, 2)} symmetric matrices keyed as
 \code{v1}, \code{v2}, ..., \code{v(md)} on both margins.
 }
 \description{
-Closed form: \eqn{\partial_{kl} M = I_m \otimes \partial_{kl} S}. The blocks
-share their free values, so there is no cross-block component to compute and
-the list is exactly the inner parameter's, lifted.
+The second derivative has closed form,
+\eqn{\partial_{kl} M = I_m \otimes \partial_{kl} S}. The blocks
+share their free values, so a cross-block component does not arise, and
+the list consists exactly of the inner parameter's components, lifted.
 }
 \seealso{
 \code{\link[=param_d1.KronIdentityParam]{param_d1.KronIdentityParam()}} and \code{\link[=param_d3.KronIdentityParam]{param_d3.KronIdentityParam()}} for

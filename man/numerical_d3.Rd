@@ -16,16 +16,16 @@ whole number.}
 }
 \value{
 A list of \code{choose(s@n_free + 2, 3)} estimates keyed as
-\code{param_tuple_names(s, 3)} and in that order, each shaped like
-\code{\link[=param_value]{param_value()}}'s result and symmetrized for a matrix family.
+\code{param_tuple_names(s, 3)} and in that order, each of which has the shape
+of \code{\link[=param_value]{param_value()}}'s result and is symmetrized for a matrix family.
 }
 \description{
 Estimates the distinct third derivatives, one tensor-product stencil per
 index tuple, through \code{\link[=param_tensor]{param_tensor()}}. The stencil is applied to the
 highest analytic derivative below the third that the family supplies, as
 \code{\link[=param_analytic]{param_analytic()}} reads it, and to \code{\link[=param_value]{param_value()}} where there is none.
-This is the method \code{\link[=param_d3]{param_d3()}} dispatches to when a family has not written
-its own.
+The generic \code{\link[=param_d3]{param_d3()}} dispatches to this method when a family has not
+written its own.
 }
 \section{The stencil}{
 Let the tuple be \eqn{\alpha} and the analytic quantity differenced be the
@@ -42,8 +42,8 @@ product,
   \partial^\beta V\Bigl(\eta + \textstyle\sum_{j=1}^{r} o^{(m_j)}_{i_j} h_j
   e_{c_j}\Bigr),}
 
-with the zero-weight nodes skipped and every point shared by several tuples
-evaluated once. With an analytic \code{\link[=param_d2]{param_d2()}} each tuple is one first
+where the nodes of zero weight are skipped and every point shared by several
+tuples is evaluated once. With an analytic \code{\link[=param_d2]{param_d2()}} each tuple is one first
 difference of a second derivative.
 }
 
@@ -68,7 +68,8 @@ s <- scalar_matrix(2)
 numerical_d3(s, 0.3)
 max(abs(numerical_d3(s, 0.3)[[1]] - param_value(s, 0.3)))
 
-# Against a family that writes its own third derivatives.
+# The estimates are compared with those of a family that writes its own
+# third derivatives.
 q <- log_cholesky(2)
 eta <- c(0.2, -0.1, 0.4)
 ana <- param_d3(q, eta)

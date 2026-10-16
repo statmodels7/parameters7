@@ -9,7 +9,7 @@ is_base_param_class(cls)
 \arguments{
 \item{cls}{An S7 class object, as \code{S7::S7_class(x)} returns or as
 \code{attr(method, "signature")[[1]]} holds. Anything else returns \code{FALSE}
-without an error, \code{attr()} on a non-class giving \code{NULL}.}
+without an error, because \code{attr()} on a non-class gives \code{NULL}.}
 }
 \value{
 \code{TRUE} when \code{cls} is \code{\link[=parameter]{parameter()}} or \code{\link[=matrix_parameter]{matrix_parameter()}}, \code{FALSE}
@@ -19,19 +19,19 @@ for any subclass and for anything that is not an S7 class.
 Returns whether an S7 class is \code{\link[=parameter]{parameter()}} or \code{\link[=matrix_parameter]{matrix_parameter()}}, the
 two base classes on which this package registers its fallback methods. The
 test distinguishes a method that a subclass wrote from one that it inherited,
-which is what \code{\link[=param_is_numerical]{param_is_numerical()}} reports and what \code{\link[=check_parameter]{check_parameter()}}
-acts on.
+and \code{\link[=param_is_numerical]{param_is_numerical()}} reports this distinction while \code{\link[=check_parameter]{check_parameter()}}
+acts on it.
 }
 \details{
-Two comparisons, in order. Identity is tried first, since it is the usual
-case and costs nothing. Then the class name together with the owning package,
-because identity does not survive a package's code being re-evaluated instead
-of loaded: a class rebuilt from the same definition is a different object.
-Coverage tools re-evaluate, so an identity-only test passes every ordinary
-check and fails under \code{covr} alone.
+The test applies two comparisons in order. It tries identity first, since
+this is the usual case and costs nothing. It then compares the class name
+together with the owning package, because identity does not survive when a
+package's code is re-evaluated instead of loaded: a class rebuilt from the
+same definition is a different object. Coverage tools re-evaluate, so an
+identity-only test passes every ordinary check and fails only under \code{covr}.
 }
 \seealso{
-\code{\link[=param_is_numerical]{param_is_numerical()}}, which calls this on the class a method was
-registered against.
+\code{\link[=param_is_numerical]{param_is_numerical()}}, which calls this on the class against which
+a method was registered.
 }
 \keyword{internal}

@@ -45,10 +45,10 @@ An object of class \code{AutoregressiveParam}, a subclass of
 \code{dimension}.
 }
 \description{
-The S7 class of covariance matrices of \eqn{p} consecutive observations of a
-stationary autoregression of order \eqn{q}, parametrized by the marginal
-variance and the \eqn{q} partial autocorrelations. \code{\link[=autoregressive]{autoregressive()}} builds
-one.
+\code{AutoregressiveParam} is the S7 class of covariance matrices of \eqn{p}
+consecutive observations of a stationary autoregression of order \eqn{q},
+parametrized by the marginal variance and the \eqn{q} partial
+autocorrelations. \code{\link[=autoregressive]{autoregressive()}} builds one.
 
 The free vector does not grow with the dimension: \code{n_free} is \eqn{q + 1} at
 every \eqn{p}. \code{\link[=ar1]{ar1()}} and \code{\link[=compound_symmetry]{compound_symmetry()}} have the same property, with
@@ -59,7 +59,8 @@ two free values at every dimension.
 vapply(c(6, 20, 200), function(p) autoregressive(p, order = 2)@n_free,
        numeric(1))
 
-# One scale and q partial autocorrelations, each on its own chart.
+# The free vector holds one scale and q partial autocorrelations, each on its
+# own chart.
 autoregressive(20, order = 3)@free_names
 
 }

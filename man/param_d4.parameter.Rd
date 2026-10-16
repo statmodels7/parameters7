@@ -13,14 +13,14 @@ checked by the generic.}
 }
 \value{
 A list of \code{choose(s@n_free + 3, 4)} estimates keyed as
-\code{param_tuple_names(s, 4)} and in that order, each shaped like
-\code{\link[=param_value]{param_value()}}'s result and symmetrized for a matrix family.
+\code{param_tuple_names(s, 4)} and in that order, each of which has the shape
+of \code{\link[=param_value]{param_value()}}'s result and is symmetrized for a matrix family.
 }
 \description{
-The method that every \code{\link[=parameter]{parameter()}} inherits when it registers no \code{\link[=param_d4]{param_d4()}} of
-its own. It applies one tensor-product stencil per index tuple, through
+This is the method that every \code{\link[=parameter]{parameter()}} inherits when it registers no
+\code{\link[=param_d4]{param_d4()}} of its own. It applies one tensor-product stencil per index tuple, through
 \code{\link[=numerical_d4]{numerical_d4()}} at its default accuracy 4, as \code{\link[=param_d3.parameter]{param_d3.parameter()}} does,
-with the multiplicities summing to four. From \code{\link[=param_value]{param_value()}} alone the
+where the multiplicities sum to four. From \code{\link[=param_value]{param_value()}} alone the
 result is enough to catch a wrong closed form and not enough for use in a
 fit. The families in this package do not reach it.
 }

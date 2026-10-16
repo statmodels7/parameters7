@@ -20,7 +20,7 @@ as \code{param_tuple_names(s, order)} and in that order.
 \description{
 The log-determinant is \eqn{2\sum_j \log d_j + \log\lvert R\rvert}, a sum of
 one term per scale and one term for the correlation. A component is therefore
-the scale's own where every index names \strong{one} scale coordinate, the
+the scale's own where every index names one scale coordinate, the
 correlation's own where every index is a correlation coordinate, and 0
 otherwise.
 }
@@ -28,9 +28,9 @@ otherwise.
 Two separabilities hold at once. The scales separate from each other, so a
 component naming two different scales is zero, and the correlation separates
 from the scales, so a component mixing a scale with a correlation coordinate
-is zero. What survives is \eqn{2\,\partial^m \log d_k} on the diagonal of the
-scale block, through \code{\link[=diag_dlog]{diag_dlog()}}, and the correlation family's own
-derivatives.
+is zero. The surviving components are \eqn{2\,\partial^m \log d_k} on the
+diagonal of the scale block, computed through \code{\link[=diag_dlog]{diag_dlog()}}, and the
+correlation family's own derivatives.
 }
 \seealso{
 \code{\link[=diag_dlog]{diag_dlog()}} for the scale terms, and

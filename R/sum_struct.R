@@ -4,9 +4,9 @@ NULL
 #' A Non-Negative Combination of Fixed Matrices
 #'
 #' @description
-#' The S7 class of a matrix parameter that is a sum of **fixed** symmetric
-#' positive semidefinite matrices, each carried by one positive free value.
-#' [sum_struct()] builds one.
+#' `SumStructParam` is the S7 class of a matrix parameter that is a sum of fixed
+#' symmetric positive semidefinite matrices, each of which is carried by one
+#' positive free value. [sum_struct()] builds one.
 #'
 #' It is the variance-components covariance. Its free values are weights:
 #' `n_free` is the number of components, whatever the dimension.
@@ -23,7 +23,8 @@ NULL
 #'   properties that this class inherits.
 #'
 #' @examples
-#' # One free value per component, whatever the side of the matrices.
+#' # The parameter has one free value per component, whatever the side of the
+#' # matrices.
 #' s <- sum_struct(list(between = matrix(1, 3, 3), within = diag(3)))
 #' c(dimension = s@dimension, n_free = s@n_free)
 #' s@free_names
@@ -37,26 +38,26 @@ SumStructParam <- S7::new_class("SumStructParam", parent = matrix_parameter)
 #' @description
 #' Returns an object holding \eqn{M(\eta) = \sum_k c_k(\eta_k) P_k}, for fixed
 #' symmetric positive semidefinite \eqn{P_1, \ldots, P_K} and positive weights
-#' carried through a link. The matrices are given once and never move; what the
-#' free vector carries is the \eqn{K} weights.
+#' carried through a link. The matrices are given once and never move, and the
+#' free vector carries the \eqn{K} weights.
 #'
 #' @details
-#' # What it is for
+#' # Purpose
 #'
 #' This is the variance-components covariance \eqn{\sum_k \sigma_k^2 Z_kZ_k^\top},
 #' and it is also the matrix that a penalty with one smoothing parameter per
-#' component assembles. \pkg{penalties7}'s `additive_penalty()` builds the same sum for its
-#' own purposes; the difference is that a penalty is a function of the
-#' coefficients while this is a matrix map, so a distribution can take it as a
-#' covariance.
+#' component assembles. \pkg{penalties7}'s `additive_penalty()` builds the same
+#' sum for its own purposes. A penalty is a function of the coefficients, while
+#' this class is a matrix map, so a distribution can take it as a covariance.
 #'
 #' # Derivatives of the value
 #'
 #' \deqn{\partial^{m}_{\eta_k} M = c_k^{(m)}(\eta_k)\, P_k,}
 #'
-#' and a component whose indices name two different weights is **exactly zero**:
+#' and a component whose indices name two different weights is exactly zero:
 #' at \eqn{K = 2} that is 1 of the 3 second-order components, 2 of 4 at third
-#' order and 3 of 5 at fourth. What survives is one number times a fixed matrix.
+#' order and 3 of 5 at fourth. Each remaining component is one number times a
+#' fixed matrix.
 #'
 #' # The log-determinant is not separable
 #'
@@ -68,9 +69,10 @@ SumStructParam <- S7::new_class("SumStructParam", parent = matrix_parameter)
 #'         \operatorname{tr}\bigl(M^{-1}P_{\sigma(1)}\cdots
 #'                                M^{-1}P_{\sigma(n)}\bigr),}
 #'
-#' the sum running over the \eqn{(n-1)!} cyclic orderings **counted with
-#' multiplicity**, and are then carried onto the free scale by a chain rule whose
-#' Jacobian is diagonal. If the orderings that coincide when an index repeats
+#' where the sum runs over the \eqn{(n-1)!} cyclic orderings, counted with
+#' multiplicity. The derivatives are then carried onto the free scale by a chain
+#' rule whose Jacobian is diagonal. If the orderings that coincide when an index
+#' repeats
 #' were counted once, the trace term whose indices are all equal would be too
 #' small by a factor of 2 at third order and of 6 at fourth, and the
 #' derivatives of the log-determinant would be wrong.
@@ -78,7 +80,7 @@ SumStructParam <- S7::new_class("SumStructParam", parent = matrix_parameter)
 #' # The rank is fixed at construction
 #'
 #' The null space of a sum of positive semidefinite matrices is the
-#' **intersection** of theirs, so it does not move with the weights, and it is
+#' intersection of theirs, so it does not move with the weights, and it is
 #' read from the components stacked and individually normalized, never from an
 #' assembled matrix. With \eqn{P_1 = \mathbf{1}\mathbf{1}^\top} of side 4, of
 #' rank 1, and \eqn{P_2} the first-difference penalty, of rank 3, the null
@@ -86,15 +88,16 @@ SumStructParam <- S7::new_class("SumStructParam", parent = matrix_parameter)
 #' eigenvalues of \eqn{M(\eta)} above \eqn{10^{-10}} of the largest gives 4 while
 #' the weight of \eqn{P_1} is up to \eqn{10^{9}} times that of \eqn{P_2}, and 1
 #' from a ratio of \eqn{10^{10}}. Weights ten orders of magnitude
-#' apart occur in ordinary fitted models. Where there **is** a shared null
+#' apart occur in ordinary fitted models. Where there is a shared null
 #' space, the basis is annihilated by \eqn{M(\eta)} up to rounding whatever the
 #' ratio of the weights.
 #'
 #' # Cost
 #'
 #' The fourth derivatives of the log-determinant are the expensive quantity,
-#' the expansion evaluating \eqn{(n-1)!} matrix chains per component and one set
-#' partition per repeated index, so the cost grows quickly with \eqn{K}.
+#' because the expansion evaluates \eqn{(n-1)!} matrix chains per component and
+#' one set partition per repeated index, so the cost grows quickly with
+#' \eqn{K}.
 #'
 #' @section Notation:
 #' \eqn{K} is the number of components, \eqn{P_k} the \eqn{k}-th fixed matrix,
@@ -102,8 +105,9 @@ SumStructParam <- S7::new_class("SumStructParam", parent = matrix_parameter)
 #' shared null space.
 #'
 #' @param components A non-empty list of symmetric positive semidefinite numeric
-#'   matrices of the same side. Each is checked for all three properties, the
-#'   semidefiniteness spectrally at a relative tolerance of \eqn{10^{-8}}. The
+#'   matrices of the same side. Each is checked for symmetry, positive
+#'   semidefiniteness and the common side, and the semidefiniteness test is
+#'   spectral, at a relative tolerance of \eqn{10^{-8}}. The
 #'   components must also be linearly independent as vectors, because otherwise
 #'   their weights would not be identified; the constructor signals an error when
 #'   they are not. Named entries supply the free-value labels, which must be
@@ -124,7 +128,7 @@ SumStructParam <- S7::new_class("SumStructParam", parent = matrix_parameter)
 #'   sum as a penalty.
 #'
 #' @examples
-#' # Two variance components on three coefficients.
+#' # This example has two variance components on three coefficients.
 #' s <- sum_struct(list(between = matrix(1, 3, 3), within = diag(3)))
 #' s@free_names
 #' eta <- c(log(0.5), log(2))
@@ -211,7 +215,7 @@ sum_struct <- function(components, link = linkfunctions7::log_link()) {
 #' The Shared Null Space of a Set of Positive Semidefinite Matrices
 #'
 #' @description
-#' Returns an orthonormal basis of the **intersection** of the components' null
+#' Returns an orthonormal basis of the intersection of the components' null
 #' spaces, which is the null space of every non-negative combination of them: a
 #' quadratic form \eqn{v^\top M v = \sum_k c_k\, v^\top P_k v} is a sum of
 #' non-negative terms, so it vanishes only where every term does. It is therefore
@@ -222,7 +226,7 @@ sum_struct <- function(components, link = linkfunctions7::log_link()) {
 #' at negligible singular values are returned, which is the intersection of the
 #' row spaces' orthogonal complements.
 #'
-#' Each component is **divided by its own largest entry** before stacking.
+#' Each component is divided by its own largest entry before stacking.
 #' Without that normalization a component whose scale is many orders below
 #' another's would fall below the tolerance and be read as absent, which is the
 #' failure that a rank taken from an assembled matrix shows (see [sum_struct()]).
@@ -235,7 +239,7 @@ sum_struct <- function(components, link = linkfunctions7::log_link()) {
 #'   same side, already checked by [sum_struct()].
 #'
 #' @return A numeric matrix with `nrow(components[[1]])` rows whose columns are
-#'   an orthonormal basis of the shared null space, with **zero columns** where
+#'   an orthonormal basis of the shared null space, with zero columns where
 #'   the family has full rank.
 #'
 #' @seealso [sum_struct()], the only caller, and [param_null_basis()] for what
@@ -266,22 +270,21 @@ sum_struct_null_basis <- function(components) {
 #' order.
 #'
 #' @details
-#' Each weight depends on one free value only, so the table is complete: there
-#' are no cross-derivatives between weights to record, and that is the whole
-#' reason a derivative of the value naming two weights is zero. It is computed
-#' once per call and read for every component of the order.
+#' Each weight depends on one free value only, so the table is complete: it
+#' records no cross-derivatives between weights. A derivative of the value that
+#' names two weights is zero for that reason and no other. The table is
+#' computed once per call and read for every component of the order.
 #'
 #' @param s A [SumStructParam()] object.
 #' @param eta A numeric vector of length `s@n_free`.
-#' @param order The highest derivative order wanted, an integer from 0 to 4.
+#' @param order The highest derivative order to compute, an integer from 0 to 4.
 #'
-#' @return An `order + 1` by \eqn{K} numeric matrix, row \eqn{m+1} holding the
-#'   \eqn{m}-th
-#'   derivative of the inverse link at each free value, so row 1 is the weights
-#'   themselves.
+#' @return An `order + 1` by \eqn{K} numeric matrix. Row \eqn{m+1} holds the
+#'   \eqn{m}-th derivative of the inverse link at each free value, so row 1 is
+#'   the weights themselves.
 #'
 #' @seealso [sum_struct_logdet_derivs()], the caller; [sum_struct_derivs()]
-#'   reads the derivative of its own order alone.
+#'   reads only the derivative of its own order.
 #'
 #' @keywords internal
 sum_struct_weight_derivs <- function(s, eta, order) {
@@ -297,9 +300,10 @@ sum_struct_weight_derivs <- function(s, eta, order) {
 #'
 #' @details
 #' A surviving component is one scalar times a component that the object has
-#' held since construction, and the rest share a single zero matrix; no other
-#' arithmetic is done on the matrices. At \eqn{K = 2} that is 1 of the 3 second-order
-#' components, 2 of 4 at third order and 3 of 5 at fourth.
+#' held since construction, and the other components share a single zero
+#' matrix; this multiplication is the only arithmetic on the matrices. At
+#' \eqn{K = 2} that is 1 of the 3 second-order components, 2 of 4 at third order
+#' and 3 of 5 at fourth.
 #'
 #' @param s A [SumStructParam()] object.
 #' @param eta A numeric vector of length `s@n_free`.
@@ -336,8 +340,8 @@ sum_struct_derivs <- function(s, eta, order) {
 #' Orderings of a Multiset, Counted With Multiplicity
 #'
 #' @description
-#' All \eqn{n!} orderings of a vector of indices, **without** deduplicating the
-#' ones that coincide because an index repeats: `multiset_orderings(c(1, 1))`
+#' Returns all \eqn{n!} orderings of a vector of indices, without deduplicating
+#' the ones that coincide because an index repeats: `multiset_orderings(c(1, 1))`
 #' returns two elements.
 #'
 #' @details
@@ -347,9 +351,9 @@ sum_struct_derivs <- function(s, eta, order) {
 #' factors \eqn{2!} and \eqn{3!}, the numbers of orderings of the tail at third
 #' and fourth order.
 #'
-#' @param v An integer vector, of length 0 to 3 in every call the package makes,
-#'   the expansion at order \eqn{n} permuting the \eqn{n-1} indices after the
-#'   first.
+#' @param v An integer vector, of length 0 to 3 in every call that the package
+#'   makes, because the expansion at order \eqn{n} permutes the \eqn{n-1}
+#'   indices after the first.
 #'
 #' @return A list of `factorial(length(v))` integer vectors.
 #'
@@ -378,12 +382,12 @@ multiset_orderings <- function(v) {
 #' the \eqn{(n-1)!} orderings of the tail with the first index held.
 #'
 #' @details
-#' Holding the first index is what leaves the orderings cyclic: a cyclic
+#' Holding the first index leaves the orderings cyclic: a cyclic
 #' permutation leaves the trace unchanged, so fixing one position counts each
 #' distinct cycle once. The orderings come from [multiset_orderings()] and are
 #' counted with multiplicity, which see.
 #'
-#' This is a derivative in the **weights**; [sum_struct_logdet_derivs()]
+#' This is a derivative in the weights; [sum_struct_logdet_derivs()]
 #' carries it onto the free scale.
 #'
 #' @param minv The inverse of the assembled matrix, or its pseudo-inverse on the
@@ -415,24 +419,25 @@ sum_struct_trace_term <- function(minv, comp, t) {
 #' @description
 #' Carries [sum_struct_trace_term()]'s expansion in the weights onto the free
 #' scale. The map from free values to weights is diagonal, so the chain rule
-#' groups the tuple by index and takes one set partition per group, each block
-#' contributing a derivative of the inverse link and one differentiation in that
-#' weight.
+#' groups the tuple by index and takes one set partition per group, and each
+#' block contributes a derivative of the inverse link and one differentiation in
+#' that weight.
 #'
 #' @details
 #' This is Faa di Bruno with a diagonal inner map, written out here instead of
 #' going through [compose_order()], because the outer function is a derivative in
-#' several weights at once, never a univariate composition. The product over the groups'
-#' partitions is the grid the loop walks; the partitions come from
-#' [numericals7::set_partitions()], the one enumeration the toolkit keeps.
+#' several weights at once, never a univariate composition. The product over
+#' the groups' partitions is the grid that the loop walks; the partitions come
+#' from [numericals7::set_partitions()], the one enumeration that the toolkit
+#' keeps.
 #'
 #' Where the family is rank deficient, the derivatives are those of the log
 #' pseudo-determinant: the inverse in the expansion is replaced by
 #' \eqn{(M + ZZ^\top)^{-1} - ZZ^\top}, with \eqn{Z} the orthonormal basis of the
 #' declared null space, which does not move with the free vector.
 #'
-#' It is the most expensive quantity of this family, the expansion evaluating a
-#' chain of matrix products for each ordering.
+#' It is the most expensive quantity of this family, because the expansion
+#' evaluates a chain of matrix products for each ordering.
 #'
 #' @param s A [SumStructParam()] object.
 #' @param eta A numeric vector of length `s@n_free`.
@@ -485,11 +490,12 @@ sum_struct_logdet_derivs <- function(s, eta, order) {
 #' @title Value of a Sum of Fixed Matrices
 #' @name param_value.SumStructParam
 #' @description
-#' The weighted sum \eqn{\sum_k c_k(\eta_k) P_k}, accumulated in place over the
-#' components. Positive semidefinite at every free vector, a non-negative
-#' combination of positive semidefinite matrices being one; positive **definite**
-#' only where the components' null spaces meet at the origin, which is the
-#' condition `rank` records.
+#' Returns the weighted sum \eqn{\sum_k c_k(\eta_k) P_k}, accumulated in place
+#' over the components. The matrix is positive semidefinite at every free
+#' vector, because a non-negative combination of positive semidefinite matrices
+#' is positive semidefinite, and it is positive definite only where the
+#' components' null spaces meet at the origin, which is the condition that
+#' `rank` records.
 #'
 #' The value is labeled `v1`, `v2`, ..., `vp` on both margins, the convention
 #' that [name_dims()] states.
@@ -518,14 +524,14 @@ S7::method(param_value, SumStructParam) <- function(s, eta, ...) {
 #' the span, the round trip closes up to rounding when the weights are of
 #' comparable size, and its error grows with the spread of the weights.
 #' @details
-#' Two rejections, each with its own message:
+#' The method rejects two kinds of matrix, each with its own message:
 #'
 #' - a matrix that the combination cannot reproduce, checked by residual at
 #'   \eqn{10^{-8}} relative to `max(1, max(abs(m)))`. The span is
 #'   \eqn{K}-dimensional inside the \eqn{p(p+1)/2}-dimensional space of symmetric
 #'   matrices, so almost every matrix is outside it and this is the ordinary
 #'   failure.
-#' - a matrix in the span needing a **non-positive weight**, which the link
+#' - a matrix in the span needing a non-positive weight, which the link
 #'   cannot carry. Such a matrix may still be positive semidefinite, so the
 #'   rejection concerns the parametrization and not the matrix.
 #'
@@ -538,7 +544,7 @@ S7::method(param_value, SumStructParam) <- function(s, eta, ...) {
 #' @param ... Unused, and accepted so the signature matches the generic's.
 #' @return A numeric vector of length `s@n_free`, the linked weights, named by
 #'   `s@free_names`.
-#' @seealso [param_value.SumStructParam()], the map this inverts.
+#' @seealso [param_value.SumStructParam()], the map that this method inverts.
 #' @keywords internal
 S7::method(param_free, SumStructParam) <- function(s, m, ...) {
   comp <- .ss(s)$components
@@ -560,13 +566,15 @@ S7::method(param_free, SumStructParam) <- function(s, m, ...) {
 #' @title Derivatives of a Sum of Fixed Matrices
 #' @name param_d1.SumStructParam
 #' @description
-#' `param_d1()`, `param_d2()`, `param_d3()` and `param_d4()` for a
-#' [sum_struct()] parameter. The value being linear in the weights, a component
-#' is **exactly zero** unless every index names the same free value, and is then
-#' that weight's \eqn{m}-th derivative times its own fixed matrix. Nothing is
-#' differenced, and the only matrix arithmetic is a multiplication by a scalar.
+#' `param_d1()`, `param_d2()`, `param_d3()` and `param_d4()` return the
+#' derivatives of a [sum_struct()] parameter. Because the value is linear in the
+#' weights, a component is exactly zero unless every index names the same free
+#' value, and is then that weight's \eqn{m}-th derivative times its own fixed
+#' matrix. The derivatives are not differenced, and the only matrix arithmetic
+#' is a multiplication by a scalar.
 #' @details
-#' The four share [sum_struct_derivs()] and differ only in the order they pass.
+#' The four share [sum_struct_derivs()] and differ only in the order that they
+#' pass.
 #' At \eqn{K = 2} the zeros are 1 of the 3 second-order components, 2 of 4 at
 #' third order and 3 of 5 at fourth. Compare
 #' [param_dlogdet.SumStructParam()], where the mixed components are in general
@@ -609,15 +617,16 @@ S7::method(param_d4, SumStructParam) <- function(s, eta, ...) {
 #' @title Log-Determinant of a Sum of Fixed Matrices
 #' @name param_logdet.SumStructParam
 #' @description
-#' The log-determinant of the assembled matrix where the family has full rank,
-#' and its log **pseudo**-determinant, the sum over the `s@rank` largest
+#' Returns the log-determinant of the assembled matrix where the family has full
+#' rank, and its log pseudo-determinant, the sum over the `s@rank` largest
 #' eigenvalues, where it does not. A sum of fixed matrices has no structure that
 #' a closed form could exploit, so this method assembles the matrix and
 #' decomposes it.
 #' @details
-#' Which branch is taken is decided by `s@rank`, fixed at construction from the
-#' components' shared null space, and never by counting eigenvalues at the point:
-#' that count falls as the weights spread apart (see [sum_struct()]). So the
+#' The branch depends on `s@rank`, which is fixed at construction from the
+#' components' shared null space, and not on a count of eigenvalues at the
+#' point, because that count falls as the weights spread apart (see
+#' [sum_struct()]). So the
 #' number of eigenvalues summed does not move as a fit walks the free vector.
 #' @param s A [SumStructParam()] object.
 #' @param eta A numeric vector of length `s@n_free`, already checked by the
@@ -640,18 +649,20 @@ S7::method(param_logdet, SumStructParam) <- function(s, eta, ...) {
 #' @name param_dlogdet.SumStructParam
 #' @description
 #' `param_dlogdet()`, `param_d2logdet()`, `param_d3logdet()` and
-#' `param_d4logdet()` for a [sum_struct()] parameter: the cyclic trace expansion
-#' in the weights, carried onto the free scale by a chain rule with a diagonal
+#' `param_d4logdet()` return the derivatives of the log-determinant of a
+#' [sum_struct()] parameter. They evaluate the cyclic trace expansion in the
+#' weights and carry it onto the free scale by a chain rule with a diagonal
 #' Jacobian.
 #' @details
-#' The four share [sum_struct_logdet_derivs()] and differ only in the order they
-#' pass. Where the family is rank deficient they differentiate the log
+#' The four share [sum_struct_logdet_derivs()] and differ only in the order that
+#' they pass. Where the family is rank deficient they differentiate the log
 #' pseudo-determinant that [param_logdet()] returns. Unlike the value's own
 #' derivatives, the mixed components are in general not zero: for the two
 #' variance components of the example in [sum_struct()] the mixed second
-#' derivative is \eqn{-0.245} against \eqn{0.245} for each pure one. The
-#' log-determinant of a sum is not a sum, which is why this family needs an
-#' expansion where [block_diag()] and [dr_prod()] need none.
+#' derivative is \eqn{-0.245} against \eqn{0.245} for each pure one. This
+#' family needs an expansion because the log-determinant of a sum is not a sum
+#' of log-determinants, whereas [block_diag()] and [dr_prod()] need no
+#' expansion.
 #'
 #' It is the most expensive quantity of the family.
 #' @param s A [SumStructParam()] object.
@@ -692,8 +703,8 @@ S7::method(param_d4logdet, SumStructParam) <- function(s, eta, ...) {
 #' @title Solve and Factor of a Sum of Fixed Matrices
 #' @name param_solve.SumStructParam
 #' @description
-#' `param_solve()` and `param_factor()` for a [sum_struct()] parameter. Both come
-#' from the assembled matrix, by `solve()` and by a transposed `chol()`: a sum of
+#' `param_solve()` and `param_factor()` are the solve and the factor methods for
+#' a [sum_struct()] parameter. Both come from the assembled matrix, by `solve()` and by a transposed `chol()`: a sum of
 #' fixed matrices has no structure that a solve could exploit, where [ar1()] has
 #' a tridiagonal inverse and [log_cholesky()] assembles its factor directly.
 #' @details
@@ -701,8 +712,8 @@ S7::method(param_d4logdet, SumStructParam) <- function(s, eta, ...) {
 #' `t(chol(M))`, lower triangular with \eqn{M = L L^\top} as [param_factor()]
 #' requires.
 #'
-#' Both are rejected by the generic where the family is rank deficient, a
-#' singular matrix having neither an inverse nor a Cholesky factor.
+#' Both are rejected by the generic where the family is rank deficient, because
+#' a singular matrix has neither an inverse nor a Cholesky factor.
 #' @param s A [SumStructParam()] object.
 #' @param eta A numeric vector of length `s@n_free`, already checked by the
 #'   generic.

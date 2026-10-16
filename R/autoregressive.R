@@ -5,10 +5,10 @@ NULL
 #' Autoregressive Parameter
 #'
 #' @description
-#' The S7 class of covariance matrices of \eqn{p} consecutive observations of a
-#' stationary autoregression of order \eqn{q}, parametrized by the marginal
-#' variance and the \eqn{q} partial autocorrelations. [autoregressive()] builds
-#' one.
+#' `AutoregressiveParam` is the S7 class of covariance matrices of \eqn{p}
+#' consecutive observations of a stationary autoregression of order \eqn{q},
+#' parametrized by the marginal variance and the \eqn{q} partial
+#' autocorrelations. [autoregressive()] builds one.
 #'
 #' The free vector does not grow with the dimension: `n_free` is \eqn{q + 1} at
 #' every \eqn{p}. [ar1()] and [compound_symmetry()] have the same property, with
@@ -30,7 +30,8 @@ NULL
 #' vapply(c(6, 20, 200), function(p) autoregressive(p, order = 2)@n_free,
 #'        numeric(1))
 #'
-#' # One scale and q partial autocorrelations, each on its own chart.
+#' # The free vector holds one scale and q partial autocorrelations, each on its
+#' # own chart.
 #' autoregressive(20, order = 3)@free_names
 #'
 #' @export
@@ -48,8 +49,8 @@ AutoregressiveParam <- S7::new_class("AutoregressiveParam",
 #'
 #' parametrized by its marginal variance \eqn{\gamma_0} and its \eqn{q} partial
 #' autocorrelations \eqn{r_1, \dots, r_q}. That is \eqn{q + 1} free values
-#' **whatever the dimension**: `n_free` is 3 for an order-2 process, whether it
-#' is observed 6 times or 200 times.
+#' whatever the dimension: `n_free` is 3 for an order-2 process, whether it is
+#' observed 6 times or 200 times.
 #'
 #' @details
 #' # Why the partial autocorrelations carry the parametrization
@@ -58,8 +59,8 @@ AutoregressiveParam <- S7::new_class("AutoregressiveParam",
 #' \eqn{1 - \phi_1 z - \cdots - \phi_q z^{q}} lie outside the unit circle, and
 #' that set is not a box. At \eqn{q = 2} it is the open triangle with vertices
 #' \eqn{(-2, -1)}, \eqn{(2, -1)} and \eqn{(0, 1)}, of area 4 inside a bounding
-#' box \eqn{(-2, 2) \times (-1, 1)} of area 8: **exactly half the box is
-#' non-stationary**, and \eqn{\phi = (1.5, 0.6)}, which sits comfortably inside
+#' box \eqn{(-2, 2) \times (-1, 1)} of area 8: exactly half the box is
+#' non-stationary, and \eqn{\phi = (1.5, 0.6)}, which sits comfortably inside
 #' the box, has a root of modulus 0.547. Scalar links onto intervals therefore
 #' cannot cover the stationary region, for any choice of intervals.
 #'
@@ -91,10 +92,10 @@ AutoregressiveParam <- S7::new_class("AutoregressiveParam",
 #' \eqn{\rho_k = \sum_{j<k} \phi^{(k)}_j \rho_{k-j} + r_k}, after which
 #' \eqn{\rho_h = \sum_j \phi_j \rho_{h-j}} for every lag beyond the order. The
 #' whole map from the partial autocorrelations to the matrix is therefore
-#' **polynomial**, built from sums and products alone, and its derivatives to
-#' fourth order come from propagating the derivative arrays through the recursion
-#' in compiled code, the product rule written out per order, with nothing
-#' differenced.
+#' polynomial, built only from sums and products, and its derivatives to fourth
+#' order come from propagating the derivative arrays through the recursion in
+#' compiled code, where the product rule is written out per order and the code
+#' does not difference any step.
 #'
 #' # The log-determinant and the inverse
 #'
@@ -103,17 +104,18 @@ AutoregressiveParam <- S7::new_class("AutoregressiveParam",
 #' \deqn{\log\lvert M \rvert = p\log\gamma_0
 #'   + \sum_{k=1}^{q} (p - k)\log(1 - r_k^{2}),}
 #'
-#' one term per free value, so the log-determinant is **separable** and every
+#' one term per free value, so the log-determinant is separable and every
 #' mixed derivative of it is exactly zero: at order 4 and \eqn{q = 2}, 12 of the
 #' 15 components are mixed and are 0 by construction. It costs a sum of
 #' \eqn{q + 1} terms at any dimension.
 #'
-#' The inverse is **banded of bandwidth \eqn{q}**: an autoregression of order
-#' \eqn{q} is Markov of that order, so its precision carries no entry beyond the
+#' The inverse is banded of bandwidth \eqn{q}: an autoregression of order
+#' \eqn{q} is Markov of that order, so its precision has only zeros beyond the
 #' \eqn{q}-th off-diagonal, and every entry outside the band is exactly 0. It is
-#' assembled from the prediction form \eqn{M^{-1} = U^\top D^{-1} U}, with
-#' \eqn{U} unit lower triangular holding the predictor coefficients and \eqn{D}
-#' the innovation variances, so no factorization is taken.
+#' assembled from the prediction form \eqn{M^{-1} = U^\top D^{-1} U}, in which
+#' \eqn{U} is unit lower triangular and holds the predictor coefficients and
+#' \eqn{D} holds the innovation variances, so the assembly does not factorize
+#' the matrix.
 #'
 #' # Implementation
 #'
@@ -133,9 +135,9 @@ AutoregressiveParam <- S7::new_class("AutoregressiveParam",
 #'
 #' # The name
 #'
-#' The name is `autoregressive()` rather than `ar()` because [stats::ar()] is a
-#' function of \pkg{stats}, and a package meant to be attached alongside others
-#' should not mask one.
+#' The function is named `autoregressive()` and not `ar()` because `ar()` is
+#' already the name of [stats::ar()] in \pkg{stats}, and attaching this package
+#' would mask that function. The name `autoregressive()` avoids the masking.
 #'
 #' @section Notation:
 #' \eqn{p} is the dimension, \eqn{q} the order, \eqn{\gamma_0} the marginal
@@ -144,9 +146,9 @@ AutoregressiveParam <- S7::new_class("AutoregressiveParam",
 #' and \eqn{\eta = (\log \gamma_0, \mathrm{atanh}\, r_1, \dots)} the free vector.
 #'
 #' @param dimension The side \eqn{p} of the matrix: the number of consecutive
-#'   observations. Must exceed `order`, since a stretch of \eqn{q} observations
-#'   does not identify \eqn{q} partial autocorrelations; \eqn{p = q + 1} is legal
-#'   and is the smallest legal dimension.
+#'   observations. The dimension must exceed `order`, since a stretch of
+#'   \eqn{q} observations does not identify \eqn{q} partial autocorrelations; the
+#'   smallest valid dimension is \eqn{p = q + 1}.
 #' @param order The order \eqn{q} of the autoregression: a single positive whole
 #'   number, no smaller than 1.
 #' @param link_scale A \pkg{linkfunctions7} link carrying the marginal variance,
@@ -183,8 +185,8 @@ AutoregressiveParam <- S7::new_class("AutoregressiveParam",
 #' # The first partial autocorrelation is the lag-one correlation.
 #' c(from_matrix = M[1, 2] / M[1, 1], from_eta = tanh(eta[2]))
 #'
-#' # The precision is banded of bandwidth two, the process being Markov of
-#' # order two: everything beyond the second off-diagonal is exactly zero.
+#' # The precision is banded with bandwidth two because the process is Markov
+#' # of order two: everything beyond the second off-diagonal is exactly zero.
 #' lag <- abs(outer(1:6, 1:6, "-"))
 #' max(abs(param_solve(s, eta)[lag > 2]))
 #'
@@ -247,16 +249,16 @@ autoregressive <- function(dimension, order,
 #' `ar_d1_cpp()` to `ar_d4_cpp()` above. The scale and the partial
 #' autocorrelations enter as their link inverses with derivatives to `order`,
 #' and the autocovariances and the autoregressive coefficients come back with
-#' the derivative components of that order alone.
+#' only the derivative components of that order.
 #'
 #' @details
 #' The coefficients are multilinear in the partial autocorrelations \eqn{r}:
 #' step \eqn{k} of the recursion is affine in \eqn{r_k} and the earlier
 #' coefficients do not involve it. The kernel differentiates the recursion in
-#' \eqn{r} for every multiset of indices up to `order`, the products by
+#' \eqn{r} for every multiset of indices up to `order`, taking each product by
 #' Leibniz over the sub-multisets without a repeated index, and applies the
-#' links once at the end through the partial Bell polynomials, each
-#' \eqn{r_k} depending on its own free value alone.
+#' links once at the end through the partial Bell polynomials, because each
+#' \eqn{r_k} depends on its own free value only.
 #'
 #' @param s An [AutoregressiveParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`.
@@ -290,12 +292,12 @@ ar_tables <- function(s, eta, order) {
 #' @title Value of an Autoregressive Parameter
 #' @name param_value.AutoregressiveParam
 #' @description
-#' Returns the Toeplitz matrix \eqn{\gamma_0 \rho_{\lvert i-j \rvert}}, the
-#' autocorrelations coming from the Levinson-Durbin recursion of [ar_tables()]
-#' and the marginal variance from the scale link. Positive definite at every free
-#' vector in exact arithmetic, the partial autocorrelations being inside
-#' \eqn{(-1, 1)} by construction; see [autoregressive()] for the edge of the
-#' chart in double precision.
+#' Returns the Toeplitz matrix \eqn{\gamma_0 \rho_{\lvert i-j \rvert}}, where
+#' the autocorrelations come from the Levinson-Durbin recursion of [ar_tables()]
+#' and the marginal variance comes from the scale link. The matrix is positive
+#' definite at every free vector in exact arithmetic, because the partial
+#' autocorrelations lie inside \eqn{(-1, 1)} by construction; see
+#' [autoregressive()] for the edge of the chart in double precision.
 #'
 #' The cost is the recursion, which is linear in \eqn{p}, and the filling of
 #' the matrix.
@@ -320,7 +322,7 @@ S7::method(param_value, AutoregressiveParam) <- function(s, eta, ...) {
 #' Assembles one derivative order from the kernel of that order: one Toeplitz
 #' matrix per index tuple, filled in compiled code from the column of
 #' autocovariance derivatives that [ar_tables()] returns for it. The four methods
-#' differ only in the order they pass.
+#' differ only in the order that they pass.
 #'
 #' @param s An [AutoregressiveParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`.
@@ -344,16 +346,16 @@ ar_derivative <- function(s, eta, order) {
 #' @title Derivatives of an Autoregressive Parameter
 #' @name param_d1.AutoregressiveParam
 #' @description
-#' `param_d1()`, `param_d2()`, `param_d3()` and `param_d4()` for an
-#' [autoregressive()] parameter, closed form at every order. The map from the
-#' partial autocorrelations to the matrix is polynomial, so the derivative arrays
-#' propagated through the Levinson-Durbin recursion give each derivative exactly
-#' and nothing is differenced.
+#' `param_d1()`, `param_d2()`, `param_d3()` and `param_d4()` return the
+#' derivatives of an [autoregressive()] parameter in closed form at every order.
+#' The map from the partial autocorrelations to the matrix is polynomial, so the
+#' derivative arrays propagated through the Levinson-Durbin recursion give each
+#' derivative exactly, without any differencing.
 #'
-#' Every component is Toeplitz, the structure being a property of the family and
-#' fixed as the point moves.
+#' Every component is Toeplitz, because this structure is a property of the
+#' family and stays fixed as the point moves.
 #' @details
-#' The four share [ar_derivative()] and differ only in the order they pass.
+#' The four share [ar_derivative()] and differ only in the order that they pass.
 #' Each order runs its own kernel, which returns the components of that order
 #' only.
 #' @param s An [AutoregressiveParam()] object.
@@ -412,11 +414,11 @@ S7::method(param_d4, AutoregressiveParam) <- function(s, eta, ...) {
 #' - a matrix that is not Toeplitz, which is rejected instead of being averaged
 #'   along its diagonals;
 #' - an implied partial autocorrelation at or beyond \eqn{\pm 1}, or a vanishing
-#'   prediction variance, neither of which is stationary;
+#'   prediction variance, both of which are non-stationary;
 #' - a Toeplitz matrix whose autocorrelations stop following the Yule-Walker
-#'   recursion beyond lag \eqn{q}. This last one is what separates an AR(2) from
-#'   an AR(3) at \eqn{p \ge 4}, and it is checked by rebuilding the matrix from
-#'   the recovered free vector and comparing.
+#'   recursion beyond lag \eqn{q}. This last condition distinguishes an AR(2)
+#'   from an AR(3) at \eqn{p \ge 4}, and the method checks it by rebuilding the
+#'   matrix from the recovered free vector and comparing.
 #'
 #' The tolerances are relative to `max(1, max(abs(m)))`: \eqn{10^{-8}} for the
 #' structure and \eqn{10^{-7}} for the rebuild.
@@ -426,7 +428,8 @@ S7::method(param_d4, AutoregressiveParam) <- function(s, eta, ...) {
 #'   generic.
 #' @param ... Unused, and accepted so the signature matches the generic's.
 #' @return A numeric vector of length `s@n_free`, named by `s@free_names`.
-#' @seealso [param_value.AutoregressiveParam()], the map this inverts.
+#' @seealso [param_value.AutoregressiveParam()], the map that this method
+#'   inverts.
 #' @keywords internal
 S7::method(param_free, AutoregressiveParam) <- function(s, m, ...) {
   p <- s@dimension
@@ -490,8 +493,9 @@ S7::method(param_free, AutoregressiveParam) <- function(s, m, ...) {
 #' @description
 #' Returns the unit lower triangular matrix \eqn{U} of one-step predictor
 #' coefficients and the vector \eqn{v} of innovation variances, which factor the
-#' matrix as \eqn{M = U^{-1} D U^{-\top}} with \eqn{D = \mathrm{diag}(v)}. It is
-#' where [param_solve.AutoregressiveParam()]'s banded precision comes from.
+#' matrix as \eqn{M = U^{-1} D U^{-\top}} with \eqn{D = \mathrm{diag}(v)}.
+#' [param_solve.AutoregressiveParam()] uses them to obtain the banded
+#' precision.
 #'
 #' @details
 #' Row \eqn{t} holds the coefficients of the best linear predictor of \eqn{y_t}
@@ -555,14 +559,14 @@ ar_prediction <- function(s, eta) {
 #' \eqn{U^\top D^{-1} U} in the prediction form of [ar_prediction()], assembled
 #' and applied.
 #' @details
-#' The precision is **banded of bandwidth \eqn{q}**, which is the content of an
-#' order-\eqn{q} Markov property: no partial correlation beyond the lag. Every
-#' entry outside the band is exactly 0.
+#' The precision is banded of bandwidth \eqn{q}, which expresses an
+#' order-\eqn{q} Markov property: partial correlations vanish beyond lag \eqn{q}.
+#' Every entry outside the band is exactly 0.
 #'
-#' The bandedness is not exploited for speed here, the whole \eqn{p} by \eqn{p}
-#' precision being formed and multiplied. What it buys a consumer is the
-#' structure: a model assembling a penalty from this parameter gets a banded
-#' block, and a sparse solver can use it.
+#' The bandedness is not exploited for speed here, because the whole \eqn{p} by
+#' \eqn{p} precision is formed and multiplied. The bandedness is still useful to
+#' a consumer as structure: a model that assembles a penalty from this parameter
+#' receives a banded block, which a sparse solver can use.
 #' @param s An [AutoregressiveParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic.
@@ -583,13 +587,14 @@ S7::method(param_solve, AutoregressiveParam) <- function(s, eta, b = NULL, ...) 
 #' @title Log-Determinant of an Autoregressive Parameter
 #' @name param_logdet.AutoregressiveParam
 #' @description
-#' Closed form, from the innovation variances of the Levinson-Durbin recursion:
+#' Returns the log-determinant in closed form, from the innovation variances of
+#' the Levinson-Durbin recursion:
 #'
 #' \deqn{\log\lvert M \rvert = p\log\gamma_0
 #'   + \sum_{k=1}^{q} (p - k)\log(1 - r_k^{2}).}
 #'
-#' A sum of \eqn{q + 1} terms at any dimension, with no factorization and no
-#' determinant taken. Under the rhobit link \eqn{1 - r_k^2 = \mathrm{sech}^2
+#' The value is a sum of \eqn{q + 1} terms at any dimension and is computed
+#' without a factorization or a determinant. Under the rhobit link \eqn{1 - r_k^2 = \mathrm{sech}^2
 #' z_k}, and each logarithm is evaluated by [log_sech2()] in the free value
 #' \eqn{z_k}, so the sum keeps its accuracy where \eqn{r_k} rounds to \eqn{-1}
 #' or 1.
@@ -663,14 +668,15 @@ ar_logdet_derivative <- function(s, eta, order) {
 #' @name param_dlogdet.AutoregressiveParam
 #' @description
 #' `param_dlogdet()`, `param_d2logdet()`, `param_d3logdet()` and
-#' `param_d4logdet()` for an [autoregressive()] parameter, closed form at every
-#' order and **separable**: the log-determinant is a sum with one term per free
-#' value, so every mixed component is exactly zero. At \eqn{q = 2} the mixed
+#' `param_d4logdet()` return the derivatives of the log-determinant of an
+#' [autoregressive()] parameter in closed form at every order. The
+#' log-determinant is separable: it is a sum with one term per free value, so
+#' every mixed component is exactly zero. At \eqn{q = 2} the mixed
 #' components are 3 of the 6 at order 2, 7 of 10 at order 3 and 12 of 15 at
 #' order 4.
 #' @details
-#' The four share [ar_logdet_derivative()] and differ only in the order they
-#' pass. Compare [compound_symmetry()] and [ar1()], whose log-determinants are
+#' The four share [ar_logdet_derivative()] and differ only in the order that
+#' they pass. Compare [compound_symmetry()] and [ar1()], whose log-determinants are
 #' separable for the same reason, against [correlation_matrix()], where a mixed
 #' component has content.
 #' @param s An [AutoregressiveParam()] object.

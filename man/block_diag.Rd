@@ -22,7 +22,8 @@ labels, and \code{null_basis} the block diagonal of the blocks'.
 Returns an object holding
 \eqn{M(\eta) = \mathrm{diag}(S_1(\eta_1), \ldots, S_B(\eta_B))} for matrix
 parameters \eqn{S_1, \ldots, S_B}: a block-diagonal matrix whose blocks are
-\strong{distinct families}, each governed by its own stretch of the free vector.
+distinct families, and each block is governed by its own stretch of the free
+vector.
 
 It is the covariance (or precision) of several independent groups of
 coefficients whose structures differ, as a model carrying more than one
@@ -36,16 +37,16 @@ The free values of one block do not enter another, so
       \qquad M^{-1} = \mathrm{diag}(S_1^{-1}, \ldots, S_B^{-1}),}
 
 and a derivative whose indices do not all belong to one block is
-\strong{identically zero}, at every order and for the log-determinant as well as
+identically zero, at every order and for the log-determinant as well as
 for the value. For \code{block_diag(log_cholesky(2), ar1(3))}, whose five free
 values split 3 and 2, 6 of the 15 second-order components are cross-block,
 21 of 35 at third order and 50 of 70 at fourth, and every one of them is
-exactly 0. What is left is fetched from the block and placed in the
-rows and columns that block occupies.
+exactly 0. The remaining components are fetched from the block and placed in
+the rows and columns that the block occupies.
 
 The rank is the sum of the blocks' ranks and the null basis is their block
-diagonal, both taken from the blocks and not from the eigenvalues of the
-assembled matrix, because the rank is a property of the family and an
+diagonal, and the method takes both from the blocks and not from the
+eigenvalues of the assembled matrix, because the rank is a property of the family and an
 eigenvalue count would depend on the free vector. A deficient block is
 therefore admitted, and the composite reports the deficiency: with a rank-one \eqn{P} of side 2,
 \code{block_diag(scaled_matrix(P), ar1(3))} has rank 4 of 5 and a null basis of one
@@ -54,7 +55,7 @@ column, \code{param_logdet()} returns the log pseudo-determinant, and
 }
 
 \section{Against kron_identity()}{
-\code{\link[=kron_identity]{kron_identity()}} repeats \strong{one} block \eqn{m} times and they share a single
+\code{\link[=kron_identity]{kron_identity()}} repeats one block \eqn{m} times and they share a single
 free vector, so its \code{n_free} does not grow with \eqn{m}. Here the blocks are
 different objects and their free vectors are concatenated, so the composite has
 \eqn{\sum_b d_b} free values. This composition suits groups with different
@@ -74,7 +75,7 @@ in \code{"blockdiag(log_cholesky, ar1)"}.
 
 \eqn{B} is the number of blocks, \eqn{S_b} the \eqn{b}-th block's map,
 \eqn{d_b} its number of free values, and \eqn{\eta_b} the stretch of the free
-vector it owns.
+vector that it owns.
 }
 
 \examples{
@@ -95,8 +96,8 @@ c(composite = param_logdet(s, eta),
   sum_of_blocks = param_logdet(log_cholesky(2), eta[1:3]) +
                   param_logdet(ar1(3), eta[4:5]))
 
-# And 50 of the 70 fourth-order components are exactly zero, their indices
-# not all belonging to one block.
+# And 50 of the 70 fourth-order components are exactly zero, because their
+# indices do not all belong to one block.
 owner <- s@param_params$owner
 cross <- vapply(param_tuple_indices(s, 4L),
                 function(t) length(unique(owner[t])) > 1L, logical(1))

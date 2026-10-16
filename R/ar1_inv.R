@@ -4,9 +4,9 @@ NULL
 #' The Precision of an AR(1) Process
 #'
 #' @description
-#' The S7 class of the family whose value is the **inverse** of an [ar1()]
-#' matrix: tridiagonal, the precision of a first-order autoregression.
-#' [ar1_inv()] builds one.
+#' This is the S7 class of the family whose value is the inverse of an [ar1()]
+#' matrix. That matrix is tridiagonal and is the precision of a first-order
+#' autoregression. [ar1_inv()] builds one.
 #'
 #' @inheritParams matrix_parameter
 #'
@@ -14,8 +14,9 @@ NULL
 #'   adding no properties of its own. `param_params` holds `inner`, the
 #'   [ar1()] family being inverted.
 #'
-#' @seealso [ar1_inv()], the constructor, [ar1()] for the family it inverts,
-#'   and [inverse_of()] for the general composition it specializes.
+#' @seealso [ar1_inv()], the constructor, [ar1()] for the family that it
+#'   inverts, and [inverse_of()] for the general composition that it
+#'   specializes.
 #'
 #' @examples
 #' s <- ar1_inv(5)
@@ -30,7 +31,7 @@ Ar1InvParam <- S7::new_class("Ar1InvParam", parent = InverseParam)
 #'
 #' @description
 #' Returns the family whose value is \eqn{\Sigma(\eta)^{-1}} for
-#' \eqn{\Sigma} an [ar1()] matrix: the **tridiagonal** precision of a
+#' \eqn{\Sigma} an [ar1()] matrix: the tridiagonal precision of a
 #' first-order autoregression. It carries [ar1()]'s free vector unchanged, so
 #' its two coordinates are the scale and the correlation of the process whose
 #' precision this is.
@@ -38,11 +39,12 @@ Ar1InvParam <- S7::new_class("Ar1InvParam", parent = InverseParam)
 #' @details
 #' # Which side is which
 #'
-#' [ar1()] is the AR(1) **pattern**, \eqn{\sigma^2\rho^{|i-j|}}. A family that
-#' takes a matrix parameter decides what it does with it, so
-#' `mvgaussian1_distrib(p, ar1(p))` is the process whose covariance is AR(1)
-#' and `mvgaussian2_distrib(p, ar1(p))` the model whose precision has those
-#' entries, which is a different and legitimate model. This family is the third
+#' [ar1()] is the AR(1) pattern, \eqn{\sigma^2\rho^{|i-j|}}. The family that
+#' takes a matrix parameter determines whether the matrix is a covariance or a
+#' precision, so `mvgaussian1_distrib(p, ar1(p))` is the process whose
+#' covariance is AR(1) and `mvgaussian2_distrib(p, ar1(p))` the model whose
+#' precision has those entries, which is a different and legitimate model.
+#' This family is the third
 #' object in that picture: the matrix whose inverse is an AR(1), so
 #' `mvgaussian2_distrib(p, ar1_inv(p))` is again the AR(1) process, written on
 #' the precision side.
@@ -63,10 +65,10 @@ Ar1InvParam <- S7::new_class("Ar1InvParam", parent = InverseParam)
 #'
 #' # The derivatives
 #'
-#' The value is a **product** of a function of the first free value and a
+#' The value is a product of a function of the first free value and a
 #' matrix function of the second, so a component with \eqn{a} scale indices and
-#' \eqn{b} correlation indices is \eqn{(\partial^a\tau)(\partial^b G)} and no
-#' mixed expansion is needed. The scale factor is the reciprocal of the link's
+#' \eqn{b} correlation indices is \eqn{(\partial^a\tau)(\partial^b G)}, and the
+#' derivative does not require a mixed expansion. The scale factor is the reciprocal of the link's
 #' inverse, chained through \eqn{x\mapsto x^{-1}}. Under the rhobit link,
 #' with \eqn{\rho = \tanh z}, the pattern's three distinct entries are
 #' \eqn{G_{11} = w = \cosh^2 z}, \eqn{G_{ii} = 2w - 1 = \cosh 2z} and
@@ -77,21 +79,21 @@ Ar1InvParam <- S7::new_class("Ar1InvParam", parent = InverseParam)
 #'   w^{(k)} = 2^{k-1}\cosh 2z \;(k \text{ even}),}
 #'
 #' with \eqn{G_{ii}^{(k)} = 2w^{(k)}} above order zero and
-#' \eqn{G_{i,i\pm1}^{(k)} = -\tfrac{1}{2}w^{(k+1)}}. No difference
-#' \eqn{1 - \rho^2} is formed, so the derivatives keep their accuracy where
-#' \eqn{\rho} rounds to \eqn{-1} or 1.
+#' \eqn{G_{i,i\pm1}^{(k)} = -\tfrac{1}{2}w^{(k+1)}}. The difference
+#' \eqn{1 - \rho^2} is never formed, so the derivatives keep their accuracy
+#' where \eqn{\rho} rounds to \eqn{-1} or 1.
 #'
-#' This is what the family adds over `inverse_of(ar1(p))`, which reaches the
-#' same numbers through the ordered-block-partition sum. There a fourth-order
-#' component is a sum of 75 products, one for each ordered set partition of its
+#' This family differs from `inverse_of(ar1(p))`, which reaches the same
+#' numbers through the ordered-block-partition sum, in that it writes the
+#' derivatives out. In that sum a fourth-order component is a sum of 75 products, one for each ordered set partition of its
 #' four positions, each of three to nine matrices; here it is one elementwise
 #' product. The two routes agree to rounding.
 #'
 #' # The log-determinant
 #'
 #' \eqn{\log\lvert\Omega\rvert = -\log\lvert\Sigma\rvert}, so the value and all
-#' four orders are [ar1()]'s negated, and the closed form
-#' \eqn{p\log\sigma^2 + (p-1)\log(1-\rho^2)} is what is negated.
+#' four orders are [ar1()]'s negated, and for [ar1()] the log-determinant is
+#' the closed form \eqn{p\log\sigma^2 + (p-1)\log(1-\rho^2)}.
 #'
 #' @section Notation:
 #' \eqn{p} is the matrix side, \eqn{\sigma^2} the AR(1) process's variance,
@@ -105,7 +107,7 @@ Ar1InvParam <- S7::new_class("Ar1InvParam", parent = InverseParam)
 #' @return An object of class [Ar1InvParam()], with `n_free` 2, `free_names`
 #'   [ar1()]'s and `rank` equal to `dimension`.
 #'
-#' @seealso [ar1()] for the family this inverts, [autoregressive_inv()] for the
+#' @seealso [ar1()] for the family that this inverts, [autoregressive_inv()] for the
 #'   order-\eqn{q} case, and [inverse_of()] for any other family's inverse.
 #'
 #' @examples
@@ -116,7 +118,7 @@ Ar1InvParam <- S7::new_class("Ar1InvParam", parent = InverseParam)
 #' # entry beyond the first off-diagonal.
 #' round(param_value(s, eta), 4)
 #'
-#' # And it is exactly the inverse of the AR(1) it names.
+#' # And it is exactly the inverse of the AR(1) that it names.
 #' max(abs(param_value(s, eta) %*% param_value(ar1(5), eta) - diag(5)))
 #'
 #' # The written-out derivatives agree with the general composition's.
@@ -144,7 +146,7 @@ ar1_inv <- function(dimension, link_scale = linkfunctions7::log_link()) {
 #' @description
 #' Returns the value and the derivatives of \eqn{\eta \mapsto 1/h(\eta)} from
 #' the value and the derivatives of \eqn{h}, by composing \eqn{x^{-1}} onto
-#' them, to the order `v` carries.
+#' them, to the order that `v` carries.
 #'
 #' @details
 #' [power_derivs()] cannot serve here: it truncates beyond the exponent, which
@@ -173,20 +175,20 @@ recip_derivs <- function(v) {
 #' @description
 #' Returns the value and the derivatives to order `order` of
 #' \eqn{w = (1 - \rho^2)^{-1}} in the free value \eqn{z}, for
-#' \eqn{\rho = \tanh z} under the rhobit link. \eqn{w} is the quantity every
-#' inverse autoregression is written in: it is the reciprocal of the
+#' \eqn{\rho = \tanh z} under the rhobit link. \eqn{w} is the quantity in which
+#' every inverse autoregression is written: it is the reciprocal of the
 #' innovation variance's share at one lag, and it multiplies every entry of an
 #' inverse AR(1) and every diagonal of an inverse AR(\eqn{q}).
 #'
 #' @details
 #' Under the rhobit link \eqn{w = \cosh^2 z = (1 + \cosh 2z)/2}, so every
 #' order is elementary: \eqn{w^{(k)} = 2^{k-1}\sinh 2z} for odd \eqn{k} and
-#' \eqn{2^{k-1}\cosh 2z} for even \eqn{k}. Written in \eqn{z}, no difference
-#' \eqn{1 - \rho^2} is formed, and the result keeps its accuracy where
-#' \eqn{\rho} rounds to \eqn{-1} or 1.
+#' \eqn{2^{k-1}\cosh 2z} for even \eqn{k}. Because the expression is written in
+#' \eqn{z}, the difference \eqn{1 - \rho^2} is never formed, and the result
+#' keeps its accuracy where \eqn{\rho} rounds to \eqn{-1} or 1.
 #'
 #' @param z The free value, a single number.
-#' @param order The highest order wanted, an integer from 0 to 5.
+#' @param order The highest order to compute, an integer from 0 to 5.
 #'
 #' @return A list of `order + 1` numbers: \eqn{w} and its derivatives in
 #'   \eqn{z}.
@@ -216,12 +218,13 @@ cosh2_derivs <- function(z, order) {
 #' they are \eqn{\cosh^2 z}, \eqn{\cosh 2z} and \eqn{-\tfrac{1}{2}\sinh 2z},
 #' so one sequence of derivatives of \eqn{w} in \eqn{z}, from
 #' [cosh2_derivs()], serves all three: the second is \eqn{2w^{(k)}} above
-#' order zero and the third is \eqn{-\tfrac{1}{2}w^{(k+1)}}. Nothing is
-#' chained through the link and no difference \eqn{1 - \rho^2} is formed.
+#' order zero and the third is \eqn{-\tfrac{1}{2}w^{(k+1)}}. The derivatives are
+#' not chained through the link, and the difference \eqn{1 - \rho^2} is not
+#' formed.
 #'
 #' @param s An [Ar1InvParam()] object, whose `dimension` supplies \eqn{p}.
 #' @param z The second free value.
-#' @param order The highest derivative order wanted, from 0 to 4.
+#' @param order The highest derivative order to compute, from 0 to 4.
 #'
 #' @return A list of `order + 1` square matrices of side `s@dimension`: the
 #'   pattern and its derivatives in the second free value.
@@ -292,10 +295,10 @@ ar1_inv_derivative <- function(s, eta, order) {
 #' @title Derivative Arrays of an Inverse AR(1) Parameter
 #' @name param_d1.Ar1InvParam
 #' @description
-#' The four orders of \eqn{\partial\Omega} for \eqn{\Omega} the precision of an
-#' AR(1), written out from the product structure instead of assembled by the
-#' ordered-block-partition sum that [inverse_of()] uses. The two routes agree
-#' to rounding.
+#' Returns the four orders of \eqn{\partial\Omega} for \eqn{\Omega} the
+#' precision of an AR(1), written out from the product structure instead of
+#' assembled by the ordered-block-partition sum that [inverse_of()] uses. The
+#' two routes agree to rounding.
 #' @param s An [Ar1InvParam()] object.
 #' @param eta A numeric vector of two free values, already checked by the
 #'   generic.
@@ -333,9 +336,10 @@ S7::method(param_d4, Ar1InvParam) <- function(s, eta, ...) {
 #' The Precision of an Autoregression of Order q
 #'
 #' @description
-#' The S7 class of the family whose value is the **inverse** of an
-#' [autoregressive()] matrix: banded of bandwidth \eqn{q}, the precision of an
-#' autoregression of that order. [autoregressive_inv()] builds one.
+#' This is the S7 class of the family whose value is the inverse of an
+#' [autoregressive()] matrix. That matrix is banded of bandwidth \eqn{q} and is
+#' the precision of an autoregression of that order. [autoregressive_inv()]
+#' builds one.
 #'
 #' @inheritParams matrix_parameter
 #'
@@ -362,7 +366,7 @@ AutoregressiveInvParam <- S7::new_class("AutoregressiveInvParam",
 #' @description
 #' Returns the family whose value is \eqn{\Sigma(\eta)^{-1}} for \eqn{\Sigma}
 #' an [autoregressive()] matrix: the precision of an autoregression of order
-#' \eqn{q}, **banded of bandwidth \eqn{q}**. It carries
+#' \eqn{q}, banded of bandwidth \eqn{q}. It carries
 #' [autoregressive()]'s free vector unchanged, so its coordinates are the scale
 #' and the partial autocorrelations of the process whose precision this is.
 #'
@@ -373,19 +377,20 @@ AutoregressiveInvParam <- S7::new_class("AutoregressiveInvParam",
 #' carries no entry beyond the \eqn{q}-th diagonal. The value comes from
 #' [param_solve.AutoregressiveParam()], which reads it off the prediction form
 #' of the process instead of factorizing, and the log-determinant is
-#' [autoregressive()]'s negated. Both are exact, and neither factorizes a
-#' matrix of side \eqn{p}.
+#' [autoregressive()]'s negated. Both are exact and avoid factorizing a matrix
+#' of side \eqn{p}.
 #'
 #' # The derivative arrays
 #'
-#' Written out, from the same prediction form the value comes from:
+#' The derivatives are written out from the same prediction form from which
+#' the value comes:
 #'
 #' \deqn{\Omega = U^\top \mathrm{diag}(\tau)\, U,}
 #'
-#' with \eqn{U} unit lower triangular of bandwidth \eqn{q}, row \eqn{t}
-#' carrying the coefficients of the best linear predictor of \eqn{y_t} from its
+#' with \eqn{U} unit lower triangular of bandwidth \eqn{q}, whose row \eqn{t}
+#' holds the coefficients of the best linear predictor of \eqn{y_t} from its
 #' predecessors, and \eqn{\tau_t = 1/v_t} the reciprocal innovation variances.
-#' Two facts make every order exact without a new recursion.
+#' Every order is exact without a new recursion, because of two facts.
 #'
 #' The lower-order rows of \eqn{U} are the coefficients of the same family at
 #' that order, so their derivative arrays come from the compiled
@@ -397,8 +402,8 @@ AutoregressiveInvParam <- S7::new_class("AutoregressiveInvParam",
 #' product of univariate derivatives and is exactly zero where it
 #' differentiates in a factor that a row does not carry.
 #'
-#' What is left is the Leibniz rule over three factors, taken twice so that a
-#' component costs \eqn{2^m} matrix products rather than \eqn{3^m}.
+#' After these two facts, the remaining step is the Leibniz rule over three
+#' factors, applied twice so that a component costs \eqn{2^m} matrix products rather than \eqn{3^m}.
 #'
 #' The result agrees with `inverse_of(autoregressive(p, q))`, which reaches the
 #' same values through the ordered-block-partition sum and shares no arithmetic
@@ -414,9 +419,9 @@ AutoregressiveInvParam <- S7::new_class("AutoregressiveInvParam",
 #' @return An object of class [AutoregressiveInvParam()], with `n_free`,
 #'   `free_names` and `dimension` [autoregressive()]'s.
 #'
-#' @seealso [autoregressive()] for the family this inverts, [ar1_inv()] for the
-#'   order-one case, and [inverse_of()] for the general composition both of
-#'   them specialize.
+#' @seealso [autoregressive()] for the family that this inverts, [ar1_inv()]
+#'   for the order-one case, and [inverse_of()] for the general composition that
+#'   both of them specialize.
 #'
 #' @examples
 #' s <- autoregressive_inv(6, order = 2)
@@ -426,7 +431,7 @@ AutoregressiveInvParam <- S7::new_class("AutoregressiveInvParam",
 #' lag <- abs(outer(1:6, 1:6, "-"))
 #' max(abs(param_value(s, eta)[lag > 2]))
 #'
-#' # And it is the inverse of the autoregression it names.
+#' # And it is the inverse of the autoregression that it names.
 #' max(abs(param_value(s, eta) %*% param_value(autoregressive(6, 2), eta) -
 #'         diag(6)))
 #'
@@ -466,7 +471,8 @@ autoregressive_inv <- function(dimension, order, ...) {
 #' @details
 #' A count vector needs neither a string key nor a sort: `tabulate()` builds it
 #' in one call, and the code indexes a list directly. Five is a safe base
-#' because a derivative order here is at most four, so no count can reach it.
+#' because a derivative order here is at most four, so every count stays
+#' below five.
 #'
 #' @param idx The index tuples of the order, as [param_tuple_indices()]
 #'   returns them.
@@ -474,9 +480,9 @@ autoregressive_inv <- function(dimension, order, ...) {
 #'
 #' @return A list with `pow`, the base-five weights; `codes`, one integer
 #'   vector per tuple holding the code of `t[take]` for every subset of
-#'   positions in the order the bits enumerate them; `comp`, the matching codes
-#'   of the complements; and `all`, every distinct code with `cnt`, the count
-#'   vector that each stands for.
+#'   positions in the order in which the bits enumerate them; `comp`, the
+#'   matching codes of the complements; and `all`, every distinct code with
+#'   `cnt`, the count vector represented by each.
 #'
 #' @seealso [ar_inv_structure()], the only caller.
 #'
@@ -517,19 +523,19 @@ ar_inv_codes <- function(idx, n) {
 #' @description
 #' Returns the two factors of \eqn{\Omega = U^\top \mathrm{diag}(\tau) U},
 #' each with its derivative arrays to fourth order, stored under the integer
-#' code of the sub-multiset differentiated in.
+#' code of the sub-multiset of indices in which the derivative is taken.
 #'
 #' @details
-#' \eqn{U} is unit lower triangular of bandwidth \eqn{q}, row \eqn{t} holding
-#' the coefficients of the best linear predictor of \eqn{y_t} from its
+#' \eqn{U} is unit lower triangular of bandwidth \eqn{q}, and its row \eqn{t}
+#' holds the coefficients of the best linear predictor of \eqn{y_t} from its
 #' predecessors, which for \eqn{t} beyond the order are the autoregression's
 #' own. Those lower-order coefficients are the coefficients of the same family
 #' at that order (row \eqn{k+1} of `ar_prediction()`, negated and read
 #' backwards, is the `phi` of `autoregressive(p, order = k)` up to rounding), so
 #' the intermediate derivative arrays come from the compiled Levinson-Durbin
-#' recursion run once per order, and nothing is rederived here. A component
-#' differentiating in a partial autocorrelation that the order does not reach
-#' is exactly zero.
+#' recursion run once per order, and the function does not rederive them. A
+#' component differentiating in a partial autocorrelation that the order does
+#' not reach is exactly zero.
 #'
 #' \eqn{\tau_t = 1/v_t} is a product of one factor per free value:
 #' \eqn{1/v_0} from the scale, and \eqn{(1-r_j^2)^{-1} = \cosh^2 z_j} from
@@ -542,14 +548,14 @@ ar_inv_codes <- function(idx, n) {
 #' @param s An [AutoregressiveInvParam()] object.
 #' @param eta A numeric vector of length `s@n_free`.
 #' @param cd The codes of [ar_inv_codes()].
-#' @param order The derivative order the codes belong to, which bounds every
-#'   factor's order.
+#' @param order The derivative order to which the codes belong, which bounds
+#'   every factor's order.
 #'
 #' @return A list with `u` and `tau`, each a list indexed by code: `u` of
 #'   `s@dimension` square matrices, `tau` of numeric vectors of that length.
 #'
 #' @seealso [autoregressive_inv()] for the formula and [ar_tables()] for the
-#'   recursion the coefficients come from.
+#'   recursion from which the coefficients come.
 #'
 #' @keywords internal
 ar_inv_factors <- function(s, eta, cd, order) {
@@ -638,7 +644,7 @@ ar_inv_factors <- function(s, eta, cd, order) {
 #' \partial_{T \setminus R} U}, and the outer one
 #' \eqn{\partial_I \Omega = \sum_{S \subseteq I} (\partial_S U)^\top
 #' \partial_{I \setminus S} N}. Both sums run over subsets of the index
-#' positions, which is what makes a repeated index count with its multiplicity.
+#' positions, so a repeated index counts with its multiplicity.
 #' Every \eqn{\partial_S N} is built once and read by every component that
 #' needs it.
 #'
@@ -684,13 +690,13 @@ ar_inv_derivative <- function(s, eta, order) {
 #' The Subset Structure of One Derivative Order, Memoized
 #'
 #' @description
-#' The index tuples of an order, the codes of every sub-multiset they carry,
-#' and the codes of the sub-multisets of those, over which the inner Leibniz
-#' rule sums. None of it depends on the free vector.
+#' Returns the index tuples of an order, the codes of every sub-multiset that
+#' they carry, and the codes of the sub-multisets of those, over which the
+#' inner Leibniz rule sums. The result does not depend on the free vector.
 #'
 #' @details
-#' Memoized in an environment held on the object, because it depends on the
-#' order and the number of free values alone. The cache is pure (the same order
+#' The result is memoized in an environment held on the object, because it
+#' depends only on the order and the number of free values. The cache is pure (the same order
 #' always gives the same structure), so sharing it across the copies that S7
 #' makes of the object is safe.
 #'
@@ -720,10 +726,11 @@ ar_inv_structure <- function(s, order) {
 #' @title Derivative Arrays of an Inverse Autoregressive Parameter
 #' @name param_d1.AutoregressiveInvParam
 #' @description
-#' The four orders of \eqn{\partial\Omega} for \eqn{\Omega} the precision of an
-#' autoregression of order \eqn{q}, written out from the prediction
-#' factorization instead of assembled by the ordered-block-partition sum that
-#' [inverse_of()] uses. The two routes agree to rounding.
+#' Returns the four orders of \eqn{\partial\Omega} for \eqn{\Omega} the
+#' precision of an autoregression of order \eqn{q}, written out from the
+#' prediction factorization instead of assembled by the
+#' ordered-block-partition sum that [inverse_of()] uses. The two routes agree
+#' to rounding.
 #' @param s An [AutoregressiveInvParam()] object.
 #' @param eta A numeric vector of length `s@n_free`, already checked by the
 #'   generic.

@@ -16,15 +16,15 @@ diag_logdet_higher(s, eta, order)
 \value{
 A numeric vector of \code{choose(s@n_free + order - 1, order)} entries,
 keyed as \code{param_tuple_names(s, order)} and in that order. Under the log link
-it is all zeros at every order above 1, \eqn{\log h(\eta) = \eta} being
-linear.
+it is all zeros at every order above 1, because \eqn{\log h(\eta) = \eta}
+is linear.
 }
 \description{
 Assembles the derivative components of orders two to four of \eqn{\log|M|} for
 a diagonal family. The log-determinant is \eqn{\sum_i \log h(\eta_i)}, a sum
 of functions of one free value each, so every mixed component is exactly zero
 and a pure one is the matching derivative from \code{\link[=diag_dlog]{diag_dlog()}}, counted once per
-entry the free value owns.
+entry that the free value owns.
 }
 \seealso{
 \code{\link[=diag_dlog]{diag_dlog()}} for the derivatives of \eqn{\log h}, and

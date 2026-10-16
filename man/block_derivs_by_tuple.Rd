@@ -21,14 +21,14 @@ the sorted local index tuples.
 }
 \description{
 Fetches one block's derivatives of a given order and re-keys them by the
-\strong{sorted local index tuple}, as \code{"1"}, \code{"1,2"}, \code{"2,2"} and so on.
+sorted local index tuple, as \code{"1"}, \code{"1,2"}, \code{"2,2"} and so on.
 }
 \details{
 The re-keying lets a lookup from the composite's enumeration succeed without
 assuming the two enumerations correspond. A block's own
 \code{param_tuple_names()} are built from its own \code{free_names}, which the composite
 has prefixed with a label, so the two name sets differ; the sorted index tuple
-is the one key both sides can compute. Sorting matters because a derivative is
+is the one key that both sides can compute. Sorting matters because a derivative is
 symmetric in its indices and the two enumerations need not order a tuple the
 same way.
 }

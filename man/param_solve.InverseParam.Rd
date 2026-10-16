@@ -21,8 +21,9 @@ the whole inverse.}
 value.
 }
 \description{
-\code{param_solve()} is the inner family's \strong{value}, no inversion being needed:
-the inverse of \eqn{S^{-1}} is \eqn{S}. \code{param_factor()} is the lower
+\code{param_solve()} is the inner family's value, because the inverse of
+\eqn{S^{-1}} is \eqn{S} and the method therefore does not invert a matrix.
+\code{param_factor()} is the lower
 triangular \eqn{L} with \eqn{LL^\top} the value, which is the package's
 convention and the transpose of what \code{\link[base:chol]{base::chol()}} returns.
 }

@@ -16,17 +16,18 @@ A list of \code{s@n_free} symmetric matrices named by \code{s@free_names}, each
 \code{s@dimension} by \code{s@dimension} with a diagonal of exact zeros.
 }
 \description{
-Closed form, by the Leibniz rule on \eqn{R = LL^\top},
+Computes the first derivatives in closed form, by the Leibniz rule on
+\eqn{R = LL^\top},
 
 \deqn{\partial_k R = L_k L^\top + L L_k^\top,}
 
-with the factor's derivative \eqn{L_k} built from the trigonometric tables of
-the angles: differentiating an entry of \eqn{L} replaces one sine or cosine
+where the factor's derivative \eqn{L_k} is built from the trigonometric
+tables of the angles: differentiating an entry of \eqn{L} replaces one sine or cosine
 factor by its own derivative in the free value.
 
-The diagonal of every component is exactly zero, the diagonal of
-\eqn{R} being the constant 1. Angle \eqn{\theta_{ij}} belongs to row \eqn{i}, so
-\eqn{\partial_k L} is supported on that row alone, though
+The diagonal of every component is exactly zero, because the diagonal of
+\eqn{R} is the constant 1. Angle \eqn{\theta_{ij}} belongs to row \eqn{i}, so
+\eqn{\partial_k L} is supported only on that row, although
 \eqn{\partial_k R} is not.
 }
 \seealso{

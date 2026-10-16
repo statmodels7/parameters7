@@ -19,8 +19,8 @@ this order.}
 }
 \value{
 A named list of \code{choose(s@n_free + order - 1, order)} entries, keyed
-as \code{param_tuple_names(s, order)} and in that order, each entry \code{wrap()}'s
-result.
+as \code{param_tuple_names(s, order)} and in that order. Each entry is the
+result of \code{wrap()}.
 }
 \description{
 Slices the tensors of \code{\link[=simplex_tensors]{simplex_tensors()}} into the named list that a

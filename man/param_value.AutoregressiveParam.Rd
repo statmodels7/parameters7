@@ -16,12 +16,12 @@ A positive definite Toeplitz \code{s@dimension} by \code{s@dimension} numeric
 matrix with dimnames \code{v1}, \code{v2}, ...
 }
 \description{
-Returns the Toeplitz matrix \eqn{\gamma_0 \rho_{\lvert i-j \rvert}}, the
-autocorrelations coming from the Levinson-Durbin recursion of \code{\link[=ar_tables]{ar_tables()}}
-and the marginal variance from the scale link. Positive definite at every free
-vector in exact arithmetic, the partial autocorrelations being inside
-\eqn{(-1, 1)} by construction; see \code{\link[=autoregressive]{autoregressive()}} for the edge of the
-chart in double precision.
+Returns the Toeplitz matrix \eqn{\gamma_0 \rho_{\lvert i-j \rvert}}, where
+the autocorrelations come from the Levinson-Durbin recursion of \code{\link[=ar_tables]{ar_tables()}}
+and the marginal variance comes from the scale link. The matrix is positive
+definite at every free vector in exact arithmetic, because the partial
+autocorrelations lie inside \eqn{(-1, 1)} by construction; see
+\code{\link[=autoregressive]{autoregressive()}} for the edge of the chart in double precision.
 
 The cost is the recursion, which is linear in \eqn{p}, and the filling of
 the matrix.

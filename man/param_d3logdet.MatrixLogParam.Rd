@@ -16,9 +16,10 @@ A numeric vector of \code{choose(s@n_free + 2, 3)} zeros, keyed as
 \code{param_tuple_names(s, 3)}.
 }
 \description{
-Closed form, and identically zero, the trace being linear in the free vector.
-The zeros are exact, so a consumer can drop the term instead of carrying small
-numbers through a contraction.
+Returns the third derivatives of the log-determinant, which are identically
+zero in closed form because the trace is linear in the free vector. The zeros
+are exact, so a consumer can drop the term instead of carrying small numbers
+through a contraction.
 }
 \seealso{
 \code{\link[=param_d2logdet.MatrixLogParam]{param_d2logdet.MatrixLogParam()}} for the order below, and

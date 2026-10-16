@@ -7,8 +7,8 @@
 scalar_matrix(dimension, link = linkfunctions7::log_link())
 }
 \arguments{
-\item{dimension}{The side \eqn{p} of the matrix. A single positive whole
-number, finite and at least 1; any other value signals an error.}
+\item{dimension}{The side \eqn{p} of the matrix. It must be a single
+positive whole number, finite and at least 1; any other value signals an error.}
 
 \item{link}{A \pkg{linkfunctions7} link carrying the free value onto the
 positive scale, \code{linkfunctions7::log_link()} by default. It must map onto
@@ -24,7 +24,7 @@ empty \code{null_basis}, \code{param_name} \code{"scalar"}, and \code{param_para
 }
 \description{
 Returns an object holding the map \eqn{M = \tau I} with \eqn{\tau = h(\eta_1)}
-positive: a diagonal matrix with \strong{one} free value shared by every entry,
+positive: a diagonal matrix with one free value shared by every entry,
 whatever \eqn{p} is. It is the simplest parametrization in the package, and it
 is the parametrization of a random effect with a single variance component.
 }
@@ -52,7 +52,7 @@ inverse link.
 }
 
 \examples{
-# One free value at any dimension.
+# The family has one free value at any dimension.
 s <- scalar_matrix(3)
 c(n_free = s@n_free, dimension = s@dimension)
 s@free_names

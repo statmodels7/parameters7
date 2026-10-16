@@ -14,20 +14,21 @@ derivative arrays.}
 \item{s}{A \code{\link[=parameter]{parameter()}} object, whose \code{dimension} supplies \code{p}.}
 }
 \value{
-\code{m}, with \code{dimnames} set to \code{list(v1..vp, v1..vp)}. Any dimnames it
-arrived with are replaced.
+\code{m}, whose \code{dimnames} are set to \code{list(v1..vp, v1..vp)}. Any dimnames
+that \code{m} had on input are replaced.
 }
 \description{
 Applies the dimension labels that every matrix produced by a parameter carries:
-\code{"v1"}, \code{"v2"}, ..., \code{"vp"} on both margins, \code{p} being the parameter's
-\code{dimension}. One convention across the families, so a consumer can read a
-printed covariance without knowing which parametrization built it.
+\code{"v1"}, \code{"v2"}, ..., \code{"vp"} on both margins, where \code{p} is the parameter's
+\code{dimension}. The convention is the same across the families, so a consumer
+can read a printed covariance without identifying which parametrization
+built it.
 
 It covers the value and the four derivative orders. A factor and a solve are
-left as each family produces them, the families disagreeing there, and
-\code{\link[=transition_matrix]{transition_matrix()}} labels its own margins \code{"s1"}, \code{"s2"}, ..., its rows
-being states rather than variables. \code{\link[=check_parameter]{check_parameter()}}'s shapes-and-names
-check reads the margins of \code{param_value()}, \code{param_d1()} and \code{param_d2()},
-so the convention is tested rather than only stated.
+left as each family produces them, because the families differ there, and
+\code{\link[=transition_matrix]{transition_matrix()}} labels its own margins \code{"s1"}, \code{"s2"}, ..., because
+its rows are states rather than variables. \code{\link[=check_parameter]{check_parameter()}}'s
+shapes-and-names check reads the margins of \code{param_value()}, \code{param_d1()} and
+\code{param_d2()}, so the convention is tested.
 }
 \keyword{internal}

@@ -20,9 +20,9 @@ A numeric matrix with \code{s@dimension} rows and as many columns as \code{b}.
 \description{
 Solves blockwise: \eqn{M^{-1} = I_m \otimes S^{-1}}, so the rows of \code{b}
 belonging to each block are handed to the inner parameter's own
-\code{\link[=param_solve]{param_solve()}} in turn. Nothing of side \eqn{md} is factorized, and the
-method uses the inner parameter's own route, including a closed inverse where
-it has one.
+\code{\link[=param_solve]{param_solve()}} in turn. The method does not factorize any matrix of side
+\eqn{md}, and it uses the inner parameter's own route, including a closed
+inverse where it has one.
 
 The generic has already rejected a rank-deficient composite, which a deficient
 inner parameter produces, and filled \code{b} with the identity when the caller

@@ -16,10 +16,10 @@ A numeric vector of length \code{s@n_free}, named by \code{s@free_names},
 holding 1 and 0.
 }
 \description{
-Closed form and constant: 1 in each of the \eqn{p} diagonal directions and 0
-in the \eqn{p(p-1)/2} below-diagonal ones, the log-determinant being
-\eqn{\sum_i \eta_i}. The value does not depend on \code{eta}, which is read only
-for its length.
+Returns the gradient of the log-determinant in closed form; it is constant:
+1 in each of the \eqn{p} diagonal directions and 0 in the \eqn{p(p-1)/2}
+below-diagonal ones, because the log-determinant is \eqn{\sum_i \eta_i}. The
+value does not depend on \code{eta}, which is read only for its length.
 
 The gradient is 1 where that of \code{\link[=log_cholesky]{log_cholesky()}} is 2: there the diagonal
 free value is \eqn{\log L_{ii}} and \eqn{|M| = |L|^2}, while here it is a

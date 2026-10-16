@@ -17,8 +17,8 @@ a positive diagonal, satisfying \code{L \%*\% t(L) == param_value(s, eta)} exact
 and carrying no dimnames.
 }
 \description{
-Returns \eqn{L} by assembling it from the free vector: no factorization is
-taken, because the free vector holds the factor. The assembly is
+Returns \eqn{L}, assembled from the free vector without a factorization,
+because the free vector holds the factor. The assembly is
 \eqn{O(p^2)}, against the \eqn{O(p^3)} Cholesky factorization of the base
 method.
 

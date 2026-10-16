@@ -21,20 +21,20 @@ as many columns as \code{b}; \code{param_factor()} a lower triangular \code{s@di
 \code{s@dimension} matrix.
 }
 \description{
-\code{param_solve()} and \code{param_factor()} for a \code{\link[=dr_prod]{dr_prod()}} parameter. Both come
-from the correlation block with a scaling on either side:
+Defines \code{param_solve()} and \code{param_factor()} for a \code{\link[=dr_prod]{dr_prod()}} parameter.
+Both come from the correlation block with a scaling on either side:
 \eqn{\Sigma^{-1} = D^{-1} R^{-1} D^{-1}}, and
-\eqn{\Sigma = (DL)(DL)^\top} for \eqn{L} the correlation's own factor. Neither
-forms \eqn{\Sigma} and neither factorizes it.
+\eqn{\Sigma = (DL)(DL)^\top} for \eqn{L} the correlation's own factor. The
+methods do not form \eqn{\Sigma} and do not factorize it.
 }
 \details{
-The scaling is done by dividing and multiplying rows, which for a diagonal
-matrix is what the products amount to. The factor is lower triangular, as
+The methods scale the rows by division and multiplication, which for a
+diagonal matrix is equivalent to forming the products. The factor is lower triangular, as
 \code{\link[=param_factor]{param_factor()}} requires, because scaling the rows of a lower triangular
 matrix leaves it lower triangular.
 
-Neither is rejected for rank: this family admits no deficient correlation
-block, so it is always of full rank.
+The methods do not reject a matrix because of its rank: this family admits
+only correlation blocks of full rank, so it always has full rank.
 }
 \seealso{
 \code{\link[=param_solve]{param_solve()}} and \code{\link[=param_factor]{param_factor()}} for the two generics.

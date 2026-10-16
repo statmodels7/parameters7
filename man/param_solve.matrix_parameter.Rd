@@ -18,7 +18,7 @@ vector and defaulted to the identity by the generic.}
 A numeric matrix with \code{s@dimension} rows and as many columns as \code{b}.
 }
 \description{
-The method that every \code{\link[=matrix_parameter]{matrix_parameter()}} inherits when it registers no
+This is the method that every \code{\link[=matrix_parameter]{matrix_parameter()}} inherits when it registers no
 \code{\link[=param_solve]{param_solve()}} of its own. It takes the Cholesky factor \eqn{L} from
 \code{\link[=param_factor]{param_factor()}} and applies it twice,
 \code{backsolve(t(l), forwardsolve(l, b))}, which is
@@ -32,7 +32,7 @@ caller left it out, so by the time this runs \code{b} is a matrix of the right
 height.
 }
 \details{
-Positive definiteness is decided inside \code{\link[=param_factor]{param_factor()}}, from the
+The test for positive definiteness runs inside \code{\link[=param_factor]{param_factor()}}, on the
 eigenvalues, before any factorization is attempted; see \code{\link[=chol_pd]{chol_pd()}} for why
 the verdict does not come from whether \code{\link[base:chol]{base::chol()}} signals an error.
 

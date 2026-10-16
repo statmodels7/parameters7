@@ -16,7 +16,8 @@
 the diagonal blocks and zeros elsewhere.
 }
 \description{
-The three one-line accessors that the \code{\link[=KronIdentityParam]{KronIdentityParam()}} methods use.
+This page documents the three one-line accessors that the
+\code{\link[=KronIdentityParam]{KronIdentityParam()}} methods use.
 \code{.kron_inner()} returns the per-block parameter, \code{.kron_m()} the number of
 blocks, and \code{.kron_lift()} places a \code{d} by \code{d} matrix into \code{m} identical
 diagonal blocks as \code{kronecker(diag(m), x)}.
@@ -27,8 +28,8 @@ place. \code{.kron_lift()} is the whole
 arithmetic of the composition: the value, every derivative component and the
 factor are the inner quantity passed through it.
 
-Note that \code{kronecker()} drops dimnames, so a lifted matrix carries none where
-the inner one carried \code{v1}, \code{v2}, ...
+The function \code{kronecker()} drops dimnames, so a lifted matrix carries none
+where the inner one carried \code{v1}, \code{v2}, ...
 }
 \seealso{
 \code{\link[=kron_identity]{kron_identity()}}, which stores what these read.

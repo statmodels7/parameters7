@@ -23,8 +23,8 @@ derivative arrays carry \code{v1}, \code{v2}, ...; the names of the value are re
 because this family computes both results from its own value.
 }
 \description{
-\code{param_solve()} and \code{param_factor()} for a \code{\link[=sum_struct]{sum_struct()}} parameter. Both come
-from the assembled matrix, by \code{solve()} and by a transposed \code{chol()}: a sum of
+\code{param_solve()} and \code{param_factor()} are the solve and the factor methods for
+a \code{\link[=sum_struct]{sum_struct()}} parameter. Both come from the assembled matrix, by \code{solve()} and by a transposed \code{chol()}: a sum of
 fixed matrices has no structure that a solve could exploit, where \code{\link[=ar1]{ar1()}} has
 a tridiagonal inverse and \code{\link[=log_cholesky]{log_cholesky()}} assembles its factor directly.
 }
@@ -33,8 +33,8 @@ a tridiagonal inverse and \code{\link[=log_cholesky]{log_cholesky()}} assembles 
 \code{t(chol(M))}, lower triangular with \eqn{M = L L^\top} as \code{\link[=param_factor]{param_factor()}}
 requires.
 
-Both are rejected by the generic where the family is rank deficient, a
-singular matrix having neither an inverse nor a Cholesky factor.
+Both are rejected by the generic where the family is rank deficient, because
+a singular matrix has neither an inverse nor a Cholesky factor.
 }
 \seealso{
 \code{\link[=param_solve]{param_solve()}} and \code{\link[=param_factor]{param_factor()}} for the two generics.

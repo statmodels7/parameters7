@@ -33,6 +33,6 @@ and the round trip would fail without an error. \code{\link[=dr_prod]{dr_prod()}
 block at construction.
 }
 \seealso{
-\code{\link[=param_value.DrProdParam]{param_value.DrProdParam()}}, the map this inverts.
+\code{\link[=param_value.DrProdParam]{param_value.DrProdParam()}}, the map that this inverts.
 }
 \keyword{internal}

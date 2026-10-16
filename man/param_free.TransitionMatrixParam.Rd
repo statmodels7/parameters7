@@ -20,18 +20,18 @@ and a true inverse of \code{\link[=param_value.TransitionMatrixParam]{param_valu
 closes up to rounding.
 }
 \details{
-A matrix is rejected when it has a non-positive entry, being then outside
-the \strong{open} simplex where \eqn{\log 0} is not finite, or when a row does not
-sum to 1, in which case it is not a probability distribution and is \strong{not}
-renormalized. The messages state the condition that failed and do not name
-the row.
+A matrix is rejected when it has a non-positive entry, because it is then
+outside the open simplex, where \eqn{\log 0} is not finite, or when a row
+does not sum to 1, in which case it is not a probability distribution and is
+not renormalized. The messages state the condition that failed and do not
+name the row.
 
-The first rejection is the one that a fit meets: a large positive free value
-makes \code{\link[=simplex_point]{simplex_point()}} return an exact 0 in the reference state, so a matrix
+Of these rejections, a fit meets the first. A large positive free value makes
+\code{\link[=simplex_point]{simplex_point()}} return an exact 0 in the reference state, so a matrix
 produced at the boundary cannot be inverted back.
 }
 \seealso{
-\code{\link[=param_value.TransitionMatrixParam]{param_value.TransitionMatrixParam()}}, the map this inverts, and
+\code{\link[=param_value.TransitionMatrixParam]{param_value.TransitionMatrixParam()}}, the map that this inverts, and
 \code{\link[=param_free.SimplexParam]{param_free.SimplexParam()}}, which does the same for one row.
 }
 \keyword{internal}

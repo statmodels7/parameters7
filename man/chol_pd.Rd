@@ -2,19 +2,19 @@
 % Please edit documentation in R/numerical_fallbacks.R
 \name{chol_pd}
 \alias{chol_pd}
-\title{Cholesky Factorization, With the Rank Decided Before It}
+\title{Cholesky Factorization After a Positive Definiteness Test}
 \usage{
 chol_pd(m, tol = 1e-14)
 }
 \arguments{
-\item{m}{A symmetric numeric matrix. Not checked for symmetry; the callers
-pass the value of \code{\link[=param_value]{param_value()}} or a matrix already symmetrized by
-\code{\link[=check_matrix]{check_matrix()}}.}
+\item{m}{A symmetric numeric matrix. The function does not check it for
+symmetry; the callers pass the value of \code{\link[=param_value]{param_value()}} or a matrix
+already symmetrized by \code{\link[=check_matrix]{check_matrix()}}.}
 
 \item{tol}{The relative tolerance below which the smallest eigenvalue counts
 as zero, so \code{m} is rejected when \code{min(ev) <= tol * max(ev)}. Defaults to
-\code{1e-14}. At that default \code{diag(c(1, 1e-14))} returns \code{NULL}, the test being
-an inequality, and \code{diag(c(1, 1e-13))} factors.}
+\code{1e-14}. At that default, \code{diag(c(1, 1e-14))} returns \code{NULL} because the
+test is an inequality, and \code{diag(c(1, 1e-13))} factors.}
 }
 \value{
 The lower triangular \eqn{L} with \eqn{M = L L^\top}, or \code{NULL} when
@@ -25,8 +25,8 @@ error.
 \description{
 Returns the lower triangular Cholesky factor of a symmetric matrix, or \code{NULL}
 when the matrix is not positive definite to the given relative tolerance.
-Positive definiteness is decided \strong{before} the factorization is attempted,
-from the eigenvalues.
+The function tests positive definiteness from the eigenvalues before it
+attempts the factorization.
 }
 \details{
 The verdict comes from the spectrum because \code{chol()} is not a rank test. On

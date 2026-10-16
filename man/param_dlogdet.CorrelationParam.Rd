@@ -15,15 +15,15 @@ checked by the generic.}
 \item{...}{Unused, and accepted so the signature matches the generic's.}
 }
 \value{
-A named numeric vector, of the length and keying its own order calls
-for; see \strong{Details}.
+A named numeric vector whose length and keys are those of its own
+order; see Details.
 }
 \description{
-Closed form at all four orders. One page covers
+Computes the derivatives in closed form at all four orders. One page covers
 \code{\link[=param_dlogdet]{param_dlogdet()}}, \code{\link[=param_d2logdet]{param_d2logdet()}}, \code{\link[=param_d3logdet]{param_d3logdet()}} and
 \code{\link[=param_d4logdet]{param_d4logdet()}} for this family because the four differ only in the order
 of one chain: \eqn{\log|R| = 2\sum_{i,k}\log\sin\theta_{ik}} is a sum with one
-term per free value, so it is \strong{separable}, every mixed component is exactly
+term per free value, so it is separable, every mixed component is exactly
 zero at every order, and each pure one is the matching derivative of
 \eqn{2\log\sin\theta_k} in \eqn{\eta_k}.
 

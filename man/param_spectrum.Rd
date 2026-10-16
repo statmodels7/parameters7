@@ -30,7 +30,8 @@ log-determinant and its first two derivatives read it, so one decomposition
 serves them.
 }
 \details{
-Which eigenvalues count as zero is settled \strong{by position}, never by size.
+The eigenvalues that count as zero are selected by their position and never
+by their size.
 \code{eigen()} returns them in decreasing order, so the first \code{s@rank} are kept and
 the rest dropped, whatever their numerical values are. The rank itself comes
 from the object and is never re-derived: counting eigenvalues above a relative

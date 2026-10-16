@@ -31,7 +31,7 @@ A rank-deficient family prints the dimension of its null space beside the
 rank, which shows at once that a penalty is improper.
 }
 \examples{
-# A full-rank family: nothing from the base class.
+# A full-rank family takes nothing from the base class.
 log_cholesky(3)
 
 # A rank-deficient one prints its null space beside the rank.
@@ -40,7 +40,7 @@ scaled_matrix(crossprod(diff(diag(6), differences = 2)))
 # A family that is not a matrix prints no matrix block.
 simplex(4)
 
-# Twelve free names at most, with the rest counted.
+# At most twelve free names are shown, and the rest are counted.
 log_cholesky(6)
 
 }

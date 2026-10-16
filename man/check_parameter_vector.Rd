@@ -21,24 +21,25 @@ Invisibly, a data frame with columns \code{check}, \code{status} and \code{note}
 with seven rows for \code{\link[=simplex]{simplex()}} and \code{\link[=transition_matrix]{transition_matrix()}} and five for any
 other family. The \code{status} is \code{"OK"}, \code{"FAIL"} or, for a derivative order
 that comes from a numerical fallback, \code{"NOT CHECKED"}. The column \code{note} is
-\strong{character}, holding a formatted number, the string \code{numerical} or the
+character and holds a formatted number, the string \code{numerical} or the
 empty string, where the matrix branch of \code{\link[=check_parameter]{check_parameter()}} returns a
 numeric \code{statistic}.
 }
 \description{
-The checks that \code{\link[=check_parameter]{check_parameter()}} runs for a family whose value is not a
-symmetric matrix and which therefore has no log-determinant, no solve and no
-factor: the inverse round trip and each of the four derivative orders against
+Carries out the checks that \code{\link[=check_parameter]{check_parameter()}} applies to a family whose
+value is not a symmetric matrix and which therefore has no log-determinant,
+no solve and no factor: the inverse round trip and each of the four derivative orders against
 the single-stencil numerical construction, and, for \code{\link[=simplex]{simplex()}} and
 \code{\link[=transition_matrix]{transition_matrix()}}, that the value stays on the simplex and that every
 derivative component sums to zero over the value index.
 }
 \details{
-The last check is an identity the set itself supplies. Differentiating
+The last check is an identity that the set itself supplies. Differentiating
 \eqn{\sum_a \pi_a = 1} gives \eqn{\sum_a \partial \pi_a = 0}, and
 differentiating again gives the same for every higher order, so a derivative
 array that fails the identity is wrong, whatever other check it passes. A
-\code{\link[=transition_matrix]{transition_matrix()}} satisfies it row by row, its rows being simplexes.
+\code{\link[=transition_matrix]{transition_matrix()}} satisfies it row by row, because its rows are
+simplexes.
 
 Three free vectors are used, drawn from \code{rnorm(s@n_free, sd = 0.8)} after
 \code{set.seed(101)}, \code{set.seed(102)} and \code{set.seed(103)}, so the results are

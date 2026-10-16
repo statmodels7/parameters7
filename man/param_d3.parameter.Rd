@@ -13,12 +13,12 @@ checked by the generic.}
 }
 \value{
 A list of \code{choose(s@n_free + 2, 3)} estimates keyed as
-\code{param_tuple_names(s, 3)} and in that order, each shaped like
-\code{\link[=param_value]{param_value()}}'s result and symmetrized for a matrix family.
+\code{param_tuple_names(s, 3)} and in that order, each of which has the shape
+of \code{\link[=param_value]{param_value()}}'s result and is symmetrized for a matrix family.
 }
 \description{
-The method that every \code{\link[=parameter]{parameter()}} inherits when it registers no \code{\link[=param_d3]{param_d3()}} of
-its own. It applies one tensor-product stencil per index tuple, through
+This is the method that every \code{\link[=parameter]{parameter()}} inherits when it registers no
+\code{\link[=param_d3]{param_d3()}} of its own. It applies one tensor-product stencil per index tuple, through
 \code{\link[=numerical_d3]{numerical_d3()}} at its default accuracy 4, to the highest analytic
 derivative below the third and to \code{\link[=param_value]{param_value()}} where there is none,
 never to a lower-order numerical derivative. The families in this package

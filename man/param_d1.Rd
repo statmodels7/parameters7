@@ -10,7 +10,8 @@ param_d1(s, eta, ...)
 \item{s}{An object inheriting from class \code{\link[=parameter]{parameter()}}.}
 
 \item{eta}{A numeric vector of length \code{s@n_free}, finite in every entry.
-Checked before dispatch; see \code{\link[=param_value]{param_value()}} for the three rejections.}
+The generic checks it before dispatch; see \code{\link[=param_value]{param_value()}} for the three
+rejections.}
 
 \item{...}{Passed to the method. The methods in this package do not read it.}
 }
@@ -24,9 +25,9 @@ entry is too.
 \description{
 Differentiates the map once in each free value, returning
 \eqn{\partial V / \partial \eta_k} for \eqn{k = 1, \dots, d} as a list of
-\eqn{d} objects each shaped like the value itself. A likelihood needs these
-to turn a score in the matrix into a score in the coordinates an optimizer
-moves, by the chain rule
+\eqn{d} objects, each of which has the shape of the value itself. A
+likelihood needs these to turn a score in the matrix into a score in the
+coordinates in which an optimizer moves, by the chain rule
 \eqn{\partial \ell / \partial \eta_k = \sum_{ij} (\partial \ell / \partial
 M_{ij}) (\partial M_{ij} / \partial \eta_k)}.
 }
@@ -37,19 +38,19 @@ coordinate to its label without tracking positions.
 }
 
 \section{Exact, or one stencil}{
-Every family here writes this out in closed form. A family that does not gets
-the method registered on \code{\link[=parameter]{parameter()}}, which applies \strong{one} three-point
-central difference to \code{\link[=param_value]{param_value()}} in each component, at the step
-\code{\link[numericals7:fd_step]{numericals7::fd_step()}} gives for a first derivative. It is never a
-difference of a lower-order difference, so the errors of two stages cannot
+Every family here writes this out in closed form. A family that does not
+write it out uses the method registered on \code{\link[=parameter]{parameter()}}, which applies one
+three-point central difference to \code{\link[=param_value]{param_value()}} in each component, at the
+step that \code{\link[numericals7:fd_step]{numericals7::fd_step()}} gives for a first derivative. It is never
+a difference of a lower-order difference, so the errors of two stages cannot
 compound. \code{param_is_numerical()} reports which route a given object takes, and
-returns \code{FALSE} throughout for every family this package ships.
+returns \code{FALSE} throughout for every family that this package ships.
 }
 
 \section{Notation}{
 
 \eqn{\eta} is the free vector, of length \eqn{d = } \code{s@n_free}, and \eqn{V}
-the value \code{\link[=param_value]{param_value()}} returns.
+the value that \code{\link[=param_value]{param_value()}} returns.
 }
 
 \examples{
@@ -65,8 +66,8 @@ fd <- (param_value(s, eta + c(0, 0, h)) - param_value(s, eta - c(0, 0, h))) /
   (2 * h)
 max(abs(d1[["L2.1"]] - fd))
 
-# For a scaled precision the derivative is the matrix itself, the free
-# value being the log of the scale.
+# For a scaled precision the derivative is the matrix itself, because the
+# free value is the log of the scale.
 P <- crossprod(diff(diag(4)))
 r <- scaled_matrix(P)
 all.equal(param_d1(r, 1.3)[[1]], param_value(r, 1.3))

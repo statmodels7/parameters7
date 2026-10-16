@@ -16,9 +16,11 @@ A list with one matrix keyed as \code{param_tuple_names(s, 3)}, or an empty
 list for a fixed parameter.
 }
 \description{
-Closed form: \eqn{\partial^3_\eta M = h'''(\eta)\,P}, from
+The third derivative has closed form,
+\eqn{\partial^3_\eta M = h'''(\eta)\,P}, computed from
 \code{linkfunctions7::d3linkinv()}. Every order is the same fixed matrix times a
-link derivative, so every order costs one multiplication and is exact. Under the default log link it is the matrix again.
+link derivative, so every order costs one multiplication and is exact. Under
+the default log link the third derivative is the matrix again.
 }
 \seealso{
 \code{\link[=param_d4.ScaledMatrixParam]{param_d4.ScaledMatrixParam()}} for the order above.

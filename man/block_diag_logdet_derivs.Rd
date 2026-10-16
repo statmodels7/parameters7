@@ -25,7 +25,7 @@ blocks.
 \details{
 The structure is \code{\link[=block_diag_derivs]{block_diag_derivs()}}'s with numbers in place of matrices,
 including the per-block cache and the sorted-tuple key. It is a different
-separability from the one \code{\link[=ar1]{ar1()}} or \code{\link[=compound_symmetry]{compound_symmetry()}} have: there the
+separability from the one that \code{\link[=ar1]{ar1()}} or \code{\link[=compound_symmetry]{compound_symmetry()}} have: there the
 log-determinant separates over the free values themselves, here it separates
 over the blocks and a block's own mixed components survive.
 }

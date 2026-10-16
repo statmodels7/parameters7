@@ -17,7 +17,7 @@ integer from 1 to 4, returning a single number.
 \description{
 Returns a function of the second free value \eqn{\eta_2} and an order that
 gives the order-th derivative of \eqn{q(\rho) = \log\{1 + (p-1)\rho\} +
-(p-1)\log(1-\rho)} in \eqn{\eta_2}, with the correlation carried by
+(p-1)\log(1-\rho)} in \eqn{\eta_2}, where the correlation is carried by
 \code{bounded_link(-1/(p-1), 1)}.
 }
 \details{

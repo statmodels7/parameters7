@@ -19,11 +19,11 @@ mixture weight or a state distribution needs: the free values are log
 ratios against the last category and are not interpretable on their own.
 
 The Jacobian is the softmax map's,
-\eqn{\partial p_i/\partial\eta_j = p_i(\delta_{ij} - p_j)}, with the reference
-category's row contributing \eqn{-p_K p_j}. It is \eqn{K} by \eqn{K-1}: one
+\eqn{\partial p_i/\partial\eta_j = p_i(\delta_{ij} - p_j)}, and the row of the
+reference category contributes \eqn{-p_K p_j}. It is \eqn{K} by \eqn{K-1}: one
 more quantity than there are free values, since the reference probability is
-determined by the others. Its \strong{columns} sum to zero up to rounding,
-\eqn{\sum_i p_i} being the constant 1.
+determined by the others. Its columns sum to zero up to rounding, because
+\eqn{\sum_i p_i} is the constant 1.
 
 Every interval is built on the logit scale, so it stays inside \eqn{(0, 1)}.
 }

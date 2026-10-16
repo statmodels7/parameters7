@@ -4,30 +4,32 @@ NULL
 #' Identical Blocks of a Matrix Parameter
 #'
 #' @description
-#' The S7 class of a block-diagonal matrix built from \eqn{m} identical copies of
-#' an inner matrix parameter, \eqn{I_m \otimes S(\eta)}. The blocks **share one
-#' free vector**, so `n_free` is the inner parameter's however large \eqn{m} is,
-#' and the free names are the inner ones unchanged.
+#' `KronIdentityParam` is the S7 class of a block-diagonal matrix built from
+#' \eqn{m} identical copies of an inner matrix parameter,
+#' \eqn{I_m \otimes S(\eta)}. The blocks share one free vector, so `n_free` is
+#' the inner parameter's however large \eqn{m} is, and the free names are the
+#' inner ones unchanged.
 #'
-#' It is one of the five composition wrappers. The value, the derivatives, the
+#' It is one of the composition wrappers. The value, the derivatives, the
 #' log-determinant, the solve and the factor are each a linear lift of the inner
-#' parameter's, so no new derivation is needed and no matrix of side \eqn{md}
-#' is decomposed.
+#' parameter's, so the class needs no new derivation and does not decompose any
+#' matrix of side \eqn{md}.
 #'
 #' @inheritParams matrix_parameter
 #'
 #' @return An object of class `KronIdentityParam`, a subclass of
 #'   [matrix_parameter()] adding no properties of its own. `param_params` holds
 #'   `inner`, the per-block parameter, and `m`, the number of blocks.
-#'   `param_name` is `kron(I<m>, <inner>)` with the number of blocks and the
-#'   inner family's name written in, for example `"kron(I3, log_cholesky)"`.
+#'   `param_name` is `kron(I<m>, <inner>)`, where the number of blocks and the
+#'   inner family's name are written in, for example `"kron(I3, log_cholesky)"`.
 #'
 #' @seealso [kron_identity()], the constructor, [block_diag()] for blocks that
-#'   are **not** identical and do not share a free vector, and
+#'   are not identical and do not share a free vector, and
 #'   [matrix_parameter()] for the properties that this class inherits.
 #'
 #' @examples
-#' # Three copies of a 2 x 2 covariance: a 6 x 6 matrix with three free values.
+#' # Here are three copies of a 2 x 2 covariance, which form a 6 x 6 matrix
+#' # with three free values.
 #' s <- kron_identity(log_cholesky(2), 3)
 #' S7::S7_inherits(s, KronIdentityParam)
 #' c(dimension = s@dimension, n_free = s@n_free)
@@ -46,7 +48,7 @@ KronIdentityParam <- S7::new_class("KronIdentityParam", parent = matrix_paramete
 #' @description
 #' Returns an object holding \eqn{M(\eta) = I_m \otimes S(\eta)} for an inner
 #' matrix parameter \eqn{S} of side \eqn{d}: a block-diagonal matrix of side
-#' \eqn{md} whose \eqn{m} diagonal blocks are the **same** matrix, sharing one
+#' \eqn{md} whose \eqn{m} diagonal blocks are the same matrix, sharing one
 #' free vector.
 #'
 #' This is the covariance, or precision, of \eqn{m} independent groups whose
@@ -63,7 +65,8 @@ KronIdentityParam <- S7::new_class("KronIdentityParam", parent = matrix_paramete
 #'       \log|M|_{+} = m \log|S|_{+}, \qquad
 #'       M^{-1} = I_m \otimes S^{-1}.}
 #'
-#' No matrix of side \eqn{md} is decomposed, and no new derivation is needed:
+#' The class does not decompose a matrix of side \eqn{md} and does not need a
+#' new derivation:
 #' the rank is \eqn{m} times the inner rank, the null basis is the inner one replicated
 #' blockwise, and [param_solve()] loops over the blocks solving the inner
 #' parameter \eqn{m} times.
@@ -114,7 +117,8 @@ KronIdentityParam <- S7::new_class("KronIdentityParam", parent = matrix_paramete
 #'   [log_cholesky()] or [ar1()] for the usual inner parameters.
 #'
 #' @examples
-#' # Three groups sharing one 2 x 2 covariance: 6 x 6, three free values.
+#' # Here are three groups that share one 2 x 2 covariance, which give a 6 x 6
+#' # matrix with three free values.
 #' inner <- log_cholesky(2)
 #' s <- kron_identity(inner, 3)
 #' c(dimension = s@dimension, n_free = s@n_free)
@@ -162,7 +166,8 @@ kron_identity <- function(structure, m) {
 #' The Inner Parameter, the Block Count, and the Lift
 #'
 #' @description
-#' The three one-line accessors that the [KronIdentityParam()] methods use.
+#' This page documents the three one-line accessors that the
+#' [KronIdentityParam()] methods use.
 #' `.kron_inner()` returns the per-block parameter, `.kron_m()` the number of
 #' blocks, and `.kron_lift()` places a `d` by `d` matrix into `m` identical
 #' diagonal blocks as `kronecker(diag(m), x)`.
@@ -173,8 +178,8 @@ kron_identity <- function(structure, m) {
 #' arithmetic of the composition: the value, every derivative component and the
 #' factor are the inner quantity passed through it.
 #'
-#' Note that `kronecker()` drops dimnames, so a lifted matrix carries none where
-#' the inner one carried `v1`, `v2`, ...
+#' The function `kronecker()` drops dimnames, so a lifted matrix carries none
+#' where the inner one carried `v1`, `v2`, ...
 #'
 #' @param s A [KronIdentityParam()] object.
 #' @param m For `.kron_lift()`, the number of blocks.
@@ -210,7 +215,7 @@ NULL
 #' @return A `s@dimension` by `s@dimension` symmetric numeric matrix, block
 #'   diagonal with `m` identical blocks, and labeled `v1`, `v2`, ..., `v(md)` on
 #'   both margins.
-#'   Positive definite exactly when the inner parameter is.
+#'   The matrix is positive definite exactly when the inner parameter is.
 #' @seealso [param_free.KronIdentityParam()] for the inverse and
 #'   [kron_identity()] for the construction.
 #' @keywords internal
@@ -221,9 +226,9 @@ S7::method(param_value, KronIdentityParam) <- function(s, eta, ...) {
 #' @title Free Vector of a Block Replication
 #' @name param_free.KronIdentityParam
 #' @description
-#' Reads the free vector from the **first** diagonal block, by inverting the
+#' Reads the free vector from the first diagonal block, by inverting the
 #' inner parameter there, and then checks the whole matrix against the
-#' replication that free vector implies. A matrix whose blocks are not identical,
+#' replication that this free vector implies. A matrix whose blocks are not identical,
 #' or whose first block is outside the inner family, is rejected.
 #'
 #' The whole rebuild is compared with `m`, and not the blocks pairwise, because
@@ -234,7 +239,7 @@ S7::method(param_value, KronIdentityParam) <- function(s, eta, ...) {
 #'   symmetry by the generic.
 #' @param ... Unused, and accepted so the signature matches the generic's.
 #' @return A numeric vector of length `s@n_free`, named by `s@free_names`.
-#' @seealso [param_value.KronIdentityParam()], the map this inverts.
+#' @seealso [param_value.KronIdentityParam()], the map that this method inverts.
 #' @keywords internal
 S7::method(param_free, KronIdentityParam) <- function(s, m, ...) {
   inner <- .kron_inner(s)
@@ -253,9 +258,11 @@ S7::method(param_free, KronIdentityParam) <- function(s, m, ...) {
 #' @title First Derivatives of a Block Replication
 #' @name param_d1.KronIdentityParam
 #' @description
-#' Closed form: \eqn{\partial_k M = I_m \otimes \partial_k S}, the inner
-#' parameter's first derivatives lifted one at a time. Exact whenever the inner
-#' parameter's are, and numerical whenever they are not. [param_is_numerical()]
+#' The first derivative has closed form,
+#' \eqn{\partial_k M = I_m \otimes \partial_k S}, which lifts the inner
+#' parameter's first derivatives one at a time. The derivatives are exact
+#' whenever the inner parameter's are, and numerical whenever they are not.
+#' [param_is_numerical()]
 #' does not propagate this: it reports `FALSE` for every quantity of the
 #' composite, which has methods of its own.
 #' @param s A [KronIdentityParam()] object.
@@ -275,9 +282,10 @@ S7::method(param_d1, KronIdentityParam) <- function(s, eta, ...) {
 #' @title Second Derivatives of a Block Replication
 #' @name param_d2.KronIdentityParam
 #' @description
-#' Closed form: \eqn{\partial_{kl} M = I_m \otimes \partial_{kl} S}. The blocks
-#' share their free values, so there is no cross-block component to compute and
-#' the list is exactly the inner parameter's, lifted.
+#' The second derivative has closed form,
+#' \eqn{\partial_{kl} M = I_m \otimes \partial_{kl} S}. The blocks
+#' share their free values, so a cross-block component does not arise, and
+#' the list consists exactly of the inner parameter's components, lifted.
 #' @param s A [KronIdentityParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`,
 #'   already checked by the generic.
@@ -296,8 +304,8 @@ S7::method(param_d2, KronIdentityParam) <- function(s, eta, ...) {
 #' @title Third Derivatives of a Block Replication
 #' @name param_d3.KronIdentityParam
 #' @description
-#' Closed form: the inner parameter's third derivatives, each lifted into \eqn{m}
-#' identical blocks.
+#' The third derivative has closed form: the method lifts each of the inner
+#' parameter's third derivatives into \eqn{m} identical blocks.
 #' @param s A [KronIdentityParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`,
 #'   already checked by the generic.
@@ -315,8 +323,8 @@ S7::method(param_d3, KronIdentityParam) <- function(s, eta, ...) {
 #' @title Fourth Derivatives of a Block Replication
 #' @name param_d4.KronIdentityParam
 #' @description
-#' Closed form: the inner parameter's fourth derivatives, each lifted into \eqn{m}
-#' identical blocks. Each component is a dense matrix of side \eqn{md}, so the
+#' The fourth derivative has closed form: the method lifts each of the inner
+#' parameter's fourth derivatives into \eqn{m} identical blocks. Each component is a dense matrix of side \eqn{md}, so the
 #' memory grows with \eqn{(md)^2} for every component.
 #' @param s A [KronIdentityParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`,
@@ -335,10 +343,11 @@ S7::method(param_d4, KronIdentityParam) <- function(s, eta, ...) {
 #' @title Log-Determinant of a Block Replication
 #' @name param_logdet.KronIdentityParam
 #' @description
-#' Closed form: \eqn{\log|M|_{+} = m \log|S|_{+}}, the inner parameter's
-#' log-(pseudo-)determinant times the number of blocks. A block-diagonal
-#' determinant is the product of the blocks' and they are identical, so nothing
-#' of side \eqn{md} is decomposed.
+#' The log-determinant has closed form, \eqn{\log|M|_{+} = m \log|S|_{+}}, which
+#' is the inner parameter's log-(pseudo-)determinant times the number of
+#' blocks. A block-diagonal determinant is the product of the blocks' and the
+#' blocks are identical, so the method does not decompose any matrix of side
+#' \eqn{md}.
 #' @param s A [KronIdentityParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`,
 #'   already checked by the generic.
@@ -353,7 +362,8 @@ S7::method(param_logdet, KronIdentityParam) <- function(s, eta, ...) {
 #' @title Log-Determinant Gradient of a Block Replication
 #' @name param_dlogdet.KronIdentityParam
 #' @description
-#' Closed form: \eqn{m} times the inner parameter's gradient. A shared free value
+#' The gradient has closed form and equals \eqn{m} times the inner parameter's
+#' gradient. A shared free value
 #' moves every block, so the gradient is multiplied rather than copied: at
 #' \eqn{m = 3} over a 2 x 2 log-Cholesky covariance it is `c(6, 6, 0)` where the
 #' inner parameter returns `c(2, 2, 0)`.
@@ -371,8 +381,9 @@ S7::method(param_dlogdet, KronIdentityParam) <- function(s, eta, ...) {
 #' @title Log-Determinant Hessian of a Block Replication
 #' @name param_d2logdet.KronIdentityParam
 #' @description
-#' Closed form: \eqn{m} times the inner parameter's Hessian, with the same keying.
-#' Zero wherever the inner parameter's is, so replicating a [log_cholesky()]
+#' The Hessian has closed form and equals \eqn{m} times the inner parameter's
+#' Hessian, with the same keying. It is zero wherever the inner parameter's is,
+#' so replicating a [log_cholesky()]
 #' gives exact zeros here and replicating an [ar1()] does not.
 #' @param s A [KronIdentityParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`,
@@ -389,7 +400,8 @@ S7::method(param_d2logdet, KronIdentityParam) <- function(s, eta, ...) {
 #' @title Third Log-Determinant Derivatives of a Block Replication
 #' @name param_d3logdet.KronIdentityParam
 #' @description
-#' Closed form: \eqn{m} times the inner parameter's third-order vector.
+#' The third-order vector has closed form and equals \eqn{m} times the inner
+#' parameter's third-order vector.
 #' @param s A [KronIdentityParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`,
 #'   already checked by the generic.
@@ -405,8 +417,9 @@ S7::method(param_d3logdet, KronIdentityParam) <- function(s, eta, ...) {
 #' @title Fourth Log-Determinant Derivatives of a Block Replication
 #' @name param_d4logdet.KronIdentityParam
 #' @description
-#' Closed form: \eqn{m} times the inner parameter's fourth-order vector. Exact
-#' where the inner parameter's is, so the composition adds no loss of accuracy.
+#' The fourth-order vector has closed form and equals \eqn{m} times the inner
+#' parameter's fourth-order vector. It is exact where the inner parameter's is,
+#' so the composition adds no loss of accuracy.
 #' @param s A [KronIdentityParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`,
 #'   already checked by the generic.
@@ -424,9 +437,9 @@ S7::method(param_d4logdet, KronIdentityParam) <- function(s, eta, ...) {
 #' @description
 #' Solves blockwise: \eqn{M^{-1} = I_m \otimes S^{-1}}, so the rows of `b`
 #' belonging to each block are handed to the inner parameter's own
-#' [param_solve()] in turn. Nothing of side \eqn{md} is factorized, and the
-#' method uses the inner parameter's own route, including a closed inverse where
-#' it has one.
+#' [param_solve()] in turn. The method does not factorize any matrix of side
+#' \eqn{md}, and it uses the inner parameter's own route, including a closed
+#' inverse where it has one.
 #'
 #' The generic has already rejected a rank-deficient composite, which a deficient
 #' inner parameter produces, and filled `b` with the identity when the caller
@@ -455,10 +468,10 @@ S7::method(param_solve, KronIdentityParam) <- function(s, eta, b = NULL, ...) {
 #' @title Factor of a Block Replication
 #' @name param_factor.KronIdentityParam
 #' @description
-#' Closed form: \eqn{I_m \otimes L}, the inner parameter's Cholesky factor lifted.
-#' A block-diagonal matrix of identical blocks factors blockwise, so one inner
-#' factorization serves every block and nothing of side \eqn{md} is
-#' decomposed.
+#' The factor has closed form, \eqn{I_m \otimes L}, which lifts the inner
+#' parameter's Cholesky factor. A block-diagonal matrix of identical blocks
+#' factors blockwise, so one inner factorization serves every block and the
+#' method does not decompose any matrix of side \eqn{md}.
 #' @param s A [KronIdentityParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`,
 #'   already checked by the generic.

@@ -15,9 +15,9 @@ returns them.}
 \value{
 A list with \code{pow}, the base-five weights; \code{codes}, one integer
 vector per tuple holding the code of \code{t[take]} for every subset of
-positions in the order the bits enumerate them; \code{comp}, the matching codes
-of the complements; and \code{all}, every distinct code with \code{cnt}, the count
-vector that each stands for.
+positions in the order in which the bits enumerate them; \code{comp}, the
+matching codes of the complements; and \code{all}, every distinct code with
+\code{cnt}, the count vector represented by each.
 }
 \description{
 Enumerates, once per order, every sub-multiset of every index tuple that the
@@ -28,7 +28,8 @@ code is that vector read as a base-five numeral.
 \details{
 A count vector needs neither a string key nor a sort: \code{tabulate()} builds it
 in one call, and the code indexes a list directly. Five is a safe base
-because a derivative order here is at most four, so no count can reach it.
+because a derivative order here is at most four, so every count stays
+below five.
 }
 \seealso{
 \code{\link[=ar_inv_structure]{ar_inv_structure()}}, the only caller.

@@ -16,7 +16,8 @@ A numeric vector of \code{choose(s@n_free + 1, 2)} zeros, keyed as
 \code{param_tuple_names(s)}.
 }
 \description{
-Closed form, and identically zero: \eqn{\log|M| = \mathrm{tr}(S)} is linear in
+Returns the second derivatives of the log-determinant, which are
+identically zero in closed form: \eqn{\log|M| = \mathrm{tr}(S)} is linear in
 the free vector, so its second derivative vanishes at every \eqn{\eta}. The
 zeros are exact.
 

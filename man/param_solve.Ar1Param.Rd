@@ -18,19 +18,21 @@ vector and defaulted to the identity by the generic.}
 A numeric matrix with \code{s@dimension} rows and as many columns as \code{b}.
 }
 \description{
-Exact, and tridiagonal. The precision of an AR(1) covariance is
+The method is exact, and the inverse is tridiagonal. The precision of an
+AR(1) covariance is
 \eqn{\{\sigma^2(1-\rho^2)\}^{-1}} times the matrix with 1 at the two corners
 of the diagonal, \eqn{1+\rho^2} elsewhere on it, and \eqn{-\rho} on the two
-first off-diagonals. Every other entry is exactly zero, an AR(1) process being
-Markov, so the inverse is written down and no factorization is performed. The
+first off-diagonals. Every other entry is exactly zero because an AR(1)
+process is Markov, so the method writes down the inverse and does not
+factorize the matrix. The
 matrix is assembled densely and multiplied by \code{b}, at \eqn{O(p^2)} per column
 of \code{b}. The factor \eqn{1 - \rho^2} is evaluated from the free value \eqn{z}
 as \eqn{\mathrm{sech}^2 z = 4e^{-2|z|}/(1 + e^{-2|z|})^2}, so the inverse stays
 accurate where \eqn{\rho} rounds to \eqn{-1} or 1.
 }
 \seealso{
-\code{\link[=ar1]{ar1()}}, which explains why the tridiagonal precision is not itself
-AR(1), and \code{\link[=param_solve.matrix_parameter]{param_solve.matrix_parameter()}} for the factorization this
-avoids.
+\code{\link[=ar1]{ar1()}}, for the reason why the tridiagonal precision is not itself
+AR(1), and \code{\link[=param_solve.matrix_parameter]{param_solve.matrix_parameter()}} for the factorization that this
+method avoids.
 }
 \keyword{internal}

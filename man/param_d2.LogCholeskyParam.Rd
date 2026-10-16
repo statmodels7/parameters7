@@ -17,21 +17,21 @@ A list of \code{choose(s@n_free + 1, 2)} symmetric matrices keyed as
 \code{s@dimension}.
 }
 \description{
-Closed form. Differentiating \eqn{\partial_k M = L_k L^\top + L L_k^\top}
-once more,
+Computes the second derivatives in closed form. Differentiating
+\eqn{\partial_k M = L_k L^\top + L L_k^\top} once more gives
 
 \deqn{\partial_{kl} M = L_{kl} L^\top + L_k L_l^\top + L_l L_k^\top
-                      + L L_{kl}^\top,}
+                      + L L_{kl}^\top.}
 
-and the factor's second derivative \eqn{L_{kl}} is non-zero only where
+The factor's second derivative \eqn{L_{kl}} is non-zero only where
 \eqn{k = l} names a diagonal free value, where it is \eqn{L_{ii} E_{ii}}
 again. A below-diagonal value enters \eqn{L} linearly, so any second
 derivative touching one of those drops the outer terms and leaves the two
 cross products.
 
-\eqn{M} is quadratic in each below-diagonal free value, so the component keyed by that value twice
-is a constant in \eqn{\eta}, and every third and fourth derivative repeating
-it is exactly zero.
+\eqn{M} is quadratic in each below-diagonal free value, so the component
+keyed by that value twice is a constant in \eqn{\eta}, and every third and
+fourth derivative repeating it is exactly zero.
 }
 \seealso{
 \code{\link[=chol_leibniz]{chol_leibniz()}}, which assembles it, and

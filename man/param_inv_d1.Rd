@@ -74,7 +74,7 @@ values,
   (\partial_U L)(\partial_{S \setminus U} G), \qquad
   \partial_S M^{-1} = \sum_{U \subseteq S}
   (\partial_U G)^\top (\partial_{S \setminus U} G),}
-the subsets being taken over the positions of \eqn{S}. Every factor is
+where the subsets are taken over the positions of \eqn{S}. Every factor is
 triangular and every derivative of \eqn{L} has a single non-zero entry, so
 these products do not cancel either.
 }
@@ -82,7 +82,8 @@ these products do not cancel either.
 s <- log_cholesky(2)
 eta <- c(-0.5, -11.5, 0.07)
 d <- param_inv_d1(s, eta)
-# against a difference of the inverse, which here is itself accurate
+# The result is compared with a difference of the inverse, which here is
+# itself accurate.
 h <- 1e-6
 num <- (param_solve(s, eta + c(0, 0, h)) - param_solve(s, eta - c(0, 0, h))) /
   (2 * h)

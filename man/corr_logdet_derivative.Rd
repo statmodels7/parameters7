@@ -20,10 +20,11 @@ vector when there are no free values.
 }
 \description{
 Assembles one derivative order of the log-determinant from the per-angle
-chains of \code{\link[=corr_logdet_chains]{corr_logdet_chains()}}. Every mixed component is exactly zero, the
-log-determinant being a sum with one term per free value, and each pure one is
-that angle's chain at the matching order. The four log-determinant derivative
-methods of the family are one call each to this function.
+chains of \code{\link[=corr_logdet_chains]{corr_logdet_chains()}}. Every mixed component is exactly zero,
+because the log-determinant is a sum with one term per free value, and each
+pure one is that angle's chain at the matching order. The four
+log-determinant derivative methods of the family are one call each to this
+function.
 }
 \seealso{
 \code{\link[=corr_logdet_chains]{corr_logdet_chains()}} for the chains, and

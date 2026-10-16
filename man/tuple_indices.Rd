@@ -18,8 +18,8 @@ length \code{order}, holding positions in \code{1:d} in non-decreasing order wit
 tuple. At order 2 the diagonal pairs come first.
 }
 \description{
-The enumeration behind \code{\link[=param_tuple_indices]{param_tuple_indices()}}, taken over a plain count of
-variables instead of over a parameter object, so that anything holding
+Returns the enumeration behind \code{\link[=param_tuple_indices]{param_tuple_indices()}}, computed over a plain
+count of variables instead of over a parameter object, so that anything holding
 derivatives over \eqn{d} variables can use it without constructing a
 \code{\link[=parameter]{parameter()}}. It forwards to \code{numericals7::tuple_indices()}, so the two
 enumerations cannot disagree.

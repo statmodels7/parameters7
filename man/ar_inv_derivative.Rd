@@ -30,7 +30,7 @@ Writing \eqn{N = \mathrm{diag}(\tau)U}, the inner Leibniz gives
 \partial_{T \setminus R} U}, and the outer one
 \eqn{\partial_I \Omega = \sum_{S \subseteq I} (\partial_S U)^\top
 \partial_{I \setminus S} N}. Both sums run over subsets of the index
-positions, which is what makes a repeated index count with its multiplicity.
+positions, so a repeated index counts with its multiplicity.
 Every \eqn{\partial_S N} is built once and read by every component that
 needs it.
 }

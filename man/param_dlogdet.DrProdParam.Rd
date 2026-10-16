@@ -20,16 +20,16 @@ A numeric vector: at order 1, \code{s@n_free} values named by
 \code{param_tuple_names(s, k)} and in that order.
 }
 \description{
-\code{param_dlogdet()}, \code{param_d2logdet()}, \code{param_d3logdet()} and
+Defines \code{param_dlogdet()}, \code{param_d2logdet()}, \code{param_d3logdet()} and
 \code{param_d4logdet()} for a \code{\link[=dr_prod]{dr_prod()}} parameter. The log-determinant is
 separable in the scales and separable from the correlation, so a component
 mixing two scales, or a scale with a correlation, is exactly zero.
 }
 \details{
-The four share \code{\link[=dr_prod_logdet_derivs]{dr_prod_logdet_derivs()}} and differ only in the order they
-pass. Under the default log link the first-order scale entries are 2 at every
-point, the scales entering \eqn{\log\lvert\Sigma\rvert} through
-\eqn{2\log d_j} and the log link canceling its own derivative.
+The four share \code{\link[=dr_prod_logdet_derivs]{dr_prod_logdet_derivs()}} and differ only in the order that
+they pass. Under the default log link the first-order scale entries are 2 at
+every point, because the scales enter \eqn{\log\lvert\Sigma\rvert} through
+\eqn{2\log d_j} and the log link cancels its own derivative.
 }
 \seealso{
 \code{\link[=dr_prod_logdet_derivs]{dr_prod_logdet_derivs()}}, which assembles them, and

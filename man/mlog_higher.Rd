@@ -19,8 +19,9 @@ keyed as \code{param_tuple_names(s, order)} and in that order, each
 \code{s@dimension} by \code{s@dimension}.
 }
 \description{
-The derivative components of orders three and four of \eqn{M = e^{S}} with
-respect to the free entries of the symmetric matrix \eqn{S}.
+Computes the derivative components of orders three and four of
+\eqn{M = e^{S}} with respect to the free entries of the symmetric matrix
+\eqn{S}.
 }
 \details{
 The Frechet derivatives of the exponential contract chains of directions
@@ -34,6 +35,6 @@ catastrophically under near-repeated eigenvalues.
 }
 \seealso{
 \code{\link[=mlog_contract]{mlog_contract()}}, which computes one component, \code{\link[=mlog_tables]{mlog_tables()}} for
-the shared tables, and \code{\link[=matrix_log]{matrix_log()}} for the cost this order carries.
+the shared tables, and \code{\link[=matrix_log]{matrix_log()}} for the cost that this order carries.
 }
 \keyword{internal}

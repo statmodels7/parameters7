@@ -16,8 +16,9 @@ A numeric vector of \code{choose(s@n_free + 3, 4)} entries, keyed as
 \code{param_tuple_names(s, 4)}.
 }
 \description{
-Closed form: \eqn{m} times the inner parameter's fourth-order vector. Exact
-where the inner parameter's is, so the composition adds no loss of accuracy.
+The fourth-order vector has closed form and equals \eqn{m} times the inner
+parameter's fourth-order vector. It is exact where the inner parameter's is,
+so the composition adds no loss of accuracy.
 }
 \seealso{
 \code{\link[=param_d3logdet.KronIdentityParam]{param_d3logdet.KronIdentityParam()}} for the order below.

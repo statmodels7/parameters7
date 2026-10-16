@@ -17,7 +17,7 @@ diagonal and labeled \code{v1}, \code{v2}, ..., \code{vp} on both margins.
 }
 \description{
 Evaluates each block at its own stretch of the free vector and writes it into
-the rows and columns that block occupies, leaving the off-diagonal blocks at
+the rows and columns that the block occupies, leaving the off-diagonal blocks at
 the zeros with which the matrix was created. Each block is identical to what
 its own family returns.
 

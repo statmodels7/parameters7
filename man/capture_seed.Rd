@@ -10,7 +10,7 @@ capture_seed()
 restore_seed(old)
 }
 \arguments{
-\item{old}{The value \code{\link[=capture_seed]{capture_seed()}} returned, or \code{NULL}.}
+\item{old}{The value that \code{\link[=capture_seed]{capture_seed()}} returned, or \code{NULL}.}
 }
 \value{
 \code{capture_seed()} returns the saved \code{.Random.seed}, an integer vector,
@@ -37,8 +37,9 @@ when the caller had never drawn a random number, so the seed that the
 validator set is not left behind.
 }
 \examples{
-# the property the pair exists for, through the public interface: a
-# validator call leaves the caller's stream exactly as it found it
+# The pair exists to give the following property, which is tested through
+# the public interface: a validator call leaves the caller's stream exactly
+# as it found it.
 set.seed(42)
 want <- rnorm(1)
 set.seed(42)

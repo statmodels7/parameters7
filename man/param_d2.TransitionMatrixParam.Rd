@@ -13,13 +13,15 @@ checked by the generic.}
 }
 \value{
 A list of \code{choose(s@n_free + 1, 2)} \eqn{K \times K} matrices keyed as
-\code{param_tuple_names(s)} and in that order, the cross-row ones exactly zero.
+\code{param_tuple_names(s)} and in that order. The cross-row matrices are
+exactly zero.
 }
 \description{
-Closed form, and mostly zero. A component pairing free values from two
-\strong{different} rows is exactly the zero matrix, the rows being parametrized
-independently; one pairing two free values of the same row is that row's
-\code{\link[=simplex]{simplex()}} second derivative, embedded in that row.
+Computes the second derivatives in closed form; most components are zero. A
+component pairing free values from two different rows is exactly the zero
+matrix, because the rows are parametrized independently. A component
+pairing two free values of the same row is that row's \code{\link[=simplex]{simplex()}} second
+derivative, embedded in that row.
 
 At \eqn{K = 3}, \code{alr1.1:alr2.1} is exactly 0 and \code{alr1.1:alr1.1} is not. Of
 the 21 components at \eqn{K = 3}, only 9 can be non-zero.

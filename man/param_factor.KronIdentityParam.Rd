@@ -17,10 +17,10 @@ block diagonal with \code{m} identical blocks, satisfying
 \code{L \%*\% t(L) == param_value(s, eta)}, with no dimnames.
 }
 \description{
-Closed form: \eqn{I_m \otimes L}, the inner parameter's Cholesky factor lifted.
-A block-diagonal matrix of identical blocks factors blockwise, so one inner
-factorization serves every block and nothing of side \eqn{md} is
-decomposed.
+The factor has closed form, \eqn{I_m \otimes L}, which lifts the inner
+parameter's Cholesky factor. A block-diagonal matrix of identical blocks
+factors blockwise, so one inner factorization serves every block and the
+method does not decompose any matrix of side \eqn{md}.
 }
 \seealso{
 \code{\link[=param_solve.KronIdentityParam]{param_solve.KronIdentityParam()}} for the blockwise solve.

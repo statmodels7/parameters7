@@ -16,7 +16,7 @@ A numeric vector of \code{choose(s@n_free + 3, 4)} entries, keyed as
 \code{param_tuple_names(s, 4)} and in that order.
 }
 \description{
-The method that every \code{\link[=matrix_parameter]{matrix_parameter()}} inherits when it registers no
+This is the method that every \code{\link[=matrix_parameter]{matrix_parameter()}} inherits when it registers no
 \code{\link[=param_d4logdet]{param_d4logdet()}} of its own. Each component is one tensor-product central
 difference, through \code{\link[=param_tensor]{param_tensor()}} at accuracy 4, of the highest analytic
 log-determinant derivative below the fourth: one first difference of
@@ -28,12 +28,13 @@ differences where they differ.
 }
 \section{Accuracy}{
 With analytic \code{\link[=param_d1]{param_d1()}} and \code{\link[=param_d2]{param_d2()}}, or with a family's own
-\code{\link[=param_d2logdet]{param_d2logdet()}}, the differencing is a single layer on an exact
-quantity, accurate to about \eqn{10^{-9}}.
+\code{\link[=param_d2logdet]{param_d2logdet()}}, the method applies the difference in a single layer to
+an exact quantity, and the result is accurate to about \eqn{10^{-9}}.
 
-With only \code{\link[=param_value]{param_value()}} supplied, the base-class \code{\link[=param_d2logdet]{param_d2logdet()}} would
-read numerical arrays and is not used: the stencil is a fourth difference
-of \code{\link[=param_logdet]{param_logdet()}}, which is exact, accurate to about \eqn{10^{-6}}. A
+When only \code{\link[=param_value]{param_value()}} is supplied, the base-class \code{\link[=param_d2logdet]{param_d2logdet()}}
+would read numerical arrays and is not used: the stencil is a fourth
+difference of \code{\link[=param_logdet]{param_logdet()}}, which is exact, accurate to about
+\eqn{10^{-6}}. A
 family that needs this order to more digits supplies \code{\link[=param_d1]{param_d1()}} and
 \code{\link[=param_d2]{param_d2()}} in closed form, or its own \code{\link[=param_d2logdet]{param_d2logdet()}}.
 \code{\link[=param_is_numerical]{param_is_numerical()}} reports which components are numerical.

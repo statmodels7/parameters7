@@ -11,14 +11,14 @@ NULL
 #' Compose Two Scalar Maps, One Order
 #'
 #' @description
-#' The derivative of order `k` of \eqn{f(g(x))}, from the derivatives of
+#' Returns the derivative of order `k` of \eqn{f(g(x))}, from the derivatives of
 #' \eqn{f} at \eqn{g(x)} and of \eqn{g} at \eqn{x} up to that order. Each order
 #' is its own formula and forms nothing above it; a caller that needs several
 #' orders calls it once per order.
 #'
 #' @details
-#' Faa di Bruno's formula, whose coefficients are the numbers of set
-#' partitions of a given shape:
+#' The derivatives follow Faa di Bruno's formula, whose coefficients are the
+#' numbers of set partitions of a given shape:
 #' \deqn{(f \circ g)' = f' g',}
 #' \deqn{(f \circ g)'' = f'' g'^2 + f' g'',}
 #' \deqn{(f \circ g)''' = f''' g'^3 + 3 f'' g' g'' + f' g''',}
@@ -33,15 +33,15 @@ NULL
 #' it: one call composes a whole table of angles or lags at once.
 #'
 #' @param fd A list or vector of the derivatives of the outer map at
-#'   \eqn{g(x)}, in order, at least `k` of them. Read with `[[`, so a list, a
-#'   numeric vector or a list of numeric vectors all serve. The **value** of
-#'   \eqn{f} is not needed and is not read.
+#'   \eqn{g(x)}, in order, at least `k` of them. The function reads the argument
+#'   with `[[`, so a list, a numeric vector or a list of numeric vectors all
+#'   serve. The value of \eqn{f} is not needed and is not read.
 #' @param gd A list or vector of the derivatives of the inner map at \eqn{x},
 #'   in order, at least `k` of them, read the same way.
 #' @param k The order, an integer from 1 to 4.
 #'
-#' @return The derivative of order `k` of the composition, the shape the
-#'   arithmetic on `fd` and `gd` produces: a single number where both are
+#' @return The derivative of order `k` of the composition, with the shape that
+#'   the arithmetic on `fd` and `gd` produces: a single number where both are
 #'   scalar, a vector where either is, a matrix where either is.
 #'
 #' @seealso [leibniz_gram()] for the other piece of shared arithmetic,
@@ -68,13 +68,13 @@ compose_order <- function(fd, gd, k) {
 #' @description
 #' Returns the derivatives of orders 1 to `order` of \eqn{r \mapsto r^{m}} at
 #' \eqn{r}, ready to be the outer map of a [compose_order()] call. They are
-#' \eqn{m(m-1)\cdots(m-k+1)\,r^{m-k}} and vanish beyond order \eqn{m}, the power
-#' being a polynomial. `ar1_pattern()` calls it once per distinct lag.
+#' \eqn{m(m-1)\cdots(m-k+1)\,r^{m-k}} and vanish beyond order \eqn{m}, because
+#' the power is a polynomial. `ar1_pattern()` calls it once per distinct lag.
 #'
 #' @param r The point, a single number or a vector.
-#' @param m The exponent, a non-negative integer. At `m = 0` all are 0, the
-#'   power being the constant 1; at `m = 2` the first four are `c(2r, 2, 0, 0)`.
-#' @param order The highest order wanted, an integer from 0 to 4.
+#' @param m The exponent, a non-negative integer. At `m = 0` all are 0, because
+#'   the power is the constant 1; at `m = 2` the first four are `c(2r, 2, 0, 0)`.
+#' @param order The highest order to compute, an integer from 0 to 4.
 #'
 #' @return A list of `order` elements, the first to the `order`-th
 #'   derivative. The elements of order at most `m` have the shape of `r`, and
@@ -102,10 +102,10 @@ power_derivs <- function(r, m, order) {
 #'
 #' @param link A \pkg{linkfunctions7} link.
 #' @param e A numeric vector of free values.
-#' @param order The highest order wanted, an integer from 0 to 4.
+#' @param order The highest order to compute, an integer from 0 to 4.
 #'
 #' @return A list of `order + 1` elements: the value, then the derivatives in
-#'   order, each the shape of `e`.
+#'   order, and each of them has the same shape as `e`.
 #'
 #' @seealso [compose_order()], which composes onto these.
 #'
@@ -123,7 +123,7 @@ linkinv_upto <- function(link, e, order) {
 #' A Gram Product's Derivatives From Its Factor's
 #'
 #' @description
-#' The derivative of \eqn{M = L L^\top} for one index tuple, from the
+#' Returns the derivative of \eqn{M = L L^\top} for one index tuple, from the
 #' derivatives of \eqn{L}.
 #'
 #' @details
@@ -131,7 +131,7 @@ linkinv_upto <- function(link, e, order) {
 #' two factors in every way, so
 #' \deqn{\partial^T (L L^\top) = \sum_{S \subseteq T}
 #'   (\partial^S L)(\partial^{T \setminus S} L)^\top,}
-#' the sum running over subsets of *positions* in the tuple, which
+#' where the sum runs over subsets of *positions* in the tuple, which
 #' handles a repeated index correctly without a multiplicity bookkeeping of
 #' its own.
 #'
@@ -144,22 +144,23 @@ linkinv_upto <- function(link, e, order) {
 #' The loop walks the \eqn{2^{|T|}} subsets through a bit mask, so the cost is
 #' \eqn{2^{\text{order}}} matrix products at worst, and far fewer in practice: a
 #' term whose `dfactor` returns `NULL` is skipped before the product is formed,
-#' and for both families that use this most terms do.
+#' and in the families that use this function `dfactor` returns `NULL` for most
+#' terms.
 #'
 #' @param dfactor A function of a (possibly empty, possibly repeating) integer
 #'   vector of free-value indices, returning the corresponding derivative of
 #'   \eqn{L}, or `NULL` where that derivative is identically zero. The empty
 #'   vector must give \eqn{L} itself.
 #' @param tuple The index tuple, an integer vector whose length is the derivative
-#'   order. Repeated entries are handled correctly, the sum running over subsets
-#'   of positions.
+#'   order. Repeated entries are handled correctly, because the sum runs over
+#'   subsets of positions.
 #' @param p The side of the matrix.
 #'
 #' @return A symmetric `p` by `p` numeric matrix, with no dimnames.
 #'
 #' @seealso [compose_order()] for the other piece of shared arithmetic,
-#'   [chol_dfactor()] and [corr_dfactor()] for the two `dfactor` arguments the
-#'   package supplies, and [chol_leibniz()], the compiled route that replaces
+#'   [chol_dfactor()] and [corr_dfactor()] for the two `dfactor` arguments that
+#'   the package supplies, and [chol_leibniz()], the compiled route that replaces
 #'   this for the log-Cholesky family.
 #'
 #' @keywords internal

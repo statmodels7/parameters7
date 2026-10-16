@@ -21,8 +21,8 @@ list or vector shaped as the inner family's, with every entry negated.
 }
 \description{
 \eqn{\log\lvert S^{-1}\rvert = -\log\lvert S\rvert}, so the value and every
-derivative order are the inner family's negated. No determinant of the
-inverted matrix is computed.
+derivative order are the inner family's negated. The determinant of the
+inverted matrix is not computed.
 }
 \seealso{
 \code{\link[=inverse_of]{inverse_of()}} for the family.

@@ -13,11 +13,12 @@ checked by the generic.}
 }
 \value{
 A numeric vector of \code{choose(s@n_free + 1, 2)} entries, keyed as
-\code{param_tuple_names(s)} and in that order, the mixed ones exactly zero.
+\code{param_tuple_names(s)} and in that order. The mixed ones are exactly zero.
 }
 \description{
-Closed form. The log-determinant is a sum of \eqn{\log h(\eta_k)} terms, one
-free value each, so every mixed component is exactly zero and a pure one is
+Computes the Hessian in closed form. The log-determinant is a sum of
+\eqn{\log h(\eta_k)} terms, one free value each, so every mixed component is
+exactly zero and a pure one is
 
 \deqn{\partial_{kk} \log|M| = m_k\left\{\frac{h''(\eta_k)}{h(\eta_k)}
   - \left(\frac{h'(\eta_k)}{h(\eta_k)}\right)^{2}\right\},}
@@ -25,8 +26,8 @@ free value each, so every mixed component is exactly zero and a pure one is
 the second derivative of \eqn{\log h} times the number of entries that the
 value owns.
 
-Under the \strong{log} link this is identically zero, \eqn{\log h(\eta) = \eta}
-being linear. Under a softplus link at \eqn{\eta = (1, 2)} the pure
+Under the log link this is identically zero, because
+\eqn{\log h(\eta) = \eta} is linear. Under a softplus link at \eqn{\eta = (1, 2)} the pure
 components are \eqn{(-0.160, -0.122)}.
 }
 \seealso{

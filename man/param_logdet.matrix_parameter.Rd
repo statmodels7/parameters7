@@ -15,11 +15,11 @@ checked by the generic.}
 A single number.
 }
 \description{
-The method that every \code{\link[=matrix_parameter]{matrix_parameter()}} inherits when it registers no
+This is the method that every \code{\link[=matrix_parameter]{matrix_parameter()}} inherits when it registers no
 \code{\link[=param_logdet]{param_logdet()}} of its own. It takes an eigendecomposition of
 \code{\link[=param_value]{param_value()}}, keeps the first \code{s@rank} eigenvalues, and returns the sum of
 their logarithms: the log-determinant for a full-rank family and the log
-pseudo-determinant otherwise. Which eigenvalues are kept is decided by
+pseudo-determinant otherwise. The method selects the eigenvalues by
 position, from the declared rank, and never from their size.
 
 The result is exact up to rounding, so \code{\link[=param_is_numerical]{param_is_numerical()}} reporting
@@ -29,10 +29,10 @@ inaccurate.
 }
 \details{
 A non-positive eigenvalue among those that the rank keeps signals an error
-naming the family and the counts: the family has declared a rank it does not have at this
-\eqn{\eta}, so \code{log()} of a non-positive number would be the wrong thing to
-return. This is the check that catches a \code{param_value()} method whose matrix
-leaves the positive semidefinite cone.
+naming the family and the counts: the family has declared a rank that it does
+not have at this \eqn{\eta}, so \code{log()} of a non-positive number would be the
+wrong thing to return. This check catches a \code{param_value()} method whose
+matrix leaves the positive semidefinite cone.
 }
 \seealso{
 \code{\link[=param_logdet]{param_logdet()}} for the generic, \code{\link[=param_spectrum]{param_spectrum()}} for the

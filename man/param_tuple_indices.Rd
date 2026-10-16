@@ -21,9 +21,9 @@ order within a tuple.
 \description{
 Returns the unordered index tuples that \code{\link[=param_tuple_names]{param_tuple_names()}} labels, in
 exactly the same order, as integer positions into the free vector. A consumer
-that has to know \emph{which} free values a component differentiates in reads
-these; a consumer that only has to display a label reads the names. At order
-2 the diagonal pairs come first and the off-diagonal ones after, which is how
+that has to know the free values in which a component differentiates uses
+these tuples; a consumer that only has to display a label uses the names.
+At order 2 the diagonal pairs come first and the off-diagonal ones after, which is how
 a Hessian is filled; at orders 3 and 4 the tuples are the lexicographic
 combinations with repetition.
 }
@@ -43,7 +43,8 @@ derivative order.
 \examples{
 s <- log_cholesky(2)
 
-# Order 2: the three diagonal pairs first, then the three off-diagonal ones.
+# At order 2 the three diagonal pairs come first, then the three
+# off-diagonal ones.
 param_tuple_indices(s, 2)
 
 # The tuples and the names are the same enumeration, so they line up.
@@ -52,18 +53,19 @@ nm <- param_tuple_names(s, 3)
 identical(nm, vapply(idx, function(t) paste(s@free_names[t], collapse = ":"),
                      character(1)))
 
-# What they are for: reading a component's indices to contract with.
+# The tuples give the indices of a component, which a caller reads in order
+# to contract it.
 d2 <- param_d2(s, c(0.2, -0.1, 0.4))
 d1 <- param_d1(s, c(0.2, -0.1, 0.4))
 i <- which(param_tuple_names(s, 2) == "log_L1:L2.1")
 param_tuple_indices(s, 2)[[i]]
 dim(d2[[i]])
 
-# Counts, over unordered tuples.
+# The counts are over unordered tuples.
 vapply(1:4, function(k) length(param_tuple_indices(s, k)), integer(1))
 
 }
 \seealso{
 \code{\link[=param_tuple_names]{param_tuple_names()}} for the same tuples as labels, and
-\code{\link[=param_d2]{param_d2()}}, \code{\link[=param_d3]{param_d3()}} and \code{\link[=param_d4]{param_d4()}} for the lists they index.
+\code{\link[=param_d2]{param_d2()}}, \code{\link[=param_d3]{param_d3()}} and \code{\link[=param_d4]{param_d4()}} for the lists that they index.
 }

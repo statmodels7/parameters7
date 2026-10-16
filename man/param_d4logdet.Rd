@@ -23,8 +23,8 @@ pseudo-determinant, keyed as \code{param_tuple_names(s, 4)}. This is the highest
 order that the package provides, and the exact Hessian of a marginal
 criterion reaches it.
 }
-\section{Where it comes from}{
-The same two rules as at third order. The trace is linear, and
+\section{Origin of the expansion}{
+The same two rules apply as at third order. The trace is linear, and
 
 \deqn{\partial_m M^{-1} = -M^{-1}(\partial_m M)M^{-1},}
 
@@ -49,14 +49,15 @@ are among the families where this order is not zero.
 
 \section{Notation}{
 
-\eqn{M} is the matrix \code{\link[=param_value]{param_value()}} returns and \eqn{\eta} the free vector,
+\eqn{M} is the matrix that \code{\link[=param_value]{param_value()}} returns and \eqn{\eta} the free vector,
 of length \eqn{d = } \code{s@n_free}. \eqn{\partial_I M} is the derivative of
 \eqn{M} in the free values named by the index set \eqn{I}.
 }
 
 \examples{
-# An AR(1) covariance: five components at d = 2, of which only the one
-# purely in the correlation is non-zero, the scale entering linearly.
+# For an AR(1) covariance there are five components at d = 2, and only the
+# one purely in the correlation is non-zero, because the scale enters
+# linearly.
 s <- ar1(4)
 eta <- c(0.3, 0.8)
 param_d4logdet(s, eta)

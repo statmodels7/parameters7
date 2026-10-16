@@ -16,15 +16,15 @@ symmetry by the generic.}
 A numeric vector of length \code{s@n_free}, named by \code{s@free_names}.
 }
 \description{
-Reads the free vector from the \strong{first} diagonal block, by inverting the
+Reads the free vector from the first diagonal block, by inverting the
 inner parameter there, and then checks the whole matrix against the
-replication that free vector implies. A matrix whose blocks are not identical,
+replication that this free vector implies. A matrix whose blocks are not identical,
 or whose first block is outside the inner family, is rejected.
 
 The whole rebuild is compared with \code{m}, and not the blocks pairwise, because
 the first block may invert cleanly while another block differs.
 }
 \seealso{
-\code{\link[=param_value.KronIdentityParam]{param_value.KronIdentityParam()}}, the map this inverts.
+\code{\link[=param_value.KronIdentityParam]{param_value.KronIdentityParam()}}, the map that this method inverts.
 }
 \keyword{internal}

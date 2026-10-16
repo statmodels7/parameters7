@@ -27,20 +27,19 @@ which keeps the Leibniz sum of \code{\link[=chol_leibniz]{chol_leibniz()}} short
 }
 \details{
 Three cases exhaust it. An empty \eqn{S} gives \eqn{L} itself. A single index
-gives a \strong{single-entry matrix}: \eqn{L_{ii} E_{ii}} for a diagonal free
+gives a single-entry matrix: \eqn{L_{ii} E_{ii}} for a diagonal free
 value, whose parametrization is a logarithm, and \eqn{E_{ij}} for one below
 the diagonal, which enters \eqn{L} linearly. A repeated index gives
 \eqn{L_{ii} E_{ii}} again where every repetition names the same diagonal
-value, every derivative of \eqn{\exp(\eta_i)} being itself, and \code{NULL}
+value, because every derivative of \eqn{\exp(\eta_i)} is itself, and \code{NULL}
 otherwise.
 
-So the only surviving higher derivatives are the pure diagonal ones, and the
-single-entry shape is what the compiled kernel exploits: each Leibniz term
-becomes one row, one column or one cell of a product, never a matrix
-multiplication.
+So the only surviving higher derivatives are the pure diagonal ones. The
+compiled kernel exploits the single-entry shape: each Leibniz term becomes
+one row, one column or one cell of a product, never a matrix multiplication.
 }
 \seealso{
 \code{\link[=chol_leibniz]{chol_leibniz()}}, the caller, and \code{\link[=leibniz_gram]{leibniz_gram()}}, the generic
-Leibniz sum the R twin uses.
+Leibniz sum that the R twin uses.
 }
 \keyword{internal}

@@ -16,7 +16,7 @@ A list of the same length, for \eqn{1/h}.
 \description{
 Returns the value and the derivatives of \eqn{\eta \mapsto 1/h(\eta)} from
 the value and the derivatives of \eqn{h}, by composing \eqn{x^{-1}} onto
-them, to the order \code{v} carries.
+them, to the order that \code{v} carries.
 }
 \details{
 \code{\link[=power_derivs]{power_derivs()}} cannot serve here: it truncates beyond the exponent, which

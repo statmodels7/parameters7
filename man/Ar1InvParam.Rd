@@ -44,9 +44,9 @@ adding no properties of its own. \code{param_params} holds \code{inner}, the
 \code{\link[=ar1]{ar1()}} family being inverted.
 }
 \description{
-The S7 class of the family whose value is the \strong{inverse} of an \code{\link[=ar1]{ar1()}}
-matrix: tridiagonal, the precision of a first-order autoregression.
-\code{\link[=ar1_inv]{ar1_inv()}} builds one.
+This is the S7 class of the family whose value is the inverse of an \code{\link[=ar1]{ar1()}}
+matrix. That matrix is tridiagonal and is the precision of a first-order
+autoregression. \code{\link[=ar1_inv]{ar1_inv()}} builds one.
 }
 \examples{
 s <- ar1_inv(5)
@@ -55,6 +55,7 @@ round(param_value(s, c(0, atanh(0.6))), 4)
 
 }
 \seealso{
-\code{\link[=ar1_inv]{ar1_inv()}}, the constructor, \code{\link[=ar1]{ar1()}} for the family it inverts,
-and \code{\link[=inverse_of]{inverse_of()}} for the general composition it specializes.
+\code{\link[=ar1_inv]{ar1_inv()}}, the constructor, \code{\link[=ar1]{ar1()}} for the family that it
+inverts, and \code{\link[=inverse_of]{inverse_of()}} for the general composition that it
+specializes.
 }

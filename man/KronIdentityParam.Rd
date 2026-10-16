@@ -42,22 +42,24 @@ for a full-rank family. The validator rejects any other shape.}
 An object of class \code{KronIdentityParam}, a subclass of
 \code{\link[=matrix_parameter]{matrix_parameter()}} adding no properties of its own. \code{param_params} holds
 \code{inner}, the per-block parameter, and \code{m}, the number of blocks.
-\code{param_name} is \verb{kron(I<m>, <inner>)} with the number of blocks and the
-inner family's name written in, for example \code{"kron(I3, log_cholesky)"}.
+\code{param_name} is \verb{kron(I<m>, <inner>)}, where the number of blocks and the
+inner family's name are written in, for example \code{"kron(I3, log_cholesky)"}.
 }
 \description{
-The S7 class of a block-diagonal matrix built from \eqn{m} identical copies of
-an inner matrix parameter, \eqn{I_m \otimes S(\eta)}. The blocks \strong{share one
-free vector}, so \code{n_free} is the inner parameter's however large \eqn{m} is,
-and the free names are the inner ones unchanged.
+\code{KronIdentityParam} is the S7 class of a block-diagonal matrix built from
+\eqn{m} identical copies of an inner matrix parameter,
+\eqn{I_m \otimes S(\eta)}. The blocks share one free vector, so \code{n_free} is
+the inner parameter's however large \eqn{m} is, and the free names are the
+inner ones unchanged.
 
-It is one of the five composition wrappers. The value, the derivatives, the
+It is one of the composition wrappers. The value, the derivatives, the
 log-determinant, the solve and the factor are each a linear lift of the inner
-parameter's, so no new derivation is needed and no matrix of side \eqn{md}
-is decomposed.
+parameter's, so the class needs no new derivation and does not decompose any
+matrix of side \eqn{md}.
 }
 \examples{
-# Three copies of a 2 x 2 covariance: a 6 x 6 matrix with three free values.
+# Here are three copies of a 2 x 2 covariance, which form a 6 x 6 matrix
+# with three free values.
 s <- kron_identity(log_cholesky(2), 3)
 S7::S7_inherits(s, KronIdentityParam)
 c(dimension = s@dimension, n_free = s@n_free)
@@ -70,6 +72,6 @@ vapply(c(1, 5, 100), function(m) kron_identity(log_cholesky(2), m)@n_free,
 }
 \seealso{
 \code{\link[=kron_identity]{kron_identity()}}, the constructor, \code{\link[=block_diag]{block_diag()}} for blocks that
-are \strong{not} identical and do not share a free vector, and
+are not identical and do not share a free vector, and
 \code{\link[=matrix_parameter]{matrix_parameter()}} for the properties that this class inherits.
 }

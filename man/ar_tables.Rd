@@ -25,16 +25,16 @@ Runs the compiled kernel of one order: \code{ar_value_cpp()} at order 0 and
 \code{ar_d1_cpp()} to \code{ar_d4_cpp()} above. The scale and the partial
 autocorrelations enter as their link inverses with derivatives to \code{order},
 and the autocovariances and the autoregressive coefficients come back with
-the derivative components of that order alone.
+only the derivative components of that order.
 }
 \details{
 The coefficients are multilinear in the partial autocorrelations \eqn{r}:
 step \eqn{k} of the recursion is affine in \eqn{r_k} and the earlier
 coefficients do not involve it. The kernel differentiates the recursion in
-\eqn{r} for every multiset of indices up to \code{order}, the products by
+\eqn{r} for every multiset of indices up to \code{order}, taking each product by
 Leibniz over the sub-multisets without a repeated index, and applies the
-links once at the end through the partial Bell polynomials, each
-\eqn{r_k} depending on its own free value alone.
+links once at the end through the partial Bell polynomials, because each
+\eqn{r_k} depends on its own free value only.
 }
 \seealso{
 \code{\link[=autoregressive]{autoregressive()}} for the recursion itself, and

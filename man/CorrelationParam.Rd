@@ -46,9 +46,9 @@ An object of class \code{CorrelationParam}, a subclass of
 \eqn{p(p-1)/2} and \code{rank} is \eqn{p}.
 }
 \description{
-The S7 class of correlation matrices, symmetric positive definite with a unit
-diagonal, in the spherical parametrization of Rapisarda, Brigo and Mercurio
-(2007). The rows of the factor are unit vectors, so the unit diagonal holds
+This S7 class represents correlation matrices, which are symmetric positive
+definite with a unit diagonal, in the spherical parametrization of Rapisarda,
+Brigo and Mercurio (2007). The rows of the factor are unit vectors, so the unit diagonal holds
 by construction, and every free vector gives a correlation matrix.
 
 \code{\link[=correlation_matrix]{correlation_matrix()}} builds one. The free values are angles carried onto the

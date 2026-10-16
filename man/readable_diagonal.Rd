@@ -28,12 +28,12 @@ with \code{nm} as its row names, and is diagonal.
 }
 \description{
 Assembles a \code{\link[=param_readable]{param_readable()}} declaration for a family whose quantities are
-one scalar link each of one free value each. The Jacobian is then \strong{diagonal},
-its \eqn{k}-th entry the inverse link's first derivative at \eqn{\eta_k}, and
-there is nothing else to compute.
+one scalar link each of one free value each. The Jacobian is then diagonal,
+and its \eqn{k}-th entry is the inverse link's first derivative at
+\eqn{\eta_k}, so these entries give the whole Jacobian.
 
 \code{\link[=ar1]{ar1()}}, \code{\link[=compound_symmetry]{compound_symmetry()}} and \code{\link[=scaled_matrix]{scaled_matrix()}} all declare through this,
-which is why their three methods are one call each.
+which is why their methods are one call each.
 }
 \seealso{
 \code{\link[=param_readable]{param_readable()}} for the structure of the declaration, and

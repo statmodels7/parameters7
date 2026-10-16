@@ -2,7 +2,7 @@
 % Please edit documentation in R/diagonal_matrix.R
 \name{diag_multiplicity}
 \alias{diag_multiplicity}
-\title{The Number of Diagonal Entries Each Free Value Owns}
+\title{The Number of Diagonal Entries Owned by Each Free Value}
 \usage{
 diag_multiplicity(s)
 }
@@ -16,9 +16,9 @@ An integer vector of length \code{s@n_free} summing to \code{s@dimension}.
 \description{
 Returns \eqn{m_k}, the number of diagonal entries that the \eqn{k}-th free
 value controls: 1 for every value of a \code{\link[=diagonal_matrix]{diagonal_matrix()}}, and \eqn{p} for the
-single value of a \code{\link[=scalar_matrix]{scalar_matrix()}}. It is the multiplicity that appears in
-the log-determinant's derivatives, \eqn{\log|M|} counting a shared value once
-per entry.
+single value of a \code{\link[=scalar_matrix]{scalar_matrix()}}. This multiplicity appears in the
+log-determinant's derivatives, because \eqn{\log|M|} counts a shared value
+once per entry.
 }
 \seealso{
 \code{\link[=diag_owner]{diag_owner()}}, the same information per entry, and

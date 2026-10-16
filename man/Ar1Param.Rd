@@ -41,23 +41,24 @@ for a full-rank family. The validator rejects any other shape.}
 \value{
 An object of class \code{Ar1Param}, a subclass of \code{\link[=matrix_parameter]{matrix_parameter()}}
 adding no properties of its own. \code{param_params} holds \code{link_scale} and
-\code{link_rho}, the second a \code{linkfunctions7::rhobit_link()} at every dimension.
-\code{n_free} is 2 and \code{rank} is \eqn{p}.
+\code{link_rho}, and \code{link_rho} is a \code{linkfunctions7::rhobit_link()} at every
+dimension. \code{n_free} is 2 and \code{rank} is \eqn{p}.
 }
 \description{
-The S7 class of first-order autoregressive covariance matrices: equal
-variances and a correlation falling geometrically with the lag,
-\eqn{M_{ij} = \sigma^2 \rho^{|i-j|}}. Two free values at every dimension, and
-the correlation is unrestricted in \eqn{(-1, 1)}, unlike
-\code{\link[=compound_symmetry]{compound_symmetry()}}'s.
+\code{Ar1Param} is the S7 class of first-order autoregressive covariance
+matrices, which have equal variances and a correlation that falls
+geometrically with the lag, \eqn{M_{ij} = \sigma^2 \rho^{|i-j|}}. The family
+has two free values at every dimension, and its correlation is unrestricted
+in \eqn{(-1, 1)}, unlike that of \code{\link[=compound_symmetry]{compound_symmetry()}}.
 
 \code{\link[=ar1]{ar1()}} builds one. It shares its whole derivative skeleton with
 \code{\link[=compound_symmetry]{compound_symmetry()}} through \code{\link[=econ_scalars]{econ_scalars()}}, \code{\link[=econ_derivative]{econ_derivative()}} and
-\code{\link[=econ_logdet_derivative]{econ_logdet_derivative()}}; what differs is the pattern and the
-log-determinant terms.
+\code{\link[=econ_logdet_derivative]{econ_logdet_derivative()}}; only the pattern and the log-determinant terms
+differ.
 }
 \examples{
-# Two free values whatever the dimension, and a rhobit correlation.
+# The family has two free values whatever the dimension, and a rhobit
+# correlation.
 s <- ar1(4)
 S7::S7_inherits(s, Ar1Param)
 c(p4 = ar1(4)@n_free, p20 = ar1(20)@n_free)

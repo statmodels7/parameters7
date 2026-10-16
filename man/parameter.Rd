@@ -14,11 +14,10 @@ parameter(
 \arguments{
 \item{param_name}{A single character string naming the family, used in the
 error messages that the validators raise and in the object's \code{print}
-output.
-\code{"log_cholesky"}, \code{"ar1"} and so on.}
+output. Examples are \code{"log_cholesky"} and \code{"ar1"}.}
 
 \item{n_free}{The length \eqn{d} of the free vector: a single non-negative
-integer. Zero is legal and describes a family with nothing to estimate.
+integer. Zero is allowed and describes a family with nothing to estimate.
 The validator rejects a vector, a negative value, or a length that
 disagrees with \code{free_names}.}
 
@@ -55,8 +54,8 @@ stochastic matrix. \code{parameter} is the base S7 class of every such map. It
 records how many free values the map consumes, what each of them is
 called, and whatever the family needs in order to evaluate itself. Because
 the domain is the whole of \eqn{\mathbb{R}^{d}}, an optimizer may move
-\eqn{\eta} anywhere and every point it visits still maps to a valid value,
-so no constraint has to be policed during a fit.
+\eqn{\eta} anywhere and every point that it visits still maps to a valid
+value, so the fit does not have to enforce any constraint.
 
 The class is not meant to be instantiated directly. Call a
 constructor: \code{\link[=log_cholesky]{log_cholesky()}} for an unstructured covariance, \code{\link[=ar1]{ar1()}} or
@@ -75,7 +74,8 @@ while it is still assembling the design.
 \code{\link[=param_value]{param_value()}} is the one compulsory method. Given it, a subclass inherits
 \code{\link[=param_d1]{param_d1()}}, \code{\link[=param_d2]{param_d2()}}, \code{\link[=param_d3]{param_d3()}} and \code{\link[=param_d4]{param_d4()}}, each a product
 stencil applied to the map itself. A closed form registered later replaces
-the inherited numerical method through dispatch, and no caller changes.
+the inherited numerical method through dispatch, and every caller remains
+unchanged.
 
 The inverse map and the matrix quantities are not supplied in this way:
 \itemize{
@@ -99,7 +99,7 @@ coordinate is already unrestricted the label is the plain name of the
 quantity, as the below-diagonal entries \code{"L2.1"} of a Cholesky factor are.
 
 A consumer outside the family flattens the free vector into scalar
-parameters carrying identity links, so a label promising
+parameters carrying identity links, so a label that names
 a bounded quantity would report a number that is not on that scale: a free
 value of 1.4 called \code{rho} reads as a correlation of 1.4, while called
 \code{z_rho} it reads as the correlation \eqn{\tanh(1.4) = 0.885}.
@@ -107,11 +107,11 @@ value of 1.4 called \code{rho} reads as a correlation of 1.4, while called
 
 \section{Notation}{
 
-\eqn{\eta} is the \strong{free vector}, the point on the unconstrained scale that
-an optimizer moves, and \eqn{d} its length, the object's \code{n_free}. Note that
-\eqn{\eta} means a linear predictor elsewhere in the toolkit; here it is
+\eqn{\eta} is the free vector, the point on the unconstrained scale that
+an optimizer moves, and \eqn{d} its length, the object's \code{n_free}. In other
+parts of the toolkit \eqn{\eta} means a linear predictor; here it is
 always the free vector of a parametrization. \eqn{p} is the side of the
-matrix a matrix family produces.
+matrix that a matrix family produces.
 }
 
 \examples{
@@ -119,7 +119,7 @@ matrix a matrix family produces.
 s <- log_cholesky(3)
 S7::S7_inherits(s, parameter)
 
-# The four properties that the class itself holds.
+# The class itself holds four properties.
 s@param_name
 s@n_free
 s@free_names

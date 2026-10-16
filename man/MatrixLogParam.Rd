@@ -45,9 +45,10 @@ An object of class \code{MatrixLogParam}, a subclass of
 \eqn{p(p+1)/2} and \code{rank} is \eqn{p}.
 }
 \description{
-The S7 class of unstructured symmetric positive definite matrices in the
-matrix logarithm parametrization, \eqn{M = \exp(S)} with \eqn{S} symmetric and
-its lower triangle read straight off the free vector. It is a second chart
+\code{MatrixLogParam} is the S7 class of unstructured symmetric positive definite
+matrices in the matrix logarithm parametrization, \eqn{M = \exp(S)} with
+\eqn{S} symmetric and its lower triangle read straight off the free vector.
+It is a second chart
 onto the cone that \code{\link[=log_cholesky]{log_cholesky()}} parametrizes, with different quantities
 in closed form.
 
@@ -56,11 +57,12 @@ computed through the eigendecomposition of \eqn{S}. The object stores only
 the positions of the free values in \code{param_params$positions}.
 }
 \examples{
-# The same cone as log_cholesky(), the same number of free values.
+# This chart parametrizes the same cone as log_cholesky(), with the same
+# number of free values.
 s <- matrix_log(3)
 c(matrix_log = s@n_free, log_cholesky = log_cholesky(3)@n_free)
 
-# But different free names: no entry is transformed here.
+# The free names differ, because the entries of S are not transformed here.
 rbind(matrix_log = s@free_names, log_cholesky = log_cholesky(3)@free_names)
 
 }

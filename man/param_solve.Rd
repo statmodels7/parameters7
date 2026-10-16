@@ -25,8 +25,8 @@ returns a one-column matrix, not a vector.
 }
 \description{
 Returns \eqn{M^{-1} B} for a right-hand side \eqn{B}, computed through a
-factorization instead of by forming the inverse. This is what a Gaussian
-quadratic form needs: \code{crossprod(r, param_solve(s, eta, r))} is
+factorization instead of by forming the inverse. A Gaussian quadratic form
+needs this product: \code{crossprod(r, param_solve(s, eta, r))} equals
 \eqn{r^\top M^{-1} r}, which the base method computes from a Cholesky factor
 and two triangular solves; inverting and multiplying would cost more and be
 less accurate. Called with no \code{b} it returns the inverse, which is convenient
@@ -34,7 +34,7 @@ for reading a covariance off a precision.
 }
 \section{Rank deficiency is rejected}{
 A deficient family signals an error and names its rank, instead of returning
-a pseudo-inverse. What a consumer of an improper prior needs is the quadratic
+a pseudo-inverse. A consumer of an improper prior needs the quadratic
 form and the log pseudo-determinant: penalized normal equations invert
 \eqn{X^\top X + \lambda P}, which is non-singular even where \eqn{P} is not,
 and the consumer assembles that matrix itself. A pseudo-inverse is not
@@ -42,24 +42,26 @@ returned, because the caller could not distinguish it from an inverse.
 }
 
 \section{A non-matrix family has no method}{
-\code{\link[=simplex]{simplex()}} and \code{\link[=transition_matrix]{transition_matrix()}} inherit \code{\link[=parameter]{parameter()}} alone, not
+\code{\link[=simplex]{simplex()}} and \code{\link[=transition_matrix]{transition_matrix()}} inherit only \code{\link[=parameter]{parameter()}}, and not
 \code{\link[=matrix_parameter]{matrix_parameter()}}, and the generic checks for that before dispatching, so
-the message names the family and says its value is not a symmetric matrix.
+the message names the family and states that its value is not a symmetric
+matrix.
 }
 
 \section{Cost}{
-The base method on \code{\link[=matrix_parameter]{matrix_parameter()}} works through a Cholesky factor:
-\eqn{O(p^3)} once plus \eqn{O(p^2)} per column of \eqn{B}. \code{\link[=log_cholesky]{log_cholesky()}},
+The base method on \code{\link[=matrix_parameter]{matrix_parameter()}} works through a Cholesky factor, at
+a cost of \eqn{O(p^3)} once plus \eqn{O(p^2)} per column of \eqn{B}.
+\code{\link[=log_cholesky]{log_cholesky()}},
 \code{\link[=diagonal_matrix]{diagonal_matrix()}}, \code{\link[=scalar_matrix]{scalar_matrix()}}, \code{\link[=scaled_matrix]{scaled_matrix()}} and
 \code{\link[=correlation_matrix]{correlation_matrix()}} use it, and the other families override it. \code{\link[=ar1]{ar1()}}
 writes its tridiagonal precision out entry by entry, \code{\link[=compound_symmetry]{compound_symmetry()}}
 uses Sherman-Morrison, and \code{\link[=block_diag]{block_diag()}} and \code{\link[=kron_identity]{kron_identity()}} solve
-blockwise, so these four decompose no matrix of side \eqn{p}.
+blockwise, so these families do not decompose a matrix of side \eqn{p}.
 }
 
 \section{Notation}{
 
-\eqn{M} is the matrix \code{\link[=param_value]{param_value()}} returns, \eqn{p} its side, and
+\eqn{M} is the matrix that \code{\link[=param_value]{param_value()}} returns, \eqn{p} its side, and
 \eqn{\eta} the free vector.
 }
 
@@ -70,7 +72,7 @@ eta <- c(0.1, -0.2, 0.3, 0.5, -0.4, 0.2)
 # With no b it is the inverse, and agrees with solve().
 max(abs(param_solve(s, eta) - solve(param_value(s, eta))))
 
-# The quadratic form of a Gaussian log-density, in one solve.
+# The quadratic form of a Gaussian log-density is computed in one solve.
 r <- c(0.4, -1.1, 0.7)
 q <- drop(crossprod(r, param_solve(s, eta, r)))
 c(q, drop(r \%*\% solve(param_value(s, eta)) \%*\% r))
@@ -78,7 +80,7 @@ c(q, drop(r \%*\% solve(param_value(s, eta)) \%*\% r))
 # A vector b comes back as a one-column matrix.
 dim(param_solve(s, eta, r))
 
-# A rank-deficient family is rejected, and the message says what to do
+# A rank-deficient family is rejected, and the message states what to do
 # instead.
 r_def <- scaled_matrix(crossprod(diff(diag(6), differences = 2)))
 try(param_solve(r_def, 0))

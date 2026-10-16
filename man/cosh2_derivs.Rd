@@ -9,7 +9,7 @@ cosh2_derivs(z, order)
 \arguments{
 \item{z}{The free value, a single number.}
 
-\item{order}{The highest order wanted, an integer from 0 to 5.}
+\item{order}{The highest order to compute, an integer from 0 to 5.}
 }
 \value{
 A list of \code{order + 1} numbers: \eqn{w} and its derivatives in
@@ -18,17 +18,17 @@ A list of \code{order + 1} numbers: \eqn{w} and its derivatives in
 \description{
 Returns the value and the derivatives to order \code{order} of
 \eqn{w = (1 - \rho^2)^{-1}} in the free value \eqn{z}, for
-\eqn{\rho = \tanh z} under the rhobit link. \eqn{w} is the quantity every
-inverse autoregression is written in: it is the reciprocal of the
+\eqn{\rho = \tanh z} under the rhobit link. \eqn{w} is the quantity in which
+every inverse autoregression is written: it is the reciprocal of the
 innovation variance's share at one lag, and it multiplies every entry of an
 inverse AR(1) and every diagonal of an inverse AR(\eqn{q}).
 }
 \details{
 Under the rhobit link \eqn{w = \cosh^2 z = (1 + \cosh 2z)/2}, so every
 order is elementary: \eqn{w^{(k)} = 2^{k-1}\sinh 2z} for odd \eqn{k} and
-\eqn{2^{k-1}\cosh 2z} for even \eqn{k}. Written in \eqn{z}, no difference
-\eqn{1 - \rho^2} is formed, and the result keeps its accuracy where
-\eqn{\rho} rounds to \eqn{-1} or 1.
+\eqn{2^{k-1}\cosh 2z} for even \eqn{k}. Because the expression is written in
+\eqn{z}, the difference \eqn{1 - \rho^2} is never formed, and the result
+keeps its accuracy where \eqn{\rho} rounds to \eqn{-1} or 1.
 }
 \seealso{
 \code{\link[=autoregressive_inv]{autoregressive_inv()}}, whose factors call it, and

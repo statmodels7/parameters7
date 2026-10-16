@@ -19,8 +19,8 @@ param_tensor(s, eta, order, what = c("value", "logdet"), accuracy = 4L)
 }
 \value{
 For \code{"value"}, a list of estimates keyed as
-\code{param_tuple_names(s, order)} and in that order, each shaped like
-\code{\link[=param_value]{param_value()}}'s result. For \code{"logdet"}, a named numeric vector in the
+\code{param_tuple_names(s, order)} and in that order, each of which has the
+shape of \code{\link[=param_value]{param_value()}}'s result. For \code{"logdet"}, a named numeric vector in the
 same order.
 }
 \description{

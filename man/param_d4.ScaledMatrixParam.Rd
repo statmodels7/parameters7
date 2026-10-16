@@ -16,9 +16,11 @@ A list with one matrix keyed as \code{param_tuple_names(s, 4)}, or an empty
 list for a fixed parameter.
 }
 \description{
-Closed form: \eqn{\partial^4_\eta M = h''''(\eta)\,P}, from
-\code{linkfunctions7::d4linkinv()}. Exact, where a family without a closed form
-gets a product stencil that is least accurate at this order.
+The fourth derivative has closed form,
+\eqn{\partial^4_\eta M = h''''(\eta)\,P}, computed from
+\code{linkfunctions7::d4linkinv()}. It is exact, whereas the numerical route for
+a family without a closed form uses a product stencil that is least accurate
+at this order.
 }
 \seealso{
 \code{\link[=param_d3.ScaledMatrixParam]{param_d3.ScaledMatrixParam()}} for the order below, and

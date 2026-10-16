@@ -15,12 +15,12 @@ neg_like(x)
 \description{
 Returns \code{-x} for a numeric vector and the elementwise negation for a list,
 so that the log-determinant derivatives of \code{\link[=inverse_of]{inverse_of()}} come back in the
-shape the inner family returned them in.
+same shape in which the inner family returned them.
 }
 \details{
-The type matters: \code{check_parameter()} subtracts the result of
-\code{\link[=param_dlogdet]{param_dlogdet()}} from a reference, which a list does not support, so the
-negation of a numeric vector has to stay a numeric vector.
+\code{check_parameter()} subtracts the result of \code{\link[=param_dlogdet]{param_dlogdet()}} from a
+reference, and a list does not support that subtraction, so the negation of
+a numeric vector has to stay a numeric vector.
 }
 \seealso{
 \code{\link[=inverse_of]{inverse_of()}}, the only caller.

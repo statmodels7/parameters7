@@ -16,16 +16,17 @@ generic.}
 }
 \value{
 A named list of \code{order + 1} symmetric \code{s@dimension} by \code{s@dimension}
-matrices; see \strong{Details} for the keying of each order.
+matrices; see Details for the keying of each order.
 }
 \description{
-Closed form at all four orders. One page covers \code{\link[=param_d1]{param_d1()}}, \code{\link[=param_d2]{param_d2()}},
+The derivatives have closed form at all four orders. One page covers
+\code{\link[=param_d1]{param_d1()}}, \code{\link[=param_d2]{param_d2()}},
 \code{\link[=param_d3]{param_d3()}} and \code{\link[=param_d4]{param_d4()}} for this family because the four are the same
 product at different orders: \eqn{M = \sigma^2 P(\rho)}, so a component with
 \eqn{a} scale indices and \eqn{b} correlation indices is the \eqn{a}-th
 derivative of the scale times the \eqn{b}-th derivative of the pattern.
 
-The pattern's derivatives are the ones that need work here. An entry is
+The pattern's derivatives need work here. An entry is
 \eqn{\rho^{|i-j|}}, a power where \code{\link[=compound_symmetry]{compound_symmetry()}}'s pattern is linear,
 so each is composed with the rhobit link to the requested order, through
 \code{\link[=compose_order]{compose_order()}}. Each distinct lag is composed once.
@@ -40,8 +41,8 @@ of their own order:
 \item \code{\link[=param_d4]{param_d4()}}: 5 entries, \code{param_tuple_names(s, 4)}.
 }
 
-Every component with at least one correlation index has a zero diagonal, the
-lag-0 entries of the pattern being the constant 1.
+Every component with at least one correlation index has a zero diagonal,
+because the lag-0 entries of the pattern are the constant 1.
 }
 \seealso{
 \code{\link[=econ_derivative]{econ_derivative()}}, which assembles all four, \code{ar1_pattern()} for

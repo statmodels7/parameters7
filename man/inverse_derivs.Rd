@@ -19,8 +19,8 @@ A named list of \code{s@dimension} square matrices, keyed and ordered as
 \code{\link[=param_tuple_names]{param_tuple_names()}} gives them.
 }
 \description{
-The ordered-block-partition sum of \code{\link[=inverse_of]{inverse_of()}}, run over the enumeration
-by which the class is keyed.
+Computes the ordered-block-partition sum of \code{\link[=inverse_of]{inverse_of()}} over the
+enumeration by which the class is keyed.
 }
 \details{
 The inner family's derivative arrays of every order up to \code{order} are

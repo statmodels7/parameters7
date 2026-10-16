@@ -11,7 +11,7 @@ ar1_inv_pattern(s, z, order)
 
 \item{z}{The second free value.}
 
-\item{order}{The highest derivative order wanted, from 0 to 4.}
+\item{order}{The highest derivative order to compute, from 0 to 4.}
 }
 \value{
 A list of \code{order + 1} square matrices of side \code{s@dimension}: the
@@ -28,8 +28,9 @@ The three distinct entries are \eqn{w}, \eqn{2w-1} and \eqn{-\rho w} for
 they are \eqn{\cosh^2 z}, \eqn{\cosh 2z} and \eqn{-\tfrac{1}{2}\sinh 2z},
 so one sequence of derivatives of \eqn{w} in \eqn{z}, from
 \code{\link[=cosh2_derivs]{cosh2_derivs()}}, serves all three: the second is \eqn{2w^{(k)}} above
-order zero and the third is \eqn{-\tfrac{1}{2}w^{(k+1)}}. Nothing is
-chained through the link and no difference \eqn{1 - \rho^2} is formed.
+order zero and the third is \eqn{-\tfrac{1}{2}w^{(k+1)}}. The derivatives are
+not chained through the link, and the difference \eqn{1 - \rho^2} is not
+formed.
 }
 \seealso{
 \code{\link[=ar1_inv]{ar1_inv()}} for the formulas and \code{ar1_pattern()} for the

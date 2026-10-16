@@ -13,13 +13,14 @@ checked by the generic.}
 }
 \value{
 A list of \code{choose(s@n_free + 1, 2)} diagonal matrices keyed as
-\code{param_tuple_names(s)} and in that order, the mixed ones exactly zero.
+\code{param_tuple_names(s)} and in that order. The mixed ones are exactly zero.
 }
 \description{
-Closed form, from \code{linkfunctions7::d2linkinv()}. The family is \strong{separable}:
-each diagonal entry is a function of one free value alone, so a component
+Computes the second derivatives in closed form from
+\code{linkfunctions7::d2linkinv()}. The family is separable: each diagonal entry
+is a function of a single free value, so a component
 \eqn{\partial_{kl} M} with \eqn{k \ne l} is exactly the zero matrix, and a
-pure one carries \eqn{h''(\eta_k)} in the entries that value owns. A
+pure one carries \eqn{h''(\eta_k)} in the entries owned by that value. A
 \code{\link[=scalar_matrix]{scalar_matrix()}} has one free value and so one component.
 
 The same separability holds at third and fourth order, which is why those

@@ -38,8 +38,8 @@ symmetric positive semidefinite matrix \eqn{P}, supplied by the caller, times
 one positive scale. With \code{link = NULL} it holds \eqn{P} alone and has no free
 value.
 
-This is the commonest penalty in semiparametric regression, and it is the
-reason why the package accepts rank-deficient matrices. \eqn{P} may be the
+This is the commonest penalty in semiparametric regression, and the package
+accepts rank-deficient matrices because of it. \eqn{P} may be the
 Gram matrix of a basis derivative, a difference penalty
 \eqn{\Delta^\top \Delta}, a neighborhood matrix, or the identity, which makes
 the object a ridge.
@@ -73,7 +73,7 @@ includes it.
 
 \section{Rank deficiency}{
 A deficient \eqn{P} makes the corresponding Gaussian improper, so it is a
-legitimate \strong{penalty} without being a legitimate density. Both readings of a
+legitimate penalty without being a legitimate density. Both readings of a
 multivariate Gaussian need full rank: a singular covariance is degenerate on a
 subspace, and a singular precision does not normalize. \code{\link[=param_logdet]{param_logdet()}}
 returns the pseudo-determinant, while \code{\link[=param_solve]{param_solve()}} and \code{\link[=param_factor]{param_factor()}}
@@ -90,13 +90,13 @@ logarithms of the \eqn{r} non-zero eigenvalues.
 }
 
 \examples{
-# A ridge: the identity, scaled. Full rank, and log|M| = p * eta.
+# A ridge is the identity, scaled; it has full rank, and log|M| = p * eta.
 r <- scaled_matrix(diag(4))
 c(rank = r@rank, logdet_at_0 = param_logdet(r, 0))
 all.equal(param_logdet(r, 1.3), 4 * 1.3)
 
-# A second-difference penalty on six coefficients: deficient by two, its
-# null space being the constants and the straight lines.
+# A second-difference penalty on six coefficients is deficient by two,
+# because its null space consists of the constants and the straight lines.
 d <- diff(diag(6), differences = 2)
 s <- scaled_matrix(crossprod(d))
 c(dimension = s@dimension, rank = s@rank)
@@ -117,7 +117,7 @@ c(closed_form = s@rank / bPb, numeric = optimize(obj, c(1e-6, 100))$minimum)
 # A deficient family has no inverse, and the call signals an error.
 try(param_solve(s, 0))
 
-# With no link the matrix is fully known and there is nothing to estimate.
+# With no link the matrix is fully known and has no free value to estimate.
 f <- scaled_matrix(diag(3), link = NULL)
 c(n_free = f@n_free, logdet = param_logdet(f, numeric(0)))
 

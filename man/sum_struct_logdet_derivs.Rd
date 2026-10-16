@@ -20,24 +20,25 @@ as \code{param_tuple_names(s, order)} and in that order.
 \description{
 Carries \code{\link[=sum_struct_trace_term]{sum_struct_trace_term()}}'s expansion in the weights onto the free
 scale. The map from free values to weights is diagonal, so the chain rule
-groups the tuple by index and takes one set partition per group, each block
-contributing a derivative of the inverse link and one differentiation in that
-weight.
+groups the tuple by index and takes one set partition per group, and each
+block contributes a derivative of the inverse link and one differentiation in
+that weight.
 }
 \details{
 This is Faa di Bruno with a diagonal inner map, written out here instead of
 going through \code{\link[=compose_order]{compose_order()}}, because the outer function is a derivative in
-several weights at once, never a univariate composition. The product over the groups'
-partitions is the grid the loop walks; the partitions come from
-\code{\link[numericals7:set_partitions]{numericals7::set_partitions()}}, the one enumeration the toolkit keeps.
+several weights at once, never a univariate composition. The product over
+the groups' partitions is the grid that the loop walks; the partitions come
+from \code{\link[numericals7:set_partitions]{numericals7::set_partitions()}}, the one enumeration that the toolkit
+keeps.
 
 Where the family is rank deficient, the derivatives are those of the log
 pseudo-determinant: the inverse in the expansion is replaced by
 \eqn{(M + ZZ^\top)^{-1} - ZZ^\top}, with \eqn{Z} the orthonormal basis of the
 declared null space, which does not move with the free vector.
 
-It is the most expensive quantity of this family, the expansion evaluating a
-chain of matrix products for each ordering.
+It is the most expensive quantity of this family, because the expansion
+evaluates a chain of matrix products for each ordering.
 }
 \seealso{
 \code{\link[=sum_struct_trace_term]{sum_struct_trace_term()}} for the inner expansion, and

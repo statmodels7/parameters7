@@ -16,15 +16,16 @@ is not positive definite is rejected.}
 A numeric vector of length \code{s@n_free}, named by \code{s@free_names}.
 }
 \description{
-Returns the free vector behind a matrix: the Cholesky factor of \code{m}, read off
-at the positions that \code{\link[=chol_positions]{chol_positions()}} records, with the diagonal logged.
-Exact, and a true inverse of \code{\link[=param_value.LogCholeskyParam]{param_value.LogCholeskyParam()}} because the
-triangular factor with a positive diagonal is unique; the round trip closes
-up to rounding.
+Returns the free vector behind a matrix: the Cholesky factor of \code{m} is read
+off at the positions that \code{\link[=chol_positions]{chol_positions()}} records, and its diagonal is
+logged.
+The map is exact, and it is a true inverse of \code{\link[=param_value.LogCholeskyParam]{param_value.LogCholeskyParam()}}
+because the triangular factor with a positive diagonal is unique; the round
+trip closes up to rounding.
 }
 \details{
-\code{m} is rejected when it is not positive definite, with the verdict taken from
-the eigenvalues through \code{\link[=chol_pd]{chol_pd()}}, at a relative tolerance of
+\code{m} is rejected when it is not positive definite; \code{\link[=chol_pd]{chol_pd()}} takes the
+verdict from the eigenvalues, at a relative tolerance of
 \eqn{10^{-14}}. A test on the spectrum gives the same answer on every
 platform, while a caught \code{\link[base:chol]{base::chol()}} error can differ between platforms on
 a matrix with an exactly zero eigenvalue.
@@ -35,7 +36,7 @@ that are free to be negative, which produces \code{NaN}s and a warning about
 values that the function then discards.
 }
 \seealso{
-\code{\link[=param_value.LogCholeskyParam]{param_value.LogCholeskyParam()}}, the map this inverts, and
+\code{\link[=param_value.LogCholeskyParam]{param_value.LogCholeskyParam()}}, the map that this inverts, and
 \code{\link[=chol_pd]{chol_pd()}} for the definiteness test.
 }
 \keyword{internal}

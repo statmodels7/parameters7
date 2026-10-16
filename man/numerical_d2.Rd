@@ -16,16 +16,17 @@ whole number.}
 }
 \value{
 A list of \code{choose(s@n_free + 1, 2)} estimates keyed as
-\code{param_tuple_names(s)} and in that order, each shaped like
-\code{\link[=param_value]{param_value()}}'s result and symmetrized for a matrix family.
+\code{param_tuple_names(s)} and in that order, each of which has the shape
+of \code{\link[=param_value]{param_value()}}'s result and is symmetrized for a matrix family.
 }
 \description{
 Estimates the \eqn{d(d+1)/2} distinct second derivatives
 \eqn{\partial^2 V / \partial \eta_k \partial \eta_l}, taking exactly one
 difference for each, through \code{\link[=param_tensor]{param_tensor()}}. Which quantity is differenced
 depends on what the family already supplies: the analytic first derivative
-where there is one, and \code{\link[=param_value]{param_value()}} itself where there is not. This is
-the method \code{\link[=param_d2]{param_d2()}} dispatches to when a family has not written its own.
+where there is one, and \code{\link[=param_value]{param_value()}} itself where there is not. The
+generic \code{\link[=param_d2]{param_d2()}} dispatches to this method when a family has not written
+its own.
 }
 \section{The two routes}{
 Where \code{\link[=param_d1]{param_d1()}} is analytic, the component \eqn{(k, l)} is one central
@@ -48,7 +49,8 @@ s <- scalar_matrix(2)
 numerical_d2(s, 0.3)
 max(abs(numerical_d2(s, 0.3)[[1]] - param_value(s, 0.3)))
 
-# Against a family that writes its own second derivatives.
+# The estimates are compared with those of a family that writes its own
+# second derivatives.
 q <- log_cholesky(2)
 eta <- c(0.2, -0.1, 0.4)
 max(abs(unlist(numerical_d2(q, eta)) - unlist(param_d2(q, eta))))

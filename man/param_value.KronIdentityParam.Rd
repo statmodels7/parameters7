@@ -15,7 +15,7 @@ already checked by the generic.}
 A \code{s@dimension} by \code{s@dimension} symmetric numeric matrix, block
 diagonal with \code{m} identical blocks, and labeled \code{v1}, \code{v2}, ..., \code{v(md)} on
 both margins.
-Positive definite exactly when the inner parameter is.
+The matrix is positive definite exactly when the inner parameter is.
 }
 \description{
 Returns \eqn{I_m \otimes S(\eta)}, the inner parameter's matrix placed into

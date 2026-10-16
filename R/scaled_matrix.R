@@ -5,9 +5,10 @@ NULL
 #' Scaled Fixed Matrix Parameter
 #'
 #' @description
-#' The S7 class of a fixed symmetric positive semidefinite matrix \eqn{P} carried
-#' by a single positive scale, \eqn{M(\eta) = h(\eta) P}. It is the family
-#' through which a **rank-deficient** matrix usually enters the package
+#' `ScaledMatrixParam` is the S7 class of a fixed symmetric positive
+#' semidefinite matrix \eqn{P} carried by a single positive scale,
+#' \eqn{M(\eta) = h(\eta) P}. It is the family
+#' through which a rank-deficient matrix usually enters the package
 #' ([sum_struct()] also accepts a deficient sum): \eqn{P} may be a difference
 #' penalty or a basis Gram matrix with a genuine null space, and the class
 #' records that rank and null basis at construction.
@@ -37,7 +38,7 @@ NULL
 #' q <- scaled_matrix(crossprod(diff(diag(6), differences = 2)))
 #' c(dimension = q@dimension, rank = q@rank, null = ncol(q@null_basis))
 #'
-#' # With no link there is nothing to estimate.
+#' # With no link the family has no free value to estimate.
 #' f <- scaled_matrix(diag(3), link = NULL)
 #' c(n_free = f@n_free, name = f@param_name)
 #'
@@ -53,8 +54,8 @@ ScaledMatrixParam <- S7::new_class("ScaledMatrixParam", parent = matrix_paramete
 #' one positive scale. With `link = NULL` it holds \eqn{P} alone and has no free
 #' value.
 #'
-#' This is the commonest penalty in semiparametric regression, and it is the
-#' reason why the package accepts rank-deficient matrices. \eqn{P} may be the
+#' This is the commonest penalty in semiparametric regression, and the package
+#' accepts rank-deficient matrices because of it. \eqn{P} may be the
 #' Gram matrix of a basis derivative, a difference penalty
 #' \eqn{\Delta^\top \Delta}, a neighborhood matrix, or the identity, which makes
 #' the object a ridge.
@@ -90,7 +91,7 @@ ScaledMatrixParam <- S7::new_class("ScaledMatrixParam", parent = matrix_paramete
 #' # Rank deficiency
 #'
 #' A deficient \eqn{P} makes the corresponding Gaussian improper, so it is a
-#' legitimate **penalty** without being a legitimate density. Both readings of a
+#' legitimate penalty without being a legitimate density. Both readings of a
 #' multivariate Gaussian need full rank: a singular covariance is degenerate on a
 #' subspace, and a singular precision does not normalize. [param_logdet()]
 #' returns the pseudo-determinant, while [param_solve()] and [param_factor()]
@@ -132,13 +133,13 @@ ScaledMatrixParam <- S7::new_class("ScaledMatrixParam", parent = matrix_paramete
 #'   pseudo-determinant.
 #'
 #' @examples
-#' # A ridge: the identity, scaled. Full rank, and log|M| = p * eta.
+#' # A ridge is the identity, scaled; it has full rank, and log|M| = p * eta.
 #' r <- scaled_matrix(diag(4))
 #' c(rank = r@rank, logdet_at_0 = param_logdet(r, 0))
 #' all.equal(param_logdet(r, 1.3), 4 * 1.3)
 #'
-#' # A second-difference penalty on six coefficients: deficient by two, its
-#' # null space being the constants and the straight lines.
+#' # A second-difference penalty on six coefficients is deficient by two,
+#' # because its null space consists of the constants and the straight lines.
 #' d <- diff(diag(6), differences = 2)
 #' s <- scaled_matrix(crossprod(d))
 #' c(dimension = s@dimension, rank = s@rank)
@@ -159,7 +160,7 @@ ScaledMatrixParam <- S7::new_class("ScaledMatrixParam", parent = matrix_paramete
 #' # A deficient family has no inverse, and the call signals an error.
 #' try(param_solve(s, 0))
 #'
-#' # With no link the matrix is fully known and there is nothing to estimate.
+#' # With no link the matrix is fully known and has no free value to estimate.
 #' f <- scaled_matrix(diag(3), link = NULL)
 #' c(n_free = f@n_free, logdet = param_logdet(f, numeric(0)))
 #'
@@ -243,17 +244,17 @@ scaled_scale <- function(s, eta) {
 #' @name param_value.ScaledMatrixParam
 #' @description
 #' Returns \eqn{M = h(\eta)\,P}, the stored fixed matrix times the scale, which
-#' is \eqn{P} itself for a fixed parameter. One elementwise multiplication and no
-#' decomposition. The result inherits \eqn{P}'s rank exactly, a positive multiple
-#' leaving a null space alone, which is why the class can record that rank at
-#' construction.
+#' is \eqn{P} itself for a fixed parameter. The computation is one elementwise
+#' multiplication and does not decompose the matrix. The result inherits
+#' \eqn{P}'s rank exactly, because a positive multiple leaves a null space
+#' alone, and the class can therefore record that rank at construction.
 #' @param s A [ScaledMatrixParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic.
 #' @param ... Unused, and accepted so the signature matches the generic's.
 #' @return A symmetric positive semidefinite `s@dimension` by `s@dimension`
-#'   numeric matrix with dimnames `v1`, `v2`, ..., of rank `s@rank`. Positive
-#'   definite only where `s@rank == s@dimension`.
+#'   numeric matrix with dimnames `v1`, `v2`, ..., of rank `s@rank`. The matrix
+#'   is positive definite only where `s@rank == s@dimension`.
 #' @seealso [param_free.ScaledMatrixParam()] for the inverse, and
 #'   [scaled_scale()] for the scale.
 #' @keywords internal
@@ -265,9 +266,10 @@ S7::method(param_value, ScaledMatrixParam) <- function(s, eta, ...) {
 #' @title First Derivative of a Scaled Parameter
 #' @name param_d1.ScaledMatrixParam
 #' @description
-#' Closed form: \eqn{\partial_\eta M = h'(\eta)\,P}, the fixed matrix times the
-#' link's own first derivative. Under the default log link \eqn{h' = h}, so the
-#' derivative **is** the matrix, which the example on [param_d1()] checks.
+#' The first derivative has closed form, \eqn{\partial_\eta M = h'(\eta)\,P},
+#' which is the fixed matrix times the link's own first derivative. Under the
+#' default log link \eqn{h' = h}, so the derivative is the matrix, which the
+#' example on [param_d1()] checks.
 #'
 #' A fixed parameter, built with `link = NULL`, has no free value, so the list is
 #' empty.
@@ -292,9 +294,10 @@ S7::method(param_d1, ScaledMatrixParam) <- function(s, eta, ...) {
 #' @title Second Derivative of a Scaled Parameter
 #' @name param_d2.ScaledMatrixParam
 #' @description
-#' Closed form: \eqn{\partial^2_\eta M = h''(\eta)\,P}. With one free value there
+#' The second derivative has closed form,
+#' \eqn{\partial^2_\eta M = h''(\eta)\,P}. With one free value there
 #' is one component, and under the default log link it is the matrix again,
-#' \eqn{h'' = h}. Empty for a fixed parameter.
+#' \eqn{h'' = h}. The list is empty for a fixed parameter.
 #' @param s A [ScaledMatrixParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic.
@@ -316,13 +319,13 @@ S7::method(param_d2, ScaledMatrixParam) <- function(s, eta, ...) {
 #' @title Log-Determinant of a Scaled Parameter
 #' @name param_logdet.ScaledMatrixParam
 #' @description
-#' Closed form,
+#' The log-determinant has closed form,
 #'
 #' \deqn{\log|M|_+ = r \log h(\eta) + \log|P|_+,}
 #'
-#' with \eqn{r} the rank and \eqn{\log|P|_+} a constant of the object, computed
-#' once at construction. The scale enters once per non-zero eigenvalue, which is
-#' where the factor \eqn{r} comes from. One expression covers both cases: it is
+#' where \eqn{r} is the rank and \eqn{\log|P|_+} is a constant of the object,
+#' computed once at construction. The scale enters once per non-zero
+#' eigenvalue, so the factor \eqn{r} appears. One expression covers both cases: it is
 #' the log-determinant where the family is of full rank and the log
 #' pseudo-determinant otherwise. Under the log link it is \eqn{r\eta + \log|P|_+},
 #' so a step of 1 in the free value moves it by \eqn{r}.
@@ -333,7 +336,7 @@ S7::method(param_d2, ScaledMatrixParam) <- function(s, eta, ...) {
 #' @param ... Unused, and accepted so the signature matches the generic's.
 #' @return A single number.
 #' @seealso [param_dlogdet.ScaledMatrixParam()] for its gradient, and
-#'   [param_null_basis()] for the rank it uses.
+#'   [param_null_basis()] for the rank that it uses.
 #' @keywords internal
 S7::method(param_logdet, ScaledMatrixParam) <- function(s, eta, ...) {
   s@rank * log(scaled_scale(s, eta)$h) + s@param_params$logdet_p
@@ -343,10 +346,11 @@ S7::method(param_logdet, ScaledMatrixParam) <- function(s, eta, ...) {
 #' @title Log-Determinant Gradient of a Scaled Parameter
 #' @name param_dlogdet.ScaledMatrixParam
 #' @description
-#' Closed form: \eqn{r\, h'(\eta)/h(\eta)}, which under the default log link is
-#' the **rank itself**, at every scale. A penalty depends on this term, which
-#' makes the smoothing parameter estimable, the stationary point
-#' of \eqn{\tfrac{\lambda}{2}\beta^\top P\beta - \tfrac{r}{2}\log\lambda} being
+#' The gradient has closed form, \eqn{r\, h'(\eta)/h(\eta)}, which under the
+#' default log link is the rank itself, at every scale. A penalty depends on
+#' this term, which makes the smoothing parameter estimable, because the
+#' stationary point of
+#' \eqn{\tfrac{\lambda}{2}\beta^\top P\beta - \tfrac{r}{2}\log\lambda} is
 #' \eqn{\lambda = r/(\beta^\top P \beta)}.
 #'
 #' The constant \eqn{\log|P|_+} contributes nothing, so for a deficient matrix
@@ -370,10 +374,10 @@ S7::method(param_dlogdet, ScaledMatrixParam) <- function(s, eta, ...) {
 #' @title Log-Determinant Hessian of a Scaled Parameter
 #' @name param_d2logdet.ScaledMatrixParam
 #' @description
-#' Closed form: \eqn{r\{h''/h - (h'/h)^2\}}, the rank times the second derivative
-#' of \eqn{\log h}. Under the default log link it is exactly zero, the log
-#' pseudo-determinant being \eqn{r\eta + \log|P|_+} and so linear in the free
-#' value. Under a link with curvature it is not.
+#' The Hessian has closed form, \eqn{r\{h''/h - (h'/h)^2\}}, which is the rank
+#' times the second derivative of \eqn{\log h}. Under the default log link it is
+#' exactly zero, because the log pseudo-determinant is \eqn{r\eta + \log|P|_+}
+#' and so is linear in the free value. Under a link with curvature it is not.
 #' @param s A [ScaledMatrixParam()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`, already
 #'   checked by the generic.
@@ -398,24 +402,24 @@ S7::method(param_d2logdet, ScaledMatrixParam) <- function(s, eta, ...) {
 #' @description
 #' Returns \eqn{g(h)} where \eqn{h} is the multiple of \eqn{P} that `m` is, read
 #' off the ratio at the entry of \eqn{P} of largest magnitude, which is where it
-#' is best determined. Exact, and a true inverse of
+#' is best determined. The map is exact and is a true inverse of
 #' [param_value.ScaledMatrixParam()].
 #' @details
-#' Four rejections. The ratio must be positive, or `m` is not a positive
-#' multiple. `m` must then agree with `h * p` to \eqn{10^{-8}} relative
-#' everywhere, or it is not a multiple of \eqn{P} at all: the ratio at one entry
-#' is not enough, since any matrix has *some* ratio there. And for a fixed
-#' parameter, built with `link = NULL`, the multiple must be 1 to \eqn{10^{-8}},
-#' the object having no free value to absorb anything else; the result is then
-#' `numeric(0)`. Otherwise the multiple must lie inside the open range of the
-#' link.
+#' The method signals an error in four cases. The ratio must be positive, or
+#' `m` is not a positive multiple. `m` must then agree with `h * p` to
+#' \eqn{10^{-8}} relative everywhere, or it is not a multiple of \eqn{P} at all:
+#' the ratio at one entry is not enough, since any matrix has *some* ratio
+#' there. And for a fixed parameter, built with `link = NULL`, the multiple must
+#' be 1 to \eqn{10^{-8}}, because the object has no free value to absorb
+#' anything else; the result is then `numeric(0)`. Otherwise the multiple must
+#' lie inside the open range of the link.
 #' @param s A [ScaledMatrixParam()] object.
 #' @param m A symmetric numeric matrix, a positive multiple of the object's
 #'   fixed matrix, already checked for shape and symmetry by the generic.
 #' @param ... Unused, and accepted so the signature matches the generic's.
 #' @return A numeric vector of length `s@n_free` named by `s@free_names`, or
 #'   `numeric(0)` for a fixed parameter.
-#' @seealso [param_value.ScaledMatrixParam()], the map this inverts.
+#' @seealso [param_value.ScaledMatrixParam()], the map that this method inverts.
 #' @keywords internal
 S7::method(param_free, ScaledMatrixParam) <- function(s, m, ...) {
   p <- s@param_params$p
@@ -454,9 +458,11 @@ S7::method(param_free, ScaledMatrixParam) <- function(s, m, ...) {
 #' @title Third Derivatives of a Scaled Parameter
 #' @name param_d3.ScaledMatrixParam
 #' @description
-#' Closed form: \eqn{\partial^3_\eta M = h'''(\eta)\,P}, from
+#' The third derivative has closed form,
+#' \eqn{\partial^3_\eta M = h'''(\eta)\,P}, computed from
 #' `linkfunctions7::d3linkinv()`. Every order is the same fixed matrix times a
-#' link derivative, so every order costs one multiplication and is exact. Under the default log link it is the matrix again.
+#' link derivative, so every order costs one multiplication and is exact. Under
+#' the default log link the third derivative is the matrix again.
 #' @param s A [ScaledMatrixParam()] object.
 #' @param eta A numeric vector with one free value, already checked by the
 #'   generic.
@@ -477,9 +483,11 @@ S7::method(param_d3, ScaledMatrixParam) <- function(s, eta, ...) {
 #' @title Fourth Derivatives of a Scaled Parameter
 #' @name param_d4.ScaledMatrixParam
 #' @description
-#' Closed form: \eqn{\partial^4_\eta M = h''''(\eta)\,P}, from
-#' `linkfunctions7::d4linkinv()`. Exact, where a family without a closed form
-#' gets a product stencil that is least accurate at this order.
+#' The fourth derivative has closed form,
+#' \eqn{\partial^4_\eta M = h''''(\eta)\,P}, computed from
+#' `linkfunctions7::d4linkinv()`. It is exact, whereas the numerical route for
+#' a family without a closed form uses a product stencil that is least accurate
+#' at this order.
 #' @param s A [ScaledMatrixParam()] object.
 #' @param eta A numeric vector with one free value, already checked by the
 #'   generic.
@@ -501,7 +509,8 @@ S7::method(param_d4, ScaledMatrixParam) <- function(s, eta, ...) {
 #' @title Third Log-Determinant Derivatives of a Scaled Parameter
 #' @name param_d3logdet.ScaledMatrixParam
 #' @description
-#' Closed form. The log-(pseudo-)determinant is \eqn{r \log h(\eta) + \log|P|_+}
+#' The third derivative has closed form. The log-(pseudo-)determinant is
+#' \eqn{r \log h(\eta) + \log|P|_+}
 #' with \eqn{r} the rank, so every derivative is \eqn{r} times the matching
 #' derivative of \eqn{\log h}, and the constant contributes nothing. With one
 #' free value there is one component.
@@ -528,14 +537,15 @@ S7::method(param_d3logdet, ScaledMatrixParam) <- function(s, eta, ...) {
 #' @title Fourth Log-Determinant Derivatives of a Scaled Parameter
 #' @name param_d4logdet.ScaledMatrixParam
 #' @description
-#' Closed form: \eqn{r} times the fourth derivative of \eqn{\log h}, which
-#' [diag_dlog()] writes out as
+#' The fourth derivative has closed form: \eqn{r} times the fourth derivative of
+#' \eqn{\log h}, which [diag_dlog()] gives as
 #' \eqn{u_4 - 4u_1u_3 - 3u_2^2 + 12u_1^2u_2 - 6u_1^4} with
 #' \eqn{u_m = h^{(m)}/h}. The constant \eqn{\log|P|_+} contributes nothing.
 #'
-#' Exactly zero under the default log link, the quantity being linear in the free
-#' value. This is the order at which a numerical route is least accurate, so a
-#' family with a curved link gains most from the closed form here.
+#' The quantity is exactly zero under the default log link, because it is linear
+#' in the free value. This is the order at which a numerical route is least
+#' accurate, so a family with a curved link gains most from the closed form
+#' here.
 #' @param s A [ScaledMatrixParam()] object.
 #' @param eta A numeric vector with one free value, already checked by the
 #'   generic.

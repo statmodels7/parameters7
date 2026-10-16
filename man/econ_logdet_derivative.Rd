@@ -30,7 +30,7 @@ families are one call each to this function, differing only in the \code{terms}
 passed.
 }
 \details{
-The log-determinant is a \strong{sum} of a function of one free value and a
+The log-determinant is a sum of a function of one free value and a
 function of the other, where the value is a product, so the structure is
 stronger: every mixed component is exactly zero, and the pure ones are the two
 chains taken separately. Under the default log link the scale's own

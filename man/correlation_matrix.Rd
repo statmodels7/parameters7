@@ -7,9 +7,9 @@
 correlation_matrix(dimension)
 }
 \arguments{
-\item{dimension}{The side \eqn{p} of the matrix. A single positive whole
-number, finite and at least 1; \eqn{p = 1} gives a constant with no free
-values, as \strong{Details} describes. Any other value signals the error
+\item{dimension}{The side \eqn{p} of the matrix. It must be a single
+positive whole number, finite and at least 1; \eqn{p = 1} gives a constant with no free
+values, as described under Details. Any other value signals the error
 \verb{'dimension' must be a single positive integer.}}
 }
 \value{
@@ -26,7 +26,7 @@ factor is a point on the unit sphere written in angular coordinates, and each
 angle is carried onto the whole real line by a bounded link, so any free
 vector in \eqn{\mathbb{R}^{p(p-1)/2}} gives a valid correlation matrix.
 
-Use it when the correlations are what the model is about and a scale belongs
+Use it when the model concerns the correlations and a scale belongs
 elsewhere: a copula, an LKJ prior, or the correlation half of a covariance
 built with \code{\link[=dr_prod]{dr_prod()}}.
 }
@@ -39,8 +39,8 @@ Row \eqn{i} of \eqn{L} is built from \eqn{i-1} angles
 
 The squared entries of a row telescope to one, so every row of \eqn{L} is a
 unit vector and \eqn{R = LL^\top} has a unit diagonal by construction. It is
-positive definite at every value of the angles, \eqn{L} being triangular with
-a positive diagonal. The angles reach the free scale through
+positive definite at every value of the angles, because \eqn{L} is triangular
+with a positive diagonal. The angles reach the free scale through
 \code{linkfunctions7::bounded_link(lwr = 0, upr = pi)}, so there is nothing to
 constrain on the free scale; in double precision the boundary is reached at
 large free values (see below). \code{\link[=param_value]{param_value()}} sets the diagonal to exactly 1
@@ -49,11 +49,11 @@ to remove the rounding of the telescoping sum.
 
 \section{Derivatives}{
 Derivatives come from the same Leibniz rule that the log-Cholesky family uses,
-\eqn{R} being a Gram product again; what changes is the factor, whose entries
-are products of sines and cosines of angles that each depend on one free
+because \eqn{R} is again a Gram product. Here the entries of the factor are
+products of sines and cosines of angles, and each angle depends on one free
 value.
 
-The rows of \eqn{L} are independent, so a derivative of the \strong{factor} in free
+The rows of \eqn{L} are independent, so a derivative of the factor in free
 values from two different rows is zero. The same does not hold for \eqn{R}:
 its entry \eqn{(i, j)} is the inner product of rows \eqn{i} and \eqn{j} of
 \eqn{L}, so a second derivative across those two rows need not vanish. Such a
@@ -69,8 +69,8 @@ The factor is triangular, so \eqn{|R| = \prod_i L_{ii}^2} and
 
 one term per free value. Every mixed derivative of the log-determinant is
 therefore exactly zero at every order, and each pure one is a logarithm
-composed with that angle's sine. No factorization and no determinant is
-computed.
+composed with that angle's sine. The computation involves neither a
+factorization nor a determinant.
 }
 
 \section{Reading the free vector}{
@@ -82,9 +82,9 @@ a free value of 0.4 is not an angle of 0.4; the angle is
 
 \section{The boundary in double precision}{
 As the free values grow, the angles approach 0 or \eqn{\pi} and a
-correlation approaches \eqn{\pm 1}. At \eqn{p = 3} with every free value equal
-to 10 the matrix is singular in double precision, with a correlation equal to
-\eqn{-1} to every printed digit. A free value beyond about \eqn{\pm 8} in a
+correlation approaches \eqn{\pm 1}. At \eqn{p = 3}, if every free value
+equals 10, the matrix is singular in double precision, and a correlation
+equals \eqn{-1} to every printed digit. A free value beyond about \eqn{\pm 8} in a
 fit therefore indicates a correlation at the boundary, and
 \code{\link[=check_parameter]{check_parameter()}} sweeps only to \eqn{\pm 2}.
 }
@@ -92,12 +92,12 @@ fit therefore indicates a correlation at the boundary, and
 \section{p = 1 is a constant}{
 A \eqn{1 \times 1} correlation matrix has no angles, so \code{n_free} is 0 and
 \code{free_names} is empty. \code{\link[=param_value]{param_value()}} returns the \eqn{1 \times 1} identity
-at the only free vector there is, \code{numeric(0)}, \code{\link[=param_d1]{param_d1()}} and \code{\link[=param_d2]{param_d2()}}
+at \code{numeric(0)}, which is the only free vector, \code{\link[=param_d1]{param_d1()}} and \code{\link[=param_d2]{param_d2()}}
 return empty lists, and \code{\link[=param_logdet]{param_logdet()}} is 0. \code{\link[=check_parameter]{check_parameter()}} passes,
-reporting its two log-determinant derivative rows as \verb{NOT CHECKED}, there
-being no free value to differentiate in. The family therefore degenerates to
-a constant instead of signaling an error, so it can still be composed
-inside \code{\link[=block_diag]{block_diag()}}; it carries no information of its own.
+reporting its two log-determinant derivative rows as \verb{NOT CHECKED}, because
+there is no free value in which to differentiate. The family therefore
+degenerates to a constant instead of signaling an error, so it can still be
+composed inside \code{\link[=block_diag]{block_diag()}}; it carries no information of its own.
 }
 
 \section{Notation}{
@@ -105,12 +105,12 @@ inside \code{\link[=block_diag]{block_diag()}}; it carries no information of its
 \eqn{\eta} is the free vector, of length \eqn{d = p(p-1)/2}, and \eqn{p} the
 side of the matrix. \eqn{\theta_{ij} \in (0, \pi)} is the \eqn{j}-th angle of
 row \eqn{i}, \eqn{L} the lower triangular factor and \eqn{R = LL^\top} the
-correlation matrix. Note that \eqn{\theta} is an angle here and a distribution
-parameter elsewhere in the toolkit.
+correlation matrix. The symbol \eqn{\theta} denotes an angle here and a
+distribution parameter elsewhere in the toolkit.
 }
 
 \examples{
-# Three angles for a 3 x 3 correlation matrix, named by row and column.
+# The three angles of a 3 x 3 correlation matrix are named by row and column.
 s <- correlation_matrix(3)
 s@free_names
 

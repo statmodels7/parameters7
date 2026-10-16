@@ -25,12 +25,12 @@ M^{-1}P_{\sigma(n)})} for one tuple of weight indices, the sum running over
 the \eqn{(n-1)!} orderings of the tail with the first index held.
 }
 \details{
-Holding the first index is what leaves the orderings cyclic: a cyclic
+Holding the first index leaves the orderings cyclic: a cyclic
 permutation leaves the trace unchanged, so fixing one position counts each
 distinct cycle once. The orderings come from \code{\link[=multiset_orderings]{multiset_orderings()}} and are
 counted with multiplicity, which see.
 
-This is a derivative in the \strong{weights}; \code{\link[=sum_struct_logdet_derivs]{sum_struct_logdet_derivs()}}
+This is a derivative in the weights; \code{\link[=sum_struct_logdet_derivs]{sum_struct_logdet_derivs()}}
 carries it onto the free scale.
 }
 \seealso{

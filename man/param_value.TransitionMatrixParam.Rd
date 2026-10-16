@@ -18,9 +18,10 @@ summing to 1, with dimnames \code{s1}, \code{s2}, ... on both margins.
 \description{
 Returns the transition matrix: each row is the softmax of that row's own
 \eqn{K-1} free values, through \code{\link[=simplex_point]{simplex_point()}}, so each row is non-negative
-and sums to 1 up to rounding. Nothing is tested and nothing is renormalized;
-the row sums are a property of the map. Rows are the distributions, so \eqn{P_{ij}} is the
-probability of moving from state \eqn{i} to state \eqn{j}.
+and sums to 1 up to rounding. The function neither tests nor renormalizes
+the rows; the row sums are a property of the map. Rows are the
+distributions, so \eqn{P_{ij}} is the probability of moving from state
+\eqn{i} to state \eqn{j}.
 }
 \seealso{
 \code{\link[=param_free.TransitionMatrixParam]{param_free.TransitionMatrixParam()}} for the inverse, and

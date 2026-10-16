@@ -21,20 +21,20 @@ A symmetric \eqn{p} by \eqn{p} numeric matrix.
 Evaluates \eqn{\partial^{S_D}(d_i d_j)} for every pair \eqn{(i, j)} at once,
 given the multiset \eqn{S_D} of scale indices. It is zero wherever \eqn{S_D}
 contains an index naming neither \eqn{i} nor \eqn{j}, so the result is
-\strong{supported on the rows and columns that those indices name}, which keeps
+supported on the rows and columns that those indices name, which keeps
 the cost of the composition low.
 }
 \details{
 Three cases, and the arithmetic differs in each:
 \itemize{
-\item \strong{no indices.} The factor is \eqn{d_i d_j}, an outer product, the case of
-a component that differentiates the correlation alone.
-\item \strong{one distinct index \eqn{k}, with multiplicity \eqn{m}.} Off the diagonal
+\item No indices. The factor is \eqn{d_i d_j}, an outer product, the case of
+a component that differentiates only the correlation.
+\item One distinct index \eqn{k}, with multiplicity \eqn{m}. Off the diagonal
 the entry carries one factor of \eqn{d_k}, so it is
 \eqn{d_k^{(m)} d_j}; on the diagonal it carries two, so it is the Leibniz
 expansion \eqn{\sum_r \binom{m}{r} d_k^{(r)} d_k^{(m-r)}} of
 \eqn{\partial^m d_k^2}.
-\item \strong{two distinct indices \eqn{i} and \eqn{j}.} Only the entries \eqn{(i,j)}
+\item Two distinct indices \eqn{i} and \eqn{j}. Only the entries \eqn{(i,j)}
 and \eqn{(j,i)} survive, each \eqn{d_i^{(m_i)} d_j^{(m_j)}}.
 }
 
@@ -44,6 +44,6 @@ scale annihilates it.
 }
 \seealso{
 \code{\link[=dr_prod_derivs]{dr_prod_derivs()}}, the only caller, and \code{\link[=dr_prod]{dr_prod()}} for the
-factorization this is half of.
+factorization of which this is half.
 }
 \keyword{internal}

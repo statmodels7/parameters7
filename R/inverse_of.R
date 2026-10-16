@@ -4,8 +4,8 @@ NULL
 #' The Inverse of a Matrix Parameter
 #'
 #' @description
-#' The S7 class of the family whose value is the inverse of another family's.
-#' [inverse_of()] builds one. It carries the inner family's free vector
+#' `InverseParam` is the S7 class of the family whose value is the inverse of
+#' another family's. [inverse_of()] builds one. It carries the inner family's free vector
 #' unchanged, so its coordinates are read as those of the matrix that it
 #' inverts.
 #'
@@ -41,7 +41,7 @@ InverseParam <- S7::new_class("InverseParam", parent = matrix_parameter)
 #' [penalties7::structured_penalty()] fixes the precision.
 #'
 #' @details
-#' # What it is for
+#' # Purpose
 #'
 #' A family and its inverse are the same set of matrices only when the family
 #' is closed under inversion, which [log_cholesky()], [matrix_log()],
@@ -60,21 +60,21 @@ InverseParam <- S7::new_class("InverseParam", parent = matrix_parameter)
 #'
 #' # The derivatives
 #'
-#' Differentiating \eqn{N = S^{-1}} repeatedly gives a sum over the **ordered**
+#' Differentiating \eqn{N = S^{-1}} repeatedly gives a sum over the ordered
 #' set partitions of the differentiated positions,
 #'
 #' \deqn{\partial_I N = \sum_{(B_1, \ldots, B_q)} (-1)^q\,
 #'   N\,(\partial_{B_1} S)\,N \cdots N\,(\partial_{B_q} S)\,N,}
 #'
-#' the blocks being ordered because matrices do not commute. At first order it
+#' where the blocks are ordered because matrices do not commute. At first order it
 #' is \eqn{-N (\partial_k S) N} and at second
 #' \eqn{N(\partial_k S\,N\,\partial_l S + \partial_l S\,N\,\partial_k S)N -
 #' N(\partial_{kl}S)N}, which are the two expressions written by hand
 #' elsewhere in the toolkit. The number of terms is the Fubini number of the
 #' order: 1, 3, 13 and 75.
 #'
-#' Every factor is the inner family's own closed form, so nothing is
-#' differenced. The products are formed in floating point, however, and the
+#' Every factor is the inner family's own closed form, so the computation does
+#' not use finite differences. The products are formed in floating point, however, and the
 #' partition sum loses accuracy roughly as the square of the condition number
 #' of the inner matrix. For an inner [log_cholesky()] family, the four orders
 #' are computed by [param_inv_d1()], [param_inv_d2()], [param_inv_d3()] and
@@ -83,8 +83,8 @@ InverseParam <- S7::new_class("InverseParam", parent = matrix_parameter)
 #' # The log-determinant
 #'
 #' \eqn{\log\lvert N\rvert = -\log\lvert S\rvert}, so the value and all four
-#' derivative orders are the inner family's negated, and no determinant of the
-#' inverted matrix is taken.
+#' derivative orders are the inner family's negated, and the determinant of the
+#' inverted matrix is not computed.
 #'
 #' # Rank
 #'
@@ -93,7 +93,7 @@ InverseParam <- S7::new_class("InverseParam", parent = matrix_parameter)
 #' and the dimension.
 #'
 #' @section Notation:
-#' \eqn{S} is the inner family's map, \eqn{N = S^{-1}} the one this builds,
+#' \eqn{S} is the inner family's map, \eqn{N = S^{-1}} the one that this builds,
 #' \eqn{I} a multiset of differentiated positions and \eqn{(B_1,\ldots,B_q)} an
 #' ordered partition of it into non-empty blocks.
 #'
@@ -174,14 +174,16 @@ inverse_of <- function(structure) {
 #' Ordered Set Partitions of the First k Positions
 #'
 #' @description
-#' Every way of splitting `1:k` into non-empty blocks **and ordering the
-#' blocks**, which is what the derivative of an inverse sums over: the factors
-#' are matrices and do not commute, so two orderings of the same split are two
-#' terms.
+#' Returns every way of splitting `1:k` into non-empty blocks and ordering the
+#' blocks, which is the set over which the derivative of an inverse sums. The
+#' factors are matrices and do not commute, so two orderings of the same split
+#' are two terms.
 #'
 #' @details
-#' Built from the unordered enumeration of `numericals7::set_partitions()` by
-#' taking every permutation of each partition's blocks. The count is the Fubini number: 1, 3, 13, 75 for `k` of 1 to 4.
+#' The enumeration is built from the unordered enumeration of
+#' `numericals7::set_partitions()` by taking every permutation of each
+#' partition's blocks. The count is the Fubini number: 1, 3, 13, 75 for `k` of
+#' 1 to 4.
 #'
 #' @param k A single positive integer, at most 4 in this package's use.
 #'
@@ -215,8 +217,8 @@ ordered_set_partitions <- function(k) {
 #' Derivatives of an Inverse Parameter of a Given Order
 #'
 #' @description
-#' The ordered-block-partition sum of [inverse_of()], run over the enumeration
-#' by which the class is keyed.
+#' Computes the ordered-block-partition sum of [inverse_of()] over the
+#' enumeration by which the class is keyed.
 #'
 #' @details
 #' The inner family's derivative arrays of every order up to `order` are
@@ -294,7 +296,7 @@ inv_partition_sum <- function(inner, eta, order) {
 #' @description
 #' `param_value()` returns the inner family's inverse, read through
 #' [param_solve()] so that a family with a closed inverse never reaches a
-#' factorization. `param_free()` inverts the matrix given and hands it to the
+#' factorization. `param_free()` inverts the matrix that it receives and passes it to the
 #' inner family's own inverse map, so the free vector is the inner one and the
 #' round trip closes on it.
 #' @param s An [InverseParam()] object.
@@ -321,8 +323,8 @@ S7::method(param_free, InverseParam) <- function(s, m, ...) {
 #' @title Derivative Arrays of an Inverse Parameter
 #' @name param_d1.InverseParam
 #' @description
-#' The four orders of \eqn{\partial N} for \eqn{N = S^{-1}}, each the ordered
-#' set-partition sum that [inverse_of()] writes out. Every factor comes from the
+#' Computes the four orders of \eqn{\partial N} for \eqn{N = S^{-1}}, each as
+#' the ordered set-partition sum that [inverse_of()] describes. Every factor comes from the
 #' inner family's own arrays, so a closed form there stays closed here. For a
 #' [log_cholesky()] inner family, the four orders are read from
 #' [param_inv_d1()], [param_inv_d2()], [param_inv_d3()] and [param_inv_d4()].
@@ -380,8 +382,8 @@ S7::method(param_d4, InverseParam) <- function(s, eta, ...) {
 #' @name param_logdet.InverseParam
 #' @description
 #' \eqn{\log\lvert S^{-1}\rvert = -\log\lvert S\rvert}, so the value and every
-#' derivative order are the inner family's negated. No determinant of the
-#' inverted matrix is computed.
+#' derivative order are the inner family's negated. The determinant of the
+#' inverted matrix is not computed.
 #' @param s An [InverseParam()] object.
 #' @param eta A numeric vector of length `s@n_free`, already checked by the
 #'   generic.
@@ -428,12 +430,12 @@ S7::method(param_d4logdet, InverseParam) <- function(s, eta, ...) {
 #' @description
 #' Returns `-x` for a numeric vector and the elementwise negation for a list,
 #' so that the log-determinant derivatives of [inverse_of()] come back in the
-#' shape the inner family returned them in.
+#' same shape in which the inner family returned them.
 #'
 #' @details
-#' The type matters: `check_parameter()` subtracts the result of
-#' [param_dlogdet()] from a reference, which a list does not support, so the
-#' negation of a numeric vector has to stay a numeric vector.
+#' `check_parameter()` subtracts the result of [param_dlogdet()] from a
+#' reference, and a list does not support that subtraction, so the negation of
+#' a numeric vector has to stay a numeric vector.
 #'
 #' @param x A numeric vector or a list of numbers.
 #'
@@ -450,8 +452,9 @@ neg_like <- function(x) {
 #' @title Solve and Factor of an Inverse Parameter
 #' @name param_solve.InverseParam
 #' @description
-#' `param_solve()` is the inner family's **value**, no inversion being needed:
-#' the inverse of \eqn{S^{-1}} is \eqn{S}. `param_factor()` is the lower
+#' `param_solve()` is the inner family's value, because the inverse of
+#' \eqn{S^{-1}} is \eqn{S} and the method therefore does not invert a matrix.
+#' `param_factor()` is the lower
 #' triangular \eqn{L} with \eqn{LL^\top} the value, which is the package's
 #' convention and the transpose of what [base::chol()] returns.
 #' @param s An [InverseParam()] object.

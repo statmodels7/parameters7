@@ -19,10 +19,10 @@ A numeric vector of length \code{s@n_free}, named by \code{s@free_names}.
 \description{
 Returns \eqn{\partial \log|M| / \partial \eta_k} for every free value, or the
 same derivative of the log pseudo-determinant for a rank-deficient family. A
-Gaussian score in the coordinates an optimizer moves is the derivative of the
-quadratic form plus this, so it is needed at every iteration of a fit.
+Gaussian score in the coordinates in which an optimizer moves is the
+derivative of the quadratic form plus this, so it is needed at every iteration of a fit.
 }
-\section{The identity it must satisfy}{
+\section{The identity that it must satisfy}{
 \deqn{\partial_k \log|M| = \mathrm{tr}\!\left(M^{-1} \partial_k M\right),}
 
 with the Moore-Penrose inverse in place of \eqn{M^{-1}} when the family is
@@ -43,12 +43,12 @@ the pseudo-determinant once per non-zero eigenvalue.
 
 \section{Notation}{
 
-\eqn{M} is the matrix \code{\link[=param_value]{param_value()}} returns and \eqn{\eta} the free vector,
+\eqn{M} is the matrix that \code{\link[=param_value]{param_value()}} returns and \eqn{\eta} the free vector,
 of length \eqn{d = } \code{s@n_free}. \eqn{p} is the side of the matrix.
 }
 
 \examples{
-# The trace identity, checked against param_d1() directly.
+# The trace identity is checked against param_d1() directly.
 s <- log_cholesky(3)
 eta <- c(0.1, -0.2, 0.3, 0.5, -0.4, 0.2)
 Minv <- solve(param_value(s, eta))
@@ -64,12 +64,13 @@ r <- scaled_matrix(crossprod(diff(diag(6), differences = 2)))
 c(at_minus_3 = param_dlogdet(r, -3), at_5 = param_dlogdet(r, 5),
   rank = r@rank)
 
-# An AR(1) covariance, where the correlation direction is not constant.
+# For an AR(1) covariance, the derivative in the correlation direction is
+# not constant.
 param_dlogdet(ar1(4), c(0.3, 0.8))
 
 }
 \seealso{
 \code{\link[=param_logdet]{param_logdet()}} for the quantity differentiated here,
-\code{\link[=param_d2logdet]{param_d2logdet()}} for the next order, and \code{\link[=param_d1]{param_d1()}}, which this must
-agree with through the trace identity.
+\code{\link[=param_d2logdet]{param_d2logdet()}} for the next order, and \code{\link[=param_d1]{param_d1()}}, with which this
+must agree through the trace identity.
 }

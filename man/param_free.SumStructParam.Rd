@@ -23,14 +23,14 @@ the span, the round trip closes up to rounding when the weights are of
 comparable size, and its error grows with the spread of the weights.
 }
 \details{
-Two rejections, each with its own message:
+The method rejects two kinds of matrix, each with its own message:
 \itemize{
 \item a matrix that the combination cannot reproduce, checked by residual at
 \eqn{10^{-8}} relative to \code{max(1, max(abs(m)))}. The span is
 \eqn{K}-dimensional inside the \eqn{p(p+1)/2}-dimensional space of symmetric
 matrices, so almost every matrix is outside it and this is the ordinary
 failure.
-\item a matrix in the span needing a \strong{non-positive weight}, which the link
+\item a matrix in the span needing a non-positive weight, which the link
 cannot carry. Such a matrix may still be positive semidefinite, so the
 rejection concerns the parametrization and not the matrix.
 }
@@ -39,6 +39,6 @@ The residual check separates a solution of the system from a least-squares
 projection.
 }
 \seealso{
-\code{\link[=param_value.SumStructParam]{param_value.SumStructParam()}}, the map this inverts.
+\code{\link[=param_value.SumStructParam]{param_value.SumStructParam()}}, the map that this method inverts.
 }
 \keyword{internal}

@@ -16,9 +16,9 @@ and \code{col} of each free value, and the logical \code{on_diagonal}.
 }
 \description{
 Returns the row and column of each free value of a log-Cholesky parameter, in
-the order that the free vector uses: the \eqn{p} diagonal entries first, then the
-strictly below-diagonal entries column by column. Everything in the family
-reads it, so the ordering is decided once here and nowhere else.
+the order that the free vector uses: the \eqn{p} diagonal entries first, then
+the strictly below-diagonal entries column by column. Every method of the
+family reads it, so the ordering is defined in this function only.
 }
 \details{
 The ordering is part of the interface, since \code{free_names} follows it and

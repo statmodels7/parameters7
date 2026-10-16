@@ -16,11 +16,11 @@ A \code{s@dimension} by \code{s@dimension} lower triangular numeric matrix with
 a positive diagonal, satisfying \code{L \%*\% t(L) == param_value(s, eta)}.
 }
 \description{
-The method that every \code{\link[=matrix_parameter]{matrix_parameter()}} inherits when it registers no
+This is the method that every \code{\link[=matrix_parameter]{matrix_parameter()}} inherits when it registers no
 \code{\link[=param_factor]{param_factor()}} of its own. It evaluates \code{\link[=param_value]{param_value()}} and returns the
-lower triangular Cholesky factor through \code{\link[=chol_pd]{chol_pd()}}, which decides positive
-definiteness from the eigenvalues before attempting the factorization. Exact,
-at \eqn{O(p^3)}.
+lower triangular Cholesky factor through \code{\link[=chol_pd]{chol_pd()}}, which tests positive
+definiteness from the eigenvalues before attempting the factorization. The
+result is exact, and the cost is \eqn{O(p^3)}.
 }
 \details{
 A family that declares full rank and is then not positive definite at this

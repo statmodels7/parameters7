@@ -30,9 +30,9 @@ order 1 to 4 in \eqn{z}. Under the rhobit link these are the factor
 \details{
 \eqn{\mathrm{sech}^2 z} is evaluated as \eqn{4a/(1 + a)^2} with
 \eqn{a = e^{-2|z|}}, and its logarithm as
-\eqn{2\log 2 - 2|z| - 2\log(1 + a)}. Neither is computed from
-\eqn{1 - \tanh^2 z}, which loses all accuracy once \eqn{\tanh z} rounds to
-\eqn{-1} or 1. With \eqn{t = \tanh z} and \eqn{u = \mathrm{sech}^2 z}, from
+\eqn{2\log 2 - 2|z| - 2\log(1 + a)}. The function and its logarithm are not
+computed from \eqn{1 - \tanh^2 z}, which loses all accuracy once
+\eqn{\tanh z} rounds to \eqn{-1} or 1. With \eqn{t = \tanh z} and \eqn{u = \mathrm{sech}^2 z}, from
 \eqn{t' = u} and \eqn{u' = -2tu}, the four derivatives of the logarithm are
 \eqn{-2t}, \eqn{-2u}, \eqn{4tu} and \eqn{4u(u - 2t^2)}.
 }

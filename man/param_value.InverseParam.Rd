@@ -21,7 +21,7 @@ numeric vector of length \code{s@n_free}.
 \description{
 \code{param_value()} returns the inner family's inverse, read through
 \code{\link[=param_solve]{param_solve()}} so that a family with a closed inverse never reaches a
-factorization. \code{param_free()} inverts the matrix given and hands it to the
+factorization. \code{param_free()} inverts the matrix that it receives and passes it to the
 inner family's own inverse map, so the free vector is the inner one and the
 round trip closes on it.
 }
