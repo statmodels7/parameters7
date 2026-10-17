@@ -27,7 +27,7 @@ the matrix."><meta property="og:image" content="https://statmodels7.github.io/pa
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.26.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -108,7 +108,12 @@ like <code>value</code>, naming the scale on which its interval is built: one of
 
 <dt><code>label</code></dt>
 <dd><p>a single string naming the block, for a consumer laying out
-a printed summary.</p></dd>
+a printed summary;</p></dd>
+
+<dt><code>inverse</code></dt>
+<dd><p>present only for an inverse family, and then <code>TRUE</code>:
+the quantities describe the inverse of the matrix that
+<code><a href="param_value.html">param_value()</a></code> returns.</p></dd>
 
 
 </dl></div>
@@ -138,9 +143,11 @@ read off the first-order block instead of being computed again.</p>
 <code>link = NULL</code> and has none. <code><a href="simplex.html">simplex()</a></code> declares the probability vector.
 <code><a href="autoregressive.html">autoregressive()</a></code> declares the variance, the partial autocorrelations that
 parametrize it, and the autoregressive coefficients, which appear nowhere
-in the covariance. Every other family, including <code><a href="log_cholesky.html">log_cholesky()</a></code>,
-<code><a href="correlation_matrix.html">correlation_matrix()</a></code> and <code><a href="transition_matrix.html">transition_matrix()</a></code>, takes the base method and
-returns <code>NULL</code>.</p>
+in the covariance. <code><a href="inverse_of.html">inverse_of()</a></code>, <code><a href="ar1_inv.html">ar1_inv()</a></code> and <code><a href="autoregressive_inv.html">autoregressive_inv()</a></code>
+declare the quantities of the family that they invert, because their free
+values are that family's, and mark the declaration with <code>inverse = TRUE</code>.
+Every other family, including <code><a href="log_cholesky.html">log_cholesky()</a></code>, <code><a href="correlation_matrix.html">correlation_matrix()</a></code> and
+<code><a href="transition_matrix.html">transition_matrix()</a></code>, takes the base method and returns <code>NULL</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

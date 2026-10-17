@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.25.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.26.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,6 +35,13 @@
       <small>Source: <a href="https://github.com/statmodels7/parameters7/blob/master/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.26.0" id="parameters7-0260">parameters7 0.26.0<a class="anchor" aria-label="anchor" href="#parameters7-0260"></a></h2>
+<ul><li>
+<code><a href="../reference/param_readable.html">param_readable()</a></code> has a method for <code><a href="../reference/inverse_of.html">inverse_of()</a></code>, <code><a href="../reference/ar1_inv.html">ar1_inv()</a></code> and <code><a href="../reference/autoregressive_inv.html">autoregressive_inv()</a></code>: it returns the quantities of the family that they invert, whose free values they share, and marks the result with <code>inverse = TRUE</code>. <code><a href="../reference/ar1_inv.html">ar1_inv()</a></code> therefore declares the variance and the lag-one correlation of the AR(1) process, where it declared nothing.</li>
+<li>
+<code><a href="../reference/ar1.html">ar1()</a></code> builds its pattern by indexing the values of the distinct lags with the lag matrix, in place of one function call per entry. The result is identical; at dimension 100 and order 4 the pattern takes under 1 ms, where it took 27 ms.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.25.1" id="parameters7-0251">parameters7 0.25.1<a class="anchor" aria-label="anchor" href="#parameters7-0251"></a></h2>
 <ul><li>Documentation and messages: relative clauses without a relative pronoun, stranded prepositions, absolute constructions, sentences without a verb (example captions included), emphasis in bold and personified descriptions of the code rewritten as plain clauses. Two error messages are reworded (<code><a href="../reference/param_solve.html">param_solve()</a></code> for a rank-deficient matrix and <code><a href="../reference/param_free.html">param_free()</a></code> of a correlation matrix that is not positive definite). No change to the code.</li>

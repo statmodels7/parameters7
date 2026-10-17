@@ -1106,6 +1106,8 @@ them.
   : The Scale, the Partial Autocorrelations and the Coefficients
 - [`param_readable.CompoundSymmetryParam`](https://statmodels7.github.io/parameters7/reference/param_readable.CompoundSymmetryParam.md)
   : The Scale and the Common Correlation of a Compound Symmetry
+- [`param_readable.InverseParam`](https://statmodels7.github.io/parameters7/reference/param_readable.InverseParam.md)
+  : The Quantities of the Inverted Family
 - [`param_readable.ScaledMatrixParam`](https://statmodels7.github.io/parameters7/reference/param_readable.ScaledMatrixParam.md)
   : The Scale of a Fixed Matrix
 - [`param_readable.SimplexParam`](https://statmodels7.github.io/parameters7/reference/param_readable.SimplexParam.md)

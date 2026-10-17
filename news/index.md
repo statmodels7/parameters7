@@ -1,5 +1,24 @@
 # Changelog
 
+## parameters7 0.26.0
+
+- [`param_readable()`](https://statmodels7.github.io/parameters7/reference/param_readable.md)
+  has a method for
+  [`inverse_of()`](https://statmodels7.github.io/parameters7/reference/inverse_of.md),
+  [`ar1_inv()`](https://statmodels7.github.io/parameters7/reference/ar1_inv.md)
+  and
+  [`autoregressive_inv()`](https://statmodels7.github.io/parameters7/reference/autoregressive_inv.md):
+  it returns the quantities of the family that they invert, whose free
+  values they share, and marks the result with `inverse = TRUE`.
+  [`ar1_inv()`](https://statmodels7.github.io/parameters7/reference/ar1_inv.md)
+  therefore declares the variance and the lag-one correlation of the
+  AR(1) process, where it declared nothing.
+- [`ar1()`](https://statmodels7.github.io/parameters7/reference/ar1.md)
+  builds its pattern by indexing the values of the distinct lags with
+  the lag matrix, in place of one function call per entry. The result is
+  identical; at dimension 100 and order 4 the pattern takes under 1 ms,
+  where it took 27 ms.
+
 ## parameters7 0.25.1
 
 - Documentation and messages: relative clauses without a relative

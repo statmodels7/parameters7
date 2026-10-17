@@ -59,7 +59,14 @@ param_readable(s, eta, ...)
 - `label`:
 
   a single string naming the block, for a consumer laying out a printed
-  summary.
+  summary;
+
+- `inverse`:
+
+  present only for an inverse family, and then `TRUE`: the quantities
+  describe the inverse of the matrix that
+  [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md)
+  returns.
 
 ## What a consumer does with it
 
@@ -99,7 +106,14 @@ declares the probability vector.
 [`autoregressive()`](https://statmodels7.github.io/parameters7/reference/autoregressive.md)
 declares the variance, the partial autocorrelations that parametrize it,
 and the autoregressive coefficients, which appear nowhere in the
-covariance. Every other family, including
+covariance.
+[`inverse_of()`](https://statmodels7.github.io/parameters7/reference/inverse_of.md),
+[`ar1_inv()`](https://statmodels7.github.io/parameters7/reference/ar1_inv.md)
+and
+[`autoregressive_inv()`](https://statmodels7.github.io/parameters7/reference/autoregressive_inv.md)
+declare the quantities of the family that they invert, because their
+free values are that family's, and mark the declaration with
+`inverse = TRUE`. Every other family, including
 [`log_cholesky()`](https://statmodels7.github.io/parameters7/reference/log_cholesky.md),
 [`correlation_matrix()`](https://statmodels7.github.io/parameters7/reference/correlation_matrix.md)
 and
