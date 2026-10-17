@@ -33,6 +33,30 @@ test_that("a family with nothing to declare says so", {
   expect_null(param_readable(matrix_log(3), rep(0.1, 6)))
   # a fixed matrix carries no free value and therefore no quantity
   expect_null(param_readable(scaled_matrix(diag(3), link = NULL), numeric(0)))
+  # an inverse of a family that declares nothing declares nothing
+  expect_null(param_readable(inverse_of(log_cholesky(3)), rep(0.1, 6)))
+})
+
+test_that("an inverse family declares the quantities of the family it inverts", {
+  eta <- c(log(4), atanh(0.6))
+  r0 <- param_readable(ar1(5), eta)
+  for (s in list(ar1_inv(5), inverse_of(ar1(5)))) {
+    r <- param_readable(s, eta)
+    expect_identical(r$value, r0$value)
+    expect_identical(r$jacobian, r0$jacobian)
+    expect_identical(r$transform, r0$transform)
+    expect_true(isTRUE(r$inverse))
+    # the quantities describe the inverse of the matrix the family returns
+    S <- solve(param_value(s, eta))
+    expect_equal(c(S[1, 1], S[1, 2] / S[1, 1]), unname(r$value),
+                 tolerance = 1e-10)
+  }
+  a0 <- param_readable(autoregressive(6, 2), c(0.3, 0.5, -0.2))
+  a <- param_readable(autoregressive_inv(6, 2), c(0.3, 0.5, -0.2))
+  expect_identical(a$value, a0$value)
+  expect_true(isTRUE(a$inverse))
+  # an inverse of an inverse describes its own matrix again
+  expect_null(param_readable(inverse_of(ar1_inv(5)), eta)$inverse)
 })
 
 test_that("the autoregressive coefficients are the ones the matrix implies", {

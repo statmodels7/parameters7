@@ -1,5 +1,5 @@
 #' @include parameter_class.R generics.R ar1.R compound_symmetry.R
-#' @include autoregressive.R scaled_matrix.R simplex.R
+#' @include autoregressive.R scaled_matrix.R simplex.R inverse_of.R
 NULL
 
 # The free vector is what a fit estimates and not what a reader reads. Nobody
@@ -55,9 +55,11 @@ NULL
 #' `link = NULL` and has none. [simplex()] declares the probability vector.
 #' [autoregressive()] declares the variance, the partial autocorrelations that
 #' parametrize it, and the autoregressive coefficients, which appear nowhere
-#' in the covariance. Every other family, including [log_cholesky()],
-#' [correlation_matrix()] and [transition_matrix()], takes the base method and
-#' returns `NULL`.
+#' in the covariance. [inverse_of()], [ar1_inv()] and [autoregressive_inv()]
+#' declare the quantities of the family that they invert, because their free
+#' values are that family's, and mark the declaration with `inverse = TRUE`.
+#' Every other family, including [log_cholesky()], [correlation_matrix()] and
+#' [transition_matrix()], takes the base method and returns `NULL`.
 #'
 #' @param s A [parameter()] object.
 #' @param eta A numeric vector of free values, of length `s@n_free`.
@@ -73,7 +75,10 @@ NULL
 #'       like `value`, naming the scale on which its interval is built: one of
 #'       `"identity"`, `"log"`, `"atanh"` or `"logit"`;}
 #'     \item{`label`}{a single string naming the block, for a consumer laying out
-#'       a printed summary.}
+#'       a printed summary;}
+#'     \item{`inverse`}{present only for an inverse family, and then `TRUE`:
+#'       the quantities describe the inverse of the matrix that
+#'       [param_value()] returns.}
 #'   }
 #'
 #' @seealso [param_value()] for the matrix itself, [autoregressive()] for the
@@ -207,6 +212,35 @@ S7::method(param_readable, Ar1Param) <- function(s, eta, ...) {
     list(s@param_params$link_scale, s@param_params$link_rho), eta,
     c("scale", "rho"), c("log", "atanh"), "Autoregressive structure"
   )
+}
+
+
+#' The Quantities of the Inverted Family
+#'
+#' @description
+#' Declares the quantities of the family that an [inverse_of()], [ar1_inv()]
+#' or [autoregressive_inv()] parameter inverts, with the same Jacobian, and
+#' adds `inverse = TRUE`. The free values of an inverse family are those of
+#' the inner family, so the inner family's quantities are functions of them;
+#' they describe the inverse of the matrix that [param_value()] returns. For
+#' [ar1_inv()] they are the marginal variance and the lag-one correlation of
+#' the AR(1) process whose precision the matrix is. An inverse of an inverse
+#' clears the mark.
+#'
+#' @param s An [InverseParam()] object, whose inner family is read.
+#' @param eta A numeric vector of free values, of length `s@n_free`.
+#' @param ... Passed to the inner family's method.
+#'
+#' @return `NULL` when the inner family declares nothing, otherwise a list as
+#'   described in [param_readable()], with `inverse` set.
+#'
+#' @name param_readable.InverseParam
+#' @keywords internal
+S7::method(param_readable, InverseParam) <- function(s, eta, ...) {
+  r <- param_readable(s@param_params$inner, eta, ...)
+  if (is.null(r)) return(NULL)
+  if (isTRUE(r$inverse)) r$inverse <- NULL else r$inverse <- TRUE
+  r
 }
 
 

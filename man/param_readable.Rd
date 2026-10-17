@@ -24,7 +24,10 @@ column per free value, row names matching \code{value} and no column names;}
 like \code{value}, naming the scale on which its interval is built: one of
 \code{"identity"}, \code{"log"}, \code{"atanh"} or \code{"logit"};}
 \item{\code{label}}{a single string naming the block, for a consumer laying out
-a printed summary.}
+a printed summary;}
+\item{\code{inverse}}{present only for an inverse family, and then \code{TRUE}:
+the quantities describe the inverse of the matrix that
+\code{\link[=param_value]{param_value()}} returns.}
 }
 }
 \description{
@@ -66,9 +69,11 @@ read off the first-order block instead of being computed again.
 \code{link = NULL} and has none. \code{\link[=simplex]{simplex()}} declares the probability vector.
 \code{\link[=autoregressive]{autoregressive()}} declares the variance, the partial autocorrelations that
 parametrize it, and the autoregressive coefficients, which appear nowhere
-in the covariance. Every other family, including \code{\link[=log_cholesky]{log_cholesky()}},
-\code{\link[=correlation_matrix]{correlation_matrix()}} and \code{\link[=transition_matrix]{transition_matrix()}}, takes the base method and
-returns \code{NULL}.
+in the covariance. \code{\link[=inverse_of]{inverse_of()}}, \code{\link[=ar1_inv]{ar1_inv()}} and \code{\link[=autoregressive_inv]{autoregressive_inv()}}
+declare the quantities of the family that they invert, because their free
+values are that family's, and mark the declaration with \code{inverse = TRUE}.
+Every other family, including \code{\link[=log_cholesky]{log_cholesky()}}, \code{\link[=correlation_matrix]{correlation_matrix()}} and
+\code{\link[=transition_matrix]{transition_matrix()}}, takes the base method and returns \code{NULL}.
 }
 
 \examples{

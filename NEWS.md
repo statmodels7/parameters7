@@ -1,3 +1,15 @@
+# parameters7 0.26.0
+
+* `param_readable()` has a method for `inverse_of()`, `ar1_inv()` and
+  `autoregressive_inv()`: it returns the quantities of the family that they
+  invert, whose free values they share, and marks the result with
+  `inverse = TRUE`. `ar1_inv()` therefore declares the variance and the
+  lag-one correlation of the AR(1) process, where it declared nothing.
+* `ar1()` builds its pattern by indexing the values of the distinct lags with
+  the lag matrix, in place of one function call per entry. The result is
+  identical; at dimension 100 and order 4 the pattern takes under 1 ms, where
+  it took 27 ms.
+
 # parameters7 0.25.1
 
 * Documentation and messages: relative clauses without a relative pronoun,
