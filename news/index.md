@@ -1,5 +1,15 @@
 # Changelog
 
+## parameters7 0.26.1
+
+- The package description says that a parameter provides its
+  derivatives, where it said that it “answers” with them. The README
+  lists
+  [`param_inv_d3()`](https://statmodels7.github.io/parameters7/reference/param_inv_d1.md)
+  and
+  [`param_inv_d4()`](https://statmodels7.github.io/parameters7/reference/param_inv_d1.md)
+  among the likelihood pieces and rewrites two absolute constructions.
+
 ## parameters7 0.26.0
 
 - [`param_readable()`](https://statmodels7.github.io/parameters7/reference/param_readable.md)

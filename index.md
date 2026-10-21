@@ -134,7 +134,7 @@ c(logdet = param_logdet(m, c(0.2, -0.3, 0.4)),
 
 An unstructured covariance over twenty occasions has 210 free values.
 The structured families reduce that to two, a scale and a correlation,
-with every quantity still in closed form:
+and every quantity remains in closed form:
 
 ``` r
 
@@ -404,11 +404,11 @@ number on a scale to which it does not belong.
 ## Validating a parameter
 
 [`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md)
-runs nine checks on a matrix family, fewer on a family that is not a
-matrix, each against a route that the implementation does not take. A
-quantity that comes from the base class is reported as not checked,
-because comparing a finite difference with a finite difference applies
-the same arithmetic to both sides.
+runs nine checks on a matrix family and fewer on a family that is not a
+matrix. Each check compares the result with a route that the
+implementation does not take. A quantity that comes from the base class
+is reported as not checked, because comparing a finite difference with a
+finite difference applies the same arithmetic to both sides.
 
 ``` r
 
@@ -416,8 +416,8 @@ invisible(check_parameter(log_cholesky(3)))
 #> Parameter: log_cholesky   (3 x 3, rank 3, 6 free)
 #>   [OK         ] membership           0.00e+00
 #>   [OK         ] round trip           7.77e-16
-#>   [OK         ] first derivatives    5.16e-11
-#>   [OK         ] second derivatives   4.45e-11
+#>   [OK         ] first derivatives    1.01e-12
+#>   [OK         ] second derivatives   6.00e-13
 #>   [OK         ] log-determinant      6.13e-15
 #>   [OK         ] logdet gradient      1.62e-13
 #>   [OK         ] logdet hessian       0.00e+00
@@ -449,7 +449,7 @@ invisible(check_parameter(decay))
 | not symmetric matrices | [`simplex()`](https://statmodels7.github.io/parameters7/reference/simplex.md), [`transition_matrix()`](https://statmodels7.github.io/parameters7/reference/transition_matrix.md) |
 | maps | [`param_value()`](https://statmodels7.github.io/parameters7/reference/param_value.md), [`param_free()`](https://statmodels7.github.io/parameters7/reference/param_free.md) |
 | derivatives | [`param_d1()`](https://statmodels7.github.io/parameters7/reference/param_d1.md) … [`param_d4()`](https://statmodels7.github.io/parameters7/reference/param_d4.md), exact to fourth order |
-| likelihood pieces | [`param_logdet()`](https://statmodels7.github.io/parameters7/reference/param_logdet.md), [`param_dlogdet()`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.md) … [`param_d4logdet()`](https://statmodels7.github.io/parameters7/reference/param_d4logdet.md), [`param_solve()`](https://statmodels7.github.io/parameters7/reference/param_solve.md), [`param_factor()`](https://statmodels7.github.io/parameters7/reference/param_factor.md), [`param_inv_d1()`](https://statmodels7.github.io/parameters7/reference/param_inv_d1.md), [`param_inv_d2()`](https://statmodels7.github.io/parameters7/reference/param_inv_d1.md) |
+| likelihood pieces | [`param_logdet()`](https://statmodels7.github.io/parameters7/reference/param_logdet.md), [`param_dlogdet()`](https://statmodels7.github.io/parameters7/reference/param_dlogdet.md) … [`param_d4logdet()`](https://statmodels7.github.io/parameters7/reference/param_d4logdet.md), [`param_solve()`](https://statmodels7.github.io/parameters7/reference/param_solve.md), [`param_factor()`](https://statmodels7.github.io/parameters7/reference/param_factor.md), [`param_inv_d1()`](https://statmodels7.github.io/parameters7/reference/param_inv_d1.md) … [`param_inv_d4()`](https://statmodels7.github.io/parameters7/reference/param_inv_d1.md) |
 | interpretable quantities | [`param_readable()`](https://statmodels7.github.io/parameters7/reference/param_readable.md) |
 | tools | [`check_parameter()`](https://statmodels7.github.io/parameters7/reference/check_parameter.md), [`param_is_numerical()`](https://statmodels7.github.io/parameters7/reference/param_is_numerical.md), [`param_null_basis()`](https://statmodels7.github.io/parameters7/reference/param_null_basis.md), [`print()`](https://rdrr.io/r/base/print.html) |
 

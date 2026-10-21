@@ -123,6 +123,6 @@ names(param_inv_d2(s, eta))
 sandwich <- S7::method(param_inv_d3, matrix_parameter)(s, eta)
 c(exact = param_inv_d3(s, eta)[["L2.1:L2.1:L2.1"]][2, 2],
   sandwich = sandwich[["L2.1:L2.1:L2.1"]][2, 2])
-#>        exact     sandwich 
-#> 0.000000e+00 2.397528e+13 
+#>       exact    sandwich 
+#> 0.00000e+00 1.18532e+14 
 ```

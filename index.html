@@ -16,8 +16,8 @@
 <script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="An S7 Framework for Constrained Parameters">
-<meta name="description" content="Parametrizations of constrained parameter spaces as objects. A parameter maps an unconstrained vector onto the set where it lives: a symmetric positive semidefinite matrix, a probability vector on the simplex, a row-stochastic transition matrix. It answers with exact derivatives to fourth order, the inverse map, and, on the matrix branch, the log-determinant or its pseudo-determinant counterpart and the solves a likelihood needs. Numerical fallbacks make a user-defined parameter work from its map alone, and a diagnostic verifies every component against an independent route.">
-<meta property="og:description" content="Parametrizations of constrained parameter spaces as objects. A parameter maps an unconstrained vector onto the set where it lives: a symmetric positive semidefinite matrix, a probability vector on the simplex, a row-stochastic transition matrix. It answers with exact derivatives to fourth order, the inverse map, and, on the matrix branch, the log-determinant or its pseudo-determinant counterpart and the solves a likelihood needs. Numerical fallbacks make a user-defined parameter work from its map alone, and a diagnostic verifies every component against an independent route.">
+<meta name="description" content="Parametrizations of constrained parameter spaces as objects. A parameter maps an unconstrained vector onto the set where it lives: a symmetric positive semidefinite matrix, a probability vector on the simplex, a row-stochastic transition matrix. It provides exact derivatives to fourth order, the inverse map, and, on the matrix branch, the log-determinant or its pseudo-determinant counterpart and the solves that a likelihood needs. Numerical fallbacks make a user-defined parameter work from its map alone, and a diagnostic verifies every component against an independent route.">
+<meta property="og:description" content="Parametrizations of constrained parameter spaces as objects. A parameter maps an unconstrained vector onto the set where it lives: a symmetric positive semidefinite matrix, a probability vector on the simplex, a row-stochastic transition matrix. It provides exact derivatives to fourth order, the inverse map, and, on the matrix branch, the log-determinant or its pseudo-determinant counterpart and the solves that a likelihood needs. Numerical fallbacks make a user-defined parameter work from its map alone, and a diagnostic verifies every component against an independent route.">
 <meta property="og:image" content="https://statmodels7.github.io/parameters7/logo.png">
 </head>
 <body>
@@ -28,7 +28,7 @@
 
     <a class="navbar-brand me-2" href="index.html">parameters7</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.26.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.26.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -142,7 +142,7 @@
 <div class="section level2">
 <h2 id="structured-covariances">Structured covariances<a class="anchor" aria-label="anchor" href="#structured-covariances"></a>
 </h2>
-<p>An unstructured covariance over twenty occasions has 210 free values. The structured families reduce that to two, a scale and a correlation, with every quantity still in closed form:</p>
+<p>An unstructured covariance over twenty occasions has 210 free values. The structured families reduce that to two, a scale and a correlation, and every quantity remains in closed form:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>unstructured <span class="op">=</span> <span class="fu"><a href="reference/log_cholesky.html">log_cholesky</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span><span class="op">@</span><span class="va">n_free</span>,</span>
 <span>  compound_symmetry <span class="op">=</span> <span class="fu"><a href="reference/compound_symmetry.html">compound_symmetry</a></span><span class="op">(</span><span class="fl">20</span><span class="op">)</span><span class="op">@</span><span class="va">n_free</span>,</span>
@@ -312,14 +312,14 @@
 <div class="section level2">
 <h2 id="validating-a-parameter">Validating a parameter<a class="anchor" aria-label="anchor" href="#validating-a-parameter"></a>
 </h2>
-<p><code><a href="reference/check_parameter.html">check_parameter()</a></code> runs nine checks on a matrix family, fewer on a family that is not a matrix, each against a route that the implementation does not take. A quantity that comes from the base class is reported as not checked, because comparing a finite difference with a finite difference applies the same arithmetic to both sides.</p>
+<p><code><a href="reference/check_parameter.html">check_parameter()</a></code> runs nine checks on a matrix family and fewer on a family that is not a matrix. Each check compares the result with a route that the implementation does not take. A quantity that comes from the base class is reported as not checked, because comparing a finite difference with a finite difference applies the same arithmetic to both sides.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/invisible.html" class="external-link">invisible</a></span><span class="op">(</span><span class="fu"><a href="reference/check_parameter.html">check_parameter</a></span><span class="op">(</span><span class="fu"><a href="reference/log_cholesky.html">log_cholesky</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Parameter: log_cholesky   (3 x 3, rank 3, 6 free)</span></span>
 <span><span class="co">#&gt;   [OK         ] membership           0.00e+00</span></span>
 <span><span class="co">#&gt;   [OK         ] round trip           7.77e-16</span></span>
-<span><span class="co">#&gt;   [OK         ] first derivatives    5.16e-11</span></span>
-<span><span class="co">#&gt;   [OK         ] second derivatives   4.45e-11</span></span>
+<span><span class="co">#&gt;   [OK         ] first derivatives    1.01e-12</span></span>
+<span><span class="co">#&gt;   [OK         ] second derivatives   6.00e-13</span></span>
 <span><span class="co">#&gt;   [OK         ] log-determinant      6.13e-15</span></span>
 <span><span class="co">#&gt;   [OK         ] logdet gradient      1.62e-13</span></span>
 <span><span class="co">#&gt;   [OK         ] logdet hessian       0.00e+00</span></span>
@@ -392,7 +392,7 @@
 <tr>
 <td>likelihood pieces</td>
 <td>
-<code><a href="reference/param_logdet.html">param_logdet()</a></code>, <code><a href="reference/param_dlogdet.html">param_dlogdet()</a></code> … <code><a href="reference/param_d4logdet.html">param_d4logdet()</a></code>, <code><a href="reference/param_solve.html">param_solve()</a></code>, <code><a href="reference/param_factor.html">param_factor()</a></code>, <code><a href="reference/param_inv_d1.html">param_inv_d1()</a></code>, <code><a href="reference/param_inv_d1.html">param_inv_d2()</a></code>
+<code><a href="reference/param_logdet.html">param_logdet()</a></code>, <code><a href="reference/param_dlogdet.html">param_dlogdet()</a></code> … <code><a href="reference/param_d4logdet.html">param_d4logdet()</a></code>, <code><a href="reference/param_solve.html">param_solve()</a></code>, <code><a href="reference/param_factor.html">param_factor()</a></code>, <code><a href="reference/param_inv_d1.html">param_inv_d1()</a></code> … <code><a href="reference/param_inv_d1.html">param_inv_d4()</a></code>
 </td>
 </tr>
 <tr>

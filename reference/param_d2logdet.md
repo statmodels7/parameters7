@@ -93,7 +93,7 @@ pred <- vapply(seq_along(idx), function(i) {
     sum(diag(Minv %*% d1[[k]] %*% Minv %*% d1[[l]]))
 }, numeric(1))
 max(abs(param_d2logdet(s, eta) - pred))
-#> [1] 1.776357e-15
+#> [1] 2.664535e-15
 
 # Dropping the second trace would give a different answer here, so the
 # comparison above has something to catch.
