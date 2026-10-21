@@ -120,8 +120,8 @@ c(logdet = param_logdet(m, c(0.2, -0.3, 0.4)),
 ## Structured covariances
 
 An unstructured covariance over twenty occasions has 210 free values. The
-structured families reduce that to two, a scale and a correlation, with every
-quantity still in closed form:
+structured families reduce that to two, a scale and a correlation, and every
+quantity remains in closed form:
 
 ```{r}
 c(unstructured = log_cholesky(20)@n_free,
@@ -308,9 +308,9 @@ to which it does not belong.
 
 ## Validating a parameter
 
-`check_parameter()` runs nine checks on a matrix family, fewer on a family
-that is not a matrix, each against a route that the implementation does not
-take. A quantity that comes from the base class is reported as
+`check_parameter()` runs nine checks on a matrix family and fewer on a family
+that is not a matrix. Each check compares the result with a route that the
+implementation does not take. A quantity that comes from the base class is reported as
 not checked, because comparing a finite difference with a finite difference
 applies the same arithmetic to both sides.
 
@@ -330,7 +330,7 @@ invisible(check_parameter(decay))
 | not symmetric matrices | `simplex()`, `transition_matrix()` |
 | maps | `param_value()`, `param_free()` |
 | derivatives | `param_d1()` … `param_d4()`, exact to fourth order |
-| likelihood pieces | `param_logdet()`, `param_dlogdet()` … `param_d4logdet()`, `param_solve()`, `param_factor()`, `param_inv_d1()`, `param_inv_d2()` |
+| likelihood pieces | `param_logdet()`, `param_dlogdet()` … `param_d4logdet()`, `param_solve()`, `param_factor()`, `param_inv_d1()` … `param_inv_d4()` |
 | interpretable quantities | `param_readable()` |
 | tools | `check_parameter()`, `param_is_numerical()`, `param_null_basis()`, `print()` |
 

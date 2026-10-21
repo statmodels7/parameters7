@@ -1,3 +1,10 @@
+# parameters7 0.26.1
+
+* The package description says that a parameter provides its derivatives,
+  where it said that it "answers" with them. The README lists
+  `param_inv_d3()` and `param_inv_d4()` among the likelihood pieces and
+  rewrites two absolute constructions.
+
 # parameters7 0.26.0
 
 * `param_readable()` has a method for `inverse_of()`, `ar1_inv()` and

@@ -137,7 +137,7 @@ c(logdet = param_logdet(m, c(0.2, -0.3, 0.4)),
 
 An unstructured covariance over twenty occasions has 210 free values.
 The structured families reduce that to two, a scale and a correlation,
-with every quantity still in closed form:
+and every quantity remains in closed form:
 
 ``` r
 c(unstructured = log_cholesky(20)@n_free,
@@ -385,19 +385,20 @@ belong.
 
 ## Validating a parameter
 
-`check_parameter()` runs nine checks on a matrix family, fewer on a
-family that is not a matrix, each against a route that the
-implementation does not take. A quantity that comes from the base class
-is reported as not checked, because comparing a finite difference with a
-finite difference applies the same arithmetic to both sides.
+`check_parameter()` runs nine checks on a matrix family and fewer on a
+family that is not a matrix. Each check compares the result with a route
+that the implementation does not take. A quantity that comes from the
+base class is reported as not checked, because comparing a finite
+difference with a finite difference applies the same arithmetic to both
+sides.
 
 ``` r
 invisible(check_parameter(log_cholesky(3)))
 #> Parameter: log_cholesky   (3 x 3, rank 3, 6 free)
 #>   [OK         ] membership           0.00e+00
 #>   [OK         ] round trip           7.77e-16
-#>   [OK         ] first derivatives    5.16e-11
-#>   [OK         ] second derivatives   4.45e-11
+#>   [OK         ] first derivatives    1.01e-12
+#>   [OK         ] second derivatives   6.00e-13
 #>   [OK         ] log-determinant      6.13e-15
 #>   [OK         ] logdet gradient      1.62e-13
 #>   [OK         ] logdet hessian       0.00e+00
@@ -429,7 +430,7 @@ invisible(check_parameter(decay))
 | not symmetric matrices | `simplex()`, `transition_matrix()` |
 | maps | `param_value()`, `param_free()` |
 | derivatives | `param_d1()` … `param_d4()`, exact to fourth order |
-| likelihood pieces | `param_logdet()`, `param_dlogdet()` … `param_d4logdet()`, `param_solve()`, `param_factor()`, `param_inv_d1()`, `param_inv_d2()` |
+| likelihood pieces | `param_logdet()`, `param_dlogdet()` … `param_d4logdet()`, `param_solve()`, `param_factor()`, `param_inv_d1()` … `param_inv_d4()` |
 | interpretable quantities | `param_readable()` |
 | tools | `check_parameter()`, `param_is_numerical()`, `param_null_basis()`, `print()` |
 
