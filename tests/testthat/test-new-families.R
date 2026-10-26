@@ -1,4 +1,4 @@
-# The renamed API, the higher orders, and the three new families: simplex,
+# The higher orders and the three new families: simplex,
 # transition matrix, matrix logarithm.
 
 test_that("every family's third and fourth derivatives match one stencil", {
