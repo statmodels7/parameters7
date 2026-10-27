@@ -1,5 +1,9 @@
 # Changelog
 
+## parameters7 0.26.2
+
+- A test file header reworded; no change to the package.
+
 ## parameters7 0.26.1
 
 - The package description says that a parameter provides its
