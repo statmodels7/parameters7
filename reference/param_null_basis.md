@@ -12,16 +12,16 @@ properties.
 ## Usage
 
 ``` r
-param_null_basis(mats, tol = 1e-10)
+param_null_basis(matrices, tol = 1e-10)
 ```
 
 ## Arguments
 
-- mats:
+- matrices:
 
   A list of symmetric numeric matrices, all of the same side, or a
   single matrix, which is wrapped in a list. An empty list signals the
-  error `'mats' must not be empty.`; the matrices themselves are not
+  error `'matrices' must not be empty.`; the matrices themselves are not
   checked for symmetry or definiteness, because the callers are the
   package's own constructors.
 
@@ -115,7 +115,7 @@ dim(nb$null_basis)
 proj <- function(v) nb$null_basis %*% (t(nb$null_basis) %*% v)
 vapply(list(rep(1, 6), 1:6, (1:6)^2),
        function(v) sqrt(sum((v - proj(v))^2)) / sqrt(sum(v^2)), numeric(1))
-#> [1] 1.107444e-15 5.871289e-16 1.281025e-01
+#> [1] 1.351405e-15 6.105395e-16 1.281025e-01
 
 # This shows why the components are taken separately. The two marginal
 # penalties on a 4 x 8 tensor product together have rank 28 out of 32.
@@ -139,5 +139,5 @@ c(equal = count(P1 + P2), ratio_1e10 = count(P1 + 1e10 * P2))
 nb2 <- param_null_basis(list(P1, P2))
 M <- P1 + 1e10 * P2
 max(abs(M %*% nb2$null_basis)) / max(abs(M))
-#> [1] 3.258303e-16
+#> [1] 6.717643e-16
 ```
