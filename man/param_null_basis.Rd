@@ -4,12 +4,12 @@
 \alias{param_null_basis}
 \title{An Orthonormal Basis of a Null Space, and the Rank That Goes With It}
 \usage{
-param_null_basis(mats, tol = 1e-10)
+param_null_basis(matrices, tol = 1e-10)
 }
 \arguments{
-\item{mats}{A list of symmetric numeric matrices, all of the same side, or a
+\item{matrices}{A list of symmetric numeric matrices, all of the same side, or a
 single matrix, which is wrapped in a list. An empty list signals the error
-\verb{'mats' must not be empty.}; the matrices themselves are not checked for
+\verb{'matrices' must not be empty.}; the matrices themselves are not checked for
 symmetry or definiteness, because the callers are the package's own
 constructors.}
 

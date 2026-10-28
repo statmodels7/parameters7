@@ -502,9 +502,9 @@ name_dims <- function(m, s) {
 #' basis is a matrix whose columns span \eqn{\{v : M v = 0 \text{ for every }
 #' M\}}, and the rank is \eqn{p} minus the dimension of that space.
 #'
-#' @param mats A list of symmetric numeric matrices, all of the same side, or a
+#' @param matrices A list of symmetric numeric matrices, all of the same side, or a
 #'   single matrix, which is wrapped in a list. An empty list signals the error
-#'   `'mats' must not be empty.`; the matrices themselves are not checked for
+#'   `'matrices' must not be empty.`; the matrices themselves are not checked for
 #'   symmetry or definiteness, because the callers are the package's own
 #'   constructors.
 #' @param tol The relative tolerance below which a singular value counts as
@@ -565,12 +565,12 @@ name_dims <- function(m, s) {
 #' max(abs(M %*% nb2$null_basis)) / max(abs(M))
 #'
 #' @export
-param_null_basis <- function(mats, tol = 1e-10) {
-  if (is.matrix(mats)) mats <- list(mats)
-  if (!length(mats)) stop("'mats' must not be empty.", call. = FALSE)
+param_null_basis <- function(matrices, tol = 1e-10) {
+  if (is.matrix(matrices)) matrices <- list(matrices)
+  if (!length(matrices)) stop("'matrices' must not be empty.", call. = FALSE)
 
-  p <- ncol(mats[[1L]])
-  stacked <- do.call(rbind, lapply(mats, function(m) {
+  p <- ncol(matrices[[1L]])
+  stacked <- do.call(rbind, lapply(matrices, function(m) {
     sc <- max(abs(m))
     if (sc == 0) matrix(0, nrow(m), ncol(m)) else m / sc
   }))

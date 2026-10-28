@@ -1,3 +1,7 @@
+# parameters7 0.27.0
+
+* The argument `mats` of `param_null_basis()` is renamed `matrices`.
+
 # parameters7 0.26.2
 
 * A test file header reworded; no change to the package.
